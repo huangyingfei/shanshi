@@ -2,7 +2,12 @@
   <div class="notice">
     <!-- 左边 -->
     <div class="cation">
-      <el-input style=" width: 250px;height: 35px;" placeholder="请输入内容" v-model="input" clearable></el-input>
+      <el-input
+        style=" width: 250px;height: 35px;"
+        placeholder="请输入内容"
+        v-model="input"
+        clearable
+      ></el-input>
       <div class="import">
         <el-button type="success" plain size="mini">导入</el-button>
         <el-button type="success" plain size="mini">导出</el-button>
@@ -54,12 +59,12 @@
         </div>
       </div>
       <!-- 结束 -->
+      <!-- 树形组件 -->
       <div class="monly">
         <div class="block">
           <p></p>
           <el-tree
             :data="data"
-            show-checkbox
             node-key="id"
             default-expand-all
             :expand-on-click-node="false"
@@ -90,11 +95,19 @@
             <el-input></el-input>
           </el-form-item>
 
-          <el-form-item label="食材真名" prop="buffer" style=" width: 350px;   ">
+          <el-form-item
+            label="食材真名"
+            prop="buffer"
+            style=" width: 350px;   "
+          >
             <el-input v-model="ruleForm.buffer"></el-input>
           </el-form-item>
 
-          <el-form-item label="活动区域" prop="autosave" style=" width: 350px;   ">
+          <el-form-item
+            label="活动区域"
+            prop="autosave"
+            style=" width: 350px;   "
+          >
             <el-select v-model="ruleForm.autosave" placeholder="请选择活动区域">
               <!-- <el-option label="区域一" value="shanghai"></el-option>
               <el-option label="区域二" value="beijing"></el-option>-->
@@ -110,7 +123,10 @@
           </el-form-item>
 
           <el-form-item label="食部(%)" prop="besaved" style=" width: 350px;  ">
-            <el-input v-model="ruleForm.besaved" placeholder="请输入"></el-input>
+            <el-input
+              v-model="ruleForm.besaved"
+              placeholder="请输入"
+            ></el-input>
           </el-form-item>
 
           <el-form-item label="重量（g）" prop="timers" style=" width: 350px; ">
@@ -185,20 +201,36 @@
       <div class="worm">营养素含量（这里为100克食部食品中的营养素含量）</div>
       <div class="saveas">
         <el-table
-          :data="tableData"
+          :data="mailto"
           style="width: 100%;margin-bottom: 20px;"
           row-key="id"
           border
           default-expand-all
           :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
         >
-          <el-table-column prop="name" label="营养素" sortable width="180"></el-table-column>
-          <el-table-column prop="address" label="单位" sortable width="180" align="center"></el-table-column>
+          <el-table-column
+            prop="title"
+            label="营养素"
+            sortable
+            width="200"
+          ></el-table-column>
+          <el-table-column
+            prop="address"
+            label="单位"
+            sortable
+            width="180"
+            align="center"
+          ></el-table-column>
 
           <el-table-column prop="address" label="含量">
             <template slot-scope="scope">
-              <el-input v-model="input1" type="text" placeholder="请输入内容" v-if="scope.row.dients"></el-input>
+              <el-input
+                v-model="input1"
+                type="text"
+                placeholder="请输入内容"
+              ></el-input>
             </template>
+            <!-- v-if="scope.row.dients" -->
           </el-table-column>
         </el-table>
       </div>
@@ -266,6 +298,7 @@ export default {
       }
     ];
     return {
+      mailto: [], //营养素含量
       data: JSON.parse(JSON.stringify(data)), //树形结构
       input1: "",
       input: "",
@@ -390,18 +423,63 @@ export default {
     };
   },
   computed: {},
+  beforeMount() {
+    this.Protocol();
+    this.queryLite();
+  },
   methods: {
-    totally(formName) {
+    //食材库保存
+    totally() {
+      this.$axios
+        .post(`api/blade-food/food/save`, {
+          foodName: this.footer.name,
+          foodAlias: this.footer.region
+        })
+        .then(res => {
+          console.log(res);
+          this.$message({
+            message: "保存成功",
+            type: "success"
+          });
+        })
+        .catch(() => {
+          this.$message.error("保存失败");
+        });
       //表单提交
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          // alert('submit!');
-        } else {
-          // console.log('error submit!!');
-          return false;
-        }
-      });
+      // this.$refs[formName].validate(valid => {
+      //   if (valid) {
+      //   } else {
+      //     console.log('error submit!!');
+      //     return false;
+      //   }
+      // });
     },
+    // 分类
+    queryLite() {
+      // this.$axios
+      //   .get(`api/blade-food/basetype/getList`, {
+      //     headers: {
+      //       "Content-Type": "application/json"
+      //     }
+      //   })
+      //   .then(res => {
+      //     console.log(res);
+      //   });
+    },
+    //营养素含量
+    Protocol() {
+      this.$axios
+        .get(`api/blade-food/nutrition/tree`, {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+        .then(res => {
+          console.log(res);
+          this.mailto = res.data.data;
+        });
+    },
+
     resetForm(formName) {
       this.$refs[formName].resetFields(); //重置
     },

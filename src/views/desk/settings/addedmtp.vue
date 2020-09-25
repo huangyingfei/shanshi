@@ -112,9 +112,33 @@
               </ul>
             </el-tab-pane>
           </el-tabs>
-          <div class="accto">
+          <div class="accto" v-if="item.sexNum == 2">
             <div class="titles">人群</div>
-            <div></div>
+            <div class="glyph">
+              <div class="startup">男性</div>
+              <div class="chart">上限</div>
+              <div class="Item">下限</div>
+            </div>
+            <div class="unset">
+              <div class="startup">女性</div>
+              <div class="chart">上限</div>
+              <div class="Item">下限</div>
+            </div>
+            <div class="rotate">
+              <div class="chart">上限系数</div>
+              <div class="Item">下限系数</div>
+            </div>
+          </div>
+          <div class="actor" v-if="item.sexNum == 1">
+            <div class="effects">人群</div>
+            <div class="kendo">
+              <div class="chart">上限</div>
+              <div class="Item">下限</div>
+            </div>
+            <div class="directory">
+              <div class="chart">上限系数</div>
+              <div class="Item">下限系数</div>
+            </div>
           </div>
           <ul v-if="item.nutritionVos.length == 0">
             <li v-for="(nvo, index) in item.nutritionCoeffientVos" :key="index">
@@ -583,7 +607,7 @@ export default {
   line-height: 40px; */
 }
 .nialing {
-  color: #b4bbc5;
+  /* color: #b4bbc5; */
   width: 100px;
   height: 40px;
   text-align: center;
@@ -595,17 +619,103 @@ export default {
 }
 .accto {
   width: 1100px;
-  height: 60px;
-  background-color: red;
+  height: 85px;
+
   margin-left: 50px;
+  color: #b4bbc5;
+  font-size: 14px;
 }
 .titles {
   width: 80px;
   height: 50px;
   line-height: 50px;
-  color: #b4bbc5;
+  margin-top: 31px;
   text-align: center;
-  background-color: #fff;
+
+  float: left;
+}
+.glyph {
+  width: 300px;
+
+  height: 83px;
+  line-height: 50px;
+  text-align: center;
+  margin-left: 30px;
+  float: left;
+}
+.chart {
+  width: 100px;
+  height: 50px;
+
+  float: left;
+  margin-left: 20px;
+}
+.Item {
+  width: 100px;
+  height: 50px;
+
+  float: left;
+  margin-left: 50px;
+}
+.unset {
+  width: 300px;
+
+  height: 83px;
+  line-height: 50px;
+  text-align: center;
+  margin-left: 20px;
+  float: left;
+}
+.rotate {
+  width: 300px;
+
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  margin-left: 20px;
+  float: left;
+  margin-top: 31px;
+}
+.startup {
+  width: 300px;
+  height: 31px;
+  /* background-color: yellow; */
+  text-align: center;
+  line-height: 31px;
+}
+.actor {
+  width: 742px;
+  height: 50px;
+
+  margin-left: 50px;
+  color: #b4bbc5;
   font-size: 14px;
+}
+.effects {
+  width: 80px;
+  height: 50px;
+  line-height: 50px;
+
+  text-align: center;
+
+  float: left;
+}
+.kendo {
+  width: 300px;
+  height: 50px;
+  text-align: center;
+  line-height: 50px;
+
+  margin-left: 30px;
+  float: left;
+}
+.directory {
+  width: 300px;
+  height: 50px;
+  text-align: center;
+  line-height: 50px;
+
+  margin-left: 20px;
+  float: left;
 }
 </style>
