@@ -104,7 +104,7 @@
           </el-form-item>
 
           <el-form-item
-            label="活动区域"
+            label="食材分类"
             prop="autosave"
             style=" width: 350px;   "
           >
@@ -148,7 +148,7 @@
             </el-radio-group>
           </el-form-item>
 
-          <el-form-item label="所属季节" style="  width: 350px;  ">
+          <el-form-item label="所属区域" style="  width: 350px;  ">
             <el-select v-model="value1" multiple placeholder="请选择">
               <el-option
                 v-for="item in options"
@@ -205,7 +205,7 @@
           style="width: 100%;margin-bottom: 20px;"
           row-key="id"
           border
-          default-expand-all
+          :default-expand-all="false"     
           :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
         >
           <el-table-column
@@ -223,10 +223,11 @@
           ></el-table-column>
 
           <el-table-column prop="address" label="含量">
-            <template slot-scope="scope">
+            <template slot-scope="scope" >
               <el-input
-                v-model="input1"
+                v-model="scope.row.value"
                 type="text"
+                v-if="scope.row.level!=1?true:false "
                 placeholder="请输入内容"
               ></el-input>
             </template>
@@ -366,65 +367,14 @@ export default {
         // }
       ],
       value1: [],
-      tableData: [
-        {
-          id: "1",
-          date: "2016-05-02",
-          name: "王1虎",
-          level: 1,
-          address: "上海市普陀区金沙江路 1518 弄",
-          dients: false,
-          children: [
-            {
-              id: "11",
-              date: "2016-05-02",
-              name: "王2虎",
-              level: 2,
-              address: "上海市普陀区金沙江路 1518 弄",
-              dients: true,
-              children: [
-                {
-                  id: "111",
-                  date: "2016-05-02",
-                  name: "王3虎",
-                  level: 3,
-                  address: "上海市普陀区金沙江路 1518 弄",
-                  dients: true
-                },
-                {
-                  id: "112",
-                  level: 3,
-                  date: "2016-05-02",
-                  name: "王4虎",
-                  address: "上海市普陀区金沙江路 1518 弄",
-                  dients: true
-                }
-              ]
-            },
-            {
-              id: "12",
-              level: 2,
-              date: "2016-05-02",
-              name: "王5虎",
-              address: "上海市普陀区金沙江路 1518 弄",
-              dients: true
-            }
-          ]
-        },
-        {
-          id: "2",
-          level: 1,
-          date: "2016-05-04",
-          name: "王6虎",
-          address: "上海市普陀区金沙江路 1517 弄",
-          dients: false
-        }
-      ]
+    
     };
   },
   computed: {},
   beforeMount() {
     this.Protocol();
+    this.queryLite();
+    this.Provinces();//省市区
     this.queryLite();
   },
   methods: {
@@ -432,7 +382,7 @@ export default {
     totally() {
       this.$axios
         .post(`api/blade-food/food/save`, {
-          foodName: this.footer.name,
+          foodName: this.ruleForm.name,
           foodAlias: this.footer.region
         })
         .then(res => {
@@ -458,9 +408,7 @@ export default {
     queryLite() {
       // this.$axios
       //   .get(`api/blade-food/basetype/getList`, {
-      //     headers: {
-      //       "Content-Type": "application/json"
-      //     }
+
       //   })
       //   .then(res => {
       //     console.log(res);
@@ -477,6 +425,20 @@ export default {
         .then(res => {
           console.log(res);
           this.mailto = res.data.data;
+        });
+    },
+    //省市区
+    Provinces(){
+      // http://localhost/blade_system/region/selectCityOrProvince
+      this.$axios
+        .get(`api/blade_system/region/selectCityOrProvince`, {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+        .then(res => {
+          console.log(res);
+          // this.mailto = res.data.data;
         });
     },
 
