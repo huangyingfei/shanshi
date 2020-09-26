@@ -160,7 +160,7 @@
             <el-cascader
               v-model="valuepark"
               placeholder="请选择省市区"
-              :options="national"
+              :options="options"
               @change="handleChange"
             ></el-cascader>
           </el-form-item>
@@ -403,22 +403,7 @@ export default {
       ],
       value: "",
       options: [
-        // {
-        //     value: '1',
-        //     label: '春'
-        // },
-        // {
-        //     value: '2',
-        //     label: '夏'
-        // },
-        // {
-        //     value: '3',
-        //     label: '秋'
-        // },
-        // {
-        //     value: '4',
-        //     label: '冬'
-        // }
+      
       ],
       value1: []
     };
@@ -430,24 +415,27 @@ export default {
     this.Provinces(); //省市区
     this.queryLite();
   },
+  created() {
+  },
   methods: {
     //食材库保存
     totally() {
-      this.$axios
-        .post(`api/blade-food/food/save`, {
-          foodName: this.ruleForm.name,
-          foodAlias: this.footer.buffer
-        })
-        .then(res => {
-          console.log(res);
-          this.$message({
-            message: "保存成功",
-            type: "success"
-          });
-        })
-        .catch(() => {
-          this.$message.error("保存失败");
-        });
+        console.log(this.mailto);
+      // this.$axios
+      //   .post(`api/blade-food/food/save`, {
+      //     foodName: this.ruleForm.name,
+      //     foodAlias: this.footer.buffer
+      //   })
+      //   .then(res => {
+      //     console.log(res);
+      //     this.$message({
+      //       message: "保存成功",
+      //       type: "success"
+      //     });
+      //   })
+      //   .catch(() => {
+      //     this.$message.error("保存失败");
+      //   });
       //表单提交
       // this.$refs[formName].validate(valid => {
       //   if (valid) {
@@ -496,6 +484,26 @@ export default {
           console.log(res);
           this.national = res.data.data;
           console.log(this.national);
+          let arr = [];
+          this.national.forEach((item, index) => {
+            arr[index] = {
+              value: item.name,
+              label: item.name,
+            }
+            arr[index].children = [];
+            console.log(item.children instanceof Array)
+            if(item.children) {
+              item.children.forEach((item1, index1) => {
+                arr[index].children[index1] = {
+                  value: item1.name,
+                  label: item1.name,
+                } 
+              })
+            }
+          })
+          
+          // this.$set(this.national, arr)
+          this.options = arr;
         });
     },
 
