@@ -89,10 +89,10 @@
             <el-input v-model="ruleForm.name"></el-input>
           </el-form-item>
           <el-form-item label="食物别名1" style=" width: 350px;  ">
-            <el-input></el-input>
+            <el-input v-model="ruleForm.foodFood"></el-input>
           </el-form-item>
           <el-form-item label="食物别名2" style=" width: 350px;  ">
-            <el-input></el-input>
+            <el-input v-model="ruleForm.ovenFood"></el-input>
           </el-form-item>
 
           <el-form-item
@@ -105,21 +105,26 @@
 
           <el-form-item
             label="食材分类"
-            prop="autosave"
+            prop="fooddata"
             style=" width: 350px;   "
           >
-            <el-select v-model="ruleForm.autosave" placeholder="请选择活动区域">
-              <!-- <el-option label="区域一" value="shanghai"></el-option>
-              <el-option label="区域二" value="beijing"></el-option>-->
+            <el-select v-model="ruleForm.fooddata" placeholder="请选择">
+              <el-option
+                v-for="item in foodPos"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
             </el-select>
           </el-form-item>
 
           <el-form-item label="食物分类1" style=" width: 350px;  ">
-            <el-input placeholder="请输入食材"></el-input>
+            <el-input v-model="foods" placeholder="请输入食物分类"></el-input>
           </el-form-item>
 
           <el-form-item label="食物分类2" style=" width: 350px;   ">
-            <el-input placeholder="请输入食材"></el-input>
+            <el-input v-model="dogfood" placeholder="请输入食物分类"></el-input>
           </el-form-item>
 
           <el-form-item label="食部(%)" prop="besaved" style=" width: 350px;  ">
@@ -134,7 +139,10 @@
           </el-form-item>
 
           <el-form-item label="水分(%)" style=" width: 350px;   ">
-            <el-input placeholder="请输入水分"></el-input>
+            <el-input
+              placeholder="请输入水分"
+              v-model="ruleForm.content"
+            ></el-input>
           </el-form-item>
 
           <el-form-item label="色系" style="  ">
@@ -149,19 +157,22 @@
           </el-form-item>
 
           <el-form-item label="所属区域" style="  width: 350px;  ">
-            <el-select v-model="value1" multiple placeholder="请选择">
+            <el-cascader
+              v-model="valuepark"
+              placeholder="请选择省市区"
+              :options="national"
+              @change="handleChange"
+            ></el-cascader>
+          </el-form-item>
+          <el-form-item label="所属季节" style=" width: 350px;  ">
+            <el-select v-model="active" multiple placeholder="请选择">
               <el-option
-                v-for="item in options"
+                v-for="item in season"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="活动区域" style=" width: 350px;  ">
-            <el-select v-model="ruleForm.region" placeholder="请选择活动区域">
-              <!-- <el-option label="区域一" value="shanghai"></el-option>
-              <el-option label="区域二" value="beijing"></el-option>-->
+              >
+              </el-option>
             </el-select>
           </el-form-item>
 
@@ -205,29 +216,28 @@
           style="width: 100%;margin-bottom: 20px;"
           row-key="id"
           border
-          :default-expand-all="false"     
+          :default-expand-all="false"
           :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
         >
           <el-table-column
             prop="title"
             label="营养素"
-            sortable
+            align="center"
             width="200"
           ></el-table-column>
           <el-table-column
-            prop="address"
+            prop="unit"
             label="单位"
-            sortable
             width="180"
             align="center"
           ></el-table-column>
 
-          <el-table-column prop="address" label="含量">
-            <template slot-scope="scope" >
+          <el-table-column label="含量" align="center">
+            <template slot-scope="scope">
               <el-input
-                v-model="scope.row.value"
+                v-model="scope.row.result"
                 type="text"
-                v-if="scope.row.level!=1?true:false "
+                v-if="scope.row.level != 1 ? true : false"
                 placeholder="请输入内容"
               ></el-input>
             </template>
@@ -303,22 +313,65 @@ export default {
       data: JSON.parse(JSON.stringify(data)), //树形结构
       input1: "",
       input: "",
-      dialogImageUrl: "",
+      dialogImageUrl: "", //图片
       dialogVisible: false,
       ruleForm: {
         region: "",
-        name: "",
-        buffer: "",
+        name: "", //食材名
+        foodFood: "", //食物别名1
+        ovenFood: "", //食物别名2
+        buffer: "", //食材真名
+        fooddata: "", //食材分类
+        foods: "", //食物分类1
+        dogfood: "", //食物分类2
+        besaved: "", //食部分
+        timers: "", //重量
+        content: "", //水分
+        resource: "", //色系
+        desc: "", //功用
+        delivery: false, //公开
+        delivery1: false, //常用
         autosave: "",
-        besaved: "",
-        timers: "",
         type: [],
-        resource: "",
-        temps: "",
-        desc: "",
-        delivery: false,
-        delivery1: false
+        temps: ""
       },
+      valuepark: [], //省市区
+      active: [], //季节
+      foodPos: [
+        {
+          value: "1",
+          label: "黄金糕"
+        },
+        {
+          value: "2",
+          label: "双皮奶"
+        },
+        {
+          value: "3",
+          label: "蚵仔煎"
+        }
+      ],
+      //季节
+      season: [
+        {
+          value: "1",
+          label: "春季"
+        },
+        {
+          value: "2",
+          label: "夏季"
+        },
+        {
+          value: "3",
+          label: "秋季"
+        },
+        {
+          value: "4",
+          label: "冬季"
+        }
+      ],
+
+      // fooddata: "",
       rules: {
         name: [
           { required: true, message: "请输入食材名", trigger: "blur" },
@@ -327,7 +380,8 @@ export default {
         buffer: [
           { required: true, message: "请输入食材真名", trigger: "blur" }
         ],
-        autosave: [
+        fooddata: [
+          //食材分类
           { required: true, message: "请选择活动区域", trigger: "change" }
         ],
         besaved: [{ required: true, message: "请输入食部", trigger: "blur" }],
@@ -366,15 +420,14 @@ export default {
         //     label: '冬'
         // }
       ],
-      value1: [],
-    
+      value1: []
     };
   },
   computed: {},
   beforeMount() {
     this.Protocol();
     this.queryLite();
-    this.Provinces();//省市区
+    this.Provinces(); //省市区
     this.queryLite();
   },
   methods: {
@@ -383,7 +436,7 @@ export default {
       this.$axios
         .post(`api/blade-food/food/save`, {
           foodName: this.ruleForm.name,
-          foodAlias: this.footer.region
+          foodAlias: this.footer.buffer
         })
         .then(res => {
           console.log(res);
@@ -408,7 +461,6 @@ export default {
     queryLite() {
       // this.$axios
       //   .get(`api/blade-food/basetype/getList`, {
-
       //   })
       //   .then(res => {
       //     console.log(res);
@@ -428,17 +480,22 @@ export default {
         });
     },
     //省市区
-    Provinces(){
-      // http://localhost/blade_system/region/selectCityOrProvince
+    handleChange(value) {
+      console.log(value);
+    },
+    Provinces() {
+      // http://api.yytianqi.com/citylist/id/2
+
       this.$axios
-        .get(`api/blade_system/region/selectCityOrProvince`, {
+        .get(`api/blade-system/region/selectCityOrProvince`, {
           headers: {
             "Content-Type": "application/json"
           }
         })
         .then(res => {
           console.log(res);
-          // this.mailto = res.data.data;
+          this.national = res.data.data;
+          console.log(this.national);
         });
     },
 
