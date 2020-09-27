@@ -120,11 +120,11 @@
           </el-form-item>
 
           <el-form-item label="食物分类1" style=" width: 350px;  ">
-            <el-input v-model="foods" placeholder="请输入食物分类"></el-input>
+            <el-input v-model="ruleForm.foods" placeholder="请输入食物分类"></el-input>
           </el-form-item>
 
           <el-form-item label="食物分类2" style=" width: 350px;   ">
-            <el-input v-model="dogfood" placeholder="请输入食物分类"></el-input>
+            <el-input v-model="ruleForm.dogfood" placeholder="请输入食物分类"></el-input>
           </el-form-item>
 
           <el-form-item label="食部(%)" prop="besaved" style=" width: 350px;  ">
@@ -421,21 +421,60 @@ export default {
     //食材库保存
     totally() {
         console.log(this.mailto);
-      // this.$axios
-      //   .post(`api/blade-food/food/save`, {
-      //     foodName: this.ruleForm.name,
-      //     foodAlias: this.footer.buffer
-      //   })
-      //   .then(res => {
-      //     console.log(res);
-      //     this.$message({
-      //       message: "保存成功",
-      //       type: "success"
-      //     });
-      //   })
-      //   .catch(() => {
-      //     this.$message.error("保存失败");
-      //   });
+        let food=[];
+        // this.mailto.forEach((item,index)=>{
+        //     // console.log(item);
+        //     food[index]=[];
+        //     item.children.forEach((item1,indx1)=>{
+        //       if(item1.children){
+        //        item1.children.forEach((item2,index2)=>{
+        //           console.log(item2);
+        //         food[index][indx1]= {
+        //           nutrientId: item1.id,
+        //           value: item1.result,
+        //          } 
+        //         })
+        //         }
+  
+        //     })
+
+        // })
+        // console.log(food)
+        // let canal=this.mailto;
+    
+
+      this.$axios
+        .post(`api/blade-food/food/save`, {
+          foodName: this.ruleForm.name,
+          foodAlias: this.ruleForm.foodFood,//食材名
+          foodAlias1:this.ruleForm.ovenFood,//食物别名1
+          foodReal:this.ruleForm.buffer,//食材真名
+          foodType:this.ruleForm.fooddata,//食材分类
+        foodType1:this.ruleForm.foods,//食物分类1
+        foodType2:this.ruleForm.dogfood,//食物分类2
+        foodEat:this.ruleForm.besaved,//食部
+        weight:this.ruleForm.timers,//重量
+        water:this.ruleForm.content,//水分
+        color:this.ruleForm.resource,//色系
+        season:this.active,//季节
+        belongRegion:this.valuepark,//所属区域
+        function:this.ruleForm.desc,//功用
+        isUse:this.ruleForm.delivery1,//是否常用
+        isPub:this.ruleForm.delivery,//是否公开
+     
+          
+          // nutritions: food,
+        })
+        .then(res => {
+          console.log(res);
+          this.$message({
+            message: "保存成功",
+            type: "success"
+          });
+        })
+        .catch(() => {
+          this.$message.error("保存失败");
+        });
       //表单提交
       // this.$refs[formName].validate(valid => {
       //   if (valid) {
