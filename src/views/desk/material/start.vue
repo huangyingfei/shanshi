@@ -120,11 +120,17 @@
           </el-form-item>
 
           <el-form-item label="食物分类1" style=" width: 350px;  ">
-            <el-input v-model="ruleForm.foods" placeholder="请输入食物分类"></el-input>
+            <el-input
+              v-model="ruleForm.foods"
+              placeholder="请输入食物分类"
+            ></el-input>
           </el-form-item>
 
           <el-form-item label="食物分类2" style=" width: 350px;   ">
-            <el-input v-model="ruleForm.dogfood" placeholder="请输入食物分类"></el-input>
+            <el-input
+              v-model="ruleForm.dogfood"
+              placeholder="请输入食物分类"
+            ></el-input>
           </el-form-item>
 
           <el-form-item label="食部(%)" prop="besaved" style=" width: 350px;  ">
@@ -147,12 +153,12 @@
 
           <el-form-item label="色系" style="  ">
             <el-radio-group v-model="ruleForm.resource">
-              <el-radio label="绿"></el-radio>
-              <el-radio label="红"></el-radio>
-              <el-radio label="黄"></el-radio>
-              <el-radio label="紫"></el-radio>
-              <el-radio label="白"></el-radio>
-              <el-radio label="黑"></el-radio>
+              <el-radio label="1">绿</el-radio>
+              <el-radio label="2">红</el-radio>
+              <el-radio label="3">黄</el-radio>
+              <el-radio label="4">紫</el-radio>
+              <el-radio label="5">白</el-radio>
+              <el-radio label="6">黑</el-radio>
             </el-radio-group>
           </el-form-item>
 
@@ -161,6 +167,7 @@
               v-model="valuepark"
               placeholder="请选择省市区"
               :options="options"
+              :props="{ multiple: true, checkStrictly: true }"
               @change="handleChange"
             ></el-cascader>
           </el-form-item>
@@ -336,21 +343,9 @@ export default {
         temps: ""
       },
       valuepark: [], //省市区
+      // props: { multiple: true },
       active: [], //季节
-      foodPos: [
-        {
-          value: "1",
-          label: "黄金糕"
-        },
-        {
-          value: "2",
-          label: "双皮奶"
-        },
-        {
-          value: "3",
-          label: "蚵仔煎"
-        }
-      ],
+      foodPos: [], //食材分类
       //季节
       season: [
         {
@@ -402,68 +397,69 @@ export default {
         }
       ],
       value: "",
-      options: [
-      
-      ],
+      options: [],
       value1: []
     };
   },
   computed: {},
   beforeMount() {
     this.Protocol();
-    this.queryLite();
     this.Provinces(); //省市区
-    this.queryLite();
+    this.queryLite(); //获取分类
   },
-  created() {
-  },
+  created() {},
   methods: {
     //食材库保存
     totally() {
-        console.log(this.mailto);
-        let food=[];
-        // this.mailto.forEach((item,index)=>{
-        //     // console.log(item);
-        //     food[index]=[];
-        //     item.children.forEach((item1,indx1)=>{
-        //       if(item1.children){
-        //        item1.children.forEach((item2,index2)=>{
-        //           console.log(item2);
-        //         food[index][indx1]= {
-        //           nutrientId: item1.id,
-        //           value: item1.result,
-        //          } 
-        //         })
-        //         }
-  
-        //     })
-
-        // })
-        // console.log(food)
-        // let canal=this.mailto;
-    
+      console.log(this.mailto);
+      let food = [];
+      this.mailto.forEach((item, index) => {
+        // console.log(item);
+        item.children.forEach((item1, indx1) => {
+          // console.log(item1);
+          if (item1.children) {
+            item1.children.forEach((item2, index2) => {
+              // console.log(item2);
+              if (item2.result != null) {
+                food.push({
+                  nutrientId: item2.id,
+                  value: item2.result
+                });
+              }
+            });
+          }
+          if (item1.result != null) {
+            food.push({
+              nutrientId: item1.id,
+              value: item1.result
+            });
+          }
+        });
+      });
+      console.log(food);
+      // console.log(Library);
+      // let canal=this.mailto;
 
       this.$axios
         .post(`api/blade-food/food/save`, {
-          foodName: this.ruleForm.name,
-          foodAlias: this.ruleForm.foodFood,//食材名
-          foodAlias1:this.ruleForm.ovenFood,//食物别名1
-          foodReal:this.ruleForm.buffer,//食材真名
-          foodType:this.ruleForm.fooddata,//食材分类
-        foodType1:this.ruleForm.foods,//食物分类1
-        foodType2:this.ruleForm.dogfood,//食物分类2
-        foodEat:this.ruleForm.besaved,//食部
-        weight:this.ruleForm.timers,//重量
-        water:this.ruleForm.content,//水分
-        color:this.ruleForm.resource,//色系
-        season:this.active,//季节
-        belongRegion:this.valuepark,//所属区域
-        function:this.ruleForm.desc,//功用
-        isUse:this.ruleForm.delivery1,//是否常用
-        isPub:this.ruleForm.delivery,//是否公开
-     
-          
-          // nutritions: food,
+          foodName: this.ruleForm.name, //食材名
+          foodAlias: this.ruleForm.foodFood, //食物别名1
+          foodAlias1: this.ruleForm.ovenFood, //食物别名2
+          foodReal: this.ruleForm.buffer, //食材真名
+          foodType: this.ruleForm.fooddata, //食材分类
+          foodType1: this.ruleForm.foods, //食物分类1
+          foodType2: this.ruleForm.dogfood, //食物分类2
+          foodEat: this.ruleForm.besaved, //食部
+          weight: this.ruleForm.timers, //重量
+          water: this.ruleForm.content, //水分
+          color: this.ruleForm.resource, //色系
+          season: this.active, //季节
+          belongRegion: this.valuepark, //所属区域
+          function: this.ruleForm.desc, //功用
+          isUse: this.ruleForm.delivery1 == false ? 0 : 1, //是否常用
+          isPub: this.ruleForm.delivery == false ? 0 : 1, //是否公开
+
+          nutritions: food
         })
         .then(res => {
           console.log(res);
@@ -486,12 +482,26 @@ export default {
     },
     // 分类
     queryLite() {
-      // this.$axios
-      //   .get(`api/blade-food/basetype/getList`, {
-      //   })
-      //   .then(res => {
-      //     console.log(res);
-      //   });
+      this.$axios
+        .get(`api/blade-food/basetype/list`, {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+        .then(res => {
+          // console.log(res);
+          this.tionDate = res.data.data;
+          console.log(this.tionDate);
+          let cation = [];
+          this.tionDate.forEach((item, index) => {
+            cation[index] = {
+              value: item.id,
+              label: item.typeName
+            };
+          });
+          console.log(cation);
+          this.foodPos = cation;
+        });
     },
     //营养素含量
     Protocol() {
@@ -520,27 +530,27 @@ export default {
           }
         })
         .then(res => {
-          console.log(res);
+          // console.log(res);
           this.national = res.data.data;
           console.log(this.national);
           let arr = [];
           this.national.forEach((item, index) => {
             arr[index] = {
-              value: item.name,
-              label: item.name,
-            }
+              value: item.id,
+              label: item.name
+            };
             arr[index].children = [];
-            console.log(item.children instanceof Array)
-            if(item.children) {
+            // console.log(item.children instanceof Array);
+            if (item.children) {
               item.children.forEach((item1, index1) => {
                 arr[index].children[index1] = {
-                  value: item1.name,
-                  label: item1.name,
-                } 
-              })
+                  value: item1.id,
+                  label: item1.name
+                };
+              });
             }
-          })
-          
+          });
+
           // this.$set(this.national, arr)
           this.options = arr;
         });
