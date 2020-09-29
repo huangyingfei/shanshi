@@ -347,6 +347,7 @@ export default {
       active: [], //季节
       foodPos: [], //食材分类
       //季节
+      fication:[],
       season: [
         {
           value: "1",
@@ -468,7 +469,7 @@ export default {
             message: "保存成功",
             type: "success"
           });
-          window.location.reload();
+          // window.location.reload();
         })
         .catch(() => {
           this.$message.error("保存失败");
@@ -491,7 +492,27 @@ export default {
           }
         })
         .then(res => {
-          console.log(res);
+          // console.log(res);
+          this.fication=res.data.data
+          console.log(this.fication);
+          let Front=[];
+          this.fication.forEach((item,index)=>{
+                console.log(item);
+                Front[index]={
+                    id:item.id,
+                    label:item.typeName
+                } ;
+           Front[index].children = [];
+            item.foods.forEach((item1, index1) => {
+              Front[index].children[index1] = {
+                id: item1.id,
+                label: item1.foodName
+              }
+            })   
+          })
+          // console.log(Front);
+          this.data=Front;
+          console.log(this.data);
         });
     },
     // 分类
@@ -505,15 +526,17 @@ export default {
         .then(res => {
           // console.log(res);
           this.tionDate = res.data.data;
-          console.log(this.tionDate);
+          // console.log(this.tionDate);
           let cation = [];
+          // children
           this.tionDate.forEach((item, index) => {
             cation[index] = {
               value: item.id,
               label: item.typeName
             };
+          
           });
-          console.log(cation);
+          // console.log(cation);
           this.foodPos = cation;
         });
     },
@@ -526,7 +549,7 @@ export default {
           }
         })
         .then(res => {
-          console.log(res);
+          // console.log(res);
           this.mailto = res.data.data;
         });
     },
@@ -546,7 +569,7 @@ export default {
         .then(res => {
           // console.log(res);
           this.national = res.data.data;
-          console.log(this.national);
+          // console.log(this.national);
           let arr = [];
           this.national.forEach((item, index) => {
             arr[index] = {
