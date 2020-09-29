@@ -3,17 +3,38 @@
     <!-- 搜索 -->
     <div class="custom">
       <span style=" margin-right: 10px;">项目名称:</span>
-      <el-input v-model="input" placeholder="请输入内容" style="width:200px"></el-input>
+      <el-input
+        v-model="input"
+        placeholder="请输入内容"
+        style="width:200px"
+      ></el-input>
       <span style="margin: 0 10px;">创建机构:</span>
-      <el-input v-model="editor" placeholder="请输入内容" style="width:200px"></el-input>
+      <el-input
+        v-model="editor"
+        placeholder="请输入内容"
+        style="width:200px"
+      ></el-input>
       <span style="margin: 0 10px;">提交日期:</span>
-      <el-date-picker v-model="value1" type="date" placeholder="选择日期" style="width:200px"></el-date-picker>
+      <el-date-picker
+        v-model="value1"
+        type="date"
+        placeholder="选择日期"
+        style="width:200px"
+      ></el-date-picker>
       <span style="margin: 0 10px;">提交人:</span>
-      <el-input v-model="editor" placeholder="请输入内容" style="width:200px"></el-input>
+      <el-input
+        v-model="editor"
+        placeholder="请输入内容"
+        style="width:200px"
+      ></el-input>
 
       <div class="tostring">
         <span style="margin-right: 10px; ">联系电话:</span>
-        <el-input v-model="editor" placeholder="请输入内容" style="width:200px"></el-input>
+        <el-input
+          v-model="editor"
+          placeholder="请输入内容"
+          style="width:200px"
+        ></el-input>
         <span style="margin: 0 10px;">审核状态:</span>
         <el-select v-model="value" placeholder="请选择">
           <el-option
@@ -28,25 +49,76 @@
           icon="el-icon-search"
           type="success"
           style=" margin-left: 20px; "
-        >搜索</el-button>
+          >搜索</el-button
+        >
       </div>
     </div>
     <!-- 审核表格 -->
     <div class="navbar">
-      <el-table :data="tableData" border style="width: 100%">
-        <el-table-column prop="date" label="序号" width="70" align="center"></el-table-column>
-        <el-table-column prop="name" label="食材名称" width="100" align="center"></el-table-column>
-        <el-table-column prop="proto" label="分类" width="100" align="center"></el-table-column>
-        <el-table-column prop="address" label="创建机构" width="180" align="center"></el-table-column>
-        <el-table-column prop="stats" label="提交人" width="100" align="center"></el-table-column>
-        <el-table-column prop="malloc" label="联系电话" width="150" align="center"></el-table-column>
-        <el-table-column prop="decls" label="提交时间" width="180" align="center"></el-table-column>
-        <el-table-column prop="board" label="审核状态" width="100" align="center"></el-table-column>
+      <el-table
+        :data="attributes"
+        border
+        style="width: 100%"
+        v-loading="loadFlag"
+        empty-text="没有数据~"
+      >
+        <el-table-column
+          prop="date"
+          label="序号"
+          width="70"
+          align="center"
+        ></el-table-column>
+        <el-table-column
+          prop="foodName"
+          label="食材名称"
+          width="100"
+          align="center"
+        ></el-table-column>
+        <el-table-column
+          prop="orgName"
+          label="分类"
+          width="100"
+          align="center"
+        ></el-table-column>
+        <el-table-column
+          prop="createName"
+          label="创建机构"
+          width="180"
+          align="center"
+        ></el-table-column>
+        <el-table-column
+          prop="createName"
+          label="提交人"
+          width="100"
+          align="center"
+        ></el-table-column>
+        <el-table-column
+          prop="mobile"
+          label="联系电话"
+          width="150"
+          align="center"
+        ></el-table-column>
+        <el-table-column
+          prop="createTime"
+          label="提交时间"
+          width="180"
+          align="aduitTime"
+        ></el-table-column>
+        <el-table-column
+          prop="status"
+          label="审核状态"
+          width="100"
+          align="center"
+        ></el-table-column>
         <!--操作格-->
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <el-button type="success" size="small" @click="seecol(scope.row)">查看</el-button>
-            <el-button type="danger" size="small" @click="Directory(scope.row)">审核</el-button>
+            <el-button type="success" size="small" @click="seecol(scope.row)"
+              >查看</el-button
+            >
+            <el-button type="danger" size="small" @click="Directory(scope.row)"
+              >审核</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -101,12 +173,23 @@
               <el-input></el-input>
             </el-form-item>
 
-            <el-form-item label="食材真名" prop="buffer" style=" width: 350px;   ">
+            <el-form-item
+              label="食材真名"
+              prop="buffer"
+              style=" width: 350px;   "
+            >
               <el-input v-model="ruleForm.buffer"></el-input>
             </el-form-item>
 
-            <el-form-item label="活动区域" prop="autosave" style=" width: 350px;   ">
-              <el-select v-model="ruleForm.autosave" placeholder="请选择活动区域">
+            <el-form-item
+              label="活动区域"
+              prop="autosave"
+              style=" width: 350px;   "
+            >
+              <el-select
+                v-model="ruleForm.autosave"
+                placeholder="请选择活动区域"
+              >
                 <!-- <el-option label="区域一" value="shanghai"></el-option>
                 <el-option label="区域二" value="beijing"></el-option>-->
               </el-select>
@@ -120,12 +203,26 @@
               <el-input placeholder="请输入食材"></el-input>
             </el-form-item>
 
-            <el-form-item label="食部(%)" prop="besaved" style=" width: 350px;  ">
-              <el-input v-model="ruleForm.besaved" placeholder="请输入"></el-input>
+            <el-form-item
+              label="食部(%)"
+              prop="besaved"
+              style=" width: 350px;  "
+            >
+              <el-input
+                v-model="ruleForm.besaved"
+                placeholder="请输入"
+              ></el-input>
             </el-form-item>
 
-            <el-form-item label="重量（g）" prop="timers" style=" width: 350px; ">
-              <el-input v-model="ruleForm.timers" placeholder="请输入"></el-input>
+            <el-form-item
+              label="重量（g）"
+              prop="timers"
+              style=" width: 350px; "
+            >
+              <el-input
+                v-model="ruleForm.timers"
+                placeholder="请输入"
+              ></el-input>
             </el-form-item>
 
             <el-form-item label="水分(%)" style=" width: 350px;   ">
@@ -203,12 +300,28 @@
             default-expand-all
             :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
           >
-            <el-table-column prop="name" label="营养素" sortable width="180"></el-table-column>
-            <el-table-column prop="address" label="单位" sortable width="180" align="center"></el-table-column>
+            <el-table-column
+              prop="name"
+              label="营养素"
+              sortable
+              width="180"
+            ></el-table-column>
+            <el-table-column
+              prop="address"
+              label="单位"
+              sortable
+              width="180"
+              align="center"
+            ></el-table-column>
 
             <el-table-column prop="num" label="含量">
               <template slot-scope="scope">
-                <el-input v-model="input1" type="text" placeholder="请输入内容" v-if="scope.row.dients"></el-input>
+                <el-input
+                  v-model="input1"
+                  type="text"
+                  placeholder="请输入内容"
+                  v-if="scope.row.dients"
+                ></el-input>
               </template>
             </el-table-column>
           </el-table>
@@ -230,9 +343,18 @@
           </el-form-item>
         </el-form>
         <div class="worm1">拒绝原因</div>
-        <el-form :model="examine" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+        <el-form
+          :model="examine"
+          ref="ruleForm"
+          label-width="100px"
+          class="demo-ruleForm"
+        >
           <el-form-item label="拒绝原因" style=" width:200px ">
-            <el-input style=" width: 450px;  " type="textarea" v-model="examine.desc1"></el-input>
+            <el-input
+              style=" width: 450px;  "
+              type="textarea"
+              v-model="examine.desc1"
+            ></el-input>
           </el-form-item>
         </el-form>
         <div class="worm1">记录</div>
@@ -261,12 +383,13 @@
   </div>
 </template>
 
-
 <script>
 export default {
   name: "toolbar",
   data() {
     return {
+      loadFlag: false, //加载flag
+      attributes: [], //表格数据
       seekeys: false, //审核弹框
       value1: "", //日期
       input: "",
@@ -393,14 +516,42 @@ export default {
       ]
     };
   },
-
+  beforeMount() {
+    this.auditing();
+  },
   methods: {
+    //表格数据
+    auditing() {
+      this.loadFlag = true;
+      this.$axios
+        .get(`api/blade-food/food/getAuditList?current=${1}&size=${10}`, {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+        .then(res => {
+          // console.log(res);
+          this.attributes = res.data.data.records;
+          console.log(this.attributes);
+          this.loadFlag = false;
+        });
+    },
     seecol(row) {
       this.seekeys = true;
     },
     Directory(row) {
       //审核
-      console.log(row);
+      // console.log(row);
+      let design = `?id=${row.id}`;
+      this.$axios
+        .get(`api/blade-food/food/audit` + design, {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+        .then(res => {
+          console.log(res);
+        });
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);

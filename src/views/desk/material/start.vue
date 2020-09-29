@@ -406,6 +406,7 @@ export default {
     this.Protocol();
     this.Provinces(); //省市区
     this.queryLite(); //获取分类
+    this.Addraudit(); //树形结构渲染
   },
   created() {},
   methods: {
@@ -453,8 +454,8 @@ export default {
           weight: this.ruleForm.timers, //重量
           water: this.ruleForm.content, //水分
           color: this.ruleForm.resource, //色系
-          season: this.active, //季节
-          belongRegion: this.valuepark, //所属区域
+          seasons: this.active, //季节
+          belongRegions: this.valuepark, //所属区域
           function: this.ruleForm.desc, //功用
           isUse: this.ruleForm.delivery1 == false ? 0 : 1, //是否常用
           isPub: this.ruleForm.delivery == false ? 0 : 1, //是否公开
@@ -467,6 +468,7 @@ export default {
             message: "保存成功",
             type: "success"
           });
+          window.location.reload();
         })
         .catch(() => {
           this.$message.error("保存失败");
@@ -479,6 +481,18 @@ export default {
       //     return false;
       //   }
       // });
+    },
+    //树形渲染数
+    Addraudit() {
+      this.$axios
+        .get(`api/blade-food/basetype/getFoodByBaseId?isPrivate=1`, {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+        .then(res => {
+          console.log(res);
+        });
     },
     // 分类
     queryLite() {
