@@ -15,17 +15,36 @@
         <el-button type="success" plain size="mini">加食材</el-button>
       </div>
       <div class="whole">
-        <div class="export">全部(326)</div>
-        <div class="export1">公开(320)</div>
-        <div class="export2">隐藏(6)</div>
+        <div class="export">
+          <!-- 全部(326) -->
+          <el-button type="text">全部</el-button>
+        </div>
+        <div class="export1">
+          <el-button type="text">公开</el-button>
+        </div>
+        <div class="export2">
+          <el-button type="text">隐藏</el-button>
+        </div>
       </div>
       <!-- 全国查找 -->
       <div class="country">
         <div class="country1">
           <template>
             <el-select v-model="value" placeholder="请选择">
-              <el-option
+              <!-- <el-option
                 v-for="item in examine"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option> -->
+            </el-select>
+          </template>
+        </div>
+        <div class="country2">
+          <template>
+            <el-select v-model="before1" placeholder="请选择">
+              <el-option
+                v-for="item in before"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -35,21 +54,9 @@
         </div>
         <div class="country2">
           <template>
-            <el-select v-model="value" placeholder="请选择">
+            <el-select v-model="really1" placeholder="请选择">
               <el-option
-                v-for="item in examine"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
-          </template>
-        </div>
-        <div class="country2">
-          <template>
-            <el-select v-model="value" placeholder="请选择">
-              <el-option
-                v-for="item in examine"
+                v-for="item in really"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -69,6 +76,7 @@
             default-expand-all
             :expand-on-click-node="false"
             :render-content="renderContent"
+            @node-click="handleNodeClick"
           ></el-tree>
         </div>
       </div>
@@ -265,56 +273,7 @@ let id = 1000;
 export default {
   name: "notice",
   data() {
-    const data = [
-      {
-        id: 1,
-        label: "一级 1",
-        children: [
-          {
-            id: 4,
-            label: "二级 1-1",
-            children: [
-              {
-                id: 9,
-                label: "三级 1-1-1"
-              },
-              {
-                id: 10,
-                label: "三级 1-1-2"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        id: 2,
-        label: "一级 2",
-        children: [
-          {
-            id: 5,
-            label: "二级 2-1"
-          },
-          {
-            id: 6,
-            label: "二级 2-2"
-          }
-        ]
-      },
-      {
-        id: 3,
-        label: "一级 3",
-        children: [
-          {
-            id: 7,
-            label: "二级 3-1"
-          },
-          {
-            id: 8,
-            label: "二级 3-2"
-          }
-        ]
-      }
-    ];
+    const data = [];
     return {
       mailto: [], //营养素含量
       data: JSON.parse(JSON.stringify(data)), //树形结构
@@ -347,7 +306,7 @@ export default {
       active: [], //季节
       foodPos: [], //食材分类
       //季节
-      fication:[],
+      fication: [],
       season: [
         {
           value: "1",
@@ -369,10 +328,7 @@ export default {
 
       // fooddata: "",
       rules: {
-        name: [
-          { required: true, message: "请输入食材名", trigger: "blur" },
-          { min: 3, max: 5, message: "长度在 3 到 5 个字符", trigger: "blur" }
-        ],
+        name: [{ required: true, message: "请输入食材名", trigger: "blur" }],
         buffer: [
           { required: true, message: "请输入食材真名", trigger: "blur" }
         ],
@@ -383,6 +339,43 @@ export default {
         besaved: [{ required: true, message: "请输入食部", trigger: "blur" }],
         timers: [{ required: true, message: "请输入重量", trigger: "blur" }]
       },
+      //全部 常用
+      really: [
+        {
+          value: "0",
+          label: "全部"
+        },
+        {
+          value: "1",
+          label: "常用"
+        }
+      ],
+      really1: "0",
+      //季节查询
+      before: [
+        {
+          value: "0",
+          label: "全部"
+        },
+        {
+          value: "1",
+          label: "春季"
+        },
+        {
+          value: "2",
+          label: "夏季"
+        },
+        {
+          value: "3",
+          label: "秋季"
+        },
+        {
+          value: "4",
+          label: "冬季"
+        }
+      ],
+      before1: "0",
+
       examine: [
         {
           value: "选项1",
@@ -493,32 +486,84 @@ export default {
         })
         .then(res => {
           // console.log(res);
-          this.fication=res.data.data
+          this.fication = res.data.data;
           console.log(this.fication);
-          let Front=[];
-          this.fication.forEach((item,index)=>{
-                console.log(item);
-                Front[index]={
-                    id:item.id,
-                    label:item.typeName
-                } ;
-           Front[index].children = [];
+          let Front = [];
+          this.fication.forEach((item, index) => {
+            console.log(item);
+            Front[index] = {
+              id: item.id,
+              label: item.typeName
+            };
+            Front[index].children = [];
             item.foods.forEach((item1, index1) => {
               Front[index].children[index1] = {
                 id: item1.id,
                 label: item1.foodName
-              }
-            })   
-          })
+              };
+            });
+          });
           // console.log(Front);
-          this.data=Front;
+          this.data = Front;
           console.log(this.data);
+        });
+    },
+    //点击查看详情
+    handleNodeClick(data) {
+      // console.log(data);
+      this.flour = data.id;
+      console.log(this.flour);
+      this.$axios
+        .get(`api/blade-food/food/detail?id=${this.flour}`, {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+        .then(res => {
+          // console.log(res);
+          this.inquired = res.data.data;
+          console.log(this.inquired);
+          this.ruleForm.name = this.inquired.foodName; //食材名
+          this.ruleForm.foodFood = this.inquired.foodAlias; //食物别名1
+          this.ruleForm.ovenFood = this.inquired.foodAlias1; //食物别名2
+          this.ruleForm.buffer = this.inquired.foodReal; //食材真名
+          this.ruleForm.fooddata = this.inquired.foodTypeName; //食材分类
+          this.ruleForm.foods = this.inquired.foodType1; //食物分类1
+          this.ruleForm.dogfood = this.inquired.foodType2; //食物分类2
+          this.ruleForm.besaved = this.inquired.foodEat; //食部
+          this.ruleForm.timers = this.inquired.weight; //重量
+          this.ruleForm.content = this.inquired.water; //水分
+          this.ruleForm.resource = this.inquired.color + ""; //色系
+          this.valuepark = this.inquired.belongRegionName; //所属区域
+          this.active = this.inquired.season + ""; //所属季节
+          console.log(this.active);
+          this.ruleForm.desc = this.inquired.function; //功用
+          this.ruleForm.delivery = this.inquired.isPub == 0 ? false : true; //公开
+          // console.log(this.ruleForm.delivery);
+          this.ruleForm.delivery1 = this.inquired.isUse == 0 ? false : true; //常用
+
+          let units = this.inquired.nutritions;
+          // this.arr = this.mailto;
+          console.log(this.mailto);
+          units.forEach(item => {
+            console.log(item);
+            for (let item1 of this.mailto) {
+              console.log(item1);
+              for (let arr of item1.children) {
+                console.log(arr);
+                if (arr.id == item.nutrientId) {
+                  arr.value = item.result;
+                  arr.id = item.nutrientId;
+                }
+              }
+            }
+          });
         });
     },
     // 分类
     queryLite() {
       this.$axios
-        .get(`api/blade-food/basetype/list`, {
+        .get(`api/blade-food/basetype/list?type=1`, {
           headers: {
             "Content-Type": "application/json"
           }
@@ -534,7 +579,6 @@ export default {
               value: item.id,
               label: item.typeName
             };
-          
           });
           // console.log(cation);
           this.foodPos = cation;
@@ -551,6 +595,7 @@ export default {
         .then(res => {
           // console.log(res);
           this.mailto = res.data.data;
+          console.log(this.mailto);
         });
     },
     //省市区

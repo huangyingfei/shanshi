@@ -13,6 +13,7 @@
       <el-table
         :data="tableData"
         stripe
+        border
         style="width: 100%;"
         v-loading="loadFlag"
         :element-loading-text="page_data.loadTxt"
