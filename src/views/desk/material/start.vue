@@ -534,9 +534,10 @@ export default {
           this.ruleForm.timers = this.inquired.weight; //重量
           this.ruleForm.content = this.inquired.water; //水分
           this.ruleForm.resource = this.inquired.color + ""; //色系
-          this.valuepark = this.inquired.belongRegionName; //所属区域
-          this.active = this.inquired.season + ""; //所属季节
-          console.log(this.active);
+          // this.valuepark = this.inquired.belongRegionName; //所属区域
+          this.valuepark.push([this.inquired.provinces,this.inquired.belongRegion])
+          console.log(this.valuepark);
+          this.active.push(this.inquired.season); //所属季节
           this.ruleForm.desc = this.inquired.function; //功用
           this.ruleForm.delivery = this.inquired.isPub == 0 ? false : true; //公开
           // console.log(this.ruleForm.delivery);
@@ -544,19 +545,26 @@ export default {
 
           let units = this.inquired.nutritions;
           // this.arr = this.mailto;
-          console.log(this.mailto);
+          // console.log(this.mailto);
           units.forEach(item => {
-            console.log(item);
+            // console.log(item);
             for (let item1 of this.mailto) {
-              console.log(item1);
+              // console.log(item1);
               for (let arr of item1.children) {
-                console.log(arr);
+                // console.log(arr);
                 if (arr.id == item.nutrientId) {
-                  arr.value = item.result;
-                  arr.id = item.nutrientId;
+                  arr.result = item.value;
+                }
+                if(arr.children){
+                  for(let add of arr.children){
+                    if(add.id==item.nutrientId){
+                      add.result = item.value;
+                    }
+                  }
                 }
               }
             }
+
           });
         });
     },
