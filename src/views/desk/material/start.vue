@@ -611,10 +611,15 @@ export default {
           this.ruleForm.content = this.inquired.water; //水分
           this.ruleForm.resource = this.inquired.color + ""; //色系
           // this.valuepark = this.inquired.belongRegionName; //所属区域
-          this.valuepark.push([
-            this.inquired.provinces,
-            this.inquired.belongRegion
-          ]);
+this.valuepark.length = 0;
+          this.inquired.provinces.split(',').forEach((item,i) => {
+            this.valuepark.push([item, this.inquired.belongRegion.split(',')[i]]);
+          })
+          console.log(this.valuepark)
+          // this.valuepark.push(
+          //   this.inquired.provinces.split(','),
+          //   this.inquired.belongRegion.split(','),
+          // );
 
           console.log(this.valuepark);
           this.active.push(this.inquired.season); //所属季节

@@ -347,9 +347,14 @@
           class="demo-ruleForm"
         >
           <el-form-item label="公共库分类" prop="region">
-            <el-select v-model="ruleForm.region" placeholder="请选择活动区域">
-              <el-option label="区域一" value="0"></el-option>
-              <el-option label="区域二" value="-1"></el-option>
+             <el-select v-model="menu" placeholder="请选择">
+              <el-option
+                v-for="item in fication"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
             </el-select>
           </el-form-item>
         </el-form>
@@ -433,6 +438,8 @@ export default {
         delivery: false,
         delivery1: false
       },
+      menu:[],//公共分类
+      fication:[],
       foodPos: [], //食材分类
       rules: {
         region: [
@@ -625,7 +632,17 @@ export default {
       this.$axios
         .get(`api/blade-food/basetype/getList?isPrivate=1&type=1`, {})
         .then(res => {
-          console.log(res);
+          // console.log(res);
+          this.myStr=res.data.data
+          let str=[];
+          this.myStr.forEach((item,index)=>{
+            console.log(item);
+              str[index]={
+                  value:item.id,
+                  label: item.typeName
+              }
+          })
+          this.fication=str;
         });
     },
     //营养素含量
