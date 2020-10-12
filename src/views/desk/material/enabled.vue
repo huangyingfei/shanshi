@@ -63,9 +63,9 @@
         empty-text="没有数据~"
       >
         <el-table-column
-          prop="date"
+          type="index"
           label="序号"
-          width="70"
+          width="100"
           align="center"
         ></el-table-column>
         <el-table-column
@@ -104,12 +104,14 @@
           width="180"
           align="aduitTime"
         ></el-table-column>
-        <el-table-column
-          prop="status"
-          label="审核状态"
-          width="100"
-          align="center"
-        ></el-table-column>
+        <el-table-column label="审核状态" width="100" align="center">
+          <template slot-scope="scope">
+            <p class="stop" v-if="scope.row.status == 0">待审核</p>
+            <p v-else-if="scope.row.status == 3">无需审核</p>
+            <p v-else-if="scope.row.status == 1">审核通过</p>
+            <p v-else-if="scope.row.status == 2">审核不通过</p>
+          </template>
+        </el-table-column>
         <!--操作格-->
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
@@ -134,23 +136,26 @@
       <div class="update1">
         <div class="seecr">
           <span style="color:#cccccc;">创建机构：</span>
-          刚好让你更好机构
+          {{ this.dsquery.establish }}
         </div>
         <div class="seecr1">
           <span style="color:#cccccc;">提交人：</span>
-          张三
+          {{ this.dsquery.submit }}
         </div>
         <div class="seecr1">
           <span style="color:#cccccc;">联系电话：</span>
-          15717211234
+          {{ this.dsquery.phone }}
         </div>
         <div class="seecr1">
           <span style="color:#cccccc;">提交时间：</span>
-          2020-06-05 09:00:00
+          {{ this.dsquery.time }}
         </div>
         <div class="hash">
           <span style="color:#cccccc;">审核状态：</span>
-          待审核
+          <span class="stop" v-if="this.dsquery.examineto == 0">待审核</span>
+          <span v-else-if="this.dsquery.examineto == 3">无需审核</span>
+          <span v-else-if="this.dsquery.examineto == 1">审核通过</span>
+          <span v-else-if="this.dsquery.examineto == 2">审核不通过</span>
         </div>
       </div>
       <div class="stored">
@@ -182,16 +187,18 @@
             </el-form-item>
 
             <el-form-item
-              label="活动区域"
+              label="食材分类"
               prop="autosave"
               style=" width: 350px;   "
             >
-              <el-select
-                v-model="ruleForm.autosave"
-                placeholder="请选择活动区域"
-              >
-                <!-- <el-option label="区域一" value="shanghai"></el-option>
-                <el-option label="区域二" value="beijing"></el-option>-->
+              <el-select v-model="ruleForm.fooddata" placeholder="请选择">
+                <el-option
+                  v-for="item in foodPos"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                </el-option>
               </el-select>
             </el-form-item>
 
@@ -210,7 +217,7 @@
             >
               <el-input
                 v-model="ruleForm.besaved"
-                placeholder="请输入"
+                placeholder="请输入食部"
               ></el-input>
             </el-form-item>
 
@@ -221,7 +228,7 @@
             >
               <el-input
                 v-model="ruleForm.timers"
-                placeholder="请输入"
+                placeholder="请输入重量"
               ></el-input>
             </el-form-item>
 
@@ -241,20 +248,24 @@
             </el-form-item>
 
             <el-form-item label="所属季节" style="  width: 350px;  ">
-              <el-select v-model="value1" multiple placeholder="请选择">
+              <el-select v-model="active" multiple placeholder="请选择季节">
                 <el-option
-                  v-for="item in options1"
+                  v-for="item in season"
                   :key="item.value"
                   :label="item.label"
                   :value="item.value"
-                ></el-option>
+                >
+                </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="活动区域" style=" width: 350px;  ">
-              <el-select v-model="ruleForm.region" placeholder="请选择活动区域">
-                <!-- <el-option label="区域一" value="shanghai"></el-option>
-                <el-option label="区域二" value="beijing"></el-option>-->
-              </el-select>
+            <el-form-item label="所属区域" style=" width: 350px;  ">
+              <el-cascader
+                v-model="valuepark"
+                placeholder="请选择省市区"
+                :options="options"
+                :props="{ multiple: true, checkStrictly: true }"
+                @change="handleChange"
+              ></el-cascader>
             </el-form-item>
 
             <el-form-item label="功用">
@@ -293,36 +304,36 @@
         <div class="worm1">营养素含量（这里为100克食部食品中的营养素含量）</div>
         <div class="saveas">
           <el-table
-            :data="tableData1"
+            :data="mailto"
             style="width: 100%;margin-bottom: 20px;"
             row-key="id"
             border
-            default-expand-all
+            :default-expand-all="false"
             :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
           >
             <el-table-column
-              prop="name"
+              prop="title"
               label="营养素"
-              sortable
-              width="180"
+              align="center"
+              width="200"
             ></el-table-column>
             <el-table-column
-              prop="address"
+              prop="unit"
               label="单位"
-              sortable
               width="180"
               align="center"
             ></el-table-column>
 
-            <el-table-column prop="num" label="含量">
+            <el-table-column label="含量" align="center">
               <template slot-scope="scope">
                 <el-input
-                  v-model="input1"
+                  v-model="scope.row.result"
                   type="text"
+                  v-if="scope.row.level != 1 ? true : false"
                   placeholder="请输入内容"
-                  v-if="scope.row.dients"
                 ></el-input>
               </template>
+              <!-- v-if="scope.row.dients" -->
             </el-table-column>
           </el-table>
         </div>
@@ -388,6 +399,14 @@ export default {
   name: "toolbar",
   data() {
     return {
+      dsquery: {
+        establish: "", //创建机构
+        submit: "", //提交人
+        phone: "", //电话
+        time: " ", //时间
+        examineto: "" //审核
+      },
+      mailto: [], //营养素含量
       loadFlag: false, //加载flag
       attributes: [], //表格数据
       seekeys: false, //审核弹框
@@ -404,7 +423,7 @@ export default {
         region: "",
         name: "",
         buffer: "",
-        autosave: "",
+        fooddata: "", //食材分类
         besaved: "",
         timers: "",
         type: [],
@@ -414,24 +433,34 @@ export default {
         delivery: false,
         delivery1: false
       },
+      foodPos: [], //食材分类
       rules: {
         region: [
           { required: true, message: "请选择公共库分类", trigger: "change" }
         ]
       },
-      tableData: [
-        //审核食材
+      valuepark: [], //省市区
+      options: [], //省市区
+      active: [], //季节
+      season: [
         {
-          date: "1",
-          name: "油桃",
-          proto: "水果",
-          address: "刚好让你更好",
-          stats: "张三",
-          malloc: "15717211234",
-          decls: "2020-08-07 00:00:00",
-          board: "待审核"
+          value: "1",
+          label: "春季"
+        },
+        {
+          value: "2",
+          label: "夏季"
+        },
+        {
+          value: "3",
+          label: "秋季"
+        },
+        {
+          value: "4",
+          label: "冬季"
         }
       ],
+
       options1: [],
       options: [
         //审核状态
@@ -518,41 +547,142 @@ export default {
   },
   beforeMount() {
     this.auditing();
+    this.setDec(); //公共库分类
+    this.Protocol(); //营养素含量
+    this.queryLite(); //获取分类
+    this.Provinces(); //省市区
   },
   methods: {
-    //表格数据
+    //获取表格数据
     auditing() {
       this.loadFlag = true;
       this.$axios
-        .get(`api/blade-food/food/getAuditList?current=${1}&size=${10}`, {
-          headers: {
-            "Content-Type": "application/json"
-          }
-        })
-        .then(res => {
-          // console.log(res);
-          this.attributes = res.data.data.records;
-          console.log(this.attributes);
-          this.loadFlag = false;
-        });
-    },
-    seecol(row) {
-      this.seekeys = true;
-    },
-    Directory(row) {
-      //审核
-      // console.log(row);
-      let design = `?id=${row.id}`;
-      this.$axios
-        .get(`api/blade-food/food/audit` + design, {
+        .get(`api/blade-food/food/getAuditList?size=${10}&current=${1}`, {
           headers: {
             "Content-Type": "application/json"
           }
         })
         .then(res => {
           console.log(res);
+          this.attributes = res.data.data.records;
+          console.log(this.attributes);
+          this.loadFlag = false;
         });
     },
+    //查看
+    seecol(row) {
+      console.log(row);
+      this.seekeys = true;
+    },
+    //审核
+    Directory(row) {
+      this.seekeys = true;
+      // console.log(row);
+      let design = `?id=${row.id}`;
+      this.$axios
+        .get(`api/blade-food/food/detail` + design, {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+        .then(res => {
+          // console.log(res);
+          this.subquery = res.data.data;
+          console.log(this.subquery);
+          this.dsquery.establish = this.subquery.createName; //创建机构
+          this.dsquery.submit = this.subquery.createName; //提交人
+          this.dsquery.phone = this.subquery.mobile; //提交电话
+          this.dsquery.time = this.subquery.createTime; //提交时间
+          this.dsquery.examineto = this.subquery.status; //审核状态
+        });
+    },
+    // 分类
+    queryLite() {
+      this.$axios
+        .get(`api/blade-food/basetype/list?type=1`, {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+        .then(res => {
+          // console.log(res);
+          this.tionDate = res.data.data;
+          // console.log(this.tionDate);
+          let cation = [];
+          // children
+          this.tionDate.forEach((item, index) => {
+            cation[index] = {
+              value: item.id,
+              label: item.typeName
+            };
+          });
+          // console.log(cation);
+          this.foodPos = cation;
+        });
+    },
+    //公共库分类
+    setDec() {
+      this.$axios
+        .get(`api/blade-food/basetype/getList?isPrivate=1&type=1`, {})
+        .then(res => {
+          console.log(res);
+        });
+    },
+    //营养素含量
+    Protocol() {
+      this.$axios
+        .get(`api/blade-food/nutrition/tree`, {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+        .then(res => {
+          // console.log(res);
+          this.mailto = res.data.data;
+          console.log(this.mailto);
+        });
+    },
+    //省市区
+    handleChange(value) {
+      console.log(value);
+    },
+    //省市区
+    Provinces() {
+      // http://api.yytianqi.com/citylist/id/2
+
+      this.$axios
+        .get(`api/blade-system/region/selectCityOrProvince`, {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+        .then(res => {
+          // console.log(res);
+          this.national = res.data.data;
+          // console.log(this.national);
+          let arr = [];
+          this.national.forEach((item, index) => {
+            arr[index] = {
+              value: item.id,
+              label: item.name
+            };
+            arr[index].children = [];
+            // console.log(item.children instanceof Array);
+            if (item.children) {
+              item.children.forEach((item1, index1) => {
+                arr[index].children[index1] = {
+                  value: item1.id,
+                  label: item1.name
+                };
+              });
+            }
+          });
+
+          // this.$set(this.national, arr)
+          this.options = arr;
+        });
+    },
+
     handleRemove(file, fileList) {
       console.log(file, fileList);
     },
@@ -639,5 +769,8 @@ export default {
   padding-left: 20px;
   font-size: 16px;
   font-weight: bold;
+}
+.stop {
+  color: #ff455b;
 }
 </style>

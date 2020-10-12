@@ -64,6 +64,7 @@
             </el-select>
           </template>
         </div>
+        <el-button type="primary" size="small" @click="stored">查询</el-button>
       </div>
       <!-- 结束 -->
       <!-- 树形组件 -->
@@ -180,7 +181,7 @@
             ></el-cascader>
           </el-form-item>
           <el-form-item label="所属季节" style=" width: 350px;  ">
-            <el-select v-model="active" multiple placeholder="请选择">
+            <el-select v-model="active" multiple placeholder="请选择季节">
               <el-option
                 v-for="item in season"
                 :key="item.value"
@@ -261,6 +262,9 @@
         </el-table>
       </div>
       <div style="   text-align: center;">
+        <el-button type="primary" @click="saved('ruleForm')"
+          >编辑保存</el-button
+        >
         <el-button type="primary" @click="totally('ruleForm')">保存</el-button>
         <el-button @click="resetForm('ruleForm')">重置</el-button>
       </div>
@@ -275,6 +279,7 @@ export default {
   data() {
     const data = [];
     return {
+      display: "0",
       mailto: [], //营养素含量
       data: JSON.parse(JSON.stringify(data)), //树形结构
       input1: "",
@@ -334,7 +339,7 @@ export default {
         ],
         fooddata: [
           //食材分类
-          { required: true, message: "请选择活动区域", trigger: "change" }
+          { required: true, message: "请选择食物分类", trigger: "change" }
         ],
         besaved: [{ required: true, message: "请输入食部", trigger: "blur" }],
         timers: [{ required: true, message: "请输入重量", trigger: "blur" }]
@@ -407,6 +412,7 @@ export default {
     //食材库保存
     totally() {
       console.log(this.mailto);
+      console.log(this.ruleForm);
       let food = [];
       this.mailto.forEach((item, index) => {
         // console.log(item);
@@ -462,7 +468,7 @@ export default {
             message: "保存成功",
             type: "success"
           });
-          // window.location.reload();
+          this.Addraudit();
         })
         .catch(() => {
           this.$message.error("保存失败");
@@ -475,6 +481,76 @@ export default {
       //     return false;
       //   }
       // });
+    },
+    //编辑保存
+    saved() {
+      // console.log(this.mailto);
+      console.log(this.ruleForm);
+      let food = [];
+      this.mailto.forEach((item, index) => {
+        // console.log(item);
+        item.children.forEach((item1, indx1) => {
+          // console.log(item1);
+          if (item1.children) {
+            item1.children.forEach((item2, index2) => {
+              // console.log(item2);
+              if (item2.result != null) {
+                food.push({
+                  nutrientId: item2.id,
+                  value: item2.result
+                });
+              }
+            });
+          }
+          if (item1.result != null) {
+            food.push({
+              nutrientId: item1.id,
+              value: item1.result
+            });
+          }
+        });
+      });
+      console.log(food);
+      // console.log(Library);
+      // let canal=this.mailto;
+
+      this.$axios
+        .post(`api/blade-food/food/update`, {
+          id: this.flour, //ID
+          foodName: this.ruleForm.name, //食材名
+          foodAlias: this.ruleForm.foodFood, //食物别名1
+          foodAlias1: this.ruleForm.ovenFood, //食物别名2
+          foodReal: this.ruleForm.buffer, //食材真名
+          foodType: this.ruleForm.fooddata, //食材分类
+          foodType1: this.ruleForm.foods, //食物分类1
+          foodType2: this.ruleForm.dogfood, //食物分类2
+          foodEat: this.ruleForm.besaved, //食部
+          weight: this.ruleForm.timers, //重量
+          water: this.ruleForm.content, //水分
+          color: this.ruleForm.resource, //色系
+          seasons: this.active, //季节
+          belongRegions: this.valuepark, //所属区域
+          function: this.ruleForm.desc, //功用
+          isUse: this.ruleForm.delivery1 == false ? 0 : 1, //是否常用
+          isPub: this.ruleForm.delivery == false ? 0 : 1, //是否公开
+
+          nutritions: food
+        })
+        .then(res => {
+          console.log(res);
+          this.$message({
+            message: "编辑成功",
+            type: "success"
+          });
+          this.Addraudit();
+        })
+        .catch(() => {
+          this.$message.error("编辑失败");
+        });
+    },
+    //查询
+    stored() {
+      console.log(123);
     },
     //树形渲染数
     Addraudit() {
@@ -512,7 +588,7 @@ export default {
     handleNodeClick(data) {
       // console.log(data);
       this.flour = data.id;
-      console.log(this.flour);
+      // console.log(this.flour);
       this.$axios
         .get(`api/blade-food/food/detail?id=${this.flour}`, {
           headers: {
@@ -527,7 +603,7 @@ export default {
           this.ruleForm.foodFood = this.inquired.foodAlias; //食物别名1
           this.ruleForm.ovenFood = this.inquired.foodAlias1; //食物别名2
           this.ruleForm.buffer = this.inquired.foodReal; //食材真名
-          this.ruleForm.fooddata = this.inquired.foodTypeName; //食材分类
+          this.ruleForm.fooddata = this.inquired.foodType; //食材分类
           this.ruleForm.foods = this.inquired.foodType1; //食物分类1
           this.ruleForm.dogfood = this.inquired.foodType2; //食物分类2
           this.ruleForm.besaved = this.inquired.foodEat; //食部
@@ -535,7 +611,11 @@ export default {
           this.ruleForm.content = this.inquired.water; //水分
           this.ruleForm.resource = this.inquired.color + ""; //色系
           // this.valuepark = this.inquired.belongRegionName; //所属区域
-          this.valuepark.push([this.inquired.provinces,this.inquired.belongRegion])
+          this.valuepark.push([
+            this.inquired.provinces,
+            this.inquired.belongRegion
+          ]);
+
           console.log(this.valuepark);
           this.active.push(this.inquired.season); //所属季节
           this.ruleForm.desc = this.inquired.function; //功用
@@ -555,16 +635,15 @@ export default {
                 if (arr.id == item.nutrientId) {
                   arr.result = item.value;
                 }
-                if(arr.children){
-                  for(let add of arr.children){
-                    if(add.id==item.nutrientId){
+                if (arr.children) {
+                  for (let add of arr.children) {
+                    if (add.id == item.nutrientId) {
                       add.result = item.value;
                     }
                   }
                 }
               }
             }
-
           });
         });
     },
@@ -649,33 +728,93 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields(); //重置
     },
-    prepare(date) {
-      console.log(date);
+
+    //设置隐藏
+    prepare(data) {
+      // console.log(data);
+      this.term = data.id;
+      console.log(this.term);
+      // this.$axios
+      //   .get(`api/blade-food/basetype/list?id=${this.term}&isPub=1`, {
+      //     headers: {
+      //       "Content-Type": "application/json"
+      //     }
+      //   })
+      //   .then(res => {
+      //     console.log(res);
+      //     this.$message({
+      //       message: "设置成功",
+      //       type: "success"
+      //     });
+      //     this.Addraudit();
+      //   })
+      //   .catch(() => {
+      //     this.$message.error("设置失败");
+      //   });
     },
+    //设置常用
     append(data) {
-      const newChild = { id: id++, label: "testtest", children: [] };
-      if (!data.children) {
-        this.$set(data, "children", []);
-      }
-      data.children.push(newChild);
+      console.log(data);
+      this.term = data.id;
+      this.$axios
+        .get(`api/blade-food/basetype/list?id=${this.term}&iisUse=0`, {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+        .then(res => {
+          console.log(res);
+          this.$message({
+            message: "设置成功",
+            type: "success"
+          });
+          this.Addraudit();
+        })
+        .catch(() => {
+          this.$message.error("设置失败");
+        });
+      // const newChild = { id: id++, label: "testtest", children: [] };
+      // if (!data.children) {
+      //   this.$set(data, "children", []);
+      // }
+      // data.children.push(newChild);
     },
+    //删除
     remove(node, data) {
-      const parent = node.parent;
-      const children = parent.data.children || parent.data;
-      const index = children.findIndex(d => d.id === data.id);
-      children.splice(index, 1);
+      console.log(data);
+      this.saveall = data.id;
+      this.$axios
+        .get(`api/blade-food/blade-food/food/remove?ids=${this.saveall}`, {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+        .then(res => {
+          console.log(res);
+          this.$message({
+            message: "删除成功",
+            type: "success"
+          });
+          this.Addraudit();
+        })
+        .catch(() => {
+          this.$message.error("删除失败");
+        });
+      // const parent = node.parent;
+      // const children = parent.data.children || parent.data;
+      // const index = children.findIndex(d => d.id === data.id);
+      // children.splice(index, 1);
     },
     renderContent(h, { node, data, store }) {
       return (
         <span class="custom-tree-node">
           <span>{node.label}</span>
           <span>
-            <el-button
-              size="mini"
-              type="text"
-              on-click={() => this.prepare(data)}
-            >
+            <el-button size="mini" type="text" on-click={() => this.prepare(0)}>
               隐藏
+            </el-button>
+            <el-button size="mini" type="text" on-click={() => this.prepare(1)}>
+              公开
             </el-button>
             <el-button
               size="mini"
