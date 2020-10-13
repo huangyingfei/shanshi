@@ -172,10 +172,10 @@
               <el-input v-model="ruleForm.name"></el-input>
             </el-form-item>
             <el-form-item label="食物别名1" style=" width: 350px;  ">
-              <el-input></el-input>
+              <el-input v-model="ruleForm.move"></el-input>
             </el-form-item>
             <el-form-item label="食物别名2" style=" width: 350px;  ">
-              <el-input></el-input>
+              <el-input v-model="ruleForm.move1"></el-input>
             </el-form-item>
 
             <el-form-item
@@ -203,11 +203,17 @@
             </el-form-item>
 
             <el-form-item label="食物分类1" style=" width: 350px;  ">
-              <el-input placeholder="请输入食材"></el-input>
+              <el-input
+                v-model="ruleForm.foods"
+                placeholder="请输入食材"
+              ></el-input>
             </el-form-item>
 
             <el-form-item label="食物分类2" style=" width: 350px;   ">
-              <el-input placeholder="请输入食材"></el-input>
+              <el-input
+                v-model="ruleForm.dogfood"
+                placeholder="请输入食材"
+              ></el-input>
             </el-form-item>
 
             <el-form-item
@@ -233,7 +239,10 @@
             </el-form-item>
 
             <el-form-item label="水分(%)" style=" width: 350px;   ">
-              <el-input placeholder="请输入水分"></el-input>
+              <el-input
+                v-model="ruleForm.moisture"
+                placeholder="请输入水分"
+              ></el-input>
             </el-form-item>
 
             <el-form-item label="色系" style="  ">
@@ -346,8 +355,8 @@
           label-width="100px"
           class="demo-ruleForm"
         >
-          <el-form-item label="公共库分类" prop="region">
-             <el-select v-model="menu" placeholder="请选择">
+          <el-form-item label="公共库分类">
+            <el-select v-model="menu" placeholder="请选择">
               <el-option
                 v-for="item in fication"
                 :key="item.value"
@@ -392,7 +401,7 @@
       </div>
       <div slot="footer" class="dialog-footer" style=" text-align: center;">
         <el-button @click="seekeys = false">取 消</el-button>
-        <el-button type="primary">拒 绝</el-button>
+        <el-button type="primary" @click="restore"> 拒 绝</el-button>
         <el-button type="primary">同 意</el-button>
       </div>
     </el-dialog>
@@ -425,30 +434,37 @@ export default {
         desc1: "" //拒绝理由
       },
       ruleForm: {
-        region: "",
-        name: "",
-        buffer: "",
+        name: "", //食材名
+        move: "", //食物别名1
+        move1: "", //食物别名2
+        buffer: "", //食材真名
         fooddata: "", //食材分类
-        besaved: "",
-        timers: "",
+        foods: "", //食物分类
+        dogfood: "", //食物分类2
+        besaved: "", //食部
+        timers: "", //重量
+        moisture: "", //水分
+        region: "",
+        resource: "", //色系
+        desc: "", //功用
+        delivery: false, //公开
+        delivery1: false, //常用
         type: [],
-        resource: "",
-        temps: "",
-        desc: "",
-        delivery: false,
-        delivery1: false
+        temps: ""
       },
-      menu:[],//公共分类
-      fication:[],
+      active: [], //季节
+      valuepark: [], //省市区
+      menu: [], //公共分类
+      fication: [],
       foodPos: [], //食材分类
       rules: {
-        region: [
-          { required: true, message: "请选择公共库分类", trigger: "change" }
-        ]
+        // region: [
+        //   { required: true, message: "请选择公共库分类", trigger: "change" }
+        // ]
       },
-      valuepark: [], //省市区
+
       options: [], //省市区
-      active: [], //季节
+
       season: [
         {
           value: "1",
@@ -469,87 +485,9 @@ export default {
       ],
 
       options1: [],
-      options: [
-        //审核状态
-        {
-          value: "1",
-          label: "全部"
-        },
-        {
-          value: "2",
-          label: "待审核"
-        },
-        {
-          value: "3",
-          label: "审核通过"
-        },
-        {
-          value: "4",
-          label: "审核不通过"
-        },
-        {
-          value: "5",
-          label: "无需审核"
-        }
-      ],
+
       value: "", //审核状态
-      tableData1: [
-        {
-          id: "1",
-          date: "2016-05-02",
-          name: "王1虎",
-          level: 1,
-          address: "上海市普陀区金沙江路 1518 弄",
-          dients: false,
-          children: [
-            {
-              id: "11",
-              date: "2016-05-02",
-              name: "王2虎",
-              level: 2,
-              address: "上海市普陀区金沙江路 1518 弄",
-              num: 326,
-              dients: true,
-              children: [
-                {
-                  id: "111",
-                  date: "2016-05-02",
-                  name: "王3虎",
-                  level: 3,
-                  address: "上海市普陀区金沙江路 1518 弄",
-                  num: 78.012,
-                  dients: true
-                },
-                {
-                  id: "112",
-                  level: 3,
-                  date: "2016-05-02",
-                  name: "王4虎",
-                  address: "上海市普陀区金沙江路 1518 弄",
-                  num: 0.129,
-                  dients: true
-                }
-              ]
-            },
-            {
-              id: "12",
-              level: 2,
-              date: "2016-05-02",
-              name: "王5虎",
-              address: "上海市普陀区金沙江路 1518 弄",
-              dients: true
-            }
-          ]
-        },
-        {
-          id: "2",
-          level: 1,
-          date: "2016-05-04",
-          name: "王6虎",
-          address: "上海市普陀区金沙江路 1517 弄",
-          dients: false
-        }
-      ]
+      tableData1: []
     };
   },
   beforeMount() {
@@ -581,6 +519,17 @@ export default {
       console.log(row);
       this.seekeys = true;
     },
+    //拒绝
+    restore() {
+      this.$axios
+        .post(`api/blade-food/food/audit`, {
+          id: this.subquery.id,
+          refuseReason: this.examine.desc1
+        })
+        .then(res => {
+          console.log(res);
+        });
+    },
     //审核
     Directory(row) {
       this.seekeys = true;
@@ -601,6 +550,7 @@ export default {
           this.dsquery.phone = this.subquery.mobile; //提交电话
           this.dsquery.time = this.subquery.createTime; //提交时间
           this.dsquery.examineto = this.subquery.status; //审核状态
+          this.ruleForm.name = this.subquery.foodName; //食材名
         });
     },
     // 分类
@@ -633,16 +583,16 @@ export default {
         .get(`api/blade-food/basetype/getList?isPrivate=1&type=1`, {})
         .then(res => {
           // console.log(res);
-          this.myStr=res.data.data
-          let str=[];
-          this.myStr.forEach((item,index)=>{
+          this.myStr = res.data.data;
+          let str = [];
+          this.myStr.forEach((item, index) => {
             console.log(item);
-              str[index]={
-                  value:item.id,
-                  label: item.typeName
-              }
-          })
-          this.fication=str;
+            str[index] = {
+              value: item.id,
+              label: item.typeName
+            };
+          });
+          this.fication = str;
         });
     },
     //营养素含量

@@ -575,13 +575,16 @@ export default {
             item.foods.forEach((item1, index1) => {
               Front[index].children[index1] = {
                 id: item1.id,
-                label: item1.foodName
+                label: item1.foodName,
+                isPub: item1.isPub,
+                isUse: item1.isUse
               };
             });
           });
           // console.log(Front);
           this.data = Front;
           console.log(this.data);
+          console.log(this.data.isPub);
         });
     },
     //点击查看详情
@@ -611,11 +614,14 @@ export default {
           this.ruleForm.content = this.inquired.water; //水分
           this.ruleForm.resource = this.inquired.color + ""; //色系
           // this.valuepark = this.inquired.belongRegionName; //所属区域
-this.valuepark.length = 0;
-          this.inquired.provinces.split(',').forEach((item,i) => {
-            this.valuepark.push([item, this.inquired.belongRegion.split(',')[i]]);
-          })
-          console.log(this.valuepark)
+          this.valuepark.length = 0;
+          this.inquired.provinces.split(",").forEach((item, i) => {
+            this.valuepark.push([
+              item,
+              this.inquired.belongRegion.split(",")[i]
+            ]);
+          });
+          console.log(this.valuepark);
           // this.valuepark.push(
           //   this.inquired.provinces.split(','),
           //   this.inquired.belongRegion.split(','),
@@ -736,9 +742,9 @@ this.valuepark.length = 0;
 
     //设置隐藏
     prepare(data) {
-      // console.log(data);
+      console.log(data);
       this.term = data.id;
-      console.log(this.term);
+      // console.log(this.term);
       // this.$axios
       //   .get(`api/blade-food/basetype/list?id=${this.term}&isPub=1`, {
       //     headers: {
@@ -815,10 +821,14 @@ this.valuepark.length = 0;
         <span class="custom-tree-node">
           <span>{node.label}</span>
           <span>
-            <el-button size="mini" type="text" on-click={() => this.prepare(0)}>
+            <el-button
+              size="mini"
+              type="text"
+              on-click={() => this.prepare(data)}
+            >
               隐藏
             </el-button>
-            <el-button size="mini" type="text" on-click={() => this.prepare(1)}>
+            <el-button size="mini" type="text" on-click={() => this.prepare}>
               公开
             </el-button>
             <el-button
