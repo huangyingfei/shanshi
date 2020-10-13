@@ -436,12 +436,11 @@ export default {
     //获取树形结构
     obtains() {
       this.$axios
-        .get(`api/blade-food/basetype/getDishByBaseId`, {
-          isPrivate: 1,
-          typeTemp: 2
-        })
+      
+        .get(`api/blade-food/basetype/getDishByBaseId?isPrivate=${1}&typeTemp=${2}`)
         .then(res => {
           console.log(res);
+          // this.s
         });
     },
     //省市区

@@ -573,18 +573,20 @@ export default {
             };
             Front[index].children = [];
             item.foods.forEach((item1, index1) => {
-              Front[index].children[index1] = {
+                   console.log(item1.isPub)
+              Front[index].children[index1] = { 
                 id: item1.id,
                 label: item1.foodName,
                 isPub: item1.isPub,
                 isUse: item1.isUse
               };
+         
             });
           });
           // console.log(Front);
           this.data = Front;
           console.log(this.data);
-          console.log(this.data.isPub);
+          // console.log(this.data.isPub);
         });
     },
     //点击查看详情
@@ -824,11 +826,12 @@ export default {
             <el-button
               size="mini"
               type="text"
+              v-if=""
               on-click={() => this.prepare(data)}
             >
               隐藏
             </el-button>
-            <el-button size="mini" type="text" on-click={() => this.prepare}>
+            <el-button v-else="" size="mini" type="text" on-click={() => this.prepare}>
               公开
             </el-button>
             <el-button
