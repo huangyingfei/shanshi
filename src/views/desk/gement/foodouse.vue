@@ -106,6 +106,7 @@
           :model="ruleForm"
           :rules="rules"
           :inline="true"
+          
           ref="ruleForm"
           label-width="100px"
           class="demo-ruleForm"
@@ -211,6 +212,7 @@
         <el-table
           :data="officeonce"
           border
+          show-summary
           style="width: 100%"
           v-loading="loadFlag"
         >
@@ -245,11 +247,18 @@
             </template>
           </el-table-column>
           <el-table-column
-            prop="malloc"
+            
             label="能量(kcal)"
             width="100"
             align="center"
-          ></el-table-column>
+          >
+          <template slot-scope="scope">
+            <!-- {{scope.row.malloc}} -->
+            <span v-if="!scope.row.stats">{{scope.row.malloc}}</span>
+            <span v-else>{{(scope.row.stats/100)*scope.row.malloc}}</span>
+          </template>
+          </el-table-column>
+
           <!--操作格-->
           <el-table-column label="操作" align="center">
             <template slot-scope="scope">
@@ -275,43 +284,44 @@
       </div>
       <!-- 菜品营养素信息 -->
       <div class="mationtxt">菜品营养素信息</div>
-      <div class="saveas">
+        <div class="saveas">
         <el-table
-          :data="tableData"
+          :data="mailto"
           style="width: 100%;margin-bottom: 20px;"
           row-key="id"
           border
-          default-expand-all
+          :default-expand-all="false"
           :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
         >
           <el-table-column
-            prop="name"
+            prop="title"
             label="营养素"
-            sortable
-            width="180"
             align="center"
+            width="200"
           ></el-table-column>
           <el-table-column
-            prop="address"
+            prop="unit"
             label="单位"
-            sortable
             width="180"
             align="center"
           ></el-table-column>
 
-          <el-table-column prop="address" label="含量" align="center">
+          <el-table-column label="含量" align="center">
             <template slot-scope="scope">
               <el-input
-                v-model="input1"
+                v-model="scope.row.result"
                 type="text"
+                v-if="scope.row.level != 1 ? true : false"
                 placeholder="请输入内容"
-                v-if="scope.row.dients"
               ></el-input>
             </template>
+            <!-- v-if="scope.row.dients" -->
           </el-table-column>
         </el-table>
       </div>
       <div style="   text-align: center;">
+        
+            <el-button type="primary" @click="shower">测试测试</el-button>
         <el-button type="primary">保存</el-button>
         <el-button @click="savefiles">保存并新增</el-button>
       </div>
@@ -407,9 +417,10 @@ export default {
           address: "", //食品分类
           stats: "", //用量
           malloc: "" //能量
-        }
+        },
+        
       ],
-      tableData: [],
+      tableData: [],//营养素含量
       csList: {},
       csListIndex: null,
       defaultProps: {
@@ -424,6 +435,7 @@ export default {
   },
   watch: {},
   beforeMount() {
+        this.Protocol();//营养素含量
     this.Provinces(); //省市区
     this.Addraudit(); //树形结构渲染
     // this.queryLite(); //获取分类
@@ -432,6 +444,9 @@ export default {
   },
   methods: {
     //保存
+    shower(){
+      console.log(this.officeonce)
+    },
     mysave() {
       let next = [];
       this.officeonce.forEach((item, index) => {
@@ -655,6 +670,20 @@ export default {
           });
           console.log(obtain);
           this.foodPos = obtain;
+        });
+    },
+     //营养素含量
+    Protocol() {
+      this.$axios
+        .get(`api/blade-food/nutrition/tree`, {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+        .then(res => {
+          // console.log(res);
+          this.mailto = res.data.data;
+          console.log(this.mailto);
         });
     },
     // queryLite() {
