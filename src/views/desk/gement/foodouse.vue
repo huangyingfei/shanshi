@@ -63,12 +63,39 @@
           <p></p>
           <el-tree
             :data="data"
+            :props="defaultProps"
+            node-key="id"
+            default-expand-all
+            :expand-on-click-node="false"
+          >
+            <span class="custom-tree-node" slot-scope="{ node, data }">
+              <span>{{ node.label }}</span>
+              <span>
+                <el-button type="text" size="mini" @click="() => prepare(data)">
+                  查看
+                </el-button>
+                <el-button type="text" size="mini" @click="() => append(data)">
+                  常用
+                </el-button>
+                <el-button
+                  type="text"
+                  size="mini"
+                  @click="() => remove(node, data)"
+                >
+                  删除
+                </el-button>
+              </span>
+            </span>
+          </el-tree>
+          <!-- <el-tree
+            :data="data"
             show-checkbox
             node-key="id"
             default-expand-all
             :expand-on-click-node="false"
             :render-content="renderContent"
-          ></el-tree>
+            @node-click="handleNodeClick1"
+          ></el-tree> -->
         </div>
       </div>
     </div>
@@ -384,17 +411,55 @@ export default {
       ],
       tableData: [],
       csList: {},
-      csListIndex: null
+      csListIndex: null,
+      defaultProps: {
+        children: "children",
+        label: "label"
+      }
     };
   },
+  computed: {
+    // officeonce:function(){
+    // }
+  },
+  watch: {},
   beforeMount() {
     this.Provinces(); //省市区
     this.Addraudit(); //树形结构渲染
-    this.queryLite(); //获取分类
+    // this.queryLite(); //获取分类
+    this.muito();
     this.obtains(); //获取树形结构
   },
   methods: {
     //保存
+    mysave() {
+      let next = [];
+      this.officeonce.forEach((item, index) => {
+        console.log(item);
+        next.push({
+          foodId: item.id,
+          value: item.stats
+        });
+      });
+      //   console.log(next);
+
+      this.$axios
+        .post(`api/blade-food/dish/save`, {
+          dishName: this.ruleForm.name, //菜品名字
+          dishType: this.ruleForm.fooddata, //菜品分类
+          seasons: this.value1, //季节
+          function: this.ruleForm.region, //特点
+          remark: this.ruleForm.desc, //做法
+          belongRegions: this.valuepark, //省市区
+          isUse: this.ruleForm.delivery1 == false ? 0 : 1, //是否常用
+          isPub: this.ruleForm.delivery == false ? 0 : 1, //是否公开
+          dishMxVos: next //菜品所含食材信息
+        })
+        .then(res => {
+          console.log(res);
+          // this.muito();
+        });
+    },
     savefiles() {
       console.log(this.officeonce);
       let next = [];
@@ -406,8 +471,9 @@ export default {
         });
       });
       //   console.log(next);
+
       this.$axios
-        .post(`api/blade-food/dish/save`, {
+        .post(`api/blade-food/dish/hasOkFood`, {
           dishName: this.ruleForm.name, //菜品名字
           dishType: this.ruleForm.fooddata, //菜品分类
           seasons: this.value1, //季节
@@ -420,6 +486,8 @@ export default {
         })
         .then(res => {
           console.log(res);
+          this.obtains();
+          this.mysave();
         });
     },
     //表格弹出框
@@ -436,11 +504,32 @@ export default {
     //获取树形结构
     obtains() {
       this.$axios
-      
-        .get(`api/blade-food/basetype/getDishByBaseId?isPrivate=${1}&typeTemp=${2}`)
+
+        .get(
+          `api/blade-food/basetype/getDishByBaseId?isPrivate=${1}&typeTemp=${2}`
+        )
         .then(res => {
-          console.log(res);
-          // this.s
+          //   console.log(res);
+          this.obtain = res.data.data;
+          let foto = [];
+          this.obtain.forEach((item, index) => {
+            // console.log(item);
+            foto[index] = {
+              id: item.id,
+              label: item.typeName
+            };
+            foto[index].children = [];
+            item.dishes.forEach((item1, index1) => {
+              foto[index].children[index1] = {
+                id: item1.id,
+                label: item1.dishName,
+                isPub: item1.isPub,
+                isUse: item1.isUse
+              };
+            });
+          });
+          this.data = foto;
+          console.log(foto);
         });
     },
     //省市区
@@ -482,6 +571,9 @@ export default {
           this.options = arr;
         });
     },
+    handleNodeClick1(data) {
+      console.log(data);
+    },
     //点击查看详情
     handleNodeClick(data) {
       //   console.log(data);
@@ -495,17 +587,24 @@ export default {
           }
         })
         .then(res => {
-          console.log(res);
+          //   console.log(res);
 
           this.inquired = res.data.data;
+          console.log(this.inquired);
+          this.inquired.nutritions.forEach((item, index) => {
+            // console.log(item);
+            if (item.nutrientId == 101) {
+              this.officeonce[this.csListIndex].malloc = item.value;
+            }
+          });
           //   this.getInput.cs = this.inquired.foodName; //食材名
           this.officeonce[this.csListIndex].id = this.inquired.id;
           this.officeonce[this.csListIndex].name = this.inquired.foodName;
           this.officeonce[
             this.csListIndex
           ].address = this.inquired.foodTypeName;
-          this.officeonce[this.csListIndex].name = this.inquired.foodName;
-          console.log(this.getInput);
+          // this.officeonce[this.csListIndex].name = this.inquired.foodName;
+          //   console.log(this.getInput);
         });
     },
     //树形渲染数
@@ -519,10 +618,10 @@ export default {
         .then(res => {
           // console.log(res);
           this.fication = res.data.data;
-          console.log(this.fication);
+          //   console.log(this.fication);
           let Front = [];
           this.fication.forEach((item, index) => {
-            console.log(item);
+            // console.log(item);
             Front[index] = {
               id: item.id,
               label: item.typeName
@@ -540,29 +639,47 @@ export default {
         });
     },
     // 分类
-    queryLite() {
+    muito() {
       this.$axios
-        .get(`api/blade-food/basetype/list?type=1`, {
-          headers: {
-            "Content-Type": "application/json"
-          }
-        })
+        .get(`api/blade-food/basetype/getList?type=${2}&isPrivate=${1}`, {})
         .then(res => {
-          // console.log(res);
-          this.tionDate = res.data.data;
-          // console.log(this.tionDate);
-          let cation = [];
-          // children
-          this.tionDate.forEach((item, index) => {
-            cation[index] = {
+          //   console.log(res);
+          this.details = res.data.data;
+          let obtain = [];
+          this.details.forEach((item, index) => {
+            // console.log(item);
+            obtain.push({
               value: item.id,
               label: item.typeName
-            };
+            });
           });
-          // console.log(cation);
-          this.foodPos = cation;
+          console.log(obtain);
+          this.foodPos = obtain;
         });
     },
+    // queryLite() {
+    //   this.$axios
+    //     .get(`api/blade-food/basetype/list?type=1`, {
+    //       headers: {
+    //         "Content-Type": "application/json"
+    //       }
+    //     })
+    //     .then(res => {
+    //       // console.log(res);
+    //       this.tionDate = res.data.data;
+    //       // console.log(this.tionDate);
+    //       let cation = [];
+    //       // children
+    //       this.tionDate.forEach((item, index) => {
+    //         cation[index] = {
+    //           value: item.id,
+    //           label: item.typeName
+    //         };
+    //       });
+    //       // console.log(cation);
+    //       this.foodPos = cation;
+    //     });
+    // },
     handleRemove(file, fileList) {
       //上传图片
       console.log(file, fileList);
@@ -574,8 +691,24 @@ export default {
     },
 
     //树形结构
-    prepare(date) {
-      console.log(date);
+    //查看
+    prepare(data) {
+      console.log(data);
+      this.auto = data.id;
+      this.$axios
+        .get(`api/blade-food/dish/dishDetail?id=${this.auto}`, {})
+        .then(res => {
+          // console.log(res);
+          this.handler = res.data.data;
+          console.log(this.handler);
+          this.ruleForm.name = this.handler.dishName; //菜品名字
+          this.ruleForm.fooddata = this.handler.dishType; //菜品分类
+          this.value1.push(this.handler.season); //季节
+          this.ruleForm.region = this.handler.function; //特点
+          this.ruleForm.remark = this.ruleForm.remark; //做法
+          this.ruleForm.delivery1 = this.handler.isUse == 0 ? false : true; //常用
+          this.ruleForm.delivery = this.handler.isPub == 0 ? false : true; //公开
+        });
     },
     append(data) {
       const newChild = { id: id++, label: "testtest", children: [] };
@@ -585,41 +718,12 @@ export default {
       data.children.push(newChild);
     },
     remove(node, data) {
-      const parent = node.parent;
-      const children = parent.data.children || parent.data;
-      const index = children.findIndex(d => d.id === data.id);
-      children.splice(index, 1);
-    },
-    renderContent(h, { node, data, store }) {
-      return (
-        <span class="custom-tree-node">
-          <span>{node.label}</span>
-          <span>
-            <el-button
-              size="mini"
-              type="text"
-              on-click={() => this.prepare(data)}
-            >
-              隐藏
-            </el-button>
-            <el-button
-              size="mini"
-              type="text"
-              on-click={() => this.append(data)}
-            >
-              常用
-            </el-button>
-            <el-button
-              size="mini"
-              type="text"
-              on-click={() => this.remove(node, data)}
-            >
-              删除
-            </el-button>
-          </span>
-        </span>
-      );
-    } //树形结构
+      console.log(data);
+      // const parent = node.parent;
+      // const children = parent.data.children || parent.data;
+      // const index = children.findIndex(d => d.id === data.id);
+      // children.splice(index, 1);
+    }
   }
 };
 </script>
