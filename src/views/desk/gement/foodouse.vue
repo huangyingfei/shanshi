@@ -2,7 +2,7 @@
   <div class="often">
     <div class="coffee">
       <el-input
-        style=" width: 250px;height: 35px;"
+        style="width: 250px; height: 35px"
         placeholder="请输入内容"
         v-model="input"
         clearable
@@ -79,10 +79,20 @@
                 <el-button type="text" size="mini" @click="() => prepare(data)">
                   查看
                 </el-button>
-                <el-button type="text" size="mini" @click="() => append(data)">
+                <el-button
+                  type="text"
+                  v-if="!data.isUse"
+                  size="mini"
+                  @click="() => append(data)"
+                >
                   常用
                 </el-button>
-                <el-button type="text" size="mini" @click="() => insert(data)">
+                <el-button
+                  type="text"
+                  v-else
+                  size="mini"
+                  @click="() => insert(data)"
+                >
                   不常用
                 </el-button>
                 <!-- <el-button type="text" size="mini" @click="() => append(data)">
@@ -124,10 +134,10 @@
           label-width="100px"
           class="demo-ruleForm"
         >
-          <el-form-item label="菜品名字" prop="name" style=" width: 350px;">
+          <el-form-item label="菜品名字" prop="name" style="width: 350px">
             <el-input v-model="ruleForm.name"></el-input>
           </el-form-item>
-          <el-form-item label="菜品分类" prop="fooddata" style=" width: 350px;">
+          <el-form-item label="菜品分类" prop="fooddata" style="width: 350px">
             <el-select v-model="ruleForm.fooddata" placeholder="请选择">
               <el-option
                 v-for="item in foodPos"
@@ -138,7 +148,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="所属区域" style="  width: 350px;  ">
+          <el-form-item label="所属区域" style="width: 350px">
             <el-cascader
               v-model="valuepark"
               placeholder="请选择省市区"
@@ -148,7 +158,7 @@
             ></el-cascader>
           </el-form-item>
 
-          <el-form-item label="所属季节" style=" width: 350px;">
+          <el-form-item label="所属季节" style="width: 350px">
             <el-select v-model="value1" multiple placeholder="请选择">
               <el-option
                 v-for="item in crashof"
@@ -159,21 +169,21 @@
             </el-select>
           </el-form-item>
 
-          <el-form-item label="特点" style=" width: 350px; ">
+          <el-form-item label="特点" style="width: 350px">
             <el-input
               type="textarea"
-              style=" width: 250px; "
+              style="width: 250px"
               v-model="ruleForm.region"
             ></el-input>
           </el-form-item>
-          <el-form-item label="做法" style=" width: 350px; ">
+          <el-form-item label="做法" style="width: 350px">
             <el-input
               type="textarea"
-              style=" width: 250px; "
+              style="width: 250px"
               v-model="ruleForm.desc"
             ></el-input>
           </el-form-item>
-          <el-form-item label="图片" style=" width: 350px; ">
+          <el-form-item label="图片" style="width: 350px">
             <el-upload
               action="https://jsonplaceholder.typicode.com/posts/"
               list-type="picture-card"
@@ -186,11 +196,11 @@
               <img width="100%" :src="dialogImageUrl" alt />
             </el-dialog>
           </el-form-item>
-          <el-form-item label="公开" style="  ">
+          <el-form-item label="公开" style="">
             <el-switch v-model="ruleForm.delivery"></el-switch>
           </el-form-item>
 
-          <el-form-item label="常用" style="   ">
+          <el-form-item label="常用" style="">
             <el-switch v-model="ruleForm.delivery1"></el-switch>
           </el-form-item>
         </el-form>
@@ -230,13 +240,14 @@
           show-summary
           style="width: 100%"
           v-loading="loadFlag"
+          :summary-method="getSummaries"
         >
           <el-table-column prop="id" label="序号" width="100" align="center">
           </el-table-column>
           <el-table-column label="食品名称" width="160" align="left">
             <template slot-scope="scope">
               <el-input
-                style="width:90px"
+                style="width: 90px"
                 v-model="scope.row.name"
                 :disabled="true"
               >
@@ -263,7 +274,7 @@
           >
             <template slot-scope="scope">
               <el-input
-                style="width:90px"
+                style="width: 90px"
                 @input="hello(scope.row, scope.$index)"
                 v-model="scope.row.stats"
                 clearable
@@ -291,7 +302,7 @@
               }}</span> -->
               <el-input
                 :disabled="true"
-                style="width:90px"
+                style="width: 90px"
                 v-model="scope.row.malloc"
                 clearable
               >
@@ -302,13 +313,13 @@
           <!--操作格-->
           <el-table-column label="操作" align="center">
             <template slot-scope="scope">
-              <el-button type="text" size="small" style=" margin-left: 10px;"
+              <el-button type="text" size="small" style="margin-left: 10px"
                 >查看</el-button
               >
               <el-button
                 type="text"
                 size="small"
-                style=" margin-left: 10px;"
+                style="margin-left: 10px"
                 @click="handleDelete(scope.$index, scope.row)"
                 >删除</el-button
               >
@@ -321,7 +332,7 @@
       <div class="saveas">
         <el-table
           :data="mailto"
-          style="width: 100%;margin-bottom: 20px;"
+          style="width: 100%; margin-bottom: 20px"
           row-key="id"
           border
           :default-expand-all="false"
@@ -353,7 +364,7 @@
           </el-table-column>
         </el-table>
       </div>
-      <div style="   text-align: center;">
+      <div style="text-align: center">
         <el-button type="primary" @click="shower">测试测试</el-button>
         <el-button type="primary">保存</el-button>
         <el-button @click="savefiles">保存并新增</el-button>
@@ -372,28 +383,30 @@ export default {
       //树形结构
     ];
     return {
+      sumss: "",
+
       showSearch: false,
       loadFlag: false, //加载flag
       dateTime: false, //弹出框
       input: "", //搜索
       getInput: {
         cs: "123123",
-        cs2: ""
+        cs2: "",
       }, //表格输入框
       examine: [
         //下拉框分类
         {
           value: "选项1",
-          label: "全国"
+          label: "全国",
         },
         {
           value: "选项2",
-          label: "浙江"
+          label: "浙江",
         },
         {
           value: "选项3",
-          label: "上海"
-        }
+          label: "上海",
+        },
       ],
       value: "",
       data: JSON.parse(JSON.stringify(data)), //树形结构
@@ -403,14 +416,14 @@ export default {
         region: "", //特点
         desc: "", //做法
         delivery: false, //公开
-        delivery1: false //常用
+        delivery1: false, //常用
       },
       foodPos: [], //菜品分类
       rules: {
         name: [{ required: true, message: "请输入活动名称", trigger: "blur" }],
         fooddata: [
-          { required: true, message: "请选择菜品分类", trigger: "change" }
-        ]
+          { required: true, message: "请选择菜品分类", trigger: "change" },
+        ],
       },
       value1: [], //所属季节
       valuepark: [], //省市区
@@ -419,20 +432,20 @@ export default {
       crashof: [
         {
           value: "1",
-          label: "春季"
+          label: "春季",
         },
         {
           value: "2",
-          label: "夏季"
+          label: "夏季",
         },
         {
           value: "3",
-          label: "秋季"
+          label: "秋季",
         },
         {
           value: "4",
-          label: "冬季"
-        }
+          label: "冬季",
+        },
       ],
 
       dialogImageUrl: "", //上传图片
@@ -444,8 +457,8 @@ export default {
           name: "", //食品名称
           address: "", //食品分类
           stats: "", //用量
-          malloc: "" //能量
-        }
+          malloc: "", //能量
+        },
       ],
       temp: [],
       tableData: [], //营养素含量
@@ -453,8 +466,8 @@ export default {
       csListIndex: null,
       defaultProps: {
         children: "children",
-        label: "label"
-      }
+        label: "label",
+      },
     };
   },
   computed: {
@@ -481,6 +494,35 @@ export default {
     // console.log(this.temp);
   },
   methods: {
+    getSummaries(param) {
+      const { columns, data } = param;
+      const sums = [];
+      columns.forEach((column, index) => {
+        // if (index === 0) {
+        //   sums[index] = '总价';
+        //   return;
+        // }
+        const values = data.map(item => Number(item[column.property]));
+        if (!values.every(value => isNaN(value)) && column.property == "malloc") {
+          sums[index] = values.reduce((prev, curr) => {
+            const value = Number(curr);
+            if (!isNaN(value)) {
+              return prev + curr;
+            } else {
+              return prev;
+            }
+          }, 0);
+          sums[index] += '';
+          this.sumss = sums[index];
+          if (this.mailto[0].children[0].id == "101") {
+            this.mailto[0].children[0].result = this.sumss;
+          }
+          // console.log(this.sumss);
+        }
+      });
+      return sums;
+    },
+
     showImg() {
       this.showSearch = !this.showSearch;
     },
@@ -508,7 +550,7 @@ export default {
         name: "", //食品名称
         address: "", //食品分类
         stats: "", //用量
-        malloc: "" //能量
+        malloc: "", //能量
       };
       //添加新的行数
       this.officeonce.push(newValue);
@@ -527,7 +569,7 @@ export default {
         console.log(item);
         next.push({
           foodId: item.id,
-          value: item.stats
+          value: item.stats,
         });
       });
       //   console.log(next);
@@ -542,9 +584,9 @@ export default {
           belongRegions: this.valuepark, //省市区
           isUse: this.ruleForm.delivery1 == false ? 0 : 1, //是否常用
           isPub: this.ruleForm.delivery == false ? 0 : 1, //是否公开
-          dishMxVos: next //菜品所含食材信息
+          dishMxVos: next, //菜品所含食材信息
         })
-        .then(res => {
+        .then((res) => {
           console.log(res);
           // this.muito();
         });
@@ -556,7 +598,7 @@ export default {
         console.log(item);
         next.push({
           foodId: item.id,
-          value: item.stats
+          value: item.stats,
         });
       });
       //   console.log(next);
@@ -571,9 +613,9 @@ export default {
           belongRegions: this.valuepark,
           isUse: this.ruleForm.delivery1 == false ? 0 : 1, //是否常用
           isPub: this.ruleForm.delivery == false ? 0 : 1, //是否公开
-          dishMxVos: next
+          dishMxVos: next,
         })
-        .then(res => {
+        .then((res) => {
           console.log(res);
           this.obtains();
           this.mysave();
@@ -597,7 +639,7 @@ export default {
         .get(
           `api/blade-food/basetype/getDishByBaseId?isPrivate=${1}&typeTemp=${2}`
         )
-        .then(res => {
+        .then((res) => {
           //   console.log(res);
           this.obtain = res.data.data;
           let foto = [];
@@ -605,7 +647,7 @@ export default {
             // console.log(item);
             foto[index] = {
               id: item.id,
-              label: item.typeName
+              label: item.typeName,
             };
             foto[index].children = [];
             item.dishes.forEach((item1, index1) => {
@@ -613,7 +655,7 @@ export default {
                 id: item1.id,
                 label: item1.dishName,
                 isPub: item1.isPub,
-                isUse: item1.isUse
+                isUse: item1.isUse,
               };
             });
           });
@@ -631,10 +673,10 @@ export default {
       this.$axios
         .get(`api/blade-system/region/selectCityOrProvince`, {
           headers: {
-            "Content-Type": "application/json"
-          }
+            "Content-Type": "application/json",
+          },
         })
-        .then(res => {
+        .then((res) => {
           // console.log(res);
           this.national = res.data.data;
           // console.log(this.national);
@@ -642,7 +684,7 @@ export default {
           this.national.forEach((item, index) => {
             arr[index] = {
               value: item.id,
-              label: item.name
+              label: item.name,
             };
             arr[index].children = [];
             // console.log(item.children instanceof Array);
@@ -650,7 +692,7 @@ export default {
               item.children.forEach((item1, index1) => {
                 arr[index].children[index1] = {
                   value: item1.id,
-                  label: item1.name
+                  label: item1.name,
                 };
               });
             }
@@ -672,10 +714,10 @@ export default {
       this.$axios
         .get(`api/blade-food/food/detail?id=${this.flour}`, {
           headers: {
-            "Content-Type": "application/json"
-          }
+            "Content-Type": "application/json",
+          },
         })
-        .then(res => {
+        .then((res) => {
           //   console.log(res);
 
           this.inquired = res.data.data;
@@ -706,10 +748,10 @@ export default {
       this.$axios
         .get(`api/blade-food/basetype/getFoodByBaseId?isPrivate=1`, {
           headers: {
-            "Content-Type": "application/json"
-          }
+            "Content-Type": "application/json",
+          },
         })
-        .then(res => {
+        .then((res) => {
           // console.log(res);
           this.fication = res.data.data;
           //   console.log(this.fication);
@@ -718,13 +760,13 @@ export default {
             // console.log(item);
             Front[index] = {
               id: item.id,
-              label: item.typeName
+              label: item.typeName,
             };
             Front[index].children = [];
             item.foods.forEach((item1, index1) => {
               Front[index].children[index1] = {
                 id: item1.id,
-                label: item1.foodName
+                label: item1.foodName,
               };
             });
           });
@@ -736,7 +778,7 @@ export default {
     muito() {
       this.$axios
         .get(`api/blade-food/basetype/getList?type=${2}&isPrivate=${1}`, {})
-        .then(res => {
+        .then((res) => {
           //   console.log(res);
           this.details = res.data.data;
           let obtain = [];
@@ -744,7 +786,7 @@ export default {
             // console.log(item);
             obtain.push({
               value: item.id,
-              label: item.typeName
+              label: item.typeName,
             });
           });
           console.log(obtain);
@@ -756,13 +798,12 @@ export default {
       this.$axios
         .get(`api/blade-food/nutrition/tree`, {
           headers: {
-            "Content-Type": "application/json"
-          }
+            "Content-Type": "application/json",
+          },
         })
-        .then(res => {
+        .then((res) => {
           // console.log(res);
           this.mailto = res.data.data;
-          console.log(this.mailto);
         });
     },
     // queryLite() {
@@ -805,7 +846,7 @@ export default {
       this.auto = data.id;
       this.$axios
         .get(`api/blade-food/dish/dishDetail?id=${this.auto}`, {})
-        .then(res => {
+        .then((res) => {
           // console.log(res);
           this.handler = res.data.data;
           console.log(this.handler);
@@ -826,9 +867,9 @@ export default {
       this.$axios
         .post(`api/blade-food/dish/changeIsUse`, {
           id: this.hack,
-          isUse: 0
+          isUse: 0,
         })
-        .then(res => {
+        .then((res) => {
           console.log(res);
         });
       // const newChild = { id: id++, label: "testtest", children: [] };
@@ -843,13 +884,13 @@ export default {
       this.$confirm("确认删除该来源比例?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
         .then(() => {
           let addid = `?ids=${data.id}`;
           this.$axios
             .post(`api/blade-food/dish/remove` + addid, {})
-            .then(res => {
+            .then((res) => {
               console.log(res);
               this.$message.success("删除成功");
               this.obtains();
@@ -858,7 +899,7 @@ export default {
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消删除"
+            message: "已取消删除",
           });
         });
 
@@ -872,8 +913,8 @@ export default {
       //   console.log(res);
       //   this.Addraudit();
       // });
-    }
-  }
+    },
+  },
 };
 </script>
 
