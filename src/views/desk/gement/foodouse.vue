@@ -13,6 +13,10 @@
         <el-button type="success" plain size="mini">加分类</el-button>
         <el-button type="success" plain size="mini">加食材</el-button>
       </div>
+      <div @click="showImg" class="showSearch">
+        <el-button v-if="!showSearch">常用</el-button>
+        <el-button type="primary" v-if="showSearch">不常用</el-button>
+      </div>
       <div class="whole">
         <div class="export">全部(326)</div>
         <div class="export1">公开(320)</div>
@@ -58,6 +62,7 @@
         </div>
       </div>
       <!-- 结束 -->
+
       <div class="monly">
         <div class="block">
           <p></p>
@@ -65,7 +70,7 @@
             :data="data"
             :props="defaultProps"
             node-key="id"
-            default-expand-all
+            :default-expand-all="false"
             :expand-on-click-node="false"
           >
             <span class="custom-tree-node" slot-scope="{ node, data }">
@@ -77,6 +82,15 @@
                 <el-button type="text" size="mini" @click="() => append(data)">
                   常用
                 </el-button>
+                <el-button type="text" size="mini" @click="() => insert(data)">
+                  不常用
+                </el-button>
+                <!-- <el-button type="text" size="mini" @click="() => append(data)">
+                  隐藏
+                </el-button>
+                <el-button type="text" size="mini" @click="() => append(data)">
+                  公开
+                </el-button> -->
                 <el-button
                   type="text"
                   size="mini"
@@ -106,7 +120,6 @@
           :model="ruleForm"
           :rules="rules"
           :inline="true"
-          
           ref="ruleForm"
           label-width="100px"
           class="demo-ruleForm"
@@ -209,6 +222,8 @@
       <!-- 菜品所含食材信息 -->
       <div class="mationtxt">菜品所含食材信息</div>
       <div>
+        <el-button @click="addLine">添加行数</el-button>
+        <el-button @click="save">保存</el-button>
         <el-table
           :data="officeonce"
           border
@@ -240,23 +255,48 @@
             width="120"
             align="center"
           ></el-table-column>
-          <el-table-column label="用量(g)" width="120" align="center">
+          <el-table-column
+            prop="stats"
+            label="用量(g)"
+            width="120"
+            align="center"
+          >
             <template slot-scope="scope">
-              <el-input style="width:90px" v-model="scope.row.stats" clearable>
+              <el-input
+                style="width:90px"
+                @input="hello(scope.row, scope.$index)"
+                v-model="scope.row.stats"
+                clearable
+              >
               </el-input>
             </template>
           </el-table-column>
+          <!-- <el-table-column
+            prop="malloc"
+            label="能量"
+            width="120"
+            align="center"
+          ></el-table-column> -->
           <el-table-column
-            
+            prop="malloc"
             label="能量(kcal)"
             width="100"
             align="center"
           >
-          <template slot-scope="scope">
-            <!-- {{scope.row.malloc}} -->
-            <span v-if="!scope.row.stats">{{scope.row.malloc}}</span>
-            <span v-else>{{(scope.row.stats/100)*scope.row.malloc}}</span>
-          </template>
+            <template slot-scope="scope">
+              <!-- {{scope.row.malloc}} -->
+              <!-- <span v-if="!scope.row.stats">{{ scope.row.malloc }}</span>
+              <span v-else>{{
+                (scope.row.stats / 100) * scope.row.malloc
+              }}</span> -->
+              <el-input
+                :disabled="true"
+                style="width:90px"
+                v-model="scope.row.malloc"
+                clearable
+              >
+              </el-input>
+            </template>
           </el-table-column>
 
           <!--操作格-->
@@ -269,14 +309,8 @@
                 type="text"
                 size="small"
                 style=" margin-left: 10px;"
-                @click="DeleteUser(scope.row)"
+                @click="handleDelete(scope.$index, scope.row)"
                 >删除</el-button
-              >
-              <el-button
-                type="text"
-                size="small"
-                style=" margin-left: 10px;margin-top: 10px;"
-                >添加</el-button
               >
             </template>
           </el-table-column>
@@ -284,7 +318,7 @@
       </div>
       <!-- 菜品营养素信息 -->
       <div class="mationtxt">菜品营养素信息</div>
-        <div class="saveas">
+      <div class="saveas">
         <el-table
           :data="mailto"
           style="width: 100%;margin-bottom: 20px;"
@@ -320,8 +354,7 @@
         </el-table>
       </div>
       <div style="   text-align: center;">
-        
-            <el-button type="primary" @click="shower">测试测试</el-button>
+        <el-button type="primary" @click="shower">测试测试</el-button>
         <el-button type="primary">保存</el-button>
         <el-button @click="savefiles">保存并新增</el-button>
       </div>
@@ -333,11 +366,13 @@
 let id = 1000;
 export default {
   name: "often",
+
   data() {
     const data = [
       //树形结构
     ];
     return {
+      showSearch: false,
       loadFlag: false, //加载flag
       dateTime: false, //弹出框
       input: "", //搜索
@@ -410,17 +445,10 @@ export default {
           address: "", //食品分类
           stats: "", //用量
           malloc: "" //能量
-        },
-        {
-          id: "",
-          name: "", //食品名称
-          address: "", //食品分类
-          stats: "", //用量
-          malloc: "" //能量
-        },
-        
+        }
       ],
-      tableData: [],//营养素含量
+      temp: [],
+      tableData: [], //营养素含量
       csList: {},
       csListIndex: null,
       defaultProps: {
@@ -433,19 +461,65 @@ export default {
     // officeonce:function(){
     // }
   },
-  watch: {},
+  watch: {
+    // (scope.row.stats / 100) * scope.row.malloc
+  },
   beforeMount() {
-        this.Protocol();//营养素含量
+    this.Protocol(); //营养素含量
     this.Provinces(); //省市区
     this.Addraudit(); //树形结构渲染
     // this.queryLite(); //获取分类
     this.muito();
     this.obtains(); //获取树形结构
   },
+  mounted() {
+    // this.temp.length = 0;
+    // this.officeonce.forEach((item, i) => {
+    //   // console.log(item);
+    //   this.temp[i] = Number(item.malloc);
+    // });
+    // console.log(this.temp);
+  },
   methods: {
+    showImg() {
+      this.showSearch = !this.showSearch;
+    },
+    hello(row, i) {
+      // row.malloc = (row.stats / 100) * row.malloc;
+      // row.malloc = row.malloc100;
+      // row.malloc = (row.malloc / 100) * row.stats;
+      // console.log(row.malloc);
+      if (row.stats) {
+        console.log(this.temp[i]);
+        row.malloc = ((this.temp[i] / 100) * Number(row.stats)).toFixed(2);
+        // console.log(row.malloc);
+      } else {
+        row.malloc = this.temp[i];
+      }
+    },
     //保存
-    shower(){
-      console.log(this.officeonce)
+    shower() {
+      console.log(this.officeonce);
+    },
+    //添加行数
+    addLine() {
+      var newValue = {
+        id: "",
+        name: "", //食品名称
+        address: "", //食品分类
+        stats: "", //用量
+        malloc: "" //能量
+      };
+      //添加新的行数
+      this.officeonce.push(newValue);
+    },
+    handleDelete(index) {
+      //删除行数
+      this.officeonce.splice(index, 1);
+    },
+    save() {
+      //这部分应该是保存提交你添加的内容
+      console.log(JSON.stringify(this.officeonce));
     },
     mysave() {
       let next = [];
@@ -620,6 +694,11 @@ export default {
           ].address = this.inquired.foodTypeName;
           // this.officeonce[this.csListIndex].name = this.inquired.foodName;
           //   console.log(this.getInput);
+          this.temp.length = 0;
+          this.officeonce.forEach((item, i) => {
+            this.temp[i] = Number(item.malloc);
+          });
+          console.log(this.temp);
         });
     },
     //树形渲染数
@@ -672,7 +751,7 @@ export default {
           this.foodPos = obtain;
         });
     },
-     //营养素含量
+    //营养素含量
     Protocol() {
       this.$axios
         .get(`api/blade-food/nutrition/tree`, {
@@ -734,24 +813,65 @@ export default {
           this.ruleForm.fooddata = this.handler.dishType; //菜品分类
           this.value1.push(this.handler.season); //季节
           this.ruleForm.region = this.handler.function; //特点
-          this.ruleForm.remark = this.ruleForm.remark; //做法
+          this.ruleForm.desc = this.handler.remark; //做法
           this.ruleForm.delivery1 = this.handler.isUse == 0 ? false : true; //常用
           this.ruleForm.delivery = this.handler.isPub == 0 ? false : true; //公开
         });
     },
+
     append(data) {
-      const newChild = { id: id++, label: "testtest", children: [] };
-      if (!data.children) {
-        this.$set(data, "children", []);
-      }
-      data.children.push(newChild);
+      console.log(data);
+      // let infos = data.id;
+      this.hack = data.id;
+      this.$axios
+        .post(`api/blade-food/dish/changeIsUse`, {
+          id: this.hack,
+          isUse: 0
+        })
+        .then(res => {
+          console.log(res);
+        });
+      // const newChild = { id: id++, label: "testtest", children: [] };
+      // if (!data.children) {
+      //   this.$set(data, "children", []);
+      // }
+      // data.children.push(newChild);
     },
+    //删除删除
     remove(node, data) {
       console.log(data);
+      this.$confirm("确认删除该来源比例?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          let addid = `?ids=${data.id}`;
+          this.$axios
+            .post(`api/blade-food/dish/remove` + addid, {})
+            .then(res => {
+              console.log(res);
+              this.$message.success("删除成功");
+              this.obtains();
+            });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
+
+      // this.facet = data.id;
+      // let addid = `?ids=${data.id}`;
       // const parent = node.parent;
       // const children = parent.data.children || parent.data;
       // const index = children.findIndex(d => d.id === data.id);
       // children.splice(index, 1);
+      // this.$axios.post(`api/blade-food/dish/remove` + addid).then(res => {
+      //   console.log(res);
+      //   this.Addraudit();
+      // });
     }
   }
 };
