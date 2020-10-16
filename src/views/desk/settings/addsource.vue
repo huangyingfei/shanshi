@@ -223,6 +223,8 @@ export default {
 <style scoped>
 .source {
   width: 100%;
+  height: 1200px;
+  background-color: #fff;
 }
 .names {
   width: 98%;

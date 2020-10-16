@@ -3,8 +3,9 @@
     <div class>
       <el-button
         icon="el-icon-circle-plus-outline"
-        type="success"
+        type="primary"
         @click="added"
+        style="  margin: 30px;"
         >新增</el-button
       >
     </div>
@@ -32,7 +33,7 @@
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button
-              type="success"
+              type="primary"
               size="small"
               icon="el-icon-edit"
               style=" margin-left: 20px;"
@@ -154,6 +155,8 @@ export default {
 <style scoped>
 .nutrition {
   width: 100%;
+  height: 1200px;
+  background-color: #fff;
 }
 .pagingClass {
   text-align: right;

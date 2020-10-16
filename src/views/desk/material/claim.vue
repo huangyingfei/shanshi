@@ -20,14 +20,14 @@
       <el-button
         size="medium"
         icon="el-icon-search"
-        type="success"
+        type="primary"
         style=" margin-left: 20px; "
         >搜索</el-button
       >
     </div>
     <!-- 添加食材 -->
     <div class="cadddr">
-      <el-button size="medium" type="success" @click="addShard"
+      <el-button size="medium" type="primary" @click="addShard"
         >添加相克食材</el-button
       >
 
@@ -77,7 +77,7 @@
         <el-table-column label="操作" align="left">
           <template slot-scope="scope">
             <el-button
-              type="success"
+              type="primary"
               size="small"
               icon="el-icon-edit"
               style=" margin-left: 20px;"

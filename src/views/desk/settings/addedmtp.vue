@@ -471,6 +471,8 @@ export default {
 }
 .Additiona {
   width: 100%;
+  height: 1200px;
+  background-color: #fff;
 }
 .current {
   width: 100%;

@@ -47,7 +47,7 @@
         <el-button
           size="medium"
           icon="el-icon-search"
-          type="success"
+          type="primary"
           style=" margin-left: 20px; "
           >搜索</el-button
         >
@@ -115,7 +115,7 @@
         <!--操作格-->
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <el-button type="success" size="small" @click="seecol(scope.row)"
+            <el-button type="primary" size="small" @click="seecol(scope.row)"
               >查看</el-button
             >
             <el-button type="danger" size="small" @click="Directory(scope.row)"
@@ -665,6 +665,7 @@ export default {
 <style>
 .toolbar {
   width: 99%;
+  height: 1200px;
   background-color: #fff;
   /* height: 600px; */
   margin-left: 10px;
@@ -673,6 +674,7 @@ export default {
   width: 100%;
   height: 100px;
   /* background-color: red; */
+  padding-top: 20px;
 }
 .tostring {
   width: 100%;

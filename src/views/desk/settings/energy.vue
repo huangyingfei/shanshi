@@ -4,7 +4,7 @@
       <el-button
         size="medium"
         icon="el-icon-circle-plus-outline"
-        type="success"
+        type="primary"
         @click="xsource"
         >新增</el-button
       >
@@ -45,7 +45,7 @@
         <el-table-column label="操作" align="center" width="260">
           <template slot-scope="scope">
             <el-button
-              type="success"
+              type="primary"
               size="small"
               icon="el-icon-edit"
               style=" margin-left: 20px;"

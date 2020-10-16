@@ -9,10 +9,10 @@
         clearable
       ></el-input>
       <div class="import">
-        <el-button type="success" plain size="mini">导入</el-button>
-        <el-button type="success" plain size="mini">导出</el-button>
-        <el-button type="success" plain size="mini">加分类</el-button>
-        <el-button type="success" plain size="mini">加食材</el-button>
+        <el-button type="primary" plain size="mini">导入</el-button>
+        <el-button type="primary" plain size="mini">导出</el-button>
+        <el-button type="primary" plain size="mini">加分类</el-button>
+        <el-button type="primary" plain size="mini">加食材</el-button>
       </div>
       <div class="whole">
         <div class="export">
@@ -573,14 +573,13 @@ export default {
             };
             Front[index].children = [];
             item.foods.forEach((item1, index1) => {
-                   console.log(item1.isPub)
-              Front[index].children[index1] = { 
+              console.log(item1.isPub);
+              Front[index].children[index1] = {
                 id: item1.id,
                 label: item1.foodName,
                 isPub: item1.isPub,
                 isUse: item1.isUse
               };
-         
             });
           });
           // console.log(Front);
@@ -831,7 +830,12 @@ export default {
             >
               隐藏
             </el-button>
-            <el-button v-else="" size="mini" type="text" on-click={() => this.prepare}>
+            <el-button
+              v-else=""
+              size="mini"
+              type="text"
+              on-click={() => this.prepare}
+            >
               公开
             </el-button>
             <el-button
@@ -876,7 +880,7 @@ export default {
   height: 1300px;
   background-color: #fff;
   float: left;
-  border-right: 1px solid #5c5c5c;
+  border-right: 1px solid #e0e0e0;
   margin-bottom: 40px;
 }
 .el-input__inner {
@@ -907,7 +911,7 @@ export default {
   /* background-color: yellow; */
   text-align: center;
   line-height: 30px;
-  border-right: 1px solid #000;
+  border-right: 1px solid #e0e0e0;
   font-size: 14px;
   float: left;
 }
@@ -916,7 +920,7 @@ export default {
   height: 30px;
   text-align: center;
   line-height: 30px;
-  border-right: 1px solid #000;
+  border-right: 1px solid #e0e0e0;
   font-size: 14px;
   float: left;
 }
