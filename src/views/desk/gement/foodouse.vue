@@ -524,7 +524,7 @@ export default {
         }
       ],
       really1: "0",
-      frame: ""
+
     };
   },
   computed: {
@@ -631,7 +631,8 @@ export default {
         next.push({
           foodId: item.id,
           value: item.stats,
-          baseTypeId: item.address
+          baseTypeIds: item.frame
+          
         });
       });
       //   console.log(next);
@@ -669,29 +670,29 @@ export default {
         next.push({
           foodId: item.id,
           value: item.stats,
-          baseTypeIds: this.frame
+      
         });
       });
       console.log(next);
 
-      // this.$axios
-      //   .post(`api/blade-food/dish/hasOkFood`, {
-      //     dishName: this.ruleForm.name, //菜品名字
-      //     dishType: this.ruleForm.fooddata, //菜品分类
-      //     seasons: this.value1, //季节
-      //     function: this.ruleForm.region,
-      //     remark: this.ruleForm.desc,
-      //     belongRegions: this.valuepark,
-      //     isUse: this.ruleForm.delivery1 == false ? 0 : 1, //是否常用
-      //     isPub: this.ruleForm.delivery == false ? 0 : 1, //是否公开
-      //     dishMxVos: next
-      //   })
-      //   .then(res => {
-      //     console.log(res);
+      this.$axios
+        .post(`api/blade-food/dish/hasOkFood`, {
+          dishName: this.ruleForm.name, //菜品名字
+          dishType: this.ruleForm.fooddata, //菜品分类
+          seasons: this.value1, //季节
+          function: this.ruleForm.region,
+          remark: this.ruleForm.desc,
+          belongRegions: this.valuepark,
+          isUse: this.ruleForm.delivery1 == false ? 0 : 1, //是否常用
+          isPub: this.ruleForm.delivery == false ? 0 : 1, //是否公开
+          dishMxVos: next
+        })
+        .then(res => {
+          console.log(res);
 
-      //     this.obtains();
-      //     this.mysave();
-      //   });
+          this.obtains();
+          this.mysave();
+        });
     },
     //表格弹出框
     columnEvent(row, index) {
@@ -794,8 +795,6 @@ export default {
 
           this.inquired = res.data.data;
           console.log(this.inquired);
-          this.frame = this.inquired.foodType;
-          // console.log(this.frame);
           this.inquired.nutritions.forEach((item, index) => {
             // console.log(item);
             if (item.nutrientId == 101) {
@@ -804,6 +803,7 @@ export default {
           });
           //   this.getInput.cs = this.inquired.foodName; //食材名
           this.officeonce[this.csListIndex].id = this.inquired.id;
+          this.officeonce[this.csListIndex].frame = this.inquired.foodType;
           this.officeonce[this.csListIndex].name = this.inquired.foodName;
           this.officeonce[
             this.csListIndex
@@ -881,14 +881,16 @@ export default {
         });
     },
     request() {
-      // this.$axios
-      //   .post(`api/blade-food/food/getNutritionbyFoodList`, {
-      //     foodId: 1314805343449788418,
-      //     value: 20
-      //   })
-      //   .then(res => {
-      //     console.log(res);
-      //   });
+      
+      this.$axios
+        .post(`api/blade-food/food/getNutritionbyFoodList`, [
+          {foodId: 1314805343449788418,
+          value: 20}
+          
+        ])
+        .then(res => {
+          console.log(res);
+        });
     },
     // queryLite() {
     //   this.$axios
