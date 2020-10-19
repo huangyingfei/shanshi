@@ -1026,10 +1026,11 @@ export default {
           // this.toBack = this.handler.dishMxVos;
           // console.log(this.toBack);
           if (this.handler.dishMxVos) {
+            let arr=[];
             this.handler.dishMxVos.forEach((item, index) => {
               // console.log(item);
               // this.officeonce[this.csListIndex].id = item.id;
-              this.officeonce[index] = {
+              arr[index] = {
                 id: item.id,
                 frame: item.baseTypeId,
                 name: item.name,
@@ -1038,8 +1039,11 @@ export default {
                 malloc: item.nutritionNlValue
               };
 
-              this.addLine();
             });
+            this.officeonce=arr;
+      
+                // this.addLine();
+                
           }
 
           console.log(this.officeonce);
