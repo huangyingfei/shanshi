@@ -2,7 +2,7 @@
   <div class="often">
     <div class="coffee">
       <el-input
-        style="width: 250px; height: 35px"
+        style="width: 250px; height: 35px;margin-left: 20px;margin-top: 10px;"
         placeholder="请输入内容"
         v-model="input"
         clearable
@@ -145,10 +145,14 @@
           class="demo-ruleForm"
         >
           <el-form-item label="菜品名字" prop="name" style="width: 350px">
-            <el-input v-model="ruleForm.name"></el-input>
+            <el-input style="width: 200px" v-model="ruleForm.name"></el-input>
           </el-form-item>
           <el-form-item label="菜品分类" prop="fooddata" style="width: 350px">
-            <el-select v-model="ruleForm.fooddata" placeholder="请选择">
+            <el-select
+              style="width: 200px"
+              v-model="ruleForm.fooddata"
+              placeholder="请选择"
+            >
               <el-option
                 v-for="item in foodPos"
                 :key="item.value"
@@ -160,6 +164,7 @@
           </el-form-item>
           <el-form-item label="所属区域" style="width: 350px">
             <el-cascader
+              style="width: 200px"
               v-model="valuepark"
               placeholder="请选择省市区"
               :options="options"
@@ -171,6 +176,7 @@
           <el-form-item label="所属季节" style="width: 350px">
             <el-select v-model="value1" multiple placeholder="请选择">
               <el-option
+                style="width: 200px"
                 v-for="item in crashof"
                 :key="item.value"
                 :label="item.label"
@@ -182,14 +188,14 @@
           <el-form-item label="特点" style="width: 350px">
             <el-input
               type="textarea"
-              style="width: 250px"
+              style="width: 200px"
               v-model="ruleForm.region"
             ></el-input>
           </el-form-item>
           <el-form-item label="做法" style="width: 350px">
             <el-input
               type="textarea"
-              style="width: 250px"
+              style="width: 200px"
               v-model="ruleForm.desc"
             ></el-input>
           </el-form-item>
@@ -247,9 +253,9 @@
         <el-table
           :data="officeonce"
           border
+          v-loading="loadFlag1"
           show-summary
           style="width: 100%"
-          v-loading="loadFlag"
           :summary-method="getSummaries"
         >
           <el-table-column prop="id" label="序号" width="100" align="center">
@@ -354,6 +360,7 @@
           style="width: 100%; margin-bottom: 20px"
           row-key="id"
           border
+          v-loading="loadFlag"
           :default-expand-all="false"
           :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
         >
@@ -383,10 +390,9 @@
           </el-table-column>
         </el-table>
       </div>
-      <div style="text-align: center">
-        <el-button type="primary" @click="shower">测试测试</el-button>
-        <el-button type="primary">保存</el-button>
-        <el-button @click="savefiles">保存并新增</el-button>
+      <div style="text-align: center;">
+        <el-button @click="saveItem" type="primary">编辑保存</el-button>
+        <el-button @click="savefiles" type="primary">保存并新增</el-button>
       </div>
     </div>
   </div>
@@ -406,6 +412,7 @@ export default {
 
       showSearch: false,
       loadFlag: false, //加载flag
+      loadFlag1: false, //加载
       dateTime: false, //弹出框
       input: "", //搜索
       getInput: {
@@ -523,8 +530,7 @@ export default {
           label: "常用"
         }
       ],
-      really1: "0",
-
+      really1: "0"
     };
   },
   computed: {
@@ -600,10 +606,7 @@ export default {
         row.malloc = this.temp[i];
       }
     },
-    //保存
-    shower() {
-      console.log(this.officeonce);
-    },
+
     //添加行数
     addLine() {
       var newValue = {
@@ -624,6 +627,76 @@ export default {
       //这部分应该是保存提交你添加的内容
       console.log(JSON.stringify(this.officeonce));
     },
+
+    //编辑保存
+    editorTab() {
+      let next = [];
+      this.officeonce.forEach(item => {
+        console.log(item);
+        next.push({
+          foodId: item.id,
+          value: item.stats,
+          baseTypeId: item.frame
+        });
+      });
+      this.$axios
+        .post(`api/blade-food/dish/update`, {
+          id: this.auto,
+          dishName: this.ruleForm.name, //菜品名字
+          dishType: this.ruleForm.fooddata, //菜品分类
+          seasons: this.value1, //季节
+          function: this.ruleForm.region, //特点
+          remark: this.ruleForm.desc, //做法
+          belongRegions: this.valuepark, //省市区
+          isUse: this.ruleForm.delivery1 == false ? 0 : 1, //是否常用
+          isPub: this.ruleForm.delivery == false ? 0 : 1, //是否公开
+          dishMxVos: next //菜品所含食材信息
+        })
+        .then(res => {
+          console.log(res);
+          this.obtains();
+          this.$message({
+            message: "保存成功",
+            type: "success"
+          });
+        })
+        .catch(() => {
+          this.$message.error("保存失败");
+        });
+    },
+    //编辑保存
+    saveItem() {
+      // console.log(123123);
+      let next = [];
+      this.officeonce.forEach((item, index) => {
+        // console.log(item);
+        next.push({
+          foodId: item.id,
+          value: item.stats
+        });
+      });
+      console.log(next);
+
+      this.$axios
+        .post(`api/blade-food/dish/hasOkFood`, {
+          dishName: this.ruleForm.name, //菜品名字
+          dishType: this.ruleForm.fooddata, //菜品分类
+          seasons: this.value1, //季节
+          function: this.ruleForm.region,
+          remark: this.ruleForm.desc,
+          belongRegions: this.valuepark,
+          isUse: this.ruleForm.delivery1 == false ? 0 : 1, //是否常用
+          isPub: this.ruleForm.delivery == false ? 0 : 1, //是否公开
+          dishMxVos: next
+        })
+        .then(res => {
+          console.log(res);
+
+          this.obtains();
+          this.editorTab();
+        });
+    },
+    //保存并新增
     mysave() {
       let next = [];
       this.officeonce.forEach(item => {
@@ -631,8 +704,7 @@ export default {
         next.push({
           foodId: item.id,
           value: item.stats,
-          baseTypeIds: item.frame
-          
+          baseTypeId: item.frame
         });
       });
       //   console.log(next);
@@ -661,7 +733,6 @@ export default {
           this.$message.error("保存失败");
         });
     },
-    //保存并新增
     savefiles() {
       console.log(this.officeonce);
       let next = [];
@@ -669,8 +740,7 @@ export default {
         // console.log(item);
         next.push({
           foodId: item.id,
-          value: item.stats,
-      
+          value: item.stats
         });
       });
       console.log(next);
@@ -881,15 +951,14 @@ export default {
         });
     },
     request() {
-      
+      this.loadFlag = true;
       this.$axios
         .post(`api/blade-food/food/getNutritionbyFoodList`, [
-          {foodId: 1314805343449788418,
-          value: 20}
-          
+          { foodId: 1314805343449788418, value: 20 }
         ])
         .then(res => {
           console.log(res);
+          this.loadFlag = false;
         });
     },
     // queryLite() {
@@ -930,6 +999,8 @@ export default {
     prepare(data) {
       console.log(data);
       this.auto = data.id;
+
+      // this.csListIndex = index;
       this.$axios
         .get(`api/blade-food/dish/dishDetail?id=${this.auto}`, {})
         .then(res => {
@@ -941,8 +1012,37 @@ export default {
           this.value1.push(this.handler.season); //季节
           this.ruleForm.region = this.handler.function; //特点
           this.ruleForm.desc = this.handler.remark; //做法
+          this.valuepark.length = 0;
+          this.handler.provinces.split(",").forEach((item, i) => {
+            console.log(item);
+            this.valuepark.push([
+              item,
+              this.handler.belongRegion.split(",")[i]
+            ]);
+          });
+          console.log(this.valuepark);
           this.ruleForm.delivery1 = this.handler.isUse == 0 ? false : true; //常用
           this.ruleForm.delivery = this.handler.isPub == 0 ? false : true; //公开
+          // this.toBack = this.handler.dishMxVos;
+          // console.log(this.toBack);
+          if (this.handler.dishMxVos) {
+            this.handler.dishMxVos.forEach((item, index) => {
+              // console.log(item);
+              // this.officeonce[this.csListIndex].id = item.id;
+              this.officeonce[index] = {
+                id: item.id,
+                frame: item.baseTypeId,
+                name: item.name,
+                address: item.baseTypeName,
+                stats: item.value,
+                malloc: item.nutritionNlValue
+              };
+
+              this.addLine();
+            });
+          }
+
+          console.log(this.officeonce);
         });
     },
     //设置常用
@@ -1062,6 +1162,7 @@ export default {
   width: 100%;
   height: 50px;
   /* background-color: red; */
+  margin-left: 20px;
   margin-top: 10px;
   line-height: 50px;
 }
@@ -1074,6 +1175,7 @@ export default {
 .country1 {
   width: 90px;
   float: left;
+  margin-left: 20px;
 }
 .country2 {
   width: 90px;
@@ -1143,7 +1245,7 @@ export default {
 }
 .saveas {
   width: 95%;
-  height: 500px;
+  /* height: 500px; */
   margin-left: 40px;
   /* background-color: red; */
 }

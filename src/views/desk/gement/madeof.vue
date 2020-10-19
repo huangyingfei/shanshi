@@ -2,7 +2,7 @@
   <div class="toolbar">
     <!-- 搜索 -->
     <div class="custom">
-      <span style=" margin-right: 10px;">项目名称:</span>
+      <span style=" margin-right: 10px;">菜品名称:</span>
       <el-input
         v-model="input"
         placeholder="请输入内容"
@@ -56,7 +56,7 @@
     <!-- 审核表格 -->
     <div class="navbar">
       <el-table
-        :data="attributes"
+        :data="tmquery"
         border
         style="width: 100%"
         v-loading="loadFlag"
@@ -69,31 +69,31 @@
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="foodName"
-          label="食材名称"
+          prop="dishName"
+          label="菜品名称"
           width="100"
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="orgName"
+          prop="dishTypeName"
           label="分类"
           width="100"
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="createName"
+          prop="tenentName"
           label="创建机构"
           width="180"
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="createName"
+          prop="userName"
           label="提交人"
           width="100"
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="mobile"
+          prop="phone"
           label="联系电话"
           width="150"
           align="center"
@@ -413,6 +413,7 @@ export default {
   name: "toolbar",
   data() {
     return {
+      tmquery: [],
       dsquery: {
         establish: "", //创建机构
         submit: "", //提交人
@@ -500,18 +501,17 @@ export default {
   methods: {
     //获取表格数据
     auditing() {
-      this.loadFlag = true;
+      // this.loadFlag = true;
       this.$axios
-        .get(`api/blade-food/food/getAuditList?size=${10}&current=${1}`, {
+        .get(`api/blade-food/dish/appPubDish?size=${10}&current=${1}`, {
           headers: {
             "Content-Type": "application/json"
           }
         })
         .then(res => {
-          console.log(res);
-          this.attributes = res.data.data.records;
-          console.log(this.attributes);
-          this.loadFlag = false;
+          // console.log(res);
+          this.tmquery = res.data.data.records;
+          console.log(this.tmquery);
         });
     },
     //查看
@@ -579,21 +579,21 @@ export default {
     },
     //公共库分类
     setDec() {
-      this.$axios
-        .get(`api/blade-food/basetype/getList?isPrivate=1&type=1`, {})
-        .then(res => {
-          // console.log(res);
-          this.myStr = res.data.data;
-          let str = [];
-          this.myStr.forEach((item, index) => {
-            console.log(item);
-            str[index] = {
-              value: item.id,
-              label: item.typeName
-            };
-          });
-          this.fication = str;
-        });
+      // this.$axios
+      //   .get(`api/blade-food/basetype/getList?isPrivate=1&type=1`, {})
+      //   .then(res => {
+      //     // console.log(res);
+      //     this.myStr = res.data.data;
+      //     let str = [];
+      //     this.myStr.forEach((item, index) => {
+      //       console.log(item);
+      //       str[index] = {
+      //         value: item.id,
+      //         label: item.typeName
+      //       };
+      //     });
+      //     this.fication = str;
+      //   });
     },
     //营养素含量
     Protocol() {
