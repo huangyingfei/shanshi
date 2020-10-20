@@ -168,26 +168,12 @@
             label-width="100px"
             class="demo-ruleForm"
           >
-            <el-form-item label="食材名" prop="name" style=" width: 350px;   ">
+            <el-form-item label="菜品名" prop="name" style=" width: 350px;   ">
               <el-input v-model="ruleForm.name"></el-input>
             </el-form-item>
-            <el-form-item label="食物别名1" style=" width: 350px;  ">
-              <el-input v-model="ruleForm.move"></el-input>
-            </el-form-item>
-            <el-form-item label="食物别名2" style=" width: 350px;  ">
-              <el-input v-model="ruleForm.move1"></el-input>
-            </el-form-item>
 
             <el-form-item
-              label="食材真名"
-              prop="buffer"
-              style=" width: 350px;   "
-            >
-              <el-input v-model="ruleForm.buffer"></el-input>
-            </el-form-item>
-
-            <el-form-item
-              label="食材分类"
+              label="菜品分类"
               prop="autosave"
               style=" width: 350px;   "
             >
@@ -202,58 +188,14 @@
               </el-select>
             </el-form-item>
 
-            <el-form-item label="食物分类1" style=" width: 350px;  ">
-              <el-input
-                v-model="ruleForm.foods"
-                placeholder="请输入食材"
-              ></el-input>
-            </el-form-item>
-
-            <el-form-item label="食物分类2" style=" width: 350px;   ">
-              <el-input
-                v-model="ruleForm.dogfood"
-                placeholder="请输入食材"
-              ></el-input>
-            </el-form-item>
-
-            <el-form-item
-              label="食部(%)"
-              prop="besaved"
-              style=" width: 350px;  "
-            >
-              <el-input
-                v-model="ruleForm.besaved"
-                placeholder="请输入食部"
-              ></el-input>
-            </el-form-item>
-
-            <el-form-item
-              label="重量（g）"
-              prop="timers"
-              style=" width: 350px; "
-            >
-              <el-input
-                v-model="ruleForm.timers"
-                placeholder="请输入重量"
-              ></el-input>
-            </el-form-item>
-
-            <el-form-item label="水分(%)" style=" width: 350px;   ">
-              <el-input
-                v-model="ruleForm.moisture"
-                placeholder="请输入水分"
-              ></el-input>
-            </el-form-item>
-
-            <el-form-item label="色系" style="  ">
-              <el-radio-group v-model="ruleForm.resource">
-                <el-radio label="绿"></el-radio>
-                <el-radio label="红"></el-radio>
-                <el-radio label="黄"></el-radio>
-                <el-radio label="紫"></el-radio>
-                <el-radio label="白"></el-radio>
-                <el-radio label="黑"></el-radio>
-              </el-radio-group>
+            <el-form-item label="所属区域" style=" width: 350px;  ">
+              <el-cascader
+                v-model="valuepark"
+                placeholder="请选择省市区"
+                :options="options"
+                :props="{ multiple: true, checkStrictly: true }"
+                @change="handleChange"
+              ></el-cascader>
             </el-form-item>
 
             <el-form-item label="所属季节" style="  width: 350px;  ">
@@ -267,26 +209,23 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="所属区域" style=" width: 350px;  ">
-              <el-cascader
-                v-model="valuepark"
-                placeholder="请选择省市区"
-                :options="options"
-                :props="{ multiple: true, checkStrictly: true }"
-                @change="handleChange"
-              ></el-cascader>
-            </el-form-item>
 
-            <el-form-item label="功用">
+            <el-form-item label="特点" style="width: 350px">
               <el-input
-                style=" width: 450px;  "
                 type="textarea"
+                style="width: 200px"
+                v-model="ruleForm.region"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="做法" style="width: 350px">
+              <el-input
+                type="textarea"
+                style="width: 200px"
                 v-model="ruleForm.desc"
-                placeholder="请输入"
               ></el-input>
             </el-form-item>
 
-            <el-form-item label="图片" style=" width:500px ">
+            <el-form-item label="图片" style=" width:300px ">
               <el-upload
                 action="https://jsonplaceholder.typicode.com/posts/"
                 list-type="picture-card"
@@ -300,7 +239,7 @@
               </el-dialog>
             </el-form-item>
 
-            <el-form-item label="公开" style=" width:200px ">
+            <el-form-item label="公开" style=" width:150px ">
               <el-switch v-model="ruleForm.delivery"></el-switch>
             </el-form-item>
 
@@ -308,6 +247,113 @@
               <el-switch v-model="ruleForm.delivery1"></el-switch>
             </el-form-item>
           </el-form>
+        </div>
+        <!-- 菜品所含食材信息 -->
+        <div class="mationtxt">菜品所含食材信息</div>
+        <div>
+          <el-button @click="addLine">添加行数</el-button>
+          <el-button @click="save">保存</el-button>
+          <el-table
+            :data="officeonce"
+            border
+            v-loading="loadFlag1"
+            show-summary
+            style="width: 100%"
+            :summary-method="getSummaries"
+          >
+            <el-table-column prop="id" label="序号" width="100" align="center">
+            </el-table-column>
+            <el-table-column
+              prop="frame"
+              label="分类ID "
+              width="100"
+              align="center"
+            >
+            </el-table-column>
+            <el-table-column label="食品名称" width="190" align="center">
+              <template slot-scope="scope">
+                <el-input
+                  style="width: 90px"
+                  v-model="scope.row.name"
+                  :disabled="true"
+                >
+                </el-input>
+                <el-button
+                  type="primary"
+                  size="small"
+                  style="   margin-left: 10px;"
+                  @click="columnEvent(scope.row, scope.$index)"
+                  plain
+                  >选择</el-button
+                >
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="address"
+              label="食品分类"
+              width="120"
+              align="center"
+            ></el-table-column>
+            <el-table-column
+              prop="stats"
+              label="用量(g)"
+              width="120"
+              align="center"
+            >
+              <template slot-scope="scope">
+                <el-input
+                  style="width: 90px"
+                  @input="hello(scope.row, scope.$index)"
+                  v-model="scope.row.stats"
+                  clearable
+                >
+                </el-input>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="malloc"
+              label="能量"
+              width="150"
+              align="center"
+            ></el-table-column>
+            <el-table-column
+              prop="malloc"
+              label="能量(kcal)"
+              width="120"
+              align="center"
+            >
+              <template slot-scope="scope">
+                <!-- {{scope.row.malloc}} -->
+                <!-- <span v-if="!scope.row.stats">{{ scope.row.malloc }}</span>
+              <span v-else>{{
+                (scope.row.stats / 100) * scope.row.malloc
+              }}</span> -->
+                <el-input
+                  :disabled="true"
+                  style="width: 90px"
+                  v-model="scope.row.malloc"
+                  clearable
+                >
+                </el-input>
+              </template>
+            </el-table-column>
+
+            <!--操作格-->
+            <el-table-column label="操作" align="center">
+              <template slot-scope="scope">
+                <el-button type="text" size="small" style="margin-left: 10px"
+                  >查看</el-button
+                >
+                <el-button
+                  type="text"
+                  size="small"
+                  style="margin-left: 10px"
+                  @click="handleDelete(scope.$index, scope.row)"
+                  >删除</el-button
+                >
+              </template>
+            </el-table-column>
+          </el-table>
         </div>
         <!-- 营养素标题 -->
         <div class="worm1">营养素含量（这里为100克食部食品中的营养素含量）</div>
@@ -436,18 +482,12 @@ export default {
       },
       ruleForm: {
         name: "", //食材名
-        move: "", //食物别名1
-        move1: "", //食物别名2
-        buffer: "", //食材真名
+
         fooddata: "", //食材分类
-        foods: "", //食物分类
-        dogfood: "", //食物分类2
-        besaved: "", //食部
-        timers: "", //重量
-        moisture: "", //水分
-        region: "",
-        resource: "", //色系
-        desc: "", //功用
+
+        region: "", //特点
+
+        desc: "", //做法
         delivery: false, //公开
         delivery1: false, //常用
         type: [],
@@ -488,17 +528,48 @@ export default {
       options1: [],
 
       value: "", //审核状态
-      tableData1: []
+      tableData1: [],
+      officeonce: [
+        //菜品所含信息
+        {
+          id: "",
+          frame: "", //分类ID
+          name: "", //食品名称
+          address: "", //食品分类
+          stats: "", //用量
+          malloc: "" //能量
+        }
+      ]
     };
   },
   beforeMount() {
     this.auditing();
     this.setDec(); //公共库分类
     this.Protocol(); //营养素含量
-    this.queryLite(); //获取分类
+    this.muito(); //获取分类
     this.Provinces(); //省市区
   },
   methods: {
+    //添加行数
+    addLine() {
+      var newValue = {
+        id: "",
+        name: "", //食品名称
+        address: "", //食品分类
+        stats: "", //用量
+        malloc: "" //能量
+      };
+      //添加新的行数
+      this.officeonce.push(newValue);
+    },
+    handleDelete(index) {
+      //删除行数
+      this.officeonce.splice(index, 1);
+    },
+    save() {
+      //这部分应该是保存提交你添加的内容
+      console.log(JSON.stringify(this.officeonce));
+    },
     //获取表格数据
     auditing() {
       // this.loadFlag = true;
@@ -554,27 +625,22 @@ export default {
         });
     },
     // 分类
-    queryLite() {
+    muito() {
       this.$axios
-        .get(`api/blade-food/basetype/list?type=1`, {
-          headers: {
-            "Content-Type": "application/json"
-          }
-        })
+        .get(`api/blade-food/basetype/getList?type=${2}&isPrivate=${1}`, {})
         .then(res => {
-          // console.log(res);
-          this.tionDate = res.data.data;
-          // console.log(this.tionDate);
-          let cation = [];
-          // children
-          this.tionDate.forEach((item, index) => {
-            cation[index] = {
+          //   console.log(res);
+          this.details = res.data.data;
+          let obtain = [];
+          this.details.forEach((item, index) => {
+            // console.log(item);
+            obtain.push({
               value: item.id,
               label: item.typeName
-            };
+            });
           });
-          // console.log(cation);
-          this.foodPos = cation;
+          console.log(obtain);
+          this.foodPos = obtain;
         });
     },
     //公共库分类
