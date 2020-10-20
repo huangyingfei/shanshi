@@ -92,47 +92,85 @@
             width="100"
           >
           </el-table-column>
-          <el-table-column align="center" width="400" prop="name" label="周一">
-            <el-table
-              :data="tableData1"
-              style="width: 100%;margin-bottom: 20px;"
-              row-key="id"
-              :default-expand-all="false"
-              :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-            >
-              <el-table-column
-                prop="date"
-                align="center"
-                label="食品/食材"
-                width="170"
+          <el-table-column align="center" width="400"  label="周一">
+            <template slot-scope="scope">
+              <el-table
+                :data="scope.row.tabaldata1"
+                style="width: 100%;margin-bottom: 20px;"
+                row-key="id"
+                :default-expand-all="false"
+                :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
               >
-              </el-table-column>
-              <el-table-column label="用量(g)" align="center" width="100">
-                <template slot-scope="scope">
-                  <el-input
-                    v-model="scope.row.name"
-                    type="text"
-                    placeholder="请输入内容"
-                  ></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column width="100" label="操作" align="center">
-                <template slot-scope="scope">
-                  <!-- <el-button type="text" size="small" style="margin-left: 10px"
-                  >查看</el-button
-                > -->
-                  <el-button
-                    type="text"
-                    size="small"
-                    style="margin-left: 10px"
-                    @click="handleDelete(scope.$index, scope.row)"
-                    >删除</el-button
-                  >
-                </template>
-              </el-table-column>
-            </el-table>
+                <el-table-column
+                  prop="date"
+                  align="center"
+                  label="食品/食材"
+                  width="170"
+                >
+                </el-table-column>
+                <el-table-column label="用量(g)" align="center" width="100">
+                  <template slot-scope="scope">
+                    <el-input
+                      v-model="scope.row.name"
+                      type="text"
+                      placeholder="请输入内容"
+                    ></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column width="100" label="操作" align="center">
+                  <template slot-scope="scope">
+              
+                    <el-button
+                      type="text"
+                      size="small"
+                      style="margin-left: 10px"
+                      @click="handleDelete(scope.$index, scope.row)"
+                      >删除</el-button
+                    >
+                  </template>
+                </el-table-column>
+              </el-table>
+            </template>
           </el-table-column>
-          <el-table-column align="center" prop="name" label="周二">
+          <el-table-column align="center"  width="400" prop="name" label="周二">
+               <template slot-scope="scope">
+                    <el-table
+                :data="scope.row.tabaldata2"
+                style="width: 100%;margin-bottom: 20px;"
+                row-key="id"
+                :default-expand-all="false"
+                :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+              >
+                <el-table-column
+                  prop="date"
+                  align="center"
+                  label="食品/食材"
+                  width="170"
+                >
+                </el-table-column>
+                <el-table-column label="用量(g)" align="center" width="100">
+                  <template slot-scope="scope">
+                    <el-input
+                      v-model="scope.row.name"
+                      type="text"
+                      placeholder="请输入内容"
+                    ></el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column width="100" label="操作" align="center">
+                  <template slot-scope="scope">
+              
+                    <el-button
+                      type="text"
+                      size="small"
+                      style="margin-left: 10px"
+                      @click="handleDelete(scope.$index, scope.row)"
+                      >删除</el-button
+                    >
+                  </template>
+                </el-table-column>
+              </el-table>
+               </template>
           </el-table-column>
           <el-table-column align="center" prop="name" label="周三">
           </el-table-column>
@@ -176,7 +214,45 @@ export default {
 
       tableData: [
         {
-          date: "早餐"
+          date: "早餐",
+          tabaldata1: [
+            {
+              id: 3,
+              date: "番茄炒鸡蛋",
+              name: "100",
+              children: [
+                {
+                  id: 31,
+                  date: "番茄",
+                  name: "50"
+                },
+                {
+                  id: 32,
+                  date: "鸡蛋",
+                  name: "50"
+                }
+              ]
+            }
+          ],
+          tabaldata2: [
+            {
+              id: 3,
+              date: "番茄炒鸡蛋",
+              name: "100",
+              children: [
+                {
+                  id: 31,
+                  date: "番茄",
+                  name: "50"
+                },
+                {
+                  id: 32,
+                  date: "鸡蛋",
+                  name: "50"
+                }
+              ]
+            }
+          ]
         },
         {
           date: "早点"
@@ -194,6 +270,7 @@ export default {
         //   date: "晚点"
         // }
       ],
+      name:"",
       tableData1: [
         {
           id: 3,
@@ -212,7 +289,7 @@ export default {
             }
           ]
         }
-      ]
+      ],
     };
   },
   methods: {

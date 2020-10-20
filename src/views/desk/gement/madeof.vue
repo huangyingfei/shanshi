@@ -616,12 +616,7 @@ export default {
           // console.log(res);
           this.subquery = res.data.data;
           console.log(this.subquery);
-          this.dsquery.establish = this.subquery.createName; //创建机构
-          this.dsquery.submit = this.subquery.createName; //提交人
-          this.dsquery.phone = this.subquery.mobile; //提交电话
-          this.dsquery.time = this.subquery.createTime; //提交时间
-          this.dsquery.examineto = this.subquery.status; //审核状态
-          this.ruleForm.name = this.subquery.foodName; //食材名
+      
         });
     },
     // 分类
