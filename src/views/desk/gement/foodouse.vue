@@ -121,15 +121,6 @@
               </span>
             </span>
           </el-tree>
-          <!-- <el-tree
-            :data="data"
-            show-checkbox
-            node-key="id"
-            default-expand-all
-            :expand-on-click-node="false"
-            :render-content="renderContent"
-            @node-click="handleNodeClick1"
-          ></el-tree> -->
         </div>
       </div>
     </div>
@@ -1026,7 +1017,7 @@ export default {
           // this.toBack = this.handler.dishMxVos;
           // console.log(this.toBack);
           if (this.handler.dishMxVos) {
-            let arr=[];
+            let arr = [];
             this.handler.dishMxVos.forEach((item, index) => {
               // console.log(item);
               // this.officeonce[this.csListIndex].id = item.id;
@@ -1038,12 +1029,10 @@ export default {
                 stats: item.value,
                 malloc: item.nutritionNlValue
               };
-
             });
-            this.officeonce=arr;
-      
-                // this.addLine();
-                
+            this.officeonce = arr;
+
+            // this.addLine();
           }
 
           console.log(this.officeonce);
