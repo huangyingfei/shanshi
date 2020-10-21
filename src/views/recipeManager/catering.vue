@@ -243,7 +243,7 @@
                     ></el-input>
                   </template>
                 </el-table-column>
-                <el-table-column width="100" label="操作" align="center">
+                <!-- <el-table-column width="100" label="操作" align="center">
                   <template slot-scope="scope">
                     <el-button
                       type="text"
@@ -259,8 +259,9 @@
                       >删除</el-button
                     >
                   </template>
-                </el-table-column>
+                </el-table-column> -->
               </el-table>
+              <el-button @click="Choice(scope.row.tabaldata1, scope.$index, 1)">获取菜谱</el-button>
             </template>
           </el-table-column>
           <el-table-column align="center" width="400" prop="name" label="周二">
@@ -467,6 +468,12 @@ export default {
         //   date: "晚点"
         // }
       ],
+
+      datadata1: [],
+      dataindex1: undefined,
+      dataindex2: undefined,
+
+
       name: "",
       examine: [
         //下拉框分类
@@ -547,26 +554,41 @@ export default {
           // console.log(res);
           this.thehabit = res.data.data;
           console.log(this.thehabit);
+
+          // this.thehabit.
           let arr = [];
-          let open = [];
-          this.thehabit.dishMxVos.forEach((item, index) => {
-            // console.log(item, index);
-            open[index] = {
-              id: item.id,
-              date: item.name,
-              name: item.value
-            };
-          });
-          console.log(open);
           arr.push({
-            id: this.thehabit.id,
+              id: this.thehabit.id,
             date: this.thehabit.dishName,
             name: this.thehabit.provinces,
-            children: open
-          });
-          console.log(arr);
-          this.tableData.tabaldata1 = arr;
-          console.log(this.tableData.tabaldata1);
+            children: this.thehabit.dishMxVos
+          })
+
+if(this.dataindex2 == 1) {
+
+  this.tableData[this.dataindex1].tabaldata1 = arr;
+}
+          console.log(this.tableData[this.dataindex1].tabaldata1)
+          // let open = [];
+          
+          // this.thehabit.dishMxVos.forEach((item, index) => {
+          //   // console.log(item, index);
+          //   open[index] = {
+          //     id: item.id,
+          //     date: item.name,
+          //     name: item.value
+          //   };
+          // });
+          // console.log(open);
+          // arr.push({
+          //   id: this.thehabit.id,
+          //   date: this.thehabit.dishName,
+          //   name: this.thehabit.provinces,
+          //   children: open
+          // });
+          // console.log(arr);
+          // this.tableData.tabaldata1 = arr;
+          // console.log(this.tableData.tabaldata1);
           // this.thehabit.forEach((item, index) => {
           //   arr[index] = {
           //     id: item.id,
@@ -585,7 +607,11 @@ export default {
     },
 
     //表格弹出框
-    Choice(row, index) {
+    Choice(row, index1, index2) {
+      this.datadata1 = row;
+      this.dataindex1 = index1;
+      this.dataindex2 = index2;
+      // console.log(index); 
       this.dateTime = true;
       // this.csListIndex = index;
       //   for (let k in row) {
