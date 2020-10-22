@@ -910,15 +910,22 @@ export default {
       this.display = flat;
     },
     autosave() {
-      // console.log(this.value1);
+      console.log(this.value1);
       let add = this.value1[0];
-      let add1 = new Date(add);
-      let add2 = (add1 = add1.getFullYear());
-      console.log(add1);
-      console.log(add2);
-      // console.log(add);
+      let arr=this.value1[1]
+     
+      var datetiem=add.getFullYear() + '-' + (add.getMonth() + 1) + '-' + add.getDate()  ;
+      var player=arr.getFullYear() + '-' + (arr.getMonth() + 1) + '-' + arr.getDate()  ;
+      
+       bionu=[],
+      bionu.push({
+        datetiem,
+         player
+      })
+        
+     
 
-      // console.log(this.tableData);
+      console.log(bionu);
       // this.$axios.post(`api/blade-food/recipe/save`,{
 
       // }).then(res=>{
