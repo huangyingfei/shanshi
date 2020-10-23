@@ -7,12 +7,14 @@
           style="width:300px"
           v-model="value1"
           type="daterange"
+          format="yyyy 年 MM 月 dd 日"
+          value-format="yyyy-MM-dd"
           range-separator="至"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
         >
         </el-date-picker>
-        <span style="padding-right: 10px;padding-left: 50px;">人群年龄</span>
+        <span style="padding-right: 10px;padding-left: 30px;">人群年龄</span>
         <el-input
           style="width:140px"
           placeholder="请输入内容"
@@ -48,6 +50,13 @@
         <el-checkbox v-model="checked6">5天</el-checkbox>
         <el-checkbox v-model="checked7">6天</el-checkbox>
         <el-checkbox v-model="checked8">7天</el-checkbox>
+
+        <span style="padding-right: 10px;padding-left: 10px;">周天数</span>
+        <el-radio-group v-model="radio">
+          <el-radio :label="3">5天</el-radio>
+          <el-radio :label="6">6天</el-radio>
+          <el-radio :label="9">5天</el-radio>
+        </el-radio-group>
       </div>
 
       <div class="results">
@@ -66,6 +75,8 @@
         <el-button type="primary" size="small" style="margin-left: 20px;"
           >带量食谱</el-button
         >
+        <el-button type="success">编辑保存</el-button>
+        <el-button @click="autosave" type="success">保存并新增</el-button>
       </div>
     </div>
     <div class="gresults">
@@ -212,7 +223,7 @@
       </div>
       <!-- 表格 -->
       <div class="field">
-        <el-table :data="tableData" border style="width: 100%">
+        <el-table :data="tableData" border style="width: 100%;heigth:100%">
           <el-table-column
             align="center"
             prop="date"
@@ -466,9 +477,21 @@
               >
             </template>
           </el-table-column>
-          <el-table-column align="center" width="400" prop="name" label="周六">
+          <el-table-column
+            v-if="checked7"
+            align="center"
+            width="400"
+            prop="name"
+            label="周六"
+          >
           </el-table-column>
-          <el-table-column align="center" width="400" prop="name" label="周天">
+          <el-table-column
+            v-if="checked8"
+            align="center"
+            width="400"
+            prop="name"
+            label="周天"
+          >
           </el-table-column>
         </el-table>
       </div>
@@ -514,8 +537,8 @@
         </div>
       </el-dialog>
       <div class="profile">
-        <el-button type="primary">编辑保存</el-button>
-        <el-button @click="autosave" type="primary">保存并新增</el-button>
+        <el-button type="success">编辑保存</el-button>
+        <el-button @click="autosave" type="success">保存并新增</el-button>
       </div>
     </div>
   </div>
@@ -527,6 +550,7 @@ export default {
   data() {
     const data = [];
     return {
+      right: false,
       data: JSON.parse(JSON.stringify(data)), //树形结构
       dateTime: false, //弹出框
       cur: 0,
@@ -553,7 +577,6 @@ export default {
               id: "11",
               name: "西红柿鸡蛋",
               date: "200",
-
               children: [
                 {
                   id: "22",
@@ -572,63 +595,6 @@ export default {
             {
               id: 3,
               name: "绿豆粥",
-              date: "200",
-              children: [
-                {
-                  id: 31,
-                  name: "绿豆",
-                  date: "50"
-                },
-                {
-                  id: 32,
-                  name: "粥",
-                  date: "50"
-                }
-              ]
-            }
-          ],
-          tabaldata3: [
-            {
-              id: 3,
-              name: "鸡蛋饼",
-              date: "200",
-              children: [
-                {
-                  id: 31,
-                  name: "绿豆",
-                  date: "50"
-                },
-                {
-                  id: 32,
-                  name: "粥",
-                  date: "50"
-                }
-              ]
-            }
-          ],
-          tabaldata4: [
-            {
-              id: 3,
-              name: "千层饼",
-              date: "200",
-              children: [
-                {
-                  id: 31,
-                  name: "绿豆",
-                  date: "50"
-                },
-                {
-                  id: 32,
-                  name: "粥",
-                  date: "50"
-                }
-              ]
-            }
-          ],
-          tabaldata5: [
-            {
-              id: 3,
-              name: "面条",
               date: "200",
               children: [
                 {
@@ -786,13 +752,30 @@ export default {
           label: "常用"
         }
       ],
-      really1: "0"
+      really1: "0",
+      radio: 6
     };
   },
   beforeMount() {
     this.obtains(); //获取树形结构
   },
   methods: {
+    //保存并新增
+    autosave() {
+      // console.log(this.checked7);
+      console.log(this.radio);
+      console.log(this.value1); //时间
+      console.log(this.tableData);
+      // this.tableData.forEach((item, index) => {
+      //   console.log(item.date);
+      // });
+      // console.log(bionu);
+      // this.$axios.post(`api/blade-food/recipe/save`,{
+
+      // }).then(res=>{
+      //   console.log(res);
+      // })
+    },
     //点击查看详情
     handleNodeClick1(data) {
       // console.log(data);
@@ -805,17 +788,18 @@ export default {
           console.log(this.thehabit);
 
           // this.thehabit.
-          let arr = [];
-          arr.push({
-            id: this.thehabit.id,
-            name: this.thehabit.dishName,
-            date: this.thehabit.provinces,
-            children: this.thehabit.dishMxVos
-          });
-          console.log(arr);
+          // let arr = [];
+          // arr.push({
+          //   id: this.thehabit.id,
+          //   name: this.thehabit.dishName,
+          //   date: this.thehabit.provinces,
+          //   children: this.thehabit.dishMxVos
+          // });
+          // console.log(arr);
 
           if (this.dataindex2 == 1) {
             this.tableData[this.dataindex1].tabaldata1.push({
+              week: this.dataindex2,
               id: this.thehabit.id,
               name: this.thehabit.dishName,
               date: this.thehabit.provinces,
@@ -824,6 +808,7 @@ export default {
             console.log(this.tableData[this.dataindex1].tabaldata1);
           } else if (this.dataindex2 == 2) {
             this.tableData[this.dataindex1].tabaldata2.push({
+              week: this.dataindex2,
               id: this.thehabit.id,
               name: this.thehabit.dishName,
               date: this.thehabit.provinces,
@@ -885,6 +870,12 @@ export default {
           // }
         });
     },
+    handleDelete(index, row) {
+      console.log(index);
+      console.log(row);
+      // console.log(this.tableData[0].tabaldata1);
+      // this.tableData[0].tabaldata1.splice(index, 1);
+    },
     handleNodeClick(data) {
       console.log(data);
     },
@@ -909,29 +900,7 @@ export default {
     displayCheck(flat) {
       this.display = flat;
     },
-    autosave() {
-      console.log(this.value1);
-      let add = this.value1[0];
-      let arr=this.value1[1]
-     
-      var datetiem=add.getFullYear() + '-' + (add.getMonth() + 1) + '-' + add.getDate()  ;
-      var player=arr.getFullYear() + '-' + (arr.getMonth() + 1) + '-' + arr.getDate()  ;
-      
-       bionu=[],
-      bionu.push({
-        datetiem,
-         player
-      })
-        
-     
 
-      console.log(bionu);
-      // this.$axios.post(`api/blade-food/recipe/save`,{
-
-      // }).then(res=>{
-      //   console.log(res);
-      // })
-    },
     prepare(data) {
       console.log(data);
     },
@@ -1002,7 +971,7 @@ export default {
 }
 .field {
   width: 79%;
-  height: 900px;
+  height: 1500px;
   float: left;
   margin-left: 10px;
 }

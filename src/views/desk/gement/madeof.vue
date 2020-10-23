@@ -47,7 +47,7 @@
         <el-button
           size="medium"
           icon="el-icon-search"
-          type="success"
+          type="primary"
           style=" margin-left: 20px; "
           >搜索</el-button
         >
@@ -65,7 +65,7 @@
         <el-table-column
           type="index"
           label="序号"
-          width="100"
+          width="50"
           align="center"
         ></el-table-column>
         <el-table-column
@@ -89,20 +89,20 @@
         <el-table-column
           prop="userName"
           label="提交人"
-          width="100"
+          width="90"
           align="center"
         ></el-table-column>
         <el-table-column
           prop="phone"
           label="联系电话"
-          width="150"
+          width="140"
           align="center"
         ></el-table-column>
         <el-table-column
           prop="createTime"
           label="提交时间"
-          width="180"
-          align="aduitTime"
+          width="170"
+          align="center"
         ></el-table-column>
         <el-table-column label="审核状态" width="100" align="center">
           <template slot-scope="scope">
@@ -115,7 +115,7 @@
         <!--操作格-->
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <el-button type="success" size="small" @click="seecol(scope.row)"
+            <el-button type="primary" size="small" @click="seecol(scope.row)"
               >查看</el-button
             >
             <el-button type="danger" size="small" @click="Directory(scope.row)"
@@ -616,7 +616,6 @@ export default {
           // console.log(res);
           this.subquery = res.data.data;
           console.log(this.subquery);
-      
         });
     },
     // 分类
