@@ -355,6 +355,30 @@
             </el-table-column>
           </el-table>
         </div>
+          <!-- 树形结构 -->
+      <el-dialog
+        title="添加食品名称"
+        append-to-body
+        :visible.sync="dateTime"
+        :close-on-click-modal="false"
+      >
+        <div class="monly">
+          <div class="block">
+            <p></p>
+            <el-tree
+              :data="data1"
+              node-key="id"
+              :default-expand-all="false"
+              :expand-on-click-node="false"
+              @node-click="handleNodeClick"
+            ></el-tree>
+          </div>
+        </div>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dateTime = false">取 消</el-button>
+          <el-button @click="setlist" type="primary">确 定</el-button>
+        </div>
+      </el-dialog>
         <!-- 营养素标题 -->
         <div class="worm1">营养素含量（这里为100克食部食品中的营养素含量）</div>
         <div class="saveas">
@@ -459,6 +483,7 @@ export default {
   name: "toolbar",
   data() {
     return {
+           dateTime: false, //弹出框
       stone: "", //id
       tmquery: [],
       dsquery: {
@@ -496,7 +521,7 @@ export default {
       },
       active: [], //季节
       valuepark: [], //省市区
-      menu: [], //公共分类
+      menu: "", //公共分类
       fication: [],
       foodPos: [], //食材分类
       rules: {
@@ -596,8 +621,20 @@ export default {
       this.$axios
         .post(`api/blade-food/dish/auditDish`, {
           id: this.stone, //ID
-          dishName: this.dsquery.establish, //创建机构
-          dishType: this.ruleForm.fooddata //分类
+          dishName: this.ruleForm.name,  //菜品名
+                                           
+          dishType: this.ruleForm.fooddata, //菜品分类
+          belongRegions:this.valuepark,//所属区域
+          seasons: this.active,//所属季节
+          function:this.ruleForm.region,//特点
+          remark:this.ruleForm.desc,//做法
+          isPub: this.ruleForm.delivery == false ? 0 : 1,//公开
+          isUse:this.ruleForm.delivery1 == false ? 0 : 1,//常用
+          stutas:"1",//
+          result:"0",
+          type:"2",
+          refuseReason:"通过了!!!",
+          dishPubType:this.menu,//公共库分类
         })
         .then(res => {
           console.log(res);
@@ -622,13 +659,13 @@ export default {
       console.log(row);
       this.stone = row.id;
       console.log(this.stone);
-      this.dsquery.establish = row.dishName;
+      this.dsquery.establish = row.tenentName;
       this.dsquery.submit = row.userName;
       this.dsquery.phone = row.phone;
       this.dsquery.time = row.createTime;
       this.dsquery.examineto = row.status;
       this.ruleForm.name = row.dishName;
-      this.ruleForm.fooddata = row.dishTypeName;
+      // this.ruleForm.fooddata = row.dishType;
       this.ruleForm.region = row.function;
       this.ruleForm.desc = row.remark;
 
@@ -681,7 +718,7 @@ export default {
     //公共库分类
     setDec() {
       this.$axios
-        .get(`api/blade-food/basetype/getList?isPrivate=1&type=1`, {})
+        .get(`api/blade-food/basetype/getList?isPrivate=1&type=2`, {})
         .then(res => {
           // console.log(res);
           this.myStr = res.data.data;
@@ -709,6 +746,56 @@ export default {
           this.mailto = res.data.data;
           console.log(this.mailto);
         });
+    },
+      //点击查看详情
+    handleNodeClick(data) {
+      //   console.log(data);
+      //   this.getInput = data.label;
+      //   console.log(this.getInput);
+      this.flour = data.id;
+      this.$axios
+        .get(`api/blade-food/food/detail?id=${this.flour}`, {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+        .then(res => {
+          //   console.log(res);
+
+          this.inquired = res.data.data;
+          console.log(this.inquired);
+          this.inquired.nutritions.forEach((item, index) => {
+            // console.log(item);
+            if (item.nutrientId == 101) {
+              this.officeonce[this.csListIndex].malloc = item.value;
+            }
+          });
+          //   this.getInput.cs = this.inquired.foodName; //食材名
+          this.officeonce[this.csListIndex].id = this.inquired.id;
+          this.officeonce[this.csListIndex].frame = this.inquired.foodType;
+          this.officeonce[this.csListIndex].name = this.inquired.foodName;
+          this.officeonce[
+            this.csListIndex
+          ].address = this.inquired.foodTypeName;
+          // this.officeonce[this.csListIndex].name = this.inquired.foodName;
+          //   console.log(this.getInput);
+          this.temp.length = 0;
+          this.officeonce.forEach((item, i) => {
+            this.temp[i] = Number(item.malloc);
+          });
+          console.log(this.temp);
+        });
+    },
+    //表格弹出框
+    columnEvent(row, index) {
+      this.dateTime = true;
+      this.csListIndex = index;
+      //   for (let k in row) {
+      //     this.csList[k] = row[k];
+      //   }
+    },
+       setlist() {
+      this.dateTime = false;
     },
     //省市区
     handleChange(value) {

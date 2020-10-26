@@ -55,7 +55,7 @@
         <el-radio-group v-model="radio">
           <el-radio :label="3">5天</el-radio>
           <el-radio :label="6">6天</el-radio>
-          <el-radio :label="9">5天</el-radio>
+          <el-radio :label="9">7天</el-radio>
         </el-radio-group>
       </div>
 
@@ -478,7 +478,7 @@
             </template>
           </el-table-column>
           <el-table-column
-            v-if="checked7"
+            v-if="radio==6||radio==9"
             align="center"
             width="400"
             prop="name"
@@ -486,7 +486,7 @@
           >
           </el-table-column>
           <el-table-column
-            v-if="checked8"
+            v-if="radio==9"
             align="center"
             width="400"
             prop="name"
@@ -871,10 +871,11 @@ export default {
         });
     },
     handleDelete(index, row) {
-      console.log(index);
+      // console.log(index);
       console.log(row);
       // console.log(this.tableData[0].tabaldata1);
       // this.tableData[0].tabaldata1.splice(index, 1);
+      delete this.tableData.tabaldata1[index]
     },
     handleNodeClick(data) {
       console.log(data);
