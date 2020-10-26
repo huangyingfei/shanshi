@@ -448,7 +448,7 @@
       <div slot="footer" class="dialog-footer" style=" text-align: center;">
         <el-button @click="seekeys = false">取 消</el-button>
         <el-button type="primary" @click="restore"> 拒 绝</el-button>
-        <el-button type="primary">同 意</el-button>
+        <el-button @click="Disagree" type="primary">同 意</el-button>
       </div>
     </el-dialog>
   </div>
@@ -459,6 +459,7 @@ export default {
   name: "toolbar",
   data() {
     return {
+      stone: "", //id
       tmquery: [],
       dsquery: {
         establish: "", //创建机构
@@ -588,35 +589,75 @@ export default {
     //查看
     seecol(row) {
       console.log(row);
-      this.seekeys = true;
+      // this.seekeys = true;
     },
-    //拒绝
-    restore() {
+    //同意
+    Disagree() {
       this.$axios
-        .post(`api/blade-food/food/audit`, {
-          id: this.subquery.id,
-          refuseReason: this.examine.desc1
+        .post(`api/blade-food/dish/auditDish`, {
+          id: this.stone, //ID
+          dishName: this.dsquery.establish, //创建机构
+          dishType: this.ruleForm.fooddata //分类
         })
         .then(res => {
           console.log(res);
         });
     },
+    //拒绝
+    restore() {
+      // this.$axios
+      //   .post(`api/blade-food/food/audit`, {
+      //     id: this.subquery.id,
+      //     refuseReason: this.examine.desc1
+      //   })
+      //   .then(res => {
+      //     console.log(res);
+      //   });
+    },
     //审核
     Directory(row) {
+      this.active.length = 0;
       this.seekeys = true;
-      // console.log(row);
-      let design = `?id=${row.id}`;
-      this.$axios
-        .get(`api/blade-food/food/detail` + design, {
-          headers: {
-            "Content-Type": "application/json"
-          }
-        })
-        .then(res => {
-          // console.log(res);
-          this.subquery = res.data.data;
-          console.log(this.subquery);
-        });
+
+      console.log(row);
+      this.stone = row.id;
+      console.log(this.stone);
+      this.dsquery.establish = row.dishName;
+      this.dsquery.submit = row.userName;
+      this.dsquery.phone = row.phone;
+      this.dsquery.time = row.createTime;
+      this.dsquery.examineto = row.status;
+      this.ruleForm.name = row.dishName;
+      this.ruleForm.fooddata = row.dishTypeName;
+      this.ruleForm.region = row.function;
+      this.ruleForm.desc = row.remark;
+
+      row.season.split(",").forEach((item, i) => {
+        console.log(item);
+        this.active.push(item);
+      });
+      row.provinces.split(",").forEach((item, i) => {
+        console.log(item);
+        this.valuepark.push([item, row.belongRegion.split(",")[i]]);
+      });
+      console.log(this.valuepark);
+      // this.valuepark
+      this.ruleForm.delivery = row.isUse == 0 ? false : true; //公开
+      this.ruleForm.delivery1 = row.isPub == 0 ? false : true; //常用
+      // this.active.push(row.season.split(","));
+      // console.log(this.active);
+      // let design = `?id=${row.id}`;
+      // this.$axios
+      //   .get(`api/blade-food/dish/dishDetail` + design, {
+      //     headers: {
+      //       "Content-Type": "application/json"
+      //     }
+      //   })
+      //   .then(res => {
+      //     console.log(res);
+      //     this.into = res.data.data;
+      //     // console.log(this.subquery);
+      //   });
     },
     // 分类
     muito() {
@@ -639,21 +680,21 @@ export default {
     },
     //公共库分类
     setDec() {
-      // this.$axios
-      //   .get(`api/blade-food/basetype/getList?isPrivate=1&type=1`, {})
-      //   .then(res => {
-      //     // console.log(res);
-      //     this.myStr = res.data.data;
-      //     let str = [];
-      //     this.myStr.forEach((item, index) => {
-      //       console.log(item);
-      //       str[index] = {
-      //         value: item.id,
-      //         label: item.typeName
-      //       };
-      //     });
-      //     this.fication = str;
-      //   });
+      this.$axios
+        .get(`api/blade-food/basetype/getList?isPrivate=1&type=1`, {})
+        .then(res => {
+          // console.log(res);
+          this.myStr = res.data.data;
+          let str = [];
+          this.myStr.forEach((item, index) => {
+            console.log(item);
+            str[index] = {
+              value: item.id,
+              label: item.typeName
+            };
+          });
+          this.fication = str;
+        });
     },
     //营养素含量
     Protocol() {

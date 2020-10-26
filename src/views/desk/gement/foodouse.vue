@@ -225,7 +225,7 @@
             <el-tree
               :data="data1"
               node-key="id"
-              default-expand-all
+              :default-expand-all="false"
               :expand-on-click-node="false"
               @node-click="handleNodeClick"
             ></el-tree>
@@ -725,7 +725,8 @@ export default {
         });
     },
     savefiles() {
-      console.log(this.officeonce);
+      // console.log(this.value1);
+      // console.log(this.officeonce);
       let next = [];
       this.officeonce.forEach((item, index) => {
         // console.log(item);
@@ -996,6 +997,8 @@ export default {
         .get(`api/blade-food/dish/dishDetail?id=${this.auto}`, {})
         .then(res => {
           // console.log(res);
+          this.valuepark.length = 0;
+          this.value1.length = 0;
           this.handler = res.data.data;
           console.log(this.handler);
           this.ruleForm.name = this.handler.dishName; //菜品名字
@@ -1003,7 +1006,7 @@ export default {
           this.value1.push(this.handler.season); //季节
           this.ruleForm.region = this.handler.function; //特点
           this.ruleForm.desc = this.handler.remark; //做法
-          this.valuepark.length = 0;
+
           this.handler.provinces.split(",").forEach((item, i) => {
             console.log(item);
             this.valuepark.push([
