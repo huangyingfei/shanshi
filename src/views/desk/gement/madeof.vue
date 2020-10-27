@@ -107,18 +107,32 @@
         <el-table-column label="审核状态" width="100" align="center">
           <template slot-scope="scope">
             <p class="stop" v-if="scope.row.status == 0">待审核</p>
-            <p v-else-if="scope.row.status == 3">无需审核</p>
-            <p v-else-if="scope.row.status == 1">审核通过</p>
-            <p v-else-if="scope.row.status == 2">审核不通过</p>
+            <p style="color:#409eff" v-else-if="scope.row.status == 3">
+              无需审核
+            </p>
+            <p style="color:#67c23a" v-else-if="scope.row.status == 1">
+              审核通过
+            </p>
+            <p style="color:#e6a23c" v-else-if="scope.row.status == 2">
+              审核不通过
+            </p>
           </template>
         </el-table-column>
         <!--操作格-->
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <el-button type="primary" size="small" @click="seecol(scope.row)"
+            <el-button
+              v-if="scope.row.status !== 0"
+              type="primary"
+              size="small"
+              @click="seecol(scope.row)"
               >查看</el-button
             >
-            <el-button type="danger" size="small" @click="Directory(scope.row)"
+            <el-button
+              type="danger"
+              v-if="scope.row.status == 0"
+              size="small"
+              @click="Directory(scope.row)"
               >审核</el-button
             >
           </template>
@@ -355,30 +369,30 @@
             </el-table-column>
           </el-table>
         </div>
-          <!-- 树形结构 -->
-      <el-dialog
-        title="添加食品名称"
-        append-to-body
-        :visible.sync="dateTime"
-        :close-on-click-modal="false"
-      >
-        <div class="monly">
-          <div class="block">
-            <p></p>
-            <el-tree
-              :data="data1"
-              node-key="id"
-              :default-expand-all="false"
-              :expand-on-click-node="false"
-              @node-click="handleNodeClick"
-            ></el-tree>
+        <!-- 树形结构 -->
+        <el-dialog
+          title="添加食品名称"
+          append-to-body
+          :visible.sync="dateTime"
+          :close-on-click-modal="false"
+        >
+          <div class="monly">
+            <div class="block">
+              <p></p>
+              <el-tree
+                :data="data1"
+                node-key="id"
+                :default-expand-all="false"
+                :expand-on-click-node="false"
+                @node-click="handleNodeClick"
+              ></el-tree>
+            </div>
           </div>
-        </div>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="dateTime = false">取 消</el-button>
-          <el-button @click="setlist" type="primary">确 定</el-button>
-        </div>
-      </el-dialog>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="dateTime = false">取 消</el-button>
+            <el-button @click="setlist" type="primary">确 定</el-button>
+          </div>
+        </el-dialog>
         <!-- 营养素标题 -->
         <div class="worm1">营养素含量（这里为100克食部食品中的营养素含量）</div>
         <div class="saveas">
@@ -428,7 +442,7 @@
           <el-form-item label="公共库分类">
             <el-select v-model="menu" placeholder="请选择">
               <el-option
-                v-for="item in fication"
+                v-for="item in source"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -483,7 +497,7 @@ export default {
   name: "toolbar",
   data() {
     return {
-           dateTime: false, //弹出框
+      dateTime: false, //弹出框
       stone: "", //id
       tmquery: [],
       dsquery: {
@@ -523,6 +537,7 @@ export default {
       valuepark: [], //省市区
       menu: "", //公共分类
       fication: [],
+      source: [], //公共分类
       foodPos: [], //食材分类
       rules: {
         // region: [
@@ -552,7 +567,7 @@ export default {
       ],
 
       options1: [],
-
+      temp: [],
       value: "", //审核状态
       tableData1: [],
       officeonce: [
@@ -574,6 +589,7 @@ export default {
     this.Protocol(); //营养素含量
     this.muito(); //获取分类
     this.Provinces(); //省市区
+    this.Addraudit(); //树形结构渲染
   },
   methods: {
     //添加行数
@@ -618,41 +634,94 @@ export default {
     },
     //同意
     Disagree() {
+      // this.ruleForm.delivery1 == false ? 0 : 1,
+      //   console.log(this.ruleForm.delivery1);
+      let next = [];
+      this.officeonce.forEach(item => {
+        console.log(item);
+        next.push({
+          foodId: item.id,
+          value: item.stats,
+          baseTypeId: item.frame
+        });
+      });
+      // console.log(next);
       this.$axios
         .post(`api/blade-food/dish/auditDish`, {
           id: this.stone, //ID
-          dishName: this.ruleForm.name,  //菜品名
-                                           
+          dishName: this.ruleForm.name, //菜品名
           dishType: this.ruleForm.fooddata, //菜品分类
-          belongRegions:this.valuepark,//所属区域
-          seasons: this.active,//所属季节
-          function:this.ruleForm.region,//特点
-          remark:this.ruleForm.desc,//做法
-          isPub: this.ruleForm.delivery == false ? 0 : 1,//公开
-          isUse:this.ruleForm.delivery1 == false ? 0 : 1,//常用
-          stutas:"1",//
-          result:"0",
-          type:"2",
-          refuseReason:"通过了!!!",
-          dishPubType:this.menu,//公共库分类
+          belongRegions: this.valuepark, //所属区域
+          seasons: this.active, //所属季节
+          function: this.ruleForm.region, //特点
+          remark: this.ruleForm.desc, //做法
+          dishMxVos: next,
+          // isPub: this.ruleForm.delivery == false ? 0 : 1, //公开
+          isUse: this.ruleForm.delivery1 == false ? 1 : 0, //常用
+          status: "1", //
+          result: "0",
+          type: "2",
+          // refuseReason: "通过了!!!",
+          dishPubType: this.menu //公共库分类
         })
         .then(res => {
-          console.log(res);
+          // console.log(res);
+          this.auditing();
+          this.$message({
+            message: "审核通过",
+            type: "success"
+          });
+        })
+        .catch(() => {
+          this.$message.error("审核失败");
         });
     },
     //拒绝
     restore() {
-      // this.$axios
-      //   .post(`api/blade-food/food/audit`, {
-      //     id: this.subquery.id,
-      //     refuseReason: this.examine.desc1
-      //   })
-      //   .then(res => {
-      //     console.log(res);
-      //   });
+      console.log("拒绝");
+      let next = [];
+      this.officeonce.forEach(item => {
+        console.log(item);
+        next.push({
+          foodId: item.id,
+          value: item.stats,
+          baseTypeId: item.frame
+        });
+      });
+      // console.log(next);
+      this.$axios
+        .post(`api/blade-food/dish/auditDish`, {
+          id: this.stone, //ID
+          dishName: this.ruleForm.name, //菜品名
+          dishType: this.ruleForm.fooddata, //菜品分类
+          belongRegions: this.valuepark, //所属区域
+          seasons: this.active, //所属季节
+          function: this.ruleForm.region, //特点
+          remark: this.ruleForm.desc, //做法
+          dishMxVos: next,
+          // isPub: this.ruleForm.delivery == false ? 0 : 1, //公开
+          isUse: this.ruleForm.delivery1 == false ? 1 : 0, //常用
+          status: "2", //
+          result: "1",
+          type: "2",
+          refuseReason: this.examine.desc1,
+          dishPubType: this.menu //公共库分类
+        })
+        .then(res => {
+          // console.log(res);
+          this.auditing();
+          this.$message({
+            message: "拒绝",
+            type: "success"
+          });
+        })
+        .catch(() => {
+          this.$message.error("拒绝失败");
+        });
     },
     //审核
     Directory(row) {
+      this.officeonce.length = 0;
       this.active.length = 0;
       this.seekeys = true;
 
@@ -730,7 +799,8 @@ export default {
               label: item.typeName
             };
           });
-          this.fication = str;
+          this.source = str;
+          // console.log(this.fication);
         });
     },
     //营养素含量
@@ -747,7 +817,52 @@ export default {
           console.log(this.mailto);
         });
     },
-      //点击查看详情
+    //计算
+    hello(row, i) {
+      // row.malloc = (row.stats / 100) * row.malloc;
+      // row.malloc = row.malloc100;
+      // row.malloc = (row.malloc / 100) * row.stats;
+      // console.log(row.malloc);
+      if (row.stats) {
+        console.log(this.temp[i]);
+        row.malloc = ((this.temp[i] / 100) * Number(row.stats)).toFixed(2);
+        // console.log(row.malloc);
+      } else {
+        row.malloc = this.temp[i];
+      }
+    },
+    getSummaries(param) {
+      const { columns, data } = param;
+      const sums = [];
+      columns.forEach((column, index) => {
+        // if (index === 0) {
+        //   sums[index] = '总价';
+        //   return;
+        // }
+        const values = data.map(item => Number(item[column.property]));
+        if (
+          !values.every(value => isNaN(value)) &&
+          column.property == "malloc"
+        ) {
+          sums[index] = values.reduce((prev, curr) => {
+            const value = Number(curr);
+            if (!isNaN(value)) {
+              return prev + curr;
+            } else {
+              return prev;
+            }
+          }, 0);
+          sums[index] += "";
+          this.sumss = sums[index];
+          if (this.mailto[0].children[0].id == "101") {
+            this.mailto[0].children[0].result = this.sumss;
+          }
+          // console.log(this.sumss);
+        }
+      });
+      return sums;
+    },
+    //点击查看详情
     handleNodeClick(data) {
       //   console.log(data);
       //   this.getInput = data.label;
@@ -794,7 +909,7 @@ export default {
       //     this.csList[k] = row[k];
       //   }
     },
-       setlist() {
+    setlist() {
       this.dateTime = false;
     },
     //省市区
@@ -837,7 +952,37 @@ export default {
           this.options = arr;
         });
     },
-
+    //树形渲染数
+    Addraudit() {
+      this.$axios
+        .get(`api/blade-food/basetype/getFoodByBaseId?isPrivate=1`, {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+        .then(res => {
+          // console.log(res);
+          this.fication = res.data.data;
+          //   console.log(this.fication);
+          let Front = [];
+          this.fication.forEach((item, index) => {
+            // console.log(item);
+            Front[index] = {
+              id: item.id,
+              label: item.typeName
+            };
+            Front[index].children = [];
+            item.foods.forEach((item1, index1) => {
+              Front[index].children[index1] = {
+                id: item1.id,
+                label: item1.foodName
+              };
+            });
+          });
+          // console.log(Front);
+          this.data1 = Front;
+        });
+    },
     handleRemove(file, fileList) {
       console.log(file, fileList);
     },

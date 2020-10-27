@@ -46,10 +46,10 @@
         <el-checkbox v-model="checked4">晚餐</el-checkbox>
         <el-checkbox v-model="checked5">晚点</el-checkbox>
 
-        <span style="padding-right: 10px;padding-left: 10px;">周天数</span>
+        <!-- <span style="padding-right: 10px;padding-left: 10px;">周天数</span>
         <el-checkbox v-model="checked6">5天</el-checkbox>
         <el-checkbox v-model="checked7">6天</el-checkbox>
-        <el-checkbox v-model="checked8">7天</el-checkbox>
+        <el-checkbox v-model="checked8">7天</el-checkbox> -->
 
         <span style="padding-right: 10px;padding-left: 10px;">周天数</span>
         <el-radio-group v-model="radio">
@@ -69,9 +69,14 @@
         <el-button type="primary" size="small" style="margin-left: 20px;"
           >自动清除油盐糖</el-button
         >
-        <el-button type="primary" size="small" style="margin-left: 20px;"
-          >营养素</el-button
+        <el-button
+          @click="nutrition"
+          type="primary"
+          size="small"
+          style="margin-left: 20px;"
         >
+          营养素
+        </el-button>
         <el-button type="primary" size="small" style="margin-left: 20px;"
           >带量食谱</el-button
         >
@@ -79,6 +84,43 @@
         <el-button @click="autosave" type="success">保存并新增</el-button>
       </div>
     </div>
+    <!-- 营养素 -->
+    <el-dialog
+      title="营养素"
+      width="35%"
+      append-to-body
+      :visible.sync="seekeys"
+    >
+      <div>
+        <div class="arrow">
+          <div class="season">不足</div>
+          <div class="season1">适量</div>
+          <div class="season2">过量</div>
+        </div>
+        <div class="fonts">
+          <el-table
+            style="width: 100%;margin-bottom: 20px;"
+            row-key="id"
+            :data="secondary"
+            :border="false"
+            :default-expand-all="false"
+            :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+          >
+            <el-table-column
+              prop="date"
+              align="center"
+              label="营养素"
+              width="140"
+            >
+            </el-table-column>
+            <el-table-column prop="name" align="center" label="含量" width="80">
+            </el-table-column>
+            <el-table-column prop="address" align="center" label="DRIs%">
+            </el-table-column>
+          </el-table>
+        </div>
+      </div>
+    </el-dialog>
     <div class="gresults">
       <div class="search">
         <div class="tab" style=" width: 100%;height:35px;">
@@ -237,6 +279,7 @@
                 :data="scope.row.tabaldata1"
                 style="width: 100%;margin-bottom: 20px;"
                 row-key="id"
+                :border="false"
                 :default-expand-all="false"
                 :tree-props="{
                   children: 'children',
@@ -478,7 +521,7 @@
             </template>
           </el-table-column>
           <el-table-column
-            v-if="radio==6||radio==9"
+            v-if="radio == 6 || radio == 9"
             align="center"
             width="400"
             prop="name"
@@ -486,7 +529,7 @@
           >
           </el-table-column>
           <el-table-column
-            v-if="radio==9"
+            v-if="radio == 9"
             align="center"
             width="400"
             prop="name"
@@ -556,6 +599,7 @@ export default {
       cur: 0,
       display: "0",
       value1: "", //时间
+      seekeys: false, //营养素
       checked: true,
       checked1: true,
       checked2: true,
@@ -752,8 +796,30 @@ export default {
           label: "常用"
         }
       ],
+      secondary: [
+        {
+          id: 3,
+          date: "蛋白质",
+          name: "322",
+          address: "123.91",
+          children: [
+            {
+              id: 31,
+              date: "完全蛋白质",
+              name: "233",
+              address: "94"
+            },
+            {
+              id: 32,
+              date: "半完全蛋白质",
+              name: "234",
+              address: "94"
+            }
+          ]
+        }
+      ],
       really1: "0",
-      radio: 6
+      radio: 3
     };
   },
   beforeMount() {
@@ -875,7 +941,7 @@ export default {
       console.log(row);
       // console.log(this.tableData[0].tabaldata1);
       // this.tableData[0].tabaldata1.splice(index, 1);
-      delete this.tableData.tabaldata1[index]
+      delete this.tableData.tabaldata1[index];
     },
     handleNodeClick(data) {
       console.log(data);
@@ -934,6 +1000,9 @@ export default {
           this.data = foto;
           console.log(foto);
         });
+    },
+    nutrition() {
+      this.seekeys = true;
     }
   }
 };
@@ -1062,5 +1131,46 @@ export default {
   height: 30px;
   /* background-color: red; */
   margin-top: 20px;
+}
+.arrow {
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+  /* background-color: blue; */
+  display: flex;
+}
+.season {
+  width: 130px;
+  height: 30px;
+  text-align: center;
+  color: #fff;
+  line-height: 30px;
+  margin-top: 10px;
+  background-color: rgba(255, 0, 0, 1);
+}
+.season1 {
+  width: 130px;
+  height: 30px;
+  margin-left: 20px;
+  text-align: center;
+  color: #fff;
+  line-height: 30px;
+  margin-top: 10px;
+  background-color: rgba(0, 172, 160, 1);
+}
+.season2 {
+  width: 130px;
+  height: 30px;
+  margin-left: 20px;
+  text-align: center;
+  color: #fff;
+  line-height: 30px;
+  margin-top: 10px;
+  background-color: rgba(255, 153, 51, 1);
+}
+.fonts {
+  width: 100%;
+  /* height: 500px; */
+  /* background-color: yellow; */
 }
 </style>
