@@ -756,14 +756,17 @@ export default {
               this.inquired.belongRegion.split(",")[i]
             ]);
           });
-          console.log(this.valuepark);
+          // console.log(this.valuepark);
           // this.valuepark.push(
           //   this.inquired.provinces.split(','),
           //   this.inquired.belongRegion.split(','),
           // );
 
           console.log(this.valuepark);
-          this.active.push(this.inquired.season); //所属季节
+          // this.active.push(this.inquired.season); //所属季节
+          this.inquired.season.split(",").forEach(item => {
+            this.active.push(item);
+          });
           this.ruleForm.desc = this.inquired.function; //功用
           this.ruleForm.delivery = this.inquired.isPub == 0 ? false : true; //公开
           // console.log(this.ruleForm.delivery);
