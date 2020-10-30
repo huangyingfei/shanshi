@@ -81,6 +81,7 @@
           >带量食谱</el-button
         >
         <el-button type="success">编辑保存</el-button>
+        <!-- <el-button type="primary">主要按钮</el-button> -->
         <el-button @click="autosave" type="success">保存并新增</el-button>
       </div>
     </div>

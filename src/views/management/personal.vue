@@ -545,7 +545,7 @@
                   </el-form-item>
 
                   <el-form-item label="常用" style="   ">
-                    <el-switch v-model="ruleForm.delivery1"></el-switch>
+                    <el-switch v-model="ruleFormUsers.delivery1"></el-switch>
                   </el-form-item>
                 </el-form>
               </div>
@@ -784,6 +784,7 @@ export default {
     },
     prepare(data) {
       this.active.length = 0;
+      this.active1.length = 0;
       console.log(data);
       this.flour = data.id;
       this.$axios
@@ -852,12 +853,12 @@ export default {
               this.active1.push(item);
             });
             //所属区域
+            let addItem = [];
             this.inquired.provinces.split(",").forEach((item, i) => {
-              this.valuepark1.push([
-                item,
-                this.inquired.belongRegion.split(",")[i]
-              ]);
+              addItem.push([item, this.inquired.belongRegion.split(",")[i]]);
             });
+            this.valuepark1 = addItem;
+            // console.log(this.valuepark1);
             this.ruleFormUsers.desc = this.inquired.function; //功用
             this.ruleFormUsers.delivery =
               this.inquired.isPub == 0 ? false : true; //公开
