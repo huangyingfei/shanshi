@@ -36,12 +36,11 @@
 
     <div class="address">
       <el-table :data="tableData" border style="width: 100%">
-        <el-table-column
-          prop="date"
-          label="序号"
-          width="100"
-          align="center"
-        ></el-table-column>
+       <el-table-column
+       label="序号"
+      type="index"
+      width="50">
+    </el-table-column>
         <el-table-column
           prop="name"
           label="名称"
@@ -117,12 +116,14 @@
         </el-form-item>
         <el-form-item label="食材一">
           <el-input
+            readonly
             v-on:click.native="obtain(1)"
             v-model="ruleForm.adding"
           ></el-input>
         </el-form-item>
         <el-form-item label="食材二">
           <el-input
+              readonly
             v-on:click.native="obtain(2)"
             v-model="ruleForm.adding1"
           ></el-input>
