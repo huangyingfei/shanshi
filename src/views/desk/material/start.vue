@@ -893,7 +893,7 @@ export default {
       console.log(data);
       this.saveall = data.id;
       this.$axios
-        .get(`api/blade-food/blade-food/food/remove?ids=${this.saveall}`, {
+        .get(`api/blade-food/food/remove?ids=${this.saveall}`, {
           headers: {
             "Content-Type": "application/json"
           }

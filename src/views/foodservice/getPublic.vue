@@ -364,7 +364,7 @@
                 :default-expand-all="false"
                 :tree-props="{
                   children: 'children',
-                  hasChildren: 'hasChildren',
+                  hasChildren: 'hasChildren'
                 }"
               >
                 <el-table-column
@@ -449,31 +449,258 @@
             </div>
           </div>
           <!-- 结束 -->
-             <div class="monly">
-        <div class="block">
-          <p></p>
-          <el-tree
-            :data="data"
-            :props="defaultProps"
-            node-key="id"
-            :default-expand-all="false"
-            :expand-on-click-node="false"
-          >
-            <span class="custom-tree-node" slot-scope="{ node, data }">
-              <span>{{ node.label }}</span>
-              <span>
-                <el-button type="text" size="mini" @click="() => prepare(data)">
-                  查看
-                </el-button>
-                
-              </span>
-            </span>
-          </el-tree>
+          <div class="monly">
+            <div class="block">
+              <p></p>
+              <el-tree
+                :data="data"
+                :props="defaultProps"
+                node-key="id"
+                :default-expand-all="false"
+                :expand-on-click-node="false"
+              >
+                <span class="custom-tree-node" slot-scope="{ node, data }">
+                  <span>{{ node.label }}</span>
+                  <span>
+                    <el-button
+                      type="text"
+                      size="mini"
+                      @click="() => prepare(data)"
+                    >
+                      查看
+                    </el-button>
+                  </span>
+                </span>
+              </el-tree>
+            </div>
+            <!-- 结束 -->
+          </div>
         </div>
-        <!-- 结束 -->
-      </div>
+        <div class="mation">
+          <div class="mationtxt">菜品信息</div>
+          <div class="mationinput">
+            <el-form
+              :model="ruleForm"
+              :rules="rules"
+              :inline="true"
+              ref="ruleForm"
+              label-width="100px"
+              class="demo-ruleForm"
+            >
+              <el-form-item label="菜品名字" prop="name" style="width: 350px">
+                <!-- <el-input style="width: 200px" v-model="ruleForm.name"></el-input> -->
+                <span>{{ ruleForm1.name }}</span>
+              </el-form-item>
+              <el-form-item
+                label="菜品分类"
+                prop="fooddata"
+                style="width: 350px"
+              >
+                <el-select
+                  style="width: 200px"
+                  v-model="ruleForm1.fooddata"
+                  placeholder="请选择"
+                >
+                  <el-option
+                    v-for="item in foodPos"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="所属区域" style="width: 350px">
+                <el-cascader
+                  style="width: 200px"
+                  v-model="valuepark1"
+                  placeholder="请选择省市区"
+                  :options="options"
+                  :props="{ multiple: true, checkStrictly: true }"
+                  @change="handleChange"
+                ></el-cascader>
+              </el-form-item>
+
+              <el-form-item label="所属季节" style="width: 350px">
+                <el-select v-model="value2" multiple placeholder="请选择">
+                  <el-option
+                    style="width: 200px"
+                    v-for="item in before"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
+
+              <el-form-item label="特点" style="width: 350px">
+                <span>{{ ruleForm1.region }}</span>
+              </el-form-item>
+
+              <el-form-item label="做法" style="width: 350px">
+                <span>{{ ruleForm1.desc }}</span>
+              </el-form-item>
+              <el-form-item label="图片" style="width: 350px">
+                <el-upload
+                  action="https://jsonplaceholder.typicode.com/posts/"
+                  list-type="picture-card"
+                  :on-preview="handlePictureCardPreview"
+                  :on-remove="handleRemove"
+                >
+                  <i class="el-icon-plus"></i>
+                </el-upload>
+                <el-dialog :visible.sync="dialogVisible">
+                  <img width="100%" :src="dialogImageUrl" alt />
+                </el-dialog>
+              </el-form-item>
+              <!-- <el-form-item label="常用" style="">
+                <el-switch v-model="ruleForm1.delivery1"></el-switch>
+              </el-form-item> -->
+              <el-switch
+                v-model="ruleForm1.delivery1"
+                active-text="常用"
+                inactive-text="不常用"
+              >
+              </el-switch>
+            </el-form>
+          </div>
+          <!-- 菜品所含食材信息 -->
+          <div class="mationtxt">菜品所含食材信息</div>
+          <div>
+            <!-- <el-button @click="addLine">添加行数</el-button>
+            <el-button @click="save">保存</el-button> -->
+            <el-table
+              :data="officeonce"
+              border
+              v-loading="loadFlag1"
+              show-summary
+              style="width: 100%"
+              :summary-method="getSummaries"
+            >
+              <el-table-column
+                prop="id"
+                label="序号"
+                width="100"
+                align="center"
+              >
+              </el-table-column>
+              <el-table-column
+                prop="frame"
+                label="分类ID "
+                width="100"
+                align="center"
+              >
+              </el-table-column>
+              <el-table-column label="食品名称" width="190" align="center">
+                <template slot-scope="scope">
+                  <el-input
+                    style="width: 90px"
+                    v-model="scope.row.name"
+                    :disabled="true"
+                  >
+                  </el-input>
+                  <!-- <el-button
+                    type="primary"
+                    size="small"
+                    style="   margin-left: 10px;"
+                    @click="columnEvent(scope.row, scope.$index)"
+                    plain
+                    >选择</el-button
+                  > -->
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="address"
+                label="食品分类"
+                width="120"
+                align="center"
+              ></el-table-column>
+              <el-table-column
+                prop="stats"
+                label="用量(g)"
+                width="120"
+                align="center"
+              >
+                <template slot-scope="scope">
+                  <el-input
+                    style="width: 90px"
+                    @input="hello(scope.row, scope.$index)"
+                    v-model="scope.row.stats"
+                    clearable
+                  >
+                  </el-input>
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="malloc"
+                label="能量"
+                width="120"
+                align="center"
+              ></el-table-column>
+              <el-table-column
+                prop="malloc"
+                label="能量(kcal)"
+                width="110"
+                align="center"
+              >
+                <template slot-scope="scope">
+                  <!-- {{scope.row.malloc}} -->
+                  <!-- <span v-if="!scope.row.stats">{{ scope.row.malloc }}</span>
+              <span v-else>{{
+                (scope.row.stats / 100) * scope.row.malloc
+              }}</span> -->
+                  <el-input
+                    :disabled="true"
+                    style="width: 90px"
+                    v-model="scope.row.malloc"
+                    clearable
+                  >
+                  </el-input>
+                </template>
+              </el-table-column>
+
+              <!--操作格-->
+            </el-table>
+          </div>
+          <!-- 菜品营养素信息 -->
+          <div class="mationtxt">菜品营养素信息</div>
+          <div class="saveas">
+            <el-table
+              :data="mailto"
+              style="width: 100%; margin-bottom: 20px"
+              row-key="id"
+              border
+              v-loading="loadFlag"
+              :default-expand-all="false"
+              :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+            >
+              <el-table-column
+                prop="title"
+                label="营养素"
+                align="center"
+                width="200"
+              ></el-table-column>
+              <el-table-column
+                prop="unit"
+                label="单位"
+                width="180"
+                align="center"
+              ></el-table-column>
+
+              <el-table-column label="含量" align="center">
+                <template slot-scope="scope">
+                  <el-input
+                    v-model="scope.row.result"
+                    type="text"
+                    v-if="scope.row.level != 1 ? true : false"
+                    placeholder="请输入内容"
+                  ></el-input>
+                </template>
+                <!-- v-if="scope.row.dients" -->
+              </el-table-column>
+            </el-table>
+          </div>
         </div>
-        <div class="mation"></div>
       </el-tab-pane>
       <!-- 结束 -->
     </el-tabs>
@@ -514,25 +741,34 @@ export default {
         children: [
           {
             id: 4,
-            label: "二级 1-1",
-          },
-        ],
-      },
+            label: "二级 1-1"
+          }
+        ]
+      }
       //树形结构
     ];
     return {
       data: JSON.parse(JSON.stringify(data)), //树形结构
       activeName: "second",
+      ruleForm1: {
+        name: "1223123", //菜品名字
+        fooddata: "", //菜品分类
+        region: "", //特点
+        desc: "", //做法
+        delivery: false, //公开
+        delivery1: false //常用
+      },
       ruleForm: {
         name: "", //菜品名字
         fooddata: "", //菜品分类
         region: "", //特点
         desc: "", //做法
         delivery: false, //公开
-        delivery1: false, //常用
+        delivery1: false //常用
       },
       foodPos: [], //菜品分类
       valuepark: [], //所属区域
+      valuepark1: [],
       options: [], //所属区域
       mailto: [], //营养素含量
       dateTime: false, //弹出框
@@ -544,49 +780,50 @@ export default {
           name: "", //食品名称
           address: "", //食品分类
           stats: "", //用量
-          malloc: "", //能量
-        },
+          malloc: "" //能量
+        }
       ],
       //季节查询
       value1: [], //所属季节
+      value2: [], //所属季节
       before: [
         {
           value: "0",
-          label: "全部",
+          label: "全部"
         },
         {
           value: "1",
-          label: "春季",
+          label: "春季"
         },
         {
           value: "2",
-          label: "夏季",
+          label: "夏季"
         },
         {
           value: "3",
-          label: "秋季",
+          label: "秋季"
         },
         {
           value: "4",
-          label: "冬季",
-        },
+          label: "冬季"
+        }
       ],
       before1: "0",
       //全部 常用
       really: [
         {
           value: "0",
-          label: "全部",
+          label: "全部"
         },
         {
           value: "1",
-          label: "常用",
-        },
+          label: "常用"
+        }
       ],
       really1: "0",
       csListIndex: null,
       temp: [],
-         lower: 0
+      lower: 0
     };
   },
   beforeMount() {
@@ -594,12 +831,12 @@ export default {
     this.muito(); //分类
     this.Provinces(); //省市区
     this.Addraudit(); //树形结构渲染
-    this.obtains();//左边树形结构
+    this.obtains(); //左边树形结构
   },
   methods: {
     handleClick(tab) {
-       this.lower = tab.index;
-       console.log(this.lower);
+      this.lower = tab.index;
+      console.log(this.lower);
       // console.log(tab);
     },
     //表格弹出框
@@ -631,10 +868,10 @@ export default {
       this.$axios
         .get(`api/blade-food/food/detail?id=${this.flour}`, {
           headers: {
-            "Content-Type": "application/json",
-          },
+            "Content-Type": "application/json"
+          }
         })
-        .then((res) => {
+        .then(res => {
           //   console.log(res);
 
           this.inquired = res.data.data;
@@ -668,7 +905,7 @@ export default {
         name: "", //食品名称
         address: "", //食品分类
         stats: "", //用量
-        malloc: "", //能量
+        malloc: "" //能量
       };
       //添加新的行数
       this.officeonce.push(newValue);
@@ -681,7 +918,7 @@ export default {
       //这部分应该是保存提交你添加的内容
       console.log(JSON.stringify(this.officeonce));
     },
-     //获取树形结构
+    //获取树形结构
     obtains() {
       this.$axios
 
@@ -717,10 +954,10 @@ export default {
       this.$axios
         .get(`api/blade-food/basetype/getFoodByBaseId?isPrivate=1`, {
           headers: {
-            "Content-Type": "application/json",
-          },
+            "Content-Type": "application/json"
+          }
         })
-        .then((res) => {
+        .then(res => {
           // console.log(res);
           this.fication = res.data.data;
           //   console.log(this.fication);
@@ -729,13 +966,13 @@ export default {
             // console.log(item);
             Front[index] = {
               id: item.id,
-              label: item.typeName,
+              label: item.typeName
             };
             Front[index].children = [];
             item.foods.forEach((item1, index1) => {
               Front[index].children[index1] = {
                 id: item1.id,
-                label: item1.foodName,
+                label: item1.foodName
               };
             });
           });
@@ -748,10 +985,10 @@ export default {
       this.$axios
         .get(`api/blade-food/nutrition/tree`, {
           headers: {
-            "Content-Type": "application/json",
-          },
+            "Content-Type": "application/json"
+          }
         })
-        .then((res) => {
+        .then(res => {
           // console.log(res);
           this.mailto = res.data.data;
         });
@@ -766,10 +1003,10 @@ export default {
       this.$axios
         .get(`api/blade-system/region/selectCityOrProvince`, {
           headers: {
-            "Content-Type": "application/json",
-          },
+            "Content-Type": "application/json"
+          }
         })
-        .then((res) => {
+        .then(res => {
           // console.log(res);
           this.national = res.data.data;
           // console.log(this.national);
@@ -777,7 +1014,7 @@ export default {
           this.national.forEach((item, index) => {
             arr[index] = {
               value: item.id,
-              label: item.name,
+              label: item.name
             };
             arr[index].children = [];
             // console.log(item.children instanceof Array);
@@ -785,7 +1022,7 @@ export default {
               item.children.forEach((item1, index1) => {
                 arr[index].children[index1] = {
                   value: item1.id,
-                  label: item1.name,
+                  label: item1.name
                 };
               });
             }
@@ -799,7 +1036,7 @@ export default {
     muito() {
       this.$axios
         .get(`api/blade-food/basetype/getList?type=${2}&isPrivate=${1}`, {})
-        .then((res) => {
+        .then(res => {
           //   console.log(res);
           this.details = res.data.data;
           let obtain = [];
@@ -807,14 +1044,14 @@ export default {
             // console.log(item);
             obtain.push({
               value: item.id,
-              label: item.typeName,
+              label: item.typeName
             });
           });
           console.log(obtain);
           this.foodPos = obtain;
         });
-    },
-  },
+    }
+  }
 };
 </script>
 

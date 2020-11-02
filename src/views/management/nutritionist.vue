@@ -27,7 +27,7 @@
     </div>
     <!-- 添加食材 -->
     <div class="cadddr">
-      <el-button size="medium" type="primary" @click="addShard"
+      <el-button size="medium" type="primary" @click="addShard(1)"
         >添加相克食材</el-button
       >
 
@@ -35,12 +35,14 @@
     </div>
 
     <div class="address">
-      <el-table :data="tableData" border style="width: 100%">
-       <el-table-column
-       label="序号"
-      type="index"
-      width="50">
-    </el-table-column>
+      <el-table
+        v-loading="loadFlag1"
+        :data="tableData"
+        border
+        style="width: 100%"
+      >
+        <el-table-column label="序号" type="index" width="50" align="center">
+        </el-table-column>
         <el-table-column
           prop="name"
           label="名称"
@@ -78,6 +80,7 @@
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button
+              @click="editorTheme(scope.row, 2)"
               type="primary"
               size="small"
               icon="el-icon-edit"
@@ -123,7 +126,7 @@
         </el-form-item>
         <el-form-item label="食材二">
           <el-input
-              readonly
+            readonly
             v-on:click.native="obtain(2)"
             v-model="ruleForm.adding1"
           ></el-input>
@@ -140,9 +143,70 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dateTime = false">取 消</el-button>
-        <el-button @click="setlist('ruleForm')" type="primary">确 定</el-button>
+        <el-button
+          v-if="this.under == 1"
+          @click="setlist('ruleForm')"
+          type="primary"
+          >确 定</el-button
+        >
+        <el-button @click="hardware('ruleForm')" v-else type="primary"
+          >编辑 确 定</el-button
+        >
       </div>
     </el-dialog>
+    <!-- 编辑相克食材 -->
+    <!-- <el-dialog
+      title="添加相克食材"
+      width="50%"
+      append-to-body
+      :visible.sync="dateTime1"
+      :close-on-click-modal="false"
+    >
+      <el-form
+        :model="ruleForm"
+        :rules="rules"
+        ref="ruleForm"
+        label-width="100px"
+        class="demo-ruleForm"
+      >
+        <el-form-item label="名称">
+          <el-input v-model="ruleForm.name"></el-input>
+        </el-form-item>
+        <el-form-item label="食材一">
+          <el-input
+            readonly
+            v-on:click.native="obtain(1)"
+            v-model="ruleForm.adding"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="食材二">
+          <el-input
+            readonly
+            v-on:click.native="obtain(2)"
+            v-model="ruleForm.adding1"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="不宜同食原因">
+          <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+        </el-form-item>
+        <el-form-item label="是否有效">
+          <el-radio-group v-model="ruleForm.resource">
+            <el-radio label="是"></el-radio>
+            <el-radio label="否"></el-radio>
+          </el-radio-group>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dateTime1 = false">取 消</el-button>
+        <el-button
+          v-if="this.under == 1"
+          @click="setlist('ruleForm')"
+          type="primary"
+          >确 定</el-button
+        >
+        <el-button v-else type="primary">编辑 确 定</el-button>
+      </div>
+    </el-dialog> -->
     <!-- 个人食材公共食材 -->
     <el-dialog
       title="个人食材公共食材"
@@ -220,7 +284,9 @@ export default {
       data: JSON.parse(JSON.stringify(data)), //树形结构
       activeName: "first",
       loadFlag: false, //加载flag
+      loadFlag1: false, //加载flag
       dateTime: false,
+      dateTime1: false,
       addEffect: false, //个人公共食材
       ruleForm: {
         name: "", //名称
@@ -258,9 +324,12 @@ export default {
       ],
       value: "",
       lower: 0,
+
       dataindex1: undefined,
+      sure: "",
       support: "", //食材一ID
-      editor: "" //食材二ID
+      editor: "", //食材二ID
+      under: ""
     };
   },
   beforeMount() {
@@ -269,6 +338,67 @@ export default {
   },
   computed: {},
   methods: {
+    //删除
+    DeleteUser(row) {
+      console.log(row);
+      this.term = row.id;
+      this.$axios
+        .post(`api/blade-food/food/remove?ids=${this.term}`)
+
+        .then(res => {
+          console.log(res);
+          this.$message({
+            message: "删除成功",
+            type: "success"
+          });
+          this.generator();
+        })
+        .catch(() => {
+          this.$message.error("删除失败");
+        });
+    },
+    //编辑
+    editorTheme(row, index1) {
+      console.log(row);
+      // console.log(index1);
+      this.under = index1;
+      this.dateTime = true;
+      this.ruleForm.name = row.name;
+      this.ruleForm.adding = row.foodName;
+      this.ruleForm.adding1 = row.foodName1;
+      this.ruleForm.desc = row.reason;
+      this.ruleForm.resource = row.isActive == 0 ? "是" : "否";
+
+      this.support = row.foodId; //食材一ID
+      this.editor = row.foodId1; //食材二ID
+      this.sure = row.id;
+      // console.log(this.support);
+      // this.ruleForm.name
+    },
+    //编辑确定
+    hardware() {
+      this.$axios
+        .post(`api/blade-food/foodmutual/update`, {
+          id: this.sure, //ID
+          name: this.ruleForm.name, //名称
+          foodId: this.support, //食材1
+          foodId1: this.editor, //食材2
+          reason: this.ruleForm.desc, //不宜同事原因
+          isActive: this.ruleForm.resource == "是" ? 0 : 1 //是否
+        })
+        .then(res => {
+          console.log(res);
+          this.$message({
+            message: "保存成功",
+            type: "success"
+          });
+          this.generator();
+          this.dateTime = false;
+        })
+        .catch(() => {
+          this.$message.error("保存失败");
+        });
+    },
     //确定
     setlist() {
       // console.log(this.support);
@@ -287,6 +417,8 @@ export default {
             message: "保存成功",
             type: "success"
           });
+          this.generator();
+          this.dateTime = false;
         })
         .catch(() => {
           this.$message.error("保存失败");
@@ -312,12 +444,17 @@ export default {
       // console.log(123123);
       this.addEffect = true;
     },
-    addShard() {
+    addShard(index1) {
+      console.log(index1);
+      this.under = index1;
+      this.ruleForm.name = "";
+      this.ruleForm.adding = "";
+      this.ruleForm.adding1 = "";
+      this.ruleForm.desc = "";
+      this.ruleForm.resource = "";
       this.dateTime = true;
     },
-    DeleteUser(row) {
-      console.log(row);
-    },
+
     handleClick(tab) {
       // console.log(tab);
       this.lower = tab.index;
@@ -343,8 +480,9 @@ export default {
     },
     //获取表格
     generator() {
+      this.loadFlag1 = true;
       this.$axios(`api/blade-food/foodmutual/list`, {}).then(res => {
-        // console.log(res);
+        this.loadFlag1 = false;
         this.tableData = res.data.data.records;
       });
     },

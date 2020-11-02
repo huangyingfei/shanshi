@@ -10,8 +10,12 @@
       <div class="import">
         <el-button type="primary" plain size="mini">导入</el-button>
         <el-button type="primary" plain size="mini">导出</el-button>
-        <el-button type="primary" plain size="mini">加分类</el-button>
-        <el-button type="primary" plain size="mini">加食材</el-button>
+        <el-button @click="increasevalue" type="primary" plain size="mini"
+          >加分类</el-button
+        >
+        <el-button @click="padded" type="primary" plain size="mini"
+          >加菜品</el-button
+        >
       </div>
       <!-- <div @click="showImg" class="showSearch">
         <el-button v-if="!showSearch">常用</el-button>
@@ -68,6 +72,7 @@
           <p></p>
           <el-tree
             :data="data"
+            v-loading="loadFlag2"
             :props="defaultProps"
             node-key="id"
             :default-expand-all="false"
@@ -124,8 +129,33 @@
         </div>
       </div>
     </div>
+    <!-- 添加分类 -->
+    <el-dialog
+      title="添加分类"
+      width="30%"
+      append-to-body
+      :visible.sync="increase"
+      :close-on-click-modal="false"
+    >
+      <el-form
+        :model="increasered"
+        :rules="logout"
+        ref="increasered"
+        label-width="100px"
+        class="demo-ruleForm"
+      >
+        <el-form-item label="分类名称" prop="name">
+          <el-input style="width: 300px" v-model="increasered.name"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="increase = false">取 消</el-button>
+        <el-button @click="palette('formName')" type="primary">确 定</el-button>
+      </div>
+    </el-dialog>
+    <!-- 结束 -->
     <div class="mation">
-      <div class="mationtxt">食材主要信息</div>
+      <div class="mationtxt">菜品信息</div>
       <div class="mationinput">
         <el-form
           :model="ruleForm"
@@ -399,11 +429,14 @@ export default {
       //树形结构
     ];
     return {
+      increasered: {
+        name: ""
+      },
       sumss: "",
-
       showSearch: false,
       loadFlag: false, //加载flag
       loadFlag1: false, //加载
+      loadFlag2: false,
       dateTime: false, //弹出框
       input: "", //搜索
       getInput: {
@@ -521,7 +554,11 @@ export default {
           label: "常用"
         }
       ],
-      really1: "0"
+      really1: "0",
+      increase: false,
+      logout: {
+        name: [{ required: true, message: "请输入分类名称", trigger: "blur" }]
+      }
     };
   },
   computed: {
@@ -549,6 +586,37 @@ export default {
     // console.log(this.temp);
   },
   methods: {
+    //增加菜品
+    padded() {
+      // this.$router.go(0);
+    },
+    //增加分类
+    palette() {
+      // this.$refs[formName].validate(valid => {
+      //   if (valid) {
+      //     alert("submit!");
+      //   } else {
+      //     console.log("error submit!!");
+      //     return false;
+      //   }
+      // });
+      this.$axios
+        .post(`api/blade-food/basetype/save`, {
+          typeName: this.increasered.name,
+          type: 2
+        })
+        .then(res => {
+          // console.log(res);
+          this.increase = false;
+          this.obtains();
+          this.muito();
+        });
+    },
+    //增加分类弹框
+    increasevalue() {
+      this.increasered.name = "";
+      this.increase = true;
+    },
     getSummaries(param) {
       const { columns, data } = param;
       const sums = [];
@@ -769,12 +837,13 @@ export default {
     },
     //获取树形结构
     obtains() {
+      this.loadFlag2 = true;
       this.$axios
-
         .get(
           `api/blade-food/basetype/getDishByBaseId?isPrivate=${1}&typeTemp=${2}`
         )
         .then(res => {
+          this.loadFlag2 = false;
           //   console.log(res);
           this.obtain = res.data.data;
           let foto = [];
