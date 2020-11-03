@@ -329,7 +329,7 @@
             </template>
           </el-table-column>
           <el-table-column
-            prop="malloc"
+            prop="spring"
             label="能量"
             width="120"
             align="center"
@@ -508,7 +508,8 @@ export default {
           name: "", //食品名称
           address: "", //食品分类
           stats: "", //用量
-          malloc: "" //能量
+          spring: "", //能量
+          malloc: "" //能量kcal
         }
       ],
       temp: [],
@@ -640,9 +641,9 @@ export default {
           }, 0);
           sums[index] += "";
           this.sumss = sums[index];
-          if (this.mailto[0].children[0].id == "101") {
-            this.mailto[0].children[0].result = this.sumss;
-          }
+          // if (this.mailto[0].children[0].id == "101") {
+          //   this.mailto[0].children[0].result = this.sumss;
+          // }
           // console.log(this.sumss);
         }
       });
@@ -665,15 +666,59 @@ export default {
         row.malloc = this.temp[i];
       }
     },
+    handleNodeClick1(data) {
+      console.log(data);
+    },
+    //点击查看详情
+    handleNodeClick(data) {
+      //   console.log(data);
+      //   this.getInput = data.label;
+      //   console.log(this.getInput);
+      this.flour = data.id;
+      this.$axios
+        .get(`api/blade-food/food/detail?id=${this.flour}`, {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+        .then(res => {
+          //   console.log(res);
 
+          this.inquired = res.data.data;
+          console.log(this.inquired);
+          this.inquired.nutritions.forEach((item, index) => {
+            // console.log(item);
+            if (item.nutrientId == 101) {
+              this.officeonce[this.csListIndex].malloc = item.value;
+              this.officeonce[this.csListIndex].spring = item.value;
+            }
+          });
+          //   this.getInput.cs = this.inquired.foodName; //食材名
+          this.officeonce[this.csListIndex].id = this.inquired.id;
+          this.officeonce[this.csListIndex].frame = this.inquired.foodType;
+          this.officeonce[this.csListIndex].name = this.inquired.foodName;
+          this.officeonce[
+            this.csListIndex
+          ].address = this.inquired.foodTypeName;
+          // this.officeonce[this.csListIndex].name = this.inquired.foodName;
+          //   console.log(this.getInput);
+          this.temp.length = 0;
+          this.officeonce.forEach((item, i) => {
+            this.temp[i] = Number(item.malloc);
+          });
+          console.log(this.temp);
+        });
+    },
     //添加行数
     addLine() {
       var newValue = {
         id: "",
+        frame: "", //分类ID
         name: "", //食品名称
         address: "", //食品分类
         stats: "", //用量
-        malloc: "" //能量
+        spring: "", //能量
+        malloc: "" //能量kcal
       };
       //添加新的行数
       this.officeonce.push(newValue);
@@ -906,48 +951,7 @@ export default {
           this.options = arr;
         });
     },
-    handleNodeClick1(data) {
-      console.log(data);
-    },
-    //点击查看详情
-    handleNodeClick(data) {
-      //   console.log(data);
-      //   this.getInput = data.label;
-      //   console.log(this.getInput);
-      this.flour = data.id;
-      this.$axios
-        .get(`api/blade-food/food/detail?id=${this.flour}`, {
-          headers: {
-            "Content-Type": "application/json"
-          }
-        })
-        .then(res => {
-          //   console.log(res);
 
-          this.inquired = res.data.data;
-          console.log(this.inquired);
-          this.inquired.nutritions.forEach((item, index) => {
-            // console.log(item);
-            if (item.nutrientId == 101) {
-              this.officeonce[this.csListIndex].malloc = item.value;
-            }
-          });
-          //   this.getInput.cs = this.inquired.foodName; //食材名
-          this.officeonce[this.csListIndex].id = this.inquired.id;
-          this.officeonce[this.csListIndex].frame = this.inquired.foodType;
-          this.officeonce[this.csListIndex].name = this.inquired.foodName;
-          this.officeonce[
-            this.csListIndex
-          ].address = this.inquired.foodTypeName;
-          // this.officeonce[this.csListIndex].name = this.inquired.foodName;
-          //   console.log(this.getInput);
-          this.temp.length = 0;
-          this.officeonce.forEach((item, i) => {
-            this.temp[i] = Number(item.malloc);
-          });
-          console.log(this.temp);
-        });
-    },
     //树形渲染数
     Addraudit() {
       this.$axios

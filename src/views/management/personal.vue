@@ -769,6 +769,7 @@ export default {
         })
         .then(res => {
           console.log(res);
+          this.treeDrawing();
           this.$message({
             message: "保存成功",
             type: "success"
@@ -1164,7 +1165,7 @@ export default {
 }
 .saveas {
   width: 95%;
-  height: 500px;
+  height: 490px;
   margin-left: 40px;
   /* background-color: red; */
 }
