@@ -556,12 +556,12 @@
               <!-- <el-form-item label="常用" style="">
                 <el-switch v-model="ruleForm1.delivery1"></el-switch>
               </el-form-item> -->
-              <el-switch
+              <!-- <el-switch
                 v-model="ruleForm1.delivery1"
                 active-text="常用"
                 inactive-text="不常用"
               >
-              </el-switch>
+              </el-switch> -->
             </el-form>
           </div>
           <!-- 菜品所含食材信息 -->
