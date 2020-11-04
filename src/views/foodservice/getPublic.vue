@@ -92,7 +92,7 @@
                       </el-button>
                       <el-button
                         type="text"
-                        v-if="data.isUse == 1"
+                        v-if="data.isUse == 0"
                         size="mini"
                         @click="() => append(data)"
                       >
@@ -100,14 +100,14 @@
                       </el-button>
                       <el-button
                         type="text"
-                        v-else-if="data.isUse == 0"
+                        v-else-if="data.isUse == 1"
                         size="mini"
                         @click="() => insert(data)"
                       >
                         不常用
                       </el-button>
                       <el-button
-                        v-if="data.isPub == 1"
+                        v-if="data.isPub == 0"
                         type="text"
                         size="mini"
                         @click="() => multi(data)"
@@ -115,7 +115,7 @@
                         隐藏
                       </el-button>
                       <el-button
-                        v-else-if="data.isPub == 0"
+                        v-else-if="data.isPub == 1"
                         type="text"
                         size="mini"
                         @click="() => docs(data)"
@@ -758,7 +758,7 @@
       </div>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dateTime = false">取 消</el-button>
-        <el-button @click="setlist" type="primary">确 定</el-button>
+        <el-button @click="dateTime = false" type="primary">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -890,6 +890,11 @@ export default {
       this.increasered.name = "";
       this.increase = true;
     },
+    //编辑保存
+    saveItem() {
+      // console.log(this.ruleForm.delivery1 == false ? 1 : 0);
+      // console.log(this.ruleForm.delivery == false ? 0 : 1);
+    },
     //保存并新增
     mysave() {
       let next = [];
@@ -911,13 +916,14 @@ export default {
           function: this.ruleForm.region, //特点
           remark: this.ruleForm.desc, //做法
           belongRegions: this.valuepark, //省市区
-          isUse: this.ruleForm.delivery1 == false ? 0 : 1, //是否常用
-          isPub: this.ruleForm.delivery == false ? 0 : 1, //是否公开
+          isUse: this.ruleForm.delivery1 == false ? 1 : 0, //是否常用
+          isPub: this.ruleForm.delivery == false ? 1 : 0, //是否公开
           dishMxVos: next //菜品所含食材信息
         })
         .then(res => {
           console.log(res);
-          // this.muito();
+          this.obtains();
+          this.Addraudit();
           this.$message({
             message: "保存成功",
             type: "success"
@@ -945,14 +951,12 @@ export default {
           function: this.ruleForm.region,
           remark: this.ruleForm.desc,
           belongRegions: this.valuepark,
-          isUse: this.ruleForm.delivery1 == false ? 0 : 1, //是否常用
-          isPub: this.ruleForm.delivery == false ? 0 : 1, //是否公开
+          isUse: this.ruleForm.delivery1 == false ? 1 : 0, //是否常用
+          isPub: this.ruleForm.delivery == false ? 1 : 0, //是否公开
           dishMxVos: next
         })
         .then(res => {
           console.log(res);
-
-          this.obtains();
           this.mysave();
         });
     },
@@ -984,8 +988,8 @@ export default {
             });
             this.valuepark = bar;
             console.log(this.valuepark);
-            this.ruleForm.delivery1 = this.handler.isUse == 0 ? false : true; //常用
-            this.ruleForm.delivery = this.handler.isPub == 0 ? false : true; //公开
+            this.ruleForm.delivery1 = this.handler.isUse == 0 ? true : false; //常用
+            this.ruleForm.delivery = this.handler.isPub == 0 ? true : false; //公开
             // this.toBack = this.handler.dishMxVos;
             // console.log(this.toBack);
             if (this.handler.dishMxVos) {
@@ -1025,7 +1029,7 @@ export default {
             });
             this.valuepark1 = bar;
             // console.log(this.valuepark1);
-            this.ruleForm1.delivery1 = this.handler.isUse == 0 ? false : true; //常用
+            this.ruleForm1.delivery1 = this.handler.isUse == 0 ? true : false; //常用
             // this.ruleForm1.delivery = this.handler.isPub == 0 ? false : true; //公开
             // this.toBack = this.handler.dishMxVos;
             // console.log(this.toBack);

@@ -67,13 +67,13 @@
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="foodName"
-          label="食材名称"
+          prop="dishName"
+          label="菜品名称"
           width="180"
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="foodTypeName"
+          prop="dishTypeName"
           label="分类"
           width="100"
           align="center"
@@ -221,7 +221,6 @@
             :data="officeonce"
             border
             v-loading="loadFlag1"
-            show-summary
             style="width: 100%"
             :summary-method="getSummaries"
           >
@@ -307,13 +306,8 @@ export default {
   data() {
     return {
       seekeys: false, //查看弹框
-      tmquery: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        }
-      ], //表格
+      loadFlag: false, //加载flag
+      tmquery: [], //表格
       ruleForm1: {
         name: "", //菜品名字
         fooddata: "", //菜品分类
@@ -396,43 +390,81 @@ export default {
 
   methods: {
     seecol(row) {
-      this.active.length = 0;
-      console.log(row);
+      this.valuepark.length = 0;
+      this.officeonce.length = 0;
+
+      this.value1.length = 0;
       this.seekeys = true;
+      console.log(row);
+      this.auto = row.id;
+      this.$axios
+        .get(`api/blade-food/dish/dishDetail?id=${this.auto}`, {})
+        .then(res => {
+          // console.log(res);
+          this.handler = res.data.data;
+          this.ruleForm1.name = this.handler.dishName; //菜品名字
+          this.ruleForm1.fooddata = this.handler.dishType; //菜品分类
+          this.handler.season.split(",").forEach(item => {
+            //季节
+            this.value1.push(item);
+          });
+          this.ruleForm1.region = this.handler.function; //特点
+          this.ruleForm1.desc = this.handler.remark; //做法
+          let bar = [];
+          this.handler.provinces.split(",").forEach((item, i) => {
+            // console.log(item);
+            bar.push([item, this.handler.belongRegion.split(",")[i]]);
+          });
+          this.valuepark = bar;
+          // console.log(this.valuepark);
+          this.ruleForm1.delivery1 = this.handler.isUse == 0 ? true : false; //常用
+          if (this.handler.dishMxVos) {
+            let arr = [];
+            this.handler.dishMxVos.forEach((item, index) => {
+              arr[index] = {
+                id: item.id,
+                frame: item.baseTypeId,
+                name: item.name,
+                address: item.baseTypeName,
+                stats: item.value,
+                spring: item.nutritionNlValue
+                // malloc: item.nutritionNlValue
+              };
+            });
+            this.officeonce = arr;
+          }
+        });
     },
     // 分类
     queryLite() {
       this.$axios
-        .get(`api/blade-food/basetype/list?type=1`, {
-          headers: {
-            "Content-Type": "application/json"
-          }
-        })
+        .get(`api/blade-food/basetype/getList?type=${2}&isPrivate=${0}`, {})
         .then(res => {
-          // console.log(res);
-          this.tionDate = res.data.data;
-          // console.log(this.tionDate);
-          let cation = [];
-          // children
-          this.tionDate.forEach((item, index) => {
-            cation[index] = {
+          //   console.log(res);
+          this.details = res.data.data;
+          let obtain = [];
+          this.details.forEach((item, index) => {
+            // console.log(item);
+            obtain.push({
               value: item.id,
               label: item.typeName
-            };
+            });
           });
-          // console.log(cation);
-          this.foodPos = cation;
+          console.log(obtain);
+          this.foodPos = obtain;
         });
     },
     //获取表格数据
     auditing() {
-      // this.$axios
-      //   .get(`api/blade-food/food/searchOrgFood?size=${10}&current=${1}`, {})
-      //   .then(res => {
-      //     // console.log(res);
-      //     this.tmquery = res.data.data.records;
-      //     console.log(this.tmquery);
-      //   });
+      this.loadFlag = true;
+      this.$axios
+        .get(`api/blade-food/dish/appPubDishOrgan?size=${10}&current=${1}`, {})
+        .then(res => {
+          // console.log(res);
+          this.loadFlag = false;
+          this.tmquery = res.data.data.records;
+          // console.log(this.tmquery);
+        });
     },
     //营养素含量
     Protocol() {
