@@ -1,1177 +1,611 @@
 <template>
-  <div class="choose">
-    <div class="flexi">
-      <div>
-        <span class="demonstration" style="padding-right: 10px;">选择日期</span>
-        <el-date-picker
-          style="width:300px"
-          v-model="value1"
-          type="daterange"
-          format="yyyy 年 MM 月 dd 日"
-          value-format="yyyy-MM-dd"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-        >
-        </el-date-picker>
-        <span style="padding-right: 10px;padding-left: 30px;">人群年龄</span>
-        <el-input
-          style="width:140px"
-          placeholder="请输入内容"
-          v-model="input"
-          clearable
-        >
-        </el-input>
-        ~
-        <el-input
-          style="width:140px"
-          placeholder="请输入内容"
-          v-model="input"
-          clearable
-        >
-        </el-input>
-        <span style="padding-left: 50px;padding-right: 10px;">公开</span>
-        <el-switch v-model="delivery"></el-switch>
-        <span style="padding-left: 30px;padding-right: 10px;">推荐</span>
-        <el-switch v-model="delivery1"></el-switch>
-        <span style="padding-left: 30px;padding-right: 10px;">收藏</span>
-        <el-switch v-model="delivery2"></el-switch>
-      </div>
-      <div class="groups">
-        <span style="padding-right: 10px;">餐点设置</span>
-        <el-checkbox v-model="checked">早餐</el-checkbox>
-        <el-checkbox v-model="checked1">早点</el-checkbox>
-        <el-checkbox v-model="checked2">午餐</el-checkbox>
-        <el-checkbox v-model="checked3">午点</el-checkbox>
-        <el-checkbox v-model="checked4">晚餐</el-checkbox>
-        <el-checkbox v-model="checked5">晚点</el-checkbox>
-
-        <!-- <span style="padding-right: 10px;padding-left: 10px;">周天数</span>
-        <el-checkbox v-model="checked6">5天</el-checkbox>
-        <el-checkbox v-model="checked7">6天</el-checkbox>
-        <el-checkbox v-model="checked8">7天</el-checkbox> -->
-
-        <span style="padding-right: 10px;padding-left: 10px;">周天数</span>
-        <el-radio-group v-model="radio">
-          <el-radio :label="3">5天</el-radio>
-          <el-radio :label="6">6天</el-radio>
-          <el-radio :label="9">7天</el-radio>
-        </el-radio-group>
-      </div>
-
-      <div class="results">
-        <el-button type="primary" size="small" style="margin-left: 0px;"
-          >智能配平</el-button
-        >
-        <el-button type="primary" size="small" style="margin-left: 20px;"
-          >自动设置油盐糖</el-button
-        >
-        <el-button type="primary" size="small" style="margin-left: 20px;"
-          >自动清除油盐糖</el-button
-        >
-        <el-button
-          @click="nutrition"
-          type="primary"
-          size="small"
-          style="margin-left: 20px;"
-        >
-          营养素
-        </el-button>
-        <el-button type="primary" size="small" style="margin-left: 20px;"
-          >带量食谱</el-button
-        >
-        <el-button type="success">编辑保存</el-button>
-        <!-- <el-button type="primary">主要按钮</el-button> -->
-        <el-button @click="autosave" type="success">保存并新增</el-button>
-      </div>
-    </div>
-    <!-- 营养素 -->
-    <el-dialog
-      title="营养素"
-      width="35%"
-      append-to-body
-      :visible.sync="seekeys"
-    >
-      <div>
-        <div class="arrow">
-          <div class="season">不足</div>
-          <div class="season1">适量</div>
-          <div class="season2">过量</div>
-        </div>
-        <div class="fonts">
-          <el-table
-            style="width: 100%;margin-bottom: 20px;"
-            row-key="id"
-            :data="secondary"
-            :border="false"
-            :default-expand-all="false"
-            :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-          >
-            <el-table-column
-              prop="date"
-              align="center"
-              label="营养素"
-              width="140"
+  <div>
+    <el-row :gutter="20" style="padding: 0px; margin-top: 5px">
+      <el-col :span="24">
+        <el-form :gutter="10" :inline="true" :model="formInline">
+          <el-form-item>
+            <el-input
+              placeholder="请选择周期"
+              v-model="WeekInfo.WeekTtitle"
+              class="input-with-select"
+              style="width: 350px"
+              suffix-icon="el-icon-date"
             >
-            </el-table-column>
-            <el-table-column prop="name" align="center" label="含量" width="80">
-            </el-table-column>
-            <el-table-column prop="address" align="center" label="DRIs%">
-            </el-table-column>
-          </el-table>
-        </div>
-      </div>
-    </el-dialog>
-    <div class="gresults">
-      <div class="search">
-        <div class="tab" style=" width: 100%;height:35px;">
-          <el-button
-            style="margin-left: 5px;width:100px"
-            :type="0 == display ? 'primary' : 'default'"
-            @click="displayCheck(0)"
-            >食谱
-          </el-button>
-          <el-button
-            style="width:100px"
-            :type="1 == display ? 'primary' : 'default'"
-            @click="displayCheck(1)"
-            >菜品</el-button
-          >
-          <div v-show="display == 0">
-            <div class="opening">
-              <div class="export">全部</div>
-              <div class="export1">公开</div>
-              <div class="export2">隐藏</div>
-              <div class="export3">推荐</div>
-            </div>
-            <!-- 查找 -->
-            <div class="and-query">
-              <div class="country1">
-                <template>
-                  <el-select
-                    style="width:100px"
-                    v-model="value"
-                    placeholder="请选择"
-                  >
-                    <el-option
-                      v-for="item in examine"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                    ></el-option>
-                  </el-select>
-                </template>
-                <template>
-                  <el-select
-                    style="width:100px;margin-left: 10px;"
-                    v-model="value"
-                    placeholder="请选择"
-                  >
-                    <el-option
-                      v-for="item in examine"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                    ></el-option>
-                  </el-select>
-                </template>
+              <el-select
+                v-model="WeekInfo.weekType"
+                slot="prepend"
+                placeholder="周长设置"
+              >
+                <el-option label="5天一周" value="5"></el-option>
+                <el-option label="6天一周" value="6"></el-option>
+                <el-option label="7天一周" value="7"></el-option>
+              </el-select>
+            </el-input>
+
+            <el-date-picker
+              v-model="WeekInfo.weekValue"
+              type="week"
+              format="yyyy-MM"
+              :picker-options="{ firstDayOfWeek: 1 }"
+              @focus="FixWeek"
+              placeholder="选择时间"
+              name="WeekSelect"
+              @change="SelectWeek"
+              style="
+                width: 230px;
+                opacity: 0;
+                position: absolute;
+                left: 120px;
+                top: -10px;
+              "
+              clear-icon=""
+              ref="refweekSelect"
+            >
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="餐谱名称">
+            <el-input
+              v-model="WeekInfo.Weekdetails"
+              style="width: 400px"
+            ></el-input>
+          </el-form-item>
+
+          <el-form-item label="餐点设置">
+            <el-checkbox-group
+              v-model="WeekInfo.foodCatalog"
+              @change="AppendFoodType"
+            >
+              <el-checkbox label="早餐" checked name="早餐"></el-checkbox>
+              <el-checkbox label="早点" name="早点"></el-checkbox>
+              <el-checkbox label="午餐" name="午餐"></el-checkbox>
+              <el-checkbox label="晚餐" name="晚餐"></el-checkbox>
+              <el-checkbox label="晚点" name="晚点"></el-checkbox>
+            </el-checkbox-group>
+          </el-form-item>
+        </el-form>
+      </el-col>
+    </el-row>
+
+    <el-row :gutter="20" style="padding: 0px">
+      <el-col :span="24">
+        <el-divider></el-divider>
+      </el-col>
+    </el-row>
+
+    <el-row :gutter="20">
+      <el-col :span="24">
+        <el-form :gutter="10" :inline="true" :model="WeekInfo">
+          <el-form-item label="选择人群">
+            <el-select v-model="WeekInfo.crowd" placeholder="选择人群">
+              <el-option label="幼儿" value="1"></el-option>
+              <el-option label="成人" value="2"></el-option>
+            </el-select>
+          </el-form-item>
+
+          <el-form-item>
+            <el-switch v-model="WeekInfo.shareOrg" inactive-text="分享组织">
+            </el-switch>
+
+            <el-switch
+              style="margin-left: 10px"
+              v-model="WeekInfo.sharePlant"
+              inactive-text="分享平台"
+            >
+            </el-switch>
+
+            <el-switch
+              style="margin-left: 10px"
+              v-model="WeekInfo.shareTell"
+              inactive-text="公告"
+            >
+            </el-switch>
+
+            <el-switch
+              style="margin-left: 10px"
+              v-model="WeekInfo.collection"
+              inactive-text="收藏"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+            >
+            </el-switch>
+
+            <el-button style="margin-left: 30px" size="medium" type="success"
+              >智能配平</el-button
+            >
+
+            <el-button style="margin-left: 10px" size="medium"
+              >自动设置油盐糖</el-button
+            >
+
+            <el-button style="margin-left: 10px" size="medium"
+              >自动清除油盐糖</el-button
+            >
+
+            <el-button style="margin-left: 10px" size="medium"
+              >营养素</el-button
+            >
+
+            <el-button style="margin-left: 10px" size="medium"
+              >带量食谱</el-button
+            >
+          </el-form-item>
+        </el-form>
+      </el-col>
+    </el-row>
+
+    <el-row :gutter="20" style="padding: 0px">
+      <el-col :span="24">
+        <el-divider></el-divider>
+      </el-col>
+    </el-row>
+
+    <el-row :gutter="20" style="padding: 0px; margin-top: 0px">
+      <el-col :span="4">
+        <el-card class="box-car" shadow="never">
+          <div class="clearfix panel_head">
+            <el-button-group>
+              <el-button size="small" style="bo">食谱</el-button>
+              <el-button size="small">菜品</el-button>
+            </el-button-group>
+          </div>
+
+          <el-tabs v-model="activeName" @tab-click="handleClick">
+            <el-tab-pane label="分享食谱" name="first">
+              <div style="margin-top: 0px;padding:5px;">
+                <el-input
+                  size="small"
+                  placeholder="请输入内容"
+                  v-model="input3"
+                  class="input-with-select"
+                >
+                  <el-button slot="append" icon="el-icon-search"></el-button>
+                </el-input>
               </div>
-            </div>
-            <!-- 结束 -->
-            <el-tree
-              :data="data1"
-              :props="defaultProps"
-              @node-click="handleNodeClick"
-            ></el-tree>
-          </div>
-          <div v-show="display == 1">
-            <div class="opening">
-              <div class="export4">全部</div>
-              <div class="export5">公开</div>
-              <div class="export3">隐藏</div>
-            </div>
-            <div class="and-query1">
-              <div class="country1">
-                <template>
-                  <el-select
-                    style="width:100px"
-                    v-model="value"
-                    placeholder="请选择"
-                  >
-                    <el-option
-                      v-for="item in examine"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                    ></el-option>
-                  </el-select>
-                </template>
-                <template>
-                  <el-select
-                    style="width:100px;margin-left: 10px;"
-                    v-model="before1"
-                    placeholder="请选择"
-                  >
-                    <el-option
-                      v-for="item in before"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                    ></el-option>
-                  </el-select>
-                </template>
-                <template>
-                  <el-select
-                    style="width:100px;margin-top: 10px;"
-                    v-model="really1"
-                    placeholder="请选择"
-                  >
-                    <el-option
-                      v-for="item in really"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                    ></el-option>
-                  </el-select>
-                </template>
+              <div style="margin-top: 3px">
+                <el-tag type="success" style="margin-left: 5px">区域</el-tag>
+                <el-tag type="success" style="margin-left: 5px">季节</el-tag>
               </div>
-            </div>
-            <!-- 结束 -->
-            <div class="monly">
-              <div class="block">
-                <p></p>
-                <el-tree
-                  :data="data"
-                  node-key="id"
-                  :expand-on-click-node="false"
-                >
-                  <span class="custom-tree-node" slot-scope="{ node, data }">
-                    <span>{{ node.label }}</span>
-                    <span>
-                      <el-button
-                        type="text"
-                        size="mini"
-                        @click="() => prepare(data)"
-                      >
-                        查看
-                      </el-button>
-                    </span>
-                  </span>
-                </el-tree>
+
+              <div style="margin-top: 5px; margin-bottom: 2px">
+                <el-divider></el-divider>
               </div>
-            </div>
-            <!-- 结束 -->
-          </div>
+
+              <ul class="foodWeekListHis">
+                <li><a>第一周菜谱</a></li>
+                <li>2</li>
+                <li>3</li>
+              </ul>
+            </el-tab-pane>
+            <el-tab-pane label="个人食谱" name="second">配置管理</el-tab-pane>
+          </el-tabs>
+        </el-card>
+      </el-col>
+      <el-col :span="20">
+        <div class="foodPanel">
+          <foods-week :headers="headers" :datas="datas" days="5"> </foods-week>
         </div>
-      </div>
-      <!-- 表格 -->
-      <div class="field">
-        <el-table :data="tableData" border style="width: 100%;heigth:100%">
-          <el-table-column
-            align="center"
-            prop="date"
-            label="菜品/食物"
-            width="100"
-          >
-          </el-table-column>
-          <el-table-column align="center" width="400" label="周一">
-            <template slot-scope="scope">
-              <el-table
-                :data="scope.row.tabaldata1"
-                style="width: 100%;margin-bottom: 20px;"
-                row-key="id"
-                :border="false"
-                :default-expand-all="false"
-                :tree-props="{
-                  children: 'children',
-                  hasChildren: 'hasChildren'
-                }"
-              >
-                <el-table-column
-                  prop="name"
-                  align="center"
-                  label="食品/食材"
-                  width="170"
-                >
-                </el-table-column>
-                <el-table-column label="用量(g)" align="center" width="100">
-                  <template slot-scope="scope">
-                    <el-input
-                      v-model="scope.row.date"
-                      type="text"
-                      placeholder="请输入内容"
-                    ></el-input>
-                  </template>
-                </el-table-column>
-                <el-table-column width="100" label="操作" align="center">
-                  <template slot-scope="scope">
-                    <!-- <el-button
-                      type="text"
-                      size="small"
-                      @click="Choice(scope.row, scope.$index)"
-                      >选择</el-button
-                    > -->
-                    <el-button
-                      type="text"
-                      size="small"
-                      style="margin-left: 10px"
-                      @click="handleDelete(scope.$index, scope.row)"
-                      >删除</el-button
-                    >
-                  </template>
-                </el-table-column>
-              </el-table>
-              <el-button
-                type="primary"
-                size="small"
-                @click="Choice(scope.row.tabaldata1, scope.$index, 1)"
-                >选择食谱/菜品</el-button
-              >
-            </template>
-          </el-table-column>
-          <el-table-column align="center" width="400" prop="name" label="周二">
-            <template slot-scope="scope">
-              <el-table
-                :data="scope.row.tabaldata2"
-                style="width: 100%;margin-bottom: 20px;"
-                row-key="id"
-                :default-expand-all="false"
-                :tree-props="{
-                  children: 'children',
-                  hasChildren: 'hasChildren'
-                }"
-              >
-                <el-table-column
-                  prop="name"
-                  align="center"
-                  label="食品/食材"
-                  width="170"
-                >
-                </el-table-column>
-                <el-table-column label="用量(g)" align="center" width="100">
-                  <template slot-scope="scope">
-                    <el-input
-                      v-model="scope.row.date"
-                      type="text"
-                      placeholder="请输入内容"
-                    ></el-input>
-                  </template>
-                </el-table-column>
-                <el-table-column width="100" label="操作" align="center">
-                  <template slot-scope="scope">
-                    <el-button
-                      type="text"
-                      size="small"
-                      style="margin-left: 10px"
-                      @click="handleDelete(scope.$index, scope.row)"
-                      >删除</el-button
-                    >
-                  </template>
-                </el-table-column>
-              </el-table>
-              <el-button
-                type="primary"
-                size="small"
-                @click="Choice(scope.row.tabaldata2, scope.$index, 2)"
-                >选择食谱/菜品</el-button
-              >
-            </template>
-          </el-table-column>
-          <el-table-column align="center" width="400" prop="name" label="周三">
-            <template slot-scope="scope">
-              <el-table
-                :data="scope.row.tabaldata3"
-                style="width: 100%;margin-bottom: 20px;"
-                row-key="id"
-                :default-expand-all="false"
-                :tree-props="{
-                  children: 'children',
-                  hasChildren: 'hasChildren'
-                }"
-              >
-                <el-table-column
-                  prop="name"
-                  align="center"
-                  label="食品/食材"
-                  width="170"
-                >
-                </el-table-column>
-                <el-table-column label="用量(g)" align="center" width="100">
-                  <template slot-scope="scope">
-                    <el-input
-                      v-model="scope.row.date"
-                      type="text"
-                      placeholder="请输入内容"
-                    ></el-input>
-                  </template>
-                </el-table-column>
-                <el-table-column width="100" label="操作" align="center">
-                  <template slot-scope="scope">
-                    <el-button
-                      type="text"
-                      size="small"
-                      style="margin-left: 10px"
-                      @click="handleDelete(scope.$index, scope.row)"
-                      >删除</el-button
-                    >
-                  </template>
-                </el-table-column>
-              </el-table>
-              <el-button
-                type="primary"
-                size="small"
-                @click="Choice(scope.row.tabaldata3, scope.$index, 3)"
-                >选择食谱/菜品</el-button
-              >
-            </template>
-          </el-table-column>
-          <el-table-column align="center" width="400" prop="name" label="周四">
-            <template slot-scope="scope">
-              <el-table
-                :data="scope.row.tabaldata4"
-                style="width: 100%;margin-bottom: 20px;"
-                row-key="id"
-                :default-expand-all="false"
-                :tree-props="{
-                  children: 'children',
-                  hasChildren: 'hasChildren'
-                }"
-              >
-                <el-table-column
-                  prop="name"
-                  align="center"
-                  label="食品/食材"
-                  width="170"
-                >
-                </el-table-column>
-                <el-table-column label="用量(g)" align="center" width="100">
-                  <template slot-scope="scope">
-                    <el-input
-                      v-model="scope.row.date"
-                      type="text"
-                      placeholder="请输入内容"
-                    ></el-input>
-                  </template>
-                </el-table-column>
-                <el-table-column width="100" label="操作" align="center">
-                  <template slot-scope="scope">
-                    <el-button
-                      type="text"
-                      size="small"
-                      style="margin-left: 10px"
-                      @click="handleDelete(scope.$index, scope.row)"
-                      >删除</el-button
-                    >
-                  </template>
-                </el-table-column>
-              </el-table>
-              <el-button
-                type="primary"
-                size="small"
-                @click="Choice(scope.row.tabaldata4, scope.$index, 4)"
-                >选择食谱/菜品</el-button
-              >
-            </template>
-          </el-table-column>
-          <el-table-column align="center" width="400" prop="name" label="周五">
-            <template slot-scope="scope">
-              <el-table
-                :data="scope.row.tabaldata5"
-                style="width: 100%;margin-bottom: 20px;"
-                row-key="id"
-                :default-expand-all="false"
-                :tree-props="{
-                  children: 'children',
-                  hasChildren: 'hasChildren'
-                }"
-              >
-                <el-table-column
-                  prop="name"
-                  align="center"
-                  label="食品/食材"
-                  width="170"
-                >
-                </el-table-column>
-                <el-table-column label="用量(g)" align="center" width="100">
-                  <template slot-scope="scope">
-                    <el-input
-                      v-model="scope.row.date"
-                      type="text"
-                      placeholder="请输入内容"
-                    ></el-input>
-                  </template>
-                </el-table-column>
-                <el-table-column width="100" label="操作" align="center">
-                  <template slot-scope="scope">
-                    <el-button
-                      type="text"
-                      size="small"
-                      style="margin-left: 10px"
-                      @click="handleDelete(scope.$index, scope.row)"
-                      >删除</el-button
-                    >
-                  </template>
-                </el-table-column>
-              </el-table>
-              <el-button
-                type="primary"
-                size="small"
-                @click="Choice(scope.row.tabaldata5, scope.$index, 5)"
-                >选择食谱/菜品</el-button
-              >
-            </template>
-          </el-table-column>
-          <el-table-column
-            v-if="radio == 6 || radio == 9"
-            align="center"
-            width="400"
-            prop="name"
-            label="周六"
-          >
-          </el-table-column>
-          <el-table-column
-            v-if="radio == 9"
-            align="center"
-            width="400"
-            prop="name"
-            label="周天"
-          >
-          </el-table-column>
-        </el-table>
-      </div>
-      <!-- 弹出框 -->
-      <el-dialog
-        title="选择食谱/菜品"
-        append-to-body
-        :visible.sync="dateTime"
-        :close-on-click-modal="false"
-      >
-        <div>
-          <el-button
-            style="margin-left: 5px;width:200px"
-            :type="0 == display ? 'primary' : 'default'"
-            @click="displayCheck(0)"
-            >食谱
-          </el-button>
-          <el-button
-            style="width:200px"
-            :type="1 == display ? 'primary' : 'default'"
-            @click="displayCheck(1)"
-            >菜品</el-button
-          >
-          <div v-show="display == 0">
-            0000
-          </div>
-          <div v-show="display == 1">
-            <div class="block">
-              <p></p>
-              <el-tree
-                :data="data"
-                node-key="id"
-                @node-click="handleNodeClick1"
-                :expand-on-click-node="false"
-              >
-              </el-tree>
-            </div>
-          </div>
-        </div>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="dateTime = false">取 消</el-button>
-          <el-button @click="setlist" type="primary">确 定</el-button>
-        </div>
-      </el-dialog>
-      <div class="profile">
-        <el-button type="success">编辑保存</el-button>
-        <el-button @click="autosave" type="success">保存并新增</el-button>
-      </div>
-    </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
-let id = 1000;
+import foodsWeek from "@/views/foods/components/foodsweek";
 export default {
+  components: {
+    foodsWeek
+  },
+  created() {
+    this.init();
+  },
   data() {
     const data = [];
     return {
-      right: false,
-      data: JSON.parse(JSON.stringify(data)), //树形结构
-      dateTime: false, //弹出框
-      cur: 0,
-      display: "0",
-      value1: "", //时间
-      seekeys: false, //营养素
-      checked: true,
-      checked1: true,
-      checked2: true,
-      checked3: true,
-      checked4: false,
-      checked5: false,
-      checked6: false,
-      checked7: false,
-      checked8: false,
-      delivery: false, //公开
-      delivery1: false, //常用
-      delivery2: false, //收藏
-      thehabit: [],
-      tableData: [
-        {
-          date: "早餐",
-          tabaldata1: [
-            {
-              id: "11",
-              name: "西红柿鸡蛋",
-              date: "200",
-              children: [
-                {
-                  id: "22",
-                  name: "西红柿",
-                  date: "100"
-                },
-                {
-                  id: "33",
-                  name: "鸡蛋",
-                  date: "100"
-                }
-              ]
-            }
-          ],
-          tabaldata2: [
-            {
-              id: 3,
-              name: "绿豆粥",
-              date: "200",
-              children: [
-                {
-                  id: 31,
-                  name: "绿豆",
-                  date: "50"
-                },
-                {
-                  id: 32,
-                  name: "粥",
-                  date: "50"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          date: "早点",
-          tabaldata1: [
-            {
-              id: 3,
-              name: "酸奶",
-              date: "200",
-              children: [
-                {
-                  id: 31,
-                  name: "酸奶",
-                  date: "50"
-                },
-                {
-                  id: 32,
-                  name: "水",
-                  date: "50"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          date: "午餐",
-          tabaldata1: [
-            {
-              id: 3,
-              name: "肉末豆腐",
-              date: "300",
-              children: [
-                {
-                  id: 31,
-                  name: "肉",
-                  date: "150"
-                },
-                {
-                  id: 32,
-                  name: "豆腐",
-                  date: "50"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          date: "午点",
-          tabaldata1: [
-            {
-              id: 3,
-              name: "夹心饼干",
-              date: "30",
-              children: [
-                {
-                  id: 31,
-                  name: "面粉",
-                  date: "150"
-                },
-                {
-                  id: 32,
-                  name: "饼干",
-                  date: "50"
-                }
-              ]
-            }
-          ]
-        }
-        // {
-        //   date: "晚餐"
-        // },
-        // {
-        //   date: "晚点"
-        // }
-      ],
-
-      datadata1: [],
-      dataindex1: undefined,
-      dataindex2: undefined,
-
-      name: "",
-      examine: [
-        //下拉框分类
-        {
-          value: "选项1",
-          label: "全国"
-        },
-        {
-          value: "选项2",
-          label: "浙江"
-        },
-        {
-          value: "选项3",
-          label: "上海"
-        }
-      ],
-      value: "",
-      data1: [
-        {
-          label: "2020年8月（8.29-9.04）食谱"
-        },
-        {
-          label: "2020年8月（8.29-9.04）食谱"
-        },
-        {
-          label: "2020年8月（8.29-9.04）食谱"
-        }
-      ],
-      //季节查询
-      before: [
-        {
-          value: "0",
-          label: "全部"
-        },
-        {
-          value: "1",
-          label: "春季"
-        },
-        {
-          value: "2",
-          label: "夏季"
-        },
-        {
-          value: "3",
-          label: "秋季"
-        },
-        {
-          value: "4",
-          label: "冬季"
-        }
-      ],
-      before1: "0",
-      //全部 常用
-      really: [
-        {
-          value: "0",
-          label: "全部"
-        },
-        {
-          value: "1",
-          label: "常用"
-        }
-      ],
-      secondary: [
-        {
-          id: 3,
-          date: "蛋白质",
-          name: "322",
-          address: "123.91",
-          children: [
-            {
-              id: 31,
-              date: "完全蛋白质",
-              name: "233",
-              address: "94"
-            },
-            {
-              id: 32,
-              date: "半完全蛋白质",
-              name: "234",
-              address: "94"
-            }
-          ]
-        }
-      ],
-      really1: "0",
-      radio: 3
+      WeekInfo: {
+        weekType: "", //周期类型
+        WeekTtitle: "", //周期标题
+        Weekdetails: "", //周期明细
+        weekValue: "",
+        foodCatalog: [], //餐点类型
+        crowd: "", //人群
+        shareOrg: true
+      },
+      activeName: "first",
+      // 表格头部
+      headers: [],
+      // 表格数据
+      datas: [],
+      WeekList: [], //所选的时间周期
+      FoodTypeList: [], //所选餐点类型
+      rebuild: false
     };
   },
-  beforeMount() {
-    this.obtains(); //获取树形结构
-  },
+  beforeMount() {},
   methods: {
-    //保存并新增
-    autosave() {
-      // console.log(this.checked7);
-      console.log(this.radio);
-      console.log(this.value1); //时间
-      console.log(this.tableData);
-      // this.tableData.forEach((item, index) => {
-      //   console.log(item.date);
-      // });
-      // console.log(bionu);
-      // this.$axios.post(`api/blade-food/recipe/save`,{
-
-      // }).then(res=>{
-      //   console.log(res);
-      // })
+    init() {
+      this.initRemoteData();
     },
-    //点击查看详情
-    handleNodeClick1(data) {
-      // console.log(data);
-      this.auto = data.id;
-      this.$axios
-        .get(`api/blade-food/dish/dishDetail?id=${this.auto}`, {})
-        .then(res => {
-          // console.log(res);
-          this.thehabit = res.data.data;
-          console.log(this.thehabit);
 
-          // this.thehabit.
-          // let arr = [];
-          // arr.push({
-          //   id: this.thehabit.id,
-          //   name: this.thehabit.dishName,
-          //   date: this.thehabit.provinces,
-          //   children: this.thehabit.dishMxVos
-          // });
-          // console.log(arr);
+    //重新构建表格
+    rebuildTable() {
+      var that = this;
+      this.headers = [];
+      setTimeout(function() {
+        var hd = JSON.parse(JSON.stringify(that.WeekList));
+        for (let j = 0; j < hd.length; j++) {
+          that.headers.push(hd[j]);
+        }
+        that.initEmptyData();
+      }, 100);
+    },
 
-          if (this.dataindex2 == 1) {
-            this.tableData[this.dataindex1].tabaldata1.push({
-              week: this.dataindex2,
-              id: this.thehabit.id,
-              name: this.thehabit.dishName,
-              date: this.thehabit.provinces,
-              children: this.thehabit.dishMxVos
-            });
-            console.log(this.tableData[this.dataindex1].tabaldata1);
-          } else if (this.dataindex2 == 2) {
-            this.tableData[this.dataindex1].tabaldata2.push({
-              week: this.dataindex2,
-              id: this.thehabit.id,
-              name: this.thehabit.dishName,
-              date: this.thehabit.provinces,
-              children: this.thehabit.dishMxVos
-            });
-          } else if (this.dataindex2 == 3) {
-            this.tableData[this.dataindex1].tabaldata3.push({
-              id: this.thehabit.id,
-              name: this.thehabit.dishName,
-              date: this.thehabit.provinces,
-              children: this.thehabit.dishMxVos
-            });
-          } else if (this.dataindex2 == 4) {
-            this.tableData[this.dataindex1].tabaldata4.push({
-              id: this.thehabit.id,
-              name: this.thehabit.dishName,
-              date: this.thehabit.provinces,
-              children: this.thehabit.dishMxVos
-            });
-          } else if (this.dataindex2 == 5) {
-            this.tableData[this.dataindex1].tabaldata5.push({
-              id: this.thehabit.id,
-              name: this.thehabit.dishName,
-              date: this.thehabit.provinces,
-              children: this.thehabit.dishMxVos
+    //餐点类型改变
+    AppendFoodType() {
+      var date3 = JSON.parse(JSON.stringify(this.WeekInfo.foodCatalog));
+
+      //新增餐点类型
+      for (let i = 0; i < date3.length; i++) {
+        if (!this.hasFoodType(date3[i])) {
+          var row = {
+            id: this.guid(),
+            pid: this.id,
+            name: date3[i],
+            weeks: []
+          };
+
+          // 填充周数据
+          for (let j = 0; j < 7; j++) {
+            row.weeks.push({
+              id: this.guid(),
+              week: this.headers[j],
+              name: "week" + (j + 1),
+              image: "",
+              // 填充食谱数据
+              foods: []
             });
           }
-          // console.log(this.tableData[this.dataindex1].tabaldata1);
-          // let open = [];
 
-          // this.thehabit.dishMxVos.forEach((item, index) => {
-          //   // console.log(item, index);
-          //   open[index] = {
-          //     id: item.id,
-          //     date: item.name,
-          //     name: item.value
-          //   };
-          // });
-          // console.log(open);
-          // arr.push({
-          //   id: this.thehabit.id,
-          //   date: this.thehabit.dishName,
-          //   name: this.thehabit.provinces,
-          //   children: open
-          // });
-          // console.log(arr);
-          // this.tableData.tabaldata1 = arr;
-          // console.log(this.tableData.tabaldata1);
-          // this.thehabit.forEach((item, index) => {
-          //   arr[index] = {
-          //     id: item.id,
-          //     date: item.dishName,
-          //     name: item.provinces
-          //   };
-          // });
-          // console.log(arr);
-          // for(var item in this.thehabit){
-          //   console.log(item)
-          // }
+          this.datas.push(row);
+        }
+      }
+
+      //删除餐点类型
+      var deleteList = [];
+      for (let i = 0; i < this.datas.length; i++) {
+        var needremove = true;
+        this.WeekInfo.foodCatalog.forEach(e => {
+          if (e == this.datas[i].name) {
+            needremove = false;
+          }
         });
-    },
-    handleDelete(index, row) {
-      // console.log(index);
-      console.log(row);
-      // console.log(this.tableData[0].tabaldata1);
-      // this.tableData[0].tabaldata1.splice(index, 1);
-      delete this.tableData.tabaldata1[index];
-    },
-    handleNodeClick(data) {
-      console.log(data);
+
+        if (needremove) {
+          deleteList.push(i);
+        }
+      }
+      deleteList.forEach(e => {
+        this.datas.splice(e, 1);
+      });
+
+      console.log(JSON.stringify(this.datas));
     },
 
-    //表格弹出框
-    Choice(row, index1, index2) {
-      this.datadata1 = row;
-      this.dataindex1 = index1;
-      this.dataindex2 = index2;
-      console.log(index1);
-      console.log(index2);
-      // console.log(this.dataindex2);
-      this.dateTime = true;
-      // this.csListIndex = index;
-      //   for (let k in row) {
-      //     this.csList[k] = row[k];
-      //   }
+    hasFoodType(foodTypeName) {
+      var result = this.datas.find(p => p.name == foodTypeName);
+      if (!result) {
+        return false;
+      } else {
+        return true;
+      }
     },
-    setlist() {
-      this.dateTime = false;
-    },
-    displayCheck(flat) {
-      this.display = flat;
-    },
+    // 初始化表格数据(根据id获取远程数据)
+    initEmptyData() {
+      this.datas = [];
+      var date3 = JSON.parse(JSON.stringify(this.WeekInfo.foodCatalog));
+      for (let i = 0; i < date3.length; i++) {
+        var row = {
+          id: this.guid(),
+          pid: this.id,
+          name: date3[i],
+          weeks: []
+        };
 
-    prepare(data) {
-      console.log(data);
-    },
-    //获取树形结构
-    obtains() {
-      this.$axios
-        .get(
-          `api/blade-food/basetype/getDishByBaseId?isPrivate=${1}&typeTemp=${2}`
-        )
-        .then(res => {
-          //   console.log(res);
-          this.obtain = res.data.data;
-          let foto = [];
-          this.obtain.forEach((item, index) => {
-            // console.log(item);
-            foto[index] = {
-              id: item.id,
-              label: item.typeName
-            };
-            foto[index].children = [];
-            item.dishes.forEach((item1, index1) => {
-              foto[index].children[index1] = {
-                id: item1.id,
-                label: item1.dishName,
-                isPub: item1.isPub,
-                isUse: item1.isUse
-              };
-            });
+        // 填充周数据
+        for (let j = 0; j < 7; j++) {
+          row.weeks.push({
+            id: this.guid(),
+            week: this.headers[j],
+            name: "week" + (j + 1),
+            image: "",
+            // 填充食谱数据
+            foods: []
           });
-          this.data = foto;
-          console.log(foto);
-        });
+        }
+
+        this.datas.push(row);
+      }
     },
-    nutrition() {
-      this.seekeys = true;
+
+    ///初始化远程数据
+    initRemoteData() {
+      var remoteStr =
+        '[{"id":"7317b146-7fc5-fcbd-2969-5b59f321e831","name":"早餐","weeks":[{"id":"79ba0527-a10a-22e0-2df4-b58d9c8b1191","week":{"name":"week1","lable":"周一","date":"11月2日","is_vacation":false},"name":"week1","image":"","foods":[{"id":101,"name":"绿豆粥","count":1,"children":[{"id":101001,"name":"绿豆","count":1,"spans":3},{"id":101002,"name":"白糖","count":1,"spans":3}],"spans":3}]},{"id":"880061e2-66d2-fed1-11bc-b9b2489fc0af","week":{"name":"week2","lable":"周二","date":"11月3日","is_vacation":false},"name":"week2","image":"","foods":[]},{"id":"ee2c62a0-5d95-9d34-0df3-212081347a45","week":{"name":"week3","lable":"周三","date":"11月4日","is_vacation":false},"name":"week3","image":"","foods":[]},{"id":"7383fe68-8ec8-e72b-879d-d99805c9813f","week":{"name":"week4","lable":"周四","date":"11月5日","is_vacation":false},"name":"week4","image":"","foods":[]},{"id":"148b984c-76f5-b856-3965-6925b0f1e694","week":{"name":"week5","lable":"周五","date":"11月6日","is_vacation":false},"name":"week5","image":"","foods":[]},{"id":"2b524e1a-4b03-d446-f09e-597a4afce450","name":"week6","image":"","foods":[]},{"id":"8eac338a-acda-78c2-e837-bae237cad7ea","name":"week7","image":"","foods":[]}]}]';
+
+      var remoteData = JSON.parse(remoteStr);
+      this.headers = [];
+      remoteData[0].weeks.forEach(e => {
+        if (e.week) {
+          this.headers.push(e.week);
+        }
+      });
+      this.datas = remoteData;
+    },
+    //生成随机 GUID 数
+    guid() {
+      function S4() {
+        return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+      }
+      return (
+        S4() +
+        S4() +
+        "-" +
+        S4() +
+        "-" +
+        S4() +
+        "-" +
+        S4() +
+        "-" +
+        S4() +
+        S4() +
+        S4()
+      );
+    },
+    //周选择添加周次
+    FixWeek() {
+      var weekSelect = document.getElementsByName("WeekSelect");
+      if (weekSelect == undefined) return;
+
+      if (weekSelect[0].getAttribute("isFixWeek") != undefined) return;
+
+      setTimeout(function() {
+        var zs = document.createElement("th");
+        zs.innerText = "周次";
+        var RootweekFirst = document.querySelector(
+          ".el-picker-panel__content table tr th"
+        );
+        var Rootweek = document.querySelector(".el-picker-panel__content tr");
+        Rootweek.insertBefore(zs, RootweekFirst);
+        var listRow = document.querySelectorAll(".el-date-table__row");
+
+        for (var i = 0; i < listRow.length; i++) {
+          var firstNode = listRow[i].children[0];
+          var zs_index = document.createElement("td");
+          zs_index.style.fontWeight = "bold";
+          zs_index.style.color = "#fe6c6f";
+          var z = i + 1;
+          switch (z) {
+            case 1:
+              zs_index.innerText = "一";
+              break;
+            case 2:
+              zs_index.innerText = "二";
+              break;
+            case 3:
+              zs_index.innerText = "三";
+              break;
+            case 4:
+              zs_index.innerText = "四";
+              break;
+            case 5:
+              zs_index.innerText = "五";
+              break;
+            case 6:
+              zs_index.innerText = "六";
+              break;
+          }
+
+          listRow[i].insertBefore(zs_index, firstNode);
+        }
+        document
+          .getElementsByName("WeekSelect")[0]
+          .setAttribute("isFixWeek", "true");
+      }, 100);
+    },
+    GetChinesDay(z) {
+      var cday = "";
+      switch (z) {
+        case 1:
+          cday = "一";
+          break;
+        case 2:
+          cday = "二";
+          break;
+        case 3:
+          cday = "三";
+          break;
+        case 4:
+          cday = "四";
+          break;
+        case 5:
+          cday = "五";
+          break;
+        case 6:
+          cday = "六";
+          break;
+        case 7:
+          cday = "天";
+          break;
+      }
+
+      return cday;
+    },
+    //选择周
+    SelectWeek(d) {
+      var that = this;
+      setTimeout(function(v) {
+        var year = d.getFullYear();
+        var begin_year;
+        var end_year;
+        begin_year = year;
+        end_year = year;
+        var begin_mouth;
+        var end_mouth;
+        var mouth = d.getMonth() + 1;
+
+        begin_mouth = mouth;
+        end_mouth = mouth;
+        var StartEliment = document.querySelectorAll(".in-range.start-date");
+        var begin_day = StartEliment[0].innerText.trim();
+
+        //判断是否为上一个月
+        if (StartEliment[0].className.indexOf("prev-month") >= 0) {
+          begin_mouth = mouth - 1;
+          if (begin_mouth == 0) {
+            begin_mouth = 12;
+          }
+        }
+
+        //判断是否为下一个月
+        var endtime = document.querySelectorAll(".in-range.end-date");
+        if (endtime[0].className.indexOf("next-month") >= 0) {
+          if (mouth == 12) {
+            end_year = end_year + 1;
+            end_mouth = 1;
+          }
+        }
+        var end_day = endtime[0].innerText.trim();
+
+        //获取周数本月
+
+        //获取周数
+        var curentWeek = document.querySelectorAll(
+          ".el-date-table__row.current"
+        )[0].firstChild.innerText;
+
+        var full_week = year + "年" + mouth + "月" + "第" + curentWeek + "周";
+
+        that.WeekInfo.WeekTtitle = full_week;
+
+        var full_weekDetails =
+          year +
+          "年" +
+          mouth +
+          "月" +
+          "第" +
+          curentWeek +
+          "周" +
+          begin_year +
+          "-" +
+          begin_mouth +
+          "-" +
+          begin_day +
+          "至" +
+          end_year +
+          "-" +
+          end_mouth +
+          "-" +
+          end_day;
+
+        that.WeekInfo.Weekdetails = full_weekDetails;
+
+        //获取每天
+        that.WeekList = [];
+
+        var alldday = document.querySelectorAll(
+          ".el-date-table__row.current"
+        )[0].children;
+        for (let i = 1; i < alldday.length; i++) {
+          if (i <= that.WeekInfo.weekType) {
+            var y = year;
+            var m = mouth;
+            if (alldday[i].className.indexOf("prev-month") >= 0) {
+              m = mouth - 1;
+              if (m == 0) {
+                m = 12;
+              }
+            }
+
+            if (alldday[i].className.indexOf("next-month") >= 0) {
+              if (mouth == 12) {
+                y = year + 1;
+                m = 1;
+              }
+            }
+
+            that.WeekList.push({
+              name: "week" + i,
+              lable: "周" + that.GetChinesDay(i),
+              date: m + "月" + alldday[i].innerText.trim() + "日",
+              is_vacation: false
+            });
+          }
+        }
+
+        //console.log(JSON.stringify(that.WeekList));
+
+        that.rebuildTable();
+      }, 100);
+    },
+    //打开周选择
+    ShowWeekSelect() {
+      this.$refs.refweekSelect.showPicker();
     }
   }
 };
 </script>
 
 <style scoped>
-.choose {
-  width: 100%;
-  /* height: 1000px; */
-  height: 100%;
-  background-color: #fff;
+.el-row {
+  padding: 5px;
 }
-.flexi {
-  width: 100%;
-  height: 150px;
-  /* background-color: red; */
-  padding-top: 15px;
-  padding-left: 5px;
+.el-select .el-input {
+  width: 120px;
 }
-.block {
-  width: 100%;
+.el-form-item {
+  margin-bottom: 0px;
 }
-.results {
-  margin-top: 20px;
+.el-divider {
+  margin: 0px !important;
 }
-.gresults {
-  width: 100%;
-  height: 900px;
-  /* background-color: red; */
-  margin-top: 30px;
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: "";
 }
-.search {
-  width: 20%;
-  height: 700px;
-  float: left;
+.clearfix:after {
+  clear: both;
 }
-.field {
-  width: 79%;
-  height: 1500px;
-  float: left;
-  margin-left: 10px;
+.box-car {
+  border: 1px solid #ebebeb !important;
+  border-radius: 3px !important;
+  padding: 0px;
+  height: 600px;
 }
-.profile {
-  text-align: center;
-  margin-bottom: 100px;
+.el-card__body {
+  padding: 0px !important;
 }
-.opening {
-  width: 250px;
-  height: 50px;
-
-  margin-top: 20px;
-}
-.export {
-  width: 50px;
-  height: 30px;
-  /* background-color: yellow; */
-  text-align: center;
-  line-height: 30px;
-  border-right: 1px solid#e0e0e0;
-  font-size: 14px;
-  float: left;
-}
-.export1 {
-  width: 50px;
-  height: 30px;
-  text-align: center;
-  line-height: 30px;
-  border-right: 1px solid #e0e0e0;
-  font-size: 14px;
-  float: left;
-}
-.export2 {
-  width: 50px;
-  height: 30px;
-  text-align: center;
-  border-right: 1px solid #e0e0e0;
-  line-height: 30px;
-  font-size: 14px;
-  float: left;
-}
-.export3 {
-  width: 50px;
-  height: 30px;
-  text-align: center;
-
-  line-height: 30px;
-  font-size: 14px;
-  float: left;
-}
-.export4 {
-  width: 80px;
-  height: 30px;
-  text-align: center;
-  line-height: 30px;
-  border-right: 1px solid #e0e0e0;
-  font-size: 14px;
-  float: left;
-}
-.export5 {
-  width: 80px;
-  height: 30px;
-  text-align: center;
-  line-height: 30px;
-  border-right: 1px solid #e0e0e0;
-  font-size: 14px;
-  float: left;
-}
-.and-query {
-  width: 250px;
-  height: 50px;
-  /* background-color: yellow; */
-}
-.and-query1 {
-  width: 250px;
-  height: 100px;
-  /* background-color: yellow; */
-}
-.monly {
-  width: 100%;
-  height: 300px;
-  /* margin-top: 20px; */
-  /* background-color: red; */
-}
-.groups {
-  width: 100%;
-  height: 30px;
-  /* background-color: red; */
-  margin-top: 20px;
-}
-.arrow {
-  width: 100%;
-  height: 50px;
-  line-height: 50px;
-  /* background-color: blue; */
-  display: flex;
-}
-.season {
-  width: 130px;
-  height: 30px;
-  text-align: center;
-  color: #fff;
-  line-height: 30px;
-  margin-top: 10px;
-  background-color: rgba(255, 0, 0, 1);
-}
-.season1 {
-  width: 130px;
-  height: 30px;
-  margin-left: 20px;
-  text-align: center;
-  color: #fff;
-  line-height: 30px;
-  margin-top: 10px;
+.panel_head {
   background-color: rgba(0, 172, 160, 1);
-}
-.season2 {
-  width: 130px;
-  height: 30px;
-  margin-left: 20px;
+  padding-top: 10px;
   text-align: center;
-  color: #fff;
-  line-height: 30px;
-  margin-top: 10px;
-  background-color: rgba(255, 153, 51, 1);
+  border-radius: 3px;
 }
-.fonts {
-  width: 100%;
-  /* height: 500px; */
-  /* background-color: yellow; */
+.panel_head button {
+  border-bottom: 0px;
+  border-bottom-right-radius: 0px;
+  border-bottom-left-radius: 0px;
+  margin-bottom: 1px;
+}
+.foodWeekListHis {
+  padding: 5px;
+}
+.foodWeekListHis li {
+  list-style: none;
+  margin-bottom: 2px;
+}
+.foodPanel {
+  height: calc(100vh - 180px);
+  overflow-y: scroll;
+  overflow-x: auto;
 }
 </style>

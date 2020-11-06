@@ -209,17 +209,28 @@
             <el-radio
               style="margin-left: 30px"
               v-model="ruleForm.marriages"
-              label="1"
+              label="0"
               >已婚</el-radio
             >
-            <el-radio v-model="ruleForm.marriages" label="2">未婚</el-radio>
+            <el-radio v-model="ruleForm.marriages" label="1">未婚</el-radio>
           </el-form-item>
           <el-form-item label="出生日期" style="width: 355px">
-            <el-date-picker
+            <!-- <el-date-picker
               style="width: 250px"
+              format="yyyy 年 MM 月 dd 日"
               v-model="ruleForm.value1"
               type="date"
               placeholder="选择日期"
+            >
+            </el-date-picker> -->
+            <el-date-picker
+              v-model="ruleForm.value1"
+              style="width: 250px"
+              @change="stop()"
+              format="yyyy 年 MM 月 dd 日 HH 时 mm 分 ss 秒 "
+              value-format="yyyy-MM-dd HH:mm:ss"
+              type="datetime"
+              placeholder="选择日期时间"
             >
             </el-date-picker>
           </el-form-item>
@@ -243,6 +254,7 @@
           </el-form-item>
           <el-form-item label="职务" style="width: 355px">
             <el-select
+              clearable
               style="width: 250px"
               v-model="ruleForm.position"
               placeholder="请选择"
@@ -280,26 +292,44 @@
             >
           </el-form-item>
           <el-form-item label="入职日期" style="width: 355px">
-            <el-date-picker
+            <!-- <el-date-picker
               style="width: 250px"
               v-model="ruleForm.inductions"
               format="yyyy 年 MM 月 dd 日"
-              value-format="yyyy-MM-dd"
               type="date"
               placeholder="选择日期"
+            >
+            </el-date-picker> -->
+            <el-date-picker
+              v-model="ruleForm.inductions"
+              style="width: 250px"
+              @change="stop()"
+              format="yyyy 年 MM 月 dd 日 HH 时 mm 分 ss 秒 "
+              value-format="yyyy-MM-dd HH:mm:ss"
+              type="datetime"
+              placeholder="选择日期时间"
             >
             </el-date-picker>
           </el-form-item>
           <el-form-item label="参加工作日期" style="width: 355px">
             <!--  -->
-            <el-date-picker
+            <!-- <el-date-picker
               style="width: 250px"
               @change="stop()"
               v-model="ruleForm.workin"
               format="yyyy 年 MM 月 dd 日"
-              value-format="yyyy-MM-dd"
               type="date"
               placeholder="选择日期"
+            >
+            </el-date-picker> -->
+            <el-date-picker
+              v-model="ruleForm.workin"
+              style="width: 250px"
+              @change="stop()"
+              format="yyyy 年 MM 月 dd 日 HH 时 mm 分 ss 秒 "
+              value-format="yyyy-MM-dd HH:mm:ss"
+              type="datetime"
+              placeholder="选择日期时间"
             >
             </el-date-picker>
           </el-form-item>
@@ -308,6 +338,12 @@
               style="width: 250px"
               v-model="ruleForm.process"
             ></el-input>
+          </el-form-item>
+          <el-form-item label="证件号码" style="width: 355px">
+            <el-input style="width: 250px" v-model="ruleForm.update"></el-input>
+          </el-form-item>
+          <el-form-item label="工作单位" style="width: 355px">
+            <el-input style="width: 250px" v-model="ruleForm.worker"></el-input>
           </el-form-item>
           <el-form-item label="邮箱" style="width: 355px">
             <el-input style="width: 250px" v-model="ruleForm.emails"></el-input>
@@ -328,11 +364,20 @@
             </el-select>
           </el-form-item>
           <el-form-item label="状态更新日期" style="width: 355px">
-            <el-date-picker
+            <!-- <el-date-picker
               style="width: 250px"
               v-model="ruleForm.nextstate"
+              format="yyyy 年 MM 月 dd 日"
               type="date"
               placeholder="选择日期"
+            >
+            </el-date-picker> -->
+            <el-date-picker
+              v-model="ruleForm.nextstate"
+              format="yyyy 年 MM 月 dd 日 HH 时 mm 分 ss 秒 "
+              value-format="yyyy-MM-dd HH:mm:ss"
+              type="datetime"
+              placeholder="选择日期时间"
             >
             </el-date-picker>
           </el-form-item>
@@ -340,7 +385,7 @@
 
         <div slot="footer" class="dialog-footer">
           <el-button @click="dateTime = false">取 消</el-button>
-          <el-button type="primary">确 定</el-button>
+          <el-button @click="cameras" type="primary">确 定</el-button>
           <el-button @click="stop" type="primary">计算</el-button>
         </div>
       </el-dialog>
@@ -383,32 +428,35 @@
           <el-table-column label="序号" type="index" width="50" align="center">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="jobNumber"
             label="工号"
             align="center"
           ></el-table-column>
           <el-table-column
-            prop="foodName"
+            prop="name"
             label="姓名"
             align="center"
           ></el-table-column>
+          <el-table-column prop="sex" label="性别" align="center">
+            <template slot-scope="scope">
+              <p v-if="scope.row.sex == 1">男</p>
+              <p v-else-if="scope.row.sex == 2">
+                女
+              </p>
+            </template>
+          </el-table-column>
           <el-table-column
-            prop="foodName1"
-            label="性别"
+            prop="birthDate"
+            label="出生日期"
             align="center"
           ></el-table-column>
           <el-table-column
-            prop="reason"
-            label="出生原因"
-            align="center"
-          ></el-table-column>
-          <el-table-column
-            prop="reason"
+            prop="mobile"
             label="手机号"
             align="center"
           ></el-table-column>
           <el-table-column
-            prop="reason"
+            prop="post"
             label="职务"
             align="center"
           ></el-table-column>
@@ -417,21 +465,26 @@
             label="所在班级"
             align="center"
           ></el-table-column>
+
           <el-table-column
-            prop="reason"
-            label="所在班级"
-            align="center"
-          ></el-table-column>
-          <el-table-column
-            prop="reason"
+            prop="entryTime"
             label="入职日期"
             align="center"
           ></el-table-column>
-          <el-table-column
-            prop="reason"
-            label="当前状态"
-            align="center"
-          ></el-table-column>
+          <el-table-column prop="stutas" label="当前状态" align="center">
+            <template slot-scope="scope">
+              <p v-if="scope.row.stutas == 1">在职</p>
+              <p v-else-if="scope.row.stutas == 2">
+                离职
+              </p>
+              <p v-else-if="scope.row.stutas == 3">
+                停职
+              </p>
+              <p v-else-if="scope.row.status == 4">
+                退休
+              </p>
+            </template>
+          </el-table-column>
           <!-- <el-table-column label="是否有效" width="120" align="center">
             <template slot-scope="scope">
               <p class="stop" v-if="scope.row.isActive == 0">是</p>
@@ -445,7 +498,7 @@
           <el-table-column label="操作" width="220" align="center">
             <template slot-scope="scope">
               <el-button
-                @click="editorTheme(scope.row, 2)"
+                @click="editorTheme(scope.row)"
                 type="primary"
                 size="small"
                 icon="el-icon-edit"
@@ -481,11 +534,11 @@ export default {
       obtained: false, //子部门弹框
       acetone: {
         name: "", //子部门名称
-        sorting: "", //部门排序
+        sorting: "" //部门排序
       },
       storage: {
         name: "", //部门名称
-        sorting: "", //部门排序
+        sorting: "" //部门排序
       },
       ruleForm: {
         name: "", //姓名
@@ -501,129 +554,449 @@ export default {
         workin: "", //参加工作日期
         process: "", //工龄
         emails: "", //邮箱
+        update: "", //证件号码
+        worker: "", //工作单位
         ddeparture: "", //当前状态
         nextstate: "", //状态更新日期
         desc: "",
-        resource: "",
+        resource: ""
       },
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄",
-        },
-      ],
+      tableData: [],
       emailslist: [
         //当前状态
         {
           value: "1",
-          label: "在职",
+          label: "在职"
         },
         {
           value: "2",
-          label: "离职",
+          label: "离职"
         },
         {
           value: "3",
-          label: "停职",
+          label: "停职"
         },
         {
           value: "4",
-          label: "退休",
-        },
+          label: "退休"
+        }
       ],
       loadClass: [
         //
         {
           value: "1",
-          label: "中班",
+          label: "中班"
         },
         {
           value: "2",
-          label: "小班",
-        },
+          label: "小班"
+        }
       ],
       vposition: [
         //职务
         {
-          value: "1",
-          label: "园长",
+          value: "园长",
+          label: "园长"
         },
         {
           value: "2",
-          label: "老师",
+          label: "副园长"
         },
+        {
+          value: "3",
+          label: "保健园"
+        },
+        {
+          value: "4",
+          label: "老师"
+        },
+        {
+          value: "5",
+          label: "保教主任"
+        },
+        {
+          value: "6",
+          label: "保育员"
+        },
+        {
+          value: "7",
+          label: "年级组长"
+        },
+        {
+          value: "8",
+          label: "教研组长"
+        },
+        {
+          value: "9",
+          label: "后勤主任"
+        },
+        {
+          value: "10",
+          label: "炊事员"
+        },
+        {
+          value: "11",
+          label: "保洁"
+        },
+        {
+          value: "12",
+          label: "保安"
+        },
+        {
+          value: "13",
+          label: "财务"
+        },
+        {
+          value: "14",
+          label: "跟车老师"
+        },
+        {
+          value: "15",
+          label: "办公司人员"
+        },
+        {
+          value: "16",
+          label: "办事员"
+        },
+        {
+          value: "17",
+          label: "其他"
+        }
       ],
       college: [
         {
-          value: "1",
           label: "汉族",
+          value: 1
         },
         {
-          value: "2",
-          label: "回族",
+          label: "满族",
+          value: 2
         },
+        {
+          label: "蒙古族",
+          value: 3
+        },
+        {
+          label: "回族",
+          value: 4
+        },
+        {
+          label: "藏族",
+          value: 5
+        },
+        {
+          label: "维吾尔族",
+          value: 6
+        },
+        {
+          label: "苗族",
+          value: 7
+        },
+        {
+          label: "彝族",
+          value: 8
+        },
+        {
+          label: "壮族",
+          value: 9
+        },
+        {
+          label: "布依族",
+          value: 10
+        },
+        {
+          label: "侗族",
+          value: 11
+        },
+        {
+          label: "瑶族",
+          value: 12
+        },
+        {
+          label: "白族",
+          value: 13
+        },
+        {
+          label: "土家族",
+          value: 14
+        },
+        {
+          label: "哈尼族",
+          value: 15
+        },
+        {
+          label: "哈萨克族",
+          value: 16
+        },
+        {
+          label: "傣族",
+          value: 17
+        },
+        {
+          label: "黎族",
+          value: 18
+        },
+        {
+          label: "傈僳族",
+          value: 19
+        },
+        {
+          label: "佤族",
+          value: 20
+        },
+        {
+          label: "畲族",
+          value: 21
+        },
+        {
+          label: "高山族",
+          value: 22
+        },
+        {
+          label: "拉祜族",
+          value: 23
+        },
+        {
+          label: "水族",
+          value: 24
+        },
+        {
+          label: "东乡族",
+          value: 25
+        },
+        {
+          label: "纳西族",
+          value: 26
+        },
+        {
+          label: "景颇族",
+          value: 27
+        },
+        {
+          label: "柯尔克孜族",
+          value: 28
+        },
+        {
+          label: "土族",
+          value: 29
+        },
+        {
+          label: "达斡尔族",
+          value: 30
+        },
+        {
+          label: "仫佬族",
+          value: 31
+        },
+        {
+          label: "羌族",
+          value: 32
+        },
+        {
+          label: "布朗族",
+          value: 33
+        },
+        {
+          label: "撒拉族",
+          value: 34
+        },
+        {
+          label: "毛南族",
+          value: 35
+        },
+        {
+          label: "仡佬族",
+          value: 36
+        },
+        {
+          label: "锡伯族",
+          value: 37
+        },
+        {
+          label: "阿昌族",
+          value: 38
+        },
+        {
+          label: "普米族",
+          value: 39
+        },
+        {
+          label: "朝鲜族",
+          value: 40
+        },
+        {
+          label: "塔吉克族",
+          value: 41
+        },
+        {
+          label: "怒族",
+          value: 42
+        },
+        {
+          label: "乌孜别克族",
+          value: 43
+        },
+        {
+          label: "俄罗斯族",
+          value: 44
+        },
+        {
+          label: "鄂温克族",
+          value: 45
+        },
+        {
+          label: "德昂族",
+          value: 46
+        },
+        {
+          label: "保安族",
+          value: 47
+        },
+        {
+          label: "裕固族",
+          value: 48
+        },
+        {
+          label: "京族",
+          value: 49
+        },
+        {
+          label: "塔塔尔族",
+          value: 50
+        },
+        {
+          label: "独龙族",
+          value: 51
+        },
+        {
+          label: "鄂伦春族",
+          value: 52
+        },
+        {
+          label: "赫哲族",
+          value: 53
+        },
+        {
+          label: "门巴族",
+          value: 54
+        },
+        {
+          label: "珞巴族",
+          value: 55
+        },
+        {
+          label: "基诺族",
+          value: 56
+        }
       ],
       prompt: [
         {
           value: "选项1",
-          label: "黄金糕",
+          label: "黄金糕"
         },
         {
           value: "选项2",
-          label: "双皮奶",
+          label: "双皮奶"
         },
         {
           value: "选项3",
-          label: "蚵仔煎",
-        },
+          label: "蚵仔煎"
+        }
       ],
       callback: "", //职务搜索
       mState: [
         {
           value: "1",
-          label: "全部",
+          label: "全部"
         },
         {
           value: "2",
-          label: "在职",
+          label: "在职"
         },
         {
           value: "3",
-          label: "离职",
+          label: "离职"
         },
         {
           value: "4",
-          label: "停职",
+          label: "停职"
         },
         {
           value: "5",
-          label: "退休",
-        },
+          label: "退休"
+        }
       ],
       driver: "", //当前状态
       number: [
         {
           value: "1",
-          label: "升序",
+          label: "升序"
         },
         {
           value: "2",
-          label: "降序",
-        },
+          label: "降序"
+        }
       ],
       working: "",
+      view: ""
     };
   },
   beforeMount() {
     this.getStorage(); //获取部门树形结构
+    this.getToolkit(); //获取班级
   },
   methods: {
+    //添加员工
+    cameras() {
+      // console.log(this.ruleForm.name); //姓名
+      // console.log(this.ruleForm.radio); //性别
+      // console.log(this.ruleForm.marriages); //婚姻状况
+      // console.log(this.ruleForm.value1); //出生日期
+      // console.log(this.ruleForm.phones); //手机号码
+      // console.log(this.ruleForm.national); //民族
+      // console.log(this.ruleForm.position); //职务
+      // console.log(this.ruleForm.getClass); //班级
+      // console.log(this.ruleForm.thejob); //工号
+      // console.log(this.ruleForm.inductions); //入职日期
+      // console.log(this.ruleForm.workin); //参加工作日期
+      // console.log(this.ruleForm.process); //工龄
+      // console.log(this.ruleForm.update); //证件号码
+      // console.log(this.ruleForm.worker); //工作单位
+      // console.log(this.ruleForm.emails); //邮箱
+      // console.log(this.ruleForm.ddeparture); //当前状态
+      // console.log(this.ruleForm.nextstate); //状态更新日期
+      this.$axios
+        .post(`api/blade-food/teacher/save`, {
+          deptId: this.view,
+          name: this.ruleForm.name, //姓名
+          sex: this.ruleForm.radio, //性别
+          marriage: this.ruleForm.marriages, //婚姻状况
+          birthDate: this.ruleForm.value1, //出生日期
+          mobile: this.ruleForm.phones, //手机号码
+          nation: this.ruleForm.national, //民族
+          post: this.ruleForm.position, //职务
+          jobNumber: this.ruleForm.thejob, //工号
+          entryTime: this.ruleForm.inductions, //入职日期
+          workTime: this.ruleForm.workin, //参加工作日期
+          cardNo: this.ruleForm.update, //证件号码
+          workUnit: this.ruleForm.worker, //工作单位
+          email: this.ruleForm.emails, //邮箱
+          stutas: this.ruleForm.ddeparture, //当前状态
+          changeDate: this.ruleForm.nextstate //状态变更日期
+        })
+        .then(res => {
+          // console.log(res);
+          this.getStorage();
+          this.dateTime = false;
+          this.$message({
+            message: "添加成功",
+            type: "success"
+          });
+        })
+        .catch(() => {
+          this.$message.error("添加失败");
+        });
+    },
     //计算工龄
     stop() {
       //  let add = this.ruleForm.workin.replace(/-/g, "");
@@ -637,8 +1010,10 @@ export default {
 
       let afterTime = new Date(add).getTime();
       var myDate = new Date().getTime();
-      let year = ((myDate-afterTime)/(24*60*60*1000*365)).toFixed(0);
-      console.log(year)
+      let year = ((myDate - afterTime) / (24 * 60 * 60 * 1000 * 365)).toFixed(
+        0
+      );
+      console.log(year);
       this.ruleForm.process = year;
       // console.log(myDate);
       // let vtop = d.getFullYear();
@@ -655,7 +1030,30 @@ export default {
       // console.log(going);
       // this.ruleForm.process = going;
     },
-
+    DeleteUser(row) {
+      console.log(row);
+      // blade-food/teacher/save
+      let addid = `?ids=${row.id}`;
+      this.$confirm("确认删除该部门?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.$axios
+            .post(`api/blade-food/teacher/remove` + addid, {})
+            .then(res => {
+              // console.log(res);
+              this.$message.success("删除成功");
+            });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
+    },
     //添加员工弹框
     addition() {
       this.dateTime = true;
@@ -676,9 +1074,9 @@ export default {
         .post(`api/blade-food/teacherdept/submit`, {
           parentId: this.adds, //上级ID
           deptName: this.acetone.name, //部门名称
-          level: this.acetone.sorting, //部门排序
+          level: this.acetone.sorting //部门排序
         })
-        .then((res) => {
+        .then(res => {
           this.getStorage();
           this.obtained = false;
           this.acetone.name = "";
@@ -686,7 +1084,7 @@ export default {
           console.log(res);
           this.$message({
             message: "添加成功",
-            type: "success",
+            type: "success"
           });
         })
         .catch(() => {
@@ -698,9 +1096,9 @@ export default {
       this.$axios
         .post(`api/blade-food/teacherdept/submit`, {
           deptName: this.storage.name, //部门名称
-          level: this.storage.sorting, //部门排序
+          level: this.storage.sorting //部门排序
         })
-        .then((res) => {
+        .then(res => {
           this.getStorage();
           this.department = false;
           this.storage.name = "";
@@ -708,7 +1106,7 @@ export default {
           console.log(res);
           this.$message({
             message: "添加成功",
-            type: "success",
+            type: "success"
           });
         })
         .catch(() => {
@@ -722,12 +1120,12 @@ export default {
       this.$confirm("确认删除该部门?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning",
+        type: "warning"
       })
         .then(() => {
           this.$axios
             .get(`api/blade-food/teacherdept/remove` + addid, {})
-            .then((res) => {
+            .then(res => {
               // console.log(res);
               this.getStorage();
               this.$message.success("删除成功");
@@ -736,24 +1134,71 @@ export default {
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消删除",
+            message: "已取消删除"
           });
         });
     },
     //查看详情
     defcustom(data) {
-      // console.log(data);
+      console.log(data);
       this.view = data.id;
+      this.loadFlag1 = true;
       this.$axios
-        .get(`api/blade-food/teacherdept/detail?id=${this.view}`, {})
-        .then((res) => {
-          console.log(res);
+        .get(`api/blade-food/teacher/list?deptId=${this.view}`, {})
+        .then(res => {
+          // console.log(res);
+          // this.store = res.data.data.records;
+          // console.log(this.store);
+          this.$message({
+            message: "查询成功",
+            type: "success"
+          });
+          this.loadFlag1 = false;
+          this.tableData = res.data.data.records;
+        })
+        .catch(() => {
+          this.$message.error("查询失败");
         });
+    },
+
+    //获取所属班级
+    getToolkit() {
+      this.$axios.get(`api/blade-food/class/tree`, {}).then(res => {
+        console.log(res);
+        this.bufs = res.data.data;
+        let fwork = [];
+        this.bufs.forEach((item, index) => {
+          // console.log(item);
+          item.children.forEach(item1 => {
+            // console.log(item1);
+            if (item1.children) {
+              item1.children.forEach((item2, index2) => {
+                // console.log(item2);
+                fwork[index2] = {
+                  id: item2.id,
+                  label: item2.classType
+                };
+                fwork[index2].children = [];
+                if (item2.children) {
+                  item2.children.forEach((item3, index3) => {
+                    console.log(item3);
+                    fwork[index2].children[index3] = {
+                      id: item3.id,
+                      label: item3.classType
+                    };
+                  });
+                }
+              });
+            }
+          });
+        });
+        console.log(fwork);
+      });
     },
     //获取部门树形结构
     getStorage() {
       this.loadFlag = true;
-      this.$axios.get(`api/blade-food/teacherdept/tree`).then((res) => {
+      this.$axios.get(`api/blade-food/teacherdept/tree`).then(res => {
         this.loadFlag = false;
         this.factors = res.data.data;
         // console.log(this.factors);
@@ -763,7 +1208,7 @@ export default {
           auto[index] = {
             id: item.id,
             label: item.title,
-            into: item.level,
+            into: item.level
           };
           auto[index].children = [];
           if (item.children) {
@@ -771,7 +1216,7 @@ export default {
               auto[index].children[index1] = {
                 id: item1.id,
                 label: item1.title,
-                into: item1.level,
+                into: item1.level
               };
             });
           }
@@ -779,8 +1224,8 @@ export default {
         console.log(auto);
         this.data = auto;
       });
-    },
-  },
+    }
+  }
 };
 </script>
 
