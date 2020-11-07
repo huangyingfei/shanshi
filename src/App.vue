@@ -30,4 +30,10 @@ export default {
   font-size: 14px;
   padding-right: 8px;
 }
+.pagingClass {
+  text-align: right;
+  /* margin: 20px 0; */
+  margin-top: 20px;
+  margin-right: 40px;
+}
 </style>

@@ -18,6 +18,7 @@
         ></el-option>
       </el-select>
       <el-button
+        @click="search"
         size="medium"
         icon="el-icon-search"
         type="primary"
@@ -39,6 +40,7 @@
         v-loading="loadFlag1"
         :data="tableData"
         border
+        :element-loading-text="page_data.loadTxt"
         style="width: 100%"
       >
         <el-table-column label="序号" type="index" width="50" align="center">
@@ -98,6 +100,19 @@
           </template>
         </el-table-column>
       </el-table>
+      <!-- 分页 -->
+      <div class="pagingClass">
+        <el-pagination
+          :page-sizes="m_page.sizes"
+          :page-size="m_page.size"
+          :current-page="m_page.number"
+          @size-change="m_handleSizeChange"
+          @current-change="m_handlePageChange"
+          layout="total,sizes,prev, pager, next"
+          background
+          :total="m_page.totalElements"
+        ></el-pagination>
+      </div>
     </div>
     <!-- 添加相克食材 -->
     <el-dialog
@@ -154,59 +169,7 @@
         >
       </div>
     </el-dialog>
-    <!-- 编辑相克食材 -->
-    <!-- <el-dialog
-      title="添加相克食材"
-      width="50%"
-      append-to-body
-      :visible.sync="dateTime1"
-      :close-on-click-modal="false"
-    >
-      <el-form
-        :model="ruleForm"
-        :rules="rules"
-        ref="ruleForm"
-        label-width="100px"
-        class="demo-ruleForm"
-      >
-        <el-form-item label="名称">
-          <el-input v-model="ruleForm.name"></el-input>
-        </el-form-item>
-        <el-form-item label="食材一">
-          <el-input
-            readonly
-            v-on:click.native="obtain(1)"
-            v-model="ruleForm.adding"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="食材二">
-          <el-input
-            readonly
-            v-on:click.native="obtain(2)"
-            v-model="ruleForm.adding1"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="不宜同食原因">
-          <el-input type="textarea" v-model="ruleForm.desc"></el-input>
-        </el-form-item>
-        <el-form-item label="是否有效">
-          <el-radio-group v-model="ruleForm.resource">
-            <el-radio label="是"></el-radio>
-            <el-radio label="否"></el-radio>
-          </el-radio-group>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dateTime1 = false">取 消</el-button>
-        <el-button
-          v-if="this.under == 1"
-          @click="setlist('ruleForm')"
-          type="primary"
-          >确 定</el-button
-        >
-        <el-button v-else type="primary">编辑 确 定</el-button>
-      </div>
-    </el-dialog> -->
+
     <!-- 个人食材公共食材 -->
     <el-dialog
       title="个人食材公共食材"
@@ -303,6 +266,16 @@ export default {
           { required: true, message: "请选择活动区域", trigger: "change" }
         ]
       },
+      page_data: {
+        loadTxt: "请求列表中"
+      },
+      m_page: {
+        sizes: [10, 20, 40, 50, 100], //每页最大显示数
+        size: 20,
+        totalElements: 0,
+        totalPages: 3,
+        number: 1
+      },
       tableData: [
         //表格数据
       ],
@@ -338,6 +311,9 @@ export default {
   },
   computed: {},
   methods: {
+    search() {
+      this.generator();
+    },
     //删除
     DeleteUser(row) {
       console.log(row);
@@ -481,10 +457,22 @@ export default {
     //获取表格
     generator() {
       this.loadFlag1 = true;
-      this.$axios(`api/blade-food/foodmutual/list`, {}).then(res => {
+      this.$axios(
+        `api/blade-food/foodmutual/list?size=${this.m_page.size}&current=${this.m_page.number}`
+      ).then(res => {
         this.loadFlag1 = false;
         this.tableData = res.data.data.records;
+        this.m_page.totalElements = res.data.data.total;
       });
+    },
+    //页码
+    m_handlePageChange(currPage) {
+      this.m_page.number = currPage;
+      this.generator();
+    },
+    m_handleSizeChange(currSize) {
+      this.m_page.size = currSize;
+      this.generator();
     },
     //树形渲染
     treeDrawing() {
@@ -498,7 +486,7 @@ export default {
           // console.log(res);
           this.loadFlag = false;
           this.prtree = res.data.data;
-          console.log(this.prtree);
+          // console.log(this.prtree);
 
           let trees = [];
           this.prtree.forEach((item, index) => {
@@ -532,7 +520,7 @@ export default {
 }
 .unsaved {
   width: 98%;
-  height: 600px;
+  height: 100%;
   margin-left: 10px;
   background-color: #fff;
   font-size: 14px;
@@ -566,5 +554,12 @@ export default {
 }
 .stop {
   color: #ff455b;
+}
+.pagingClass {
+  text-align: right;
+  /* margin: 20px 0; */
+  margin-top: 20px;
+  margin-right: 40px;
+  margin-bottom: 60px;
 }
 </style>

@@ -14,6 +14,7 @@
         :data="retorne"
         border
         v-loading="loadFlag"
+        :element-loading-text="page_data.loadTxt"
         style="width: 100%;margin-bottom: 40px;"
         empty-text="没有数据~"
       >
@@ -51,6 +52,19 @@
           </template>
         </el-table-column>
       </el-table>
+      <!-- 分页 -->
+      <div class="pagingClass">
+        <el-pagination
+          :page-sizes="m_page.sizes"
+          :page-size="m_page.size"
+          :current-page="m_page.number"
+          @size-change="m_handleSizeChange"
+          @current-change="m_handlePageChange"
+          layout="total,sizes,prev, pager, next"
+          background
+          :total="m_page.totalElements"
+        ></el-pagination>
+      </div>
     </div>
   </div>
 </template>
@@ -70,6 +84,9 @@ export default {
         totalElements: 0,
         totalPages: 3,
         number: 1
+      },
+      page_data: {
+        loadTxt: "请求列表中"
       }
     };
   },
@@ -135,19 +152,20 @@ export default {
           }
         )
         .then(res => {
-          console.log(res);
+          // console.log(res);
           this.retorne = res.data.data.records;
           this.loadFlag = false;
+          this.m_page.totalElements = res.data.data.total;
         });
     },
     //页码
     m_handlePageChange(currPage) {
       this.m_page.number = currPage;
-      this.getAdded();
+      this.getobtain();
     },
     m_handleSizeChange(currSize) {
       this.m_page.size = currSize;
-      this.getAdded();
+      this.getobtain();
     }
   }
 };

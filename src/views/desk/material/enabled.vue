@@ -59,6 +59,7 @@
         :data="attributes"
         border
         style="width: 100%"
+        :element-loading-text="page_data.loadTxt"
         v-loading="loadFlag"
         empty-text="没有数据~"
       >
@@ -124,6 +125,19 @@
           </template>
         </el-table-column>
       </el-table>
+      <!-- 分页 -->
+      <div class="pagingClass">
+        <el-pagination
+          :page-sizes="m_page.sizes"
+          :page-size="m_page.size"
+          :current-page="m_page.number"
+          @size-change="m_handleSizeChange"
+          @current-change="m_handlePageChange"
+          layout="total,sizes,prev, pager, next"
+          background
+          :total="m_page.totalElements"
+        ></el-pagination>
+      </div>
     </div>
     <!-- 审核食材 查看 -->
     <el-dialog
@@ -423,6 +437,17 @@ export default {
       mailto: [], //营养素含量
       loadFlag: false, //加载flag
       attributes: [], //表格数据
+      page_data: {
+        loadTxt: "请求列表中"
+      },
+      m_page: {
+        //分頁
+        sizes: [10, 20, 40, 50, 100], //每页最大显示数
+        size: 10,
+        totalElements: 0,
+        totalPages: 3,
+        number: 1
+      },
       seekeys: false, //审核弹框
       value1: "", //日期
       input: "",
@@ -508,11 +533,21 @@ export default {
           }
         })
         .then(res => {
-          console.log(res);
+          // console.log(res);
           this.attributes = res.data.data.records;
-          console.log(this.attributes);
+          // console.log(this.attributes);
+          this.m_page.totalElements = res.data.data.total;
           this.loadFlag = false;
         });
+    },
+    //页码
+    m_handlePageChange(currPage) {
+      this.m_page.number = currPage;
+      this.getobtain();
+    },
+    m_handleSizeChange(currSize) {
+      this.m_page.size = currSize;
+      this.getobtain();
     },
     //查看
     seecol(row) {
@@ -668,7 +703,6 @@ export default {
   height: 1200px;
   background-color: #fff;
   /* height: 600px; */
-  margin-left: 10px;
 }
 .custom {
   width: 100%;

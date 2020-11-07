@@ -180,7 +180,7 @@
           label-width="105px"
           class="demo-ruleForm"
         >
-          <el-form-item label="姓名" style="width: 355px">
+          <el-form-item label="姓名" style="width: 355px" prop="name">
             <el-input style="width: 250px" v-model="ruleForm.name"></el-input>
           </el-form-item>
           <el-form-item label="性别" style="width: 355px">
@@ -214,19 +214,10 @@
             >
             <el-radio v-model="ruleForm.marriages" label="1">未婚</el-radio>
           </el-form-item>
-          <el-form-item label="出生日期" style="width: 355px">
-            <!-- <el-date-picker
-              style="width: 250px"
-              format="yyyy 年 MM 月 dd 日"
-              v-model="ruleForm.value1"
-              type="date"
-              placeholder="选择日期"
-            >
-            </el-date-picker> -->
+          <el-form-item label="出生日期" style="width: 355px" prop="value1">
             <el-date-picker
               v-model="ruleForm.value1"
               style="width: 250px"
-              @change="stop()"
               format="yyyy 年 MM 月 dd 日 HH 时 mm 分 ss 秒 "
               value-format="yyyy-MM-dd HH:mm:ss"
               type="datetime"
@@ -234,7 +225,7 @@
             >
             </el-date-picker>
           </el-form-item>
-          <el-form-item label="手机号码" style="width: 355px">
+          <el-form-item label="手机号码" style="width: 355px" prop="phones">
             <el-input style="width: 250px" v-model="ruleForm.phones"></el-input>
           </el-form-item>
           <el-form-item label="民族" style="width: 355px">
@@ -252,7 +243,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="职务" style="width: 355px">
+          <el-form-item label="职务" style="width: 355px" prop="position">
             <el-select
               clearable
               style="width: 250px"
@@ -291,7 +282,7 @@
               >若为年级组长、保教主任、老师、保育员时需选择 所在年级/班级</span
             >
           </el-form-item>
-          <el-form-item label="入职日期" style="width: 355px">
+          <el-form-item label="入职日期" style="width: 355px" prop="inductions">
             <!-- <el-date-picker
               style="width: 250px"
               v-model="ruleForm.inductions"
@@ -303,7 +294,6 @@
             <el-date-picker
               v-model="ruleForm.inductions"
               style="width: 250px"
-              @change="stop()"
               format="yyyy 年 MM 月 dd 日 HH 时 mm 分 ss 秒 "
               value-format="yyyy-MM-dd HH:mm:ss"
               type="datetime"
@@ -385,8 +375,17 @@
 
         <div slot="footer" class="dialog-footer">
           <el-button @click="dateTime = false">取 消</el-button>
-          <el-button @click="cameras" type="primary">确 定</el-button>
-          <el-button @click="stop" type="primary">计算</el-button>
+          <el-button @click="resetForm('ruleForm')">重置</el-button>
+          <el-button
+            v-if="this.under == 1"
+            @click="cameras('ruleForm')"
+            type="primary"
+            >确 定</el-button
+          >
+          <el-button v-if="this.under == 2" @click="edittab" type="primary"
+            >编辑 确定</el-button
+          >
+          <!-- <el-button @click="stop" type="primary">计算</el-button>  -->
         </div>
       </el-dialog>
       <!-- 弹框结束 -->
@@ -406,7 +405,7 @@
           size="medium"
           type="primary"
           icon="el-icon-plus"
-          @click="addition"
+          @click="addition(1)"
           >添加员工</el-button
         >
         <el-button
@@ -498,7 +497,7 @@
           <el-table-column label="操作" width="220" align="center">
             <template slot-scope="scope">
               <el-button
-                @click="editorTheme(scope.row)"
+                @click="editorTheme(scope.row, 2)"
                 type="primary"
                 size="small"
                 icon="el-icon-edit"
@@ -561,6 +560,19 @@ export default {
         desc: "",
         resource: ""
       },
+      rules: {
+        name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
+        phones: [
+          { required: true, message: "请输入手机号码", trigger: "blur" }
+        ],
+        value1: [
+          { required: true, message: "请选择出生日期", trigger: "blur" }
+        ],
+        position: [{ required: true, message: "请选择职务", trigger: "blur" }],
+        inductions: [
+          { required: true, message: "请选择入职日期", trigger: "blur" }
+        ]
+      },
       tableData: [],
       emailslist: [
         //当前状态
@@ -599,67 +611,67 @@ export default {
           label: "园长"
         },
         {
-          value: "2",
+          value: "副园长",
           label: "副园长"
         },
         {
-          value: "3",
+          value: "保健园",
           label: "保健园"
         },
         {
-          value: "4",
+          value: "老师",
           label: "老师"
         },
         {
-          value: "5",
+          value: "保教主任",
           label: "保教主任"
         },
         {
-          value: "6",
+          value: "保育员",
           label: "保育员"
         },
         {
-          value: "7",
+          value: "年级组长",
           label: "年级组长"
         },
         {
-          value: "8",
+          value: "教研组长",
           label: "教研组长"
         },
         {
-          value: "9",
+          value: "后勤主任",
           label: "后勤主任"
         },
         {
-          value: "10",
+          value: "炊事员",
           label: "炊事员"
         },
         {
-          value: "11",
+          value: "保洁",
           label: "保洁"
         },
         {
-          value: "12",
+          value: "保安",
           label: "保安"
         },
         {
-          value: "13",
+          value: "财务",
           label: "财务"
         },
         {
-          value: "14",
+          value: "跟车老师",
           label: "跟车老师"
         },
         {
-          value: "15",
+          value: "办公司人员",
           label: "办公司人员"
         },
         {
-          value: "16",
+          value: "办事员",
           label: "办事员"
         },
         {
-          value: "17",
+          value: "其他",
           label: "其他"
         }
       ],
@@ -938,6 +950,8 @@ export default {
         }
       ],
       working: "",
+      under: "", //添加员工下标
+      edits: "", //ID
       view: ""
     };
   },
@@ -946,8 +960,12 @@ export default {
     this.getToolkit(); //获取班级
   },
   methods: {
+    resetForm(formName) {
+      console.log(12321);
+      this.$refs[formName].resetFields();
+    },
     //添加员工
-    cameras() {
+    cameras(formName) {
       // console.log(this.ruleForm.name); //姓名
       // console.log(this.ruleForm.radio); //性别
       // console.log(this.ruleForm.marriages); //婚姻状况
@@ -965,9 +983,50 @@ export default {
       // console.log(this.ruleForm.emails); //邮箱
       // console.log(this.ruleForm.ddeparture); //当前状态
       // console.log(this.ruleForm.nextstate); //状态更新日期
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.$axios
+            .post(`api/blade-food/teacher/save`, {
+              deptId: this.view,
+              name: this.ruleForm.name, //姓名
+              sex: this.ruleForm.radio, //性别
+              marriage: this.ruleForm.marriages, //婚姻状况
+              birthDate: this.ruleForm.value1, //出生日期
+              mobile: this.ruleForm.phones, //手机号码
+              nation: this.ruleForm.national, //民族
+              post: this.ruleForm.position, //职务
+              jobNumber: this.ruleForm.thejob, //工号
+              entryTime: this.ruleForm.inductions, //入职日期
+              workTime: this.ruleForm.workin, //参加工作日期
+              cardNo: this.ruleForm.update, //证件号码
+              workUnit: this.ruleForm.worker, //工作单位
+              email: this.ruleForm.emails, //邮箱
+              stutas: this.ruleForm.ddeparture, //当前状态
+              changeDate: this.ruleForm.nextstate //状态变更日期
+            })
+            .then(res => {
+              // console.log(res);
+
+              this.dateTime = false;
+              this.$message({
+                message: "添加成功",
+                type: "success"
+              });
+            })
+            .catch(() => {
+              this.$message.error("添加失败");
+            });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    //编辑保存
+    edittab() {
       this.$axios
-        .post(`api/blade-food/teacher/save`, {
-          deptId: this.view,
+        .post(`api/blade-food/teacher/update`, {
+          id: this.edits,
           name: this.ruleForm.name, //姓名
           sex: this.ruleForm.radio, //性别
           marriage: this.ruleForm.marriages, //婚姻状况
@@ -985,16 +1044,16 @@ export default {
           changeDate: this.ruleForm.nextstate //状态变更日期
         })
         .then(res => {
-          // console.log(res);
-          this.getStorage();
-          this.dateTime = false;
+          console.log(res);
           this.$message({
-            message: "添加成功",
+            message: "编辑成功",
             type: "success"
           });
+
+          this.dateTime = false;
         })
         .catch(() => {
-          this.$message.error("添加失败");
+          this.$message.error("编辑失败");
         });
     },
     //计算工龄
@@ -1030,6 +1089,30 @@ export default {
       // console.log(going);
       // this.ruleForm.process = going;
     },
+    //编辑员工
+    editorTheme(row, index1) {
+      console.log(row);
+      this.edits = row.id; //ID
+      this.under = index1;
+      this.dateTime = true;
+      this.ruleForm.name = row.name; //姓名
+      this.ruleForm.radio = row.sex + ""; //性别
+      this.ruleForm.marriages = row.marriage + ""; //婚姻状况
+      this.ruleForm.value1 = row.birthDate; //出生日期
+      this.ruleForm.phones = row.mobile; //手机号码
+      this.ruleForm.national = row.nation; //民族
+      this.ruleForm.position = row.post; //职务
+      //所在班级
+      this.ruleForm.thejob = row.jobNumber; //工号
+      this.ruleForm.inductions = row.entryTime; //入职日期
+      this.ruleForm.workin = row.workTime; //参加工作日期
+      this.ruleForm.update = row.cardNo; //证件号码
+      this.ruleForm.worker = row.workUnit; //工作单位
+      this.ruleForm.emails = row.email; //邮箱
+      this.ruleForm.ddeparture = row.stutas; //当前状态
+      this.ruleForm.nextstate = row.changeDate; //状态变更日期
+    },
+    //删除员工
     DeleteUser(row) {
       console.log(row);
       // blade-food/teacher/save
@@ -1044,6 +1127,7 @@ export default {
             .post(`api/blade-food/teacher/remove` + addid, {})
             .then(res => {
               // console.log(res);
+              this.defcustom();
               this.$message.success("删除成功");
             });
         })
@@ -1055,7 +1139,10 @@ export default {
         });
     },
     //添加员工弹框
-    addition() {
+    addition(index1) {
+      // console.log(index1);
+      console.log(this.view);
+      this.under = index1;
       this.dateTime = true;
     },
     added() {
@@ -1140,7 +1227,7 @@ export default {
     },
     //查看详情
     defcustom(data) {
-      console.log(data);
+      // console.log(data);
       this.view = data.id;
       this.loadFlag1 = true;
       this.$axios

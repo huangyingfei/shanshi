@@ -70,8 +70,9 @@
           :current-page="m_page.number"
           @size-change="m_handleSizeChange"
           @current-change="m_handlePageChange"
+          :total="m_page.totalElements"
           background
-          layout="sizes,prev, pager, next"
+          layout="total,sizes,prev, pager, next"
         ></el-pagination>
       </div>
     </div>
@@ -188,6 +189,8 @@ export default {
 <style scoped>
 .Energy {
   width: 100%;
+  height: 700px;
+  background-color: #fff;
 }
 .sourceof {
   width: 100%;

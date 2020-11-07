@@ -229,7 +229,6 @@ export default {
 .unsaved {
   width: 98%;
   height: 600px;
-  margin-left: 10px;
   background-color: #fff;
   font-size: 14px;
 }
