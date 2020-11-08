@@ -19,6 +19,7 @@ import thirdRegister from "./components/third-register/main";
 import avueUeditor from "avue-plugin-ueditor";
 import website from "@/config/website";
 import echarts from "echarts";
+import vueConfig from "../vue.config";
 
 Vue.prototype.$echarts = echarts;
 Vue.use(router);
@@ -47,7 +48,12 @@ iconfontVersion.forEach(ele => {
   loadStyle(iconfontUrl.replace("$key", ele));
 });
 
-Vue.config.productionTip = false;
+Vue.config.productionTip = true;
+if(process.env.NODE_ENV == 'development') {
+  Vue.config.devtools = true;
+} else {
+  Vue.config.devtools = false;
+}
 
 new Vue({
   router,

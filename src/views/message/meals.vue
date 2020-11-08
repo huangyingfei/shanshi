@@ -12,6 +12,7 @@
               suffix-icon="el-icon-date"
             >
               <el-select
+                style="width:120px"
                 v-model="WeekInfo.weekType"
                 slot="prepend"
                 placeholder="周长设置"

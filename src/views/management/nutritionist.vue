@@ -521,7 +521,7 @@ export default {
 .unsaved {
   width: 98%;
   height: 100%;
-  margin-left: 10px;
+  /* margin-left: 10px; */
   background-color: #fff;
   font-size: 14px;
 }

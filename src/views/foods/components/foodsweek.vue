@@ -754,6 +754,7 @@
     <!-- foods choice start-->
     <el-dialog
       :title="'选择食谱 / 菜品'"
+       append-to-body
       :visible.sync="dialog_choice.opened"
       width="600px"
     >
