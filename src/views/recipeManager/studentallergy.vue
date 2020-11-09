@@ -1,9 +1,4 @@
 <template>
-  <div>
-    <h2>食谱库</h2>
-  </div>
-</template>
-<template>
   <basic-container>
     <avue-crud :option="option"
                :table-loading="loading"
@@ -28,71 +23,16 @@
                    size="small"
                    icon="el-icon-delete"
                    plain
-                   v-if="permission.post_delete"
+                   v-if="permission.studentallergy_delete"
                    @click="handleDelete">删 除
         </el-button>
-      </template>
-      <template slot-scope="scope" slot="menu">
-        <el-button
-          type="text"
-          icon="el-icon-circle-plus-outline"
-          size="small"
-          v-show="scope.row.isPub!=0"
-          @click="changeInfo(scope.row.id,1)"
-        >公开
-        </el-button>
-        <el-button
-          type="text"
-          icon="el-icon-circle-plus-outline"
-          size="small"
-          v-show="scope.row.isPub==0"
-          @click="changeInfo(scope.row.id,2)"
-        >取消公开
-        </el-button>
-        <el-button
-          type="text"
-          icon="el-icon-circle-plus-outline"
-          size="small"
-          v-show="scope.row.isRecommend==0"
-          @click="changeInfo(scope.row.id,3)"
-        >推荐
-        </el-button>
-        <el-button
-          type="text"
-          icon="el-icon-circle-plus-outline"
-          size="small"
-          v-show="scope.row.isRecommend!=0"
-          @click="changeInfo(scope.row.id,4)"
-        >取消推荐
-        </el-button>
-        <el-button
-          type="text"
-          icon="el-icon-circle-plus-outline"
-          size="small"
-          v-show="scope.row.isUse!=0"
-          @click="changeInfo(scope.row.id,5)"
-        >取消收藏
-        </el-button>
-        <el-button
-          type="text"
-          icon="el-icon-circle-plus-outline"
-          size="small"
-          v-show="scope.row.isUse==0"
-          @click="changeInfo(scope.row.id,6)"
-        >收藏
-        </el-button>
-      </template>
-
-      <template slot-scope="{row}"
-                slot="category">
-        <el-tag>{{row.categoryName}}</el-tag>
       </template>
     </avue-crud>
   </basic-container>
 </template>
 
 <script>
-  import {getList, getDetail, add, update, remove,changeInfo} from "@/api/food/recipe";
+  import {getList, getDetail, add, update, remove,getTree,getStudentClass} from "@/api/food/studentallergy";
   import {mapGetters} from "vuex";
 
   export default {
@@ -108,79 +48,105 @@
         },
         selectionList: [],
         option: {
-          height: 'auto',
+          height:'auto',
           calcHeight: 30,
           tip: false,
           searchShow: true,
           searchMenuSpan: 6,
           border: true,
           index: true,
-          viewBtn: true,
+          viewBtn: false,
           selection: true,
-          menuWidth:500,
           dialogClickModal: false,
-          addBtn:false,
           column: [
             {
-              label: "食谱名称",
-              prop: "recipeName",
-              search: true,
-              rules: [{
-                required: true,
-                message: "请输入食谱名称",
-                trigger: "blur"
-              }]
-            },
-            {
-              label: "食谱周期",
-              prop: "recipeDay",
-              search: true,
-              rules: [{
-                required: true,
-                message: "请输入食谱周期",
-                trigger: "blur"
-              }]
-            },
-            {
-              label: "收藏",
-              prop: "isUse",
-              type: "select",
-              search: true,
-              dicData: [
-                {
-                  label: "已收藏",
-                  value: 1
-                },
-                {
-                  label: "未收藏",
-                  value: 0
-                }
+              label: "姓名",
+              prop: "studentId",
+              multiple: false,
+              span:24,
+              type: "tree",
+              dicUrl:"/api/blade-food/class/getStudent",
+              hide:true,
+              dicData: [],
+              props: {
+                label: "name",
+                value:"id"
+              },
+              rules: [
+                { required: true, trigger: "blur" },
               ],
-              rules: [
-                {
-                  required: true,
-                  message: "请选择",
-                  trigger: "blur"
+              change:({value,column})=>{
+                debugger;
+                if(value!='' && value!=null){
+                  getStudentClass(value).then(res => {
+/*                    console.log(res);*/
+                    this.form.className = res.data.data.className;
+                  })
                 }
-              ]
+
+              },
             },
             {
-              label: "创建机构",
-              prop: "orgName",
+              label: "班级",
+              prop: "className",
+              span:24,
+              disabled:true,
+              search:true
             },
             {
-              label: "创建人",
-              prop: "createName",
-              span: 24,
-              minRows: 6,
+              label: "姓名",
+              prop: "peopleName",
+              display:false,
+              search:true,
+              rules: [{
+                required: true,
+                message: "请输入姓名",
+                trigger: "blur"
+              }]
             },
             {
-              label: "创建时间",
-              prop: "createTime",
-              width: 180,
-              span: 24,
-              minRows: 6,
+              label: "食材名称",
+              prop: "foodNames",
+              display:false,
+              rules: [{
+                required: true,
+                message: "请输入主键",
+                trigger: "blur"
+              }]
             },
+            {
+              label: "过敏食材",
+              prop: "foodId",
+              hide:true,
+              span:24,
+              rules: [{
+                required: true,
+                message: "请选择过敏食材",
+                trigger: "blur"
+              }]
+            },
+            {
+              label: "过敏症状",
+              prop: "symptom",
+              type:"textarea",
+              span:24,
+              rules: [{
+                required: true,
+                message: "请输入过敏症状",
+                trigger: "blur"
+              }]
+            },
+            {
+              label: "备注",
+              prop: "remark",
+              span:24,
+              type:"textarea",
+              rules: [{
+                required: false,
+                message: "请输入备注",
+                trigger: "blur"
+              }]
+            }
           ]
         },
         data: []
@@ -190,10 +156,10 @@
       ...mapGetters(["permission"]),
       permissionList() {
         return {
-          /* addBtn: this.vaildData(this.permission.recipe_add, false),
-           viewBtn: this.vaildData(this.permission.recipe_view, false),
-           delBtn: this.vaildData(this.permission.recipe_delete, false),
-           editBtn: this.vaildData(this.permission.recipe_edit, false)*/
+         /* addBtn: this.vaildData(this.permission.studentallergy_add, false),
+          viewBtn: this.vaildData(this.permission.studentallergy_view, false),
+          delBtn: this.vaildData(this.permission.studentallergy_delete, false),
+          editBtn: this.vaildData(this.permission.studentallergy_edit, false)*/
         };
       },
       ids() {
@@ -214,8 +180,8 @@
           });
           done();
         }, error => {
-          window.console.log(error);
           loading();
+          window.console.log(error);
         });
       },
       rowUpdate(row, index, done, loading) {
@@ -227,8 +193,8 @@
           });
           done();
         }, error => {
-          window.console.log(error);
           loading();
+          console.log(error);
         });
       },
       rowDel(row) {
@@ -248,42 +214,6 @@
             });
           });
       },
-      changeInfo(id,type) {
-        debugger;
-        var isPub;//是否公开
-        var isRecommend;//是否推荐
-        var isUse;//是否收藏
-        if(type==1){
-          isPub=0
-        }else if(type==2){
-          isPub=1
-        }else if(type==3){
-          isRecommend=1
-        }else if(type==4){//取消推荐
-          isRecommend=0
-        }else if(type==5){//取消收藏
-          isUse=0
-        }else if(type==6){
-          isUse=1
-        }
-
-        this.$confirm("确定执行按钮?", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        })
-          .then(() => {
-            return changeInfo(id,isPub,isRecommend,isUse);
-          })
-          .then(() => {
-            this.onLoad(this.page);
-            this.$message({
-              type: "success",
-              message: "操作成功!"
-            });
-          });
-      },
-
       handleDelete() {
         if (this.selectionList.length === 0) {
           this.$message.warning("请选择至少一条数据");
@@ -311,7 +241,8 @@
           getDetail(this.form.id).then(res => {
             this.form = res.data.data;
           });
-        }
+        };
+
         done();
       },
       searchReset() {
@@ -331,10 +262,10 @@
         this.selectionList = [];
         this.$refs.crud.toggleSelection();
       },
-      currentChange(currentPage) {
+      currentChange(currentPage){
         this.page.currentPage = currentPage;
       },
-      sizeChange(pageSize) {
+      sizeChange(pageSize){
         this.page.pageSize = pageSize;
       },
       refreshChange() {
@@ -342,10 +273,6 @@
       },
       onLoad(page, params = {}) {
         this.loading = true;
-        params=
-          {
-            searchType:0
-          }
         getList(page.currentPage, page.pageSize, Object.assign(params, this.query)).then(res => {
           const data = res.data.data;
           this.page.total = data.total;

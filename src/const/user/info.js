@@ -41,6 +41,12 @@ export default {
         prop: 'email',
         span: 12,
         row: true,
+      },  {
+        label: '角色',
+        prop: 'roleName',
+        span: 12,
+        row: true,
+        readonly:true,
       }]
     }
   }, {

@@ -69,6 +69,7 @@
               realName: user.realName,
               phone: user.phone,
               email: user.email,
+              roleName: user.roleName,
             }
           });
         }

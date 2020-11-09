@@ -152,5 +152,18 @@ export default [
           )
       }
     ]
-  }
+  },
+  {
+    path: "/oprate",
+    component: Layout,
+    redirect: "/oprate/addStudent",
+    children: [
+      {
+        path: "addStudent",
+        name: "学生信息",
+        component: () =>
+          import(/* webpackChunkName: "views" */  "@/views/organ/recipeManager/addStudent")
+      }
+    ]
+  },
 ];
