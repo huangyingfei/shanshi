@@ -15,8 +15,9 @@
     </el-row>
     <!-- filter end -->
     <!-- <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane label="个人菜品库" name="first">
-        <el-tree
+      <el-tab-pane label="个人菜品库" name="first"></el-tab-pane>
+      <el-tab-pane label="公共菜品库" name="second"> </el-tab-pane>
+       <el-tree
           style="width:400px"
           :data="data"
           :props="defaultProps"
@@ -39,40 +40,14 @@
             </span>
           </span>
         </el-tree>
-      </el-tab-pane>
-      <el-tab-pane label="公共菜品库" name="second">
-        <el-tree
-          style="width:400px"
-          :data="data"
-          :props="defaultProps"
-          v-loading="loadFlag"
-          node-key="id"
-          :default-expand-all="false"
-          :expand-on-click-node="false"
-        >
-          <span class="custom-tree-node" slot-scope="{ node, data }">
-            <span>{{ node.label }}</span>
-            <span>
-              <el-button
-                v-if="data.form == 1"
-                type="text"
-                size="mini"
-                @click="() => onChoice(data)"
-              >
-                选择
-              </el-button>
-            </span>
-          </span>
-        </el-tree>
-      </el-tab-pane>
     </el-tabs> -->
     <!-- table start -->
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane label="个人菜品库" name="first">
-        <!-- 22 -->
+
       </el-tab-pane>
       <el-tab-pane label="公共菜品库" name="second">
-        <!-- 11 -->
+
       </el-tab-pane>
     </el-tabs>
     <el-table
@@ -91,8 +66,8 @@
         label="食品/食材"
         width="200"
       ></el-table-column>
-      <!-- <el-table-column prop="count" align="center" label="用量(g)" width="150">
-      </el-table-column> -->
+      <el-table-column prop="count" align="center" label="用量(g)" width="150">
+      </el-table-column>
       <el-table-column align="center" label="操作">
         <template slot-scope="scope">
           <el-link
@@ -114,8 +89,8 @@ export default {
     // Id
     id: {
       type: String,
-      default: "1"
-    }
+      default: "1",
+    },
   },
   data() {
     const data = [
@@ -127,7 +102,7 @@ export default {
       filter: { keyword: "" },
       datas: [],
       loadFlag: false, //加载flag
-      lower: 0
+      lower: 0,
     };
   },
   // 计算属性computed,计算的是Name依赖的值,它不能计算在data中已经定义过的变量。
@@ -136,7 +111,7 @@ export default {
   watch: {
     id(val) {
       this.init();
-    }
+    },
   },
   created() {
     this.obtains(); //获取树形结构
@@ -225,7 +200,7 @@ export default {
             this.lower
           }&typeTemp=${2}`
         )
-        .then(res => {
+        .then((res) => {
           this.loadFlag = false;
           //   console.log(res);
           this.obtain = res.data.data;
@@ -234,14 +209,14 @@ export default {
             // console.log(item);
             foto[index] = {
               id: item.id,
-              name: item.typeName
+              name: item.typeName,
             };
             foto[index].children = [];
             item.dishes.forEach((item1, index1) => {
               foto[index].children[index1] = {
                 id: item1.id,
                 name: item1.dishName,
-                form: 1
+                form: 1,
               };
             });
           });
@@ -256,33 +231,47 @@ export default {
     },
     // 选择
     onChoice(row) {
-      console.log(row);
+      // console.log(row);
       // console.log(data);
       this.auto = row.id;
       this.$axios
         .get(`api/blade-food/dish/dishDetail?id=${this.auto}`)
-        .then(res => {
+        .then((res) => {
           // console.log(res);
           this.thehabit = res.data.data;
           console.log(this.thehabit);
 
-          let forms = [];
-          forms.push({
+          let open = [];
+          this.thehabit.dishMxVos.forEach((item,index) => {
+            open[index] = {
+              id: item.id,
+              name: item.name,
+              count: item.nutritionNlValue,
+            };
+          });
+
+          let forms = {
             id: this.thehabit.id,
             name: this.thehabit.dishName,
-            count: this.thehabit.provinces
-            // children: this.thehabit.dishMxVos
-          });
+            count: this.thehabit.provinces,
+            children: open,
+          };
+          // forms.push({
+          //   id: this.thehabit.id,
+          //   name: this.thehabit.dishName,
+          //   count: this.thehabit.provinces
+          //   // children: this.thehabit.dishMxVos
+          // });
           console.log(forms);
           //  let item=forms
-          // this.$emit("change", { ...forms });
+          this.$emit("change", { ...forms });
         });
+      // console.log(row);
       // this.$emit("change", { ...row });
-      // var that = this;
-    }
+    },
 
     /////////  methods end ///////////
-  }
+  },
 };
 </script>
 <style>

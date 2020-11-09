@@ -831,10 +831,10 @@ export default {
           });
           week.foods.forEach(food => {
             food.spans = count;
+            console.log(food.spans);
             food.children.forEach(c => {
               c.spans = count;
             });
-            console.log(food.children);
           });
           // console.log(week.foods);
         });
@@ -863,7 +863,7 @@ export default {
       this.dialog_choice.data_id = data_id;
       this.dialog_choice.week_id = week_id;
       this.dialog_choice.opened = true;
-      console.log(this.dialog_choice.data_id);
+      // console.log(this.dialog_choice.data_id);
     },
 
     // 选择菜谱结果
