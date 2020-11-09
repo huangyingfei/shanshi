@@ -754,7 +754,7 @@
     <!-- foods choice start-->
     <el-dialog
       :title="'选择食谱 / 菜品'"
-       append-to-body
+      append-to-body
       :visible.sync="dialog_choice.opened"
       width="600px"
     >
@@ -834,7 +834,9 @@ export default {
             food.children.forEach(c => {
               c.spans = count;
             });
+            console.log(food.children);
           });
+          // console.log(week.foods);
         });
       });
     },

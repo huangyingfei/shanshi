@@ -14,8 +14,67 @@
       </el-col>
     </el-row>
     <!-- filter end -->
-
+    <!-- <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tab-pane label="个人菜品库" name="first">
+        <el-tree
+          style="width:400px"
+          :data="data"
+          :props="defaultProps"
+          v-loading="loadFlag"
+          node-key="id"
+          :default-expand-all="false"
+          :expand-on-click-node="false"
+        >
+          <span class="custom-tree-node" slot-scope="{ node, data }">
+            <span>{{ node.label }}</span>
+            <span>
+              <el-button
+                v-if="data.form == 1"
+                type="text"
+                size="mini"
+                @click="() => onChoice(data)"
+              >
+                选择
+              </el-button>
+            </span>
+          </span>
+        </el-tree>
+      </el-tab-pane>
+      <el-tab-pane label="公共菜品库" name="second">
+        <el-tree
+          style="width:400px"
+          :data="data"
+          :props="defaultProps"
+          v-loading="loadFlag"
+          node-key="id"
+          :default-expand-all="false"
+          :expand-on-click-node="false"
+        >
+          <span class="custom-tree-node" slot-scope="{ node, data }">
+            <span>{{ node.label }}</span>
+            <span>
+              <el-button
+                v-if="data.form == 1"
+                type="text"
+                size="mini"
+                @click="() => onChoice(data)"
+              >
+                选择
+              </el-button>
+            </span>
+          </span>
+        </el-tree>
+      </el-tab-pane>
+    </el-tabs> -->
     <!-- table start -->
+    <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tab-pane label="个人菜品库" name="first">
+        <!-- 22 -->
+      </el-tab-pane>
+      <el-tab-pane label="公共菜品库" name="second">
+        <!-- 11 -->
+      </el-tab-pane>
+    </el-tabs>
     <el-table
       :data="datas"
       style="width: 100%"
@@ -32,12 +91,12 @@
         label="食品/食材"
         width="200"
       ></el-table-column>
-      <el-table-column prop="count" align="center" label="用量(g)" width="150">
-      </el-table-column>
+      <!-- <el-table-column prop="count" align="center" label="用量(g)" width="150">
+      </el-table-column> -->
       <el-table-column align="center" label="操作">
         <template slot-scope="scope">
           <el-link
-            v-if="scope.row.children"
+            v-if="!scope.row.children"
             type="primary"
             @click="onChoice(scope.row)"
             >选择</el-link
@@ -59,9 +118,16 @@ export default {
     }
   },
   data() {
+    const data = [
+      //树形结构
+    ];
     return {
+      data: JSON.parse(JSON.stringify(data)), //树形结构
+      activeName: "first", //弹出框标签页
       filter: { keyword: "" },
-      datas: []
+      datas: [],
+      loadFlag: false, //加载flag
+      lower: 0
     };
   },
   // 计算属性computed,计算的是Name依赖的值,它不能计算在data中已经定义过的变量。
@@ -71,6 +137,9 @@ export default {
     id(val) {
       this.init();
     }
+  },
+  created() {
+    this.obtains(); //获取树形结构
   },
   // 组件第一次加载
   mounted() {
@@ -84,39 +153,132 @@ export default {
     // 初始化表格数据(根据id获取远程数据)
     getData() {
       this.datas = [
-        {
-          id: 101,
-          name: "绿豆粥",
-          count: 1,
-          children: [
-            { id: 101001, name: "绿豆", count: 1 },
-            { id: 101002, name: "白糖", count: 1 }
-          ]
-        },
-        {
-          id: 102,
-          name: "番茄鸡蛋",
-          count: 1,
-          children: [
-            { id: 102001, name: "番茄", count: 1 },
-            { id: 102002, name: "鸡蛋", count: 1 }
-          ]
-        },
-        {
-          id: 103,
-          name: "牛奶",
-          count: 1,
-          children: [
-            { id: 103001, name: "奶粉", count: 1 },
-            { id: 103002, name: "白糖", count: 1 }
-          ]
-        }
+        // {
+        //   id: 101,
+        //   name: "素食",
+        //   count: 2,
+        //   children: [
+        //     {
+        //       id: 101001,
+        //       name: "青菜青菜",
+        //       count: 1,
+        //       children: [
+        //         {
+        //           id: 101002,
+        //           name: "小麦",
+        //           count: 22
+        //         }
+        //       ]
+        //     }
+        //   ]
+        // },
+        // {
+        //   id: 101,
+        //   name: "炒菜",
+        //   count: 2,
+        //   children: [
+        //     {
+        //       id: 101001,
+        //       name: "蚂蚁上树",
+        //       count: 55,
+        //       children: [
+        //         {
+        //           id: 101002,
+        //           name: "粉丝",
+        //           count: 22
+        //         },
+        //         {
+        //           id: 101002,
+        //           name: "葱",
+        //           count: 33
+        //         }
+        //       ]
+        //     }
+        //   ]
+        // }
+        // {
+        //   id: 102,
+        //   name: "番茄鸡蛋",
+        //   count: 1,
+        //   children: [
+        //     { id: 102001, name: "番茄", count: 1 },
+        //     { id: 102002, name: "鸡蛋", count: 1 }
+        //   ]
+        // },
+        // {
+        //   id: 103,
+        //   name: "牛奶",
+        //   count: 1,
+        //   children: [
+        //     { id: 103001, name: "奶粉", count: 1 },
+        //     { id: 103002, name: "白糖", count: 1 }
+        //   ]
+        // }
       ];
     },
-
+    //获取树形结构
+    obtains() {
+      this.loadFlag = true;
+      this.$axios
+        .get(
+          `api/blade-food/basetype/getDishByBaseId?isPrivate=${
+            this.lower
+          }&typeTemp=${2}`
+        )
+        .then(res => {
+          this.loadFlag = false;
+          //   console.log(res);
+          this.obtain = res.data.data;
+          let foto = [];
+          this.obtain.forEach((item, index) => {
+            // console.log(item);
+            foto[index] = {
+              id: item.id,
+              name: item.typeName
+            };
+            foto[index].children = [];
+            item.dishes.forEach((item1, index1) => {
+              foto[index].children[index1] = {
+                id: item1.id,
+                name: item1.dishName,
+                form: 1
+              };
+            });
+          });
+          this.datas = foto;
+          console.log(foto);
+        });
+    },
+    handleClick(tab) {
+      this.lower = tab.index;
+      // console.log(this.lower);
+      this.obtains();
+    },
     // 选择
-    onChoice(item) {
-      this.$emit("change", { ...item });
+    onChoice(row) {
+      console.log(row);
+      // console.log(data);
+      this.auto = row.id;
+      this.$axios
+        .get(`api/blade-food/dish/dishDetail?id=${this.auto}`)
+        .then(res => {
+          // console.log(res);
+          this.thehabit = res.data.data;
+          console.log(this.thehabit);
+
+          let forms = [];
+          forms.push({
+            id: this.thehabit.id,
+            name: this.thehabit.dishName,
+            count: this.thehabit.provinces
+            // children: this.thehabit.dishMxVos
+          });
+          console.log(forms);
+          //  let item=forms
+          // this.$emit("change", { ...forms });
+        });
+      // this.$emit("change", { ...row });
+      // var that = this;
     }
 
     /////////  methods end ///////////
