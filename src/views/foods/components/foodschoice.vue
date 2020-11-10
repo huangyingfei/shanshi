@@ -48,6 +48,7 @@
     </el-tabs>
     <el-table
       :data="datas"
+      v-loading="loadFlag"
       style="width: 100%"
       border
       fit

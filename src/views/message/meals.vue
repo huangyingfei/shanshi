@@ -204,11 +204,20 @@
         </div>
       </el-col>
     </el-row>
-    <div class="scores" @click="fraction">
+    <div class="scores" @click="tfractio">
       <p class="gnus">95.99</p>
       <p class="scorefor">分</p>
     </div>
-
+    <!-- 分数弹框 -->
+    <el-drawer
+      title="我是标题"
+      :modal-append-to-body="false"
+      :visible.sync="drawer"
+      :with-header="false"
+    >
+      <span>22222</span>
+    </el-drawer>
+    <!-- 分数弹框 结束-->
     <!-- 智能配平弹框 -->
     <el-dialog
       title="食谱配平"
@@ -221,7 +230,7 @@
         <div class="time">
           <span class="demonstration" style="padding-right: 10px;">日期</span>
           <span></span>
-          <!-- <span></span> -->
+
           <el-checkbox style="padding-left: 50px;" v-model="focus"
             >调整食材的量</el-checkbox
           >
@@ -318,7 +327,30 @@ export default {
   data() {
     const data = [];
     return {
-      pointscan: false,
+      drawer: false, //分数弹框
+      pointscan: false, //智能配餐弹框
+      secondary: [
+        {
+          id: 3,
+          date: "蛋白质",
+          name: "322",
+          address: "123.91",
+          children: [
+            {
+              id: 31,
+              date: "完全蛋白质",
+              name: "233",
+              address: "94"
+            },
+            {
+              id: 32,
+              date: "半完全蛋白质",
+              name: "234",
+              address: "94"
+            }
+          ]
+        }
+      ],
       WeekInfo: {
         weekType: "", //周期类型
         WeekTtitle: "", //周期标题
@@ -340,6 +372,9 @@ export default {
   },
   beforeMount() {},
   methods: {
+    tfractio() {
+      this.drawer = true;
+    },
     wrapscan() {
       this.pointscan = true;
     },
