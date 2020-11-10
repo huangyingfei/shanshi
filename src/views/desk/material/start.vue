@@ -17,13 +17,28 @@
       <div class="whole">
         <div class="export">
           <!-- 全部(326) -->
-          <el-button type="text">全部</el-button>
+          <el-button
+            type="text"
+            @click="buttonClick(1)"
+            :class="buttonIndex == 1 ? 'bgcolor' : ''"
+            >全部</el-button
+          >
         </div>
         <div class="export1">
-          <el-button type="text">公开</el-button>
+          <el-button
+            type="text"
+            @click="buttonClick(2)"
+            :class="buttonIndex == 2 ? 'bgcolor' : ''"
+            >公开</el-button
+          >
         </div>
         <div class="export2">
-          <el-button type="text">隐藏</el-button>
+          <el-button
+            type="text"
+            @click="buttonClick(3)"
+            :class="buttonIndex == 3 ? 'bgcolor' : ''"
+            >隐藏</el-button
+          >
         </div>
       </div>
       <!-- 全国查找 -->
@@ -602,11 +617,10 @@ export default {
     //树形渲染数
     Addraudit() {
       this.$axios
-        .get(`api/blade-food/basetype/getFoodByBaseId?isPrivate=1`, {
-          headers: {
-            "Content-Type": "application/json"
-          }
-        })
+        .get(
+          `api/blade-food/basetype/getFoodByBaseId?isPrivate=1&typeTemp=${2}`,
+          {}
+        )
         .then(res => {
           // console.log(res);
           this.fication = res.data.data;

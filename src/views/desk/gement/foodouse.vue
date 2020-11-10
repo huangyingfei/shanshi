@@ -828,6 +828,7 @@ export default {
         .then(res => {
           console.log(res);
           // this.muito();
+          this.obtains();
           this.$message({
             message: "保存成功",
             type: "success"
@@ -865,7 +866,6 @@ export default {
         .then(res => {
           console.log(res);
 
-          this.obtains();
           this.mysave();
         });
     },

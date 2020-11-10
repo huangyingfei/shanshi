@@ -63,6 +63,9 @@
               <el-checkbox label="晚点" name="晚点"></el-checkbox>
             </el-checkbox-group>
           </el-form-item>
+          <!-- <el-form-item style="  margin-left: 30px;">
+            <div class="scores">123123</div>
+          </el-form-item> -->
         </el-form>
       </el-col>
     </el-row>
@@ -110,7 +113,11 @@
             >
             </el-switch>
 
-            <el-button style="margin-left: 30px" size="medium" type="success"
+            <el-button
+              @click="wrapscan"
+              style="margin-left: 30px"
+              size="medium"
+              type="success"
               >智能配平</el-button
             >
 
@@ -186,7 +193,116 @@
           <foods-week :headers="headers" :datas="datas" days="5"> </foods-week>
         </div>
       </el-col>
+      <el-col>
+        <div class="foodrate">
+          <el-button
+            style=" text-align: center;"
+            type="primary"
+            @click="buttonend"
+            >保存</el-button
+          >
+        </div>
+      </el-col>
     </el-row>
+    <div class="scores" @click="fraction">
+      <p class="gnus">95.99</p>
+      <p class="scorefor">分</p>
+    </div>
+
+    <!-- 智能配平弹框 -->
+    <el-dialog
+      title="食谱配平"
+      append-to-body
+      :fullscreen="true"
+      :visible.sync="pointscan"
+      width="600px"
+    >
+      <div class="header">
+        <div class="time">
+          <span class="demonstration" style="padding-right: 10px;">日期</span>
+          <span></span>
+          <!-- <span></span> -->
+          <el-checkbox style="padding-left: 50px;" v-model="focus"
+            >调整食材的量</el-checkbox
+          >
+          <el-checkbox style="padding-left: 50px;" v-model="tment"
+            >调整菜品的量</el-checkbox
+          >
+          <el-checkbox style="padding-left: 50px;" v-model="changed"
+            >保留整数</el-checkbox
+          >
+        </div>
+        <div class="nutrition">
+          <span>选择营养素</span>
+          <el-select v-model="value" placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+          <span style="padding-right: 10px;padding-left: 30px;">起始值(%)</span>
+          <el-input
+            style="width:140px"
+            placeholder="请输入内容"
+            v-model="input"
+            clearable
+          >
+          </el-input>
+          ~
+          <span style="padding-right: 10px;padding-left: 10px;">期望值(%)</span>
+          <el-input
+            style="width:140px"
+            placeholder="请输入内容"
+            v-model="input"
+            clearable
+          >
+          </el-input>
+
+          <el-button style="margin-left: 30px;" type="primary"
+            >开始配平</el-button
+          >
+          <el-button type="primary">应用</el-button>
+          <el-button type="primary">重置</el-button>
+        </div>
+      </div>
+      <div class="action">
+        <div class="arrow">
+          <div class="season">不足</div>
+          <div class="season1">适量</div>
+          <div class="season2">过量</div>
+        </div>
+        <div class="fonts">
+          <el-table
+            style="width: 100%;margin-bottom: 20px;"
+            row-key="id"
+            :data="secondary"
+            :border="false"
+            :default-expand-all="false"
+            :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+          >
+            <el-table-column
+              prop="date"
+              align="center"
+              label="营养素"
+              width="140"
+            >
+            </el-table-column>
+            <el-table-column prop="name" align="center" label="含量" width="80">
+            </el-table-column>
+            <el-table-column prop="address" align="center" label="DRIs%">
+            </el-table-column>
+          </el-table>
+        </div>
+      </div>
+      <!-- 表格 -->
+      <div class="onblur">
+        <foods-week :headers="headers" :datas="datas" days="5"> </foods-week>
+      </div>
+    </el-dialog>
+    <!-- 智能配平弹框结束 -->
   </div>
 </template>
 
@@ -202,6 +318,7 @@ export default {
   data() {
     const data = [];
     return {
+      pointscan: false,
       WeekInfo: {
         weekType: "", //周期类型
         WeekTtitle: "", //周期标题
@@ -223,6 +340,12 @@ export default {
   },
   beforeMount() {},
   methods: {
+    wrapscan() {
+      this.pointscan = true;
+    },
+    buttonend() {
+      console.log(this.datas);
+    },
     init() {
       this.initRemoteData();
     },
@@ -330,8 +453,8 @@ export default {
     ///初始化远程数据
     initRemoteData() {
       var remoteStr =
+        // '[{"id":"7317b146-7fc5-fcbd-2969-5b59f321e831","name":"早餐","weeks":[{"id":"79ba0527-a10a-22e0-2df4-b58d9c8b1191","week":{"name":"week1","lable":"周一","date":"11月2日","is_vacation":false},"name":"week1","image":"","foods":[{"id":101,"name":"绿豆粥","count":1,"children":[{"id":101001,"name":"绿豆","count":1,"spans":3},{"id":101002,"name":"白糖","count":1,"spans":3}],"spans":3}]},{"id":"880061e2-66d2-fed1-11bc-b9b2489fc0af","week":{"name":"week2","lable":"周二","date":"11月3日","is_vacation":false},"name":"week2","image":"","foods":[]},{"id":"ee2c62a0-5d95-9d34-0df3-212081347a45","week":{"name":"week3","lable":"周三","date":"11月4日","is_vacation":false},"name":"week3","image":"","foods":[]},{"id":"7383fe68-8ec8-e72b-879d-d99805c9813f","week":{"name":"week4","lable":"周四","date":"11月5日","is_vacation":false},"name":"week4","image":"","foods":[]},{"id":"148b984c-76f5-b856-3965-6925b0f1e694","week":{"name":"week5","lable":"周五","date":"11月6日","is_vacation":false},"name":"week5","image":"","foods":[]},{"id":"2b524e1a-4b03-d446-f09e-597a4afce450","name":"week6","image":"","foods":[]},{"id":"8eac338a-acda-78c2-e837-bae237cad7ea","name":"week7","image":"","foods":[]}]}]';
         '[{"id":"7317b146-7fc5-fcbd-2969-5b59f321e831","name":"早餐","weeks":[{"id":"79ba0527-a10a-22e0-2df4-b58d9c8b1191","week":{"name":"week1","lable":"周一","date":"11月2日","is_vacation":false},"name":"week1","image":"","foods":[{"id":101,"name":"绿豆粥","count":1,"children":[{"id":101001,"name":"绿豆","count":1,"spans":3},{"id":101002,"name":"白糖","count":1,"spans":3}],"spans":3}]},{"id":"880061e2-66d2-fed1-11bc-b9b2489fc0af","week":{"name":"week2","lable":"周二","date":"11月3日","is_vacation":false},"name":"week2","image":"","foods":[]},{"id":"ee2c62a0-5d95-9d34-0df3-212081347a45","week":{"name":"week3","lable":"周三","date":"11月4日","is_vacation":false},"name":"week3","image":"","foods":[]},{"id":"7383fe68-8ec8-e72b-879d-d99805c9813f","week":{"name":"week4","lable":"周四","date":"11月5日","is_vacation":false},"name":"week4","image":"","foods":[]},{"id":"148b984c-76f5-b856-3965-6925b0f1e694","week":{"name":"week5","lable":"周五","date":"11月6日","is_vacation":false},"name":"week5","image":"","foods":[]},{"id":"2b524e1a-4b03-d446-f09e-597a4afce450","name":"week6","image":"","foods":[]},{"id":"8eac338a-acda-78c2-e837-bae237cad7ea","name":"week7","image":"","foods":[]}]}]';
-
       var remoteData = JSON.parse(remoteStr);
       this.headers = [];
       remoteData[0].weeks.forEach(e => {
@@ -605,8 +728,107 @@ export default {
   margin-bottom: 2px;
 }
 .foodPanel {
-  height: calc(100vh - 180px);
+  /* height: calc(100vh - 180px); */
   overflow-y: scroll;
   overflow-x: auto;
+}
+.foodrate {
+  width: 100%;
+  height: 50px;
+  /* background-color: red; */
+  text-align: center;
+  margin-bottom: 50px;
+}
+.scores {
+  cursor: pointer;
+  width: 90px;
+  height: 90px;
+  /* background-color: red; */
+  position: absolute;
+  top: 110px;
+  right: 70px;
+  border-radius: 50%;
+  background-image: url("/img/yuan.png");
+  background-size: 100% 100%;
+}
+.gnus {
+  font-size: 24px;
+  text-align: center;
+  color: #ffffff;
+}
+.scorefor {
+  text-align: center;
+  color: #ffffff;
+  font-size: 15px;
+  margin-top: -23px;
+}
+.header {
+  width: 100%;
+  height: 120px;
+  /* background-color: red; */
+}
+.time {
+  width: 100%;
+  height: 55px;
+}
+.nutrition {
+  width: 100%;
+  height: 55px;
+  /* background-color: blue; */
+}
+.action {
+  width: 23%;
+  height: 700px;
+  /* background: yellow; */
+  float: left;
+}
+.onblur {
+  width: 75%;
+  height: 700px;
+  /* background-color: red; */
+  float: left;
+  margin-left: 15px;
+  margin-bottom: 70px;
+}
+.arrow {
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+  /* background-color: blue; */
+  display: flex;
+}
+.season {
+  width: 80px;
+  height: 30px;
+  text-align: center;
+  color: #fff;
+  line-height: 30px;
+  margin-top: 10px;
+  background-color: rgba(255, 0, 0, 1);
+}
+.season1 {
+  width: 80px;
+  height: 30px;
+  margin-left: 20px;
+  text-align: center;
+  color: #fff;
+  line-height: 30px;
+  margin-top: 10px;
+  background-color: rgba(0, 172, 160, 1);
+}
+.season2 {
+  width: 80px;
+  height: 30px;
+  margin-left: 20px;
+  text-align: center;
+  color: #fff;
+  line-height: 30px;
+  margin-top: 10px;
+  background-color: rgba(255, 153, 51, 1);
+}
+.fonts {
+  width: 100%;
+  /* height: 500px; */
+  /* background-color: yellow; */
 }
 </style>
