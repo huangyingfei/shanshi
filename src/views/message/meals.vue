@@ -47,7 +47,7 @@
           <el-form-item label="餐谱名称">
             <el-input
               v-model="WeekInfo.Weekdetails"
-              style="width: 400px"
+              style="width: 300px"
             ></el-input>
           </el-form-item>
 
@@ -108,8 +108,6 @@
               style="margin-left: 10px"
               v-model="WeekInfo.collection"
               inactive-text="收藏"
-              active-color="#13ce66"
-              inactive-color="#ff4949"
             >
             </el-switch>
 
@@ -205,8 +203,10 @@
       </el-col>
     </el-row>
     <div class="scores" @click="tfractio">
-      <p class="gnus">95.99</p>
-      <p class="scorefor">分</p>
+      <div class="scores1"></div>
+      <div class="scores2"></div>
+      <!-- <p class="gnus">95.99</p>
+      <p class="scorefor">分</p> -->
     </div>
     <!-- 分数弹框 -->
     <el-drawer
@@ -776,15 +776,15 @@ export default {
 }
 .scores {
   cursor: pointer;
-  width: 90px;
+  width: 150px;
   height: 90px;
-  /* background-color: red; */
+  background-color: red;
   position: absolute;
   top: 110px;
   right: 70px;
-  border-radius: 50%;
+  /* border-radius: 50%;
   background-image: url("/img/yuan.png");
-  background-size: 100% 100%;
+  background-size: 100% 100%; */
 }
 .gnus {
   font-size: 24px;
@@ -840,6 +840,8 @@ export default {
   line-height: 30px;
   margin-top: 10px;
   background-color: rgba(255, 0, 0, 1);
+}
+.scores1 {
 }
 .season1 {
   width: 80px;

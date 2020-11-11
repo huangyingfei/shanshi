@@ -9,16 +9,17 @@
         clearable
       ></el-input> -->
       <div class="import">
-        <el-button type="primary" plain size="mini">导入</el-button>
-        <el-button type="primary" plain size="mini">导出</el-button>
-        <el-button type="primary" plain size="mini">加分类</el-button>
-        <el-button type="primary" plain size="mini">加食材</el-button>
+        <el-button type="goon" plain size="mini">导入</el-button>
+        <el-button type="goon" plain size="mini">导出</el-button>
+        <el-button type="goon" plain size="mini">加分类</el-button>
+        <el-button type="goon" plain size="mini">加食材</el-button>
       </div>
       <div class="whole">
         <div class="export">
           <!-- 全部(326) -->
           <el-button
             type="text"
+            style="color: #00bfaf"
             @click="buttonClick(1)"
             :class="buttonIndex == 1 ? 'bgcolor' : ''"
             >全部</el-button
@@ -27,6 +28,7 @@
         <div class="export1">
           <el-button
             type="text"
+            style="color: #00bfaf"
             @click="buttonClick(2)"
             :class="buttonIndex == 2 ? 'bgcolor' : ''"
             >公开</el-button
@@ -35,6 +37,7 @@
         <div class="export2">
           <el-button
             type="text"
+            style="color: #00bfaf"
             @click="buttonClick(3)"
             :class="buttonIndex == 3 ? 'bgcolor' : ''"
             >隐藏</el-button
@@ -79,7 +82,7 @@
             </el-select>
           </template>
         </div>
-        <el-button type="primary" size="small" @click="stored">查询</el-button>
+        <el-button type="goon" size="small" @click="stored">查询</el-button>
       </div>
       <!-- 结束 -->
       <!-- 树形组件 -->
@@ -96,12 +99,19 @@
             <span class="custom-tree-node" slot-scope="{ node, data }">
               <span>{{ node.label }}</span>
               <span>
-                <el-button type="text" size="mini" @click="() => prepare(data)">
+                <el-button
+                  v-if="data.view == 1"
+                  type="text"
+                  size="mini"
+                  style="color: #00bfaf"
+                  @click="() => prepare(data)"
+                >
                   查看
                 </el-button>
                 <el-button
                   type="text"
-                  v-if="!data.isUse"
+                  v-if="data.isUse == 0"
+                  style="color: #00bfaf"
                   size="mini"
                   @click="() => append(data)"
                 >
@@ -109,14 +119,16 @@
                 </el-button>
                 <el-button
                   type="text"
-                  v-else
+                  v-if="data.isUse == 1"
+                  style="color: #00bfaf"
                   size="mini"
                   @click="() => insert(data)"
                 >
                   不常用
                 </el-button>
                 <el-button
-                  v-if="!data.isPub"
+                  v-if="data.isPub == 1"
+                  style="color: #00bfaf"
                   type="text"
                   size="mini"
                   @click="() => multi(data)"
@@ -124,7 +136,8 @@
                   隐藏
                 </el-button>
                 <el-button
-                  v-else
+                  v-if="data.isPub == 0"
+                  style="color: #00bfaf"
                   type="text"
                   size="mini"
                   @click="() => docs(data)"
@@ -132,6 +145,8 @@
                   公开
                 </el-button>
                 <el-button
+                  v-if="data.delete == 1"
+                  style="color: #00bfaf"
                   type="text"
                   size="mini"
                   @click="() => remove(node, data)"
@@ -157,10 +172,10 @@
           class="demo-ruleForm"
         >
           <el-form-item label="食材名" prop="name" style=" width: 350px;   ">
-            <el-input v-model="ruleForm.name"></el-input>
+            <el-input style="300px" v-model="ruleForm.name"></el-input>
           </el-form-item>
           <el-form-item label="食物别名1" style=" width: 350px;  ">
-            <el-input v-model="ruleForm.foodFood"></el-input>
+            <el-input style="300px" v-model="ruleForm.foodFood"></el-input>
           </el-form-item>
           <el-form-item label="食物别名2" style=" width: 350px;  ">
             <el-input v-model="ruleForm.ovenFood"></el-input>
@@ -179,7 +194,11 @@
             prop="fooddata"
             style=" width: 350px;   "
           >
-            <el-select v-model="ruleForm.fooddata" placeholder="请选择">
+            <el-select
+              style=" width: 200px; "
+              v-model="ruleForm.fooddata"
+              placeholder="请选择"
+            >
               <el-option
                 v-for="item in foodPos"
                 :key="item.value"
@@ -222,7 +241,7 @@
             ></el-input>
           </el-form-item>
 
-          <el-form-item label="色系" style="  ">
+          <el-form-item label="色系" style="width: 700px;   ">
             <el-radio-group v-model="ruleForm.resource">
               <el-radio label="1">绿</el-radio>
               <el-radio label="2">红</el-radio>
@@ -254,16 +273,16 @@
             </el-select>
           </el-form-item>
 
-          <el-form-item label="功用">
+          <el-form-item label="功用" style="width:350px">
             <el-input
-              style=" width: 450px;  "
+              style=" width: 200px;  "
               type="textarea"
               v-model="ruleForm.desc"
               placeholder="请输入"
             ></el-input>
           </el-form-item>
 
-          <el-form-item label="图片">
+          <el-form-item label="图片" style="width:350px">
             <el-upload
               action="https://jsonplaceholder.typicode.com/posts/"
               list-type="picture-card"
@@ -324,10 +343,8 @@
         </el-table>
       </div>
       <div style="   text-align: center;">
-        <el-button type="primary" @click="saved('ruleForm')"
-          >编辑保存</el-button
-        >
-        <el-button type="primary" @click="totally('ruleForm')">保存</el-button>
+        <el-button type="goon" @click="saved('ruleForm')">编辑保存</el-button>
+        <el-button type="goon" @click="totally('ruleForm')">保存</el-button>
         <el-button @click="resetForm('ruleForm')">重置</el-button>
       </div>
     </div>
@@ -639,7 +656,9 @@ export default {
                 id: item1.id,
                 label: item1.foodName,
                 isPub: item1.isPub,
-                isUse: item1.isUse
+                isUse: item1.isUse,
+                view: 1,
+                delete: 1
               };
             });
           });
@@ -944,7 +963,8 @@ export default {
 .notice {
   width: 100%;
   /* height: 1300px; */
-  /* background-color: #fff; */
+  height: 100%;
+  background-color: #fff;
   margin-bottom: 40px;
   overflow: auto;
 }
@@ -1033,6 +1053,7 @@ export default {
   height: 30px;
   line-height: 30px;
   padding-left: 20px;
+  margin-top: 20px;
   font-size: 16px;
   font-weight: bold;
 }
