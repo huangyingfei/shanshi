@@ -31,15 +31,13 @@
           :label="item.name"
           align="center"
           prop="nutrient"
+          width="110"
           v-for="(item, i) in reset"
           :key="i"
         >
           <template slot-scope="scope">
             <!-- <div v-for="(set,i) in trysource" :key="i"> -->
-            <el-input
-              v-model="item.threeName"
-              placeholder="请输入内容"
-            ></el-input>
+            <el-input v-model="item.threeName" placeholder="请输入"></el-input>
             <!-- </div> -->
           </template>
         </el-table-column>
@@ -70,7 +68,7 @@ export default {
 
       tableData: [
         {
-          date: "比列"
+          date: "比例"
         }
       ],
       footer: {
@@ -138,7 +136,8 @@ export default {
           powerNutritions: arr
         })
         .then(res => {
-          console.log(res);
+          // console.log(res);
+          this.$router.replace("./energy");
           this.$message({
             message: "編輯成功",
             type: "success"
@@ -168,7 +167,8 @@ export default {
               powerNutritions: arr
             })
             .then(res => {
-              console.log(res);
+              // console.log(res);
+              this.$router.replace("./energy");
               this.$message({
                 message: "保存成功",
                 type: "success"

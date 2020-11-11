@@ -9,10 +9,10 @@
         clearable
       ></el-input> -->
       <div class="import">
-        <el-button type="goon" plain size="mini">导入</el-button>
-        <el-button type="goon" plain size="mini">导出</el-button>
-        <el-button type="goon" plain size="mini">加分类</el-button>
-        <el-button type="goon" plain size="mini">加食材</el-button>
+        <!-- <el-button type="primary" plain size="mini">导入</el-button>
+        <el-button type="primary" plain size="mini">导出</el-button>
+        <el-button type="primary" plain size="mini">加分类</el-button> -->
+        <el-button type="primary" size="mini">加食材</el-button>
       </div>
       <div class="whole">
         <div class="export">
@@ -20,47 +20,57 @@
           <el-button
             type="text"
             style="color: #00bfaf"
-            @click="buttonClick(1)"
+            @click="buttonClick(2)"
             :class="buttonIndex == 1 ? 'bgcolor' : ''"
             >全部</el-button
           >
         </div>
+        <div class="toLine"></div>
         <div class="export1">
           <el-button
             type="text"
-            style="color: #00bfaf"
-            @click="buttonClick(2)"
-            :class="buttonIndex == 2 ? 'bgcolor' : ''"
-            >公开</el-button
+            style="color: #000"
+            @click="buttonClick(1)"
+            :class="buttonIndex == 3 ? 'bgcolor' : ''"
+            >隐藏</el-button
           >
         </div>
+
+        <div class="toLine"></div>
         <div class="export2">
           <el-button
             type="text"
-            style="color: #00bfaf"
-            @click="buttonClick(3)"
-            :class="buttonIndex == 3 ? 'bgcolor' : ''"
-            >隐藏</el-button
+            style="color: #000"
+            @click="buttonClick(0)"
+            :class="buttonIndex == 2 ? 'bgcolor' : ''"
+            >公开</el-button
           >
         </div>
       </div>
       <!-- 全国查找 -->
       <div class="country">
         <div class="country1">
-          <template>
-            <el-select v-model="value" placeholder="请选择">
-              <!-- <el-option
+          <el-cascader
+            v-model="valuepark1"
+            :options="options"
+            @change="gProvinces"
+          ></el-cascader>
+          <!-- <el-select v-model="value" placeholder="请选择">
+              <el-option
                 v-for="item in examine"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
-              ></el-option> -->
-            </el-select>
-          </template>
+              ></el-option>
+            </el-select> -->
         </div>
         <div class="country2">
           <template>
-            <el-select v-model="before1" placeholder="请选择">
+            <el-select
+              @change="disallow()"
+              v-model="before1"
+              placeholder="请选择"
+            >
               <el-option
                 v-for="item in before"
                 :key="item.value"
@@ -82,19 +92,28 @@
             </el-select>
           </template>
         </div>
-        <el-button type="goon" size="small" @click="stored">查询</el-button>
+        <!-- <el-button type="goon" size="small" @click="stored">查询</el-button> -->
       </div>
       <!-- 结束 -->
       <!-- 树形组件 -->
       <div class="monly">
         <div class="block">
+          <el-input
+            style="width:350px"
+            placeholder="输入关键字进行过滤"
+            v-model="filterText"
+          >
+          </el-input>
           <p></p>
           <el-tree
             :data="data"
             node-key="id"
+            v-loading="loadFlag"
             :default-expand-all="false"
             :expand-on-click-node="false"
             @node-click="handleNodeClick"
+            :filter-node-method="filterNode"
+            ref="tree"
           >
             <span class="custom-tree-node" slot-scope="{ node, data }">
               <span>{{ node.label }}</span>
@@ -343,8 +362,11 @@
         </el-table>
       </div>
       <div style="   text-align: center;">
-        <el-button type="goon" @click="saved('ruleForm')">编辑保存</el-button>
-        <el-button type="goon" @click="totally('ruleForm')">保存</el-button>
+        <el-button type="primary" @click="saved('ruleForm')"
+          >编辑保存</el-button
+        >
+
+        <el-button type="primary" @click="totally('ruleForm')">保存</el-button>
         <el-button @click="resetForm('ruleForm')">重置</el-button>
       </div>
     </div>
@@ -358,8 +380,10 @@ export default {
   data() {
     const data = [];
     return {
+      loadFlag: false, // 加载flag
       display: "0",
       mailto: [], //营养素含量
+      filterText: "",
       data: JSON.parse(JSON.stringify(data)), //树形结构
       input1: "",
       input: "",
@@ -386,6 +410,7 @@ export default {
         temps: ""
       },
       valuepark: [], //省市区
+      valuepark1: [], //
       // props: { multiple: true },
       active: [], //季节
       foodPos: [], //食材分类
@@ -476,7 +501,8 @@ export default {
       ],
       value: "",
       options: [],
-      value1: []
+      value1: [],
+      waterfall: "2"
     };
   },
   computed: {},
@@ -487,7 +513,35 @@ export default {
     this.Addraudit(); //树形结构渲染
   },
   created() {},
+  watch: {
+    filterText(val) {
+      console.log(this.$refs.tree);
+      this.$refs.tree.filter(val);
+    }
+  },
   methods: {
+    filterNode(value, data) {
+      if (!value) return true;
+
+      return data.label.indexOf(value) !== -1;
+    },
+    //省市区查询
+    gProvinces() {
+      console.log(this.valuepark1);
+      this.valuepark1.forEach(item => {
+        console.log(item);
+      });
+    },
+    disallow() {
+      console.log(this.before1);
+      this.Addraudit();
+    },
+    buttonClick(index) {
+      // console.log(index);
+      this.waterfall = index;
+      // console.log(this.waterfall);
+      this.Addraudit();
+    },
     //食材库保存
     totally() {
       console.log(this.mailto);
@@ -633,18 +687,20 @@ export default {
     },
     //树形渲染数
     Addraudit() {
+      this.loadFlag = true;
       this.$axios
         .get(
-          `api/blade-food/basetype/getFoodByBaseId?isPrivate=1&typeTemp=${2}`,
+          `api/blade-food/basetype/getFoodByBaseId?isPrivate=1&typeTemp=${this.waterfall}&season=${this.before1}`,
           {}
         )
         .then(res => {
+          this.loadFlag = false;
           // console.log(res);
           this.fication = res.data.data;
-          console.log(this.fication);
+          // console.log(this.fication);
           let Front = [];
           this.fication.forEach((item, index) => {
-            console.log(item);
+            // console.log(item);
             Front[index] = {
               id: item.id,
               label: item.typeName
@@ -664,7 +720,7 @@ export default {
           });
           // console.log(Front);
           this.data = Front;
-          console.log(this.data);
+          // console.log(this.data);
           // console.log(this.data.isPub);
         });
     },
@@ -1000,29 +1056,36 @@ export default {
   /* background-color: red; */
 }
 .export {
-  width: 100px;
+  width: 70px;
   height: 30px;
   /* background-color: yellow; */
   text-align: center;
-  line-height: 30px;
-  border-right: 1px solid #e0e0e0;
+  /* line-height: 30px; */
+  /* border-right: 1px solid #e0e0e0; */
   font-size: 14px;
   float: left;
 }
+.toLine {
+  width: 2px;
+  height: 20px;
+  margin-top: 10px;
+  border-right: solid #acc0d8 1px;
+  float: left;
+}
 .export1 {
-  width: 100px;
+  width: 70px;
   height: 30px;
   text-align: center;
-  line-height: 30px;
-  border-right: 1px solid #e0e0e0;
+  /* line-height: 20px; */
+  /* border-right: 1px solid #e0e0e0; */
   font-size: 14px;
   float: left;
 }
 .export2 {
-  width: 100px;
+  width: 70px;
   height: 30px;
   text-align: center;
-  line-height: 30px;
+  /* line-height: 30px; */
   font-size: 14px;
   float: left;
 }

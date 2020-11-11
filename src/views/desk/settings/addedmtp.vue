@@ -175,17 +175,17 @@
                   style=" margin-left: 20px; width: 140px;"
                 ></el-input>
                 <!-- 男下限+女下限 -->
-                <el-input
+                <!-- <el-input
                   v-model="nvo.resultMin"
                   placeholder="男下限+女下限"
                   style=" margin-left: 20px; width: 140px;"
-                ></el-input>
+                ></el-input> -->
                 <!-- 男上限+女上限 -->
-                <el-input
+                <!-- <el-input
                   v-model="nvo.resultMax"
                   placeholder="男上限+女上限"
                   style=" margin-left: 20px; width: 140px;"
-                ></el-input>
+                ></el-input> -->
               </div>
               <div v-if="item.sexNum == 1" style="display: inline-block;">
                 <el-input

@@ -787,8 +787,7 @@ export default {
   },
   data() {
     return {
-      empty_image:
-        "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1604518032197&di=54d8ae81d5f878fa32d5b2e55e37292f&imgtype=0&src=http%3A%2F%2Fimg.51miz.com%2FElement%2F00%2F38%2F77%2F59%2F323d6aa8_E387759_fd2eeb2b.png ",
+      empty_image: "/img/tianjia.png",
 
       dialog_choice: {
         opened: false, // 是否显示

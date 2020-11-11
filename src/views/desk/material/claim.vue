@@ -113,16 +113,18 @@
           <el-input v-model="ruleForm.name"></el-input>
         </el-form-item>
         <el-form-item label="食材一" prop="region">
-          <el-select v-model="ruleForm.region" placeholder="请选择食材">
-            <el-option label="区域一" value="1"></el-option>
-            <el-option label="区域二" value="2"></el-option>
-          </el-select>
+          <el-input
+            readonly
+            v-on:click.native="obtain(1)"
+            v-model="ruleForm.adding"
+          ></el-input>
         </el-form-item>
         <el-form-item label="食材二" prop="region1">
-          <el-select v-model="ruleForm.region1" placeholder="请选择食材">
-            <el-option label="一" value="3"></el-option>
-            <el-option label="二" value="4"></el-option>
-          </el-select>
+          <el-input
+            readonly
+            v-on:click.native="obtain(2)"
+            v-model="ruleForm.adding1"
+          ></el-input>
         </el-form-item>
         <el-form-item label="不宜同食原因">
           <el-input type="textarea" v-model="ruleForm.desc"></el-input>
@@ -139,6 +141,39 @@
         <el-button @click="setlist('ruleForm')" type="primary">确 定</el-button>
       </div>
     </el-dialog>
+    <!-- 食材 -->
+    <el-dialog
+      title="个人食材"
+      width="40%"
+      append-to-body
+      :visible.sync="addEffect"
+    >
+      <div class="block">
+        <p></p>
+        <el-tree
+          :data="data"
+          v-loading="loadFlag"
+          node-key="id"
+          :default-expand-all="false"
+          :expand-on-click-node="false"
+          @node-click="handleNodeClick"
+        >
+          <!-- <span class="custom-tree-node" slot-scope="{ node, data }">
+                      <span>{{ node.label }}</span>
+                      <span>
+                        <el-button
+                          type="text"
+                          size="mini"
+                          @click="() => prepare(data)"
+                        >
+                          查看
+                        </el-button>   
+                     
+                      </span>
+                    </span> -->
+        </el-tree>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -146,10 +181,15 @@
 export default {
   name: "unsaved",
   data() {
+    const data = [];
     return {
+      data: JSON.parse(JSON.stringify(data)), //树形结构
       dateTime: false,
+      addEffect: false, //个人食材
       ruleForm: {
         name: "",
+        adding: "", //食材1
+        adding1: "", //食材2
         region: "",
         region1: "",
         desc: "",
@@ -189,14 +229,25 @@ export default {
           label: "否"
         }
       ],
-      value: ""
+      value: "",
+      lower: 1
     };
+  },
+  beforeMount() {
+    this.treeDrawing(); //树形渲染数
   },
   computed: {},
   methods: {
     //添加相克食物
     addShard() {
       this.dateTime = true;
+    },
+    //添加相克食物
+    obtain(index1) {
+      this.dataindex1 = index1;
+      // console.log(this.dataindex1);
+      // console.log(123123);
+      this.addEffect = true;
     },
     setlist(formName) {
       this.$refs[formName].validate(valid => {
@@ -215,6 +266,40 @@ export default {
     },
     DeleteUser(row) {
       console.log(row);
+    },
+    //树形渲染
+    treeDrawing() {
+      this.loadFlag = true;
+      this.$axios
+        .get(
+          `api/blade-food/basetype/getFoodByBaseId?isPrivate=${this.lower}`,
+          {}
+        )
+        .then(res => {
+          // console.log(res);
+          this.loadFlag = false;
+          this.prtree = res.data.data;
+          // console.log(this.prtree);
+
+          let trees = [];
+          this.prtree.forEach((item, index) => {
+            trees[index] = {
+              id: item.id,
+              label: item.typeName
+            };
+            trees[index].children = [];
+            item.foods.forEach((item1, index1) => {
+              trees[index].children[index1] = {
+                id: item1.id,
+                label: item1.foodName,
+                isPub: item1.isPub,
+                isUse: item1.isUse
+              };
+            });
+          });
+          // console.log(trees);
+          this.data = trees;
+        });
     }
   }
 };

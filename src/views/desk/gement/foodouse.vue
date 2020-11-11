@@ -8,23 +8,47 @@
         clearable
       ></el-input>
       <div class="import">
-        <el-button type="primary" plain size="mini">导入</el-button>
-        <el-button type="primary" plain size="mini">导出</el-button>
-        <el-button @click="increasevalue" type="primary" plain size="mini"
+        <!-- <el-button type="primary" plain size="mini">导入</el-button>
+        <el-button type="primary" plain size="mini">导出</el-button> -->
+        <el-button @click="increasevalue" type="primary" size="mini"
           >加分类</el-button
         >
-        <el-button @click="padded" type="primary" plain size="mini"
-          >加菜品</el-button
-        >
+        <el-button @click="padded" type="primary" size="mini">加菜品</el-button>
       </div>
       <!-- <div @click="showImg" class="showSearch">
         <el-button v-if="!showSearch">常用</el-button>
         <el-button type="primary" v-if="showSearch">不常用</el-button>
       </div> -->
       <div class="whole">
-        <div class="export">全部</div>
-        <div class="export1">公开</div>
-        <div class="export2">隐藏</div>
+        <div class="export">
+          <el-button
+            type="text"
+            style="color: #00bfaf"
+            @click="buttonClick(1)"
+            :class="buttonIndex == 1 ? 'bgcolor' : ''"
+            >全部</el-button
+          >
+        </div>
+        <div class="toLine"></div>
+        <div class="export1">
+          <el-button
+            type="text"
+            style="color: #000"
+            @click="buttonClick(2)"
+            :class="buttonIndex == 2 ? 'bgcolor' : ''"
+            >公开</el-button
+          >
+        </div>
+        <div class="toLine"></div>
+        <div class="export2">
+          <el-button
+            type="text"
+            style="color: #000"
+            @click="buttonClick(3)"
+            :class="buttonIndex == 3 ? 'bgcolor' : ''"
+            >隐藏</el-button
+          >
+        </div>
       </div>
       <!-- 全国查找 -->
       <div class="country">
@@ -81,12 +105,17 @@
             <span class="custom-tree-node" slot-scope="{ node, data }">
               <span>{{ node.label }}</span>
               <span>
-                <el-button type="text" size="mini" @click="() => prepare(data)">
+                <el-button
+                  v-if="data.view == 1"
+                  type="text"
+                  size="mini"
+                  @click="() => prepare(data)"
+                >
                   查看
                 </el-button>
                 <el-button
                   type="text"
-                  v-if="!data.isUse"
+                  v-if="data.isUse == 0"
                   size="mini"
                   @click="() => append(data)"
                 >
@@ -94,14 +123,14 @@
                 </el-button>
                 <el-button
                   type="text"
-                  v-else
+                  v-if="data.isUse == 1"
                   size="mini"
                   @click="() => insert(data)"
                 >
                   不常用
                 </el-button>
                 <el-button
-                  v-if="!data.isPub"
+                  v-if="data.isPub == 1"
                   type="text"
                   size="mini"
                   @click="() => multi(data)"
@@ -109,7 +138,7 @@
                   隐藏
                 </el-button>
                 <el-button
-                  v-else
+                  v-if="data.isPub == 0"
                   type="text"
                   size="mini"
                   @click="() => docs(data)"
@@ -117,6 +146,7 @@
                   公开
                 </el-button>
                 <el-button
+                  v-if="data.delete == 1"
                   type="text"
                   size="mini"
                   @click="() => remove(node, data)"
@@ -904,7 +934,9 @@ export default {
                 id: item1.id,
                 label: item1.dishName,
                 isPub: item1.isPub,
-                isUse: item1.isUse
+                isUse: item1.isUse,
+                view: 1,
+                delete: 1
               };
             });
           });
@@ -1257,26 +1289,33 @@ export default {
   /* background-color: red; */
 }
 .export {
-  width: 100px;
+  width: 70px;
   height: 30px;
   /* background-color: yellow; */
   text-align: center;
   line-height: 30px;
-  border-right: 1px solid#e0e0e0;
+  /* border-right: 1px solid#e0e0e0; */
   font-size: 14px;
   float: left;
 }
+.toLine {
+  width: 2px;
+  height: 20px;
+  margin-top: 6px;
+  border-right: solid #acc0d8 1px;
+  float: left;
+}
 .export1 {
-  width: 100px;
+  width: 70px;
   height: 30px;
   text-align: center;
   line-height: 30px;
-  border-right: 1px solid #e0e0e0;
+  /* border-right: 1px solid #e0e0e0; */
   font-size: 14px;
   float: left;
 }
 .export2 {
-  width: 100px;
+  width: 70px;
   height: 30px;
   text-align: center;
   line-height: 30px;

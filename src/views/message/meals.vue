@@ -203,10 +203,14 @@
       </el-col>
     </el-row>
     <div class="scores" @click="tfractio">
-      <div class="scores1"></div>
-      <div class="scores2"></div>
-      <!-- <p class="gnus">95.99</p>
-      <p class="scorefor">分</p> -->
+      <div class="scores1">
+        <p class="gnus">95.99</p>
+        <p class="scorefor">分</p>
+      </div>
+      <div class="scores2">
+        <img class="picture" src="/img/fenshu.png" alt="" />
+        <p class="vertical">真棒</p>
+      </div>
     </div>
     <!-- 分数弹框 -->
     <el-drawer
@@ -776,20 +780,51 @@ export default {
 }
 .scores {
   cursor: pointer;
-  width: 150px;
+  width: 180px;
   height: 90px;
-  background-color: red;
+  /* background-color: red; */
   position: absolute;
   top: 110px;
   right: 70px;
+  display: flex;
   /* border-radius: 50%;
   background-image: url("/img/yuan.png");
   background-size: 100% 100%; */
+}
+.scores1 {
+  width: 90px;
+  height: 90px;
+  /* background-color: yellow; */
+  border-radius: 50%;
+  background-image: url("/img/yuan.png");
+  background-size: 100% 100%;
+}
+.scores2 {
+  width: 80px;
+  height: 65px;
+  margin-top: 20px;
+  display: flex;
+  margin-left: -5px;
+  /* background-color: blue; */
+  background-image: url("/img/fenshu1.png");
+  background-size: 100% 100%;
 }
 .gnus {
   font-size: 24px;
   text-align: center;
   color: #ffffff;
+}
+.picture {
+  width: 30px;
+  height: 30px;
+  margin-top: 20px;
+  margin-left: 2px;
+}
+.vertical {
+  font-size: 20px;
+  color: #00bfaf;
+  line-height: 30px;
+  padding-left: 5px;
 }
 .scorefor {
   text-align: center;
@@ -841,8 +876,7 @@ export default {
   margin-top: 10px;
   background-color: rgba(255, 0, 0, 1);
 }
-.scores1 {
-}
+
 .season1 {
   width: 80px;
   height: 30px;
