@@ -46,7 +46,7 @@ export default {
         prop: 'roleName',
         span: 12,
         row: true,
-        readonly:true,
+        disabled:true,
       }]
     }
   }, {

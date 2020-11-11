@@ -22,6 +22,20 @@ export default {
   height: 100%;
   overflow: hidden;
 }
+.avue-header{
+ background-color: #00aca0 !important;
+  color:#FFFFFF !important;
+}
+.avue-logo_title{
+  background-color: #00aca0 !important;
+  color:#FFFFFF !important;
+}
+.icon-navicon{
+  color: #fff!important;
+}
+.el-dropdown{
+  color: #fff!important;
+}
 .custom-tree-node {
   flex: 1;
   display: flex;

@@ -8,9 +8,10 @@
         <div class="avue-logo_title" key="1">
           <!-- <img class="logoicon" src="/img/logoicon.png" alt /> -->
           <span class="logoicon">
-            <img src="/img/logoicon.png" alt />
+            <img src="/img/huayuanlogo2.png" alt />
           </span>
-          <span>{{website.indexTitle}}</span>
+
+          <span > <img src="/img/huayuanlogo.png" style="width: 180px"/></span>
         </div>
       </template>
     </transition-group>

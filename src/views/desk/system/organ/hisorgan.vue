@@ -1,5 +1,6 @@
 <template>
   <basic-container>
+
     <avue-crud
       :option="option"
       :table-loading="loading"
@@ -40,9 +41,9 @@
           </el-col>
         </el-row>
       </template>
-    
+
       <template slot-scope="scope" slot="menu">
- 
+
          <el-button
           type="text"
           icon="el-icon-circle-plus-outline"
@@ -53,9 +54,9 @@
         </el-button>
       </template>
 
-    
+
     </avue-crud>
-   
+
   </basic-container>
 </template>
 
@@ -98,25 +99,25 @@ export default {
           callback(new Error('请输入开始时间'));
         }else  if (this.form.expireTime === '') {
           callback();
-        }  
+        }
         else {
           this.form.days=getInervalHour(this.form.startUseTime,this.form.expireTime)
           callback();
         }
-      } 
+      }
       const validateEndTime=(rule,value,callback)=>{
          if (value === '') {
           callback(new Error('请输入开始时间'));
         } else  if (this.form.startUseTime === '') {
           callback();
-        } 
+        }
          else {
           this.form.days=getInervalHour(this.form.startUseTime,this.form.expireTime)
           callback();
         }
       }
 
-      
+
     return {
       form: {},
       region: [], //省市区
@@ -168,7 +169,7 @@ export default {
             search: true,
             display: false,
           },
-           
+
           {
             label: "用户账号",
             prop: "account",
@@ -424,6 +425,8 @@ export default {
                 prop: "logoUrl",
                 type: "upload",
                 listType: "picture-img",
+                action: '/api/blade-resource/oss/endpoint/put-file',
+                tip: '只能上传jpg/png用户头像，且不超过500kb',
                 //  action: '/api/blade-resource/oss/endpoint/put-file',
                 propsHttp: {
                   res: "data",
@@ -435,6 +438,8 @@ export default {
                 prop: "avatar",
                 type: "upload",
                 listType: "picture-img",
+                action: '/api/blade-resource/oss/endpoint/put-file',
+                tip: '只能上传jpg/png用户头像，且不超过500kb',
                 //  action: '/api/blade-resource/oss/endpoint/put-file',
                 propsHttp: {
                   res: "data",
@@ -479,7 +484,7 @@ export default {
                     trigger: "click",
                   },
                 ],
-               
+
               },
             ],
           },
@@ -526,6 +531,8 @@ export default {
                 prop: "webLogo",
                 type: "upload",
                 listType: "picture-img",
+                action: '/api/blade-resource/oss/endpoint/put-file',
+                tip: '只能上传jpg/png用户头像，且不超过500kb',
                 //  action: '/api/blade-resource/oss/endpoint/put-file',
                 propsHttp: {
                   res: "data",
@@ -543,10 +550,10 @@ export default {
     ...mapGetters(["userInfo", "permission"]),
     permissionList() {
       return {
-        addBtn: this.vaildData(this.permission.role_add, false),
-        viewBtn: this.vaildData(this.permission.role_view, false),
-        delBtn: this.vaildData(this.permission.role_delete, false),
-        editBtn: this.vaildData(this.permission.role_edit, false),
+        // addBtn: this.vaildData(this.permission.role_add, false),
+        // viewBtn: this.vaildData(this.permission.role_view, false),
+        // delBtn: this.vaildData(this.permission.role_delete, false),
+        // editBtn: this.vaildData(this.permission.role_edit, false),
       };
     },
     ids() {
@@ -568,7 +575,7 @@ export default {
     initData() {
       var params={};
       this.query["tenantType"] = 2;
-    
+
       getPage(
         this.page.currentPage,
         this.page.pageSize,
@@ -605,7 +612,7 @@ export default {
         });
       });
     },
-   
+
     handleStop(row){
        this.$confirm("确定将选择数据停用?", {
         confirmButtonText: "确定",
@@ -726,7 +733,7 @@ export default {
           loading();
         }
       );
-    
+
     },
     rowDel(row) {
       this.$confirm("确定将选择数据删除?", {
@@ -810,7 +817,7 @@ export default {
         });
         done();
       },
-  
+
     handleDelete() {
       if (this.selectionList.length === 0) {
         this.$message.warning("请选择至少一条数据");
@@ -912,6 +919,7 @@ export default {
   },
 };
 </script>
+
 
 
 

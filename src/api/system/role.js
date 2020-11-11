@@ -25,8 +25,7 @@ export const grant = (roleIds, menuIds, dataScopeIds, apiScopeIds) => {
     data: {
       roleIds,
       menuIds,
-      dataScopeIds,
-      apiScopeIds
+
     }
   })
 }

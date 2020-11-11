@@ -1,5 +1,5 @@
 <template>
-  <basic-container>
+  <basic-container >
     <avue-crud :option="option"
                :table-loading="loading"
                :data="data"
@@ -22,7 +22,7 @@
         <!-- <el-button type="danger"
                    size="small"
                    icon="el-icon-delete"
-            
+
                    plain
                    @click="handleDelete">删 除 -->
         <!-- </el-button> -->
@@ -67,7 +67,25 @@
                    :props="props">
           </el-tree>
         </el-tab-pane>
-    
+        <!--<el-tab-pane label="数据权限">-->
+          <!--<el-tree :data="dataScopeGrantList"-->
+                   <!--show-checkbox-->
+                   <!--node-key="id"-->
+                   <!--ref="treeDataScope"-->
+                   <!--:default-checked-keys="dataScopeTreeObj"-->
+                   <!--:props="props">-->
+          <!--</el-tree>-->
+        <!--</el-tab-pane>-->
+        <!--<el-tab-pane label="接口权限">-->
+          <!--<el-tree :data="apiScopeGrantList"-->
+                   <!--show-checkbox-->
+                   <!--node-key="id"-->
+                   <!--ref="treeApiScope"-->
+                   <!--:default-checked-keys="apiScopeTreeObj"-->
+                   <!--:props="props">-->
+          <!--</el-tree>-->
+        <!--</el-tab-pane>-->
+
       </el-tabs>
 
       <span slot="footer"
@@ -175,7 +193,7 @@
             //     trigger: "click"
             //   }]
             // },
-           
+
             {
               label: "角色别名",
               prop: "roleAlias",
@@ -260,9 +278,9 @@
       // },
       submit() {
         const menuList = this.$refs.treeMenu.getCheckedKeys();
-        const dataScopeList = this.$refs.treeDataScope.getCheckedKeys();
-        const apiScopeList = this.$refs.treeApiScope.getCheckedKeys();
-        grant(this.idsArray, menuList, dataScopeList, apiScopeList).then(() => {
+        // const dataScopeList = this.$refs.treeDataScope.getCheckedKeys();
+        // const apiScopeList = this.$refs.treeApiScope.getCheckedKeys();
+        grant(this.idsArray, menuList).then(() => {
           this.box = false;
           this.$message({
             type: "success",
@@ -425,3 +443,6 @@
     }
   };
 </script>
+
+
+

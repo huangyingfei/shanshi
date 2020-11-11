@@ -59,11 +59,12 @@
           type="danger"
           size="small"
           icon="el-icon-delete"
-          v-if="permission.role_delete"
+
           plain
           @click="handleDelete"
           >删 除
         </el-button>
+        <!--v-if="permission.role_delete"-->
       </template>
       <template slot-scope="scope" slot="menu">
             <el-button
@@ -82,7 +83,7 @@
           @click.stop="handleStart(scope.row, scope.index)"
           >启用
         </el-button>
-        
+
       </template>
     </avue-crud>
 
@@ -174,7 +175,7 @@ export default {
             search: true,
             display: false,
           },
-           
+
           {
             label: "用户账号",
             prop: "account",
@@ -223,7 +224,7 @@ export default {
               },
             ],
           },
-          
+
         ],
         group: [
           {
@@ -258,7 +259,7 @@ export default {
                 viewDisplay: false,
                 rules: [{required: true, validator: validatePass2, trigger: 'blur'}]
               },
-             
+
               {
                 label: "单位名称",
                 prop: "tenantName",
@@ -270,7 +271,7 @@ export default {
                   },
                 ],
               },
-            
+
               {
                 label: "联系人",
                 prop: "linkman",
@@ -355,7 +356,8 @@ export default {
                 prop: "logoUrl",
                 type: "upload",
                 listType: "picture-img",
-                //  action: '/api/blade-resource/oss/endpoint/put-file',
+                action: '/api/blade-resource/oss/endpoint/put-file',
+                tip: '只能上传jpg/png用户头像，且不超过500kb',
                 propsHttp: {
                   res: "data",
                   url: "link",
@@ -366,7 +368,8 @@ export default {
                 prop: "avatar",
                 type: "upload",
                 listType: "picture-img",
-                //  action: '/api/blade-resource/oss/endpoint/put-file',
+                action: '/api/blade-resource/oss/endpoint/put-file',
+                tip: '只能上传jpg/png用户头像，且不超过500kb',
                 propsHttp: {
                   res: "data",
                   url: "link",
@@ -385,16 +388,16 @@ export default {
                 formslot: true,
                 span:24
               },
-            
+
             ],
           },
-      
+
           {
             label: "系统设置",
             prop: "systemInfo",
             icon: "el-icon-s-order",
             column: [
-             
+
               {
                 label: "网站标题",
                 prop: "webTitle",
@@ -404,7 +407,8 @@ export default {
                 prop: "webLogo",
                 type: "upload",
                 listType: "picture-img",
-                //  action: '/api/blade-resource/oss/endpoint/put-file',
+                action: '/api/blade-resource/oss/endpoint/put-file',
+                tip: '只能上传jpg/png用户头像，且不超过500kb',
                 propsHttp: {
                   res: "data",
                   url: "link",
@@ -422,11 +426,11 @@ export default {
     ...mapGetters(["userInfo", "permission"]),
     permissionList() {
       return {
-        addBtn: this.vaildData(this.permission.role_add, false),
-        viewBtn: this.vaildData(this.permission.role_view, false),
-        delBtn: this.vaildData(this.permission.role_delete, false),
-        editBtn: this.vaildData(this.permission.role_edit, false),
-      };
+        // addBtn: this.vaildData(this.permission.role_add, false),
+        // viewBtn: this.vaildData(this.permission.role_view, false),
+        // delBtn: this.vaildData(this.permission.role_delete, false),
+        // editBtn: this.vaildData(this.permission.role_edit, false),
+    };
     },
     ids() {
       let ids = [];
@@ -445,7 +449,7 @@ export default {
   },
   methods: {
     initData() {
-    
+
        grantTree()
           .then(res => {
             console.log("res",res)
@@ -588,7 +592,7 @@ export default {
             for(var i=0;i<data.goverAreas.length;i++){
                 this.goverAreasForm.push(data.goverAreas[i].areaId)
             }
-             
+
           })
             debugger
             if(type=="edit"){
@@ -609,7 +613,7 @@ export default {
         this.$refs.crud.tableForm = {};
         done();
       },
-   
+
     handleDelete() {
       if (this.selectionList.length === 0) {
         this.$message.warning("请选择至少一条数据");
@@ -710,7 +714,7 @@ export default {
       if (level == 0) {
         lazyList().then((res) => {
           let data = res.data.data;
-        
+
           data.forEach((e) => {
             list.push({
               name: e.name,
@@ -750,6 +754,7 @@ export default {
   },
 };
 </script>
+
 
 
 

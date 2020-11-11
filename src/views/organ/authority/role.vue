@@ -22,7 +22,7 @@
         <!-- <el-button type="danger"
                    size="small"
                    icon="el-icon-delete"
-            
+
                    plain
                    @click="handleDelete">删 除 -->
         <!-- </el-button> -->
@@ -67,7 +67,7 @@
                    :props="props">
           </el-tree>
         </el-tab-pane>
-    
+
       </el-tabs>
 
       <span slot="footer"
@@ -175,7 +175,7 @@
             //     trigger: "click"
             //   }]
             // },
-           
+
             {
               label: "角色别名",
               prop: "roleAlias",
@@ -260,8 +260,8 @@
       // },
       submit() {
         const menuList = this.$refs.treeMenu.getCheckedKeys();
-        const dataScopeList = this.$refs.treeDataScope.getCheckedKeys();
-        const apiScopeList = this.$refs.treeApiScope.getCheckedKeys();
+        // const dataScopeList = this.$refs.treeDataScope.getCheckedKeys();
+        // const apiScopeList = this.$refs.treeApiScope.getCheckedKeys();
         grant(this.idsArray, menuList, dataScopeList, apiScopeList).then(() => {
           this.box = false;
           this.$message({

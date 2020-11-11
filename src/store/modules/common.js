@@ -24,7 +24,7 @@ const common = {
     showTheme: true,
     showMenu: true,
     showColor: true,
-    colorName: getStore({name: 'colorName'}) || '#409EFF',
+    colorName: getStore({name: 'colorName'}) || '#00b1a2',
     themeName: getStore({name: 'themeName'}) || 'theme-default',
     lockPasswd: getStore({name: 'lockPasswd'}) || '',
     website: website,

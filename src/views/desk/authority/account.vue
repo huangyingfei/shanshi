@@ -1,5 +1,5 @@
 <template>
-  <el-row>
+  <el-row >
     <el-col :span="24">
       <basic-container>
         <avue-crud
@@ -47,24 +47,24 @@
               @click="handleReset"
               >密码重置
             </el-button>
-            <el-button
-              type="success"
-              size="small"
-              plain
-              v-if="userInfo.role_name.includes('admin')"
-              icon="el-icon-upload2"
-              @click="handleImport"
-              >导入
-            </el-button>
-            <el-button
-              type="warning"
-              size="small"
-              plain
-              v-if="userInfo.role_name.includes('admin')"
-              icon="el-icon-download"
-              @click="handleExport"
-              >导出
-            </el-button>
+            <!--<el-button-->
+              <!--type="success"-->
+              <!--size="small"-->
+              <!--plain-->
+              <!--v-if="userInfo.role_name.includes('admin')"-->
+              <!--icon="el-icon-upload2"-->
+              <!--@click="handleImport"-->
+              <!--&gt;导入-->
+            <!--</el-button>-->
+            <!--<el-button-->
+              <!--type="warning"-->
+              <!--size="small"-->
+              <!--plain-->
+              <!--v-if="userInfo.role_name.includes('admin')"-->
+              <!--icon="el-icon-download"-->
+              <!--@click="handleExport"-->
+              <!--&gt;导出-->
+            <!--</el-button>-->
           </template>
 
           <template slot-scope="scope" slot="menu">
@@ -820,4 +820,6 @@ export default {
 .box .el-scrollbar__wrap {
   overflow: scroll;
 }
+
+
 </style>

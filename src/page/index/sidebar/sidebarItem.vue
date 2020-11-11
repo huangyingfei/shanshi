@@ -17,7 +17,8 @@
         :key="item[labelKey]"
       >
         <template slot="title">
-          <i :class="item[iconKey]"></i>
+          <img :src="'/img/menuLogo/'+item[iconKey]" style="margin-right: 5px;" v-if="item[iconKey]!='none'"/>
+          <!--<i :class="item[iconKey]"></i>-->
           <span slot="title" :class="{'el-menu--display':collapse && first}">{{generateTitle(item)}}</span>
         </template>
         <template v-for="(child,cindex) in item[childrenKey]">
@@ -28,7 +29,7 @@
             v-if="validatenull(child[childrenKey])"
             :key="child[labelKey]"
           >
-            <i :class="child[iconKey]"></i>
+            <!--<i :class="child[iconKey]"></i>-->
             <span slot="title">{{generateTitle(child)}}</span>
           </el-menu-item>
           <sidebar-item

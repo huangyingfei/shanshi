@@ -18,11 +18,11 @@
       </span>
     </div>-->
     <div class="top-bar__right">
-      <!-- <el-tooltip v-if="showColor" effect="dark" :content="$t('navbar.color')" placement="bottom">
+      <el-tooltip v-if="showColor" effect="dark" :content="$t('navbar.color')" placement="bottom">
         <div class="top-bar__item">
           <top-color></top-color>
         </div>
-      </el-tooltip>-->
+      </el-tooltip>
       <!-- <el-tooltip
         v-if="showDebug"
         effect="dark"
