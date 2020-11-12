@@ -149,6 +149,12 @@
       :visible.sync="addEffect"
     >
       <div class="block">
+        <el-input
+          style="width:290px; margin-left: 9px;margin-top: 10px;"
+          placeholder="输入关键字进行查询"
+          v-model="filterText"
+        >
+        </el-input>
         <p></p>
         <el-tree
           :data="data"
@@ -157,6 +163,8 @@
           :default-expand-all="false"
           :expand-on-click-node="false"
           @node-click="handleNodeClick"
+          :filter-node-method="filterNode"
+          ref="tree"
         >
           <!-- <span class="custom-tree-node" slot-scope="{ node, data }">
                       <span>{{ node.label }}</span>
@@ -183,6 +191,7 @@ export default {
   data() {
     const data = [];
     return {
+      filterText: "",
       data: JSON.parse(JSON.stringify(data)), //树形结构
       dateTime: false,
       addEffect: false, //个人食材
@@ -230,14 +239,31 @@ export default {
         }
       ],
       value: "",
-      lower: 1
+      lower: 1,
+      support: "", //食材一ID
+      editor: "" //食材二ID
     };
   },
   beforeMount() {
     this.treeDrawing(); //树形渲染数
   },
-  computed: {},
+  computed() {},
+  watch: {
+    filterText(val) {
+      console.log(this.$refs.tree);
+      this.$refs.tree.filter(val);
+    }
+  },
   methods: {
+    filterNode(value, data) {
+      if (!value) return true;
+
+      return data.label.indexOf(value) !== -1;
+    },
+    handleNodeClick(data) {
+      this.ruleForm.adding = data.label;
+      this.support = data.id;
+    },
     //添加相克食物
     addShard() {
       this.dateTime = true;

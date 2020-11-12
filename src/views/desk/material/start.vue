@@ -2,36 +2,36 @@
   <div class="notice">
     <!-- 左边 -->
     <div class="cation">
-      <!-- <el-input
-        style=" width: 250px;height: 35px;"
-        placeholder="请输入内容"
-        v-model="input"
-        clearable
-      ></el-input> -->
+      <el-input
+        style="width:290px; margin-left: 9px;margin-top: 10px;"
+        placeholder="输入关键字进行查询"
+        v-model="filterText"
+      >
+      </el-input>
       <div class="import">
         <!-- <el-button type="primary" plain size="mini">导入</el-button>
         <el-button type="primary" plain size="mini">导出</el-button>
         <el-button type="primary" plain size="mini">加分类</el-button> -->
-        <el-button type="primary" size="mini">加食材</el-button>
+        <el-button @click="addition" type="primary" size="mini"
+          >加食材</el-button
+        >
       </div>
       <div class="whole">
         <div class="export">
           <!-- 全部(326) -->
           <el-button
-            type="text"
-            style="color: #00bfaf"
+            size="mini"
+            :type="2 == display ? 'primary' : 'default'"
             @click="buttonClick(2)"
-            :class="buttonIndex == 1 ? 'bgcolor' : ''"
             >全部</el-button
           >
         </div>
         <div class="toLine"></div>
         <div class="export1">
           <el-button
-            type="text"
-            style="color: #000"
+            size="mini"
+            :type="1 == display ? 'primary' : 'default'"
             @click="buttonClick(1)"
-            :class="buttonIndex == 3 ? 'bgcolor' : ''"
             >隐藏</el-button
           >
         </div>
@@ -39,10 +39,9 @@
         <div class="toLine"></div>
         <div class="export2">
           <el-button
-            type="text"
-            style="color: #000"
+            size="mini"
+            :type="0 == display ? 'primary' : 'default'"
             @click="buttonClick(0)"
-            :class="buttonIndex == 2 ? 'bgcolor' : ''"
             >公开</el-button
           >
         </div>
@@ -82,7 +81,11 @@
         </div>
         <div class="country2">
           <template>
-            <el-select v-model="really1" placeholder="请选择">
+            <el-select
+              @change="commonly()"
+              v-model="really1"
+              placeholder="请选择"
+            >
               <el-option
                 v-for="item in really"
                 :key="item.value"
@@ -98,12 +101,6 @@
       <!-- 树形组件 -->
       <div class="monly">
         <div class="block">
-          <el-input
-            style="width:350px"
-            placeholder="输入关键字进行过滤"
-            v-model="filterText"
-          >
-          </el-input>
           <p></p>
           <el-tree
             :data="data"
@@ -214,7 +211,7 @@
             style=" width: 350px;   "
           >
             <el-select
-              style=" width: 200px; "
+              style=" width: 185px; "
               v-model="ruleForm.fooddata"
               placeholder="请选择"
             >
@@ -273,6 +270,7 @@
 
           <el-form-item label="所属区域" style="  width: 350px;  ">
             <el-cascader
+              style=" width: 185px; "
               v-model="valuepark"
               placeholder="请选择省市区"
               :options="options"
@@ -281,7 +279,12 @@
             ></el-cascader>
           </el-form-item>
           <el-form-item label="所属季节" style=" width: 350px;  ">
-            <el-select v-model="active" multiple placeholder="请选择季节">
+            <el-select
+              style=" width: 185px; "
+              v-model="active"
+              multiple
+              placeholder="请选择季节"
+            >
               <el-option
                 v-for="item in season"
                 :key="item.value"
@@ -294,7 +297,7 @@
 
           <el-form-item label="功用" style="width:350px">
             <el-input
-              style=" width: 200px;  "
+              style=" width: 185px;  "
               type="textarea"
               v-model="ruleForm.desc"
               placeholder="请输入"
@@ -380,8 +383,8 @@ export default {
   data() {
     const data = [];
     return {
+      display: "2",
       loadFlag: false, // 加载flag
-      display: "0",
       mailto: [], //营养素含量
       filterText: "",
       data: JSON.parse(JSON.stringify(data)), //树形结构
@@ -451,7 +454,7 @@ export default {
       //全部 常用
       really: [
         {
-          value: "0",
+          value: "",
           label: "全部"
         },
         {
@@ -459,11 +462,11 @@ export default {
           label: "常用"
         }
       ],
-      really1: "0",
+      really1: "",
       //季节查询
       before: [
         {
-          value: "0",
+          value: "",
           label: "全部"
         },
         {
@@ -483,7 +486,7 @@ export default {
           label: "冬季"
         }
       ],
-      before1: "0",
+      before1: "",
 
       examine: [
         {
@@ -502,7 +505,9 @@ export default {
       value: "",
       options: [],
       value1: [],
-      waterfall: "2"
+      waterfall: "2",
+      fallen: "",
+      used: ""
     };
   },
   computed: {},
@@ -520,6 +525,13 @@ export default {
     }
   },
   methods: {
+    buttonClick(flat) {
+      // console.log(index);
+      // console.log(flat);
+      this.waterfall = flat;
+      this.display = flat;
+      this.Addraudit();
+    },
     filterNode(value, data) {
       if (!value) return true;
 
@@ -527,20 +539,36 @@ export default {
     },
     //省市区查询
     gProvinces() {
-      console.log(this.valuepark1);
-      this.valuepark1.forEach(item => {
-        console.log(item);
-      });
+      // console.log(this.valuepark1[1]);
+      this.fallen = this.valuepark1[1];
+      this.Addraudit();
+      // this.valuepark1.forEach(item => {
+      //   console.log(item[1]);
+      // });
+    },
+    commonly() {
+      // this.used = this.really1;
+      // console.log(this.used);
+      this.Addraudit();
     },
     disallow() {
       console.log(this.before1);
       this.Addraudit();
     },
-    buttonClick(index) {
-      // console.log(index);
-      this.waterfall = index;
-      // console.log(this.waterfall);
-      this.Addraudit();
+    addition() {
+      this.ruleForm.name = "";
+      this.ruleForm.foodFood = "";
+      this.ruleForm.ovenFood = "";
+      this.ruleForm.buffer = "";
+      this.ruleForm.fooddata = "";
+      this.ruleForm.dogfood = "";
+      this.ruleForm.besaved = "";
+      this.ruleForm.timers = "";
+      this.ruleForm.content = "";
+      this.ruleForm.resource = "";
+      this.active.length = 0;
+      this.valuepark.length = 0;
+      this.ruleForm.desc = "";
     },
     //食材库保存
     totally() {
@@ -590,8 +618,8 @@ export default {
           seasons: this.active, //季节
           belongRegions: this.valuepark, //所属区域
           function: this.ruleForm.desc, //功用
-          isUse: this.ruleForm.delivery1 == false ? 0 : 1, //是否常用
-          isPub: this.ruleForm.delivery == false ? 0 : 1, //是否公开
+          isUse: this.ruleForm.delivery1 == false ? 1 : 0, //是否常用
+          isPub: this.ruleForm.delivery == false ? 1 : 0, //是否公开
 
           nutritions: food
         })
@@ -664,8 +692,8 @@ export default {
           seasons: this.active, //季节
           belongRegions: this.valuepark, //所属区域
           function: this.ruleForm.desc, //功用
-          isUse: this.ruleForm.delivery1 == false ? 0 : 1, //是否常用
-          isPub: this.ruleForm.delivery == false ? 0 : 1, //是否公开
+          isUse: this.ruleForm.delivery1 == false ? 1 : 0, //是否常用
+          isPub: this.ruleForm.delivery == false ? 1 : 0, //是否公开
 
           nutritions: food
         })
@@ -690,7 +718,7 @@ export default {
       this.loadFlag = true;
       this.$axios
         .get(
-          `api/blade-food/basetype/getFoodByBaseId?isPrivate=1&typeTemp=${this.waterfall}&season=${this.before1}`,
+          `api/blade-food/basetype/getFoodByBaseId?isPrivate=1&typeTemp=${this.waterfall}&season=${this.before1}&isUse=${this.really1}&regionId=${this.fallen}`,
           {}
         )
         .then(res => {
@@ -824,6 +852,8 @@ export default {
         })
         .then(res => {
           // console.log(res);
+          this.valuepark.length = 0;
+          this.active.length = 0;
           this.inquired = res.data.data;
           console.log(this.inquired);
           this.ruleForm.name = this.inquired.foodName; //食材名
@@ -839,12 +869,11 @@ export default {
           this.ruleForm.resource = this.inquired.color + ""; //色系
           // this.valuepark = this.inquired.belongRegionName; //所属区域
           this.valuepark.length = 0;
+          let bar = [];
           this.inquired.provinces.split(",").forEach((item, i) => {
-            this.valuepark.push([
-              item,
-              this.inquired.belongRegion.split(",")[i]
-            ]);
+            bar.push([item, this.inquired.belongRegion.split(",")[i]]);
           });
+          this.valuepark = bar;
           // console.log(this.valuepark);
           // this.valuepark.push(
           //   this.inquired.provinces.split(','),
@@ -1046,13 +1075,14 @@ export default {
   width: 100%;
   height: 50px;
   /* background-color: red; */
-  margin-top: 10px;
+  /* margin-top: 10px; */
   line-height: 50px;
-  margin-left: 20px;
+  margin-left: 9px;
 }
 .whole {
   width: 100%;
   height: 40px;
+  margin-left: 3px;
   /* background-color: red; */
 }
 .export {
@@ -1068,7 +1098,7 @@ export default {
 .toLine {
   width: 2px;
   height: 20px;
-  margin-top: 10px;
+  margin-top: 5px;
   border-right: solid #acc0d8 1px;
   float: left;
 }
