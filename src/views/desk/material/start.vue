@@ -3,7 +3,7 @@
     <!-- 左边 -->
     <div class="cation">
       <el-input
-        style="width:290px; margin-left: 9px;margin-top: 10px;"
+        style="width:290px; margin-left: 9px;margin-top: 20px;"
         placeholder="输入关键字进行查询"
         v-model="filterText"
       >
@@ -194,7 +194,7 @@
             <el-input style="300px" v-model="ruleForm.foodFood"></el-input>
           </el-form-item>
           <el-form-item label="食物别名2" style=" width: 350px;  ">
-            <el-input v-model="ruleForm.ovenFood"></el-input>
+            <el-input style="300px" v-model="ruleForm.ovenFood"></el-input>
           </el-form-item>
 
           <el-form-item
@@ -202,7 +202,7 @@
             prop="buffer"
             style=" width: 350px;   "
           >
-            <el-input v-model="ruleForm.buffer"></el-input>
+            <el-input style="300px" v-model="ruleForm.buffer"></el-input>
           </el-form-item>
 
           <el-form-item
@@ -886,9 +886,9 @@ export default {
             this.active.push(item);
           });
           this.ruleForm.desc = this.inquired.function; //功用
-          this.ruleForm.delivery = this.inquired.isPub == 0 ? false : true; //公开
+          this.ruleForm.delivery = this.inquired.isPub == 1 ? false : true; //公开
           // console.log(this.ruleForm.delivery);
-          this.ruleForm.delivery1 = this.inquired.isUse == 0 ? false : true; //常用
+          this.ruleForm.delivery1 = this.inquired.isUse == 1 ? false : true; //常用
 
           let units = this.inquired.nutritions;
           // this.arr = this.mailto;

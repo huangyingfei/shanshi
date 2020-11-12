@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <el-row :gutter="20" style="padding: 0px; margin-top: 5px">
+  <div class="smart">
+    <el-row :gutter="20" style="padding: 0px; margin-top: 5px;">
       <el-col :span="24">
         <el-form :gutter="10" :inline="true" :model="formInline">
           <el-form-item>
@@ -718,6 +718,11 @@ export default {
 </script>
 
 <style scoped>
+.smart {
+  width: 1325px;
+  height: 900px;
+  background-color: #fff;
+}
 .el-row {
   padding: 5px;
 }
@@ -798,6 +803,7 @@ export default {
   border-radius: 50%;
   background-image: url("/img/yuan.png");
   background-size: 100% 100%;
+  z-index: 999;
 }
 .scores2 {
   width: 80px;
@@ -808,6 +814,8 @@ export default {
   /* background-color: blue; */
   background-image: url("/img/fenshu1.png");
   background-size: 100% 100%;
+  margin-left: -20px;
+  margin-top: 13px;
 }
 .gnus {
   font-size: 24px;
@@ -818,12 +826,12 @@ export default {
   width: 30px;
   height: 30px;
   margin-top: 20px;
-  margin-left: 2px;
+  margin-left: 10px;
 }
 .vertical {
-  font-size: 20px;
+  font-size: 16px;
   color: #00bfaf;
-  line-height: 30px;
+  line-height: 42px;
   padding-left: 5px;
 }
 .scorefor {

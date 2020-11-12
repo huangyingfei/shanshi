@@ -7,41 +7,54 @@
           <div class="cation">
             <!-- 左边 -->
             <div class="personal">
+              <el-input
+                style="width:290px; margin-left: 9px;"
+                placeholder="输入关键字进行查询"
+                v-model="filterText"
+              >
+              </el-input>
               <div class="import">
-                <el-button type="primary" plain size="mini">导入</el-button>
+                <!-- <el-button type="primary" plain size="mini">导入</el-button>
                 <el-button type="primary" plain size="mini">导出</el-button>
-                <el-button type="primary" plain size="mini">加分类</el-button>
-                <el-button type="primary" plain size="mini">加食材</el-button>
+                <el-button type="primary" plain size="mini">加分类</el-button> -->
+                <el-button type="primary" size="mini">加食材</el-button>
               </div>
               <div class="whole">
                 <div class="export">
                   <!-- 全部(326) -->
-                  <el-button type="text">全部</el-button>
+                  <el-button
+                    size="mini"
+                    :type="2 == display ? 'primary' : 'default'"
+                    @click="buttonClick(2)"
+                    >全部</el-button
+                  >
                 </div>
+                <div class="toLine"></div>
                 <div class="export1">
-                  <el-button type="text">分享平台</el-button>
+                  <el-button
+                    size="mini"
+                    :type="1 == display ? 'primary' : 'default'"
+                    @click="buttonClick(1)"
+                    >分享平台</el-button
+                  >
                 </div>
-                <el-button type="primary" size="small" @click="stored"
-                  >查询</el-button
-                >
               </div>
               <!-- 全国查找 -->
               <div class="country">
                 <div class="country1">
-                  <template>
-                    <el-select v-model="value" placeholder="请选择">
-                      <!-- <el-option
-                v-for="item in examine"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option> -->
-                    </el-select>
-                  </template>
+                  <el-cascader
+                    v-model="valuepark2"
+                    :options="options"
+                    @change="gProvinces"
+                  ></el-cascader>
                 </div>
                 <div class="country2">
                   <template>
-                    <el-select v-model="before1" placeholder="请选择">
+                    <el-select
+                      @change="disallow()"
+                      v-model="before1"
+                      placeholder="请选择"
+                    >
                       <el-option
                         v-for="item in before"
                         :key="item.value"
@@ -53,7 +66,11 @@
                 </div>
                 <div class="country2">
                   <template>
-                    <el-select v-model="really1" placeholder="请选择">
+                    <el-select
+                      @change="commonly()"
+                      v-model="really1"
+                      placeholder="请选择"
+                    >
                       <el-option
                         v-for="item in really"
                         :key="item.value"
@@ -75,11 +92,14 @@
                     :default-expand-all="false"
                     :expand-on-click-node="false"
                     @node-click="handleNodeClick"
+                    :filter-node-method="filterNode"
+                    ref="tree"
                   >
                     <span class="custom-tree-node" slot-scope="{ node, data }">
                       <span>{{ node.label }}</span>
                       <span>
                         <el-button
+                          v-if="data.view == 1"
                           type="text"
                           size="mini"
                           @click="() => prepare(data)"
@@ -88,7 +108,7 @@
                         </el-button>
                         <el-button
                           type="text"
-                          v-if="data.isUse"
+                          v-if="data.isUse == 0"
                           size="mini"
                           @click="() => append(data)"
                         >
@@ -96,7 +116,7 @@
                         </el-button>
                         <el-button
                           type="text"
-                          v-else
+                          v-if="data.isUse == 1"
                           size="mini"
                           @click="() => insert(data)"
                         >
@@ -120,6 +140,7 @@
                           公开
                         </el-button> -->
                         <el-button
+                          v-if="data.delete == 1"
                           type="text"
                           size="mini"
                           @click="() => remove(node, data)"
@@ -145,13 +166,19 @@
                   class="demo-ruleForm"
                 >
                   <el-form-item label="食材名" prop="name" style="width: 350px">
-                    <el-input v-model="ruleForm.name"></el-input>
+                    <el-input style="300px" v-model="ruleForm.name"></el-input>
                   </el-form-item>
                   <el-form-item label="食物别名1" style="width: 350px">
-                    <el-input v-model="ruleForm.foodFood"></el-input>
+                    <el-input
+                      style="300px"
+                      v-model="ruleForm.foodFood"
+                    ></el-input>
                   </el-form-item>
                   <el-form-item label="食物别名2" style="width: 350px">
-                    <el-input v-model="ruleForm.ovenFood"></el-input>
+                    <el-input
+                      style="300px"
+                      v-model="ruleForm.ovenFood"
+                    ></el-input>
                   </el-form-item>
 
                   <el-form-item
@@ -159,7 +186,10 @@
                     prop="buffer"
                     style="width: 350px"
                   >
-                    <el-input v-model="ruleForm.buffer"></el-input>
+                    <el-input
+                      style="300px"
+                      v-model="ruleForm.buffer"
+                    ></el-input>
                   </el-form-item>
 
                   <el-form-item
@@ -167,7 +197,11 @@
                     prop="fooddata"
                     style="width: 350px"
                   >
-                    <el-select v-model="ruleForm.fooddata" placeholder="请选择">
+                    <el-select
+                      style=" width: 185px; "
+                      v-model="ruleForm.fooddata"
+                      placeholder="请选择"
+                    >
                       <el-option
                         v-for="item in foodPos"
                         :key="item.value"
@@ -221,7 +255,7 @@
                     ></el-input>
                   </el-form-item>
 
-                  <el-form-item label="色系" style="">
+                  <el-form-item label="色系" style="width: 700px;   ">
                     <el-radio-group v-model="ruleForm.resource">
                       <el-radio label="1">绿</el-radio>
                       <el-radio label="2">红</el-radio>
@@ -234,6 +268,7 @@
 
                   <el-form-item label="所属区域" style="width: 350px">
                     <el-cascader
+                      style=" width: 185px; "
                       v-model="valuepark"
                       placeholder="请选择省市区"
                       :options="options"
@@ -243,6 +278,7 @@
                   </el-form-item>
                   <el-form-item label="所属季节" style="width: 350px">
                     <el-select
+                      style=" width: 185px; "
                       v-model="active"
                       multiple
                       placeholder="请选择季节"
@@ -257,16 +293,16 @@
                     </el-select>
                   </el-form-item>
 
-                  <el-form-item label="功用">
+                  <el-form-item label="功用" style="width:350px">
                     <el-input
-                      style="width: 450px"
+                      style=" width: 185px;  "
                       type="textarea"
                       v-model="ruleForm.desc"
                       placeholder="请输入"
                     ></el-input>
                   </el-form-item>
 
-                  <el-form-item label="图片">
+                  <el-form-item label="图片" style="width:350px">
                     <el-upload
                       action="https://jsonplaceholder.typicode.com/posts/"
                       list-type="picture-card"
@@ -608,6 +644,8 @@ export default {
   data() {
     const data = [];
     return {
+      filterText: "",
+      display: "2",
       checked: true,
       loadFlag: false, //加载flag
       data: JSON.parse(JSON.stringify(data)), //树形结构
@@ -659,13 +697,14 @@ export default {
       prtree: [],
       valuepark: [], //省市区
       valuepark1: [], //公共沈世渠
+      valuepark2: [], //查询省市区
       options: [],
       active: [], //季节
       active1: [], //公共所属季节
       //全部 常用
       really: [
         {
-          value: "0",
+          value: "",
           label: "全部"
         },
         {
@@ -673,12 +712,12 @@ export default {
           label: "常用"
         }
       ],
-      really1: "0",
+      really1: "",
       really2: "0",
       //季节查询
       before: [
         {
-          value: "0",
+          value: "",
           label: "全部"
         },
         {
@@ -698,10 +737,18 @@ export default {
           label: "冬季"
         }
       ],
-      before1: "0",
+      before1: "",
       before2: "0",
-      lower: 0
+      lower: 0,
+      waterfall: "2",
+      fallen: ""
     };
+  },
+  watch: {
+    filterText(val) {
+      console.log(this.$refs.tree);
+      this.$refs.tree.filter(val);
+    }
   },
   beforeMount() {
     this.Protocol(); //营养素含量
@@ -710,6 +757,37 @@ export default {
     this.treeDrawing(); //树形渲染数
   },
   methods: {
+    resetForm() {
+      // console.log(this.ruleForm.delivery1);
+      // console.log(this.ruleForm.delivery1 == false ? 1 : 0);
+      // console.log(this.ruleForm.delivery);
+      // console.log(this.ruleForm.delivery == false ? 1 : 0);
+    },
+    //全部常用查询
+    commonly() {
+      this.treeDrawing();
+    },
+    //春夏秋冬查询
+    disallow() {
+      this.treeDrawing();
+    },
+    //省市区查询
+    gProvinces() {
+      this.fallen = this.valuepark2[1];
+      this.treeDrawing();
+    },
+    filterNode(value, data) {
+      if (!value) return true;
+
+      return data.label.indexOf(value) !== -1;
+    }, //树形结构搜索
+    buttonClick(flat) {
+      // console.log(index);
+      // console.log(flat);
+      this.waterfall = flat;
+      this.display = flat;
+      this.treeDrawing();
+    },
     handleClick(tab) {
       // console.log(tab);
       this.lower = tab.index;
@@ -717,6 +795,71 @@ export default {
       this.treeDrawing();
       this.Protocol();
       // console.log(event);
+    },
+    //编辑保存
+    saved() {
+      // console.log(this.mailto);
+      console.log(this.ruleForm);
+      let food = [];
+      this.mailto.forEach(item => {
+        // console.log(item);
+        item.children.forEach(item1 => {
+          // console.log(item1);
+          if (item1.children) {
+            item1.children.forEach(item2 => {
+              // console.log(item2);
+              if (item2.result != null) {
+                food.push({
+                  nutrientId: item2.id,
+                  value: item2.result
+                });
+              }
+            });
+          }
+          if (item1.result != null) {
+            food.push({
+              nutrientId: item1.id,
+              value: item1.result
+            });
+          }
+        });
+      });
+      console.log(food);
+      // console.log(Library);
+      // let canal=this.mailto;
+
+      this.$axios
+        .post(`api/blade-food/food/update`, {
+          id: this.flour, //ID
+          foodName: this.ruleForm.name, //食材名
+          foodAlias: this.ruleForm.foodFood, //食物别名1
+          foodAlias1: this.ruleForm.ovenFood, //食物别名2
+          foodReal: this.ruleForm.buffer, //食材真名
+          foodType: this.ruleForm.fooddata, //食材分类
+          foodType1: this.ruleForm.foods, //食物分类1
+          foodType2: this.ruleForm.dogfood, //食物分类2
+          foodEat: this.ruleForm.besaved, //食部
+          weight: this.ruleForm.timers, //重量
+          water: this.ruleForm.content, //水分
+          color: this.ruleForm.resource, //色系
+          seasons: this.active, //季节
+          belongRegions: this.valuepark, //所属区域
+          function: this.ruleForm.desc, //功用
+          isUse: this.ruleForm.delivery1 == false ? 1 : 0, //是否常用
+          isPub: this.ruleForm.delivery == false ? 1 : 0, //是否公开
+
+          nutritions: food
+        })
+        .then(res => {
+          this.$message({
+            message: "编辑成功",
+            type: "success"
+          });
+          this.treeDrawing();
+        })
+        .catch(() => {
+          this.$message.error("编辑失败");
+        });
     },
     //保存
     iptables() {
@@ -762,8 +905,8 @@ export default {
           seasons: this.active, //季节
           belongRegions: this.valuepark, //所属区域
           function: this.ruleForm.desc, //功用
-          isUse: this.ruleForm.delivery1 == false ? 0 : 1, //是否常用
-          isPub: this.ruleForm.delivery == false ? 0 : 1, //是否分享平台
+          isUse: this.ruleForm.delivery1 == false ? 1 : 0, //是否常用
+          isPub: this.ruleForm.delivery == false ? 1 : 0, //是否分享平台
 
           nutritions: food
         })
@@ -794,6 +937,8 @@ export default {
           // console.log(res);
           this.inquired = res.data.data;
           console.log(this.inquired);
+          this.valuepark.length = 0;
+          this.active.length = 0;
           if (this.lower == 0) {
             this.ruleForm.name = this.inquired.foodName; //食材名
             this.ruleForm.foodFood = this.inquired.foodAlias; //食物别名1
@@ -811,16 +956,15 @@ export default {
               this.active.push(item);
             });
             //所属区域
+            let bar = [];
             this.inquired.provinces.split(",").forEach((item, i) => {
-              this.valuepark.push([
-                item,
-                this.inquired.belongRegion.split(",")[i]
-              ]);
+              bar.push([item, this.inquired.belongRegion.split(",")[i]]);
             });
+            this.valuepark = bar;
             this.ruleForm.desc = this.inquired.function; //功用
-            this.ruleForm.delivery = this.inquired.isPub == 0 ? false : true; //公开
+            this.ruleForm.delivery = this.inquired.isPub == 1 ? false : true; //公开
             // console.log(this.ruleForm.delivery);
-            this.ruleForm.delivery1 = this.inquired.isUse == 0 ? false : true; //常用
+            this.ruleForm.delivery1 = this.inquired.isUse == 1 ? false : true; //常用
             let units = this.inquired.nutritions;
             units.forEach(item => {
               // console.log(item);
@@ -955,14 +1099,13 @@ export default {
       this.loadFlag = true;
       this.$axios
         .get(
-          `api/blade-food/basetype/getFoodByBaseId?isPrivate=${this.lower}`,
+          `api/blade-food/basetype/getFoodByBaseId?isPrivate=${this.lower}&typeTemp=${this.waterfall}&regionId=${this.fallen}&season=${this.before1}&isUse=${this.really1}`,
           {}
         )
         .then(res => {
           // console.log(res);
           this.loadFlag = false;
           this.prtree = res.data.data;
-          console.log(this.prtree);
 
           let trees = [];
           this.prtree.forEach((item, index) => {
@@ -976,7 +1119,9 @@ export default {
                 id: item1.id,
                 label: item1.foodName,
                 isPub: item1.isPub,
-                isUse: item1.isUse
+                isUse: item1.isUse,
+                view: 1,
+                delete: 1
               };
             });
           });
@@ -1091,28 +1236,40 @@ export default {
   /* background-color: red; */
   margin-left: 10px;
 }
+.monly {
+  width: 300px;
+  height: 100%;
+  margin-top: 10px;
+}
 .import {
   width: 100%;
-  height: 50px;
+  height: 30px;
   /* background-color: red; */
-  margin-top: 10px;
-  line-height: 50px;
-  margin-left: 20px;
+  margin-top: 15px;
+  /* line-height: 50px; */
+  margin-left: 9px;
 }
 .whole {
   width: 100%;
   height: 40px;
-  margin-top: 10px;
+  margin-top: 20px;
   /* background-color: red; */
 }
 .export {
-  width: 100px;
+  width: 77px;
   height: 35px;
   /* background-color: yellow; */
   text-align: center;
   line-height: 30px;
-  border-right: 1px solid #e0e0e0;
+
   font-size: 14px;
+  float: left;
+}
+.toLine {
+  width: 2px;
+  height: 20px;
+  margin-top: 5px;
+  border-right: solid #acc0d8 1px;
   float: left;
 }
 .export1 {
@@ -1125,7 +1282,7 @@ export default {
   float: left;
 }
 .country {
-  width: 100%;
+  width: 300px;
   height: 50px;
   /* background-color: red; */
   line-height: 50px;
@@ -1149,7 +1306,7 @@ export default {
   font-weight: bold;
 }
 .mationinput {
-  width: 95%;
+  width: 760px;
   /* height: 700px; */
   /* display: flex; */
   margin-left: 40px;

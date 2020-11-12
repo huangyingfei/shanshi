@@ -19,6 +19,7 @@
       </el-select>
       <el-button
         size="medium"
+        @click="searchType"
         icon="el-icon-search"
         type="primary"
         style=" margin-left: 20px; "
@@ -27,7 +28,11 @@
     </div>
     <!-- 添加食材 -->
     <div class="cadddr">
-      <el-button size="medium" type="primary" @click="addShard"
+      <el-button
+        icon="el-icon-plus"
+        size="medium"
+        type="primary"
+        @click="addShard(1)"
         >添加相克食材</el-button
       >
 
@@ -35,13 +40,15 @@
     </div>
 
     <div class="address">
-      <el-table :data="tableData" border style="width: 100%">
-        <el-table-column
-          prop="date"
-          label="序号"
-          width="100"
-          align="center"
-        ></el-table-column>
+      <el-table
+        v-loading="loadFlag1"
+        :data="tableData"
+        border
+        :element-loading-text="page_data.loadTxt"
+        style="width: 100%"
+      >
+        <el-table-column label="序号" type="index" width="50" align="center">
+        </el-table-column>
         <el-table-column
           prop="name"
           label="名称"
@@ -49,34 +56,37 @@
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="address"
+          prop="foodName"
           label="食材一"
           width="160"
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="stats"
+          prop="foodName1"
           label="食材二"
           width="160"
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="malloc"
+          prop="reason"
           label="不宜同食原因"
           width="180"
           align="center"
         ></el-table-column>
-        <el-table-column
-          prop="decls"
-          label="是否有效"
-          width="120"
-          align="center"
-        ></el-table-column>
+        <el-table-column label="是否有效" width="120" align="center">
+          <template slot-scope="scope">
+            <p class="stop" v-if="scope.row.isActive == 0">是</p>
+            <p style="color:#409eff" v-else-if="scope.row.isActive == 1">
+              否
+            </p>
+          </template>
+        </el-table-column>
 
         <!--操作格-->
-        <el-table-column label="操作" align="left">
+        <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button
+              @click="editorTheme(scope.row, 2)"
               type="primary"
               size="small"
               icon="el-icon-edit"
@@ -94,6 +104,19 @@
           </template>
         </el-table-column>
       </el-table>
+      <!-- 分页 -->
+      <div class="pagingClass">
+        <el-pagination
+          :page-sizes="m_page.sizes"
+          :page-size="m_page.size"
+          :current-page="m_page.number"
+          @size-change="m_handleSizeChange"
+          @current-change="m_handlePageChange"
+          layout="total,sizes,prev, pager, next"
+          background
+          :total="m_page.totalElements"
+        ></el-pagination>
+      </div>
     </div>
     <!-- 添加相克食材 -->
     <el-dialog
@@ -138,7 +161,15 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dateTime = false">取 消</el-button>
-        <el-button @click="setlist('ruleForm')" type="primary">确 定</el-button>
+        <el-button
+          v-if="this.under == 1"
+          @click="setlist('ruleForm')"
+          type="primary"
+          >确 定</el-button
+        >
+        <el-button @click="hardware('ruleForm')" v-else type="primary"
+          >编辑 确 定</el-button
+        >
       </div>
     </el-dialog>
     <!-- 食材 -->
@@ -195,6 +226,7 @@ export default {
       data: JSON.parse(JSON.stringify(data)), //树形结构
       dateTime: false,
       addEffect: false, //个人食材
+      loadFlag1: false, //加载flag
       ruleForm: {
         name: "",
         adding: "", //食材1
@@ -205,28 +237,29 @@ export default {
         resource: ""
       },
       rules: {
-        region: [
-          { required: true, message: "请选择活动区域", trigger: "change" }
-        ],
-        region1: [
-          { required: true, message: "请选择活动区域", trigger: "change" }
-        ]
+        // region: [
+        //   { required: true, message: "请选择活动区域", trigger: "change" }
+        // ],
+        // region1: [
+        //   { required: true, message: "请选择活动区域", trigger: "change" }
+        // ]
       },
-      tableData: [
-        {
-          date: "1",
-          name: "食物相克",
-          address: "油桃",
-          stats: "西瓜",
-          malloc: "容易长红点",
-          decls: "是"
-        }
-      ],
-      input: "",
+      m_page: {
+        sizes: [10, 20, 40, 50, 100], //每页最大显示数
+        size: 20,
+        totalElements: 0,
+        totalPages: 3,
+        number: 1
+      },
+      page_data: {
+        loadTxt: "请求列表中"
+      },
+      tableData: [],
+      input: "", //名称
       temps: "",
       options: [
         {
-          value: "0",
+          value: "",
           label: "全部"
         },
         {
@@ -234,18 +267,21 @@ export default {
           label: "是"
         },
         {
-          value: "2",
+          value: "0",
           label: "否"
         }
       ],
       value: "",
+      dataindex1: undefined,
       lower: 1,
       support: "", //食材一ID
-      editor: "" //食材二ID
+      editor: "", //食材二ID
+      under: ""
     };
   },
   beforeMount() {
     this.treeDrawing(); //树形渲染数
+    this.generator(); //获取表格数据
   },
   computed() {},
   watch: {
@@ -261,11 +297,23 @@ export default {
       return data.label.indexOf(value) !== -1;
     },
     handleNodeClick(data) {
-      this.ruleForm.adding = data.label;
-      this.support = data.id;
+      if (this.dataindex1 == 1) {
+        this.ruleForm.adding = data.label;
+        this.support = data.id;
+      } else {
+        this.ruleForm.adding1 = data.label;
+        this.editor = data.id;
+      }
     },
     //添加相克食物
-    addShard() {
+    addShard(index1) {
+      console.log(index1);
+      this.under = index1;
+      this.ruleForm.name = "";
+      this.ruleForm.adding = "";
+      this.ruleForm.adding1 = "";
+      this.ruleForm.desc = "";
+      this.ruleForm.resource = "";
       this.dateTime = true;
     },
     //添加相克食物
@@ -275,23 +323,127 @@ export default {
       // console.log(123123);
       this.addEffect = true;
     },
-    setlist(formName) {
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          // alert('submit!');
-          this.$axios.post(`api/blade-food/foodmutual/save`, {
-            name: this.ruleForm.name, //名称
+    //编辑
+    editorTheme(row, index1) {
+      console.log(row);
+      // console.log(index1);
+      this.under = index1;
+      this.dateTime = true;
+      this.ruleForm.name = row.name;
+      this.ruleForm.adding = row.foodName;
+      this.ruleForm.adding1 = row.foodName1;
+      this.ruleForm.desc = row.reason;
+      this.ruleForm.resource = row.isActive == 0 ? "是" : "否";
 
-            isActive: this.ruleForm.resource //是否有效
+      this.support = row.foodId; //食材一ID
+      this.editor = row.foodId1; //食材二ID
+      this.sure = row.id;
+      // console.log(this.support);
+      // this.ruleForm.name
+    },
+    //编辑确定
+    hardware() {
+      this.$axios
+        .post(`api/blade-food/foodmutual/update`, {
+          id: this.sure, //ID
+          name: this.ruleForm.name, //名称
+          foodId: this.support, //食材1
+          foodId1: this.editor, //食材2
+          reason: this.ruleForm.desc, //不宜同事原因
+          isActive: this.ruleForm.resource == "是" ? 0 : 1 //是否
+        })
+        .then(res => {
+          console.log(res);
+          this.$message({
+            message: "编辑成功",
+            type: "success"
           });
-        } else {
-          console.log("error submit!!");
-          return false;
-        }
-      });
+          this.generator();
+          this.dateTime = false;
+        })
+        .catch(() => {
+          this.$message.error("编辑失败");
+        });
+    },
+    //保存
+    setlist() {
+      this.$axios
+        .post(`api/blade-food/foodmutual/save`, {
+          name: this.ruleForm.name, //名称
+          foodId: this.support, //食材1
+          foodId1: this.editor, //食材2
+          reason: this.ruleForm.desc, //不宜同事原因
+          isActive: this.ruleForm.resource == "是" ? 0 : 1 //是否
+        })
+        .then(res => {
+          console.log(res);
+          this.$message({
+            message: "保存成功",
+            type: "success"
+          });
+          this.generator();
+          this.dateTime = false;
+        })
+        .catch(() => {
+          this.$message.error("保存失败");
+        });
+      // this.$refs[formName].validate(valid => {
+      //   if (valid) {
+      //     // alert('submit!');
+      //     this.$axios.post(`api/blade-food/foodmutual/save`, {
+      //       name: this.ruleForm.name, //名称
+
+      //       isActive: this.ruleForm.resource //是否有效
+      //     });
+      //   } else {
+      //     console.log("error submit!!");
+      //     return false;
+      //   }
+      // });
     },
     DeleteUser(row) {
       console.log(row);
+      this.term = row.id;
+      this.$axios
+        .post(`api/blade-food/foodmutual/remove?ids=${this.term}`)
+
+        .then(res => {
+          console.log(res);
+          this.$message({
+            message: "删除成功",
+            type: "success"
+          });
+          this.generator();
+        })
+        .catch(() => {
+          this.$message.error("删除失败");
+        });
+    },
+    //搜索
+    searchType() {
+      // console.log(this.input);
+      this.generator();
+      // console.log(this.value);
+    },
+    //获取表格
+    generator() {
+      this.loadFlag1 = true;
+      this.$axios(
+        `api/blade-food/foodmutual/list?size=${this.m_page.size}&current=${this.m_page.number}&name=${this.input}&isActive=${this.value}&foodName=${this.temps}`
+      ).then(res => {
+        this.loadFlag1 = false;
+        this.tableData = res.data.data.records;
+        this.m_page.totalElements = res.data.data.total;
+      });
+    },
+    //页码
+    m_handlePageChange(currPage) {
+      this.m_page.number = currPage;
+      this.generator();
+    },
+    m_handleSizeChange(currSize) {
+      this.m_page.size = currSize;
+      this.generator();
     },
     //树形渲染
     treeDrawing() {
@@ -332,29 +484,25 @@ export default {
 </script>
 
 <style>
-.el-button--success {
-  color: #fff;
-  background-color: #00aca0;
-  border-color: #00aca0;
-}
 .unsaved {
-  width: 98%;
-  height: 600px;
+  width: 100%;
+  height: 100%;
   background-color: #fff;
   font-size: 14px;
+  margin-top: -19px;
 }
 .update {
-  width: 100%;
+  width: 1135px;
   height: 50px;
   float: left;
   margin-left: 20px;
   /* background-color: #fff; */
-  line-height: 50px;
+  margin-top: 15px;
   /* background-color: red; */
 }
 .update .el-input {
   width: 200px;
-  height: 32px;
+  height: 40px;
 }
 .exact {
   margin-left: 20px;
@@ -362,12 +510,19 @@ export default {
 }
 .cadddr {
   width: 100%;
-  height: 50px;
+  height: 55px;
   margin-left: 20px;
   margin-top: 20px;
   line-height: 50px;
 }
 .address {
-  margin-top: 50px;
+  margin-top: 72px;
+}
+.pagingClass {
+  text-align: right;
+  /* margin: 20px 0; */
+  margin-top: 20px;
+  margin-right: 40px;
+  margin-bottom: 60px;
 }
 </style>
