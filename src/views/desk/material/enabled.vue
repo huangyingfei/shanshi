@@ -16,6 +16,8 @@
       ></el-input>
       <span style="margin: 0 10px;">提交日期:</span>
       <el-date-picker
+        format="yyyy 年 MM 月 dd 日"
+      value-format="yyyy-MM-dd"c
         v-model="value1"
         type="date"
         placeholder="选择日期"
@@ -556,15 +558,14 @@ export default {
   methods: {
     searchType() {
       this.auditing();
+      // console.log(this.value1);
     },
     //获取表格数据
     auditing() {
       this.loadFlag = true;
       this.$axios
         .get(
-          `api/blade-food/food/getAuditList?size=${10}&name=${
-            this.input
-          }&current=${1}&orgName=${this.noinst}&mobile=${this.phoneId}`,
+          `api/blade-food/food/getAuditList?size=${this.m_page.size}&current=${this.m_page.number}&name=${ this.input}&orgName=${this.noinst}&mobile=${this.phoneId}&createName=${this.editor}`,
           {
             headers: {
               "Content-Type": "application/json"
@@ -582,11 +583,11 @@ export default {
     //页码
     m_handlePageChange(currPage) {
       this.m_page.number = currPage;
-      this.getobtain();
+      this.auditing();
     },
     m_handleSizeChange(currSize) {
       this.m_page.size = currSize;
-      this.getobtain();
+      this.auditing();
     },
     //查看
     seecol(row) {
