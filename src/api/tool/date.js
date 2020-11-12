@@ -32,7 +32,7 @@ export function getInervalHour(startDate, endDate) {
   }
   var ms = endDate.getTime() - startDate.getTime();
   if (ms < 0) return 0;
-  return Math.floor(ms / 1000 / 60 / 60);
+  return Math.floor(ms / 1000 / 60 / 60 /24);
 }
 
 export function getDate(strDate) {

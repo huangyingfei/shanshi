@@ -1,5 +1,5 @@
 <template>
-  <basic-container >
+  <basic-container  class="organ">
     <avue-crud
       :option="option"
       :table-loading="loading"
@@ -28,10 +28,12 @@
               :lazy-load="lazyLoad"
               :props="props1"
               v-model="region"
+              :disabled="ableFlag"
               style="width: 324.8px"
             ></avue-cascader>
 
             <avue-input
+              :disabled="ableFlag"
               v-model="regionDetail"
               placeholder="详细地址"
               type="textarea"
@@ -150,6 +152,7 @@ export default {
 
 
     return {
+      ableFlag:false,
       form: {},
       region: [], //省市区
       regionDetail: "", //详细地址
@@ -456,7 +459,7 @@ export default {
                 type: "upload",
                 listType: "picture-img",
                 action: '/api/blade-resource/oss/endpoint/put-file',
-                tip: '只能上传jpg/png用户头像，且不超过500kb',
+                tip: '只能上传jpg/png的图片，且不超过500kb',
                 //  action: '/api/blade-resource/oss/endpoint/put-file',
                 propsHttp: {
                   res: "data",
@@ -469,7 +472,7 @@ export default {
                 type: "upload",
                 listType: "picture-img",
                 action: '/api/blade-resource/oss/endpoint/put-file',
-                tip: '只能上传jpg/png用户头像，且不超过500kb',
+                tip: '只能上传jpg/png的图片，且不超过500kb',
                 //  action: '/api/blade-resource/oss/endpoint/put-file',
                 propsHttp: {
                   res: "data",
@@ -562,7 +565,7 @@ export default {
                 type: "upload",
                 listType: "picture-img",
                 action: '/api/blade-resource/oss/endpoint/put-file',
-                tip: '只能上传jpg/png用户头像，且不超过500kb',
+                tip: '只能上传jpg/png的图片，且不超过500kb',
                 //  action: '/api/blade-resource/oss/endpoint/put-file',
                 propsHttp: {
                   res: "data",
@@ -686,6 +689,7 @@ export default {
     },
     //新增
     rowSave(row, done, loading) {
+      this.ableFlag=true;
       var param = {
         account: row.account,
         accountType: row.accountSchoolType[0],
@@ -730,6 +734,7 @@ export default {
       );
     },
     rowUpdate(row, index, done, loading) {
+        this.ableFlag=true;
         var param = {
         id:row.id,
         account: row.account,
@@ -839,6 +844,7 @@ export default {
       done();
     },
     clear() {
+      this.ableFlag=false;
       this.region = []; //省市区
       this.regionDetail = ""; //详细地址
       this.findObject(this.option.group, "account").readonly=false;
@@ -918,6 +924,7 @@ export default {
       };
       if (level == 0) {
         lazyList().then((res) => {
+          debugger
           let data = res.data.data;
           data.forEach((e) => {
             list.push({
@@ -930,6 +937,7 @@ export default {
       }
       if (level == 1) {
         lazyList(code).then((res) => {
+          debugger
           let data = res.data.data;
           data.forEach((e) => {
             list.push({
@@ -942,6 +950,7 @@ export default {
         });
       } else if (level == 2) {
         lazyList(code).then((res) => {
+          debugger
           let data = res.data.data;
           data.forEach((e) => {
             list.push({
@@ -957,6 +966,11 @@ export default {
   },
 };
 </script>
+<style>
+  .el-select-dropdown__item.selected {
+    font-weight: 400 !important;
+  }
+</style>
 
 
 

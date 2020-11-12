@@ -357,7 +357,7 @@ export default {
                 type: "upload",
                 listType: "picture-img",
                 action: '/api/blade-resource/oss/endpoint/put-file',
-                tip: '只能上传jpg/png用户头像，且不超过500kb',
+                tip: '只能上传jpg/png的图片，且不超过500kb',
                 propsHttp: {
                   res: "data",
                   url: "link",
@@ -369,7 +369,7 @@ export default {
                 type: "upload",
                 listType: "picture-img",
                 action: '/api/blade-resource/oss/endpoint/put-file',
-                tip: '只能上传jpg/png用户头像，且不超过500kb',
+                tip: '只能上传jpg/png的图片，且不超过500kb',
                 propsHttp: {
                   res: "data",
                   url: "link",
@@ -408,7 +408,7 @@ export default {
                 type: "upload",
                 listType: "picture-img",
                 action: '/api/blade-resource/oss/endpoint/put-file',
-                tip: '只能上传jpg/png用户头像，且不超过500kb',
+                tip: '只能上传jpg/png的图片，且不超过500kb',
                 propsHttp: {
                   res: "data",
                   url: "link",

@@ -10,7 +10,7 @@ export const saveWeb = (params) => {
 
 export const getOneWeb = () => {
   return request({
-    url: '/api/blade-system/web/getOneWeb',
+    url: '/api/blade-system/web/detail',
     method: 'get',
   })
 }

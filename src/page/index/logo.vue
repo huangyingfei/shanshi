@@ -7,11 +7,12 @@
       <template v-if="!keyCollapse">
         <div class="avue-logo_title" key="1">
           <!-- <img class="logoicon" src="/img/logoicon.png" alt /> -->
-          <span class="logoicon">
-            <img src="/img/huayuanlogo2.png" alt />
-          </span>
+          <img :src="webLogo" alt />
+          <!--<span class="logoicon">-->
+            <!--<img src="/img/huayuanlogo2.png" alt />-->
+          <!--</span>-->
 
-          <span > <img src="/img/huayuanlogo.png" style="width: 180px"/></span>
+          <!--<span > <img src="/img/huayuanlogo.png" style="width: 180px"/></span>-->
         </div>
       </template>
     </transition-group>
@@ -19,17 +20,34 @@
 </template>
 
 <script>
+  import {  getOneWeb } from "@/api/system/setting";
+  import router from '@/router/router'
 import { mapGetters } from "vuex";
 export default {
   name: "logo",
+  webLogo:'',
   data() {
-    return {};
+    return {
+      webLogo:'',
+    };
   },
   created() {},
+  mounted(){
+    this.init()
+  },
   computed: {
     ...mapGetters(["website", "keyCollapse"])
   },
-  methods: {}
+  methods: {
+    init(){
+      getOneWeb().then(res=>{
+        if(res.data.success){
+          this.webLogo=res.data.data.webLogo
+          router.$avueRouter.setTitle(res.data.data.webTitle);
+        }
+      })
+    }
+  }
 };
 </script>
 

@@ -85,6 +85,7 @@
         };
         this.$store.dispatch("FlowRoutes").then(() => {
         });
+
       },
       //打开菜单
       openMenu(item = {}) {
