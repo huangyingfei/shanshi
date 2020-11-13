@@ -8,8 +8,8 @@
               <el-input placeholder="输入关键字进行过滤" v-model="filterText">
               </el-input>
 
-              <el-tree
-                :data="treeData"
+              <el-tree default-expand-all
+                       :data="treeData"
                 :props="treeProps"
                 @node-click="nodeClick"
                 :filter-node-method="filterNode"
@@ -1043,9 +1043,10 @@
     font-size: 12px;
   }
   .el-tree-node__content {
-    height: 30px;
+    height: 30px !important;
   }
   .ant-tree-node-content-btn {
     margin-top: 4px;
   }
+
 </style>
