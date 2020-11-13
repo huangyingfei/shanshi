@@ -17,7 +17,8 @@
       <span style="margin: 0 10px;">提交日期:</span>
       <el-date-picker
         format="yyyy 年 MM 月 dd 日"
-      value-format="yyyy-MM-dd"c
+        value-format="yyyy-MM-dd"
+        c
         v-model="value1"
         type="date"
         placeholder="选择日期"
@@ -38,9 +39,9 @@
           style="width:200px"
         ></el-input>
         <span style="margin: 0 10px;">审核状态:</span>
-        <el-select v-model="value" placeholder="请选择">
+        <el-select v-model="mState1" placeholder="请选择">
           <el-option
-            v-for="item in options"
+            v-for="item in mState"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -521,7 +522,29 @@ export default {
       },
 
       options: [], //省市区
-
+      mState: [
+        {
+          value: "",
+          label: "全部"
+        },
+        {
+          value: "1",
+          label: "待审核"
+        },
+        {
+          value: "2",
+          label: "审核通过"
+        },
+        {
+          value: "3",
+          label: "审核不通过"
+        },
+        {
+          value: "4",
+          label: "无需审核"
+        }
+      ],
+      mState1: "",
       season: [
         {
           value: "1",
@@ -565,7 +588,7 @@ export default {
       this.loadFlag = true;
       this.$axios
         .get(
-          `api/blade-food/food/getAuditList?size=${this.m_page.size}&current=${this.m_page.number}&name=${ this.input}&orgName=${this.noinst}&mobile=${this.phoneId}&createName=${this.editor}`,
+          `api/blade-food/food/getAuditList?size=${this.m_page.size}&current=${this.m_page.number}&name=${this.input}&orgName=${this.noinst}&mobile=${this.phoneId}&createName=${this.editor}&createtime=${this.value1}`,
           {
             headers: {
               "Content-Type": "application/json"

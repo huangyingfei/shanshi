@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 10px">
+  <div style="padding: 0px">
     <!-- table-week start   -->
     <el-table class="table-week" style="width: 100%" :data="datas" border fit>
       <el-table-column align="center" width="100" fixed class-name="col-date3">
@@ -29,99 +29,113 @@
           </div>
         </template>
         <template slot-scope="scope">
-          <!-- table start -->
-          <el-table
-            class="table-foods"
-            style="width: 100%"
-            :data="scope.row.weeks.find(p => p.name == 'week1').foods"
-            row-key="id"
-            default-expand-all
-            :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-            :span-method="onTableSpanMethod"
+          <div
+            class="drapIn"
+            @drop="drop($event, scope.row.id, 'week1')"
+            @dragleave="ondragleave($event)"
+            @dragenter="ondragenter($event)"
+            @dragover="ondragover($event)"
           >
-            <el-table-column
-              label="食品/食材"
-              prop="name"
-              header-align="center"
-              align="left"
-            ></el-table-column>
-            <el-table-column label="用量(g)" prop="count" align="center">
-              <template slot-scope="scope1">
-                <div style="display: flex">
-                  <el-input
-                    style="flex: 1"
-                    v-model="scope1.row.count"
-                    type="text"
-                    size="mini"
-                    placeholder="请输入内容"
-                  ></el-input>
-                  <div style="width: 35px; text-algin: center">
-                    <el-link
-                      v-if="scope1.row.children"
-                      type="primary"
-                      @click="
-                        onRemove(
+            <!-- table start -->
+            <el-table
+              class="table-foods"
+              style="width: 100%"
+              :data="scope.row.weeks.find(p => p.name == 'week1').foods"
+              row-key="id"
+              default-expand-all
+              :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+              :span-method="onTableSpanMethod"
+            >
+              <el-table-column
+                label="食品/食材"
+                prop="name"
+                header-align="center"
+                align="left"
+              ></el-table-column>
+              <el-table-column label="用量(g)" prop="count" align="center">
+                <template slot-scope="scope1">
+                  <div style="display: flex">
+                    <el-input
+                      style="flex: 1"
+                      v-model="scope1.row.count"
+                      type="text"
+                      size="mini"
+                      placeholder="请输入内容"
+                    ></el-input>
+                    <div style="width: 35px; text-algin: center">
+                      <el-link
+                        v-if="scope1.row.children"
+                        type="primary"
+                        @click="
+                          onRemove(
+                            scope.row.id,
+                            scope.row.weeks.find(p => p.name == 'week1').id,
+                            scope1.row.id
+                          )
+                        "
+                        >移除</el-link
+                      >
+                    </div>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column label="图片" align="center">
+                <template slot-scope="scope1">
+                  <div
+                    v-if="
+                      scope1.$index === 0 &&
+                        scope.row.weeks.find(p => p.name == 'week1')
+                    "
+                    style="width: 100px; height: 100px; margin: 0 auto"
+                  >
+                    <el-upload
+                      :multiple="false"
+                      :show-file-list="false"
+                      :action="upload_url"
+                      :on-change="
+                        onUploadImage(
                           scope.row.id,
                           scope.row.weeks.find(p => p.name == 'week1').id,
-                          scope1.row.id
+                          $event
                         )
                       "
-                      >移除</el-link
                     >
+                      <img
+                        v-if="
+                          scope.row.weeks.find(p => p.name == 'week1').image
+                        "
+                        :src="
+                          scope.row.weeks.find(p => p.name == 'week1').image
+                        "
+                        style="width: 100%; height: 100%"
+                      />
+                      <img
+                        v-if="
+                          !scope.row.weeks.find(p => p.name == 'week1').image
+                        "
+                        :src="empty_image"
+                        style="width: 100%; height: 100%"
+                      />
+                    </el-upload>
                   </div>
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column label="图片" align="center">
-              <template slot-scope="scope1">
-                <div
-                  v-if="
-                    scope1.$index === 0 &&
-                      scope.row.weeks.find(p => p.name == 'week1')
-                  "
-                  style="width: 100px; height: 100px; margin: 0 auto"
-                >
-                  <el-upload
-                    :multiple="false"
-                    :show-file-list="false"
-                    :action="upload_url"
-                    :on-change="
-                      onUploadImage(
-                        scope.row.id,
-                        scope.row.weeks.find(p => p.name == 'week1').id,
-                        $event
-                      )
-                    "
-                  >
-                    <img
-                      v-if="scope.row.weeks.find(p => p.name == 'week1').image"
-                      :src="scope.row.weeks.find(p => p.name == 'week1').image"
-                      style="width: 100%; height: 100%"
-                    />
-                    <img
-                      v-if="!scope.row.weeks.find(p => p.name == 'week1').image"
-                      :src="empty_image"
-                      style="width: 100%; height: 100%"
-                    />
-                  </el-upload>
-                </div>
-              </template>
-            </el-table-column>
-          </el-table>
-          <!-- table end -->
-          <div style="padding: 6px; background: #fff">
-            <el-button
-              type="primary"
-              size="mini"
-              plain
-              @click="
-                onChoice(
-                  scope.row.id,
-                  scope.row.weeks.find(p => p.name == 'week1').id
-                )
-              "
-              >选择食谱/菜品</el-button
-            >
+                </template>
+              </el-table-column>
+            </el-table>
+            <!-- table end -->
+            <div style="padding: 6px; background: #fff">
+              <el-button
+                type="primary"
+                size="mini"
+                plain
+                @click="
+                  onChoice(
+                    scope.row.id,
+                    scope.row.weeks.find(p => p.name == 'week1').id
+                  )
+                "
+                >选择食谱/菜品</el-button
+              >
+            </div>
           </div>
         </template>
       </el-table-column>
@@ -146,86 +160,94 @@
           </div>
         </template>
         <template slot-scope="scope">
-          <!-- table start -->
-          <el-table
-            class="table-foods"
-            style="width: 100%"
-            :data="scope.row.weeks.find(p => p.name == 'week2').foods"
-            row-key="id"
-            default-expand-all
-            :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-            :span-method="onTableSpanMethod"
+          <div
+            class="drapIn"
+            @drop="drop($event, scope.row.id, 'week2')"
+            @dragleave="ondragleave($event)"
+            @dragenter="ondragenter($event)"
+            @dragover="ondragover($event)"
           >
-            <el-table-column
-              label="食品/食材"
-              prop="name"
-              header-align="center"
-              align="left"
-            ></el-table-column>
-            <el-table-column label="用量(g)" prop="count" align="center">
-              <template slot-scope="scope1">
-                <div style="display: flex">
-                  <el-input
-                    style="flex: 1"
-                    v-model="scope1.row.count"
-                    type="text"
-                    size="mini"
-                    placeholder="请输入内容"
-                  ></el-input>
-                  <div style="width: 35px; text-algin: center">
-                    <el-link
-                      v-if="scope1.row.children"
-                      type="primary"
-                      @click="
-                        onRemove(
-                          scope.row.id,
-                          scope.row.weeks.find(p => p.name == 'week2').id,
-                          scope1.row.id
-                        )
-                      "
-                      >移除</el-link
-                    >
-                  </div>
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column label="图片" align="center">
-              <template slot-scope="scope1">
-                <div
-                  v-if="
-                    scope1.$index === 0 &&
-                      scope.row.weeks.find(p => p.name == 'week2')
-                  "
-                  style="width: 100px; height: 100px; margin: 0 auto"
-                >
-                  <img
-                    v-if="scope.row.weeks.find(p => p.name == 'week2').image"
-                    :src="scope.row.weeks.find(p => p.name == 'week2').image"
-                    style="width: 100%; height: 100%"
-                  />
-                  <img
-                    v-if="!scope.row.weeks.find(p => p.name == 'week2').image"
-                    :src="empty_image"
-                    style="width: 100%; height: 100%"
-                  />
-                </div>
-              </template>
-            </el-table-column>
-          </el-table>
-          <!-- table end -->
-          <div style="padding: 6px; background: #fff">
-            <el-button
-              type="primary"
-              size="mini"
-              plain
-              @click="
-                onChoice(
-                  scope.row.id,
-                  scope.row.weeks.find(p => p.name == 'week2').id
-                )
-              "
-              >选择食谱/菜品</el-button
+            <!-- table start -->
+            <el-table
+              class="table-foods"
+              style="width: 100%"
+              :data="scope.row.weeks.find(p => p.name == 'week2').foods"
+              row-key="id"
+              default-expand-all
+              :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+              :span-method="onTableSpanMethod"
             >
+              <el-table-column
+                label="食品/食材"
+                prop="name"
+                header-align="center"
+                align="left"
+              ></el-table-column>
+              <el-table-column label="用量(g)" prop="count" align="center">
+                <template slot-scope="scope1">
+                  <div style="display: flex">
+                    <el-input
+                      style="flex: 1"
+                      v-model="scope1.row.count"
+                      type="text"
+                      size="mini"
+                      placeholder="请输入内容"
+                    ></el-input>
+                    <div style="width: 35px; text-algin: center">
+                      <el-link
+                        v-if="scope1.row.children"
+                        type="primary"
+                        @click="
+                          onRemove(
+                            scope.row.id,
+                            scope.row.weeks.find(p => p.name == 'week2').id,
+                            scope1.row.id
+                          )
+                        "
+                        >移除</el-link
+                      >
+                    </div>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column label="图片" align="center">
+                <template slot-scope="scope1">
+                  <div
+                    v-if="
+                      scope1.$index === 0 &&
+                        scope.row.weeks.find(p => p.name == 'week2')
+                    "
+                    style="width: 100px; height: 100px; margin: 0 auto"
+                  >
+                    <img
+                      v-if="scope.row.weeks.find(p => p.name == 'week2').image"
+                      :src="scope.row.weeks.find(p => p.name == 'week2').image"
+                      style="width: 100%; height: 100%"
+                    />
+                    <img
+                      v-if="!scope.row.weeks.find(p => p.name == 'week2').image"
+                      :src="empty_image"
+                      style="width: 100%; height: 100%"
+                    />
+                  </div>
+                </template>
+              </el-table-column>
+            </el-table>
+            <!-- table end -->
+            <div style="padding: 6px; background: #fff">
+              <el-button
+                type="primary"
+                size="mini"
+                plain
+                @click="
+                  onChoice(
+                    scope.row.id,
+                    scope.row.weeks.find(p => p.name == 'week2').id
+                  )
+                "
+                >选择食谱/菜品</el-button
+              >
+            </div>
           </div>
         </template>
       </el-table-column>
@@ -250,86 +272,94 @@
           </div>
         </template>
         <template slot-scope="scope">
-          <!-- table start -->
-          <el-table
-            class="table-foods"
-            style="width: 100%"
-            :data="scope.row.weeks.find(p => p.name == 'week3').foods"
-            row-key="id"
-            default-expand-all
-            :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-            :span-method="onTableSpanMethod"
+          <div
+            class="drapIn"
+            @drop="drop($event, scope.row.id, 'week3')"
+            @dragleave="ondragleave($event)"
+            @dragenter="ondragenter($event)"
+            @dragover="ondragover($event)"
           >
-            <el-table-column
-              label="食品/食材"
-              prop="name"
-              header-align="center"
-              align="left"
-            ></el-table-column>
-            <el-table-column label="用量(g)" prop="count" align="center">
-              <template slot-scope="scope1">
-                <div style="display: flex">
-                  <el-input
-                    style="flex: 1"
-                    v-model="scope1.row.count"
-                    type="text"
-                    size="mini"
-                    placeholder="请输入内容"
-                  ></el-input>
-                  <div style="width: 35px; text-algin: center">
-                    <el-link
-                      v-if="scope1.row.children"
-                      type="primary"
-                      @click="
-                        onRemove(
-                          scope.row.id,
-                          scope.row.weeks.find(p => p.name == 'week3').id,
-                          scope1.row.id
-                        )
-                      "
-                      >移除</el-link
-                    >
-                  </div>
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column label="图片" align="center">
-              <template slot-scope="scope1">
-                <div
-                  v-if="
-                    scope1.$index === 0 &&
-                      scope.row.weeks.find(p => p.name == 'week3')
-                  "
-                  style="width: 100px; height: 100px; margin: 0 auto"
-                >
-                  <img
-                    v-if="scope.row.weeks.find(p => p.name == 'week3').image"
-                    :src="scope.row.weeks.find(p => p.name == 'week3').image"
-                    style="width: 100%; height: 100%"
-                  />
-                  <img
-                    v-if="!scope.row.weeks.find(p => p.name == 'week3').image"
-                    :src="empty_image"
-                    style="width: 100%; height: 100%"
-                  />
-                </div>
-              </template>
-            </el-table-column>
-          </el-table>
-          <!-- table end -->
-          <div style="padding: 6px; background: #fff">
-            <el-button
-              type="primary"
-              size="mini"
-              plain
-              @click="
-                onChoice(
-                  scope.row.id,
-                  scope.row.weeks.find(p => p.name == 'week3').id
-                )
-              "
-              >选择食谱/菜品</el-button
+            <!-- table start -->
+            <el-table
+              class="table-foods"
+              style="width: 100%"
+              :data="scope.row.weeks.find(p => p.name == 'week3').foods"
+              row-key="id"
+              default-expand-all
+              :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+              :span-method="onTableSpanMethod"
             >
+              <el-table-column
+                label="食品/食材"
+                prop="name"
+                header-align="center"
+                align="left"
+              ></el-table-column>
+              <el-table-column label="用量(g)" prop="count" align="center">
+                <template slot-scope="scope1">
+                  <div style="display: flex">
+                    <el-input
+                      style="flex: 1"
+                      v-model="scope1.row.count"
+                      type="text"
+                      size="mini"
+                      placeholder="请输入内容"
+                    ></el-input>
+                    <div style="width: 35px; text-algin: center">
+                      <el-link
+                        v-if="scope1.row.children"
+                        type="primary"
+                        @click="
+                          onRemove(
+                            scope.row.id,
+                            scope.row.weeks.find(p => p.name == 'week3').id,
+                            scope1.row.id
+                          )
+                        "
+                        >移除</el-link
+                      >
+                    </div>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column label="图片" align="center">
+                <template slot-scope="scope1">
+                  <div
+                    v-if="
+                      scope1.$index === 0 &&
+                        scope.row.weeks.find(p => p.name == 'week3')
+                    "
+                    style="width: 100px; height: 100px; margin: 0 auto"
+                  >
+                    <img
+                      v-if="scope.row.weeks.find(p => p.name == 'week3').image"
+                      :src="scope.row.weeks.find(p => p.name == 'week3').image"
+                      style="width: 100%; height: 100%"
+                    />
+                    <img
+                      v-if="!scope.row.weeks.find(p => p.name == 'week3').image"
+                      :src="empty_image"
+                      style="width: 100%; height: 100%"
+                    />
+                  </div>
+                </template>
+              </el-table-column>
+            </el-table>
+            <!-- table end -->
+            <div style="padding: 6px; background: #fff">
+              <el-button
+                type="primary"
+                size="mini"
+                plain
+                @click="
+                  onChoice(
+                    scope.row.id,
+                    scope.row.weeks.find(p => p.name == 'week3').id
+                  )
+                "
+                >选择食谱/菜品</el-button
+              >
+            </div>
           </div>
         </template>
       </el-table-column>
@@ -354,86 +384,94 @@
           </div>
         </template>
         <template slot-scope="scope">
-          <!-- table start -->
-          <el-table
-            class="table-foods"
-            style="width: 100%"
-            :data="scope.row.weeks.find(p => p.name == 'week4').foods"
-            row-key="id"
-            default-expand-all
-            :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-            :span-method="onTableSpanMethod"
+          <div
+            class="drapIn"
+            @drop="drop($event, scope.row.id, 'week4')"
+            @dragleave="ondragleave($event)"
+            @dragenter="ondragenter($event)"
+            @dragover="ondragover($event)"
           >
-            <el-table-column
-              label="食品/食材"
-              prop="name"
-              header-align="center"
-              align="left"
-            ></el-table-column>
-            <el-table-column label="用量(g)" prop="count" align="center">
-              <template slot-scope="scope1">
-                <div style="display: flex">
-                  <el-input
-                    style="flex: 1"
-                    v-model="scope1.row.count"
-                    type="text"
-                    size="mini"
-                    placeholder="请输入内容"
-                  ></el-input>
-                  <div style="width: 35px; text-algin: center">
-                    <el-link
-                      v-if="scope1.row.children"
-                      type="primary"
-                      @click="
-                        onRemove(
-                          scope.row.id,
-                          scope.row.weeks.find(p => p.name == 'week4').id,
-                          scope1.row.id
-                        )
-                      "
-                      >移除</el-link
-                    >
-                  </div>
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column label="图片" align="center">
-              <template slot-scope="scope1">
-                <div
-                  v-if="
-                    scope1.$index === 0 &&
-                      scope.row.weeks.find(p => p.name == 'week4')
-                  "
-                  style="width: 100px; height: 100px; margin: 0 auto"
-                >
-                  <img
-                    v-if="scope.row.weeks.find(p => p.name == 'week4').image"
-                    :src="scope.row.weeks.find(p => p.name == 'week4').image"
-                    style="width: 100%; height: 100%"
-                  />
-                  <img
-                    v-if="!scope.row.weeks.find(p => p.name == 'week4').image"
-                    :src="empty_image"
-                    style="width: 100%; height: 100%"
-                  />
-                </div>
-              </template>
-            </el-table-column>
-          </el-table>
-          <!-- table end -->
-          <div style="padding: 6px; background: #fff">
-            <el-button
-              type="primary"
-              size="mini"
-              plain
-              @click="
-                onChoice(
-                  scope.row.id,
-                  scope.row.weeks.find(p => p.name == 'week4').id
-                )
-              "
-              >选择食谱/菜品</el-button
+            <!-- table start -->
+            <el-table
+              class="table-foods"
+              style="width: 100%"
+              :data="scope.row.weeks.find(p => p.name == 'week4').foods"
+              row-key="id"
+              default-expand-all
+              :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+              :span-method="onTableSpanMethod"
             >
+              <el-table-column
+                label="食品/食材"
+                prop="name"
+                header-align="center"
+                align="left"
+              ></el-table-column>
+              <el-table-column label="用量(g)" prop="count" align="center">
+                <template slot-scope="scope1">
+                  <div style="display: flex">
+                    <el-input
+                      style="flex: 1"
+                      v-model="scope1.row.count"
+                      type="text"
+                      size="mini"
+                      placeholder="请输入内容"
+                    ></el-input>
+                    <div style="width: 35px; text-algin: center">
+                      <el-link
+                        v-if="scope1.row.children"
+                        type="primary"
+                        @click="
+                          onRemove(
+                            scope.row.id,
+                            scope.row.weeks.find(p => p.name == 'week4').id,
+                            scope1.row.id
+                          )
+                        "
+                        >移除</el-link
+                      >
+                    </div>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column label="图片" align="center">
+                <template slot-scope="scope1">
+                  <div
+                    v-if="
+                      scope1.$index === 0 &&
+                        scope.row.weeks.find(p => p.name == 'week4')
+                    "
+                    style="width: 100px; height: 100px; margin: 0 auto"
+                  >
+                    <img
+                      v-if="scope.row.weeks.find(p => p.name == 'week4').image"
+                      :src="scope.row.weeks.find(p => p.name == 'week4').image"
+                      style="width: 100%; height: 100%"
+                    />
+                    <img
+                      v-if="!scope.row.weeks.find(p => p.name == 'week4').image"
+                      :src="empty_image"
+                      style="width: 100%; height: 100%"
+                    />
+                  </div>
+                </template>
+              </el-table-column>
+            </el-table>
+            <!-- table end -->
+            <div style="padding: 6px; background: #fff">
+              <el-button
+                type="primary"
+                size="mini"
+                plain
+                @click="
+                  onChoice(
+                    scope.row.id,
+                    scope.row.weeks.find(p => p.name == 'week4').id
+                  )
+                "
+                >选择食谱/菜品</el-button
+              >
+            </div>
           </div>
         </template>
       </el-table-column>
@@ -458,86 +496,94 @@
           </div>
         </template>
         <template slot-scope="scope">
-          <!-- table start -->
-          <el-table
-            class="table-foods"
-            style="width: 100%"
-            :data="scope.row.weeks.find(p => p.name == 'week5').foods"
-            row-key="id"
-            default-expand-all
-            :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-            :span-method="onTableSpanMethod"
+          <div
+            class="drapIn"
+            @drop="drop($event, scope.row.id, 'week5')"
+            @dragleave="ondragleave($event)"
+            @dragenter="ondragenter($event)"
+            @dragover="ondragover($event)"
           >
-            <el-table-column
-              label="食品/食材"
-              prop="name"
-              header-align="center"
-              align="left"
-            ></el-table-column>
-            <el-table-column label="用量(g)" prop="count" align="center">
-              <template slot-scope="scope1">
-                <div style="display: flex">
-                  <el-input
-                    style="flex: 1"
-                    v-model="scope1.row.count"
-                    type="text"
-                    size="mini"
-                    placeholder="请输入内容"
-                  ></el-input>
-                  <div style="width: 35px; text-algin: center">
-                    <el-link
-                      v-if="scope1.row.children"
-                      type="primary"
-                      @click="
-                        onRemove(
-                          scope.row.id,
-                          scope.row.weeks.find(p => p.name == 'week5').id,
-                          scope1.row.id
-                        )
-                      "
-                      >移除</el-link
-                    >
-                  </div>
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column label="图片" align="center">
-              <template slot-scope="scope1">
-                <div
-                  v-if="
-                    scope1.$index === 0 &&
-                      scope.row.weeks.find(p => p.name == 'week5')
-                  "
-                  style="width: 100px; height: 100px; margin: 0 auto"
-                >
-                  <img
-                    v-if="scope.row.weeks.find(p => p.name == 'week5').image"
-                    :src="scope.row.weeks.find(p => p.name == 'week5').image"
-                    style="width: 100%; height: 100%"
-                  />
-                  <img
-                    v-if="!scope.row.weeks.find(p => p.name == 'week5').image"
-                    :src="empty_image"
-                    style="width: 100%; height: 100%"
-                  />
-                </div>
-              </template>
-            </el-table-column>
-          </el-table>
-          <!-- table end -->
-          <div style="padding: 6px; background: #fff">
-            <el-button
-              type="primary"
-              size="mini"
-              plain
-              @click="
-                onChoice(
-                  scope.row.id,
-                  scope.row.weeks.find(p => p.name == 'week5').id
-                )
-              "
-              >选择食谱/菜品</el-button
+            <!-- table start -->
+            <el-table
+              class="table-foods"
+              style="width: 100%"
+              :data="scope.row.weeks.find(p => p.name == 'week5').foods"
+              row-key="id"
+              default-expand-all
+              :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+              :span-method="onTableSpanMethod"
             >
+              <el-table-column
+                label="食品/食材"
+                prop="name"
+                header-align="center"
+                align="left"
+              ></el-table-column>
+              <el-table-column label="用量(g)" prop="count" align="center">
+                <template slot-scope="scope1">
+                  <div style="display: flex">
+                    <el-input
+                      style="flex: 1"
+                      v-model="scope1.row.count"
+                      type="text"
+                      size="mini"
+                      placeholder="请输入内容"
+                    ></el-input>
+                    <div style="width: 35px; text-algin: center">
+                      <el-link
+                        v-if="scope1.row.children"
+                        type="primary"
+                        @click="
+                          onRemove(
+                            scope.row.id,
+                            scope.row.weeks.find(p => p.name == 'week5').id,
+                            scope1.row.id
+                          )
+                        "
+                        >移除</el-link
+                      >
+                    </div>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column label="图片" align="center">
+                <template slot-scope="scope1">
+                  <div
+                    v-if="
+                      scope1.$index === 0 &&
+                        scope.row.weeks.find(p => p.name == 'week5')
+                    "
+                    style="width: 100px; height: 100px; margin: 0 auto"
+                  >
+                    <img
+                      v-if="scope.row.weeks.find(p => p.name == 'week5').image"
+                      :src="scope.row.weeks.find(p => p.name == 'week5').image"
+                      style="width: 100%; height: 100%"
+                    />
+                    <img
+                      v-if="!scope.row.weeks.find(p => p.name == 'week5').image"
+                      :src="empty_image"
+                      style="width: 100%; height: 100%"
+                    />
+                  </div>
+                </template>
+              </el-table-column>
+            </el-table>
+            <!-- table end -->
+            <div style="padding: 6px; background: #fff">
+              <el-button
+                type="primary"
+                size="mini"
+                plain
+                @click="
+                  onChoice(
+                    scope.row.id,
+                    scope.row.weeks.find(p => p.name == 'week5').id
+                  )
+                "
+                >选择食谱/菜品</el-button
+              >
+            </div>
           </div>
         </template>
       </el-table-column>
@@ -562,86 +608,94 @@
           </div>
         </template>
         <template slot-scope="scope">
-          <!-- table start -->
-          <el-table
-            class="table-foods"
-            style="width: 100%"
-            :data="scope.row.weeks.find(p => p.name == 'week6').foods"
-            row-key="id"
-            default-expand-all
-            :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-            :span-method="onTableSpanMethod"
+          <div
+            class="drapIn"
+            @drop="drop($event, scope.row.id, 'week6')"
+            @dragleave="ondragleave($event)"
+            @dragenter="ondragenter($event)"
+            @dragover="ondragover($event)"
           >
-            <el-table-column
-              label="食品/食材"
-              prop="name"
-              header-align="center"
-              align="left"
-            ></el-table-column>
-            <el-table-column label="用量(g)" prop="count" align="center">
-              <template slot-scope="scope1">
-                <div style="display: flex">
-                  <el-input
-                    style="flex: 1"
-                    v-model="scope1.row.count"
-                    type="text"
-                    size="mini"
-                    placeholder="请输入内容"
-                  ></el-input>
-                  <div style="width: 35px; text-algin: center">
-                    <el-link
-                      v-if="scope1.row.children"
-                      type="primary"
-                      @click="
-                        onRemove(
-                          scope.row.id,
-                          scope.row.weeks.find(p => p.name == 'week6').id,
-                          scope1.row.id
-                        )
-                      "
-                      >移除</el-link
-                    >
-                  </div>
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column label="图片" align="center">
-              <template slot-scope="scope1">
-                <div
-                  v-if="
-                    scope1.$index === 0 &&
-                      scope.row.weeks.find(p => p.name == 'week6')
-                  "
-                  style="width: 100px; height: 100px; margin: 0 auto"
-                >
-                  <img
-                    v-if="scope.row.weeks.find(p => p.name == 'week6').image"
-                    :src="scope.row.weeks.find(p => p.name == 'week6').image"
-                    style="width: 100%; height: 100%"
-                  />
-                  <img
-                    v-if="!scope.row.weeks.find(p => p.name == 'week6').image"
-                    :src="empty_image"
-                    style="width: 100%; height: 100%"
-                  />
-                </div>
-              </template>
-            </el-table-column>
-          </el-table>
-          <!-- table end -->
-          <div style="padding: 6px; background: #fff">
-            <el-button
-              type="primary"
-              size="mini"
-              plain
-              @click="
-                onChoice(
-                  scope.row.id,
-                  scope.row.weeks.find(p => p.name == 'week6').id
-                )
-              "
-              >选择食谱/菜品</el-button
+            <!-- table start -->
+            <el-table
+              class="table-foods"
+              style="width: 100%"
+              :data="scope.row.weeks.find(p => p.name == 'week6').foods"
+              row-key="id"
+              default-expand-all
+              :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+              :span-method="onTableSpanMethod"
             >
+              <el-table-column
+                label="食品/食材"
+                prop="name"
+                header-align="center"
+                align="left"
+              ></el-table-column>
+              <el-table-column label="用量(g)" prop="count" align="center">
+                <template slot-scope="scope1">
+                  <div style="display: flex">
+                    <el-input
+                      style="flex: 1"
+                      v-model="scope1.row.count"
+                      type="text"
+                      size="mini"
+                      placeholder="请输入内容"
+                    ></el-input>
+                    <div style="width: 35px; text-algin: center">
+                      <el-link
+                        v-if="scope1.row.children"
+                        type="primary"
+                        @click="
+                          onRemove(
+                            scope.row.id,
+                            scope.row.weeks.find(p => p.name == 'week6').id,
+                            scope1.row.id
+                          )
+                        "
+                        >移除</el-link
+                      >
+                    </div>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column label="图片" align="center">
+                <template slot-scope="scope1">
+                  <div
+                    v-if="
+                      scope1.$index === 0 &&
+                        scope.row.weeks.find(p => p.name == 'week6')
+                    "
+                    style="width: 100px; height: 100px; margin: 0 auto"
+                  >
+                    <img
+                      v-if="scope.row.weeks.find(p => p.name == 'week6').image"
+                      :src="scope.row.weeks.find(p => p.name == 'week6').image"
+                      style="width: 100%; height: 100%"
+                    />
+                    <img
+                      v-if="!scope.row.weeks.find(p => p.name == 'week6').image"
+                      :src="empty_image"
+                      style="width: 100%; height: 100%"
+                    />
+                  </div>
+                </template>
+              </el-table-column>
+            </el-table>
+            <!-- table end -->
+            <div style="padding: 6px; background: #fff">
+              <el-button
+                type="primary"
+                size="mini"
+                plain
+                @click="
+                  onChoice(
+                    scope.row.id,
+                    scope.row.weeks.find(p => p.name == 'week6').id
+                  )
+                "
+                >选择食谱/菜品</el-button
+              >
+            </div>
           </div>
         </template>
       </el-table-column>
@@ -666,86 +720,94 @@
           </div>
         </template>
         <template slot-scope="scope">
-          <!-- table start -->
-          <el-table
-            class="table-foods"
-            style="width: 100%"
-            :data="scope.row.weeks.find(p => p.name == 'week7').foods"
-            row-key="id"
-            default-expand-all
-            :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-            :span-method="onTableSpanMethod"
+          <div
+            class="drapIn"
+            @drop="drop($event, scope.row.id, 'week7')"
+            @dragleave="ondragleave($event)"
+            @dragenter="ondragenter($event)"
+            @dragover="ondragover($event)"
           >
-            <el-table-column
-              label="食品/食材"
-              prop="name"
-              header-align="center"
-              align="left"
-            ></el-table-column>
-            <el-table-column label="用量(g)" prop="count" align="center">
-              <template slot-scope="scope1">
-                <div style="display: flex">
-                  <el-input
-                    style="flex: 1"
-                    v-model="scope1.row.count"
-                    type="text"
-                    size="mini"
-                    placeholder="请输入内容"
-                  ></el-input>
-                  <div style="width: 35px; text-algin: center">
-                    <el-link
-                      v-if="scope1.row.children"
-                      type="primary"
-                      @click="
-                        onRemove(
-                          scope.row.id,
-                          scope.row.weeks.find(p => p.name == 'week7').id,
-                          scope1.row.id
-                        )
-                      "
-                      >移除</el-link
-                    >
-                  </div>
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column label="图片" align="center">
-              <template slot-scope="scope1">
-                <div
-                  v-if="
-                    scope1.$index === 0 &&
-                      scope.row.weeks.find(p => p.name == 'week7')
-                  "
-                  style="width: 100px; height: 100px; margin: 0 auto"
-                >
-                  <img
-                    v-if="scope.row.weeks.find(p => p.name == 'week7').image"
-                    :src="scope.row.weeks.find(p => p.name == 'week7').image"
-                    style="width: 100%; height: 100%"
-                  />
-                  <img
-                    v-if="!scope.row.weeks.find(p => p.name == 'week7').image"
-                    :src="empty_image"
-                    style="width: 100%; height: 100%"
-                  />
-                </div>
-              </template>
-            </el-table-column>
-          </el-table>
-          <!-- table end -->
-          <div style="padding: 6px; background: #fff">
-            <el-button
-              type="primary"
-              size="mini"
-              plain
-              @click="
-                onChoice(
-                  scope.row.id,
-                  scope.row.weeks.find(p => p.name == 'week7').id
-                )
-              "
-              >选择食谱/菜品</el-button
+            <!-- table start -->
+            <el-table
+              class="table-foods"
+              style="width: 100%"
+              :data="scope.row.weeks.find(p => p.name == 'week7').foods"
+              row-key="id"
+              default-expand-all
+              :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+              :span-method="onTableSpanMethod"
             >
+              <el-table-column
+                label="食品/食材"
+                prop="name"
+                header-align="center"
+                align="left"
+              ></el-table-column>
+              <el-table-column label="用量(g)" prop="count" align="center">
+                <template slot-scope="scope1">
+                  <div style="display: flex">
+                    <el-input
+                      style="flex: 1"
+                      v-model="scope1.row.count"
+                      type="text"
+                      size="mini"
+                      placeholder="请输入内容"
+                    ></el-input>
+                    <div style="width: 35px; text-algin: center">
+                      <el-link
+                        v-if="scope1.row.children"
+                        type="primary"
+                        @click="
+                          onRemove(
+                            scope.row.id,
+                            scope.row.weeks.find(p => p.name == 'week7').id,
+                            scope1.row.id
+                          )
+                        "
+                        >移除</el-link
+                      >
+                    </div>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column label="图片" align="center">
+                <template slot-scope="scope1">
+                  <div
+                    v-if="
+                      scope1.$index === 0 &&
+                        scope.row.weeks.find(p => p.name == 'week7')
+                    "
+                    style="width: 100px; height: 100px; margin: 0 auto"
+                  >
+                    <img
+                      v-if="scope.row.weeks.find(p => p.name == 'week7').image"
+                      :src="scope.row.weeks.find(p => p.name == 'week7').image"
+                      style="width: 100%; height: 100%"
+                    />
+                    <img
+                      v-if="!scope.row.weeks.find(p => p.name == 'week7').image"
+                      :src="empty_image"
+                      style="width: 100%; height: 100%"
+                    />
+                  </div>
+                </template>
+              </el-table-column>
+            </el-table>
+            <!-- table end -->
+            <div style="padding: 6px; background: #fff">
+              <el-button
+                type="primary"
+                size="mini"
+                plain
+                @click="
+                  onChoice(
+                    scope.row.id,
+                    scope.row.weeks.find(p => p.name == 'week7').id
+                  )
+                "
+                >选择食谱/菜品</el-button
+              >
+            </div>
           </div>
         </template>
       </el-table-column>
@@ -783,7 +845,9 @@ export default {
     height: {
       type: Number,
       default: 800
-    }
+    },
+
+    dragnode: {}
   },
   data() {
     return {
@@ -806,14 +870,75 @@ export default {
     this.init();
   },
   methods: {
-    init() {
-      console.log("----init header-----");
-      console.log(this.headers);
-      //   console.log(this.height);
-      this.refreshData();
+    //拖放进入
+    ondragenter(ev) {
+      ev.preventDefault();
+      ev.path.forEach(e => {
+        var cname = e.className;
+        if (cname == "drapIn") {
+          e.classList.add("drapInActive");
+        }
+      });
+    },
+    ondragleave(ev) {
+      ev.preventDefault();
+      var drapIn = null;
 
-      console.log("----init data----");
-      console.log(this.datas);
+      ev.path.forEach(e => {
+        var cname = e.className;
+        if (cname && cname.indexOf("drapIn") >= 0) {
+          drapIn = e;
+        }
+      });
+
+      if (drapIn != null) {
+        if (!drapIn.contains(ev.fromElement)) {
+          drapIn.classList.remove("drapInActive");
+        }
+      }
+    },
+    ondragover(ev) {
+      ev.preventDefault();
+    },
+
+    //拖放结束
+    drop(ev, id, week) {
+      ev.preventDefault();
+      var node = JSON.parse(JSON.stringify(this.dragnode.node));
+      this.appendDragFood(node, id, week);
+
+      ev.path.forEach(e => {
+        var cname = e.className;
+        if (cname && cname.indexOf("drapIn") >= 0) {
+          e.classList.remove("drapInActive");
+        }
+      });
+      this.dragnode.node = {};
+    },
+    //新增菜谱
+    appendDragFood(res, id, wk) {
+      if (!res.id) return;
+      this.datas.forEach(data => {
+        if (data.id === id) {
+          data.weeks.forEach(week => {
+            if (week.name === wk) {
+              var food = week.foods.find(p => p.id == res.id);
+              if (food) {
+                return;
+              } else {
+                if (!week.foods) {
+                  week.foods = [];
+                }
+                week.foods.push(res);
+                return;
+              }
+            }
+          });
+        }
+      });
+    },
+    init() {
+      this.refreshData();
     },
 
     // 处理数据
@@ -828,13 +953,14 @@ export default {
               count = count + food.children.length;
             }
           });
-          week.foods.forEach(food => {
-            food.spans = count;
-            console.log(food.spans);
-            food.children.forEach(c => {
-              c.spans = count;
+          if (week.foods != undefined) {
+            week.foods.forEach(food => {
+              food.spans = count;
+              food.children.forEach(c => {
+                c.spans = count;
+              });
             });
-          });
+          }
           // console.log(week.foods);
         });
       });
@@ -959,5 +1085,8 @@ export default {
 }
 .table-foods td .cell {
   padding: 0 10px !important;
+}
+.drapInActive .el-table th {
+  background-color: red !important;
 }
 </style>

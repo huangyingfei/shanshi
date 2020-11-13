@@ -43,6 +43,7 @@
               <div class="country">
                 <div class="country1">
                   <el-cascader
+                    clearable
                     v-model="valuepark2"
                     :options="options"
                     @change="gProvinces"
@@ -670,6 +671,18 @@ export default {
         autosave: "",
         type: [],
         temps: ""
+      },
+      rules: {
+        name: [{ required: true, message: "请输入食材名", trigger: "blur" }],
+        buffer: [
+          { required: true, message: "请输入食材真名", trigger: "blur" }
+        ],
+        fooddata: [
+          //食材分类
+          { required: true, message: "请选择食物分类", trigger: "change" }
+        ],
+        besaved: [{ required: true, message: "请输入食部", trigger: "blur" }],
+        timers: [{ required: true, message: "请输入重量", trigger: "blur" }]
       },
       ruleForm: {
         //个人食材库

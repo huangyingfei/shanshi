@@ -1,6 +1,6 @@
 <template>
-  <div class="smart">
-    <el-row :gutter="20" style="padding: 0px; margin-top: 5px;">
+  <div>
+    <el-row :gutter="20" style="padding: 0px; margin-top: 5px">
       <el-col :span="24">
         <el-form :gutter="10" :inline="true" :model="formInline">
           <el-form-item>
@@ -150,12 +150,19 @@
         <el-card class="box-car" shadow="never">
           <div class="clearfix panel_head">
             <el-button-group>
-              <el-button size="small" style="bo">食谱</el-button>
-              <el-button size="small">菜品</el-button>
+              <el-button size="small" @click="showFoodList = false" style="bo"
+                >食谱</el-button
+              >
+              <el-button size="small" @click="showFoodList = true"
+                >菜品</el-button
+              >
             </el-button-group>
           </div>
-
-          <el-tabs v-model="activeName" @tab-click="handleClick">
+          <el-tabs
+            v-show="!showFoodList"
+            v-model="activeName"
+            @tab-click="handleClick"
+          >
             <el-tab-pane label="分享食谱" name="first">
               <div style="margin-top: 0px;padding:5px;">
                 <el-input
@@ -184,11 +191,38 @@
             </el-tab-pane>
             <el-tab-pane label="个人食谱" name="second">配置管理</el-tab-pane>
           </el-tabs>
+          <div
+            class="foodSelectMenue"
+            v-show="showFoodList"
+            style="margin-top: 0px;padding:5px;"
+          >
+            <el-input placeholder="输入关键字进行过滤" v-model="filterText">
+            </el-input>
+
+            <el-tree
+              class="filter-tree"
+              :data="menue_data"
+              :props="defaultProps"
+              default-expand-all
+              :filter-node-method="filterNode"
+              draggable
+              @node-drag-start="foodmenueDragStart"
+              :allow-drop="foodmenueDragEnd"
+              ref="tree"
+            >
+            </el-tree>
+          </div>
         </el-card>
       </el-col>
       <el-col :span="20">
         <div class="foodPanel">
-          <foods-week :headers="headers" :datas="datas" days="5"> </foods-week>
+          <foods-week
+            :headers="headers"
+            :datas="datas"
+            days="5"
+            :dragnode="drogNode"
+          >
+          </foods-week>
         </div>
       </el-col>
       <el-col>
@@ -326,7 +360,7 @@ export default {
     foodsWeek
   },
   created() {
-    this.init();
+    //this.init();
   },
   data() {
     const data = [];
@@ -371,11 +405,51 @@ export default {
       datas: [],
       WeekList: [], //所选的时间周期
       FoodTypeList: [], //所选餐点类型
-      rebuild: false
+      rebuild: false,
+      showFoodList: false,
+      menue_data: [
+        {
+          id: 1,
+          label: "番茄鸡蛋",
+          node: {
+            id: 102,
+            name: "番茄鸡蛋",
+            count: 1,
+            children: [
+              { id: 101001, name: "绿豆", count: 1 },
+              { id: 101002, name: "白糖", count: 1 }
+            ]
+          }
+        },
+        {
+          id: 2,
+          label: "绿豆粥",
+          node: {
+            id: 103,
+            name: "绿豆粥",
+            count: 1,
+            children: [
+              { id: 101001, name: "绿豆", count: 1 },
+              { id: 101002, name: "白糖", count: 1 }
+            ]
+          }
+        }
+      ],
+      //拖动的节点
+      drogNode: {}
     };
   },
   beforeMount() {},
   methods: {
+    drop(ev) {},
+    //菜谱拖动
+    foodmenueDragStart(node, ev) {
+      this.drogNode = JSON.parse(JSON.stringify(node.data));
+      ev.dataTransfer.setData("Text", JSON.stringify(node.data));
+    },
+    foodmenueDragEnd(a, b, c) {
+      return false;
+    },
     tfractio() {
       this.drawer = true;
     },
@@ -718,11 +792,6 @@ export default {
 </script>
 
 <style scoped>
-.smart {
-  width: 1325px;
-  height: 900px;
-  background-color: #fff;
-}
 .el-row {
   padding: 5px;
 }
@@ -803,7 +872,6 @@ export default {
   border-radius: 50%;
   background-image: url("/img/yuan.png");
   background-size: 100% 100%;
-  z-index: 999;
 }
 .scores2 {
   width: 80px;
@@ -814,8 +882,6 @@ export default {
   /* background-color: blue; */
   background-image: url("/img/fenshu1.png");
   background-size: 100% 100%;
-  margin-left: -20px;
-  margin-top: 13px;
 }
 .gnus {
   font-size: 24px;
@@ -826,12 +892,12 @@ export default {
   width: 30px;
   height: 30px;
   margin-top: 20px;
-  margin-left: 10px;
+  margin-left: 2px;
 }
 .vertical {
-  font-size: 16px;
+  font-size: 20px;
   color: #00bfaf;
-  line-height: 42px;
+  line-height: 30px;
   padding-left: 5px;
 }
 .scorefor {

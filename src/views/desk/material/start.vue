@@ -12,7 +12,7 @@
         <!-- <el-button type="primary" plain size="mini">导入</el-button>
         <el-button type="primary" plain size="mini">导出</el-button>
         <el-button type="primary" plain size="mini">加分类</el-button> -->
-        <el-button @click="addition" type="primary" size="mini"
+        <el-button @click="addition(1)" type="primary" size="mini"
           >加食材</el-button
         >
       </div>
@@ -50,6 +50,7 @@
       <div class="country">
         <div class="country1">
           <el-cascader
+            clearable
             v-model="valuepark1"
             :options="options"
             @change="gProvinces"
@@ -106,6 +107,7 @@
             :data="data"
             node-key="id"
             v-loading="loadFlag"
+            :props="defaultProps"
             :default-expand-all="false"
             :expand-on-click-node="false"
             @node-click="handleNodeClick"
@@ -120,13 +122,13 @@
                   type="text"
                   size="mini"
                   style="color: #00bfaf"
-                  @click="() => prepare(data)"
+                  @click="() => prepare(data, 2)"
                 >
                   查看
                 </el-button>
                 <el-button
                   type="text"
-                  v-if="data.isUse == 0"
+                  v-if="data.isUse == 1"
                   style="color: #00bfaf"
                   size="mini"
                   @click="() => append(data)"
@@ -135,7 +137,7 @@
                 </el-button>
                 <el-button
                   type="text"
-                  v-if="data.isUse == 1"
+                  v-if="data.isUse == 0"
                   style="color: #00bfaf"
                   size="mini"
                   @click="() => insert(data)"
@@ -143,7 +145,7 @@
                   不常用
                 </el-button>
                 <el-button
-                  v-if="data.isPub == 1"
+                  v-if="data.isPub == 0"
                   style="color: #00bfaf"
                   type="text"
                   size="mini"
@@ -152,7 +154,7 @@
                   隐藏
                 </el-button>
                 <el-button
-                  v-if="data.isPub == 0"
+                  v-if="data.isPub == 1"
                   style="color: #00bfaf"
                   type="text"
                   size="mini"
@@ -332,6 +334,7 @@
       <div class="saveas">
         <el-table
           :data="mailto"
+          max-height="400"
           style="width: 100%;margin-bottom: 20px;"
           row-key="id"
           border
@@ -365,11 +368,19 @@
         </el-table>
       </div>
       <div style="   text-align: center;">
-        <el-button type="primary" @click="saved('ruleForm')"
+        <el-button
+          type="primary"
+          v-if="this.gavatorta == 1"
+          @click="totally('ruleForm')"
+          >保存</el-button
+        >
+        <el-button
+          v-if="this.gavatorta == 2"
+          type="primary"
+          @click="saved('ruleForm')"
           >编辑保存</el-button
         >
 
-        <el-button type="primary" @click="totally('ruleForm')">保存</el-button>
         <el-button @click="resetForm('ruleForm')">重置</el-button>
       </div>
     </div>
@@ -383,6 +394,10 @@ export default {
   data() {
     const data = [];
     return {
+      defaultProps: {
+        children: "children",
+        label: "label"
+      },
       display: "2",
       loadFlag: false, // 加载flag
       mailto: [], //营养素含量
@@ -507,7 +522,8 @@ export default {
       value1: [],
       waterfall: "2",
       fallen: "",
-      used: ""
+      used: "",
+      gavatorta: "1"
     };
   },
   computed: {},
@@ -540,7 +556,12 @@ export default {
     //省市区查询
     gProvinces() {
       // console.log(this.valuepark1[1]);
-      this.fallen = this.valuepark1[1];
+      if (this.valuepark1[1]) {
+        this.fallen = this.valuepark1[1];
+      } else {
+        this.fallen = "";
+      }
+
       this.Addraudit();
       // this.valuepark1.forEach(item => {
       //   console.log(item[1]);
@@ -555,7 +576,9 @@ export default {
       console.log(this.before1);
       this.Addraudit();
     },
-    addition() {
+    addition(index) {
+      console.log(index);
+      this.gavatorta = index;
       this.ruleForm.name = "";
       this.ruleForm.foodFood = "";
       this.ruleForm.ovenFood = "";
@@ -571,143 +594,155 @@ export default {
       this.ruleForm.desc = "";
     },
     //食材库保存
-    totally() {
+    totally(formName) {
       console.log(this.mailto);
       console.log(this.ruleForm);
-      let food = [];
-      this.mailto.forEach((item, index) => {
-        // console.log(item);
-        item.children.forEach((item1, indx1) => {
-          // console.log(item1);
-          if (item1.children) {
-            item1.children.forEach((item2, index2) => {
-              // console.log(item2);
-              if (item2.result != null) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          let food = [];
+          this.mailto.forEach((item, index) => {
+            // console.log(item);
+            item.children.forEach((item1, indx1) => {
+              // console.log(item1);
+              if (item1.children) {
+                item1.children.forEach((item2, index2) => {
+                  // console.log(item2);
+                  if (item2.result != null) {
+                    food.push({
+                      nutrientId: item2.id,
+                      value: item2.result
+                    });
+                  }
+                });
+              }
+              if (item1.result != null) {
                 food.push({
-                  nutrientId: item2.id,
-                  value: item2.result
+                  nutrientId: item1.id,
+                  value: item1.result
                 });
               }
             });
-          }
-          if (item1.result != null) {
-            food.push({
-              nutrientId: item1.id,
-              value: item1.result
-            });
-          }
-        });
-      });
-      console.log(food);
-      // console.log(Library);
-      // let canal=this.mailto;
-
-      this.$axios
-        .post(`api/blade-food/food/save`, {
-          foodName: this.ruleForm.name, //食材名
-          foodAlias: this.ruleForm.foodFood, //食物别名1
-          foodAlias1: this.ruleForm.ovenFood, //食物别名2
-          foodReal: this.ruleForm.buffer, //食材真名
-          foodType: this.ruleForm.fooddata, //食材分类
-          foodType1: this.ruleForm.foods, //食物分类1
-          foodType2: this.ruleForm.dogfood, //食物分类2
-          foodEat: this.ruleForm.besaved, //食部
-          weight: this.ruleForm.timers, //重量
-          water: this.ruleForm.content, //水分
-          color: this.ruleForm.resource, //色系
-          seasons: this.active, //季节
-          belongRegions: this.valuepark, //所属区域
-          function: this.ruleForm.desc, //功用
-          isUse: this.ruleForm.delivery1 == false ? 1 : 0, //是否常用
-          isPub: this.ruleForm.delivery == false ? 1 : 0, //是否公开
-
-          nutritions: food
-        })
-        .then(res => {
-          console.log(res);
-          this.$message({
-            message: "保存成功",
-            type: "success"
           });
-          this.Addraudit();
-        })
-        .catch(() => {
-          this.$message.error("保存失败");
-        });
-      //表单提交
-      // this.$refs[formName].validate(valid => {
-      //   if (valid) {
-      //   } else {
-      //     console.log('error submit!!');
-      //     return false;
-      //   }
-      // });
+          console.log(food);
+          // console.log(Library);
+          // let canal=this.mailto;
+
+          this.$axios
+            .post(`api/blade-food/food/save`, {
+              foodName: this.ruleForm.name, //食材名
+              foodAlias: this.ruleForm.foodFood, //食物别名1
+              foodAlias1: this.ruleForm.ovenFood, //食物别名2
+              foodReal: this.ruleForm.buffer, //食材真名
+              foodType: this.ruleForm.fooddata, //食材分类
+              foodType1: this.ruleForm.foods, //食物分类1
+              foodType2: this.ruleForm.dogfood, //食物分类2
+              foodEat: this.ruleForm.besaved, //食部
+              weight: this.ruleForm.timers, //重量
+              water: this.ruleForm.content, //水分
+              color: this.ruleForm.resource, //色系
+              seasons: this.active, //季节
+              belongRegions: this.valuepark, //所属区域
+              function: this.ruleForm.desc, //功用
+              isUse: this.ruleForm.delivery1 == false ? 1 : 0, //是否常用
+              isPub: this.ruleForm.delivery == false ? 1 : 0, //是否公开
+
+              nutritions: food
+            })
+            .then(res => {
+              console.log(res);
+              this.$message({
+                message: "保存成功",
+                type: "success"
+              });
+              this.Addraudit();
+            })
+            .catch(() => {
+              this.$message.error("保存失败");
+            });
+        } else {
+          // console.log("error submit!!");
+          this.$message({
+            message: "食材未填全",
+            type: "warning"
+          });
+          return false;
+        }
+      });
     },
     //编辑保存
-    saved() {
+    saved(formName) {
       // console.log(this.mailto);
       console.log(this.ruleForm);
-      let food = [];
-      this.mailto.forEach((item, index) => {
-        // console.log(item);
-        item.children.forEach((item1, indx1) => {
-          // console.log(item1);
-          if (item1.children) {
-            item1.children.forEach((item2, index2) => {
-              // console.log(item2);
-              if (item2.result != null) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          let food = [];
+          this.mailto.forEach((item, index) => {
+            // console.log(item);
+            item.children.forEach((item1, indx1) => {
+              // console.log(item1);
+              if (item1.children) {
+                item1.children.forEach((item2, index2) => {
+                  // console.log(item2);
+                  if (item2.result != null) {
+                    food.push({
+                      nutrientId: item2.id,
+                      value: item2.result
+                    });
+                  }
+                });
+              }
+              if (item1.result != null) {
                 food.push({
-                  nutrientId: item2.id,
-                  value: item2.result
+                  nutrientId: item1.id,
+                  value: item1.result
                 });
               }
             });
-          }
-          if (item1.result != null) {
-            food.push({
-              nutrientId: item1.id,
-              value: item1.result
-            });
-          }
-        });
-      });
-      console.log(food);
-      // console.log(Library);
-      // let canal=this.mailto;
-
-      this.$axios
-        .post(`api/blade-food/food/update`, {
-          id: this.flour, //ID
-          foodName: this.ruleForm.name, //食材名
-          foodAlias: this.ruleForm.foodFood, //食物别名1
-          foodAlias1: this.ruleForm.ovenFood, //食物别名2
-          foodReal: this.ruleForm.buffer, //食材真名
-          foodType: this.ruleForm.fooddata, //食材分类
-          foodType1: this.ruleForm.foods, //食物分类1
-          foodType2: this.ruleForm.dogfood, //食物分类2
-          foodEat: this.ruleForm.besaved, //食部
-          weight: this.ruleForm.timers, //重量
-          water: this.ruleForm.content, //水分
-          color: this.ruleForm.resource, //色系
-          seasons: this.active, //季节
-          belongRegions: this.valuepark, //所属区域
-          function: this.ruleForm.desc, //功用
-          isUse: this.ruleForm.delivery1 == false ? 1 : 0, //是否常用
-          isPub: this.ruleForm.delivery == false ? 1 : 0, //是否公开
-
-          nutritions: food
-        })
-        .then(res => {
-          console.log(res);
-          this.$message({
-            message: "编辑成功",
-            type: "success"
           });
-          this.Addraudit();
-        })
-        .catch(() => {
-          this.$message.error("编辑失败");
-        });
+          console.log(food);
+
+          this.$axios
+            .post(`api/blade-food/food/update`, {
+              id: this.flour, //ID
+              foodName: this.ruleForm.name, //食材名
+              foodAlias: this.ruleForm.foodFood, //食物别名1
+              foodAlias1: this.ruleForm.ovenFood, //食物别名2
+              foodReal: this.ruleForm.buffer, //食材真名
+              foodType: this.ruleForm.fooddata, //食材分类
+              foodType1: this.ruleForm.foods, //食物分类1
+              foodType2: this.ruleForm.dogfood, //食物分类2
+              foodEat: this.ruleForm.besaved, //食部
+              weight: this.ruleForm.timers, //重量
+              water: this.ruleForm.content, //水分
+              color: this.ruleForm.resource, //色系
+              seasons: this.active, //季节
+              belongRegions: this.valuepark, //所属区域
+              function: this.ruleForm.desc, //功用
+              isUse: this.ruleForm.delivery1 == false ? 1 : 0, //是否常用
+              isPub: this.ruleForm.delivery == false ? 1 : 0, //是否公开
+
+              nutritions: food
+            })
+            .then(res => {
+              console.log(res);
+              this.$message({
+                message: "编辑成功",
+                type: "success"
+              });
+              this.Addraudit();
+            })
+            .catch(() => {
+              this.$message.error("编辑失败");
+            });
+          // alert("submit!");
+        } else {
+          this.$message({
+            message: "食材未填全",
+            type: "warning"
+          });
+          return false;
+        }
+      });
     },
     //查询
     stored() {
@@ -839,8 +874,10 @@ export default {
     },
 
     //查看
-    prepare(data) {
-      console.log(data);
+    prepare(data, index) {
+      console.log(index);
+      this.gavatorta = index;
+      // console.log(data);
       // this.term = data.id;
       this.flour = data.id;
       // console.log(this.flour);
@@ -937,7 +974,7 @@ export default {
       // console.log(data);
       this.term = data.id;
       this.$axios
-        .get(`api/blade-food/basetype/list?id=${this.term}&iisUse=0`, {
+        .get(`api/blade-food/basetype/list?id=${this.term}&isUse=0`, {
           headers: {
             "Content-Type": "application/json"
           }
@@ -959,7 +996,7 @@ export default {
       // console.log(data);
       this.term = data.id;
       this.$axios
-        .get(`api/blade-food/basetype/list?id=${this.term}&iisUse=1`, {})
+        .get(`api/blade-food/basetype/list?id=${this.term}&isUse=1`, {})
         .then(res => {
           console.log(res);
           this.$message({
@@ -976,7 +1013,9 @@ export default {
     multi(data) {
       this.term = data.id;
       this.$axios
-        .get(`api/blade-food/food/changeIsPublic?id=${this.term}&iisUse=1`, {})
+        .post(`api/blade-food/food/changeIsPublic?isPub=1`, {
+          id: this.term
+        })
         .then(res => {
           console.log(res);
           this.$message({
@@ -993,7 +1032,9 @@ export default {
     docs(data) {
       this.term = data.id;
       this.$axios
-        .get(`api/blade-food/food/changeIsPublic?id=${this.term}&iisUse=0`, {})
+        .post(`api/blade-food/food/changeIsPublic?isPub=0`, {
+          id: this.term
+        })
         .then(res => {
           console.log(res);
           this.$message({
@@ -1011,7 +1052,7 @@ export default {
       console.log(data);
       this.saveall = data.id;
       this.$axios
-        .get(`api/blade-food/food/remove?ids=${this.saveall}`, {
+        .post(`api/blade-food/food/remove?ids=${this.saveall}`, {
           headers: {
             "Content-Type": "application/json"
           }
@@ -1151,7 +1192,7 @@ export default {
   font-weight: bold;
 }
 .mationinput {
-  width: 95%;
+  width: 99%;
   /* height: 700px; */
   /* display: flex; */
   margin-left: 40px;
