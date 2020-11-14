@@ -214,6 +214,22 @@
           >
             <el-select
               style=" width: 185px; "
+              v-if="this.gavatorta == 1"
+              v-model="ruleForm.fooddata"
+              placeholder="请选择"
+            >
+              <el-option
+                v-for="item in foodPos"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+            <el-select
+              v-if="this.gavatorta == 2"
+              style=" width: 185px; "
+              disabled
               v-model="ruleForm.fooddata"
               placeholder="请选择"
             >
@@ -381,7 +397,7 @@
           >编辑保存</el-button
         >
 
-        <el-button @click="resetForm('ruleForm')">重置</el-button>
+        <!-- <el-button @click="resetForm('ruleForm')">重置</el-button> -->
       </div>
     </div>
   </div>
@@ -473,7 +489,7 @@ export default {
           label: "全部"
         },
         {
-          value: "1",
+          value: "0",
           label: "常用"
         }
       ],
@@ -589,9 +605,12 @@ export default {
       this.ruleForm.timers = "";
       this.ruleForm.content = "";
       this.ruleForm.resource = "";
-      this.active.length = 0;
-      this.valuepark.length = 0;
+      this.active = [];
+      this.valuepark = [];
+      // this.valuepark.length = 0;
       this.ruleForm.desc = "";
+      this.ruleForm.delivery = false;
+      this.ruleForm.delivery1 = false;
     },
     //食材库保存
     totally(formName) {
@@ -875,6 +894,8 @@ export default {
 
     //查看
     prepare(data, index) {
+      this.valuepark.length = 0;
+      this.active.length = 0;
       console.log(index);
       this.gavatorta = index;
       // console.log(data);
@@ -889,8 +910,7 @@ export default {
         })
         .then(res => {
           // console.log(res);
-          this.valuepark.length = 0;
-          this.active.length = 0;
+
           this.inquired = res.data.data;
           console.log(this.inquired);
           this.ruleForm.name = this.inquired.foodName; //食材名
@@ -905,7 +925,7 @@ export default {
           this.ruleForm.content = this.inquired.water; //水分
           this.ruleForm.resource = this.inquired.color + ""; //色系
           // this.valuepark = this.inquired.belongRegionName; //所属区域
-          this.valuepark.length = 0;
+
           let bar = [];
           this.inquired.provinces.split(",").forEach((item, i) => {
             bar.push([item, this.inquired.belongRegion.split(",")[i]]);
@@ -974,10 +994,9 @@ export default {
       // console.log(data);
       this.term = data.id;
       this.$axios
-        .get(`api/blade-food/basetype/list?id=${this.term}&isUse=0`, {
-          headers: {
-            "Content-Type": "application/json"
-          }
+        .post(`api/blade-food/food/changeIsUse`, {
+          id: this.term,
+          isUse: 0
         })
         .then(res => {
           console.log(res);
@@ -996,7 +1015,10 @@ export default {
       // console.log(data);
       this.term = data.id;
       this.$axios
-        .get(`api/blade-food/basetype/list?id=${this.term}&isUse=1`, {})
+        .post(`api/blade-food/food/changeIsUse`, {
+          id: this.term,
+          isUse: 1
+        })
         .then(res => {
           console.log(res);
           this.$message({
@@ -1013,8 +1035,9 @@ export default {
     multi(data) {
       this.term = data.id;
       this.$axios
-        .post(`api/blade-food/food/changeIsPublic?isPub=1`, {
-          id: this.term
+        .post(`api/blade-food/food/changeIsPublic`, {
+          id: this.term,
+          isPub: 1
         })
         .then(res => {
           console.log(res);
@@ -1032,8 +1055,9 @@ export default {
     docs(data) {
       this.term = data.id;
       this.$axios
-        .post(`api/blade-food/food/changeIsPublic?isPub=0`, {
-          id: this.term
+        .post(`api/blade-food/food/changeIsPublic`, {
+          id: this.term,
+          isPub: 0
         })
         .then(res => {
           console.log(res);
@@ -1051,27 +1075,43 @@ export default {
     remove(node, data) {
       console.log(data);
       this.saveall = data.id;
-      this.$axios
-        .post(`api/blade-food/food/remove?ids=${this.saveall}`, {
-          headers: {
-            "Content-Type": "application/json"
-          }
-        })
-        .then(res => {
-          console.log(res);
-          this.$message({
-            message: "删除成功",
-            type: "success"
-          });
-          this.Addraudit();
+      // this.$axios
+      //   .post(`api/blade-food/food/remove?ids=${this.saveall}`, {
+      //     headers: {
+      //       "Content-Type": "application/json"
+      //     }
+      //   })
+      //   .then(res => {
+      //     console.log(res);
+      //     this.$message({
+      //       message: "删除成功",
+      //       type: "success"
+      //     });
+      //     this.Addraudit();
+      //   })
+      //   .catch(() => {
+      //     this.$message.error("删除失败");
+      //   });
+      this.$confirm("确认删除该分类?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.$axios
+            .post(`api/blade-food/food/remove?ids=${this.saveall}`, {})
+            .then(res => {
+              console.log(res);
+              this.$message.success("删除成功");
+              this.Addraudit();
+            });
         })
         .catch(() => {
-          this.$message.error("删除失败");
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
         });
-      // const parent = node.parent;
-      // const children = parent.data.children || parent.data;
-      // const index = children.findIndex(d => d.id === data.id);
-      // children.splice(index, 1);
     },
 
     handleRemove(file, fileList) {

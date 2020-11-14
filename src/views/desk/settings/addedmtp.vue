@@ -215,8 +215,8 @@
       </el-tab-pane>
     </el-tabs>
     <div class="Aconfirm">
-      <el-button type="primary" @click="Submit">确认</el-button>
-      <el-button type="success" @click="Atom">編輯保存</el-button>
+      <el-button type="primary" v-if="window" @click="Submit">保存</el-button>
+      <el-button type="success" v-else @click="Atom">編輯保存</el-button>
     </div>
   </div>
 </template>
@@ -276,6 +276,11 @@ export default {
     handleClick(tab, event) {},
 
     confirm() {
+      if (this.ruleForm.name == "") {
+        this.window = true; //更新
+      } else {
+        this.window = false;
+      }
       //样式渲染
       this.$axios
         .get(`api/blade-food/nutritionage/nutrage`, {
@@ -343,8 +348,7 @@ export default {
               (parseInt(list[i].nutritionCoeffientVos[j].manMax) +
                 parseInt(list[i].nutritionCoeffientVos[j].womanMax)) /
               2;
-            // console.log(list[i].nutritionCoeffientVos[j].resultMin);
-            // console.log(list[i].nutritionCoeffientVos[j].resultMax);
+
             if (
               list[i].nutritionCoeffientVos[j].manMin == null ||
               list[i].nutritionCoeffientVos[j].womanMin == null

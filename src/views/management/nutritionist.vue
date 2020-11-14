@@ -83,14 +83,14 @@
           <template slot-scope="scope">
             <el-button
               @click="editorTheme(scope.row, 2)"
-              type="primary"
+              type="text"
               size="small"
               icon="el-icon-edit"
               style=" margin-left: 20px;"
               >编辑</el-button
             >
             <el-button
-              type="danger"
+              type="text"
               size="small"
               icon="el-icon-delete"
               style=" margin-left: 20px;"
@@ -116,7 +116,7 @@
     </div>
     <!-- 添加相克食材 -->
     <el-dialog
-      title="添加相克食材"
+      title="食材"
       width="50%"
       append-to-body
       :visible.sync="dateTime"
@@ -132,14 +132,14 @@
         <el-form-item label="名称">
           <el-input v-model="ruleForm.name"></el-input>
         </el-form-item>
-        <el-form-item label="食材一">
+        <el-form-item label="食材一" prop="adding">
           <el-input
             readonly
             v-on:click.native="obtain(1)"
             v-model="ruleForm.adding"
           ></el-input>
         </el-form-item>
-        <el-form-item label="食材二">
+        <el-form-item label="食材二" prop="adding1">
           <el-input
             readonly
             v-on:click.native="obtain(2)"
@@ -524,6 +524,7 @@ export default {
   /* margin-left: 10px; */
   background-color: #fff;
   font-size: 14px;
+  margin-top: -20px;
 }
 .update {
   width: 100%;
