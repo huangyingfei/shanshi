@@ -404,19 +404,39 @@ export default {
     DeleteUser(row) {
       console.log(row);
       this.term = row.id;
-      this.$axios
-        .post(`api/blade-food/foodmutual/remove?ids=${this.term}`)
+      // this.$axios
+      //   .post(`api/blade-food/foodmutual/remove?ids=${this.term}`)
 
-        .then(res => {
-          console.log(res);
-          this.$message({
-            message: "删除成功",
-            type: "success"
-          });
-          this.generator();
+      //   .then(res => {
+      //     console.log(res);
+      //     this.$message({
+      //       message: "删除成功",
+      //       type: "success"
+      //     });
+      //     this.generator();
+      //   })
+      //   .catch(() => {
+      //     this.$message.error("删除失败");
+      //   });
+      this.$confirm("确认删除该菜品分类?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.$axios
+            .post(`api/blade-food/foodmutual/remove?ids=${this.term}`, {})
+            .then(res => {
+              // console.log(res);
+              this.generator();
+              this.$message.success("删除成功");
+            });
         })
         .catch(() => {
-          this.$message.error("删除失败");
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
         });
     },
     //搜索
