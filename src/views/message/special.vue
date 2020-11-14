@@ -61,6 +61,14 @@
   } from "@/api/system/special";
   export default {
     data() {
+      const validate=(rule,value,callback)=>{
+        this.morenData.forEach(_=>{
+          if(!_.mealNum){
+            callback(new Error('默认餐别必填'));
+          }
+        })
+        callback();
+      }
       return {
 
         treeData: [],
@@ -76,7 +84,7 @@
               value:"1"
             }],
             mealCheck:false,
-            mealNum:undefined
+            mealNum:25
           },
           {
             dicData:[{
@@ -84,7 +92,7 @@
               value:"2"
             }],
             mealCheck:true,
-            mealNum:undefined
+            mealNum:5
           },
           {
             dicData:[{
@@ -92,7 +100,7 @@
               value:"3"
             }],
             mealCheck:true,
-            mealNum:undefined
+            mealNum:35
           },
           {
             dicData:[{
@@ -100,7 +108,7 @@
               value:"4"
             }],
             mealCheck:true,
-            mealNum:undefined
+            mealNum:5
           },
           {
             dicData:[{
@@ -108,7 +116,7 @@
               value:"5"
             }],
             mealCheck:false,
-            mealNum:undefined
+            mealNum:30
           },
           {
             dicData:[{
@@ -116,7 +124,7 @@
               value:6
             }],
             mealCheck:false,
-            mealNum:undefined
+            mealNum:5
           },
         ],
         specialForm:{
@@ -238,7 +246,8 @@
               label: '默认餐别',
               prop: 'moren',
               span:24,
-              formslot:true
+              formslot:true,
+              rules: [{required: true, validator: validate, trigger: 'blur'}]
             },
             {
               label: '人群特点',
@@ -287,7 +296,25 @@
       },
       empty(){
         this.morenData.forEach(_=>{
-            this.$set(_,"mealNum",undefined)
+          if(_.dicData[0].value=="1"){
+            this.$set(_,"mealNum",25)
+          }
+          if(_.dicData[0].value=="2"){
+            this.$set(_,"mealNum",5)
+          }
+          if(_.dicData[0].value=="3"){
+            this.$set(_,"mealNum",35)
+          }
+          if(_.dicData[0].value=="4"){
+            this.$set(_,"mealNum",5)
+          }
+          if(_.dicData[0].value=="5"){
+            this.$set(_,"mealNum",30)
+          }
+          if(_.dicData[0].value=="6"){
+            this.$set(_,"mealNum",5)
+          }
+
           this.$set(_,"mealCheck",false)
             if(_.dicData[0].value=="2"||_.dicData[0].value=="3"||_.dicData[0].value=="4"){
               this.$set(_,"mealCheck",true)

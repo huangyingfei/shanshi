@@ -1,6 +1,6 @@
 <template>
-  <div class="smart">
-    <el-row :gutter="20" style="padding: 0px; margin-top: 5px;">
+  <div>
+    <el-row :gutter="20" style="padding: 0px; margin-top: 5px">
       <el-col :span="24">
         <el-form :gutter="10" :inline="true" :model="formInline">
           <el-form-item>
@@ -116,23 +116,23 @@
               style="margin-left: 30px"
               size="medium"
               type="success"
-              >智能配平</el-button
+            >智能配平</el-button
             >
 
             <el-button style="margin-left: 10px" size="medium"
-              >自动设置油盐糖</el-button
+            >自动设置油盐糖</el-button
             >
 
             <el-button style="margin-left: 10px" size="medium"
-              >自动清除油盐糖</el-button
+            >自动清除油盐糖</el-button
             >
 
             <el-button style="margin-left: 10px" size="medium"
-              >营养素</el-button
+            >营养素</el-button
             >
 
             <el-button style="margin-left: 10px" size="medium"
-              >带量食谱</el-button
+            >带量食谱</el-button
             >
           </el-form-item>
         </el-form>
@@ -150,12 +150,11 @@
         <el-card class="box-car" shadow="never">
           <div class="clearfix panel_head">
             <el-button-group>
-              <el-button size="small" style="bo">食谱</el-button>
-              <el-button size="small">菜品</el-button>
+              <el-button size="small" @click="showFoodList=false" style="bo">食谱</el-button>
+              <el-button size="small"  @click="showFoodList=true">菜品</el-button>
             </el-button-group>
           </div>
-
-          <el-tabs v-model="activeName" @tab-click="handleClick">
+          <el-tabs v-show="!showFoodList" v-model="activeName" @tab-click="handleClick">
             <el-tab-pane label="分享食谱" name="first">
               <div style="margin-top: 0px;padding:5px;">
                 <el-input
@@ -176,7 +175,7 @@
                 <el-divider></el-divider>
               </div>
 
-              <ul class="foodWeekListHis">
+              <ul class="foodWeekListHis" >
                 <li><a>第一周菜谱</a></li>
                 <li>2</li>
                 <li>3</li>
@@ -184,11 +183,30 @@
             </el-tab-pane>
             <el-tab-pane label="个人食谱" name="second">配置管理</el-tab-pane>
           </el-tabs>
+          <div class="foodSelectMenue" v-show="showFoodList" style="margin-top: 0px;padding:5px;">
+
+            <el-input
+              placeholder="输入关键字进行过滤"
+              v-model="filterText">
+            </el-input>
+
+            <el-tree
+              class="filter-tree"
+              :data="menue_data"
+              :props="defaultProps"
+              default-expand-all
+              :filter-node-method="filterNode"
+              draggable
+              @node-drag-start="foodmenueDragStart"
+              :allow-drop="foodmenueDragEnd"
+              ref="tree">
+            </el-tree>
+          </div>
         </el-card>
       </el-col>
       <el-col :span="20">
         <div class="foodPanel">
-          <foods-week :headers="headers" :datas="datas" days="5"> </foods-week>
+          <foods-week :headers="headers" :datas="datas" days="5" :dragnode="drogNode"> </foods-week>
         </div>
       </el-col>
       <el-col>
@@ -197,7 +215,7 @@
             style=" text-align: center;"
             type="primary"
             @click="buttonend"
-            >保存</el-button
+          >保存</el-button
           >
         </div>
       </el-col>
@@ -236,13 +254,13 @@
           <span></span>
 
           <el-checkbox style="padding-left: 50px;" v-model="focus"
-            >调整食材的量</el-checkbox
+          >调整食材的量</el-checkbox
           >
           <el-checkbox style="padding-left: 50px;" v-model="tment"
-            >调整菜品的量</el-checkbox
+          >调整菜品的量</el-checkbox
           >
           <el-checkbox style="padding-left: 50px;" v-model="changed"
-            >保留整数</el-checkbox
+          >保留整数</el-checkbox
           >
         </div>
         <div class="nutrition">
@@ -275,7 +293,7 @@
           </el-input>
 
           <el-button style="margin-left: 30px;" type="primary"
-            >开始配平</el-button
+          >开始配平</el-button
           >
           <el-button type="primary">应用</el-button>
           <el-button type="primary">重置</el-button>
@@ -312,7 +330,7 @@
       </div>
       <!-- 表格 -->
       <div class="onblur">
-        <foods-week :headers="headers" :datas="datas" days="5"> </foods-week>
+        <foods-week :headers="headers" :datas="datas"  days="5"> </foods-week>
       </div>
     </el-dialog>
     <!-- 智能配平弹框结束 -->
@@ -320,95 +338,195 @@
 </template>
 
 <script>
-import foodsWeek from "@/views/foods/components/foodsweek";
-export default {
-  components: {
-    foodsWeek
-  },
-  created() {
-    this.init();
-  },
-  data() {
-    const data = [];
-    return {
-      drawer: false, //分数弹框
-      pointscan: false, //智能配餐弹框
-      secondary: [
-        {
-          id: 3,
-          date: "蛋白质",
-          name: "322",
-          address: "123.91",
-          children: [
-            {
-              id: 31,
-              date: "完全蛋白质",
-              name: "233",
-              address: "94"
-            },
-            {
-              id: 32,
-              date: "半完全蛋白质",
-              name: "234",
-              address: "94"
+  import foodsWeek from "@/views/foods/components/foodsweek";
+  export default {
+    components: {
+      foodsWeek
+    },
+    created() {
+      //this.init();
+    },
+    data() {
+      const data = [];
+      return {
+        shareList:[],
+
+        drawer: false, //分数弹框
+        pointscan: false, //智能配餐弹框
+        secondary: [
+          {
+            id: 3,
+            date: "蛋白质",
+            name: "322",
+            address: "123.91",
+            children: [
+              {
+                id: 31,
+                date: "完全蛋白质",
+                name: "233",
+                address: "94"
+              },
+              {
+                id: 32,
+                date: "半完全蛋白质",
+                name: "234",
+                address: "94"
+              }
+            ]
+          }
+        ],
+        WeekInfo: {
+          weekType: "", //周期类型
+          WeekTtitle: "", //周期标题
+          Weekdetails: "", //周期明细
+          weekValue: "",
+          foodCatalog: [], //餐点类型
+          crowd: "", //人群
+          shareOrg: true
+        },
+        activeName: "first",
+        // 表格头部
+        headers: [],
+        // 表格数据
+        datas: [],
+        WeekList: [], //所选的时间周期
+        FoodTypeList: [], //所选餐点类型
+        rebuild: false,
+        showFoodList:false,
+        menue_data:[
+          {id:1,label:'番茄鸡蛋',
+            node:{
+              id: 102,
+              name: "番茄鸡蛋",
+              count: 1,
+              children: [
+                { id: 101001, name: "绿豆", count: 1 },
+                { id: 101002, name: "白糖", count: 1 },
+              ],
             }
-          ]
-        }
-      ],
-      WeekInfo: {
-        weekType: "", //周期类型
-        WeekTtitle: "", //周期标题
-        Weekdetails: "", //周期明细
-        weekValue: "",
-        foodCatalog: [], //餐点类型
-        crowd: "", //人群
-        shareOrg: true
+          },
+          {id:2,label:'绿豆粥',
+            node:{
+              id: 103,
+              name: "绿豆粥",
+              count: 1,
+              children: [
+                { id: 101001, name: "绿豆", count: 1 },
+                { id: 101002, name: "白糖", count: 1 },
+              ],
+            }
+          }
+        ],
+        //拖动的节点
+        drogNode:{}
+      };
+    },
+    beforeMount() {},
+    methods: {
+
+      drop(ev){
+
+
       },
-      activeName: "first",
-      // 表格头部
-      headers: [],
-      // 表格数据
-      datas: [],
-      WeekList: [], //所选的时间周期
-      FoodTypeList: [], //所选餐点类型
-      rebuild: false
-    };
-  },
-  beforeMount() {},
-  methods: {
-    tfractio() {
-      this.drawer = true;
-    },
-    wrapscan() {
-      this.pointscan = true;
-    },
-    buttonend() {
-      console.log(this.datas);
-    },
-    init() {
-      this.initRemoteData();
-    },
+      //菜谱拖动
+      foodmenueDragStart(node,ev){
 
-    //重新构建表格
-    rebuildTable() {
-      var that = this;
-      this.headers = [];
-      setTimeout(function() {
-        var hd = JSON.parse(JSON.stringify(that.WeekList));
-        for (let j = 0; j < hd.length; j++) {
-          that.headers.push(hd[j]);
+        this.drogNode=JSON.parse(JSON.stringify(node.data));
+        ev.dataTransfer.setData("Text",JSON.stringify(node.data));
+      },
+      foodmenueDragEnd(a,b,c){
+        return false;
+      },
+      tfractio() {
+        this.drawer = true;
+      },
+      wrapscan() {
+        this.pointscan = true;
+      },
+      buttonend() {
+        console.log(this.datas);
+      },
+      init() {
+        this.initRemoteData();
+      },
+
+      //重新构建表格
+      rebuildTable() {
+        var that = this;
+        this.headers = [];
+        setTimeout(function() {
+          var hd = JSON.parse(JSON.stringify(that.WeekList));
+          for (let j = 0; j < hd.length; j++) {
+            that.headers.push(hd[j]);
+          }
+          that.initEmptyData();
+        }, 100);
+      },
+
+      //餐点类型改变
+      AppendFoodType() {
+        var date3 = JSON.parse(JSON.stringify(this.WeekInfo.foodCatalog));
+
+        //新增餐点类型
+        for (let i = 0; i < date3.length; i++) {
+          if (!this.hasFoodType(date3[i])) {
+            var row = {
+              id: this.guid(),
+              pid: this.id,
+              name: date3[i],
+              weeks: []
+            };
+
+            // 填充周数据
+            for (let j = 0; j < 7; j++) {
+              row.weeks.push({
+                id: this.guid(),
+                week: this.headers[j],
+                name: "week" + (j + 1),
+                image: "",
+                // 填充食谱数据
+                foods: []
+              });
+            }
+
+            this.datas.push(row);
+          }
         }
-        that.initEmptyData();
-      }, 100);
-    },
 
-    //餐点类型改变
-    AppendFoodType() {
-      var date3 = JSON.parse(JSON.stringify(this.WeekInfo.foodCatalog));
+        //删除餐点类型
+        var deleteList = [];
+        for (let i = 0; i < this.datas.length; i++) {
+          var needremove = true;
+          this.WeekInfo.foodCatalog.forEach(e => {
+            if (e == this.datas[i].name) {
+              needremove = false;
+            }
+          });
 
-      //新增餐点类型
-      for (let i = 0; i < date3.length; i++) {
-        if (!this.hasFoodType(date3[i])) {
+          if (needremove) {
+            deleteList.push(i);
+          }
+        }
+        deleteList.forEach(e => {
+          this.datas.splice(e, 1);
+        });
+
+        console.log(JSON.stringify(this.datas));
+      },
+
+      hasFoodType(foodTypeName) {
+        var result = this.datas.find(p => p.name == foodTypeName);
+        if (!result) {
+          return false;
+        } else {
+          return true;
+        }
+      },
+      // 初始化表格数据(根据id获取远程数据)
+      initEmptyData() {
+        this.datas = [];
+        var date3 = JSON.parse(JSON.stringify(this.WeekInfo.foodCatalog));
+        for (let i = 0; i < date3.length; i++) {
           var row = {
             id: this.guid(),
             pid: this.id,
@@ -430,484 +548,420 @@ export default {
 
           this.datas.push(row);
         }
-      }
+      },
 
-      //删除餐点类型
-      var deleteList = [];
-      for (let i = 0; i < this.datas.length; i++) {
-        var needremove = true;
-        this.WeekInfo.foodCatalog.forEach(e => {
-          if (e == this.datas[i].name) {
-            needremove = false;
+      ///初始化远程数据
+      initRemoteData() {
+        var remoteStr =
+          // '[{"id":"7317b146-7fc5-fcbd-2969-5b59f321e831","name":"早餐","weeks":[{"id":"79ba0527-a10a-22e0-2df4-b58d9c8b1191","week":{"name":"week1","lable":"周一","date":"11月2日","is_vacation":false},"name":"week1","image":"","foods":[{"id":101,"name":"绿豆粥","count":1,"children":[{"id":101001,"name":"绿豆","count":1,"spans":3},{"id":101002,"name":"白糖","count":1,"spans":3}],"spans":3}]},{"id":"880061e2-66d2-fed1-11bc-b9b2489fc0af","week":{"name":"week2","lable":"周二","date":"11月3日","is_vacation":false},"name":"week2","image":"","foods":[]},{"id":"ee2c62a0-5d95-9d34-0df3-212081347a45","week":{"name":"week3","lable":"周三","date":"11月4日","is_vacation":false},"name":"week3","image":"","foods":[]},{"id":"7383fe68-8ec8-e72b-879d-d99805c9813f","week":{"name":"week4","lable":"周四","date":"11月5日","is_vacation":false},"name":"week4","image":"","foods":[]},{"id":"148b984c-76f5-b856-3965-6925b0f1e694","week":{"name":"week5","lable":"周五","date":"11月6日","is_vacation":false},"name":"week5","image":"","foods":[]},{"id":"2b524e1a-4b03-d446-f09e-597a4afce450","name":"week6","image":"","foods":[]},{"id":"8eac338a-acda-78c2-e837-bae237cad7ea","name":"week7","image":"","foods":[]}]}]';
+          '[{"id":"7317b146-7fc5-fcbd-2969-5b59f321e831","name":"早餐","weeks":[{"id":"79ba0527-a10a-22e0-2df4-b58d9c8b1191","week":{"name":"week1","lable":"周一","date":"11月2日","is_vacation":false},"name":"week1","image":"","foods":[{"id":101,"name":"绿豆粥","count":1,"children":[{"id":101001,"name":"绿豆","count":1,"spans":3},{"id":101002,"name":"白糖","count":1,"spans":3}],"spans":3}]},{"id":"880061e2-66d2-fed1-11bc-b9b2489fc0af","week":{"name":"week2","lable":"周二","date":"11月3日","is_vacation":false},"name":"week2","image":"","foods":[]},{"id":"ee2c62a0-5d95-9d34-0df3-212081347a45","week":{"name":"week3","lable":"周三","date":"11月4日","is_vacation":false},"name":"week3","image":"","foods":[]},{"id":"7383fe68-8ec8-e72b-879d-d99805c9813f","week":{"name":"week4","lable":"周四","date":"11月5日","is_vacation":false},"name":"week4","image":"","foods":[]},{"id":"148b984c-76f5-b856-3965-6925b0f1e694","week":{"name":"week5","lable":"周五","date":"11月6日","is_vacation":false},"name":"week5","image":"","foods":[]},{"id":"2b524e1a-4b03-d446-f09e-597a4afce450","name":"week6","image":"","foods":[]},{"id":"8eac338a-acda-78c2-e837-bae237cad7ea","name":"week7","image":"","foods":[]}]}]';
+        var remoteData = JSON.parse(remoteStr);
+        this.headers = [];
+        remoteData[0].weeks.forEach(e => {
+          if (e.week) {
+            this.headers.push(e.week);
           }
         });
-
-        if (needremove) {
-          deleteList.push(i);
+        this.datas = remoteData;
+      },
+      //生成随机 GUID 数
+      guid() {
+        function S4() {
+          return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
         }
-      }
-      deleteList.forEach(e => {
-        this.datas.splice(e, 1);
-      });
-
-      console.log(JSON.stringify(this.datas));
-    },
-
-    hasFoodType(foodTypeName) {
-      var result = this.datas.find(p => p.name == foodTypeName);
-      if (!result) {
-        return false;
-      } else {
-        return true;
-      }
-    },
-    // 初始化表格数据(根据id获取远程数据)
-    initEmptyData() {
-      this.datas = [];
-      var date3 = JSON.parse(JSON.stringify(this.WeekInfo.foodCatalog));
-      for (let i = 0; i < date3.length; i++) {
-        var row = {
-          id: this.guid(),
-          pid: this.id,
-          name: date3[i],
-          weeks: []
-        };
-
-        // 填充周数据
-        for (let j = 0; j < 7; j++) {
-          row.weeks.push({
-            id: this.guid(),
-            week: this.headers[j],
-            name: "week" + (j + 1),
-            image: "",
-            // 填充食谱数据
-            foods: []
-          });
-        }
-
-        this.datas.push(row);
-      }
-    },
-
-    ///初始化远程数据
-    initRemoteData() {
-      var remoteStr =
-        // '[{"id":"7317b146-7fc5-fcbd-2969-5b59f321e831","name":"早餐","weeks":[{"id":"79ba0527-a10a-22e0-2df4-b58d9c8b1191","week":{"name":"week1","lable":"周一","date":"11月2日","is_vacation":false},"name":"week1","image":"","foods":[{"id":101,"name":"绿豆粥","count":1,"children":[{"id":101001,"name":"绿豆","count":1,"spans":3},{"id":101002,"name":"白糖","count":1,"spans":3}],"spans":3}]},{"id":"880061e2-66d2-fed1-11bc-b9b2489fc0af","week":{"name":"week2","lable":"周二","date":"11月3日","is_vacation":false},"name":"week2","image":"","foods":[]},{"id":"ee2c62a0-5d95-9d34-0df3-212081347a45","week":{"name":"week3","lable":"周三","date":"11月4日","is_vacation":false},"name":"week3","image":"","foods":[]},{"id":"7383fe68-8ec8-e72b-879d-d99805c9813f","week":{"name":"week4","lable":"周四","date":"11月5日","is_vacation":false},"name":"week4","image":"","foods":[]},{"id":"148b984c-76f5-b856-3965-6925b0f1e694","week":{"name":"week5","lable":"周五","date":"11月6日","is_vacation":false},"name":"week5","image":"","foods":[]},{"id":"2b524e1a-4b03-d446-f09e-597a4afce450","name":"week6","image":"","foods":[]},{"id":"8eac338a-acda-78c2-e837-bae237cad7ea","name":"week7","image":"","foods":[]}]}]';
-        '[{"id":"7317b146-7fc5-fcbd-2969-5b59f321e831","name":"早餐","weeks":[{"id":"79ba0527-a10a-22e0-2df4-b58d9c8b1191","week":{"name":"week1","lable":"周一","date":"11月2日","is_vacation":false},"name":"week1","image":"","foods":[{"id":101,"name":"绿豆粥","count":1,"children":[{"id":101001,"name":"绿豆","count":1,"spans":3},{"id":101002,"name":"白糖","count":1,"spans":3}],"spans":3}]},{"id":"880061e2-66d2-fed1-11bc-b9b2489fc0af","week":{"name":"week2","lable":"周二","date":"11月3日","is_vacation":false},"name":"week2","image":"","foods":[]},{"id":"ee2c62a0-5d95-9d34-0df3-212081347a45","week":{"name":"week3","lable":"周三","date":"11月4日","is_vacation":false},"name":"week3","image":"","foods":[]},{"id":"7383fe68-8ec8-e72b-879d-d99805c9813f","week":{"name":"week4","lable":"周四","date":"11月5日","is_vacation":false},"name":"week4","image":"","foods":[]},{"id":"148b984c-76f5-b856-3965-6925b0f1e694","week":{"name":"week5","lable":"周五","date":"11月6日","is_vacation":false},"name":"week5","image":"","foods":[]},{"id":"2b524e1a-4b03-d446-f09e-597a4afce450","name":"week6","image":"","foods":[]},{"id":"8eac338a-acda-78c2-e837-bae237cad7ea","name":"week7","image":"","foods":[]}]}]';
-      var remoteData = JSON.parse(remoteStr);
-      this.headers = [];
-      remoteData[0].weeks.forEach(e => {
-        if (e.week) {
-          this.headers.push(e.week);
-        }
-      });
-      this.datas = remoteData;
-    },
-    //生成随机 GUID 数
-    guid() {
-      function S4() {
-        return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
-      }
-      return (
-        S4() +
-        S4() +
-        "-" +
-        S4() +
-        "-" +
-        S4() +
-        "-" +
-        S4() +
-        "-" +
-        S4() +
-        S4() +
-        S4()
-      );
-    },
-    //周选择添加周次
-    FixWeek() {
-      var weekSelect = document.getElementsByName("WeekSelect");
-      if (weekSelect == undefined) return;
-
-      if (weekSelect[0].getAttribute("isFixWeek") != undefined) return;
-
-      setTimeout(function() {
-        var zs = document.createElement("th");
-        zs.innerText = "周次";
-        var RootweekFirst = document.querySelector(
-          ".el-picker-panel__content table tr th"
+        return (
+          S4() +
+          S4() +
+          "-" +
+          S4() +
+          "-" +
+          S4() +
+          "-" +
+          S4() +
+          "-" +
+          S4() +
+          S4() +
+          S4()
         );
-        var Rootweek = document.querySelector(".el-picker-panel__content tr");
-        Rootweek.insertBefore(zs, RootweekFirst);
-        var listRow = document.querySelectorAll(".el-date-table__row");
+      },
+      //周选择添加周次
+      FixWeek() {
+        var weekSelect = document.getElementsByName("WeekSelect");
+        if (weekSelect == undefined) return;
 
-        for (var i = 0; i < listRow.length; i++) {
-          var firstNode = listRow[i].children[0];
-          var zs_index = document.createElement("td");
-          zs_index.style.fontWeight = "bold";
-          zs_index.style.color = "#fe6c6f";
-          var z = i + 1;
-          switch (z) {
-            case 1:
-              zs_index.innerText = "一";
-              break;
-            case 2:
-              zs_index.innerText = "二";
-              break;
-            case 3:
-              zs_index.innerText = "三";
-              break;
-            case 4:
-              zs_index.innerText = "四";
-              break;
-            case 5:
-              zs_index.innerText = "五";
-              break;
-            case 6:
-              zs_index.innerText = "六";
-              break;
+        if (weekSelect[0].getAttribute("isFixWeek") != undefined) return;
+
+        setTimeout(function() {
+          var zs = document.createElement("th");
+          zs.innerText = "周次";
+          var RootweekFirst = document.querySelector(
+            ".el-picker-panel__content table tr th"
+          );
+          var Rootweek = document.querySelector(".el-picker-panel__content tr");
+          Rootweek.insertBefore(zs, RootweekFirst);
+          var listRow = document.querySelectorAll(".el-date-table__row");
+
+          for (var i = 0; i < listRow.length; i++) {
+            var firstNode = listRow[i].children[0];
+            var zs_index = document.createElement("td");
+            zs_index.style.fontWeight = "bold";
+            zs_index.style.color = "#fe6c6f";
+            var z = i + 1;
+            switch (z) {
+              case 1:
+                zs_index.innerText = "一";
+                break;
+              case 2:
+                zs_index.innerText = "二";
+                break;
+              case 3:
+                zs_index.innerText = "三";
+                break;
+              case 4:
+                zs_index.innerText = "四";
+                break;
+              case 5:
+                zs_index.innerText = "五";
+                break;
+              case 6:
+                zs_index.innerText = "六";
+                break;
+            }
+
+            listRow[i].insertBefore(zs_index, firstNode);
+          }
+          document
+            .getElementsByName("WeekSelect")[0]
+            .setAttribute("isFixWeek", "true");
+        }, 100);
+      },
+      GetChinesDay(z) {
+        var cday = "";
+        switch (z) {
+          case 1:
+            cday = "一";
+            break;
+          case 2:
+            cday = "二";
+            break;
+          case 3:
+            cday = "三";
+            break;
+          case 4:
+            cday = "四";
+            break;
+          case 5:
+            cday = "五";
+            break;
+          case 6:
+            cday = "六";
+            break;
+          case 7:
+            cday = "天";
+            break;
+        }
+
+        return cday;
+      },
+      //选择周
+      SelectWeek(d) {
+        var that = this;
+        setTimeout(function(v) {
+          var year = d.getFullYear();
+          var begin_year;
+          var end_year;
+          begin_year = year;
+          end_year = year;
+          var begin_mouth;
+          var end_mouth;
+          var mouth = d.getMonth() + 1;
+
+          begin_mouth = mouth;
+          end_mouth = mouth;
+          var StartEliment = document.querySelectorAll(".in-range.start-date");
+          var begin_day = StartEliment[0].innerText.trim();
+
+          //判断是否为上一个月
+          if (StartEliment[0].className.indexOf("prev-month") >= 0) {
+            begin_mouth = mouth - 1;
+            if (begin_mouth == 0) {
+              begin_mouth = 12;
+            }
           }
 
-          listRow[i].insertBefore(zs_index, firstNode);
-        }
-        document
-          .getElementsByName("WeekSelect")[0]
-          .setAttribute("isFixWeek", "true");
-      }, 100);
-    },
-    GetChinesDay(z) {
-      var cday = "";
-      switch (z) {
-        case 1:
-          cday = "一";
-          break;
-        case 2:
-          cday = "二";
-          break;
-        case 3:
-          cday = "三";
-          break;
-        case 4:
-          cday = "四";
-          break;
-        case 5:
-          cday = "五";
-          break;
-        case 6:
-          cday = "六";
-          break;
-        case 7:
-          cday = "天";
-          break;
+          //判断是否为下一个月
+          var endtime = document.querySelectorAll(".in-range.end-date");
+          if (endtime[0].className.indexOf("next-month") >= 0) {
+            if (mouth == 12) {
+              end_year = end_year + 1;
+              end_mouth = 1;
+            }
+          }
+          var end_day = endtime[0].innerText.trim();
+
+          //获取周数本月
+
+          //获取周数
+          var curentWeek = document.querySelectorAll(
+            ".el-date-table__row.current"
+          )[0].firstChild.innerText;
+
+          var full_week = year + "年" + mouth + "月" + "第" + curentWeek + "周";
+
+          that.WeekInfo.WeekTtitle = full_week;
+
+          var full_weekDetails =
+            year +
+            "年" +
+            mouth +
+            "月" +
+            "第" +
+            curentWeek +
+            "周" +
+            begin_year +
+            "-" +
+            begin_mouth +
+            "-" +
+            begin_day +
+            "至" +
+            end_year +
+            "-" +
+            end_mouth +
+            "-" +
+            end_day;
+
+          that.WeekInfo.Weekdetails = full_weekDetails;
+
+          //获取每天
+          that.WeekList = [];
+
+          var alldday = document.querySelectorAll(
+            ".el-date-table__row.current"
+          )[0].children;
+          for (let i = 1; i < alldday.length; i++) {
+            if (i <= that.WeekInfo.weekType) {
+              var y = year;
+              var m = mouth;
+              if (alldday[i].className.indexOf("prev-month") >= 0) {
+                m = mouth - 1;
+                if (m == 0) {
+                  m = 12;
+                }
+              }
+
+              if (alldday[i].className.indexOf("next-month") >= 0) {
+                if (mouth == 12) {
+                  y = year + 1;
+                  m = 1;
+                }
+              }
+
+              that.WeekList.push({
+                name: "week" + i,
+                lable: "周" + that.GetChinesDay(i),
+                date: m + "月" + alldday[i].innerText.trim() + "日",
+                is_vacation: false
+              });
+            }
+          }
+
+          //console.log(JSON.stringify(that.WeekList));
+
+          that.rebuildTable();
+        }, 100);
+      },
+      //打开周选择
+      ShowWeekSelect() {
+        this.$refs.refweekSelect.showPicker();
       }
-
-      return cday;
-    },
-    //选择周
-    SelectWeek(d) {
-      var that = this;
-      setTimeout(function(v) {
-        var year = d.getFullYear();
-        var begin_year;
-        var end_year;
-        begin_year = year;
-        end_year = year;
-        var begin_mouth;
-        var end_mouth;
-        var mouth = d.getMonth() + 1;
-
-        begin_mouth = mouth;
-        end_mouth = mouth;
-        var StartEliment = document.querySelectorAll(".in-range.start-date");
-        var begin_day = StartEliment[0].innerText.trim();
-
-        //判断是否为上一个月
-        if (StartEliment[0].className.indexOf("prev-month") >= 0) {
-          begin_mouth = mouth - 1;
-          if (begin_mouth == 0) {
-            begin_mouth = 12;
-          }
-        }
-
-        //判断是否为下一个月
-        var endtime = document.querySelectorAll(".in-range.end-date");
-        if (endtime[0].className.indexOf("next-month") >= 0) {
-          if (mouth == 12) {
-            end_year = end_year + 1;
-            end_mouth = 1;
-          }
-        }
-        var end_day = endtime[0].innerText.trim();
-
-        //获取周数本月
-
-        //获取周数
-        var curentWeek = document.querySelectorAll(
-          ".el-date-table__row.current"
-        )[0].firstChild.innerText;
-
-        var full_week = year + "年" + mouth + "月" + "第" + curentWeek + "周";
-
-        that.WeekInfo.WeekTtitle = full_week;
-
-        var full_weekDetails =
-          year +
-          "年" +
-          mouth +
-          "月" +
-          "第" +
-          curentWeek +
-          "周" +
-          begin_year +
-          "-" +
-          begin_mouth +
-          "-" +
-          begin_day +
-          "至" +
-          end_year +
-          "-" +
-          end_mouth +
-          "-" +
-          end_day;
-
-        that.WeekInfo.Weekdetails = full_weekDetails;
-
-        //获取每天
-        that.WeekList = [];
-
-        var alldday = document.querySelectorAll(
-          ".el-date-table__row.current"
-        )[0].children;
-        for (let i = 1; i < alldday.length; i++) {
-          if (i <= that.WeekInfo.weekType) {
-            var y = year;
-            var m = mouth;
-            if (alldday[i].className.indexOf("prev-month") >= 0) {
-              m = mouth - 1;
-              if (m == 0) {
-                m = 12;
-              }
-            }
-
-            if (alldday[i].className.indexOf("next-month") >= 0) {
-              if (mouth == 12) {
-                y = year + 1;
-                m = 1;
-              }
-            }
-
-            that.WeekList.push({
-              name: "week" + i,
-              lable: "周" + that.GetChinesDay(i),
-              date: m + "月" + alldday[i].innerText.trim() + "日",
-              is_vacation: false
-            });
-          }
-        }
-
-        //console.log(JSON.stringify(that.WeekList));
-
-        that.rebuildTable();
-      }, 100);
-    },
-    //打开周选择
-    ShowWeekSelect() {
-      this.$refs.refweekSelect.showPicker();
     }
-  }
-};
+  };
 </script>
 
-<style scoped>
-.smart {
-  width: 1325px;
-  height: 900px;
-  background-color: #fff;
-}
-.el-row {
-  padding: 5px;
-}
-.el-select .el-input {
-  width: 120px;
-}
-.el-form-item {
-  margin-bottom: 0px;
-}
-.el-divider {
-  margin: 0px !important;
-}
-.clearfix:before,
-.clearfix:after {
-  display: table;
-  content: "";
-}
-.clearfix:after {
-  clear: both;
-}
-.box-car {
-  border: 1px solid #ebebeb !important;
-  border-radius: 3px !important;
-  padding: 0px;
-  height: 600px;
-}
-.el-card__body {
-  padding: 0px !important;
-}
-.panel_head {
-  background-color: rgba(0, 172, 160, 1);
-  padding-top: 10px;
-  text-align: center;
-  border-radius: 3px;
-}
-.panel_head button {
-  border-bottom: 0px;
-  border-bottom-right-radius: 0px;
-  border-bottom-left-radius: 0px;
-  margin-bottom: 1px;
-}
-.foodWeekListHis {
-  padding: 5px;
-}
-.foodWeekListHis li {
-  list-style: none;
-  margin-bottom: 2px;
-}
-.foodPanel {
-  /* height: calc(100vh - 180px); */
-  overflow-y: scroll;
-  overflow-x: auto;
-}
-.foodrate {
-  width: 100%;
-  height: 50px;
-  /* background-color: red; */
-  text-align: center;
-  margin-bottom: 50px;
-}
-.scores {
-  cursor: pointer;
-  width: 180px;
-  height: 90px;
-  /* background-color: red; */
-  position: absolute;
-  top: 110px;
-  right: 70px;
-  display: flex;
-  /* border-radius: 50%;
-  background-image: url("/img/yuan.png");
-  background-size: 100% 100%; */
-}
-.scores1 {
-  width: 90px;
-  height: 90px;
-  /* background-color: yellow; */
-  border-radius: 50%;
-  background-image: url("/img/yuan.png");
-  background-size: 100% 100%;
-  z-index: 999;
-}
-.scores2 {
-  width: 80px;
-  height: 65px;
-  margin-top: 20px;
-  display: flex;
-  margin-left: -5px;
-  /* background-color: blue; */
-  background-image: url("/img/fenshu1.png");
-  background-size: 100% 100%;
-  margin-left: -20px;
-  margin-top: 13px;
-}
-.gnus {
-  font-size: 24px;
-  text-align: center;
-  color: #ffffff;
-}
-.picture {
-  width: 30px;
-  height: 30px;
-  margin-top: 20px;
-  margin-left: 10px;
-}
-.vertical {
-  font-size: 16px;
-  color: #00bfaf;
-  line-height: 42px;
-  padding-left: 5px;
-}
-.scorefor {
-  text-align: center;
-  color: #ffffff;
-  font-size: 15px;
-  margin-top: -23px;
-}
-.header {
-  width: 100%;
-  height: 120px;
-  /* background-color: red; */
-}
-.time {
-  width: 100%;
-  height: 55px;
-}
-.nutrition {
-  width: 100%;
-  height: 55px;
-  /* background-color: blue; */
-}
-.action {
-  width: 23%;
-  height: 700px;
-  /* background: yellow; */
-  float: left;
-}
-.onblur {
-  width: 75%;
-  height: 700px;
-  /* background-color: red; */
-  float: left;
-  margin-left: 15px;
-  margin-bottom: 70px;
-}
-.arrow {
-  width: 100%;
-  height: 50px;
-  line-height: 50px;
-  /* background-color: blue; */
-  display: flex;
-}
-.season {
-  width: 80px;
-  height: 30px;
-  text-align: center;
-  color: #fff;
-  line-height: 30px;
-  margin-top: 10px;
-  background-color: rgba(255, 0, 0, 1);
-}
 
-.season1 {
-  width: 80px;
-  height: 30px;
-  margin-left: 20px;
-  text-align: center;
-  color: #fff;
-  line-height: 30px;
-  margin-top: 10px;
-  background-color: rgba(0, 172, 160, 1);
-}
-.season2 {
-  width: 80px;
-  height: 30px;
-  margin-left: 20px;
-  text-align: center;
-  color: #fff;
-  line-height: 30px;
-  margin-top: 10px;
-  background-color: rgba(255, 153, 51, 1);
-}
-.fonts {
-  width: 100%;
-  /* height: 500px; */
-  /* background-color: yellow; */
-}
+<style scoped>
+  .el-row {
+    padding: 5px;
+  }
+  .el-select .el-input {
+    width: 120px;
+  }
+  .el-form-item {
+    margin-bottom: 0px;
+  }
+  .el-divider {
+    margin: 0px !important;
+  }
+  .clearfix:before,
+  .clearfix:after {
+    display: table;
+    content: "";
+  }
+  .clearfix:after {
+    clear: both;
+  }
+  .box-car {
+    border: 1px solid #ebebeb !important;
+    border-radius: 3px !important;
+    padding: 0px;
+    height: 600px;
+  }
+  .el-card__body {
+    padding: 0px !important;
+  }
+  .panel_head {
+    background-color: rgba(0, 172, 160, 1);
+    padding-top: 10px;
+    text-align: center;
+    border-radius: 3px;
+  }
+  .panel_head button {
+    border-bottom: 0px;
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+    margin-bottom: 1px;
+  }
+  .foodWeekListHis {
+    padding: 5px;
+  }
+  .foodWeekListHis li {
+    list-style: none;
+    margin-bottom: 2px;
+  }
+  .foodPanel {
+    /* height: calc(100vh - 180px); */
+    overflow-y: scroll;
+    overflow-x: auto;
+  }
+  .foodrate {
+    width: 100%;
+    height: 50px;
+    /* background-color: red; */
+    text-align: center;
+    margin-bottom: 50px;
+  }
+  .scores {
+    cursor: pointer;
+    width: 180px;
+    height: 90px;
+    /* background-color: red; */
+    position: absolute;
+    top: 110px;
+    right: 70px;
+    display: flex;
+    /* border-radius: 50%;
+    background-image: url("/img/yuan.png");
+    background-size: 100% 100%; */
+  }
+  .scores1 {
+    width: 90px;
+    height: 90px;
+    /* background-color: yellow; */
+    border-radius: 50%;
+    background-image: url("/img/yuan.png");
+    background-size: 100% 100%;
+  }
+  .scores2 {
+    width: 80px;
+    height: 65px;
+    margin-top: 20px;
+    display: flex;
+    margin-left: -5px;
+    /* background-color: blue; */
+    background-image: url("/img/fenshu1.png");
+    background-size: 100% 100%;
+  }
+  .gnus {
+    font-size: 24px;
+    text-align: center;
+    color: #ffffff;
+  }
+  .picture {
+    width: 30px;
+    height: 30px;
+    margin-top: 20px;
+    margin-left: 2px;
+  }
+  .vertical {
+    font-size: 20px;
+    color: #00bfaf;
+    line-height: 30px;
+    padding-left: 5px;
+  }
+  .scorefor {
+    text-align: center;
+    color: #ffffff;
+    font-size: 15px;
+    margin-top: -23px;
+  }
+  .header {
+    width: 100%;
+    height: 120px;
+    /* background-color: red; */
+  }
+  .time {
+    width: 100%;
+    height: 55px;
+  }
+  .nutrition {
+    width: 100%;
+    height: 55px;
+    /* background-color: blue; */
+  }
+  .action {
+    width: 23%;
+    height: 700px;
+    /* background: yellow; */
+    float: left;
+  }
+  .onblur {
+    width: 75%;
+    height: 700px;
+    /* background-color: red; */
+    float: left;
+    margin-left: 15px;
+    margin-bottom: 70px;
+  }
+  .arrow {
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    /* background-color: blue; */
+    display: flex;
+  }
+  .season {
+    width: 80px;
+    height: 30px;
+    text-align: center;
+    color: #fff;
+    line-height: 30px;
+    margin-top: 10px;
+    background-color: rgba(255, 0, 0, 1);
+  }
+
+  .season1 {
+    width: 80px;
+    height: 30px;
+    margin-left: 20px;
+    text-align: center;
+    color: #fff;
+    line-height: 30px;
+    margin-top: 10px;
+    background-color: rgba(0, 172, 160, 1);
+  }
+  .season2 {
+    width: 80px;
+    height: 30px;
+    margin-left: 20px;
+    text-align: center;
+    color: #fff;
+    line-height: 30px;
+    margin-top: 10px;
+    background-color: rgba(255, 153, 51, 1);
+  }
+  .fonts {
+    width: 100%;
+    /* height: 500px; */
+    /* background-color: yellow; */
+  }
 </style>
