@@ -308,27 +308,29 @@
       </div>
       <!-- 树形结构 -->
       <el-dialog
-        title="添加食品名称"
+        title="添加菜品"
         append-to-body
+        width="40%"
         :visible.sync="dateTime"
         :close-on-click-modal="false"
       >
-        <div class="monly">
-          <div class="block">
-            <p></p>
-            <el-tree
-              :data="data1"
-              node-key="id"
-              :default-expand-all="false"
-              :expand-on-click-node="false"
-              @node-click="handleNodeClick"
-            ></el-tree>
-          </div>
+        <div class="block">
+          <p></p>
+          <el-tree
+            :data="data1"
+            node-key="id"
+            :default-expand-all="false"
+            :expand-on-click-node="false"
+            @node-click="handleNodeClick"
+            :filter-node-method="filterNode"
+            ref="tree"
+          ></el-tree>
         </div>
+
         <div slot="footer" class="dialog-footer">
           <el-button @click="dateTime = false">取 消</el-button>
           <el-button @click="setlist" type="primary">确 定</el-button>
-          <el-button @click="setlist" type="primary">编辑 确 定</el-button>
+          <!-- <el-button @click="setlist" type="primary">编辑 确 定</el-button> -->
         </div>
       </el-dialog>
       <!-- 菜品所含食材信息 -->
