@@ -607,7 +607,13 @@
       personMealhandleNodeClick(id){
         console.log(this.datas)
         detail(id).then(res=>{
-
+            if(res.data.success){
+              let mealsType=
+              let data=res.data.data;
+              data.recipeCycles.forEach(_=>{
+                 _.mealsType
+              })
+            }
         })
       },
       parentFn(score){
