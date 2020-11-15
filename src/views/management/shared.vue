@@ -414,22 +414,23 @@ export default {
       this.ruleFormUsers.delivery1 = row.isUse == 0 ? false : true; //常用
       //营养素含量
       let units = row.nutritionsl;
-      units.forEach(item => {
-        for (let item1 of this.mailto) {
-          for (let arr of item1.children) {
-            if (arr.id == item.nutrientId) {
-              arr.result = item.value;
-            }
-            if (arr.children) {
-              for (let add of arr.children) {
-                if (add.id == item.nutrientId) {
-                  add.result = item.value;
-                }
-              }
-            }
-          }
-        }
-      });
+      console.log(units)
+      // units.forEach(item => {
+      //   for (let item1 of this.mailto) {
+      //     for (let arr of item1.children) {
+      //       if (arr.id == item.nutrientId) {
+      //         arr.result = item.value;
+      //       }
+      //       if (arr.children) {
+      //         for (let add of arr.children) {
+      //           if (add.id == item.nutrientId) {
+      //             add.result = item.value;
+      //           }
+      //         }
+      //       }
+      //     }
+      //   }
+      // });
     },
     // 分类
     queryLite() {

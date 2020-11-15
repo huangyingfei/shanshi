@@ -234,6 +234,10 @@
           </el-tab-pane>
         </el-tabs>
       </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="addEffect = false">取 消</el-button>
+        <el-button @click="addEffect = false" type="primary">确 定</el-button>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -551,7 +555,7 @@ export default {
   line-height: 50px;
 }
 .address {
-  margin-top: 50px;
+  margin-top: 70px;
 }
 .stop {
   color: #ff455b;
