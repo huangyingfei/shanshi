@@ -542,6 +542,9 @@ export default {
 .stop {
   color: #ff455b;
 }
+.navbar{
+  margin-top: 39px;
+}
 .mationtxt {
   width: 100%;
   height: 30px;

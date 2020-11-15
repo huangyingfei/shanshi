@@ -184,7 +184,7 @@
     </div>
     <!-- 添加分类 -->
     <el-dialog
-      title="添加分类"
+      title="分类"
       width="30%"
       append-to-body
       :visible.sync="increase"
@@ -198,7 +198,7 @@
         class="demo-ruleForm"
       >
         <el-form-item label="分类名称" prop="name">
-          <el-input style="width: 300px" v-model="increasered.name"></el-input>
+          <el-input style="width: 280px" v-model="increasered.name"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
