@@ -138,7 +138,7 @@
 
                 <el-button
                   type="text"
-                  v-if="data.isUse == 0"
+                  v-if="data.isUse == 1"
                   size="mini"
                   @click="() => append(data)"
                 >
@@ -146,14 +146,14 @@
                 </el-button>
                 <el-button
                   type="text"
-                  v-if="data.isUse == 1"
+                  v-if="data.isUse == 0"
                   size="mini"
                   @click="() => insert(data)"
                 >
                   不常用
                 </el-button>
                 <el-button
-                  v-if="data.isPub == 1"
+                  v-if="data.isPub == 0"
                   type="text"
                   size="mini"
                   @click="() => multi(data)"
@@ -161,7 +161,7 @@
                   隐藏
                 </el-button>
                 <el-button
-                  v-if="data.isPub == 0"
+                  v-if="data.isPub == 1"
                   type="text"
                   size="mini"
                   @click="() => docs(data)"
@@ -335,9 +335,9 @@
       <div class="mationtxt">菜品所含食材信息</div>
       <div>
         <el-button style="margin-left: 10px;" type="primary" @click="addLine"
-          >添加行数</el-button
+          >添加</el-button
         >
-        <el-button @click="save">保存</el-button>
+        <!-- <el-button @click="save">保存</el-button> -->
         <el-table
           :data="officeonce"
           border
@@ -346,9 +346,16 @@
           style="width: 100%"
           :summary-method="getSummaries"
         >
-          <el-table-column prop="id" label="序号" width="100" align="center">
+          <el-table-column
+            v-if="show"
+            prop="id"
+            label="序号"
+            width="100"
+            align="center"
+          >
           </el-table-column>
           <el-table-column
+            v-if="show"
             prop="frame"
             label="分类ID "
             width="100"
@@ -405,7 +412,7 @@
           <el-table-column
             prop="malloc"
             label="能量(kcal)"
-            width="110"
+            width="120"
             align="center"
           >
             <template slot-scope="scope">
@@ -427,9 +434,9 @@
           <!--操作格-->
           <el-table-column label="操作" align="center">
             <template slot-scope="scope">
-              <el-button type="text" size="small" style="margin-left: 10px"
+              <!-- <el-button type="text" size="small" style="margin-left: 10px"
                 >查看</el-button
-              >
+              > -->
               <el-button
                 type="text"
                 size="small"
@@ -446,9 +453,9 @@
       <div class="saveas">
         <el-table
           :data="mailto"
+          max-height="400"
           style="width: 100%; margin-bottom: 20px"
           row-key="id"
-          border
           v-loading="loadFlag"
           :default-expand-all="false"
           :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
@@ -469,6 +476,7 @@
           <el-table-column label="含量" align="center">
             <template slot-scope="scope">
               <el-input
+                :disabled="true"
                 v-model="scope.row.result"
                 type="text"
                 v-if="scope.row.level != 1 ? true : false"
@@ -629,7 +637,7 @@ export default {
           label: "全部"
         },
         {
-          value: "1",
+          value: "0",
           label: "常用"
         }
       ],
@@ -780,7 +788,9 @@ export default {
       this.ruleForm.desc = "";
       this.ruleForm.delivery = false;
       this.ruleForm.delivery1 = false;
-      this.value1.length = 0;
+      this.value1 = [];
+      this.valuepark = [];
+      this.officeonce = [];
       // console.log(this.editable);
       // this.$router.go(0);
     },
@@ -1048,8 +1058,8 @@ export default {
           function: this.ruleForm.region, //特点
           remark: this.ruleForm.desc, //做法
           belongRegions: this.valuepark, //省市区
-          isUse: this.ruleForm.delivery1 == false ? 0 : 1, //是否常用
-          isPub: this.ruleForm.delivery == false ? 0 : 1, //是否公开
+          isUse: this.ruleForm.delivery1 == false ? 1 : 0, //是否常用
+          isPub: this.ruleForm.delivery == false ? 1 : 0, //是否公开
           dishMxVos: next //菜品所含食材信息
         })
         .then(res => {
@@ -1087,8 +1097,8 @@ export default {
           function: this.ruleForm.region,
           remark: this.ruleForm.desc,
           belongRegions: this.valuepark,
-          isUse: this.ruleForm.delivery1 == false ? 0 : 1, //是否常用
-          isPub: this.ruleForm.delivery == false ? 0 : 1, //是否公开
+          isUse: this.ruleForm.delivery1 == false ? 1 : 0, //是否常用
+          isPub: this.ruleForm.delivery == false ? 1 : 0, //是否公开
           dishMxVos: next
         })
         .then(res => {
@@ -1119,8 +1129,8 @@ export default {
           function: this.ruleForm.region, //特点
           remark: this.ruleForm.desc, //做法
           belongRegions: this.valuepark, //省市区
-          isUse: this.ruleForm.delivery1 == false ? 0 : 1, //是否常用
-          isPub: this.ruleForm.delivery == false ? 0 : 1, //是否公开
+          isUse: this.ruleForm.delivery1 == false ? 1 : 0, //是否常用
+          isPub: this.ruleForm.delivery == false ? 1 : 0, //是否公开
           dishMxVos: next //菜品所含食材信息
         })
         .then(res => {
@@ -1141,39 +1151,42 @@ export default {
       // console.log(this.officeonce);
       this.$refs[formName].validate(valid => {
         if (valid) {
-          alert("submit!");
+          // alert("submit!");
+          let next = [];
+          this.officeonce.forEach((item, index) => {
+            // console.log(item);
+            next.push({
+              foodId: item.id,
+              value: item.stats
+            });
+          });
+          console.log(next);
+
+          this.$axios
+            .post(`api/blade-food/dish/hasOkFood`, {
+              dishName: this.ruleForm.name, //菜品名字
+              dishType: this.ruleForm.fooddata, //菜品分类
+              seasons: this.value1, //季节
+              function: this.ruleForm.region,
+              remark: this.ruleForm.desc,
+              belongRegions: this.valuepark,
+              isUse: this.ruleForm.delivery1 == false ? 1 : 0, //是否常用
+              isPub: this.ruleForm.delivery == false ? 1 : 0, //是否公开
+              dishMxVos: next
+            })
+            .then(res => {
+              console.log(res);
+
+              this.mysave();
+            });
         } else {
-          console.log("error submit!!");
+          this.$message({
+            message: "食材未填全",
+            type: "warning"
+          });
           return false;
         }
       });
-      // let next = [];
-      // this.officeonce.forEach((item, index) => {
-      //   // console.log(item);
-      //   next.push({
-      //     foodId: item.id,
-      //     value: item.stats
-      //   });
-      // });
-      // console.log(next);
-
-      // this.$axios
-      //   .post(`api/blade-food/dish/hasOkFood`, {
-      //     dishName: this.ruleForm.name, //菜品名字
-      //     dishType: this.ruleForm.fooddata, //菜品分类
-      //     seasons: this.value1, //季节
-      //     function: this.ruleForm.region,
-      //     remark: this.ruleForm.desc,
-      //     belongRegions: this.valuepark,
-      //     isUse: this.ruleForm.delivery1 == false ? 0 : 1, //是否常用
-      //     isPub: this.ruleForm.delivery == false ? 0 : 1, //是否公开
-      //     dishMxVos: next
-      //   })
-      //   .then(res => {
-      //     console.log(res);
-
-      //     this.mysave();
-      //   });
     },
     //表格弹出框
     columnEvent(row, index) {
@@ -1332,8 +1345,8 @@ export default {
           });
           this.valuepark = bar;
           // console.log(this.valuepark);
-          this.ruleForm.delivery1 = this.handler.isUse == 0 ? false : true; //常用
-          this.ruleForm.delivery = this.handler.isPub == 0 ? false : true; //公开
+          this.ruleForm.delivery1 = this.handler.isUse == 1 ? false : true; //常用
+          this.ruleForm.delivery = this.handler.isPub == 1 ? false : true; //公开
           // this.toBack = this.handler.dishMxVos;
           // console.log(this.toBack);
           if (this.handler.dishMxVos) {
@@ -1347,15 +1360,16 @@ export default {
                 name: item.name,
                 address: item.baseTypeName,
                 stats: item.value,
-                malloc: item.nutritionNlValue
+                spring: item.nutritionNlValue
               };
             });
             this.officeonce = arr;
+            // console.log(this.officeonce);
 
             // this.addLine();
           }
 
-          console.log(this.officeonce);
+          // console.log(this.officeonce);
         });
     },
     //设置常用
@@ -1369,7 +1383,15 @@ export default {
           isUse: 0
         })
         .then(res => {
+          this.obtains();
           console.log(res);
+          this.$message({
+            message: "设置成功",
+            type: "success"
+          });
+        })
+        .catch(() => {
+          this.$message.error("设置失败");
         });
       // const newChild = { id: id++, label: "testtest", children: [] };
       // if (!data.children) {
@@ -1387,7 +1409,15 @@ export default {
           isUse: 1
         })
         .then(res => {
+          this.obtains();
           console.log(res);
+          this.$message({
+            message: "设置成功",
+            type: "success"
+          });
+        })
+        .catch(() => {
+          this.$message.error("设置失败");
         });
     },
     //设置隐藏
@@ -1397,9 +1427,18 @@ export default {
       this.$axios(`blade-food/dish/changeIsPub`, {
         id: this.key,
         isPub: 1
-      }).then(res => {
-        console.log(res);
-      });
+      })
+        .then(res => {
+          this.obtains();
+          console.log(res);
+          this.$message({
+            message: "设置成功",
+            type: "success"
+          });
+        })
+        .catch(() => {
+          this.$message.error("设置失败");
+        });
     },
     //设置公开
     docs(data) {
@@ -1407,15 +1446,24 @@ export default {
       this.$axios(`blade-food/dish/changeIsPub`, {
         id: this.terms,
         isPub: 0
-      }).then(res => {
-        console.log(res);
-      });
+      })
+        .then(res => {
+          this.obtains();
+          console.log(res);
+          this.$message({
+            message: "设置成功",
+            type: "success"
+          });
+        })
+        .catch(() => {
+          this.$message.error("设置失败");
+        });
     },
 
     //删除删除
     remove(node, data) {
       console.log(data);
-      this.$confirm("确认删除该来源比例?", "提示", {
+      this.$confirm("确认删除该菜品?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"

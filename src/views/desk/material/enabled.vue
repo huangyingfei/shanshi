@@ -116,7 +116,7 @@
           <template slot-scope="scope">
             <el-button
               v-if="scope.row.status != 0"
-              type="primary"
+              type="text"
               icon="el-icon-view"
               size="small"
               @click="seecol(scope.row, 0)"
@@ -125,7 +125,7 @@
             <el-button
               v-if="scope.row.status == 0"
               icon="el-icon-user-solid"
-              type="danger"
+              type="text"
               size="small"
               @click="Directory(scope.row, 1)"
               >审核</el-button
@@ -401,7 +401,11 @@
           class="demo-ruleForm"
         >
           <el-form-item label="公共库分类">
-            <el-select v-model="menu" placeholder="请选择">
+            <el-select
+              v-if="this.according == 1"
+              v-model="menu"
+              placeholder="请选择"
+            >
               <el-option
                 v-for="item in fication"
                 :key="item.value"
@@ -415,12 +419,14 @@
         <div class="worm1">拒绝原因</div>
         <el-form
           :model="examine"
-          ref="ruleForm"
+          ref="examine"
+          :rules="rules"
           label-width="100px"
           class="demo-ruleForm"
         >
-          <el-form-item label="拒绝原因" style=" width:200px ">
+          <el-form-item label="拒绝原因" style=" width:200px " prop="desc1">
             <el-input
+              v-if="this.according == 1"
               style=" width: 450px;  "
               type="textarea"
               v-model="examine.desc1"
@@ -446,7 +452,11 @@
       </div>
       <div slot="footer" class="dialog-footer" style=" text-align: center;">
         <el-button @click="seekeys = false">取 消</el-button>
-        <el-button type="primary" @click="restore" v-if="this.according == 1">
+        <el-button
+          type="primary"
+          @click="restore(examine)"
+          v-if="this.according == 1"
+        >
           拒 绝</el-button
         >
         <el-button type="primary" @click="Disagree" v-if="this.according == 1"
@@ -514,15 +524,16 @@ export default {
         type: [],
         temps: ""
       },
+
       active: [], //季节
       valuepark: [], //省市区
       menu: "", //公共分类
       fication: [],
       foodPos: [], //食材分类
       rules: {
-        // region: [
-        //   { required: true, message: "请选择公共库分类", trigger: "change" }
-        // ]
+        desc1: [
+          { required: true, message: "请输入拒绝理由", trigger: "change" }
+        ]
       },
 
       options: [], //省市区
@@ -692,26 +703,74 @@ export default {
         });
     },
     //拒绝
-    restore() {
-      this.examine.desc1 = "";
-      this.$axios
-        .post(`api/blade-food/food/audit`, {
-          id: this.subquery.id,
-          refuseReason: this.examine.desc1,
-          status: 0 //审核状态
-        })
-        .then(res => {
-          console.log(res);
-          this.auditing();
-          this.seekeys = false;
-          this.$message({
-            message: "拒绝成功",
-            type: "success"
-          });
-        })
-        .catch(() => {
-          this.$message.error("拒绝失败");
+    restore(examine) {
+      console.log(examine);
+      if (examine.desc1 == "") {
+        this.$message({
+          message: "拒绝理由未填",
+          type: "warning"
         });
+      } else {
+        // alert("enen ");
+        let food = [];
+        this.mailto.forEach((item, index) => {
+          item.children.forEach((item1, indx1) => {
+            if (item1.children) {
+              item1.children.forEach((item2, index2) => {
+                if (item2.result != null) {
+                  food.push({
+                    nutrientId: item2.id,
+                    value: item2.result
+                  });
+                }
+              });
+            }
+            if (item1.result != null) {
+              food.push({
+                nutrientId: item1.id,
+                value: item1.result
+              });
+            }
+          });
+        });
+        this.$axios
+          .post(`api/blade-food/food/audit`, {
+            id: this.subquery.id,
+            refuseReason: this.examine.desc1,
+            status: 2, //审核状态
+            foodPubType: this.menu, //公共库所属分类
+            foodName: this.ruleForm.name, //食材名
+            foodAlias: this.ruleForm.foodFood, //食物别名1
+            foodAlias1: this.ruleForm.ovenFood, //食物别名2
+            foodReal: this.ruleForm.buffer, //食材真名
+            foodType: this.ruleForm.fooddata, //食材分类
+            foodType1: this.ruleForm.foods, //食物分类1
+            foodType2: this.ruleForm.dogfood, //食物分类2
+            foodEat: this.ruleForm.besaved, //食部
+            weight: this.ruleForm.timers, //重量
+            water: this.ruleForm.content, //水分
+            color: this.ruleForm.resource, //色系
+            seasons: this.active, //季节
+            belongRegions: this.valuepark, //所属区域
+            function: this.ruleForm.desc, //功用
+            isUse: this.ruleForm.delivery1 == false ? 1 : 0, //是否常用
+            isPub: this.ruleForm.delivery == false ? 1 : 0, //是否公开
+            nutritions: food
+          })
+          .then(res => {
+            this.examine.desc1 = "";
+            console.log(res);
+            this.auditing();
+            this.seekeys = false;
+            this.$message({
+              message: "拒绝成功",
+              type: "success"
+            });
+          })
+          .catch(() => {
+            this.$message.error("拒绝失败");
+          });
+      }
     },
     Disagree() {
       // console.log(this.ruleForm.fooddata);
