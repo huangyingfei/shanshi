@@ -272,13 +272,14 @@
           ids.forEach(_=>{
             people.push(_.studentId)
           })
+          debugger
           this.$set(this.specialForm,"people",people)
           this.$set(this.morenData[0],"mealNum",!res.data.data.breakfast?undefined:res.data.data.breakfast)
-          this.$set(this.morenData[1],"mealNum",!res.data.data.breakfast_snack?undefined:res.data.data.breakfast_snack)
+          this.$set(this.morenData[1],"mealNum",!res.data.data.breakfastSnack?undefined:res.data.data.breakfastSnack)
           this.$set(this.morenData[2],"mealNum",!res.data.data.lunch?undefined:res.data.data.lunch)
-          this.$set(this.morenData[3],"mealNum",!res.data.data.lunch_snack?undefined:data.data.lunch_snack)
+          this.$set(this.morenData[3],"mealNum",!res.data.data.lunchSnack?undefined:res.data.data.lunchSnack)
           this.$set(this.morenData[4],"mealNum",!res.data.data.dinner?undefined:res.data.data.dinner)
-          this.$set(this.morenData[5],"mealNum",!res.data.data.dinner_snack?undefined:res.data.data.dinner_snack)
+          this.$set(this.morenData[5],"mealNum",!res.data.data.dinnerSnack?undefined:res.data.data.dinnerSnack)
           if(res.data.data.defaultMeal){
             let defaultMeal =res.data.data.defaultMeal.split(",");
             this.morenData.forEach(_=>{
@@ -329,7 +330,7 @@
         this.$set( this.specialForm,"remark",undefined)
         this.$set( this.specialForm,"avgAge",undefined)
         this.$set( this.specialForm,"proportion",undefined)
-        this.$set( this.specialForm,"proportion",undefined)
+        // this.$set( this.specialForm,"proportion",undefined)
       },
       addPeople(){
         this.empty();
@@ -364,11 +365,11 @@
           remark:this.specialForm.remark,
           defaultMeal:defaultMeal.substring(0,defaultMeal.length-1),
           breakfast:this.morenData[0].mealNum,
-          breakfast_snack:this.morenData[1].mealNum,
+          breakfastSnack:this.morenData[1].mealNum,
           lunch:this.morenData[2].mealNum,
-          lunch_snack:this.morenData[3].mealNum,
+          lunchSnack:this.morenData[3].mealNum,
           dinner:this.morenData[4].mealNum,
-          dinner_snack:this.morenData[5].mealNum,
+          dinnerSnack:this.morenData[5].mealNum,
         }
         debugger
         submit(row).then(res=>{

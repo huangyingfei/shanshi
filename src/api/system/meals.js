@@ -41,5 +41,28 @@ export const calRecipe = (recipe) => {
   })
 }
 
+export const save = (row) => {
+  return request({
+    url: '/api/blade-food/recipe/save',
+    method: 'post',
+    data:row
+  })
+}
+
+export const detail = (id) => {
+  return request({
+    url: '/api/blade-food/recipe/detail',
+    method: 'get',
+    params:{
+      id
+    }
+  })
+}
+
+
+
+
+
+
 
 

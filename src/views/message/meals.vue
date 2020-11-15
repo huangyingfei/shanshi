@@ -123,9 +123,8 @@
       <el-col :span="24">
         <el-form :gutter="10" :inline="true" :model="WeekInfo">
           <el-form-item label="选择人群">
-            <el-select v-model="WeekInfo.crowd" placeholder="选择人群">
-              <el-option label="幼儿" value="1"></el-option>
-              <el-option label="成人" value="2"></el-option>
+            <el-select v-model="WeekInfo.crowd" placeholder="选择人群"    >
+              <el-option  v-for="(item ,index) in crowdData" :label="item.peopleName" :value="item.id" :key="item.id"></el-option>
             </el-select>
           </el-form-item>
 
@@ -260,7 +259,7 @@
               </div>
 
               <ul class="foodWeekListHis">
-                <li  v-for="f in peopleMealListLeft" :key="f.id" @mouseover="ShowFoodTips($event,f)"  @mouseout="HidenFoodTips($event)">
+                <li  v-for="f in peopleMealListLeft" :key="f.id" @click="personMealhandleNodeClick(f.id)"  @mouseover="ShowFoodTips($event,f)"  @mouseout="HidenFoodTips($event)">
                   {{f.recipeName}}
                 </li>
               </ul>
@@ -294,6 +293,7 @@
               @node-drag-start="foodmenueDragStart"
               :allow-drop="foodmenueDragEnd"
               @node-drag-over="foodmenueDragMove"
+
             >
             </el-tree>
             </el-tab-pane>
@@ -322,6 +322,7 @@
             :headers="headers"
             :datas="datas"
             days="5"
+            :crowd="WeekInfo.crowd"
             :dragnode="drogNode"
           >
           </foods-week>
@@ -456,7 +457,8 @@
 
 <script>
   import foodsWeek from "@/views/foods/components/foodsweek";
-  import {mealList,getDishByBaseId,dishDetail} from "@/api/system/meals"
+  import {getList} from "@/api/system/special"
+  import {mealList,getDishByBaseId,dishDetail,save,detail} from "@/api/system/meals"
   export default {
     components: {
       foodsWeek,
@@ -506,6 +508,7 @@
             ],
           },
         ],
+        crowdData:[],
         WeekInfo: {
           weekType: "", //周期类型
           WeekTtitle: "", //周期标题
@@ -601,6 +604,12 @@
     },
     beforeMount() {},
     methods: {
+      personMealhandleNodeClick(id){
+        console.log(this.datas)
+        detail(id).then(res=>{
+
+        })
+      },
       parentFn(score){
           this.score=score;
       },
@@ -655,6 +664,10 @@
             this.personMenuDishList=data;
           }
         })
+        getList().then(res=>{
+          this.crowdData=res.data.data;
+        })
+
       },
       GetAbsoluteLocation(element)
       {
@@ -730,13 +743,18 @@
               item["count"]=_.value
               children.push(item);
             })
+            debugger
+            let dishCount=0
+            data.dishMxVos.forEach(_=>{
+              dishCount+=parseFloat(_.value)
+            })
             node.data={
               id:data.id,
               label:data.dishName,
               node:{
                 id:data.id,
                 name:data.dishName,
-                count:data.dishMxVos.length,
+                count:dishCount,
                 children:children
               }
             }
@@ -785,27 +803,38 @@
                     val:____.count,
                   })
                 })
+                recipeCycles.push({
+                  week:__.name.slice(4),
+                  mealsType:this.getmealTypeData(_.name),
+                  dishId:___.id,
+                  value:___.count,
+                  year:this.year,
+                  month:this.month,
+                  childrens:children
+                })
               }
-              recipeCycles.push({
-                week:__.name.slice(4),
-                mealType:this.getmealTypeData(_.name),
-                dishId:___.id,
-                value:___.count,
-                 year:this.year,
-                month:this.month
-              })
+
             })
           })
         })
         let row={
           recipeName:this.WeekInfo.Weekdetails,
-          peopleId:"1326899548322041858",
+          peopleId:this.WeekInfo.crowd,
           isPub:this.WeekInfo.sharePlant?0:1,
           recipeDay:this.WeekInfo.weekType,
           recipeCycles:recipeCycles,
           isUse:this.WeekInfo.collection?1:0,
+          recipeCategory:1
         }
-        console.log(row);
+        console.log(this.datas);
+        save(row).then(res=>{
+          if(res.data.success){
+            this.$message({
+              type: "success",
+              message: "新增成功!"
+            });
+          }
+        })
       },
       // init() {
       //   this.initRemoteData();
@@ -885,6 +914,7 @@
       },
       // 初始化表格数据(根据id获取远程数据)
       initEmptyData() {
+        debugger
         this.datas = [];
         var date3 = JSON.parse(JSON.stringify(this.WeekInfo.foodCatalog));
         for (let i = 0; i < date3.length; i++) {
@@ -1027,15 +1057,18 @@
       //选择周
       SelectWeek(d) {
         var that = this;
+        debugger
         setTimeout(function (v) {
+
           var year = d.getFullYear();
-          this.year=year;
+          that.year=year;
           var begin_year;
           var end_year;
           begin_year = year;
           end_year = year;
           var begin_mouth;
-          this.month=begin_mouth;
+
+
           var end_mouth;
           var mouth = d.getMonth() + 1;
 
@@ -1043,7 +1076,7 @@
           end_mouth = mouth;
           var StartEliment = document.querySelectorAll(".in-range.start-date");
           var begin_day = StartEliment[0].innerText.trim();
-
+          that.month=begin_mouth+"-"+begin_day+"";
           //判断是否为上一个月
           if (StartEliment[0].className.indexOf("prev-month") >= 0) {
             begin_mouth = mouth - 1;
@@ -1072,7 +1105,7 @@
           var full_week = year + "年" + mouth + "月" + "第" + curentWeek + "周";
 
           that.WeekInfo.WeekTtitle = full_week;
-
+          debugger
           if(parseInt(begin_day)>parseInt(end_day)) {
 
             end_mouth+=1;

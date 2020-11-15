@@ -821,6 +821,7 @@
         type: Number,
         default: 800
       },
+      crowd:'',
 
       dragnode: {
       }
@@ -971,7 +972,7 @@
         let days=0;
         let foods={}
         let mealTypes=[]
-        foods["peopleId"]="1326899548322041858";
+        foods["peopleId"]=this.crowd;
         let recipeVals=[];
         var that=this;
         this.datas.forEach(_=>{
@@ -1012,7 +1013,7 @@
         foods["days"]=days;
         calRecipe(foods).then(res=>{
           if(res.data.success){
-            that.$emit('childfn',  this.getScore(res.data.data));
+            that.$emit('childfn', Math.floor(this.getScore(res.data.data) * 100) / 100 );
           }
 
         })
