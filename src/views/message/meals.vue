@@ -1,5 +1,48 @@
 <template>
   <div>
+    <div
+      ref="layershipu"
+      id="tooltip_shipu"
+      class="el-popover el-popper el-popover--plain"
+      style="
+        display:none;
+        width: 400px;
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        z-index: 2064;
+      "
+      v-show="layershipu"
+      tabindex="0"
+      x-placement="bottom"
+    >
+      <div class="el-popover__title">{{curentHoverFood.name}}</div>
+
+      <p>我也不知道啥啥啥</p>
+    </div>
+
+
+    <div
+      ref="foodmenudLayer"
+      id="foodmenudLayer"
+      class="el-popover el-popper el-popover--plain"
+      style="
+        display:none;
+        width: 400px;
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        z-index: 2064;
+      "
+      v-show="layershipu"
+      tabindex="0"
+      x-placement="bottom"
+    >
+      <div class="el-popover__title">{{drogNode.label}}</div>
+
+      <p>营养素列表</p>
+    </div>
+
     <el-row :gutter="20" style="padding: 0px; margin-top: 5px">
       <el-col :span="24">
         <el-form :gutter="10" :inline="true" :model="formInline">
@@ -12,7 +55,7 @@
               suffix-icon="el-icon-date"
             >
               <el-select
-                style="width:120px"
+                style="width: 120px"
                 v-model="WeekInfo.weekType"
                 slot="prepend"
                 placeholder="周长设置"
@@ -87,8 +130,8 @@
           </el-form-item>
 
           <el-form-item>
-            <el-switch v-model="WeekInfo.shareOrg" inactive-text="分享组织">
-            </el-switch>
+            <!--<el-switch v-model="WeekInfo.shareOrg" inactive-text="分享组织">-->
+            <!--</el-switch>-->
 
             <el-switch
               style="margin-left: 10px"
@@ -149,14 +192,27 @@
       <el-col :span="4">
         <el-card class="box-car" shadow="never">
           <div class="clearfix panel_head">
+            <!--食谱菜品按钮-->
             <el-button-group>
-              <el-button size="small" @click="showFoodList=false" style="bo">食谱</el-button>
-              <el-button size="small"  @click="showFoodList=true">菜品</el-button>
+              <el-button size="small" @click="showFoodList = false" style=""
+              >食谱</el-button
+              >
+              <el-button size="small" @click="showFoodList = true"
+              >菜品</el-button
+              >
             </el-button-group>
           </div>
-          <el-tabs v-show="!showFoodList" v-model="activeName" @tab-click="handleClick">
+
+
+          <!--食谱-->
+          <el-tabs
+            v-show="!showFoodList"
+            v-model="activeName"
+            @tab-click="handleClick"
+          >
+            <!--//分享食谱-->
             <el-tab-pane label="分享食谱" name="first">
-              <div style="margin-top: 0px;padding:5px;">
+              <div style="margin-top: 0px; padding: 5px">
                 <el-input
                   size="small"
                   placeholder="请输入内容"
@@ -175,54 +231,115 @@
                 <el-divider></el-divider>
               </div>
 
-              <ul class="foodWeekListHis" >
-                <li><a>第一周菜谱</a></li>
-                <li>2</li>
-                <li>3</li>
+              <ul class="foodWeekListHis">
+                <li  v-for="f in mealListLeft" :key="f.id" @mouseover="ShowFoodTips($event,f)"  @mouseout="HidenFoodTips($event)">
+                  {{f.recipeName}}
+                </li>
               </ul>
             </el-tab-pane>
-            <el-tab-pane label="个人食谱" name="second">配置管理</el-tab-pane>
-          </el-tabs>
-          <div class="foodSelectMenue" v-show="showFoodList" style="margin-top: 0px;padding:5px;">
 
-            <el-input
-              placeholder="输入关键字进行过滤"
-              v-model="filterText">
-            </el-input>
+            <!--//个人食谱-->
+            <el-tab-pane label="个人食谱" name="second">
+              <div style="margin-top: 0px; padding: 5px">
+                <el-input
+                  size="small"
+                  placeholder="请输入内容"
+                  v-model="input3"
+                  class="input-with-select"
+                >
+                  <el-button slot="append" icon="el-icon-search"></el-button>
+                </el-input>
+              </div>
+              <div style="margin-top: 3px">
+                <el-tag type="success" style="margin-left: 5px">区域</el-tag>
+                <el-tag type="success" style="margin-left: 5px">季节</el-tag>
+              </div>
+
+              <div style="margin-top: 5px; margin-bottom: 2px">
+                <el-divider></el-divider>
+              </div>
+
+              <ul class="foodWeekListHis">
+                <li  v-for="f in peopleMealListLeft" :key="f.id" @mouseover="ShowFoodTips($event,f)"  @mouseout="HidenFoodTips($event)">
+                  {{f.recipeName}}
+                </li>
+              </ul>
+            </el-tab-pane>
+          </el-tabs>
+
+          <!--<div-->
+            <!--class="foodSelectMenue"-->
+            <!--v-show="showFoodList"-->
+            <!--style="margin-top: 0px; padding: 5px"-->
+          <!--&gt;-->
+          <!--</div>-->
+
+
+          <!--菜品-->
+            <el-tabs
+              v-show="showFoodList"
+              v-model="activeName2"
+            >
+            <el-tab-pane label="公共菜品" name="thread">
+
+
 
             <el-tree
               class="filter-tree"
-              :data="menue_data"
+              :data="menuDishList"
               :props="defaultProps"
               default-expand-all
               :filter-node-method="filterNode"
               draggable
               @node-drag-start="foodmenueDragStart"
               :allow-drop="foodmenueDragEnd"
-              ref="tree">
+              @node-drag-over="foodmenueDragMove"
+            >
             </el-tree>
-          </div>
+            </el-tab-pane>
+            <el-tab-pane label="个人菜品" name="four">
+              <el-tree
+                class="filter-tree"
+                :data="personMenuDishList"
+                :props="defaultProps"
+                default-expand-all
+                :filter-node-method="filterNode"
+                draggable
+                @node-drag-start="foodmenueDragStart"
+                :allow-drop="foodmenueDragEnd"
+                @node-drag-over="foodmenueDragMove"
+              >
+              </el-tree>
+            </el-tab-pane>
+            </el-tabs>
+
         </el-card>
       </el-col>
       <el-col :span="20">
         <div class="foodPanel">
-          <foods-week :headers="headers" :datas="datas" days="5" :dragnode="drogNode"> </foods-week>
+          <foods-week
+            @childfn="parentFn"
+            :headers="headers"
+            :datas="datas"
+            days="5"
+            :dragnode="drogNode"
+          >
+          </foods-week>
         </div>
       </el-col>
       <el-col>
         <div class="foodrate">
           <el-button
-            style=" text-align: center;"
+            style="text-align: center"
             type="primary"
             @click="buttonend"
-          >保存</el-button
-          >
+          >保存</el-button>
         </div>
       </el-col>
     </el-row>
     <div class="scores" @click="tfractio">
       <div class="scores1">
-        <p class="gnus">95.99</p>
+        <p class="gnus">{{score}}</p>
         <p class="scorefor">分</p>
       </div>
       <div class="scores2">
@@ -250,16 +367,16 @@
     >
       <div class="header">
         <div class="time">
-          <span class="demonstration" style="padding-right: 10px;">日期</span>
+          <span class="demonstration" style="padding-right: 10px">日期</span>
           <span></span>
 
-          <el-checkbox style="padding-left: 50px;" v-model="focus"
+          <el-checkbox style="padding-left: 50px" v-model="focus"
           >调整食材的量</el-checkbox
           >
-          <el-checkbox style="padding-left: 50px;" v-model="tment"
+          <el-checkbox style="padding-left: 50px" v-model="tment"
           >调整菜品的量</el-checkbox
           >
-          <el-checkbox style="padding-left: 50px;" v-model="changed"
+          <el-checkbox style="padding-left: 50px" v-model="changed"
           >保留整数</el-checkbox
           >
         </div>
@@ -274,25 +391,25 @@
             >
             </el-option>
           </el-select>
-          <span style="padding-right: 10px;padding-left: 30px;">起始值(%)</span>
+          <span style="padding-right: 10px; padding-left: 30px">起始值(%)</span>
           <el-input
-            style="width:140px"
+            style="width: 140px"
             placeholder="请输入内容"
             v-model="input"
             clearable
           >
           </el-input>
           ~
-          <span style="padding-right: 10px;padding-left: 10px;">期望值(%)</span>
+          <span style="padding-right: 10px; padding-left: 10px">期望值(%)</span>
           <el-input
-            style="width:140px"
+            style="width: 140px"
             placeholder="请输入内容"
             v-model="input"
             clearable
           >
           </el-input>
 
-          <el-button style="margin-left: 30px;" type="primary"
+          <el-button style="margin-left: 30px" type="primary"
           >开始配平</el-button
           >
           <el-button type="primary">应用</el-button>
@@ -307,7 +424,7 @@
         </div>
         <div class="fonts">
           <el-table
-            style="width: 100%;margin-bottom: 20px;"
+            style="width: 100%; margin-bottom: 20px"
             row-key="id"
             :data="secondary"
             :border="false"
@@ -330,7 +447,7 @@
       </div>
       <!-- 表格 -->
       <div class="onblur">
-        <foods-week :headers="headers" :datas="datas"  days="5"> </foods-week>
+        <foods-week :headers="headers" :datas="datas" days="5"   > </foods-week>
       </div>
     </el-dialog>
     <!-- 智能配平弹框结束 -->
@@ -339,18 +456,32 @@
 
 <script>
   import foodsWeek from "@/views/foods/components/foodsweek";
+  import {mealList,getDishByBaseId,dishDetail} from "@/api/system/meals"
   export default {
     components: {
-      foodsWeek
+      foodsWeek,
     },
     created() {
       //this.init();
+      var that=this;
+      document.body.ondrop = function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+      };
+
+      document.oncontextmenu = function(){return false};
+
+
+    },
+    mounted(){
+      this.initData()
     },
     data() {
+
       const data = [];
       return {
-        shareList:[],
-
+        score:'0',
         drawer: false, //分数弹框
         pointscan: false, //智能配餐弹框
         secondary: [
@@ -364,16 +495,16 @@
                 id: 31,
                 date: "完全蛋白质",
                 name: "233",
-                address: "94"
+                address: "94",
               },
               {
                 id: 32,
                 date: "半完全蛋白质",
                 name: "234",
-                address: "94"
-              }
-            ]
-          }
+                address: "94",
+              },
+            ],
+          },
         ],
         WeekInfo: {
           weekType: "", //周期类型
@@ -382,9 +513,10 @@
           weekValue: "",
           foodCatalog: [], //餐点类型
           crowd: "", //人群
-          shareOrg: true
+          shareOrg: true,
         },
         activeName: "first",
+        activeName2: 'thread',
         // 表格头部
         headers: [],
         // 表格数据
@@ -392,10 +524,16 @@
         WeekList: [], //所选的时间周期
         FoodTypeList: [], //所选餐点类型
         rebuild: false,
-        showFoodList:false,
-        menue_data:[
-          {id:1,label:'番茄鸡蛋',
-            node:{
+        showFoodList: false,
+        // defaultProps:{
+        //
+        // },
+        personMenuDishList:[],
+        menuDishList: [
+          {
+            id: 1,
+            label: "番茄鸡蛋",
+            node: {
               id: 102,
               name: "番茄鸡蛋",
               count: 1,
@@ -403,10 +541,12 @@
                 { id: 101001, name: "绿豆", count: 1 },
                 { id: 101002, name: "白糖", count: 1 },
               ],
-            }
+            },
           },
-          {id:2,label:'绿豆粥',
-            node:{
+          {
+            id: 2,
+            label: "绿豆粥",
+            node: {
               id: 103,
               name: "绿豆粥",
               count: 1,
@@ -414,27 +554,207 @@
                 { id: 101001, name: "绿豆", count: 1 },
                 { id: 101002, name: "白糖", count: 1 },
               ],
-            }
-          }
+            },
+          },
         ],
+        mealListLeft:[
+          // {name:"周一食谱",id:"1"},
+          // {name:"周二食谱",id:"2"},
+          // {name:"周三食谱",id:"3"},
+          // {name:"周四食谱",id:"4"}
+        ],
+        peopleMealListLeft:[],
+        curentHoverFood:{},
         //拖动的节点
-        drogNode:{}
+        drogNode: {},
+        //是否正在拖拽节点
+        drogNodeStats:false,
+        year:'',
+        month:'',
+        mealTypeData:[
+          {
+            name:"早餐",
+            value:"1"
+          },
+          {
+            name:"早点",
+            value:"2"
+          },
+          {
+            name:"午餐",
+            value:"3"
+          },
+          {
+            name:"午点",
+            value:"4"
+          },
+          {
+            name:"晚餐",
+            value:"5"
+          },
+          {
+            name:"晚点",
+            value:"6"
+          }
+        ]
       };
     },
     beforeMount() {},
     methods: {
+      parentFn(score){
+          this.score=score;
+      },
+      initData(){
+        //公开
+        mealList(1).then(res=>{
+          this.mealListLeft=res.data.data;
+        })
+        mealList(2).then(res=>{
+          this.peopleMealListLeft=res.data.data;
+        })
+        //公共
+        getDishByBaseId(1).then(res=>{
+            if(res.data.success){
+              let data=[];
+              res.data.data.forEach(_=>{
+                let item={};
+                item["id"]=_.id;
+                item["label"]=_.typeName;
+                let children=[];
+                _.dishes.forEach(__=>{
+                  let item1={};
+                  item1["id"]=__.id;
+                  item1["label"]=__.dishName;
+                  children.push(item1)
+                })
+                item["children"]=children
+                data.push(item)
+              })
+              this.menuDishList=data;
+            }
 
-      drop(ev){
+        })
+        //私人
+        getDishByBaseId(0).then(res=>{
+          if(res.data.success){
+            let data=[];
+            res.data.data.forEach(_=>{
+              let item={};
+              item["id"]=_.id;
+              item["label"]=_.typeName;
+              let children=[];
+              _.dishes.forEach(__=>{
+                let item1={};
+                item1["id"]=__.id;
+                item1["label"]=__.dishName;
+                children.push(item1)
+              })
+              item["children"]=children
+              data.push(item)
+            })
+            this.personMenuDishList=data;
+          }
+        })
+      },
+      GetAbsoluteLocation(element)
+      {
+        if ( arguments.length != 1 || element == null )
+        {
+          return null;
+        }
+        var offsetTop = element.offsetTop;
+        var offsetLeft = element.offsetLeft;
+        var offsetWidth = element.offsetWidth;
+        var offsetHeight = element.offsetHeight;
+        while( element = element.offsetParent )
+        {
+          offsetTop += element.offsetTop;
+          offsetLeft += element.offsetLeft;
+        }
+        return { absoluteTop: offsetTop, absoluteLeft: offsetLeft,
+          offsetWidth: offsetWidth, offsetHeight: offsetHeight };
+      },
 
+      MoveFoodLayer(ev){
+        var x=ev.pageX;
+        var y=ev.pageY;
+        this.$refs.foodmenudLayer.style.top=y+'px';
+        this.$refs.foodmenudLayer.style.left=x+'px';
+        this.$refs.foodmenudLayer.style.display="block";
+      },
+      //食谱跟随显示
+      ShowFoodTips(ev,f){
+
+        var that=this;
+        this.curentHoverFood=f;
+
+        var pose= this.GetAbsoluteLocation(ev.srcElement);
+
+        pose.absoluteLeft+=ev.srcElement.offsetWidth+30;
+
+        setTimeout(() => {
+          that.$refs.layershipu.style.top=pose.absoluteTop+'px';
+          that.$refs.layershipu.style.left=pose.absoluteLeft+'px';
+          that.$refs.layershipu.style.display="block";
+        }, 200);
 
       },
+      HidenFoodTips(ev)
+      {
+        setTimeout(() => {
+          this.$refs.layershipu.style.display="none";
+        }, 200);
+
+      },
+
+
+      drop(ev) {},
       //菜谱拖动
-      foodmenueDragStart(node,ev){
+      foodmenueDragStart(node, ev) {
+        var that=this;
+        ev.srcElement.addEventListener("drag",function(e){
+          that.MoveFoodLayer(e);
+        });
+        ev.srcElement.addEventListener("dragend",function(e){
+          that.$refs.foodmenudLayer.style.display="none";
+        });
+        var that=this;
+        dishDetail(node.data.id).then(res=>{
+          let data=res.data.data;
+          if(data.dishMxVos){
+            let children=[];
+            data.dishMxVos.forEach(_=>{
+              let item={};
+              item["id"]=_.foodId;
+              item["name"]=_.name;
+              item["count"]=_.value
+              children.push(item);
+            })
+            node.data={
+              id:data.id,
+              label:data.dishName,
+              node:{
+                id:data.id,
+                name:data.dishName,
+                count:data.dishMxVos.length,
+                children:children
+              }
+            }
+          }
+          that.drogNode = JSON.parse(JSON.stringify(node.data));
 
-        this.drogNode=JSON.parse(JSON.stringify(node.data));
-        ev.dataTransfer.setData("Text",JSON.stringify(node.data));
+          ev.dataTransfer.setData("Text", JSON.stringify(node.data));
+          that.drogNodeStats=true;
+        })
+
+
+
+
       },
-      foodmenueDragEnd(a,b,c){
+      foodmenueDragEnd(a, b, c) {
+        this.drogNodeStats=false;
+        this.$refs.foodmenudLayer.style.display="none";
+
         return false;
       },
       tfractio() {
@@ -443,18 +763,59 @@
       wrapscan() {
         this.pointscan = true;
       },
+      getmealTypeData(name){
+        return  this.mealTypeData.filter(_=>{
+          if(_.name==name){
+            return _.value
+          }
+        })[0].value
+      },
       buttonend() {
-        console.log(this.datas);
+        debugger
+
+        let recipeCycles=[];
+        this.datas.forEach(_=>{
+          _.weeks.forEach(__=>{
+            __.foods.forEach(___=>{
+              if( ___.children){
+                let children=[];
+                ___.children.forEach(____=>{
+                  children.push({
+                    foodId:____.id,
+                    val:____.count,
+                  })
+                })
+              }
+              recipeCycles.push({
+                week:__.name.slice(4),
+                mealType:this.getmealTypeData(_.name),
+                dishId:___.id,
+                value:___.count,
+                 year:this.year,
+                month:this.month
+              })
+            })
+          })
+        })
+        let row={
+          recipeName:this.WeekInfo.Weekdetails,
+          peopleId:"1326899548322041858",
+          isPub:this.WeekInfo.sharePlant?0:1,
+          recipeDay:this.WeekInfo.weekType,
+          recipeCycles:recipeCycles,
+          isUse:this.WeekInfo.collection?1:0,
+        }
+        console.log(row);
       },
-      init() {
-        this.initRemoteData();
-      },
+      // init() {
+      //   this.initRemoteData();
+      // },
 
       //重新构建表格
       rebuildTable() {
         var that = this;
         this.headers = [];
-        setTimeout(function() {
+        setTimeout(function () {
           var hd = JSON.parse(JSON.stringify(that.WeekList));
           for (let j = 0; j < hd.length; j++) {
             that.headers.push(hd[j]);
@@ -474,7 +835,7 @@
               id: this.guid(),
               pid: this.id,
               name: date3[i],
-              weeks: []
+              weeks: [],
             };
 
             // 填充周数据
@@ -485,7 +846,7 @@
                 name: "week" + (j + 1),
                 image: "",
                 // 填充食谱数据
-                foods: []
+                foods: [],
               });
             }
 
@@ -497,7 +858,7 @@
         var deleteList = [];
         for (let i = 0; i < this.datas.length; i++) {
           var needremove = true;
-          this.WeekInfo.foodCatalog.forEach(e => {
+          this.WeekInfo.foodCatalog.forEach((e) => {
             if (e == this.datas[i].name) {
               needremove = false;
             }
@@ -507,7 +868,7 @@
             deleteList.push(i);
           }
         }
-        deleteList.forEach(e => {
+        deleteList.forEach((e) => {
           this.datas.splice(e, 1);
         });
 
@@ -515,7 +876,7 @@
       },
 
       hasFoodType(foodTypeName) {
-        var result = this.datas.find(p => p.name == foodTypeName);
+        var result = this.datas.find((p) => p.name == foodTypeName);
         if (!result) {
           return false;
         } else {
@@ -531,7 +892,7 @@
             id: this.guid(),
             pid: this.id,
             name: date3[i],
-            weeks: []
+            weeks: [],
           };
 
           // 填充周数据
@@ -542,7 +903,7 @@
               name: "week" + (j + 1),
               image: "",
               // 填充食谱数据
-              foods: []
+              foods: [],
             });
           }
 
@@ -550,20 +911,20 @@
         }
       },
 
-      ///初始化远程数据
-      initRemoteData() {
-        var remoteStr =
-          // '[{"id":"7317b146-7fc5-fcbd-2969-5b59f321e831","name":"早餐","weeks":[{"id":"79ba0527-a10a-22e0-2df4-b58d9c8b1191","week":{"name":"week1","lable":"周一","date":"11月2日","is_vacation":false},"name":"week1","image":"","foods":[{"id":101,"name":"绿豆粥","count":1,"children":[{"id":101001,"name":"绿豆","count":1,"spans":3},{"id":101002,"name":"白糖","count":1,"spans":3}],"spans":3}]},{"id":"880061e2-66d2-fed1-11bc-b9b2489fc0af","week":{"name":"week2","lable":"周二","date":"11月3日","is_vacation":false},"name":"week2","image":"","foods":[]},{"id":"ee2c62a0-5d95-9d34-0df3-212081347a45","week":{"name":"week3","lable":"周三","date":"11月4日","is_vacation":false},"name":"week3","image":"","foods":[]},{"id":"7383fe68-8ec8-e72b-879d-d99805c9813f","week":{"name":"week4","lable":"周四","date":"11月5日","is_vacation":false},"name":"week4","image":"","foods":[]},{"id":"148b984c-76f5-b856-3965-6925b0f1e694","week":{"name":"week5","lable":"周五","date":"11月6日","is_vacation":false},"name":"week5","image":"","foods":[]},{"id":"2b524e1a-4b03-d446-f09e-597a4afce450","name":"week6","image":"","foods":[]},{"id":"8eac338a-acda-78c2-e837-bae237cad7ea","name":"week7","image":"","foods":[]}]}]';
-          '[{"id":"7317b146-7fc5-fcbd-2969-5b59f321e831","name":"早餐","weeks":[{"id":"79ba0527-a10a-22e0-2df4-b58d9c8b1191","week":{"name":"week1","lable":"周一","date":"11月2日","is_vacation":false},"name":"week1","image":"","foods":[{"id":101,"name":"绿豆粥","count":1,"children":[{"id":101001,"name":"绿豆","count":1,"spans":3},{"id":101002,"name":"白糖","count":1,"spans":3}],"spans":3}]},{"id":"880061e2-66d2-fed1-11bc-b9b2489fc0af","week":{"name":"week2","lable":"周二","date":"11月3日","is_vacation":false},"name":"week2","image":"","foods":[]},{"id":"ee2c62a0-5d95-9d34-0df3-212081347a45","week":{"name":"week3","lable":"周三","date":"11月4日","is_vacation":false},"name":"week3","image":"","foods":[]},{"id":"7383fe68-8ec8-e72b-879d-d99805c9813f","week":{"name":"week4","lable":"周四","date":"11月5日","is_vacation":false},"name":"week4","image":"","foods":[]},{"id":"148b984c-76f5-b856-3965-6925b0f1e694","week":{"name":"week5","lable":"周五","date":"11月6日","is_vacation":false},"name":"week5","image":"","foods":[]},{"id":"2b524e1a-4b03-d446-f09e-597a4afce450","name":"week6","image":"","foods":[]},{"id":"8eac338a-acda-78c2-e837-bae237cad7ea","name":"week7","image":"","foods":[]}]}]';
-        var remoteData = JSON.parse(remoteStr);
-        this.headers = [];
-        remoteData[0].weeks.forEach(e => {
-          if (e.week) {
-            this.headers.push(e.week);
-          }
-        });
-        this.datas = remoteData;
-      },
+      // ///初始化远程数据
+      // initRemoteData() {
+      //   var remoteStr =
+      //     // '[{"id":"7317b146-7fc5-fcbd-2969-5b59f321e831","name":"早餐","weeks":[{"id":"79ba0527-a10a-22e0-2df4-b58d9c8b1191","week":{"name":"week1","lable":"周一","date":"11月2日","is_vacation":false},"name":"week1","image":"","foods":[{"id":101,"name":"绿豆粥","count":1,"children":[{"id":101001,"name":"绿豆","count":1,"spans":3},{"id":101002,"name":"白糖","count":1,"spans":3}],"spans":3}]},{"id":"880061e2-66d2-fed1-11bc-b9b2489fc0af","week":{"name":"week2","lable":"周二","date":"11月3日","is_vacation":false},"name":"week2","image":"","foods":[]},{"id":"ee2c62a0-5d95-9d34-0df3-212081347a45","week":{"name":"week3","lable":"周三","date":"11月4日","is_vacation":false},"name":"week3","image":"","foods":[]},{"id":"7383fe68-8ec8-e72b-879d-d99805c9813f","week":{"name":"week4","lable":"周四","date":"11月5日","is_vacation":false},"name":"week4","image":"","foods":[]},{"id":"148b984c-76f5-b856-3965-6925b0f1e694","week":{"name":"week5","lable":"周五","date":"11月6日","is_vacation":false},"name":"week5","image":"","foods":[]},{"id":"2b524e1a-4b03-d446-f09e-597a4afce450","name":"week6","image":"","foods":[]},{"id":"8eac338a-acda-78c2-e837-bae237cad7ea","name":"week7","image":"","foods":[]}]}]';
+      //     '[{"id":"7317b146-7fc5-fcbd-2969-5b59f321e831","name":"早餐","weeks":[{"id":"79ba0527-a10a-22e0-2df4-b58d9c8b1191","week":{"name":"week1","lable":"周一","date":"11月2日","is_vacation":false},"name":"week1","image":"","foods":[{"id":101,"name":"绿豆粥","count":1,"children":[{"id":101001,"name":"绿豆","count":1,"spans":3},{"id":101002,"name":"白糖","count":1,"spans":3}],"spans":3}]},{"id":"880061e2-66d2-fed1-11bc-b9b2489fc0af","week":{"name":"week2","lable":"周二","date":"11月3日","is_vacation":false},"name":"week2","image":"","foods":[]},{"id":"ee2c62a0-5d95-9d34-0df3-212081347a45","week":{"name":"week3","lable":"周三","date":"11月4日","is_vacation":false},"name":"week3","image":"","foods":[]},{"id":"7383fe68-8ec8-e72b-879d-d99805c9813f","week":{"name":"week4","lable":"周四","date":"11月5日","is_vacation":false},"name":"week4","image":"","foods":[]},{"id":"148b984c-76f5-b856-3965-6925b0f1e694","week":{"name":"week5","lable":"周五","date":"11月6日","is_vacation":false},"name":"week5","image":"","foods":[]},{"id":"2b524e1a-4b03-d446-f09e-597a4afce450","name":"week6","image":"","foods":[]},{"id":"8eac338a-acda-78c2-e837-bae237cad7ea","name":"week7","image":"","foods":[]}]}]';
+      //   var remoteData = JSON.parse(remoteStr);
+      //   this.headers = [];
+      //   remoteData[0].weeks.forEach((e) => {
+      //     if (e.week) {
+      //       this.headers.push(e.week);
+      //     }
+      //   });
+      //   this.datas = remoteData;
+      // },
       //生成随机 GUID 数
       guid() {
         function S4() {
@@ -591,7 +952,7 @@
 
         if (weekSelect[0].getAttribute("isFixWeek") != undefined) return;
 
-        setTimeout(function() {
+        setTimeout(function () {
           var zs = document.createElement("th");
           zs.innerText = "周次";
           var RootweekFirst = document.querySelector(
@@ -666,13 +1027,15 @@
       //选择周
       SelectWeek(d) {
         var that = this;
-        setTimeout(function(v) {
+        setTimeout(function (v) {
           var year = d.getFullYear();
+          this.year=year;
           var begin_year;
           var end_year;
           begin_year = year;
           end_year = year;
           var begin_mouth;
+          this.month=begin_mouth;
           var end_mouth;
           var mouth = d.getMonth() + 1;
 
@@ -710,6 +1073,13 @@
 
           that.WeekInfo.WeekTtitle = full_week;
 
+          if(parseInt(begin_day)>parseInt(end_day)) {
+
+            end_mouth+=1;
+            if(end_mouth>12){
+              end_mouth=1
+            }
+          }
           var full_weekDetails =
             year +
             "年" +
@@ -718,14 +1088,14 @@
             "第" +
             curentWeek +
             "周" +
-            begin_year +
-            "-" +
+            // begin_year +
+            // "-" +
             begin_mouth +
             "-" +
             begin_day +
             "至" +
-            end_year +
-            "-" +
+            // end_year +
+            // "-" +
             end_mouth +
             "-" +
             end_day;
@@ -760,7 +1130,7 @@
                 name: "week" + i,
                 lable: "周" + that.GetChinesDay(i),
                 date: m + "月" + alldday[i].innerText.trim() + "日",
-                is_vacation: false
+                is_vacation: false,
               });
             }
           }
@@ -773,11 +1143,10 @@
       //打开周选择
       ShowWeekSelect() {
         this.$refs.refweekSelect.showPicker();
-      }
-    }
+      },
+    },
   };
 </script>
-
 
 <style scoped>
   .el-row {
@@ -826,10 +1195,10 @@
   }
   .foodWeekListHis li {
     list-style: none;
-    margin-bottom: 2px;
+    margin-bottom: 5px;
   }
   .foodPanel {
-    /* height: calc(100vh - 180px); */
+     height: calc(100vh - 180px);
     overflow-y: scroll;
     overflow-x: auto;
   }

@@ -1,5 +1,26 @@
 <template>
   <div style="padding: 0px" >
+    <div
+      ref="contextmenuFood"
+      id="contextmenuFood"
+      class="el-popover el-popper el-popover--plain"
+      style="
+        display:none;
+        width: 200px;
+        height:300px;
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        z-index: 2064;
+      "
+      v-show="layershipu"
+      tabindex="0"
+      x-placement="bottom"
+    >
+      <div class="el-popover__title">{{dragnode.name}}</div>
+
+      <p>弹出菜单</p>
+    </div>
     <!-- table-week start   -->
     <el-table class="table-week" style="width: 100%" :data="datas" border fit>
       <el-table-column align="center" width="100" fixed class-name="col-date3">
@@ -29,7 +50,7 @@
           </div>
         </template>
         <template slot-scope="scope">
-          <div  class="drapIn"  @drop="drop($event, scope.row.id,'week1')" @dragleave="ondragleave($event)"  @dragenter="ondragenter($event)"   @dragover="ondragover($event)">
+          <div   class="drapIn"  @drop="drop($event, scope.row.id,'week1')" @dragleave="ondragleave($event)"  @dragenter="ondragenter($event)"   @dragover="ondragover($event)">
             <!-- table start -->
             <el-table
               class="table-foods"
@@ -110,20 +131,20 @@
               </el-table-column>
             </el-table>
             <!-- table end -->
-            <div style="padding: 6px; background: #fff">
-              <el-button
-                type="primary"
-                size="mini"
-                plain
-                @click="
-                onChoice(
-                  scope.row.id,
-                  scope.row.weeks.find(p => p.name == 'week1').id
-                )
-              "
-              >选择食谱/菜品</el-button
-              >
-            </div>
+            <!--<div style="padding: 6px; background: #fff">-->
+              <!--<el-button-->
+                <!--type="primary"-->
+                <!--size="mini"-->
+                <!--plain-->
+                <!--@click="-->
+                <!--onChoice(-->
+                  <!--scope.row.id,-->
+                  <!--scope.row.weeks.find(p => p.name == 'week1').id-->
+                <!--)-->
+              <!--"-->
+              <!--&gt;选择食谱/菜品</el-button-->
+              <!--&gt;-->
+            <!--</div>-->
           </div>
         </template>
       </el-table-column>
@@ -216,20 +237,20 @@
               </el-table-column>
             </el-table>
             <!-- table end -->
-            <div style="padding: 6px; background: #fff">
-              <el-button
-                type="primary"
-                size="mini"
-                plain
-                @click="
-                onChoice(
-                  scope.row.id,
-                  scope.row.weeks.find(p => p.name == 'week2').id
-                )
-              "
-              >选择食谱/菜品</el-button
-              >
-            </div>
+            <!--<div style="padding: 6px; background: #fff">-->
+              <!--<el-button-->
+                <!--type="primary"-->
+                <!--size="mini"-->
+                <!--plain-->
+                <!--@click="-->
+                <!--onChoice(-->
+                  <!--scope.row.id,-->
+                  <!--scope.row.weeks.find(p => p.name == 'week2').id-->
+                <!--)-->
+              <!--"-->
+              <!--&gt;选择食谱/菜品</el-button-->
+              <!--&gt;-->
+            <!--</div>-->
           </div>
         </template>
       </el-table-column>
@@ -322,20 +343,20 @@
               </el-table-column>
             </el-table>
             <!-- table end -->
-            <div style="padding: 6px; background: #fff">
-              <el-button
-                type="primary"
-                size="mini"
-                plain
-                @click="
-                onChoice(
-                  scope.row.id,
-                  scope.row.weeks.find(p => p.name == 'week3').id
-                )
-              "
-              >选择食谱/菜品</el-button
-              >
-            </div>
+            <!--<div style="padding: 6px; background: #fff">-->
+              <!--<el-button-->
+                <!--type="primary"-->
+                <!--size="mini"-->
+                <!--plain-->
+                <!--@click="-->
+                <!--onChoice(-->
+                  <!--scope.row.id,-->
+                  <!--scope.row.weeks.find(p => p.name == 'week3').id-->
+                <!--)-->
+              <!--"-->
+              <!--&gt;选择食谱/菜品</el-button-->
+              <!--&gt;-->
+            <!--</div>-->
           </div>
         </template>
       </el-table-column>
@@ -428,20 +449,20 @@
               </el-table-column>
             </el-table>
             <!-- table end -->
-            <div style="padding: 6px; background: #fff">
-              <el-button
-                type="primary"
-                size="mini"
-                plain
-                @click="
-                onChoice(
-                  scope.row.id,
-                  scope.row.weeks.find(p => p.name == 'week4').id
-                )
-              "
-              >选择食谱/菜品</el-button
-              >
-            </div>
+            <!--<div style="padding: 6px; background: #fff">-->
+              <!--<el-button-->
+                <!--type="primary"-->
+                <!--size="mini"-->
+                <!--plain-->
+                <!--@click="-->
+                <!--onChoice(-->
+                  <!--scope.row.id,-->
+                  <!--scope.row.weeks.find(p => p.name == 'week4').id-->
+                <!--)-->
+              <!--"-->
+              <!--&gt;选择食谱/菜品</el-button-->
+              <!--&gt;-->
+            <!--</div>-->
           </div>
         </template>
       </el-table-column>
@@ -534,20 +555,20 @@
               </el-table-column>
             </el-table>
             <!-- table end -->
-            <div style="padding: 6px; background: #fff">
-              <el-button
-                type="primary"
-                size="mini"
-                plain
-                @click="
-                onChoice(
-                  scope.row.id,
-                  scope.row.weeks.find(p => p.name == 'week5').id
-                )
-              "
-              >选择食谱/菜品</el-button
-              >
-            </div>
+            <!--<div style="padding: 6px; background: #fff">-->
+              <!--<el-button-->
+                <!--type="primary"-->
+                <!--size="mini"-->
+                <!--plain-->
+                <!--@click="-->
+                <!--onChoice(-->
+                  <!--scope.row.id,-->
+                  <!--scope.row.weeks.find(p => p.name == 'week5').id-->
+                <!--)-->
+              <!--"-->
+              <!--&gt;选择食谱/菜品</el-button-->
+              <!--&gt;-->
+            <!--</div>-->
           </div>
         </template>
       </el-table-column>
@@ -640,20 +661,20 @@
               </el-table-column>
             </el-table>
             <!-- table end -->
-            <div style="padding: 6px; background: #fff">
-              <el-button
-                type="primary"
-                size="mini"
-                plain
-                @click="
-                onChoice(
-                  scope.row.id,
-                  scope.row.weeks.find(p => p.name == 'week6').id
-                )
-              "
-              >选择食谱/菜品</el-button
-              >
-            </div>
+            <!--<div style="padding: 6px; background: #fff">-->
+              <!--<el-button-->
+                <!--type="primary"-->
+                <!--size="mini"-->
+                <!--plain-->
+                <!--@click="-->
+                <!--onChoice(-->
+                  <!--scope.row.id,-->
+                  <!--scope.row.weeks.find(p => p.name == 'week6').id-->
+                <!--)-->
+              <!--"-->
+              <!--&gt;选择食谱/菜品</el-button-->
+              <!--&gt;-->
+            <!--</div>-->
           </div>
         </template>
       </el-table-column>
@@ -746,20 +767,20 @@
               </el-table-column>
             </el-table>
             <!-- table end -->
-            <div style="padding: 6px; background: #fff">
-              <el-button
-                type="primary"
-                size="mini"
-                plain
-                @click="
-                onChoice(
-                  scope.row.id,
-                  scope.row.weeks.find(p => p.name == 'week7').id
-                )
-              "
-              >选择食谱/菜品</el-button
-              >
-            </div>
+            <!--<div style="padding: 6px; background: #fff">-->
+              <!--<el-button-->
+                <!--type="primary"-->
+                <!--size="mini"-->
+                <!--plain-->
+                <!--@click="-->
+                <!--onChoice(-->
+                  <!--scope.row.id,-->
+                  <!--scope.row.weeks.find(p => p.name == 'week7').id-->
+                <!--)-->
+              <!--"-->
+              <!--&gt;选择食谱/菜品</el-button-->
+              <!--&gt;-->
+            <!--</div>-->
           </div>
         </template>
       </el-table-column>
@@ -779,12 +800,14 @@
 </template>
 <script>
   import foodsChoice from "@/views/foods/components/foodschoice";
+  import {calRecipe} from "@/api/system/meals"
   export default {
     name: "foodsWeek",
     components: {
       foodsChoice
     },
     props: {
+      score:'99.5',
       // 表格头部
       headers: [],
       // 表格数据
@@ -811,7 +834,34 @@
           data_id: "", // 主数据ID
           week_id: "", // 周几数据ID
           upload_url: "" // 上传地址
-        }
+        },
+        mealTypeData:[
+          {
+            name:"早餐",
+            value:"1"
+          },
+          {
+            name:"早点",
+            value:"2"
+          },
+          {
+            name:"午餐",
+            value:"3"
+          },
+          {
+            name:"午点",
+            value:"4"
+          },
+          {
+            name:"晚餐",
+            value:"5"
+          },
+          {
+            name:"晚点",
+            value:"6"
+          }
+        ]
+
       };
     },
     // 计算属性computed,计算的是Name依赖的值,它不能计算在data中已经定义过的变量。
@@ -820,10 +870,48 @@
     watch: {},
     // 组件第一次加载
     mounted() {
+      console.log("this-mounted");
+      console.log(this);
       this.init();
     },
     methods: {
 
+
+      oncontextmenuFood(e,data_id, week_id, food_id)
+      {
+        if(e.button===2){       //如果button=1（鼠标左键），button=2（鼠标右键），button=0（鼠标中间键）
+          this.$refs.contextmenuFood.style.top = e.clientY-140+'px';     //鼠标点击时给div定位Y轴
+          this.$refs.contextmenuFood.style.left = e.clientX+'px';    //鼠标点击时给div定位X轴
+          this.$refs.contextmenuFood.style.display = 'block';        //显示div盒子
+        }else{
+          this.$refs.contextmenuFood.style.display = 'none';         //否则不显示div盒子
+        }
+      },
+
+      GetCurentNode(data_id, week_id, food_id) {
+        this.datas.forEach(data => {
+          if (data.id === data_id) {
+            data.weeks.forEach(week => {
+              if (week.id === week_id) {
+                var idx = week.foods.find(p => p.id === food_id);
+                if (idx > -1) {
+                  week.foods.splice(idx, 1);
+
+                  return;
+                }
+              }
+            });
+          }
+        });
+      },
+      // 根据名称获取mealtype
+      getmealTypeData(name){
+       return  this.mealTypeData.filter(_=>{
+          if(_.name==name){
+            return _.value
+          }
+        })[0].value
+      },
       //拖放进入
       ondragenter(ev){
 
@@ -879,6 +967,102 @@
           }
         });
         this.dragnode.node={};
+        let day=[0,0,0,0,0,0,0]
+        let days=0;
+        let foods={}
+        let mealTypes=[]
+        foods["peopleId"]="1326899548322041858";
+        let recipeVals=[];
+        var that=this;
+        this.datas.forEach(_=>{
+          let index=0
+          _.weeks.forEach(__=>{
+            __.foods.forEach(___=>{
+              if( ___.children){
+                day[index]+=1;
+                mealTypes.push(that.getmealTypeData(_.name));
+                ___.children.forEach(____=>{
+                  recipeVals.push({
+                    foodId:____.id,
+                    val:____.count,
+                    mealType:that.getmealTypeData(_.name),
+                    week:__.name.slice(4)
+                  })
+                })
+              }
+            })
+            index++;
+
+          })
+        })
+        if(mealTypes.length>0){
+          let obj=Array.from(new Set(mealTypes))
+          let resultObj="";
+          for(let i=0;i<obj.length;i++){
+            resultObj+=obj[i]+","
+          }
+          foods["mealTypes"]=resultObj.substring(0,resultObj.length-1)
+        }
+        for(let i=0;i<day.length;i++){
+          if(day[i]>0){
+            days++;
+          }
+        }
+        foods["recipeVals"]=recipeVals
+        foods["days"]=days;
+        calRecipe(foods).then(res=>{
+          if(res.data.success){
+            that.$emit('childfn',  this.getScore(res.data.data));
+          }
+
+        })
+        console.log(foods)
+      },
+      getScore(data){
+        let lastScore=100;
+        if(data.mealTypeCalDTOList&&data.mealTypeCalDTOList.length){
+          for(let i=0;i<data.mealTypeCalDTOList.length;i++){
+            lastScore= parseFloat(lastScore)-data.mealTypeCalDTOList[i].point;
+          }
+        }
+        if(data.nutritionCalDTOList){
+          lastScore= parseFloat(lastScore)-data.nutritionCalDTOList["101"].point;
+          lastScore= parseFloat(lastScore)-data.nutritionCalDTOList["102"].point;
+          lastScore= parseFloat(lastScore)-data.nutritionCalDTOList["201"].point;
+          lastScore= parseFloat(lastScore)-data.nutritionCalDTOList["204"].point;
+          lastScore= parseFloat(lastScore)-data.nutritionCalDTOList["301"].point;
+          lastScore= parseFloat(lastScore)-data.nutritionCalDTOList["303"].point;
+          lastScore= parseFloat(lastScore)-data.nutritionCalDTOList["401"].point;
+          lastScore= parseFloat(lastScore)-data.nutritionCalDTOList["405"].point;
+          lastScore= parseFloat(lastScore)-data.nutritionCalDTOList["406"].point;
+          lastScore= parseFloat(lastScore)-data.nutritionCalDTOList["415"].point;
+        }
+        if(data.powerCalDTOList){
+            lastScore= parseFloat(lastScore)-data.powerCalDTOList["102"].point;
+            lastScore= parseFloat(lastScore)-data.powerCalDTOList["103"].point;
+            lastScore= parseFloat(lastScore)-data.powerCalDTOList["104"].point;
+        }
+        if(data.recipeCalDTOList){
+            lastScore= parseFloat(lastScore)-data.recipeCalDTOList["dd"].point;
+            lastScore= parseFloat(lastScore)-data.recipeCalDTOList["gl"].point;
+             lastScore= parseFloat(lastScore)-data.recipeCalDTOList["jg"].point;
+            lastScore= parseFloat(lastScore)-data.recipeCalDTOList["rzp"].point;
+          lastScore= parseFloat(lastScore)-data.recipeCalDTOList["sc"].point;
+          lastScore= parseFloat(lastScore)-data.recipeCalDTOList["sg"].point;
+          lastScore= parseFloat(lastScore)-data.recipeCalDTOList["sl"].point;
+          lastScore= parseFloat(lastScore)-data.recipeCalDTOList["sy"].point;
+          lastScore= parseFloat(lastScore)-data.recipeCalDTOList["syy"].point;
+          lastScore= parseFloat(lastScore)-data.recipeCalDTOList["xql:scp:dl"].point;
+        }
+        var real=0;
+        if(data.proteinCalDTOList&&data.proteinCalDTOList.length){
+          for(let i=0;i<data.proteinCalDTOList.length;i++){
+            real+=data.proteinCalDTOList[i].real;
+          }
+          var point =10/data.proteinCalDTOList[0].min*(data.proteinCalDTOList[0].min-real>0?data.proteinCalDTOList[0].min-real:real-data.proteinCalDTOList[0].min);
+          lastScore=lastScore-(point<10?point:10);
+        }
+        return lastScore;
       },
       //新增菜谱
       appendDragFood(res,id,wk){

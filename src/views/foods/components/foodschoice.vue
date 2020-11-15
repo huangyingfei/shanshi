@@ -94,6 +94,7 @@
         //树形结构
       ];
       return {
+
         data: JSON.parse(JSON.stringify(data)), //树形结构
         activeName: "first", //弹出框标签页
         filter: { keyword: "" },

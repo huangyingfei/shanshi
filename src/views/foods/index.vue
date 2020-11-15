@@ -5,10 +5,11 @@
       :datas="datas"
       height="800"
       days="5"
+      @childfn="childfn"
     ></foods-week>
 
     <div style="text-align:center;padding:10px;">
-      <el-button type="primary" @click="onResult">获取结果</el-button>
+      <el-button type="primary" @click="onResult" >获取结果</el-button>
     </div>
   </div>
 </template>
@@ -30,6 +31,10 @@
       this.init();
     },
     methods: {
+      childfn(a) {
+        console.log("a");
+        console.log(a);
+      },
       init() {
         this.getHeader();
         this.getData();
