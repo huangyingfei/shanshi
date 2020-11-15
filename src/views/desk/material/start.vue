@@ -554,7 +554,8 @@ export default {
       waterfall: "2",
       fallen: "",
       used: "",
-      gavatorta: "1"
+      gavatorta: "1",
+      energy:[]
     };
   },
   computed: {},
@@ -633,6 +634,14 @@ export default {
       this.ruleForm.desc = "";
       this.ruleForm.delivery = false;
       this.ruleForm.delivery1 = false;
+      // this.mailto=this.energy;
+      // console.log(this.energy)
+      this.mailto.forEach(item=>{
+            console.log(item)
+        item.children.forEach(item1=>{
+             item1.result=""   
+        })
+      })
     },
     //食材库保存
     totally(formName) {
@@ -867,6 +876,7 @@ export default {
         .then(res => {
           // console.log(res);
           this.mailto = res.data.data;
+          this.energy=this.mailto;
           console.log(this.mailto);
         });
     },
@@ -1147,7 +1157,8 @@ export default {
     // },
     handleAvatarSuccess(res, file) {
       console.log(file);
-      console.log(this.response.data);
+      console.log(file.response.data.link);
+
       this.imageUrl = URL.createObjectURL(file.raw);
       console.log(this.imageUrl);
     },
