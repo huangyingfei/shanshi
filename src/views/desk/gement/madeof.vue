@@ -644,6 +644,7 @@ export default {
     this.Provinces(); //省市区
     this.Addraudit(); //树形结构渲染
   },
+
   methods: {
     //添加行数
     addLine() {
@@ -792,49 +793,47 @@ export default {
           type: "warning"
         });
       } else {
-        alert("123123");
-      }
-      console.log("拒绝");
-      let next = [];
-      this.officeonce.forEach(item => {
-        console.log(item);
-        next.push({
-          foodId: item.id,
-          value: item.stats,
-          baseTypeId: item.frame
-        });
-      });
-      // console.log(next);
-      this.$axios
-        .post(`api/blade-food/dish/auditDish`, {
-          id: this.stone, //ID
-          dishName: this.ruleForm.name, //菜品名
-          dishType: this.ruleForm.fooddata, //菜品分类
-          belongRegions: this.valuepark, //所属区域
-          seasons: this.active, //所属季节
-          function: this.ruleForm.region, //特点
-          remark: this.ruleForm.desc, //做法
-          dishMxVos: next,
-          // isPub: this.ruleForm.delivery == false ? 0 : 1, //公开
-          isUse: this.ruleForm.delivery1 == false ? 1 : 0, //常用
-          status: "2", //
-          result: "1",
-          type: "2",
-          refuseReason: this.examine.desc1,
-          dishPubType: this.menu //公共库分类
-        })
-        .then(res => {
-          this.seekeys = false;
-          // console.log(res);
-          this.auditing();
-          this.$message({
-            message: "拒绝",
-            type: "success"
+        let next = [];
+        this.officeonce.forEach(item => {
+          console.log(item);
+          next.push({
+            foodId: item.id,
+            value: item.stats,
+            baseTypeId: item.frame
           });
-        })
-        .catch(() => {
-          this.$message.error("拒绝失败");
         });
+        // console.log(next);
+        this.$axios
+          .post(`api/blade-food/dish/auditDish`, {
+            id: this.stone, //ID
+            dishName: this.ruleForm.name, //菜品名
+            dishType: this.ruleForm.fooddata, //菜品分类
+            belongRegions: this.valuepark, //所属区域
+            seasons: this.active, //所属季节
+            function: this.ruleForm.region, //特点
+            remark: this.ruleForm.desc, //做法
+            dishMxVos: next,
+            // isPub: this.ruleForm.delivery == false ? 0 : 1, //公开
+            isUse: this.ruleForm.delivery1 == false ? 1 : 0, //常用
+            status: "2", //
+            result: "1",
+            type: "2",
+            refuseReason: this.examine.desc1,
+            dishPubType: this.menu //公共库分类
+          })
+          .then(res => {
+            this.seekeys = false;
+            // console.log(res);
+            this.auditing();
+            this.$message({
+              message: "拒绝",
+              type: "success"
+            });
+          })
+          .catch(() => {
+            this.$message.error("拒绝失败");
+          });
+      }
     },
     //审核
     Directory(row, index) {
