@@ -323,17 +323,29 @@
           </el-form-item>
 
           <el-form-item label="图片" style="width:350px">
-            <el-upload
-              action="https://jsonplaceholder.typicode.com/posts/"
+            <!-- <el-upload
+              action="api/blade-resource/oss/endpoint/put-file"
               list-type="picture-card"
               :on-preview="handlePictureCardPreview"
               :on-remove="handleRemove"
+              :headers="headerObj"
             >
               <i class="el-icon-plus"></i>
             </el-upload>
             <el-dialog :visible.sync="dialogVisible">
               <img width="100%" :src="dialogImageUrl" alt />
-            </el-dialog>
+            </el-dialog> -->
+            <el-upload
+              class="avatar-uploader"
+              action="api/blade-resource/oss/endpoint/put-file"
+              :headers="headerObj"
+              :show-file-list="false"
+              :on-success="handleAvatarSuccess"
+              :before-upload="beforeAvatarUpload"
+            >
+              <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
           </el-form-item>
 
           <el-form-item label="公开" style="  ">
@@ -353,7 +365,6 @@
           max-height="400"
           style="width: 100%;margin-bottom: 20px;"
           row-key="id"
-          border
           :default-expand-all="false"
           :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
         >
@@ -388,7 +399,7 @@
           type="primary"
           v-if="this.gavatorta == 1"
           @click="totally('ruleForm')"
-          >保存</el-button
+          >保存并新增</el-button
         >
         <el-button
           v-if="this.gavatorta == 2"
@@ -397,7 +408,7 @@
           >编辑保存</el-button
         >
 
-        <!-- <el-button @click="resetForm('ruleForm')">重置</el-button> -->
+        <el-button @click="resetForm('ruleForm')">重置</el-button>
       </div>
     </div>
   </div>
@@ -410,6 +421,9 @@ export default {
   data() {
     const data = [];
     return {
+      headerObj: {
+        "Blade-Auth": ""
+      }, //上传图片请求头
       defaultProps: {
         children: "children",
         label: "label"
@@ -423,6 +437,7 @@ export default {
       input: "",
       dialogImageUrl: "", //图片
       dialogVisible: false,
+      imageUrl: "",
       ruleForm: {
         region: "",
         name: "", //食材名
@@ -548,6 +563,7 @@ export default {
     this.Provinces(); //省市区
     this.queryLite(); //获取分类
     this.Addraudit(); //树形结构渲染
+    this.Takeone();
   },
   created() {},
   watch: {
@@ -557,6 +573,11 @@ export default {
     }
   },
   methods: {
+    Takeone() {
+      let str = JSON.parse(localStorage.getItem("saber-token"));
+      this.headerObj["Blade-Auth"] = `bearer ${str.content}`;
+      console.log(this.headerObj);
+    },
     buttonClick(flat) {
       // console.log(index);
       // console.log(flat);
@@ -596,6 +617,7 @@ export default {
       console.log(index);
       this.gavatorta = index;
       this.ruleForm.name = "";
+      this.ruleForm.foods = "";
       this.ruleForm.foodFood = "";
       this.ruleForm.ovenFood = "";
       this.ruleForm.buffer = "";
@@ -888,8 +910,9 @@ export default {
         });
     },
 
-    resetForm(formName) {
-      this.$refs[formName].resetFields(); //重置
+    resetForm() {
+      // this.$refs[formName].resetFields(); //重置
+      console.log(this.dialogImageUrl);
     },
 
     //查看
@@ -1092,7 +1115,7 @@ export default {
       //   .catch(() => {
       //     this.$message.error("删除失败");
       //   });
-      this.$confirm("确认删除该分类?", "提示", {
+      this.$confirm("确认删除该食材?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
@@ -1113,13 +1136,32 @@ export default {
           });
         });
     },
-
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
+    //删除
+    // handleRemove(file, fileList) {
+    //   console.log(file, fileList);
+    // },
+    // handlePictureCardPreview(file) {
+    //   console.log(file.url);
+    //   this.dialogImageUrl = file.url;
+    //   this.dialogVisible = true;
+    // },
+    handleAvatarSuccess(res, file) {
+      console.log(file);
+      console.log(this.response.data);
+      this.imageUrl = URL.createObjectURL(file.raw);
+      console.log(this.imageUrl);
     },
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === "image/jpeg";
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!isJPG) {
+        this.$message.error("上传头像图片只能是 JPG 格式!");
+      }
+      if (!isLt2M) {
+        this.$message.error("上传头像图片大小不能超过 2MB!");
+      }
+      return isJPG && isLt2M;
     }
   }
 };
@@ -1262,5 +1304,28 @@ export default {
   justify-content: space-between;
   font-size: 14px;
   padding-right: 8px;
+}
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+.avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
 }
 </style>

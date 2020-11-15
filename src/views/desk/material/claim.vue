@@ -301,7 +301,11 @@ export default {
     }
   },
   methods: {
-    notEmpty() {},
+    notEmpty() {
+      this.input = "";
+      this.temps = "";
+      this.value = "";
+    },
     filterNode(value, data) {
       if (!value) return true;
 
@@ -428,7 +432,7 @@ export default {
       //   .catch(() => {
       //     this.$message.error("删除失败");
       //   });
-      this.$confirm("确认删除该食材?", "提示", {
+      this.$confirm("确认删除该相克食材?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
@@ -540,7 +544,7 @@ export default {
 }
 .cadddr {
   width: 100%;
-  height: 55px;
+  height: 75px;
   margin-left: 20px;
   margin-top: 20px;
   line-height: 50px;

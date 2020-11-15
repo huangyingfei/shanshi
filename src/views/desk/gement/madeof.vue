@@ -123,21 +123,36 @@
           <template slot-scope="scope">
             <el-button
               v-if="scope.row.status !== 0"
-              type="primary"
+              type="text"
+              icon="el-icon-view"
               size="small"
-              @click="seecol(scope.row)"
+              @click="seecol(scope.row, 1)"
               >查看</el-button
             >
             <el-button
-              type="danger"
+              type="text"
+              icon="el-icon-user-solid"
               v-if="scope.row.status == 0"
               size="small"
-              @click="Directory(scope.row)"
+              @click="Directory(scope.row, 2)"
               >审核</el-button
             >
           </template>
         </el-table-column>
       </el-table>
+      <!-- 分页 -->
+      <div class="pagingClass">
+        <el-pagination
+          :page-sizes="m_page.sizes"
+          :page-size="m_page.size"
+          :current-page="m_page.number"
+          @size-change="m_handleSizeChange"
+          @current-change="m_handlePageChange"
+          layout="total,sizes,prev, pager, next"
+          background
+          :total="m_page.totalElements"
+        ></el-pagination>
+      </div>
     </div>
     <!-- 审核食材 查看 -->
     <el-dialog
@@ -265,19 +280,28 @@
         <!-- 菜品所含食材信息 -->
         <div class="mationtxt">菜品所含食材信息</div>
         <div>
-          <el-button @click="addLine">添加行数</el-button>
-          <el-button @click="save">保存</el-button>
+          <el-button style="margin-left: 10px;" type="primary" @click="addLine"
+            >添加</el-button
+          >
+          <!-- <el-button @click="save">保存</el-button> -->
           <el-table
             :data="officeonce"
             border
             v-loading="loadFlag1"
             show-summary
-            style="width: 100%"
+            style="width: 60%"
             :summary-method="getSummaries"
           >
-            <el-table-column prop="id" label="序号" width="100" align="center">
+            <el-table-column
+              v-if="show"
+              prop="id"
+              label="序号"
+              width="100"
+              align="center"
+            >
             </el-table-column>
             <el-table-column
+              v-if="show"
               prop="frame"
               label="分类ID "
               width="100"
@@ -317,6 +341,7 @@
               <template slot-scope="scope">
                 <el-input
                   style="width: 90px"
+                  @blur="graph"
                   @input="hello(scope.row, scope.$index)"
                   v-model="scope.row.stats"
                   clearable
@@ -325,9 +350,9 @@
               </template>
             </el-table-column>
             <el-table-column
-              prop="malloc"
+              prop="spring"
               label="能量"
-              width="150"
+              width="120"
               align="center"
             ></el-table-column>
             <el-table-column
@@ -351,13 +376,12 @@
                 </el-input>
               </template>
             </el-table-column>
-
             <!--操作格-->
             <el-table-column label="操作" align="center">
               <template slot-scope="scope">
-                <el-button type="text" size="small" style="margin-left: 10px"
+                <!-- <el-button type="text" size="small" style="margin-left: 10px"
                   >查看</el-button
-                >
+                > -->
                 <el-button
                   type="text"
                   size="small"
@@ -398,7 +422,7 @@
         <div class="saveas">
           <el-table
             :data="mailto"
-            style="width: 100%;margin-bottom: 20px;"
+            style="width: 60%;margin-bottom: 20px;"
             row-key="id"
             border
             :default-expand-all="false"
@@ -440,7 +464,11 @@
           class="demo-ruleForm"
         >
           <el-form-item label="公共库分类">
-            <el-select v-model="menu" placeholder="请选择">
+            <el-select
+              v-if="this.nbottoms == 2"
+              v-model="menu"
+              placeholder="请选择"
+            >
               <el-option
                 v-for="item in source"
                 :key="item.value"
@@ -454,12 +482,14 @@
         <div class="worm1">拒绝原因</div>
         <el-form
           :model="examine"
-          ref="ruleForm"
+          ref="examine"
+          :rules="rules"
           label-width="100px"
           class="demo-ruleForm"
         >
-          <el-form-item label="拒绝原因" style=" width:200px ">
+          <el-form-item label="拒绝原因" style=" width:200px " prop="desc1">
             <el-input
+              v-if="this.nbottoms == 2"
               style=" width: 450px;  "
               type="textarea"
               v-model="examine.desc1"
@@ -468,7 +498,7 @@
         </el-form>
         <div class="worm1">记录</div>
         <el-timeline>
-          <el-timeline-item timestamp="2018/4/12" placement="top">
+          <!-- <el-timeline-item timestamp="2018/4/12" placement="top">
             <el-card>
               <h4>刚好让你更好机构</h4>
               <p>王小虎 提交于 2018/4/12 20:46</p>
@@ -480,13 +510,21 @@
               <h4>刚好让你更好机构</h4>
               <p>王小虎 提交于 2018/4/12 20:46</p>
             </el-card>
-          </el-timeline-item>
+          </el-timeline-item> -->
         </el-timeline>
       </div>
       <div slot="footer" class="dialog-footer" style=" text-align: center;">
         <el-button @click="seekeys = false">取 消</el-button>
-        <el-button type="primary" @click="restore"> 拒 绝</el-button>
-        <el-button @click="Disagree" type="primary">同 意</el-button>
+        <el-button
+          type="primary"
+          @click="restore(examine)"
+          v-if="this.nbottoms == 2"
+        >
+          拒 绝</el-button
+        >
+        <el-button @click="Disagree" type="primary" v-if="this.nbottoms == 2"
+          >同 意</el-button
+        >
       </div>
     </el-dialog>
   </div>
@@ -520,8 +558,13 @@ export default {
       examine: {
         desc1: "" //拒绝理由
       },
+      rules: {
+        desc1: [
+          { required: true, message: "请输入拒绝理由", trigger: "change" }
+        ]
+      },
       ruleForm: {
-        name: "", //食材名
+        restorename: "", //食材名
 
         fooddata: "", //食材分类
 
@@ -532,6 +575,14 @@ export default {
         delivery1: false, //常用
         type: [],
         temps: ""
+      },
+      m_page: {
+        //分頁
+        sizes: [10, 20, 40, 50, 100], //每页最大显示数
+        size: 20,
+        totalElements: 0,
+        totalPages: 3,
+        number: 1
       },
       active: [], //季节
       valuepark: [], //省市区
@@ -578,9 +629,11 @@ export default {
           name: "", //食品名称
           address: "", //食品分类
           stats: "", //用量
-          malloc: "" //能量
+          spring: "", //能量
+          malloc: "" //能量kcal
         }
-      ]
+      ],
+      nbottoms: ""
     };
   },
   beforeMount() {
@@ -596,10 +649,12 @@ export default {
     addLine() {
       var newValue = {
         id: "",
+        frame: "", //分类ID
         name: "", //食品名称
         address: "", //食品分类
         stats: "", //用量
-        malloc: "" //能量
+        spring: "", //能量
+        malloc: "" //能量kcal
       };
       //添加新的行数
       this.officeonce.push(newValue);
@@ -614,23 +669,74 @@ export default {
     },
     //获取表格数据
     auditing() {
-      // this.loadFlag = true;
+      this.loadFlag = true;
       this.$axios
-        .get(`api/blade-food/dish/appPubDish?size=${10}&current=${1}`, {
-          headers: {
-            "Content-Type": "application/json"
-          }
-        })
+        .get(`api/blade-food/dish/appPubDish?size=${10}&current=${1}`, {})
         .then(res => {
+          this.loadFlag = false;
           // console.log(res);
           this.tmquery = res.data.data.records;
+          this.m_page.totalElements = res.data.data.total;
           console.log(this.tmquery);
         });
     },
     //查看
     seecol(row) {
+      // console.log(row);
+      this.seekeys = true;
+      this.active.length = "";
+      this.valuepark = "";
+      // this.nbottoms = index;
       console.log(row);
-      // this.seekeys = true;
+      this.stone = row.id;
+      this.dsquery.establish = row.tenentName;
+      this.dsquery.submit = row.userName;
+      this.dsquery.phone = row.phone;
+      this.dsquery.time = row.createTime;
+      this.dsquery.examineto = row.status;
+      this.seekeys = true;
+      let design = `?id=${row.id}`;
+      this.$axios
+        .get(`api/blade-food/dish/dishDetail` + design, {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+        .then(res => {
+          console.log(res);
+          this.handler = res.data.data;
+          this.ruleForm.name = this.handler.dishName; //菜品名字
+          this.ruleForm.fooddata = this.handler.dishType; //菜品分类
+          // console.log(this.handler);
+          this.handler.season.split(",").forEach(item => {
+            this.active.push(item);
+          });
+          let bar = [];
+          this.handler.provinces.split(",").forEach((item, i) => {
+            bar.push([item, this.handler.belongRegion.split(",")[i]]);
+          });
+          this.valuepark = bar;
+          this.ruleForm.region = this.handler.function; //特点
+          this.ruleForm.desc = this.handler.remark; //做法
+          this.ruleForm.delivery1 = this.handler.isUse == 1 ? false : true; //常用
+          this.ruleForm.delivery = this.handler.isPub == 1 ? false : true; //公开
+          if (this.handler.dishMxVos) {
+            let arr = [];
+            this.handler.dishMxVos.forEach((item, index) => {
+              // console.log(item);
+              // this.officeonce[this.csListIndex].id = item.id;
+              arr[index] = {
+                id: item.foodId,
+                frame: item.baseTypeId,
+                name: item.name,
+                address: item.baseTypeName,
+                stats: item.value,
+                spring: item.nutritionNlValue
+              };
+            });
+            this.officeonce = arr;
+          }
+        });
     },
     //同意
     Disagree() {
@@ -666,6 +772,7 @@ export default {
         })
         .then(res => {
           // console.log(res);
+          this.seekeys = false;
           this.auditing();
           this.$message({
             message: "审核通过",
@@ -677,7 +784,16 @@ export default {
         });
     },
     //拒绝
-    restore() {
+    restore(examine) {
+      console.log(examine);
+      if (examine.desc1 == "") {
+        this.$message({
+          message: "拒绝理由未填",
+          type: "warning"
+        });
+      } else {
+        alert("123123");
+      }
       console.log("拒绝");
       let next = [];
       this.officeonce.forEach(item => {
@@ -708,6 +824,7 @@ export default {
           dishPubType: this.menu //公共库分类
         })
         .then(res => {
+          this.seekeys = false;
           // console.log(res);
           this.auditing();
           this.$message({
@@ -720,50 +837,86 @@ export default {
         });
     },
     //审核
-    Directory(row) {
-      this.officeonce.length = 0;
-      this.active.length = 0;
-      this.seekeys = true;
-
+    Directory(row, index) {
+      this.active.length = "";
+      this.valuepark = "";
+      // console.log(index);
+      this.nbottoms = index;
       console.log(row);
       this.stone = row.id;
-      console.log(this.stone);
       this.dsquery.establish = row.tenentName;
       this.dsquery.submit = row.userName;
       this.dsquery.phone = row.phone;
       this.dsquery.time = row.createTime;
       this.dsquery.examineto = row.status;
-      this.ruleForm.name = row.dishName;
-      // this.ruleForm.fooddata = row.dishType;
-      this.ruleForm.region = row.function;
-      this.ruleForm.desc = row.remark;
+      this.seekeys = true;
+      let design = `?id=${row.id}`;
+      this.$axios
+        .get(`api/blade-food/dish/dishDetail` + design, {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+        .then(res => {
+          console.log(res);
+          this.handler = res.data.data;
+          this.ruleForm.name = this.handler.dishName; //菜品名字
+          this.ruleForm.fooddata = this.handler.dishType; //菜品分类
+          // console.log(this.handler);
+          this.handler.season.split(",").forEach(item => {
+            this.active.push(item);
+          });
+          let bar = [];
+          this.handler.provinces.split(",").forEach((item, i) => {
+            bar.push([item, this.handler.belongRegion.split(",")[i]]);
+          });
+          this.valuepark = bar;
+          this.ruleForm.region = this.handler.function; //特点
+          this.ruleForm.desc = this.handler.remark; //做法
+          this.ruleForm.delivery1 = this.handler.isUse == 1 ? false : true; //常用
+          this.ruleForm.delivery = this.handler.isPub == 1 ? false : true; //公开
+          if (this.handler.dishMxVos) {
+            let arr = [];
+            this.handler.dishMxVos.forEach((item, index) => {
+              // console.log(item);
+              // this.officeonce[this.csListIndex].id = item.id;
+              arr[index] = {
+                id: item.foodId,
+                frame: item.baseTypeId,
+                name: item.name,
+                address: item.baseTypeName,
+                stats: item.value,
+                malloc: item.nutritionNlValue
+              };
+            });
+            this.officeonce = arr;
+          }
+        });
+      // this.officeonce.length = 0;
+      // this.active.length = 0;
+      // this.seekeys = true;
 
-      row.season.split(",").forEach((item, i) => {
-        console.log(item);
-        this.active.push(item);
-      });
-      row.provinces.split(",").forEach((item, i) => {
-        console.log(item);
-        this.valuepark.push([item, row.belongRegion.split(",")[i]]);
-      });
-      console.log(this.valuepark);
-      // this.valuepark
-      this.ruleForm.delivery = row.isUse == 0 ? false : true; //公开
-      this.ruleForm.delivery1 = row.isPub == 0 ? false : true; //常用
+      // console.log(row);
+
+      // this.ruleForm.name = row.dishName;
+      // // this.ruleForm.fooddata = row.dishType;
+      // this.ruleForm.region = row.function;
+      // this.ruleForm.desc = row.remark;
+
+      // row.season.split(",").forEach((item, i) => {
+      //   console.log(item);
+      //   this.active.push(item);
+      // });
+      // row.provinces.split(",").forEach((item, i) => {
+      //   console.log(item);
+      //   this.valuepark.push([item, row.belongRegion.split(",")[i]]);
+      // });
+      // console.log(this.valuepark);
+      // // this.valuepark
+      // this.ruleForm.delivery = row.isUse == 0 ? false : true; //公开
+      // this.ruleForm.delivery1 = row.isPub == 0 ? false : true; //常用
       // this.active.push(row.season.split(","));
       // console.log(this.active);
-      // let design = `?id=${row.id}`;
-      // this.$axios
-      //   .get(`api/blade-food/dish/dishDetail` + design, {
-      //     headers: {
-      //       "Content-Type": "application/json"
-      //     }
-      //   })
-      //   .then(res => {
-      //     console.log(res);
-      //     this.into = res.data.data;
-      //     // console.log(this.subquery);
-      //   });
     },
     // 分类
     muito() {
@@ -854,9 +1007,9 @@ export default {
           }, 0);
           sums[index] += "";
           this.sumss = sums[index];
-          if (this.mailto[0].children[0].id == "101") {
-            this.mailto[0].children[0].result = this.sumss;
-          }
+          // if (this.mailto[0].children[0].id == "101") {
+          //   this.mailto[0].children[0].result = this.sumss;
+          // }
           // console.log(this.sumss);
         }
       });
@@ -990,6 +1143,15 @@ export default {
       //上传图片
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
+    },
+    //页码
+    m_handlePageChange(currPage) {
+      this.m_page.number = currPage;
+      this.auditing();
+    },
+    m_handleSizeChange(currSize) {
+      this.m_page.size = currSize;
+      this.auditing();
     }
   }
 };
@@ -1005,6 +1167,8 @@ export default {
 .custom {
   width: 100%;
   height: 100px;
+  font-size: 14px;
+  padding-top: 15px;
   /* background-color: red; */
 }
 .tostring {
@@ -1014,7 +1178,7 @@ export default {
   /* background-color: red; */
 }
 .navbar {
-  margin-top: 50px;
+  margin-top: 20px;
 }
 .update1 {
   width: 100%;
