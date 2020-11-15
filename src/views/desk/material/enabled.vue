@@ -119,7 +119,7 @@
               type="primary"
               icon="el-icon-view"
               size="small"
-              @click="seecol(scope.row)"
+              @click="seecol(scope.row, 0)"
               >查看</el-button
             >
             <el-button
@@ -127,7 +127,7 @@
               icon="el-icon-user-solid"
               type="danger"
               size="small"
-              @click="Directory(scope.row)"
+              @click="Directory(scope.row, 1)"
               >审核</el-button
             >
           </template>
@@ -446,8 +446,12 @@
       </div>
       <div slot="footer" class="dialog-footer" style=" text-align: center;">
         <el-button @click="seekeys = false">取 消</el-button>
-        <el-button type="primary" @click="restore"> 拒 绝</el-button>
-        <el-button type="primary" @click="Disagree">同 意</el-button>
+        <el-button type="primary" @click="restore" v-if="this.according == 1">
+          拒 绝</el-button
+        >
+        <el-button type="primary" @click="Disagree" v-if="this.according == 1"
+          >同 意</el-button
+        >
       </div>
     </el-dialog>
   </div>
@@ -568,7 +572,8 @@ export default {
 
       value: "", //审核状态
       tableData1: [],
-      flour: "" //ID
+      flour: "", //ID
+      according: "0"
     };
   },
   beforeMount() {
@@ -613,8 +618,10 @@ export default {
       this.auditing();
     },
     //查看
-    seecol(row) {
+    seecol(row, index) {
+      console.log(index);
       console.log(row);
+      this.examine.desc1 = "";
       this.valuepark.length = 0;
       this.active.length = 0;
       this.seekeys = true;
@@ -686,13 +693,24 @@ export default {
     },
     //拒绝
     restore() {
+      this.examine.desc1 = "";
       this.$axios
         .post(`api/blade-food/food/audit`, {
           id: this.subquery.id,
-          refuseReason: this.examine.desc1
+          refuseReason: this.examine.desc1,
+          status: 0 //审核状态
         })
         .then(res => {
           console.log(res);
+          this.auditing();
+          this.seekeys = false;
+          this.$message({
+            message: "拒绝成功",
+            type: "success"
+          });
+        })
+        .catch(() => {
+          this.$message.error("拒绝失败");
         });
     },
     Disagree() {
@@ -755,7 +773,10 @@ export default {
         });
     },
     //审核
-    Directory(row) {
+    Directory(row, index) {
+      console.log(index);
+      this.according = index;
+      this.examine.desc1 = "";
       this.valuepark.length = 0;
       this.active.length = 0;
       this.seekeys = true;

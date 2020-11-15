@@ -388,6 +388,7 @@
             <template slot-scope="scope">
               <el-input
                 style="width: 90px"
+                @blur="graph"
                 @input="hello(scope.row, scope.$index)"
                 v-model="scope.row.stats"
                 clearable
@@ -514,6 +515,7 @@ export default {
       loadFlag2: false,
       dateTime: false, //弹出框
       input: "", //搜索
+      mailto: [],
       getInput: {
         cs: "123123",
         cs2: ""
@@ -983,7 +985,49 @@ export default {
       //这部分应该是保存提交你添加的内容
       console.log(JSON.stringify(this.officeonce));
     },
-
+    //失去焦点事件
+    graph() {
+      // console.log(this.officeonce);
+      let next = [];
+      this.officeonce.forEach(item => {
+        // console.log(item);
+        next.push({
+          foodId: item.id,
+          val: item.stats
+        });
+      });
+      console.log(next);
+      this.$axios
+        .post(`api/blade-food/dish/calNutriByFoodIds`, {
+          recipeVals: next
+        })
+        .then(res => {
+          // console.log(res);
+          this.atomic = res.data.data;
+          // console.log(this.atomic);
+          // let touch=[];
+          this.atomic.forEach(item => {
+            // console.log(item);
+            for (let item1 of this.mailto) {
+              // console.log(item1);
+              for (let arr of item1.children) {
+                // console.log(arr);
+                if (arr.id == item.nutrientId) {
+                  arr.result = item.total;
+                }
+                //   if (arr.children) {
+                //     for (let add of arr.children) {
+                //       console.log(add);
+                //       if (add.id == item.nutrientId) {
+                //         add.result = item.value;
+                //       }
+                //     }
+                //   }
+              }
+            }
+          });
+        });
+    },
     //编辑保存
     editorTab() {
       let next = [];

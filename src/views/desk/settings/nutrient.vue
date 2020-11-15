@@ -4,7 +4,7 @@
       <el-button
         icon="el-icon-circle-plus-outline"
         type="primary"
-        @click="added"
+        @click="added(1)"
         style="  margin: 30px;"
         >新增</el-button
       >

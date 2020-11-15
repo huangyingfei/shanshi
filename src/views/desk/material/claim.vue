@@ -25,6 +25,14 @@
         style=" margin-left: 20px; "
         >搜索</el-button
       >
+      <el-button
+        size="medium"
+        @click="notEmpty"
+        icon="el-icon-search"
+        type="primary"
+        style=" margin-left: 20px; "
+        >清空</el-button
+      >
     </div>
     <!-- 添加食材 -->
     <div class="cadddr">
@@ -75,8 +83,8 @@
         ></el-table-column>
         <el-table-column label="是否有效" width="120" align="center">
           <template slot-scope="scope">
-            <p class="stop" v-if="scope.row.isActive == 0">是</p>
-            <p style="color:#409eff" v-else-if="scope.row.isActive == 1">
+            <p class="stop" v-if="scope.row.isActive == 1">是</p>
+            <p style="color:#409eff" v-else-if="scope.row.isActive == 0">
               否
             </p>
           </template>
@@ -87,14 +95,14 @@
           <template slot-scope="scope">
             <el-button
               @click="editorTheme(scope.row, 2)"
-              type="primary"
+              type="text"
               size="small"
               icon="el-icon-edit"
               style=" margin-left: 20px;"
               >编辑</el-button
             >
             <el-button
-              type="danger"
+              type="text"
               size="small"
               icon="el-icon-delete"
               style=" margin-left: 20px;"
@@ -120,7 +128,7 @@
     </div>
     <!-- 添加相克食材 -->
     <el-dialog
-      title="添加相克食材"
+      title="食材"
       append-to-body
       :visible.sync="dateTime"
       :close-on-click-modal="false"
@@ -132,17 +140,17 @@
         label-width="100px"
         class="demo-ruleForm"
       >
-        <el-form-item label="名称">
+        <el-form-item label="名称" prop="name">
           <el-input v-model="ruleForm.name"></el-input>
         </el-form-item>
-        <el-form-item label="食材一" prop="region">
+        <el-form-item label="食材一" prop="adding">
           <el-input
             readonly
             v-on:click.native="obtain(1)"
             v-model="ruleForm.adding"
           ></el-input>
         </el-form-item>
-        <el-form-item label="食材二" prop="region1">
+        <el-form-item label="食材二" prop="adding1">
           <el-input
             readonly
             v-on:click.native="obtain(2)"
@@ -212,6 +220,10 @@
                     </span> -->
         </el-tree>
       </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="addEffect = false">取 消</el-button>
+        <el-button @click="addEffect = false" type="primary">确 定</el-button>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -237,12 +249,9 @@ export default {
         resource: ""
       },
       rules: {
-        // region: [
-        //   { required: true, message: "请选择活动区域", trigger: "change" }
-        // ],
-        // region1: [
-        //   { required: true, message: "请选择活动区域", trigger: "change" }
-        // ]
+        name: [{ required: true, message: "请输入名称", trigger: "blur" }],
+        adding: [{ required: true, message: "请选择食材", trigger: "change" }],
+        adding1: [{ required: true, message: "请选择食材", trigger: "change" }]
       },
       m_page: {
         sizes: [10, 20, 40, 50, 100], //每页最大显示数
@@ -254,6 +263,7 @@ export default {
       page_data: {
         loadTxt: "请求列表中"
       },
+
       tableData: [],
       input: "", //名称
       temps: "",
@@ -291,6 +301,7 @@ export default {
     }
   },
   methods: {
+    notEmpty() {},
     filterNode(value, data) {
       if (!value) return true;
 
@@ -333,7 +344,7 @@ export default {
       this.ruleForm.adding = row.foodName;
       this.ruleForm.adding1 = row.foodName1;
       this.ruleForm.desc = row.reason;
-      this.ruleForm.resource = row.isActive == 0 ? "是" : "否";
+      this.ruleForm.resource = row.isActive == 0 ? "否" : "1";
 
       this.support = row.foodId; //食材一ID
       this.editor = row.foodId1; //食材二ID
@@ -350,7 +361,7 @@ export default {
           foodId: this.support, //食材1
           foodId1: this.editor, //食材2
           reason: this.ruleForm.desc, //不宜同事原因
-          isActive: this.ruleForm.resource == "是" ? 0 : 1 //是否
+          isActive: this.ruleForm.resource == "是" ? 1 : 0 //是否
         })
         .then(res => {
           console.log(res);
@@ -366,40 +377,39 @@ export default {
         });
     },
     //保存
-    setlist() {
-      this.$axios
-        .post(`api/blade-food/foodmutual/save`, {
-          name: this.ruleForm.name, //名称
-          foodId: this.support, //食材1
-          foodId1: this.editor, //食材2
-          reason: this.ruleForm.desc, //不宜同事原因
-          isActive: this.ruleForm.resource == "是" ? 0 : 1 //是否
-        })
-        .then(res => {
-          console.log(res);
+    setlist(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          // alert('submit!');
+          this.$axios
+            .post(`api/blade-food/foodmutual/save`, {
+              name: this.ruleForm.name, //名称
+              foodId: this.support, //食材1
+              foodId1: this.editor, //食材2
+              reason: this.ruleForm.desc, //不宜同事原因
+              isActive: this.ruleForm.resource == "是" ? 1 : 0 //是否
+            })
+            .then(res => {
+              console.log(res);
+              this.$message({
+                message: "保存成功",
+                type: "success"
+              });
+              this.generator();
+              this.dateTime = false;
+            })
+            .catch(() => {
+              this.$message.error("保存失败");
+            });
+        } else {
+          // console.log("error submit!!");
           this.$message({
-            message: "保存成功",
-            type: "success"
+            message: "相克食材未填全",
+            type: "warning"
           });
-          this.generator();
-          this.dateTime = false;
-        })
-        .catch(() => {
-          this.$message.error("保存失败");
-        });
-      // this.$refs[formName].validate(valid => {
-      //   if (valid) {
-      //     // alert('submit!');
-      //     this.$axios.post(`api/blade-food/foodmutual/save`, {
-      //       name: this.ruleForm.name, //名称
-
-      //       isActive: this.ruleForm.resource //是否有效
-      //     });
-      //   } else {
-      //     console.log("error submit!!");
-      //     return false;
-      //   }
-      // });
+          return false;
+        }
+      });
     },
     DeleteUser(row) {
       console.log(row);
@@ -418,7 +428,7 @@ export default {
       //   .catch(() => {
       //     this.$message.error("删除失败");
       //   });
-      this.$confirm("确认删除该菜品分类?", "提示", {
+      this.$confirm("确认删除该食材?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"

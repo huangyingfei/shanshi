@@ -17,7 +17,9 @@
                 <!-- <el-button type="primary" plain size="mini">导入</el-button>
                 <el-button type="primary" plain size="mini">导出</el-button>
                 <el-button type="primary" plain size="mini">加分类</el-button> -->
-                <el-button type="primary" size="mini">加食材</el-button>
+                <el-button @click="addition(1)" type="primary" size="mini"
+                  >加食材</el-button
+                >
               </div>
               <div class="whole">
                 <div class="export">
@@ -34,7 +36,7 @@
                   <el-button
                     size="mini"
                     :type="1 == display ? 'primary' : 'default'"
-                    @click="buttonClick(1)"
+                    @click="buttonClick(0)"
                     >分享平台</el-button
                   >
                 </div>
@@ -103,13 +105,13 @@
                           v-if="data.view == 1"
                           type="text"
                           size="mini"
-                          @click="() => prepare(data)"
+                          @click="() => prepare(data, 2)"
                         >
                           查看
                         </el-button>
                         <el-button
                           type="text"
-                          v-if="data.isUse == 0"
+                          v-if="data.isUse == 1"
                           size="mini"
                           @click="() => append(data)"
                         >
@@ -117,7 +119,7 @@
                         </el-button>
                         <el-button
                           type="text"
-                          v-if="data.isUse == 1"
+                          v-if="data.isUse == 0"
                           size="mini"
                           @click="() => insert(data)"
                         >
@@ -317,20 +319,13 @@
                     </el-dialog>
                   </el-form-item>
 
-                  <el-switch
-                    style="width: 250px; margin-left: 40px"
-                    v-model="ruleForm.delivery"
-                    active-text="分享平台"
-                    inactive-text="不分享平台"
-                  >
-                  </el-switch>
+                  <el-form-item label="分享平台" style="  ">
+                    <el-switch v-model="ruleForm.delivery"></el-switch>
+                  </el-form-item>
 
-                  <el-switch
-                    v-model="ruleForm.delivery1"
-                    active-text="常用"
-                    inactive-text="不常用"
-                  >
-                  </el-switch>
+                  <el-form-item label="常用" style="   ">
+                    <el-switch v-model="ruleForm.delivery1"></el-switch>
+                  </el-form-item>
                 </el-form>
               </div>
               <!-- 营养素标题 -->
@@ -379,35 +374,50 @@
             </div>
           </div>
           <div class="base">
-            <el-button type="primary" @click="saved('ruleForm')"
+            <el-button
+              v-if="this.gavatorta == 2"
+              type="primary"
+              @click="saved('ruleForm')"
               >编辑保存</el-button
             >
-            <el-button type="primary" @click="iptables">保存</el-button>
-            <el-button @click="resetForm('ruleForm')">重置</el-button>
+            <el-button
+              v-if="this.gavatorta == 1"
+              type="primary"
+              @click="iptables"
+              >保存</el-button
+            >
+            <!-- <el-button @click="resetForm('ruleForm')">重置</el-button> -->
           </div>
         </el-tab-pane>
         <!-- 公共食材库 -->
         <el-tab-pane label="公共食材库" name="second">
           <div class="cation">
             <!-- 左边 -->
+            <!-- 全国查找 -->
+
             <div class="personal">
-              <!-- 全国查找 -->
+              <!-- <el-input
+                style="width:290px; margin-left: 9px;"
+                placeholder="输入关键字进行查询"
+                v-model="filterText"
+              > -->
+              </el-input>
               <div class="country">
                 <div class="country1">
-                  <template>
-                    <el-select v-model="value" placeholder="请选择">
-                      <!-- <el-option
-                v-for="item in examine"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option> -->
-                    </el-select>
-                  </template>
+                  <el-cascader
+                    clearable
+                    v-model="valuepark2"
+                    :options="options"
+                    @change="gProvinces"
+                  ></el-cascader>
                 </div>
                 <div class="country2">
                   <template>
-                    <el-select v-model="before2" placeholder="请选择">
+                    <el-select
+                      @change="disallow()"
+                      v-model="before1"
+                      placeholder="请选择"
+                    >
                       <el-option
                         v-for="item in before"
                         :key="item.value"
@@ -419,7 +429,11 @@
                 </div>
                 <div class="country2">
                   <template>
-                    <el-select v-model="really2" placeholder="请选择">
+                    <el-select
+                      @change="commonly()"
+                      v-model="really1"
+                      placeholder="请选择"
+                    >
                       <el-option
                         v-for="item in really"
                         :key="item.value"
@@ -441,6 +455,8 @@
                     :default-expand-all="false"
                     :expand-on-click-node="false"
                     @node-click="handleNodeClick"
+                    :filter-node-method="filterNode"
+                    ref="tree"
                   >
                     <span class="custom-tree-node" slot-scope="{ node, data }">
                       <span>{{ node.label }}</span>
@@ -448,6 +464,7 @@
                         <el-button
                           type="text"
                           size="mini"
+                          v-if="data.view == 1"
                           @click="() => prepare(data)"
                         >
                           查看
@@ -721,7 +738,7 @@ export default {
           label: "全部"
         },
         {
-          value: "1",
+          value: "0",
           label: "常用"
         }
       ],
@@ -751,10 +768,11 @@ export default {
         }
       ],
       before1: "",
-      before2: "0",
+      before2: "",
       lower: 0,
       waterfall: "2",
-      fallen: ""
+      fallen: "",
+      gavatorta: "1"
     };
   },
   watch: {
@@ -770,6 +788,27 @@ export default {
     this.treeDrawing(); //树形渲染数
   },
   methods: {
+    //加食材
+    addition(index) {
+      console.log(index);
+      this.gavatorta = index;
+      this.ruleForm.name = "";
+      this.ruleForm.foodFood = "";
+      this.ruleForm.ovenFood = "";
+      this.ruleForm.buffer = "";
+      this.ruleForm.fooddata = "";
+      this.ruleForm.dogfood = "";
+      this.ruleForm.besaved = "";
+      this.ruleForm.timers = "";
+      this.ruleForm.content = "";
+      this.ruleForm.resource = "";
+      this.active = [];
+      this.valuepark = [];
+      // this.valuepark.length = 0;
+      this.ruleForm.desc = "";
+      this.ruleForm.delivery = false;
+      this.ruleForm.delivery1 = false;
+    },
     resetForm() {
       // console.log(this.ruleForm.delivery1);
       // console.log(this.ruleForm.delivery1 == false ? 1 : 0);
@@ -786,7 +825,12 @@ export default {
     },
     //省市区查询
     gProvinces() {
-      this.fallen = this.valuepark2[1];
+      // this.fallen = this.valuepark2[1];
+      if (this.valuepark2[1]) {
+        this.fallen = this.valuepark2[1];
+      } else {
+        this.fallen = "";
+      }
       this.treeDrawing();
     },
     filterNode(value, data) {
@@ -939,7 +983,8 @@ export default {
     classification(data) {
       console.log(data);
     },
-    prepare(data) {
+    prepare(data, index) {
+      this.gavatorta = index;
       this.active.length = 0;
       this.active1.length = 0;
       console.log(data);
@@ -1049,10 +1094,9 @@ export default {
       console.log(data);
       this.term = data.id;
       this.$axios
-        .get(`api/blade-food/basetype/list?id=${this.term}&iisUse=0`, {
-          headers: {
-            "Content-Type": "application/json"
-          }
+        .post(`api/blade-food/food/changeIsUse`, {
+          id: this.term,
+          isUse: 0
         })
         .then(res => {
           console.log(res);
@@ -1071,7 +1115,10 @@ export default {
       // console.log(data);
       this.term = data.id;
       this.$axios
-        .get(`api/blade-food/basetype/list?id=${this.term}&iisUse=1`, {})
+        .post(`api/blade-food/food/changeIsUse`, {
+          id: this.term,
+          isUse: 1
+        })
         .then(res => {
           console.log(res);
           this.$message({
@@ -1088,22 +1135,42 @@ export default {
     remove(node, data) {
       console.log(data);
       this.saveall = data.id;
-      this.$axios
-        .post(`api/blade-food/blade-food/food/remove?ids=${this.saveall}`, {
-          headers: {
-            "Content-Type": "application/json"
-          }
-        })
-        .then(res => {
-          console.log(res);
-          this.$message({
-            message: "删除成功",
-            type: "success"
-          });
-          this.treeDrawing();
+      // this.$axios
+      //   .post(`api/blade-food/blade-food/food/remove?ids=${this.saveall}`, {
+      //     headers: {
+      //       "Content-Type": "application/json"
+      //     }
+      //   })
+      //   .then(res => {
+      //     console.log(res);
+      //     this.$message({
+      //       message: "删除成功",
+      //       type: "success"
+      //     });
+      //     this.treeDrawing();
+      //   })
+      //   .catch(() => {
+      //     this.$message.error("删除失败");
+      //   });
+      this.$confirm("确认删除该食材?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.$axios
+            .post(`api/blade-food/food/remove?ids=${this.saveall}`, {})
+            .then(res => {
+              console.log(res);
+              this.$message.success("删除成功");
+              this.treeDrawing();
+            });
         })
         .catch(() => {
-          this.$message.error("删除失败");
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
         });
     },
 
