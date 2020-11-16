@@ -808,6 +808,12 @@ export default {
       this.ruleForm.desc = "";
       this.ruleForm.delivery = false;
       this.ruleForm.delivery1 = false;
+         this.mailto.forEach(item=>{
+            console.log(item)
+        item.children.forEach(item1=>{
+             item1.result=""   
+        })
+      })
     },
     resetForm() {
       // console.log(this.ruleForm.delivery1);
