@@ -408,7 +408,7 @@
           >编辑保存</el-button
         >
 
-        <el-button @click="resetForm('ruleForm')">重置</el-button>
+        <!-- <el-button @click="resetForm('ruleForm')">重置</el-button> -->
       </div>
     </div>
   </div>
@@ -555,7 +555,7 @@ export default {
       fallen: "",
       used: "",
       gavatorta: "1",
-      energy:[]
+      energy: []
     };
   },
   computed: {},
@@ -636,12 +636,12 @@ export default {
       this.ruleForm.delivery1 = false;
       // this.mailto=this.energy;
       // console.log(this.energy)
-      this.mailto.forEach(item=>{
-            console.log(item)
-        item.children.forEach(item1=>{
-             item1.result=""   
-        })
-      })
+      this.mailto.forEach(item => {
+        console.log(item);
+        item.children.forEach(item1 => {
+          item1.result = "";
+        });
+      });
     },
     //食材库保存
     totally(formName) {
@@ -876,7 +876,7 @@ export default {
         .then(res => {
           // console.log(res);
           this.mailto = res.data.data;
-          this.energy=this.mailto;
+          this.energy = this.mailto;
           console.log(this.mailto);
         });
     },
@@ -936,11 +936,7 @@ export default {
       this.flour = data.id;
       // console.log(this.flour);
       this.$axios
-        .get(`api/blade-food/food/detail?id=${this.flour}`, {
-          headers: {
-            "Content-Type": "application/json"
-          }
-        })
+        .get(`api/blade-food/food/detail?id=${this.flour}`, {})
         .then(res => {
           // console.log(res);
 
