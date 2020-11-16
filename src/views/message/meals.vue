@@ -608,11 +608,15 @@
         console.log(this.datas)
         detail(id).then(res=>{
             if(res.data.success){
-              let mealsType=
+              let mealsType=[];
               let data=res.data.data;
               data.recipeCycles.forEach(_=>{
-                 _.mealsType
+                mealsType.push(_.mealsType);
               })
+               let arr= Array.from(new Set(mealsType));
+              for(let i=0;i<arr.length;i++){
+                this.WeekInfo.foodCatalog.push(this.getmealTypeDataValue(arr[i]))
+              }
             }
         })
       },
@@ -794,6 +798,13 @@
           }
         })[0].value
       },
+      getmealTypeDataValue(value){
+        return  this.mealTypeData.filter(_=>{
+          if(_.value==value){
+            return _.value
+          }
+        })[0].name
+      },
       buttonend() {
         debugger
 
@@ -831,6 +842,7 @@
           recipeCycles:recipeCycles,
           isUse:this.WeekInfo.collection?1:0,
           recipeCategory:1
+          start_time
         }
         console.log(this.datas);
         save(row).then(res=>{
@@ -848,6 +860,7 @@
 
       //重新构建表格
       rebuildTable() {
+        debugger
         var that = this;
         this.headers = [];
         setTimeout(function () {
