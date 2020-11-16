@@ -1,7 +1,7 @@
 <template>
   <div class="unsaved">
     <div class="header">
-      <span style=" margin-right: 10px;">食谱名称:</span>
+      <span style=" margin-right: 10px;margin-left: 25px;">食谱名称:</span>
       <el-input
         style="width:200px;"
         size="small"
@@ -14,7 +14,7 @@
         v-model="wupload.getDate"
         type="date"
         placeholder="选择日期"
-        style="width:250px"
+        style="width:200px;"
         format="yyyy 年 MM 月 dd 日"
         value-format="yyyy-MM-dd"
       ></el-date-picker>
@@ -47,7 +47,7 @@
       >
     </div>
     <div class="prepall">
-      <span style=" margin-right: 10px;">收藏食谱</span>
+      <span style=" margin-right: 10px;margin-left: 25px;">收藏食谱</span>
       <el-select
         @change="collection"
         v-model="empty"
@@ -146,17 +146,38 @@
             <el-button type="text" size="small" @click="seecol(scope.row)"
               >编辑</el-button
             >
-            <el-button type="text" size="small" @click="create(scope.row)"
+            <el-button type="text" size="small" @click="remove(scope.row)"
               >删除</el-button
             >
-            <el-button type="text" size="small" v-if="scope.row.isPub == 1"
+            <el-button
+              type="text"
+              @click="handleto(scope.row)"
+              size="small"
+              v-if="scope.row.isUse == 0"
               >收藏</el-button
             >
-            <el-button type="text" size="small" v-if="scope.row.isPub == 0"
+            <el-button
+              type="text"
+              size="small"
+              @click="costofhand(scope.row)"
+              v-if="scope.row.isUse == 1"
               >不收藏</el-button
             >
             <el-button type="text" size="small">复制</el-button>
-            <el-button type="text" size="small">公示</el-button>
+            <el-button
+              @click="getPublicDomain(scope.row)"
+              type="text"
+              size="small"
+              v-if="scope.row.isBoard == 0"
+              >公示</el-button
+            >
+            <el-button
+              @click="setPublicDomain(scope.row)"
+              type="text"
+              size="small"
+              v-if="scope.row.isBoard == 1"
+              >不公示</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -253,6 +274,92 @@ export default {
     this.generator();
   },
   methods: {
+    //编辑
+    seecol(row) {
+      this.$router.push({
+        path: "./meals",
+        query: { userid: row.id }
+      });
+    },
+    //删除删除
+    remove(row) {
+      this.$confirm("确认删除该食材?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.$axios
+            .get(`api/blade-food/recipe/remove?ids=${row.id}`, {})
+            .then(res => {
+              this.$message.success("删除成功");
+              this.generator();
+            });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
+    },
+    //收藏
+    handleto(row) {
+      console.log(row);
+      let params = `?id=${row.id}&isUse=${1}`;
+      this.$axios
+        .get(`api/blade-food/recipe/changeInfo${params}`, {})
+        .then(res => {
+          // console.log(res);
+          this.$message({
+            message: "设置成功",
+            type: "success"
+          });
+          this.generator();
+        });
+    },
+    //不收藏
+    costofhand(row) {
+      let params = `?id=${row.id}&isUse=${0}`;
+      this.$axios
+        .get(`api/blade-food/recipe/changeInfo${params}`, {})
+        .then(res => {
+          // console.log(res);
+          this.$message({
+            message: "设置成功",
+            type: "success"
+          });
+          this.generator();
+        });
+    },
+    //公示
+    getPublicDomain(row) {
+      let params = `?id=${row.id}&isBoard=${1}`;
+      this.$axios
+        .get(`api/blade-food/recipe/changeInfo${params}`, {})
+        .then(res => {
+          // console.log(res);
+          this.$message({
+            message: "设置成功",
+            type: "success"
+          });
+          this.generator();
+        });
+    },
+    //不公示
+    setPublicDomain(row) {
+      let params = `?id=${row.id}&isBoard=${0}`;
+      this.$axios
+        .get(`api/blade-food/recipe/changeInfo${params}`, {})
+        .then(res => {
+          // console.log(res);
+          this.$message({
+            message: "设置成功",
+            type: "success"
+          });
+          this.generator();
+        });
+    },
     //搜索
     searchStr() {
       // console.log(this.wupload.input);
@@ -273,6 +380,12 @@ export default {
     titlesearch() {
       console.log(this.blicity);
       this.generator();
+    },
+    //清空
+    notEmpty() {
+      this.wupload.input = "";
+      this.wupload.getDate = "";
+      this.wupload.block = "";
     },
     //获取列表
     generator() {
@@ -306,16 +419,17 @@ export default {
 <style scoped>
 .unsaved {
   width: 100%;
-  height: 700px;
+  /* height: 700px; */
+  、height: 100%;
   background-color: #fff;
 }
 
 .header {
   width: 100%;
-  height: 53px;
+  height: 55px;
   /* background-color: red; */
   font-size: 13px;
-  padding-top: 20px;
+  padding-top: 10px;
 }
 .prepall {
   font-size: 13px;
