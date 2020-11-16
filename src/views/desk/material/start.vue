@@ -693,6 +693,7 @@ export default {
               seasons: this.active, //季节
               belongRegions: this.valuepark, //所属区域
               function: this.ruleForm.desc, //功用
+              pic: this.imageUrl,
               isUse: this.ruleForm.delivery1 == false ? 1 : 0, //是否常用
               isPub: this.ruleForm.delivery == false ? 1 : 0, //是否公开
 
@@ -1155,7 +1156,8 @@ export default {
       console.log(file);
       console.log(file.response.data.link);
 
-      this.imageUrl = URL.createObjectURL(file.raw);
+      // this.imageUrl = URL.createObjectURL(file.raw);
+      this.imageUrl = URL.createObjectURL(file.response.data.link);
       console.log(this.imageUrl);
     },
     beforeAvatarUpload(file) {
