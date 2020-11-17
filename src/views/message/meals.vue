@@ -1,5 +1,7 @@
 <template>
   <div>
+
+
     <div
       ref="layershipu"
       id="tooltip_shipu"
@@ -22,7 +24,7 @@
     </div>
 
 
-    <div
+       <div
       ref="foodmenudLayer"
       id="foodmenudLayer"
       class="el-popover el-popper el-popover--plain"
@@ -102,6 +104,7 @@
               <el-checkbox label="早餐" checked name="早餐"></el-checkbox>
               <el-checkbox label="早点" name="早点"></el-checkbox>
               <el-checkbox label="午餐" name="午餐"></el-checkbox>
+              <el-checkbox label="午点" name="午点"></el-checkbox>
               <el-checkbox label="晚餐" name="晚餐"></el-checkbox>
               <el-checkbox label="晚点" name="晚点"></el-checkbox>
             </el-checkbox-group>
@@ -129,7 +132,7 @@
           </el-form-item>
 
           <el-form-item>
-            <!--<el-switch v-model="WeekInfo.shareOrg" inactive-text="分享组织">-->
+            <!--&lt;!&ndash;<el-switch v-model="WeekInfo.shareOrg" inactive-text="分享组织">&ndash;&gt;-->
             <!--</el-switch>-->
 
             <el-switch
@@ -142,7 +145,7 @@
             <el-switch
               style="margin-left: 10px"
               v-model="WeekInfo.shareTell"
-              inactive-text="公告"
+              inactive-text="公示"
             >
             </el-switch>
 
@@ -158,23 +161,29 @@
               style="margin-left: 30px"
               size="medium"
               type="success"
-            >智能配平</el-button
+              >智能配平</el-button
+            >
+            <el-button
+              @click="buttonend"
+              style="margin-left: 30px"
+              size="medium"
+              type="success"
+            >保存食谱</el-button
+            >
+            <el-button style="margin-left: 10px" size="medium"
+              >自动设置油盐糖</el-button
             >
 
             <el-button style="margin-left: 10px" size="medium"
-            >自动设置油盐糖</el-button
+              >自动清除油盐糖</el-button
             >
 
             <el-button style="margin-left: 10px" size="medium"
-            >自动清除油盐糖</el-button
+              >营养素</el-button
             >
 
             <el-button style="margin-left: 10px" size="medium"
-            >营养素</el-button
-            >
-
-            <el-button style="margin-left: 10px" size="medium"
-            >带量食谱</el-button
+              >带量食谱</el-button
             >
           </el-form-item>
         </el-form>
@@ -191,19 +200,15 @@
       <el-col :span="4">
         <el-card class="box-car" shadow="never">
           <div class="clearfix panel_head">
-            <!--食谱菜品按钮-->
             <el-button-group>
-              <el-button size="small" @click="showFoodList = false" style=""
-              >食谱</el-button
+              <el-button size="small" @click="showFoodList = false" style="bo"
+                >食谱</el-button
               >
               <el-button size="small" @click="showFoodList = true"
-              >菜品</el-button
+                >菜品</el-button
               >
             </el-button-group>
           </div>
-
-
-          <!--食谱-->
           <el-tabs
             v-show="!showFoodList"
             v-model="activeName"
@@ -232,10 +237,13 @@
 
               <ul class="foodWeekListHis">
                 <li  v-for="f in mealListLeft" :key="f.id" @mouseover="ShowFoodTips($event,f)"  @mouseout="HidenFoodTips($event)">
-                  {{f.recipeName}}
+                 {{f.recipeName}}
                 </li>
+
+
               </ul>
             </el-tab-pane>
+
 
             <!--//个人食谱-->
             <el-tab-pane label="个人食谱" name="second">
@@ -266,36 +274,28 @@
             </el-tab-pane>
           </el-tabs>
 
-          <!--<div-->
-            <!--class="foodSelectMenue"-->
-            <!--v-show="showFoodList"-->
-            <!--style="margin-top: 0px; padding: 5px"-->
-          <!--&gt;-->
-          <!--</div>-->
-
-
           <!--菜品-->
-            <el-tabs
-              v-show="showFoodList"
-              v-model="activeName2"
-            >
+          <el-tabs
+            v-show="showFoodList"
+            v-model="activeName2"
+          >
             <el-tab-pane label="公共菜品" name="thread">
 
 
 
-            <el-tree
-              class="filter-tree"
-              :data="menuDishList"
-              :props="defaultProps"
-              default-expand-all
-              :filter-node-method="filterNode"
-              draggable
-              @node-drag-start="foodmenueDragStart"
-              :allow-drop="foodmenueDragEnd"
-              @node-drag-over="foodmenueDragMove"
+              <el-tree
+                class="filter-tree"
+                :data="menuDishList"
+                :props="defaultProps"
+                default-expand-all
+                :filter-node-method="filterNode"
+                draggable
+                @node-drag-start="foodmenueDragStart"
+                :allow-drop="foodmenueDragEnd"
+                @node-drag-over="foodmenueDragMove"
 
-            >
-            </el-tree>
+              >
+              </el-tree>
             </el-tab-pane>
             <el-tab-pane label="个人菜品" name="four">
               <el-tree
@@ -311,8 +311,30 @@
               >
               </el-tree>
             </el-tab-pane>
-            </el-tabs>
+          </el-tabs>
 
+          <!--<div-->
+            <!--class="foodSelectMenue"-->
+            <!--v-show="showFoodList"-->
+            <!--style="margin-top: 0px; padding: 5px"-->
+          <!--&gt;-->
+            <!--<el-input placeholder="输入关键字进行过滤" v-model="filterText">-->
+            <!--</el-input>-->
+
+            <!--<el-tree-->
+              <!--class="filter-tree"-->
+              <!--:data="menue_data"-->
+              <!--:props="defaultProps"-->
+              <!--default-expand-all-->
+              <!--:filter-node-method="filterNode"-->
+              <!--draggable-->
+              <!--@node-drag-start="foodmenueDragStart"-->
+              <!--:allow-drop="foodmenueDragEnd"-->
+              <!--@node-drag-over="foodmenueDragMove"-->
+              <!--ref="tree"-->
+            <!--&gt;-->
+            <!--</el-tree>-->
+          <!--</div>-->
         </el-card>
       </el-col>
       <el-col :span="20">
@@ -328,15 +350,7 @@
           </foods-week>
         </div>
       </el-col>
-      <el-col>
-        <div class="foodrate">
-          <el-button
-            style="text-align: center"
-            type="primary"
-            @click="buttonend"
-          >保存</el-button>
-        </div>
-      </el-col>
+
     </el-row>
     <div class="scores" @click="tfractio">
       <div class="scores1">
@@ -372,13 +386,13 @@
           <span></span>
 
           <el-checkbox style="padding-left: 50px" v-model="focus"
-          >调整食材的量</el-checkbox
+            >调整食材的量</el-checkbox
           >
           <el-checkbox style="padding-left: 50px" v-model="tment"
-          >调整菜品的量</el-checkbox
+            >调整菜品的量</el-checkbox
           >
           <el-checkbox style="padding-left: 50px" v-model="changed"
-          >保留整数</el-checkbox
+            >保留整数</el-checkbox
           >
         </div>
         <div class="nutrition">
@@ -411,7 +425,7 @@
           </el-input>
 
           <el-button style="margin-left: 30px" type="primary"
-          >开始配平</el-button
+            >开始配平</el-button
           >
           <el-button type="primary">应用</el-button>
           <el-button type="primary">重置</el-button>
@@ -448,7 +462,7 @@
       </div>
       <!-- 表格 -->
       <div class="onblur">
-        <foods-week :headers="headers" :datas="datas" days="5"   > </foods-week>
+        <foods-week :headers="headers" :datas="datas" days="5"> </foods-week>
       </div>
     </el-dialog>
     <!-- 智能配平弹框结束 -->
@@ -458,485 +472,505 @@
 <script>
   import foodsWeek from "@/views/foods/components/foodsweek";
   import {getList} from "@/api/system/special"
-  import {mealList,getDishByBaseId,dishDetail,save,detail} from "@/api/system/meals"
-  export default {
-    components: {
-      foodsWeek,
-    },
-    created() {
-      //this.init();
-      var that=this;
-      document.body.ondrop = function (event) {
-        event.preventDefault();
-        event.stopPropagation();
+  import {mealList,getDishByBaseId,dishDetail,save,detail,update} from "@/api/system/meals"
+export default {
+  components: {
+    foodsWeek,
+  },
+  mounted(){
+    this.initData()
+  },
+  created() {
+    //this.init();
+    var that=this;
+    document.body.ondrop = function (event) {
+      event.preventDefault();
+      event.stopPropagation();
 
-      };
+    };
 
-      document.oncontextmenu = function(){return false};
+document.oncontextmenu = function(){return false};
 
 
-    },
-    mounted(){
-      this.initData()
-    },
-    data() {
-
-      const data = [];
-      return {
-        score:'0',
-        drawer: false, //分数弹框
-        pointscan: false, //智能配餐弹框
-        secondary: [
-          {
-            id: 3,
-            date: "蛋白质",
-            name: "322",
-            address: "123.91",
+  },
+  data() {
+    const data = [];
+    return {
+      id:'',
+      score:'0',
+      drawer: false, //分数弹框
+      pointscan: false, //智能配餐弹框
+      secondary: [
+        {
+          id: 3,
+          date: "蛋白质",
+          name: "322",
+          address: "123.91",
+          children: [
+            {
+              id: 31,
+              date: "完全蛋白质",
+              name: "233",
+              address: "94",
+            },
+            {
+              id: 32,
+              date: "半完全蛋白质",
+              name: "234",
+              address: "94",
+            },
+          ],
+        },
+      ],
+      WeekInfo: {
+        weekType: "", //周期类型
+        WeekTtitle: "", //周期标题
+        Weekdetails: "", //周期明细
+        weekValue: "",
+        foodCatalog: [], //餐点类型
+        crowd: "", //人群
+        shareOrg: true,
+      },
+      activeName: "first",
+      activeName2: 'thread',
+      // 表格头部
+      headers: [],
+      // 表格数据
+      datas: [],
+      WeekList: [], //所选的时间周期
+      FoodTypeList: [], //所选餐点类型
+      rebuild: false,
+      showFoodList: false,
+      personMenuDishList:[],
+      menuDishList: [
+        {
+          id: 1,
+          label: "番茄鸡蛋",
+          node: {
+            id: 102,
+            name: "番茄鸡蛋",
+            count: 1,
             children: [
-              {
-                id: 31,
-                date: "完全蛋白质",
-                name: "233",
-                address: "94",
-              },
-              {
-                id: 32,
-                date: "半完全蛋白质",
-                name: "234",
-                address: "94",
-              },
+              { id: 101001, name: "绿豆", count: 1 },
+              { id: 101002, name: "白糖", count: 1 },
             ],
           },
-        ],
-        crowdData:[],
-        WeekInfo: {
-          weekType: "", //周期类型
-          WeekTtitle: "", //周期标题
-          Weekdetails: "", //周期明细
-          weekValue: "",
-          foodCatalog: [], //餐点类型
-          crowd: "", //人群
-          shareOrg: true,
         },
-        activeName: "first",
-        activeName2: 'thread',
-        // 表格头部
-        headers: [],
-        // 表格数据
-        datas: [],
-        WeekList: [], //所选的时间周期
-        FoodTypeList: [], //所选餐点类型
-        rebuild: false,
-        showFoodList: false,
-        // defaultProps:{
-        //
-        // },
-        personMenuDishList:[],
-        menuDishList: [
-          {
-            id: 1,
-            label: "番茄鸡蛋",
-            node: {
-              id: 102,
-              name: "番茄鸡蛋",
-              count: 1,
-              children: [
-                { id: 101001, name: "绿豆", count: 1 },
-                { id: 101002, name: "白糖", count: 1 },
-              ],
-            },
+        {
+          id: 2,
+          label: "绿豆粥",
+          node: {
+            id: 103,
+            name: "绿豆粥",
+            count: 1,
+            children: [
+              { id: 101001, name: "绿豆", count: 1 },
+              { id: 101002, name: "白糖", count: 1 },
+            ],
           },
-          {
-            id: 2,
-            label: "绿豆粥",
-            node: {
-              id: 103,
-              name: "绿豆粥",
-              count: 1,
-              children: [
-                { id: 101001, name: "绿豆", count: 1 },
-                { id: 101002, name: "白糖", count: 1 },
-              ],
-            },
-          },
-        ],
-        mealListLeft:[
-          // {name:"周一食谱",id:"1"},
-          // {name:"周二食谱",id:"2"},
-          // {name:"周三食谱",id:"3"},
-          // {name:"周四食谱",id:"4"}
-        ],
-        peopleMealListLeft:[],
-        curentHoverFood:{},
-        //拖动的节点
-        drogNode: {},
-        //是否正在拖拽节点
-        drogNodeStats:false,
-        year:'',
-        month:'',
-        mealTypeData:[
-          {
-            name:"早餐",
-            value:"1"
-          },
-          {
-            name:"早点",
-            value:"2"
-          },
-          {
-            name:"午餐",
-            value:"3"
-          },
-          {
-            name:"午点",
-            value:"4"
-          },
-          {
-            name:"晚餐",
-            value:"5"
-          },
-          {
-            name:"晚点",
-            value:"6"
+        },
+      ],
+
+      mealListLeft:[
+        // {name:"周一食谱",id:"1"},
+        // {name:"周二食谱",id:"2"},
+        // {name:"周三食谱",id:"3"},
+        // {name:"周四食谱",id:"4"}
+      ],
+      peopleMealListLeft:[],
+      curentHoverFood:{},
+      //拖动的节点
+      drogNode: {},
+      //是否正在拖拽节点
+      drogNodeStats:false,
+      year:'',
+      month:'',
+      startTime:'',
+      endTime:'',
+      mealTypeData:[
+        {
+          name:"早餐",
+          value:"1"
+        },
+        {
+          name:"早点",
+          value:"2"
+        },
+        {
+          name:"午餐",
+          value:"3"
+        },
+        {
+          name:"午点",
+          value:"4"
+        },
+        {
+          name:"晚餐",
+          value:"5"
+        },
+        {
+          name:"晚点",
+          value:"6"
+        }
+      ]
+    };
+  },
+  beforeMount() {},
+  methods: {
+    personMealhandleNodeClick(id){
+      detail(id).then(res=>{
+        if(res.data.success){
+          let mealsType=[];
+          let data=res.data.data;
+          data.recipeCycles.forEach(_=>{
+            mealsType.push(_.mealsType);
+          })
+          let arr= Array.from(new Set(mealsType));
+          let foodCatalog=[]
+          for(let i=0;i<arr.length;i++){
+            foodCatalog.push(this.getmealTypeDataValue(arr[i]))
           }
-        ]
-      };
+          this.WeekInfo.foodCatalog=foodCatalog;
+          this.WeekInfo.weekType=res.data.data.recipeDay
+          this.WeekInfo.weekValue=new Date(res.data.data.startTime)
+          this.FixWeek();
+          this.ShowWeekSelect();
+          let recipeCycles=data.recipeCycles;
+          this.SelectWeek(new Date(data.startTime),data.recipeName,recipeCycles)
+          this.$refs.refweekSelect.hidePicker();
+          this.WeekInfo.Weekdetails=data.recipeName;
+          this.WeekInfo.crowd=data.peopleId;
+          this.WeekInfo.shareTell=data.isBoard=="1"?true:false
+          this.WeekInfo.collection=data.isUse==1?true:false;
+          this.WeekInfo.sharePlant=data.isPub==0?true:false
+          // this.id=data.id;
+          let that=this;
+          setTimeout(function () {
+            console.log(that.datas);
+            that.detailPushData(recipeCycles,that);
+            console.log(that.datas);
+          }, 1000);
+
+
+
+        }
+      })
     },
-    beforeMount() {},
-    methods: {
-      personMealhandleNodeClick(id){
-        console.log(this.datas)
-        detail(id).then(res=>{
-            if(res.data.success){
-              let mealsType=[];
-              let data=res.data.data;
-              data.recipeCycles.forEach(_=>{
-                mealsType.push(_.mealsType);
-              })
-               let arr= Array.from(new Set(mealsType));
-              for(let i=0;i<arr.length;i++){
-                this.WeekInfo.foodCatalog.push(this.getmealTypeDataValue(arr[i]))
+    //详情数据绑定前端
+    detailPushData(recipeCycles,that){
+      debugger
+      that.datas.forEach(_=>{
+        _.weeks.forEach(__=>{
+          /////
+          let foods=__.foods;
+          for(let i=0;i<recipeCycles.length;i++){
+
+            if(recipeCycles[i].mealsType+""==that.getmealTypeData(_.name)&&recipeCycles[i].week+""==__.name.slice(4)){
+              let recipeConncts=recipeCycles[i].recipeConncts;
+
+              for(let k=0;k<recipeConncts.length;k++){//菜品
+                let food={};
+                let recipevals=recipeConncts[k].recipevals;  let children=[];
+
+                for(let j=0;j<recipevals.length;j++){//食材
+                  children.push({id:recipevals[j].foodId,name:recipevals[j].foodName,count:recipevals[j].val})
+                }
+                food.id=recipeConncts[k].dishId;
+                food.name=recipeConncts[k].dishName;
+                food.count=recipeConncts[k].value;
+                food.children=children;
+                foods.push(food)
               }
             }
-        })
-      },
-      parentFn(score){
-          this.score=score;
-      },
-      initData(){
-        //公开
-        mealList(1).then(res=>{
-          this.mealListLeft=res.data.data;
-        })
-        mealList(2).then(res=>{
-          this.peopleMealListLeft=res.data.data;
-        })
-        //公共
-        getDishByBaseId(1).then(res=>{
-            if(res.data.success){
-              let data=[];
-              res.data.data.forEach(_=>{
-                let item={};
-                item["id"]=_.id;
-                item["label"]=_.typeName;
-                let children=[];
-                _.dishes.forEach(__=>{
-                  let item1={};
-                  item1["id"]=__.id;
-                  item1["label"]=__.dishName;
-                  children.push(item1)
-                })
-                item["children"]=children
-                data.push(item)
-              })
-              this.menuDishList=data;
-            }
-
-        })
-        //私人
-        getDishByBaseId(0).then(res=>{
-          if(res.data.success){
-            let data=[];
-            res.data.data.forEach(_=>{
-              let item={};
-              item["id"]=_.id;
-              item["label"]=_.typeName;
-              let children=[];
-              _.dishes.forEach(__=>{
-                let item1={};
-                item1["id"]=__.id;
-                item1["label"]=__.dishName;
-                children.push(item1)
-              })
-              item["children"]=children
-              data.push(item)
-            })
-            this.personMenuDishList=data;
           }
-        })
-        getList().then(res=>{
-          this.crowdData=res.data.data;
+          that.$set(__,"foods",foods);
         })
 
-      },
-      GetAbsoluteLocation(element)
-      {
-        if ( arguments.length != 1 || element == null )
-        {
-          return null;
+      })
+    },
+    parentFn(score){
+      this.score=score;
+    },
+
+    initMealData(){
+      //公开
+      mealList(1).then(res=>{
+        this.mealListLeft=res.data.data;
+      })
+
+      mealList(2).then(res=>{
+        this.peopleMealListLeft=res.data.data;
+      })
+    },
+    initData(){
+
+        this.initMealData();
+      //公共
+      getDishByBaseId(1).then(res=>{
+        if(res.data.success){
+          let data=[];
+          res.data.data.forEach(_=>{
+            let item={};
+            item["id"]=_.id;
+            item["label"]=_.typeName;
+            let children=[];
+            _.dishes.forEach(__=>{
+              let item1={};
+              item1["id"]=__.id;
+              item1["label"]=__.dishName;
+              children.push(item1)
+            })
+            item["children"]=children
+            data.push(item)
+          })
+          this.menuDishList=data;
         }
-        var offsetTop = element.offsetTop;
-        var offsetLeft = element.offsetLeft;
-        var offsetWidth = element.offsetWidth;
-        var offsetHeight = element.offsetHeight;
-        while( element = element.offsetParent )
-        {
+
+      })
+      //私人
+      getDishByBaseId(0).then(res=>{
+        if(res.data.success){
+          let data=[];
+          res.data.data.forEach(_=>{
+            let item={};
+            item["id"]=_.id;
+            item["label"]=_.typeName;
+            let children=[];
+            _.dishes.forEach(__=>{
+              let item1={};
+              item1["id"]=__.id;
+              item1["label"]=__.dishName;
+              children.push(item1)
+            })
+            item["children"]=children
+            data.push(item)
+          })
+          this.personMenuDishList=data;
+        }
+      })
+      getList().then(res=>{
+        this.crowdData=res.data.data;
+      })
+
+    },
+
+  GetAbsoluteLocation(element)
+  {
+      if ( arguments.length != 1 || element == null )
+      {
+          return null;
+      }
+      var offsetTop = element.offsetTop;
+      var offsetLeft = element.offsetLeft;
+      var offsetWidth = element.offsetWidth;
+      var offsetHeight = element.offsetHeight;
+      while( element = element.offsetParent )
+      {
           offsetTop += element.offsetTop;
           offsetLeft += element.offsetLeft;
-        }
-        return { absoluteTop: offsetTop, absoluteLeft: offsetLeft,
+      }
+      return { absoluteTop: offsetTop, absoluteLeft: offsetLeft,
           offsetWidth: offsetWidth, offsetHeight: offsetHeight };
-      },
+  },
 
-      MoveFoodLayer(ev){
-        var x=ev.pageX;
-        var y=ev.pageY;
-        this.$refs.foodmenudLayer.style.top=y+'px';
-        this.$refs.foodmenudLayer.style.left=x+'px';
-        this.$refs.foodmenudLayer.style.display="block";
-      },
-      //食谱跟随显示
-      ShowFoodTips(ev,f){
+  MoveFoodLayer(ev){
+    var x=ev.pageX;
+      var y=ev.pageY;
+      this.$refs.foodmenudLayer.style.top=y+'px';
+      this.$refs.foodmenudLayer.style.left=x+'px';
+      this.$refs.foodmenudLayer.style.display="block";
+  },
+    //食谱跟随显示
+    ShowFoodTips(ev,f){
 
+      var that=this;
+      this.curentHoverFood=f;
+
+      var pose= this.GetAbsoluteLocation(ev.srcElement);
+
+      pose.absoluteLeft+=ev.srcElement.offsetWidth+30;
+
+      setTimeout(() => {
+        that.$refs.layershipu.style.top=pose.absoluteTop+'px';
+        that.$refs.layershipu.style.left=pose.absoluteLeft+'px';
+        that.$refs.layershipu.style.display="block";
+      }, 200);
+
+    },
+    HidenFoodTips(ev)
+    {
+      setTimeout(() => {
+         this.$refs.layershipu.style.display="none";
+      }, 200);
+
+    },
+
+
+    drop(ev) {},
+    //菜谱拖动
+    foodmenueDragStart(node, ev) {
         var that=this;
-        this.curentHoverFood=f;
+      ev.srcElement.addEventListener("drag",function(e){
+        that.MoveFoodLayer(e);
+      });
 
-        var pose= this.GetAbsoluteLocation(ev.srcElement);
-
-        pose.absoluteLeft+=ev.srcElement.offsetWidth+30;
-
-        setTimeout(() => {
-          that.$refs.layershipu.style.top=pose.absoluteTop+'px';
-          that.$refs.layershipu.style.left=pose.absoluteLeft+'px';
-          that.$refs.layershipu.style.display="block";
-        }, 200);
-
-      },
-      HidenFoodTips(ev)
-      {
-        setTimeout(() => {
-          this.$refs.layershipu.style.display="none";
-        }, 200);
-
-      },
+      ev.srcElement.addEventListener("dragend",function(e){
+         that.$refs.foodmenudLayer.style.display="none";
+      });
 
 
-      drop(ev) {},
-      //菜谱拖动
-      foodmenueDragStart(node, ev) {
-        var that=this;
-        ev.srcElement.addEventListener("drag",function(e){
-          that.MoveFoodLayer(e);
-        });
-        ev.srcElement.addEventListener("dragend",function(e){
-          that.$refs.foodmenudLayer.style.display="none";
-        });
-        var that=this;
-        dishDetail(node.data.id).then(res=>{
-          let data=res.data.data;
-          if(data.dishMxVos){
-            let children=[];
-            data.dishMxVos.forEach(_=>{
-              let item={};
-              item["id"]=_.foodId;
-              item["name"]=_.name;
-              item["count"]=_.value
-              children.push(item);
-            })
-            debugger
-            let dishCount=0
-            data.dishMxVos.forEach(_=>{
-              dishCount+=parseFloat(_.value)
-            })
-            node.data={
+      var that=this;
+      dishDetail(node.data.id).then(res=>{
+        let data=res.data.data;
+        if(data.dishMxVos){
+          let children=[];
+          data.dishMxVos.forEach(_=>{
+            let item={};
+            item["id"]=_.foodId;
+            item["name"]=_.name;
+            item["count"]=_.value
+            children.push(item);
+          })
+          let dishCount=0
+          data.dishMxVos.forEach(_=>{
+            dishCount+=parseFloat(_.value)
+          })
+          node.data={
+            id:data.id,
+            label:data.dishName,
+            node:{
               id:data.id,
-              label:data.dishName,
-              node:{
-                id:data.id,
-                name:data.dishName,
-                count:dishCount,
-                children:children
-              }
+              name:data.dishName,
+              count:dishCount,
+              children:children
             }
           }
-          that.drogNode = JSON.parse(JSON.stringify(node.data));
+        }
+        that.drogNode = JSON.parse(JSON.stringify(node.data));
 
-          ev.dataTransfer.setData("Text", JSON.stringify(node.data));
-          that.drogNodeStats=true;
-        })
+        ev.dataTransfer.setData("Text", JSON.stringify(node.data));
+        that.drogNodeStats=true;
+      })
 
 
+    },
+    foodmenueDragEnd(a, b, c) {
+      this.drogNodeStats=false;
+      this.$refs.foodmenudLayer.style.display="none";
 
+      return false;
+    },
+    tfractio() {
+      this.drawer = true;
+    },
+    wrapscan() {
+      this.pointscan = true;
+    },
+    getmealTypeData(name){
+      return  this.mealTypeData.filter(_=>{
+        if(_.name==name){
+          return _.value
+        }
+      })[0].value
+    },
+    getmealTypeDataValue(value){
+      return  this.mealTypeData.filter(_=>{
+        if(_.value==value){
+          return _.value
+        }
+      })[0].name
+    },
+    buttonend() {
 
-      },
-      foodmenueDragEnd(a, b, c) {
-        this.drogNodeStats=false;
-        this.$refs.foodmenudLayer.style.display="none";
-
-        return false;
-      },
-      tfractio() {
-        this.drawer = true;
-      },
-      wrapscan() {
-        this.pointscan = true;
-      },
-      getmealTypeData(name){
-        return  this.mealTypeData.filter(_=>{
-          if(_.name==name){
-            return _.value
-          }
-        })[0].value
-      },
-      getmealTypeDataValue(value){
-        return  this.mealTypeData.filter(_=>{
-          if(_.value==value){
-            return _.value
-          }
-        })[0].name
-      },
-      buttonend() {
-        debugger
-
-        let recipeCycles=[];
-        this.datas.forEach(_=>{
-          _.weeks.forEach(__=>{
-            __.foods.forEach(___=>{
-              if( ___.children){
-                let children=[];
-                ___.children.forEach(____=>{
-                  children.push({
-                    foodId:____.id,
-                    val:____.count,
-                  })
+      let recipeCycles=[];
+      this.datas.forEach(_=>{
+        _.weeks.forEach(__=>{
+          __.foods.forEach(___=>{
+            if( ___.children){
+              let children=[];
+              ___.children.forEach(____=>{
+                children.push({
+                  foodId:____.id,
+                  val:____.count,
                 })
-                recipeCycles.push({
-                  week:__.name.slice(4),
-                  mealsType:this.getmealTypeData(_.name),
-                  dishId:___.id,
-                  value:___.count,
-                  year:this.year,
-                  month:this.month,
-                  childrens:children
-                })
-              }
+              })
+              recipeCycles.push({
+                week:__.name.slice(4),
+                mealsType:this.getmealTypeData(_.name),
+                dishId:___.id,
+                value:___.count,
+                year:this.year,
+                month:this.month,
+                childrens:children
+              })
+            }
 
-            })
           })
         })
-        let row={
-          recipeName:this.WeekInfo.Weekdetails,
-          peopleId:this.WeekInfo.crowd,
-          isPub:this.WeekInfo.sharePlant?0:1,
-          recipeDay:this.WeekInfo.weekType,
-          recipeCycles:recipeCycles,
-          isUse:this.WeekInfo.collection?1:0,
-          recipeCategory:1
-          start_time
-        }
-        console.log(this.datas);
+      })
+      let row={
+        recipeName:this.WeekInfo.Weekdetails,
+        peopleId:this.WeekInfo.crowd,
+        isPub:this.WeekInfo.sharePlant?0:1,
+        recipeDay:this.WeekInfo.weekType,
+        recipeCycles:recipeCycles,
+        isUse:this.WeekInfo.collection?1:0,
+        recipeCategory:1,
+        startTime:this.startTime,
+        endTime:this.endTime,
+        isBoard:this.WeekInfo.shareTell?1:0
+      }
+      if(this.id){
+        row["id"]=this.id;
+        update(row).then(res=>{
+          if(res.data.success){
+            this.$message({
+              type: "success",
+              message: "编辑成功!"
+            });
+            this.initMealData();
+          }
+        })
+      }else{
         save(row).then(res=>{
           if(res.data.success){
             this.$message({
               type: "success",
               message: "新增成功!"
             });
+            this.initMealData();
           }
         })
-      },
-      // init() {
-      //   this.initRemoteData();
-      // },
+      }
 
-      //重新构建表格
-      rebuildTable() {
-        debugger
-        var that = this;
-        this.headers = [];
-        setTimeout(function () {
-          var hd = JSON.parse(JSON.stringify(that.WeekList));
-          for (let j = 0; j < hd.length; j++) {
-            that.headers.push(hd[j]);
-          }
-          that.initEmptyData();
-        }, 100);
-      },
+      console.log(this.datas);
 
-      //餐点类型改变
-      AppendFoodType() {
-        var date3 = JSON.parse(JSON.stringify(this.WeekInfo.foodCatalog));
 
-        //新增餐点类型
-        for (let i = 0; i < date3.length; i++) {
-          if (!this.hasFoodType(date3[i])) {
-            var row = {
-              id: this.guid(),
-              pid: this.id,
-              name: date3[i],
-              weeks: [],
-            };
 
-            // 填充周数据
-            for (let j = 0; j < 7; j++) {
-              row.weeks.push({
-                id: this.guid(),
-                week: this.headers[j],
-                name: "week" + (j + 1),
-                image: "",
-                // 填充食谱数据
-                foods: [],
-              });
-            }
-
-            this.datas.push(row);
-          }
+    },
+    init() {
+      this.initRemoteData();
+    },
+    //重新构建表格
+    rebuildTable() {
+      var that = this;
+      this.headers = [];
+      setTimeout(function () {
+        var hd = JSON.parse(JSON.stringify(that.WeekList));
+        for (let j = 0; j < hd.length; j++) {
+          that.headers.push(hd[j]);
         }
+        that.initEmptyData();
+      }, 100);
+    },
 
-        //删除餐点类型
-        var deleteList = [];
-        for (let i = 0; i < this.datas.length; i++) {
-          var needremove = true;
-          this.WeekInfo.foodCatalog.forEach((e) => {
-            if (e == this.datas[i].name) {
-              needremove = false;
-            }
-          });
+    //餐点类型改变
+    AppendFoodType() {
+      var date3 = JSON.parse(JSON.stringify(this.WeekInfo.foodCatalog));
 
-          if (needremove) {
-            deleteList.push(i);
-          }
-        }
-        deleteList.forEach((e) => {
-          this.datas.splice(e, 1);
-        });
-
-        console.log(JSON.stringify(this.datas));
-      },
-
-      hasFoodType(foodTypeName) {
-        var result = this.datas.find((p) => p.name == foodTypeName);
-        if (!result) {
-          return false;
-        } else {
-          return true;
-        }
-      },
-      // 初始化表格数据(根据id获取远程数据)
-      initEmptyData() {
-        debugger
-        this.datas = [];
-        var date3 = JSON.parse(JSON.stringify(this.WeekInfo.foodCatalog));
-        for (let i = 0; i < date3.length; i++) {
+      //新增餐点类型
+      for (let i = 0; i < date3.length; i++) {
+        if (!this.hasFoodType(date3[i])) {
           var row = {
             id: this.guid(),
             pid: this.id,
@@ -955,434 +989,496 @@
               foods: [],
             });
           }
-
           this.datas.push(row);
         }
-      },
+      }
 
-      // ///初始化远程数据
-      // initRemoteData() {
-      //   var remoteStr =
-      //     // '[{"id":"7317b146-7fc5-fcbd-2969-5b59f321e831","name":"早餐","weeks":[{"id":"79ba0527-a10a-22e0-2df4-b58d9c8b1191","week":{"name":"week1","lable":"周一","date":"11月2日","is_vacation":false},"name":"week1","image":"","foods":[{"id":101,"name":"绿豆粥","count":1,"children":[{"id":101001,"name":"绿豆","count":1,"spans":3},{"id":101002,"name":"白糖","count":1,"spans":3}],"spans":3}]},{"id":"880061e2-66d2-fed1-11bc-b9b2489fc0af","week":{"name":"week2","lable":"周二","date":"11月3日","is_vacation":false},"name":"week2","image":"","foods":[]},{"id":"ee2c62a0-5d95-9d34-0df3-212081347a45","week":{"name":"week3","lable":"周三","date":"11月4日","is_vacation":false},"name":"week3","image":"","foods":[]},{"id":"7383fe68-8ec8-e72b-879d-d99805c9813f","week":{"name":"week4","lable":"周四","date":"11月5日","is_vacation":false},"name":"week4","image":"","foods":[]},{"id":"148b984c-76f5-b856-3965-6925b0f1e694","week":{"name":"week5","lable":"周五","date":"11月6日","is_vacation":false},"name":"week5","image":"","foods":[]},{"id":"2b524e1a-4b03-d446-f09e-597a4afce450","name":"week6","image":"","foods":[]},{"id":"8eac338a-acda-78c2-e837-bae237cad7ea","name":"week7","image":"","foods":[]}]}]';
-      //     '[{"id":"7317b146-7fc5-fcbd-2969-5b59f321e831","name":"早餐","weeks":[{"id":"79ba0527-a10a-22e0-2df4-b58d9c8b1191","week":{"name":"week1","lable":"周一","date":"11月2日","is_vacation":false},"name":"week1","image":"","foods":[{"id":101,"name":"绿豆粥","count":1,"children":[{"id":101001,"name":"绿豆","count":1,"spans":3},{"id":101002,"name":"白糖","count":1,"spans":3}],"spans":3}]},{"id":"880061e2-66d2-fed1-11bc-b9b2489fc0af","week":{"name":"week2","lable":"周二","date":"11月3日","is_vacation":false},"name":"week2","image":"","foods":[]},{"id":"ee2c62a0-5d95-9d34-0df3-212081347a45","week":{"name":"week3","lable":"周三","date":"11月4日","is_vacation":false},"name":"week3","image":"","foods":[]},{"id":"7383fe68-8ec8-e72b-879d-d99805c9813f","week":{"name":"week4","lable":"周四","date":"11月5日","is_vacation":false},"name":"week4","image":"","foods":[]},{"id":"148b984c-76f5-b856-3965-6925b0f1e694","week":{"name":"week5","lable":"周五","date":"11月6日","is_vacation":false},"name":"week5","image":"","foods":[]},{"id":"2b524e1a-4b03-d446-f09e-597a4afce450","name":"week6","image":"","foods":[]},{"id":"8eac338a-acda-78c2-e837-bae237cad7ea","name":"week7","image":"","foods":[]}]}]';
-      //   var remoteData = JSON.parse(remoteStr);
-      //   this.headers = [];
-      //   remoteData[0].weeks.forEach((e) => {
-      //     if (e.week) {
-      //       this.headers.push(e.week);
-      //     }
-      //   });
-      //   this.datas = remoteData;
-      // },
-      //生成随机 GUID 数
-      guid() {
-        function S4() {
-          return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+      //删除餐点类型
+      var deleteList = [];
+      for (let i = 0; i < this.datas.length; i++) {
+        var needremove = true;
+        this.WeekInfo.foodCatalog.forEach((e) => {
+          if (e == this.datas[i].name) {
+            needremove = false;
+          }
+        });
+
+        if (needremove) {
+          deleteList.push(i);
         }
-        return (
-          S4() +
-          S4() +
-          "-" +
-          S4() +
-          "-" +
-          S4() +
-          "-" +
-          S4() +
-          "-" +
-          S4() +
-          S4() +
-          S4()
-        );
-      },
-      //周选择添加周次
-      FixWeek() {
-        var weekSelect = document.getElementsByName("WeekSelect");
-        if (weekSelect == undefined) return;
-
-        if (weekSelect[0].getAttribute("isFixWeek") != undefined) return;
-
-        setTimeout(function () {
-          var zs = document.createElement("th");
-          zs.innerText = "周次";
-          var RootweekFirst = document.querySelector(
-            ".el-picker-panel__content table tr th"
-          );
-          var Rootweek = document.querySelector(".el-picker-panel__content tr");
-          Rootweek.insertBefore(zs, RootweekFirst);
-          var listRow = document.querySelectorAll(".el-date-table__row");
-
-          for (var i = 0; i < listRow.length; i++) {
-            var firstNode = listRow[i].children[0];
-            var zs_index = document.createElement("td");
-            zs_index.style.fontWeight = "bold";
-            zs_index.style.color = "#fe6c6f";
-            var z = i + 1;
-            switch (z) {
-              case 1:
-                zs_index.innerText = "一";
-                break;
-              case 2:
-                zs_index.innerText = "二";
-                break;
-              case 3:
-                zs_index.innerText = "三";
-                break;
-              case 4:
-                zs_index.innerText = "四";
-                break;
-              case 5:
-                zs_index.innerText = "五";
-                break;
-              case 6:
-                zs_index.innerText = "六";
-                break;
-            }
-
-            listRow[i].insertBefore(zs_index, firstNode);
-          }
-          document
-            .getElementsByName("WeekSelect")[0]
-            .setAttribute("isFixWeek", "true");
-        }, 100);
-      },
-      GetChinesDay(z) {
-        var cday = "";
-        switch (z) {
-          case 1:
-            cday = "一";
-            break;
-          case 2:
-            cday = "二";
-            break;
-          case 3:
-            cday = "三";
-            break;
-          case 4:
-            cday = "四";
-            break;
-          case 5:
-            cday = "五";
-            break;
-          case 6:
-            cday = "六";
-            break;
-          case 7:
-            cday = "天";
-            break;
-        }
-
-        return cday;
-      },
-      //选择周
-      SelectWeek(d) {
-        var that = this;
-        debugger
-        setTimeout(function (v) {
-
-          var year = d.getFullYear();
-          that.year=year;
-          var begin_year;
-          var end_year;
-          begin_year = year;
-          end_year = year;
-          var begin_mouth;
-
-
-          var end_mouth;
-          var mouth = d.getMonth() + 1;
-
-          begin_mouth = mouth;
-          end_mouth = mouth;
-          var StartEliment = document.querySelectorAll(".in-range.start-date");
-          var begin_day = StartEliment[0].innerText.trim();
-          that.month=begin_mouth+"-"+begin_day+"";
-          //判断是否为上一个月
-          if (StartEliment[0].className.indexOf("prev-month") >= 0) {
-            begin_mouth = mouth - 1;
-            if (begin_mouth == 0) {
-              begin_mouth = 12;
-            }
-          }
-
-          //判断是否为下一个月
-          var endtime = document.querySelectorAll(".in-range.end-date");
-          if (endtime[0].className.indexOf("next-month") >= 0) {
-            if (mouth == 12) {
-              end_year = end_year + 1;
-              end_mouth = 1;
-            }
-          }
-          var end_day = endtime[0].innerText.trim();
-
-          //获取周数本月
-
-          //获取周数
-          var curentWeek = document.querySelectorAll(
-            ".el-date-table__row.current"
-          )[0].firstChild.innerText;
-
-          var full_week = year + "年" + mouth + "月" + "第" + curentWeek + "周";
-
-          that.WeekInfo.WeekTtitle = full_week;
-          debugger
-          if(parseInt(begin_day)>parseInt(end_day)) {
-
-            end_mouth+=1;
-            if(end_mouth>12){
-              end_mouth=1
-            }
-          }
-          var full_weekDetails =
-            year +
-            "年" +
-            mouth +
-            "月" +
-            "第" +
-            curentWeek +
-            "周" +
-            // begin_year +
-            // "-" +
-            begin_mouth +
-            "-" +
-            begin_day +
-            "至" +
-            // end_year +
-            // "-" +
-            end_mouth +
-            "-" +
-            end_day;
-
-          that.WeekInfo.Weekdetails = full_weekDetails;
-
-          //获取每天
-          that.WeekList = [];
-
-          var alldday = document.querySelectorAll(
-            ".el-date-table__row.current"
-          )[0].children;
-          for (let i = 1; i < alldday.length; i++) {
-            if (i <= that.WeekInfo.weekType) {
-              var y = year;
-              var m = mouth;
-              if (alldday[i].className.indexOf("prev-month") >= 0) {
-                m = mouth - 1;
-                if (m == 0) {
-                  m = 12;
-                }
-              }
-
-              if (alldday[i].className.indexOf("next-month") >= 0) {
-                if (mouth == 12) {
-                  y = year + 1;
-                  m = 1;
-                }
-              }
-
-              that.WeekList.push({
-                name: "week" + i,
-                lable: "周" + that.GetChinesDay(i),
-                date: m + "月" + alldday[i].innerText.trim() + "日",
-                is_vacation: false,
-              });
-            }
-          }
-
-          //console.log(JSON.stringify(that.WeekList));
-
-          that.rebuildTable();
-        }, 100);
-      },
-      //打开周选择
-      ShowWeekSelect() {
-        this.$refs.refweekSelect.showPicker();
-      },
+      }
+      deleteList.forEach((e) => {
+        this.datas.splice(e, 1);
+      });
     },
-  };
+
+    hasFoodType(foodTypeName) {
+      var result = this.datas.find((p) => p.name == foodTypeName);
+      if (!result) {
+        return false;
+      } else {
+        return true;
+      }
+    },
+    // 初始化表格数据(根据id获取远程数据)
+    initEmptyData() {
+      this.datas = [];
+      var date3 = JSON.parse(JSON.stringify(this.WeekInfo.foodCatalog));
+      for (let i = 0; i < date3.length; i++) {
+        var row = {
+          id: this.guid(),
+          pid: this.id,
+          name: date3[i],
+          weeks: [],
+        };
+
+        // 填充周数据
+        for (let j = 0; j < 7; j++) {
+          row.weeks.push({
+            id: this.guid(),
+            week: this.headers[j],
+            name: "week" + (j + 1),
+            image: "",
+            // 填充食谱数据
+            foods: [],
+          });
+        }
+        this.datas.push(row);
+
+      }
+    },
+
+    ///初始化远程数据
+    initRemoteData() {
+      var remoteStr =
+        // '[{"id":"7317b146-7fc5-fcbd-2969-5b59f321e831","name":"早餐","weeks":[{"id":"79ba0527-a10a-22e0-2df4-b58d9c8b1191","week":{"name":"week1","lable":"周一","date":"11月2日","is_vacation":false},"name":"week1","image":"","foods":[{"id":101,"name":"绿豆粥","count":1,"children":[{"id":101001,"name":"绿豆","count":1,"spans":3},{"id":101002,"name":"白糖","count":1,"spans":3}],"spans":3}]},{"id":"880061e2-66d2-fed1-11bc-b9b2489fc0af","week":{"name":"week2","lable":"周二","date":"11月3日","is_vacation":false},"name":"week2","image":"","foods":[]},{"id":"ee2c62a0-5d95-9d34-0df3-212081347a45","week":{"name":"week3","lable":"周三","date":"11月4日","is_vacation":false},"name":"week3","image":"","foods":[]},{"id":"7383fe68-8ec8-e72b-879d-d99805c9813f","week":{"name":"week4","lable":"周四","date":"11月5日","is_vacation":false},"name":"week4","image":"","foods":[]},{"id":"148b984c-76f5-b856-3965-6925b0f1e694","week":{"name":"week5","lable":"周五","date":"11月6日","is_vacation":false},"name":"week5","image":"","foods":[]},{"id":"2b524e1a-4b03-d446-f09e-597a4afce450","name":"week6","image":"","foods":[]},{"id":"8eac338a-acda-78c2-e837-bae237cad7ea","name":"week7","image":"","foods":[]}]}]';
+        '[{"id":"7317b146-7fc5-fcbd-2969-5b59f321e831","name":"早餐","weeks":[{"id":"79ba0527-a10a-22e0-2df4-b58d9c8b1191","week":{"name":"week1","lable":"周一","date":"11月2日","is_vacation":false},"name":"week1","image":"","foods":[{"id":101,"name":"绿豆粥","count":1,"children":[{"id":101001,"name":"绿豆","count":1,"spans":3},{"id":101002,"name":"白糖","count":1,"spans":3}],"spans":3}]},{"id":"880061e2-66d2-fed1-11bc-b9b2489fc0af","week":{"name":"week2","lable":"周二","date":"11月3日","is_vacation":false},"name":"week2","image":"","foods":[]},{"id":"ee2c62a0-5d95-9d34-0df3-212081347a45","week":{"name":"week3","lable":"周三","date":"11月4日","is_vacation":false},"name":"week3","image":"","foods":[]},{"id":"7383fe68-8ec8-e72b-879d-d99805c9813f","week":{"name":"week4","lable":"周四","date":"11月5日","is_vacation":false},"name":"week4","image":"","foods":[]},{"id":"148b984c-76f5-b856-3965-6925b0f1e694","week":{"name":"week5","lable":"周五","date":"11月6日","is_vacation":false},"name":"week5","image":"","foods":[]},{"id":"2b524e1a-4b03-d446-f09e-597a4afce450","name":"week6","image":"","foods":[]},{"id":"8eac338a-acda-78c2-e837-bae237cad7ea","name":"week7","image":"","foods":[]}]}]';
+      var remoteData = JSON.parse(remoteStr);
+      this.headers = [];
+      remoteData[0].weeks.forEach((e) => {
+        if (e.week) {
+          this.headers.push(e.week);
+        }
+      });
+      this.datas = remoteData;
+    },
+    //生成随机 GUID 数
+    guid() {
+      function S4() {
+        return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+      }
+      return (
+        S4() +
+        S4() +
+        "-" +
+        S4() +
+        "-" +
+        S4() +
+        "-" +
+        S4() +
+        "-" +
+        S4() +
+        S4() +
+        S4()
+      );
+    },
+    //周选择添加周次
+    FixWeek() {
+      var weekSelect = document.getElementsByName("WeekSelect");
+      if (weekSelect == undefined) return;
+
+      if (weekSelect[0].getAttribute("isFixWeek") != undefined) return;
+
+      setTimeout(function () {
+        var zs = document.createElement("th");
+        zs.innerText = "周次";
+        var RootweekFirst = document.querySelector(
+          ".el-picker-panel__content table tr th"
+        );
+        var Rootweek = document.querySelector(".el-picker-panel__content tr");
+        Rootweek.insertBefore(zs, RootweekFirst);
+        var listRow = document.querySelectorAll(".el-date-table__row");
+
+        for (var i = 0; i < listRow.length; i++) {
+          var firstNode = listRow[i].children[0];
+          var zs_index = document.createElement("td");
+          zs_index.style.fontWeight = "bold";
+          zs_index.style.color = "#fe6c6f";
+          var z = i + 1;
+          switch (z) {
+            case 1:
+              zs_index.innerText = "一";
+              break;
+            case 2:
+              zs_index.innerText = "二";
+              break;
+            case 3:
+              zs_index.innerText = "三";
+              break;
+            case 4:
+              zs_index.innerText = "四";
+              break;
+            case 5:
+              zs_index.innerText = "五";
+              break;
+            case 6:
+              zs_index.innerText = "六";
+              break;
+          }
+
+          listRow[i].insertBefore(zs_index, firstNode);
+        }
+        document
+          .getElementsByName("WeekSelect")[0]
+          .setAttribute("isFixWeek", "true");
+      }, 100);
+    },
+    GetChinesDay(z) {
+      var cday = "";
+      switch (z) {
+        case 1:
+          cday = "一";
+          break;
+        case 2:
+          cday = "二";
+          break;
+        case 3:
+          cday = "三";
+          break;
+        case 4:
+          cday = "四";
+          break;
+        case 5:
+          cday = "五";
+          break;
+        case 6:
+          cday = "六";
+          break;
+        case 7:
+          cday = "天";
+          break;
+      }
+
+      return cday;
+    },
+    //选择周
+    SelectWeek(d,name,recipeCycles) {
+
+      if(typeof  d =="string"){
+        d=new Date(d)
+      }
+      var that = this;
+      setTimeout(function (v) {
+
+        var year = d.getFullYear();
+        that.year=year;
+        that.startTime=d;
+        var begin_year;
+        var end_year;
+        begin_year = year;
+        end_year = year;
+        var begin_mouth;
+        var end_mouth;
+        var mouth = d.getMonth() + 1;
+
+        begin_mouth = mouth;
+        end_mouth = mouth;
+        var StartEliment = document.querySelectorAll(".in-range.start-date");
+        var begin_day = StartEliment[0].innerText.trim();
+        that.month=begin_mouth+"-"+begin_day+"";
+        //判断是否为上一个月
+        if (StartEliment[0].className.indexOf("prev-month") >= 0) {
+          begin_mouth = mouth - 1;
+          if (begin_mouth == 0) {
+            begin_mouth = 12;
+          }
+        }
+
+        //判断是否为下一个月
+        var endtime = document.querySelectorAll(".in-range.end-date");
+        if (endtime[0].className.indexOf("next-month") >= 0) {
+          if (mouth == 12) {
+            end_year = end_year + 1;
+            end_mouth = 1;
+          }
+        }
+        var end_day = endtime[0].innerText.trim();
+
+        //获取周数本月
+
+        //获取周数
+        var curentWeek = document.querySelectorAll(
+          ".el-date-table__row.current"
+        )[0].firstChild.innerText;
+
+        var full_week = year + "年" + mouth + "月" + "第" + curentWeek + "周";
+
+        that.WeekInfo.WeekTtitle = full_week;
+        if(parseInt(begin_day)>parseInt(end_day)) {
+          end_mouth=begin_mouth+1;
+          if(end_mouth>12){
+            end_mouth=1
+          }
+        }
+        var full_weekDetails =
+          year +
+          "年" +
+          mouth +
+          "月" +
+          "第" +
+          curentWeek +
+          "周" +
+          // begin_year +
+          // "-" +
+          begin_mouth +
+          "-" +
+          begin_day +
+          "至" +
+          // end_year +
+          // "-" +
+          end_mouth +
+          "-" +
+          end_day;
+
+        if(name){
+          that.WeekInfo.Weekdetails=name;
+        }else{
+          that.WeekInfo.Weekdetails = full_weekDetails;
+        }
+        that.endTime=new Date(begin_mouth+"-"+begin_day);
+
+        //获取每天
+        that.WeekList = [];
+
+        var alldday = document.querySelectorAll(
+          ".el-date-table__row.current"
+        )[0].children;
+        for (let i = 1; i < alldday.length; i++) {
+          if (i <= that.WeekInfo.weekType) {
+            var y = year;
+            var m = mouth;
+            if (alldday[i].className.indexOf("prev-month") >= 0) {
+              m = mouth - 1;
+              if (m == 0) {
+                m = 12;
+              }
+            }
+
+            if (alldday[i].className.indexOf("next-month") >= 0) {
+              if (mouth == 12) {
+                y = year + 1;
+                m = 1;
+              }
+            }
+
+            that.WeekList.push({
+              name: "week" + i,
+              lable: "周" + that.GetChinesDay(i),
+              date: m + "月" + alldday[i].innerText.trim() + "日",
+              is_vacation: false,
+            });
+          }
+        }
+
+        //console.log(JSON.stringify(that.WeekList));
+
+        that.rebuildTable();
+      }, 100);
+    },
+    //打开周选择
+    ShowWeekSelect() {
+      this.$refs.refweekSelect.showPicker();
+    },
+  },
+};
 </script>
 
 <style scoped>
-  .el-row {
-    padding: 5px;
-  }
-  .el-select .el-input {
-    width: 120px;
-  }
-  .el-form-item {
-    margin-bottom: 0px;
-  }
-  .el-divider {
-    margin: 0px !important;
-  }
-  .clearfix:before,
-  .clearfix:after {
-    display: table;
-    content: "";
-  }
-  .clearfix:after {
-    clear: both;
-  }
-  .box-car {
-    border: 1px solid #ebebeb !important;
-    border-radius: 3px !important;
-    padding: 0px;
-    height: 600px;
-  }
-  .el-card__body {
-    padding: 0px !important;
-  }
-  .panel_head {
-    background-color: rgba(0, 172, 160, 1);
-    padding-top: 10px;
-    text-align: center;
-    border-radius: 3px;
-  }
-  .panel_head button {
-    border-bottom: 0px;
-    border-bottom-right-radius: 0px;
-    border-bottom-left-radius: 0px;
-    margin-bottom: 1px;
-  }
-  .foodWeekListHis {
-    padding: 5px;
-  }
-  .foodWeekListHis li {
-    list-style: none;
-    margin-bottom: 5px;
-  }
-  .foodPanel {
-     height: calc(100vh - 180px);
-    overflow-y: scroll;
-    overflow-x: auto;
-  }
-  .foodrate {
-    width: 100%;
-    height: 50px;
-    /* background-color: red; */
-    text-align: center;
-    margin-bottom: 50px;
-  }
-  .scores {
-    cursor: pointer;
-    width: 180px;
-    height: 90px;
-    /* background-color: red; */
-    position: absolute;
-    top: 110px;
-    right: 70px;
-    display: flex;
-    /* border-radius: 50%;
-    background-image: url("/img/yuan.png");
-    background-size: 100% 100%; */
-  }
-  .scores1 {
-    width: 90px;
-    height: 90px;
-    /* background-color: yellow; */
-    border-radius: 50%;
-    background-image: url("/img/yuan.png");
-    background-size: 100% 100%;
-  }
-  .scores2 {
-    width: 80px;
-    height: 65px;
-    margin-top: 20px;
-    display: flex;
-    margin-left: -5px;
-    /* background-color: blue; */
-    background-image: url("/img/fenshu1.png");
-    background-size: 100% 100%;
-  }
-  .gnus {
-    font-size: 24px;
-    text-align: center;
-    color: #ffffff;
-  }
-  .picture {
-    width: 30px;
-    height: 30px;
-    margin-top: 20px;
-    margin-left: 2px;
-  }
-  .vertical {
-    font-size: 20px;
-    color: #00bfaf;
-    line-height: 30px;
-    padding-left: 5px;
-  }
-  .scorefor {
-    text-align: center;
-    color: #ffffff;
-    font-size: 15px;
-    margin-top: -23px;
-  }
-  .header {
-    width: 100%;
-    height: 120px;
-    /* background-color: red; */
-  }
-  .time {
-    width: 100%;
-    height: 55px;
-  }
-  .nutrition {
-    width: 100%;
-    height: 55px;
-    /* background-color: blue; */
-  }
-  .action {
-    width: 23%;
-    height: 700px;
-    /* background: yellow; */
-    float: left;
-  }
-  .onblur {
-    width: 75%;
-    height: 700px;
-    /* background-color: red; */
-    float: left;
-    margin-left: 15px;
-    margin-bottom: 70px;
-  }
-  .arrow {
-    width: 100%;
-    height: 50px;
-    line-height: 50px;
-    /* background-color: blue; */
-    display: flex;
-  }
-  .season {
-    width: 80px;
-    height: 30px;
-    text-align: center;
-    color: #fff;
-    line-height: 30px;
-    margin-top: 10px;
-    background-color: rgba(255, 0, 0, 1);
-  }
+.el-row {
+  padding: 5px;
+}
+.el-select .el-input {
+  width: 120px;
+}
+.el-form-item {
+  margin-bottom: 0px;
+}
+.el-divider {
+  margin: 0px !important;
+}
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: "";
+}
+.clearfix:after {
+  clear: both;
+}
+.box-car {
+  border: 1px solid #ebebeb !important;
+  border-radius: 3px !important;
+  padding: 0px;
+  height: 600px;
+}
+.el-card__body {
+  padding: 0px !important;
+}
+.panel_head {
+  background-color: rgba(0, 172, 160, 1);
+  padding-top: 10px;
+  text-align: center;
+  border-radius: 3px;
+}
+.panel_head button {
+  border-bottom: 0px;
+  border-bottom-right-radius: 0px;
+  border-bottom-left-radius: 0px;
+  margin-bottom: 1px;
+}
+.foodWeekListHis {
+  padding: 5px;
+}
+.foodWeekListHis li {
+  list-style: none;
+  margin-bottom: 5px;
+}
+.foodPanel {
+   height: calc(100vh - 180px);
+  overflow-y: scroll;
+  overflow-x: auto;
+}
+.foodrate {
+  width: 100%;
+  height: 50px;
+  /* background-color: red; */
+  text-align: center;
+  margin-bottom: 50px;
+}
+.scores {
+  cursor: pointer;
+  width: 180px;
+  height: 90px;
+  /* background-color: red; */
+  position: absolute;
+  top: 110px;
+  right: 70px;
+  display: flex;
+  /* border-radius: 50%;
+  background-image: url("/img/yuan.png");
+  background-size: 100% 100%; */
+}
+.scores1 {
+  width: 90px;
+  height: 90px;
+  /* background-color: yellow; */
+  border-radius: 50%;
+  background-image: url("/img/yuan.png");
+  background-size: 100% 100%;
+}
+.scores2 {
+  width: 80px;
+  height: 65px;
+  margin-top: 10px;
+  display: flex;
+  margin-left: -5px;
+  /* background-color: blue; */
+  background-image: url("/img/fenshu1.png");
+  background-size: 100% 100%;
+}
+.gnus {
+  font-size: 24px;
+  text-align: center;
+  color: #ffffff;
+}
+.picture {
+  width: 30px;
+  height: 30px;
+  margin-top: 20px;
+  margin-left: 2px;
+}
+.vertical {
+  font-size: 20px;
+  color: #00bfaf;
+  line-height: 30px;
+  padding-left: 5px;
+}
+.scorefor {
+  text-align: center;
+  color: #ffffff;
+  font-size: 15px;
+  margin-top: -23px;
+}
+.header {
+  width: 100%;
+  height: 120px;
+  /* background-color: red; */
+}
+.time {
+  width: 100%;
+  height: 55px;
+}
+.nutrition {
+  width: 100%;
+  height: 55px;
+  /* background-color: blue; */
+}
+.action {
+  width: 23%;
+  height: 700px;
+  /* background: yellow; */
+  float: left;
+}
+.onblur {
+  width: 75%;
+  height: 700px;
+  /* background-color: red; */
+  float: left;
+  margin-left: 15px;
+  margin-bottom: 70px;
+}
+.arrow {
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+  /* background-color: blue; */
+  display: flex;
+}
+.season {
+  width: 80px;
+  height: 30px;
+  text-align: center;
+  color: #fff;
+  line-height: 30px;
+  margin-top: 10px;
+  background-color: rgba(255, 0, 0, 1);
+}
 
-  .season1 {
-    width: 80px;
-    height: 30px;
-    margin-left: 20px;
-    text-align: center;
-    color: #fff;
-    line-height: 30px;
-    margin-top: 10px;
-    background-color: rgba(0, 172, 160, 1);
-  }
-  .season2 {
-    width: 80px;
-    height: 30px;
-    margin-left: 20px;
-    text-align: center;
-    color: #fff;
-    line-height: 30px;
-    margin-top: 10px;
-    background-color: rgba(255, 153, 51, 1);
-  }
-  .fonts {
-    width: 100%;
-    /* height: 500px; */
-    /* background-color: yellow; */
+.season1 {
+  width: 80px;
+  height: 30px;
+  margin-left: 20px;
+  text-align: center;
+  color: #fff;
+  line-height: 30px;
+  margin-top: 10px;
+  background-color: rgba(0, 172, 160, 1);
+}
+.season2 {
+  width: 80px;
+  height: 30px;
+  margin-left: 20px;
+  text-align: center;
+  color: #fff;
+  line-height: 30px;
+  margin-top: 10px;
+  background-color: rgba(255, 153, 51, 1);
+}
+.fonts {
+  width: 100%;
+  /* height: 500px; */
+  /* background-color: yellow; */
+}
+  .el-checkbox{
+   width: 35px;
   }
 </style>

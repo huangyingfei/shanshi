@@ -48,6 +48,13 @@ export const save = (row) => {
     data:row
   })
 }
+export const update = (row) => {
+  return request({
+    url: '/api/blade-food/recipe/update',
+    method: 'post',
+    data:row
+  })
+}
 
 export const detail = (id) => {
   return request({
