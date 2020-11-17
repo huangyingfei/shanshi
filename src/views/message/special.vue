@@ -61,6 +61,14 @@
   } from "@/api/system/special";
   export default {
     data() {
+      const validate=(rule,value,callback)=>{
+        this.morenData.forEach(_=>{
+          if(!_.mealNum){
+            callback(new Error('默认餐别必填'));
+          }
+        })
+        callback();
+      }
       return {
 
         treeData: [],
@@ -76,7 +84,7 @@
               value:"1"
             }],
             mealCheck:false,
-            mealNum:undefined
+            mealNum:25
           },
           {
             dicData:[{
@@ -84,7 +92,7 @@
               value:"2"
             }],
             mealCheck:true,
-            mealNum:undefined
+            mealNum:5
           },
           {
             dicData:[{
@@ -92,7 +100,7 @@
               value:"3"
             }],
             mealCheck:true,
-            mealNum:undefined
+            mealNum:35
           },
           {
             dicData:[{
@@ -100,7 +108,7 @@
               value:"4"
             }],
             mealCheck:true,
-            mealNum:undefined
+            mealNum:5
           },
           {
             dicData:[{
@@ -108,7 +116,7 @@
               value:"5"
             }],
             mealCheck:false,
-            mealNum:undefined
+            mealNum:30
           },
           {
             dicData:[{
@@ -116,7 +124,7 @@
               value:6
             }],
             mealCheck:false,
-            mealNum:undefined
+            mealNum:5
           },
         ],
         specialForm:{
@@ -238,7 +246,8 @@
               label: '默认餐别',
               prop: 'moren',
               span:24,
-              formslot:true
+              formslot:true,
+              rules: [{required: true, validator: validate, trigger: 'blur'}]
             },
             {
               label: '人群特点',
@@ -263,13 +272,14 @@
           ids.forEach(_=>{
             people.push(_.studentId)
           })
+          debugger
           this.$set(this.specialForm,"people",people)
           this.$set(this.morenData[0],"mealNum",!res.data.data.breakfast?undefined:res.data.data.breakfast)
-          this.$set(this.morenData[1],"mealNum",!res.data.data.breakfast_snack?undefined:res.data.data.breakfast_snack)
+          this.$set(this.morenData[1],"mealNum",!res.data.data.breakfastSnack?undefined:res.data.data.breakfastSnack)
           this.$set(this.morenData[2],"mealNum",!res.data.data.lunch?undefined:res.data.data.lunch)
-          this.$set(this.morenData[3],"mealNum",!res.data.data.lunch_snack?undefined:data.data.lunch_snack)
+          this.$set(this.morenData[3],"mealNum",!res.data.data.lunchSnack?undefined:res.data.data.lunchSnack)
           this.$set(this.morenData[4],"mealNum",!res.data.data.dinner?undefined:res.data.data.dinner)
-          this.$set(this.morenData[5],"mealNum",!res.data.data.dinner_snack?undefined:res.data.data.dinner_snack)
+          this.$set(this.morenData[5],"mealNum",!res.data.data.dinnerSnack?undefined:res.data.data.dinnerSnack)
           if(res.data.data.defaultMeal){
             let defaultMeal =res.data.data.defaultMeal.split(",");
             this.morenData.forEach(_=>{
@@ -287,7 +297,25 @@
       },
       empty(){
         this.morenData.forEach(_=>{
-            this.$set(_,"mealNum",undefined)
+          if(_.dicData[0].value=="1"){
+            this.$set(_,"mealNum",25)
+          }
+          if(_.dicData[0].value=="2"){
+            this.$set(_,"mealNum",5)
+          }
+          if(_.dicData[0].value=="3"){
+            this.$set(_,"mealNum",35)
+          }
+          if(_.dicData[0].value=="4"){
+            this.$set(_,"mealNum",5)
+          }
+          if(_.dicData[0].value=="5"){
+            this.$set(_,"mealNum",30)
+          }
+          if(_.dicData[0].value=="6"){
+            this.$set(_,"mealNum",5)
+          }
+
           this.$set(_,"mealCheck",false)
             if(_.dicData[0].value=="2"||_.dicData[0].value=="3"||_.dicData[0].value=="4"){
               this.$set(_,"mealCheck",true)
@@ -302,7 +330,7 @@
         this.$set( this.specialForm,"remark",undefined)
         this.$set( this.specialForm,"avgAge",undefined)
         this.$set( this.specialForm,"proportion",undefined)
-        this.$set( this.specialForm,"proportion",undefined)
+        // this.$set( this.specialForm,"proportion",undefined)
       },
       addPeople(){
         this.empty();
@@ -337,11 +365,11 @@
           remark:this.specialForm.remark,
           defaultMeal:defaultMeal.substring(0,defaultMeal.length-1),
           breakfast:this.morenData[0].mealNum,
-          breakfast_snack:this.morenData[1].mealNum,
+          breakfastSnack:this.morenData[1].mealNum,
           lunch:this.morenData[2].mealNum,
-          lunch_snack:this.morenData[3].mealNum,
+          lunchSnack:this.morenData[3].mealNum,
           dinner:this.morenData[4].mealNum,
-          dinner_snack:this.morenData[5].mealNum,
+          dinnerSnack:this.morenData[5].mealNum,
         }
         debugger
         submit(row).then(res=>{

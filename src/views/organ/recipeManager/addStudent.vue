@@ -84,6 +84,7 @@ export default {
           {
             label: "幼儿号",
             prop: "childNo",
+            type:"number",
             rules: [
               {
                 required: true,
