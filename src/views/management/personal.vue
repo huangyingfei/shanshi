@@ -587,7 +587,7 @@
                     <span>{{ ruleFormUsers.desc }}</span>
                   </el-form-item>
                   <el-form-item label="图片"  style="width:350px">
-                    <img :src="this.dialogImageUrl" alt="">
+                    <img style="width:200px;height:200px" :src="this.rectangle" alt="">
                     <!-- <el-upload
                       action="https://jsonplaceholder.typicode.com/posts/"
                       list-type="picture-card"
@@ -678,6 +678,7 @@ export default {
       headerObj: {
         "Blade-Auth": ""
       }, //上传图片请求头
+      rectangle:"",
       ruleFormUsers: {
         //公共食材库
         region: "",
@@ -821,12 +822,13 @@ export default {
       this.ruleForm.resource = "";
       this.active = [];
       this.valuepark = [];
+          this.productImgs = [];
       // this.valuepark.length = 0;
       this.ruleForm.desc = "";
       this.ruleForm.delivery = false;
       this.ruleForm.delivery1 = false;
          this.mailto.forEach(item=>{
-            console.log(item)
+            // console.log(item)
         item.children.forEach(item1=>{
              item1.result=""   
         })
@@ -925,6 +927,7 @@ export default {
           seasons: this.active, //季节
           belongRegions: this.valuepark, //所属区域
           function: this.ruleForm.desc, //功用
+             pic: this.dialogImageUrl,
           isUse: this.ruleForm.delivery1 == false ? 1 : 0, //是否常用
           isPub: this.ruleForm.delivery == false ? 1 : 0, //是否公开
 
@@ -986,6 +989,7 @@ export default {
           seasons: this.active, //季节
           belongRegions: this.valuepark, //所属区域
           function: this.ruleForm.desc, //功用
+             pic: this.dialogImageUrl,
           isUse: this.ruleForm.delivery1 == false ? 1 : 0, //是否常用
           isPub: this.ruleForm.delivery == false ? 1 : 0, //是否分享平台
 
@@ -1053,7 +1057,14 @@ export default {
             });
             this.valuepark = bar;
             this.ruleForm.desc = this.inquired.function; //功用
-           
+
+                 let picture = [];//图片
+          if (this.inquired.pic) {
+            picture[0] = {
+              url: this.inquired.pic
+            };
+          };
+          this.productImgs = picture;
             this.ruleForm.delivery = this.inquired.isPub == 1 ? false : true; //公开
             // console.log(this.ruleForm.delivery);
             this.ruleForm.delivery1 = this.inquired.isUse == 1 ? false : true; //常用
@@ -1097,8 +1108,8 @@ export default {
             this.valuepark1 = addItem;
             // console.log(this.valuepark1);
             this.ruleFormUsers.desc = this.inquired.function; //功用
-             this.dialogImageUrl=this.inquired.pic;
-             console.log(this.dialogImageUrl);
+             this.rectangle=this.inquired.pic;
+            //  console.log(this.dialogImageUrl);
             this.ruleFormUsers.delivery =
               this.inquired.isPub == 0 ? false : true; //公开
             // console.log(this.ruleForm.delivery);
@@ -1459,7 +1470,7 @@ export default {
 }
 .saveas {
   width: 95%;
-  height: 490px;
+  height: 450px;
   margin-left: 40px;
   /* background-color: red; */
 }
