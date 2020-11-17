@@ -286,14 +286,21 @@
           </el-form-item>
           <el-form-item label="图片" style="width: 350px">
             <el-upload
-              action="https://jsonplaceholder.typicode.com/posts/"
+              action="api/blade-resource/oss/endpoint/put-file"
               list-type="picture-card"
+              :limit="imgLimit"
+              :file-list="productImgs"
+              :on-exceed="handleExceed"
               :on-preview="handlePictureCardPreview"
+              :before-upload="beforeAvatarUpload"
+              :on-success="handleAvatarSuccess"
               :on-remove="handleRemove"
+              :headers="headerObj"
             >
+              <!-- <img v-if="dialogImageUrl" :src="dialogImageUrl" class="avatar" /> -->
               <i class="el-icon-plus"></i>
             </el-upload>
-            <el-dialog :visible.sync="dialogVisible">
+            <el-dialog append-to-body :visible.sync="dialogVisible">
               <img width="100%" :src="dialogImageUrl" alt />
             </el-dialog>
           </el-form-item>
@@ -586,8 +593,13 @@ export default {
         }
       ],
 
-      dialogImageUrl: "", //上传图片
-      dialogVisible: false, //上传图片
+      dialogImageUrl: "", //图片
+      imgLimit: 1, //文件个数
+      productImgs: [],
+      dialogVisible: false,
+      headerObj: {
+        "Blade-Auth": ""
+      }, //上传图片请求头
       officeonce: [
         //菜品所含信息
         {
@@ -675,9 +687,17 @@ export default {
     this.muito(); //分类
     this.obtains(); //获取树形结构
     this.request();
+    this.Takeone();
   },
+  created() {},
   mounted() {},
   methods: {
+    //初始数据获取token
+    Takeone() {
+      let str = JSON.parse(localStorage.getItem("saber-token"));
+      this.headerObj["Blade-Auth"] = `bearer ${str.content}`;
+      console.log(this.headerObj);
+    },
     buttonClick(flat) {
       this.waterfall = flat;
       this.display = flat;
@@ -793,6 +813,13 @@ export default {
       this.value1 = [];
       this.valuepark = [];
       this.officeonce = [];
+      this.productImgs = [];
+      this.mailto.forEach(item => {
+        console.log(item);
+        item.children.forEach(item1 => {
+          item1.result = "";
+        });
+      });
       // console.log(this.editable);
       // this.$router.go(0);
     },
@@ -1060,6 +1087,7 @@ export default {
           function: this.ruleForm.region, //特点
           remark: this.ruleForm.desc, //做法
           belongRegions: this.valuepark, //省市区
+          pic: this.dialogImageUrl, //图片
           isUse: this.ruleForm.delivery1 == false ? 1 : 0, //是否常用
           isPub: this.ruleForm.delivery == false ? 1 : 0, //是否公开
           dishMxVos: next //菜品所含食材信息
@@ -1131,6 +1159,7 @@ export default {
           function: this.ruleForm.region, //特点
           remark: this.ruleForm.desc, //做法
           belongRegions: this.valuepark, //省市区
+          pic: this.dialogImageUrl, //图片
           isUse: this.ruleForm.delivery1 == false ? 1 : 0, //是否常用
           isPub: this.ruleForm.delivery == false ? 1 : 0, //是否公开
           dishMxVos: next //菜品所含食材信息
@@ -1307,15 +1336,6 @@ export default {
     //       this.foodPos = cation;
     //     });
     // },
-    handleRemove(file, fileList) {
-      //上传图片
-      console.log(file, fileList);
-    },
-    handlePictureCardPreview(file) {
-      //上传图片
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
-    },
 
     //树形结构
     //查看
@@ -1346,6 +1366,13 @@ export default {
             bar.push([item, this.handler.belongRegion.split(",")[i]]);
           });
           this.valuepark = bar;
+          let picture = [];
+          if (this.handler.pic) {
+            picture[0] = {
+              url: this.handler.pic
+            };
+          }
+          this.productImgs = picture;
           // console.log(this.valuepark);
           this.ruleForm.delivery1 = this.handler.isUse == 1 ? false : true; //常用
           this.ruleForm.delivery = this.handler.isPub == 1 ? false : true; //公开
@@ -1395,11 +1422,6 @@ export default {
         .catch(() => {
           this.$message.error("设置失败");
         });
-      // const newChild = { id: id++, label: "testtest", children: [] };
-      // if (!data.children) {
-      //   this.$set(data, "children", []);
-      // }
-      // data.children.push(newChild);
     },
     //设置不常用
     insert(data) {
@@ -1486,17 +1508,43 @@ export default {
             message: "已取消删除"
           });
         });
+    },
+    //移除图片
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
+    },
+    //预览图片
+    handlePictureCardPreview(file) {
+      console.log(file.url);
 
-      // this.facet = data.id;
-      // let addid = `?ids=${data.id}`;
-      // const parent = node.parent;
-      // const children = parent.data.children || parent.data;
-      // const index = children.findIndex(d => d.id === data.id);
-      // children.splice(index, 1);
-      // this.$axios.post(`api/blade-food/dish/remove` + addid).then(res => {
-      //   console.log(res);
-      //   this.Addraudit();
-      // });
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
+    handleExceed(files, fileList) {
+      //图片上传超过数量限制
+      this.$message.error("上传图片不能超过1张!");
+      console.log(files, fileList);
+    },
+    // 上传成功
+    handleAvatarSuccess(res, file) {
+      console.log(res);
+      this.dialogImageUrl = URL.createObjectURL(file.raw);
+      this.dialogImageUrl = res.data.link;
+      // this.imageUrl = URL.createObjectURL(file.raw);
+      // this.imageUrl = res.data.link;
+      console.log(this.dialogImageUrl);
+    },
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === "image/jpeg";
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!isJPG) {
+        this.$message.error("上传图片只能是 JPG 格式!");
+      }
+      if (!isLt2M) {
+        this.$message.error("上传图片大小不能超过 2MB!");
+      }
+      return isJPG && isLt2M;
     }
   }
 };
