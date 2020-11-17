@@ -389,6 +389,8 @@ export default {
 
   methods: {
     seecol(row) {
+      this.flour = row.id;
+
       this.active.length = 0;
       console.log(row);
       this.seekeys = true;
@@ -407,30 +409,43 @@ export default {
         this.active.push(item);
       });
       //所属区域
+      let bar = [];
       row.provinces.split(",").forEach((item, i) => {
-        this.valuepark.push([item, row.belongRegion.split(",")[i]]);
+        bar.push([item, row.belongRegion.split(",")[i]]);
       });
-      this.ruleFormUsers.desc = row.function; //功用
-      this.ruleFormUsers.delivery1 = row.isUse == 0 ? false : true; //常用
-      //营养素含量
-      let units = row.nutritionsl;
-      console.log(units)
-      // units.forEach(item => {
-      //   for (let item1 of this.mailto) {
-      //     for (let arr of item1.children) {
-      //       if (arr.id == item.nutrientId) {
-      //         arr.result = item.value;
-      //       }
-      //       if (arr.children) {
-      //         for (let add of arr.children) {
-      //           if (add.id == item.nutrientId) {
-      //             add.result = item.value;
-      //           }
-      //         }
-      //       }
-      //     }
-      //   }
+      this.valuepark = bar;
+      // row.provinces.split(",").forEach((item, i) => {
+      //   this.valuepark.push([item, row.belongRegion.split(",")[i]]);
       // });
+      this.ruleFormUsers.desc = row.function; //功用
+      this.ruleFormUsers.delivery1 = row.isUse == 1 ? false : true; //常用
+      //营养素含量
+      // let units = row.nutritionsl;
+      this.$axios
+        .get(`api/blade-food/food/detail?id=${this.flour}`, {})
+        .then(res => {
+          this.inquired = res.data.data;
+          let units = this.inquired.nutritions;
+          units.forEach(item => {
+            // console.log(item);
+            for (let item1 of this.mailto) {
+              // console.log(item1);
+              for (let arr of item1.children) {
+                // console.log(arr);
+                if (arr.id == item.nutrientId) {
+                  arr.result = item.value;
+                }
+                if (arr.children) {
+                  for (let add of arr.children) {
+                    if (add.id == item.nutrientId) {
+                      add.result = item.value;
+                    }
+                  }
+                }
+              }
+            }
+          });
+        });
     },
     // 分类
     queryLite() {

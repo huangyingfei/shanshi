@@ -129,7 +129,7 @@
         label-width="100px"
         class="demo-ruleForm"
       >
-        <el-form-item label="名称">
+        <el-form-item label="名称" prop="name">
           <el-input v-model="ruleForm.name"></el-input>
         </el-form-item>
         <el-form-item label="食材一" prop="adding">
@@ -263,12 +263,9 @@ export default {
         resource: ""
       },
       rules: {
-        region: [
-          { required: true, message: "请选择活动区域", trigger: "change" }
-        ],
-        region1: [
-          { required: true, message: "请选择活动区域", trigger: "change" }
-        ]
+        name: [{ required: true, message: "请输入名称", trigger: "blur" }],
+        adding: [{ required: true, message: "请选择食材", trigger: "change" }],
+        adding1: [{ required: true, message: "请选择食材", trigger: "change" }]
       },
       page_data: {
         loadTxt: "请求列表中"
@@ -356,66 +353,73 @@ export default {
       // this.ruleForm.name
     },
     //编辑确定
-    hardware() {
-      this.$axios
-        .post(`api/blade-food/foodmutual/update`, {
-          id: this.sure, //ID
-          name: this.ruleForm.name, //名称
-          foodId: this.support, //食材1
-          foodId1: this.editor, //食材2
-          reason: this.ruleForm.desc, //不宜同事原因
-          isActive: this.ruleForm.resource == "是" ? 0 : 1 //是否
-        })
-        .then(res => {
-          console.log(res);
+    hardware(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.$axios
+            .post(`api/blade-food/foodmutual/update`, {
+              id: this.sure, //ID
+              name: this.ruleForm.name, //名称
+              foodId: this.support, //食材1
+              foodId1: this.editor, //食材2
+              reason: this.ruleForm.desc, //不宜同事原因
+              isActive: this.ruleForm.resource == "是" ? 0 : 1 //是否
+            })
+            .then(res => {
+              console.log(res);
+              this.$message({
+                message: "保存成功",
+                type: "success"
+              });
+              this.generator();
+              this.dateTime = false;
+            })
+            .catch(() => {
+              this.$message.error("保存失败");
+            });
+        } else {
+          // console.log("error submit!!");
           this.$message({
-            message: "保存成功",
-            type: "success"
+            message: "相克食材未填全",
+            type: "warning"
           });
-          this.generator();
-          this.dateTime = false;
-        })
-        .catch(() => {
-          this.$message.error("保存失败");
-        });
+          return false;
+        }
+      });
     },
     //确定
-    setlist() {
-      // console.log(this.support);
-      // console.log(this.editor);
-      this.$axios
-        .post(`api/blade-food/foodmutual/save`, {
-          name: this.ruleForm.name, //名称
-          foodId: this.support, //食材1
-          foodId1: this.editor, //食材2
-          reason: this.ruleForm.desc, //不宜同事原因
-          isActive: this.ruleForm.resource == "是" ? 0 : 1 //是否
-        })
-        .then(res => {
-          console.log(res);
+    setlist(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.$axios
+            .post(`api/blade-food/foodmutual/save`, {
+              name: this.ruleForm.name, //名称
+              foodId: this.support, //食材1
+              foodId1: this.editor, //食材2
+              reason: this.ruleForm.desc, //不宜同事原因
+              isActive: this.ruleForm.resource == "是" ? 0 : 1 //是否
+            })
+            .then(res => {
+              console.log(res);
+              this.$message({
+                message: "保存成功",
+                type: "success"
+              });
+              this.generator();
+              this.dateTime = false;
+            })
+            .catch(() => {
+              this.$message.error("保存失败");
+            });
+        } else {
+          // console.log("error submit!!");
           this.$message({
-            message: "保存成功",
-            type: "success"
+            message: "相克食材未填全",
+            type: "warning"
           });
-          this.generator();
-          this.dateTime = false;
-        })
-        .catch(() => {
-          this.$message.error("保存失败");
-        });
-      // this.$refs[formName].validate(valid => {
-      //   if (valid) {
-      //     // alert('submit!');
-      //     this.$axios.post(`api/blade-food/foodmutual/save`, {
-      //       name: this.ruleForm.name, //名称
-
-      //       isActive: this.ruleForm.resource //是否有效
-      //     });
-      //   } else {
-      //     console.log("error submit!!");
-      //     return false;
-      //   }
-      // });
+          return false;
+        }
+      });
     },
     //添加相克食物
     obtain(index1) {

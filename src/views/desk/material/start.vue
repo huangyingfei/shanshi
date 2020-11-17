@@ -408,7 +408,7 @@
           >编辑保存</el-button
         >
 
-        <el-button @click="resetForm('ruleForm')">重置</el-button>
+        <!-- <el-button @click="resetForm('ruleForm')">重置</el-button> -->
       </div>
     </div>
   </div>
@@ -555,7 +555,7 @@ export default {
       fallen: "",
       used: "",
       gavatorta: "1",
-      energy:[]
+      energy: []
     };
   },
   computed: {},
@@ -636,12 +636,12 @@ export default {
       this.ruleForm.delivery1 = false;
       // this.mailto=this.energy;
       // console.log(this.energy)
-      this.mailto.forEach(item=>{
-            console.log(item)
-        item.children.forEach(item1=>{
-             item1.result=""   
-        })
-      })
+      this.mailto.forEach(item => {
+        console.log(item);
+        item.children.forEach(item1 => {
+          item1.result = "";
+        });
+      });
     },
     //食材库保存
     totally(formName) {
@@ -693,6 +693,7 @@ export default {
               seasons: this.active, //季节
               belongRegions: this.valuepark, //所属区域
               function: this.ruleForm.desc, //功用
+              pic: this.imageUrl,
               isUse: this.ruleForm.delivery1 == false ? 1 : 0, //是否常用
               isPub: this.ruleForm.delivery == false ? 1 : 0, //是否公开
 
@@ -876,7 +877,7 @@ export default {
         .then(res => {
           // console.log(res);
           this.mailto = res.data.data;
-          this.energy=this.mailto;
+          this.energy = this.mailto;
           console.log(this.mailto);
         });
     },
@@ -936,11 +937,7 @@ export default {
       this.flour = data.id;
       // console.log(this.flour);
       this.$axios
-        .get(`api/blade-food/food/detail?id=${this.flour}`, {
-          headers: {
-            "Content-Type": "application/json"
-          }
-        })
+        .get(`api/blade-food/food/detail?id=${this.flour}`, {})
         .then(res => {
           // console.log(res);
 
@@ -1159,7 +1156,8 @@ export default {
       console.log(file);
       console.log(file.response.data.link);
 
-      this.imageUrl = URL.createObjectURL(file.raw);
+      // this.imageUrl = URL.createObjectURL(file.raw);
+      this.imageUrl = URL.createObjectURL(file.response.data.link);
       console.log(this.imageUrl);
     },
     beforeAvatarUpload(file) {

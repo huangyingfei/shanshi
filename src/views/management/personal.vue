@@ -383,8 +383,8 @@
             <el-button
               v-if="this.gavatorta == 1"
               type="primary"
-              @click="iptables"
-              >保存</el-button
+              @click="iptables('ruleForm')"
+              >保存并新增</el-button
             >
             <!-- <el-button @click="resetForm('ruleForm')">重置</el-button> -->
           </div>
@@ -482,7 +482,7 @@
               <div class="mationinput">
                 <el-form
                   :model="ruleFormUsers"
-                  :rules="rules"
+         
                   :inline="true"
                   ref="ruleFormUsers"
                   label-width="100px"
@@ -490,7 +490,7 @@
                 >
                   <el-form-item
                     label="食材名"
-                    prop="name"
+          
                     style=" width: 350px;   "
                   >
                     <span>{{ ruleFormUsers.name }}</span>
@@ -507,7 +507,7 @@
 
                   <el-form-item
                     label="食材分类"
-                    prop="fooddata"
+          
                     style=" width: 350px;   "
                   >
                     <el-select
@@ -925,10 +925,11 @@ export default {
         });
     },
     //保存
-    iptables() {
-      // console.log(123123);
-
-      let food = [];
+    iptables(formName) {
+       this.$refs[formName].validate((valid) => {
+          if (valid) {
+            // alert('submit!');
+             let food = [];
       this.mailto.forEach(item => {
         // console.log(item);
         item.children.forEach(item1 => {
@@ -984,6 +985,18 @@ export default {
         .catch(() => {
           this.$message.error("保存失败");
         });
+          } else {
+            // console.log('error submit!!');
+             this.$message({
+            message: "食材未填全",
+            type: "warning"
+          });
+            return false;
+          }
+        });
+      // console.log(123123);
+
+     
     },
     //查看
     classification(data) {
