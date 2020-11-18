@@ -1,13 +1,15 @@
 import request from '@/router/axios';
 
 
-export const mealList = (searchType,isPub) => {
+export const mealList = (searchType,isPub,recipeName,isUse) => {
   return request({
     url: '/api/blade-food/recipe/list',
     method: 'get',
     params: {
       searchType,
-      isPub
+      isPub,
+      recipeName,
+      isUse,
     }
   })
 }
@@ -17,7 +19,8 @@ export  const getDishByBaseId=(isPrivate)=>{
     url: '/api/blade-food/basetype/getDishByBaseId',
     method: 'get',
     params: {
-      isPrivate
+      isPrivate,
+      dishName,
     }
   })
 }

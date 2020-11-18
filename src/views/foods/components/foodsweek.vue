@@ -42,11 +42,11 @@
             }})
           </div>
           <div class="">
-            <el-checkbox
-              label="设置为假期"
-              :checked="headers.find((p) => p.name == 'week1').is_vacation"
-              @change="onCheck('week1', $event)"
-            ></el-checkbox>
+            <!--<el-checkbox-->
+              <!--label="设置为假期"-->
+              <!--:checked="headers.find((p) => p.name == 'week1').is_vacation"-->
+              <!--@change="onCheck('week1', $event)"-->
+            <!--&gt;</el-checkbox>-->
           </div>
         </template>
         <template slot-scope="scope">
@@ -79,6 +79,16 @@
                     <el-input
                       style="flex: 1"
                       v-model="scope1.row.count"
+                      v-if="!scope1.row.children"
+                      type="text"
+                      size="mini"
+                      placeholder="请输入内容"
+                    ></el-input>
+                    <el-input
+                      style="flex: 1"
+                      v-model="scope1.row.count"
+                      v-if="scope1.row.children"
+                      disabled
                       type="text"
                       size="mini"
                       placeholder="请输入内容"
@@ -210,6 +220,16 @@
                     <el-input
                       style="flex: 1"
                       v-model="scope1.row.count"
+                      v-if="!scope1.row.children"
+                      type="text"
+                      size="mini"
+                      placeholder="请输入内容"
+                    ></el-input>
+                    <el-input
+                      style="flex: 1"
+                      v-model="scope1.row.count"
+                      v-if="scope1.row.children"
+                      disabled
                       type="text"
                       size="mini"
                       placeholder="请输入内容"
@@ -328,6 +348,16 @@
                     <el-input
                       style="flex: 1"
                       v-model="scope1.row.count"
+                      v-if="!scope1.row.children"
+                      type="text"
+                      size="mini"
+                      placeholder="请输入内容"
+                    ></el-input>
+                    <el-input
+                      style="flex: 1"
+                      v-model="scope1.row.count"
+                      v-if="scope1.row.children"
+                      disabled
                       type="text"
                       size="mini"
                       placeholder="请输入内容"
@@ -446,6 +476,16 @@
                     <el-input
                       style="flex: 1"
                       v-model="scope1.row.count"
+                      v-if="!scope1.row.children"
+                      type="text"
+                      size="mini"
+                      placeholder="请输入内容"
+                    ></el-input>
+                    <el-input
+                      style="flex: 1"
+                      v-model="scope1.row.count"
+                      v-if="scope1.row.children"
+                      disabled
                       type="text"
                       size="mini"
                       placeholder="请输入内容"
@@ -564,6 +604,16 @@
                     <el-input
                       style="flex: 1"
                       v-model="scope1.row.count"
+                      v-if="!scope1.row.children"
+                      type="text"
+                      size="mini"
+                      placeholder="请输入内容"
+                    ></el-input>
+                    <el-input
+                      style="flex: 1"
+                      v-model="scope1.row.count"
+                      v-if="scope1.row.children"
+                      disabled
                       type="text"
                       size="mini"
                       placeholder="请输入内容"
@@ -682,6 +732,16 @@
                     <el-input
                       style="flex: 1"
                       v-model="scope1.row.count"
+                      v-if="!scope1.row.children"
+                      type="text"
+                      size="mini"
+                      placeholder="请输入内容"
+                    ></el-input>
+                    <el-input
+                      style="flex: 1"
+                      v-model="scope1.row.count"
+                      v-if="scope1.row.children"
+                      disabled
                       type="text"
                       size="mini"
                       placeholder="请输入内容"
@@ -800,6 +860,16 @@
                     <el-input
                       style="flex: 1"
                       v-model="scope1.row.count"
+                      v-if="!scope1.row.children"
+                      type="text"
+                      size="mini"
+                      placeholder="请输入内容"
+                    ></el-input>
+                    <el-input
+                      style="flex: 1"
+                      v-model="scope1.row.count"
+                      v-if="scope1.row.children"
+                      disabled
                       type="text"
                       size="mini"
                       placeholder="请输入内容"
@@ -949,7 +1019,23 @@ export default {
   // 计算属性computed,计算的是Name依赖的值,它不能计算在data中已经定义过的变量。
   computed: {},
   // 当属性的值发生变化时，就会调用对应属性的方法，方法里面的形参对应的是属性的新值和旧值
-  watch: {},
+  watch: {
+    'datas':{
+      handler(data){
+        data[0].weeks.forEach(_=>{
+          _.foods.forEach(__=>{
+            let count=0;
+            __.children.forEach(___=>{
+              count+= parseInt(___.count?___.count:0)
+            })
+            this.$set(__,"count",count);
+          })
+        })
+        this.getFoodScore();
+      },
+      deep:true,
+    }
+  },
   // 组件第一次加载
   mounted() {
     this.init();
@@ -1064,6 +1150,10 @@ export default {
         }
       });
       this.resizeExpendHeight();
+      this.getFoodScore();
+    },
+    //获取分数
+    getFoodScore(){
       this.dragnode.node={};
       let day=[0,0,0,0,0,0,0]
       let days=0;
@@ -1080,12 +1170,13 @@ export default {
               day[index]+=1;
               mealTypes.push(that.getmealTypeData(_.name));
               ___.children.forEach(____=>{
-                recipeVals.push({
-                  foodId:____.id,
-                  val:____.count,
-                  mealType:that.getmealTypeData(_.name),
-                  week:__.name.slice(4)
-                })
+                   recipeVals.push({
+                     foodId:____.id,
+                     val:___.count?___.count:0,
+                     mealType:that.getmealTypeData(_.name),
+                     week:__.name.slice(4)
+                   })
+
               })
             }
           })
@@ -1108,15 +1199,19 @@ export default {
       }
       foods["recipeVals"]=recipeVals
       foods["days"]=days;
-      calRecipe(foods).then(res=>{
-        if(res.data.success){
-          that.$emit('childfn', Math.floor(this.getScore(res.data.data) * 100) / 100 );
-        }
+      if(foods.recipeVals.length>0){
+        calRecipe(foods).then(res=>{
+          if(res.data.success){
+            that.$emit('childfn', Math.floor(this.getData(res.data.data) * 100) / 100 );
+          }
+        })
+      }else{
+        that.$emit('childfn', 0);
+      }
 
-      })
-      console.log(foods)
     },
-    getScore(data){
+    //处理数据
+    getData(data){
       let lastScore=100;
       if(data.mealTypeCalDTOList&&data.mealTypeCalDTOList.length){
         for(let i=0;i<data.mealTypeCalDTOList.length;i++){
