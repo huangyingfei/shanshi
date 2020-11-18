@@ -42,6 +42,7 @@
       <el-radio v-model="keyword.radio" label="2">已收藏食谱</el-radio>
       <el-radio v-model="keyword.radio" label="3">推荐食谱</el-radio>
       <el-button
+        @click="searchterm"
         size="small"
         icon="el-icon-search"
         type="primary"
@@ -49,6 +50,7 @@
         >搜索</el-button
       >
       <el-button
+        @click="emptyset"
         size="small"
         icon="el-icon-delete"
         type="primary"
@@ -56,10 +58,27 @@
         >清空</el-button
       >
     </div>
-
+    <!-- 查看 -->
+    <el-dialog
+      title="食材"
+      width="50%"
+      append-to-body
+      :visible.sync="dateTime"
+      :close-on-click-modal="false"
+    >
+      <div>
+        <!-- <foods-week :headers="headers" :datas="datas" days="5"> </foods-week> -->
+        123213213
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dateTime = false">取 消</el-button>
+        <el-button @click="setlist('ruleForm')" type="primary">确 定</el-button>
+      </div>
+    </el-dialog>
     <div class="inform">
       <el-table
         :data="modeforms"
+        :element-loading-text="page_data.loadTxt"
         border
         style="width: 100%"
         v-loading="loadFlag"
@@ -72,17 +91,17 @@
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="name"
+          prop="recipeName"
           label="食谱名称"
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="dishTypeName"
+          prop="createTime"
           label="食谱周期"
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="createName"
+          prop="avgAge"
           label="平均年龄"
           align="center"
         ></el-table-column>
@@ -100,7 +119,7 @@
         ></el-table-column>
 
         <el-table-column
-          prop="createTime"
+          prop="orgName"
           label="创建机构"
           align="center"
         ></el-table-column>
@@ -119,12 +138,36 @@
               @click="seecol(scope.row)"
               >查看</el-button
             >
-            <el-button type="text" size="small" @click="create(scope.row)"
+            <el-button
+              type="text"
+              v-if="scope.row.isUse == 0"
+              size="small"
+              @click="handleto(scope.row)"
               >收藏</el-button
+            >
+            <el-button
+              type="text"
+              size="small"
+              @click="costofhand(scope.row)"
+              v-if="scope.row.isUse == 1"
+              >不收藏</el-button
             >
           </template>
         </el-table-column>
       </el-table>
+      <!-- 分页 -->
+      <div class="pagingClass">
+        <el-pagination
+          :page-sizes="m_page.sizes"
+          :page-size="m_page.size"
+          :current-page="m_page.number"
+          @size-change="m_handleSizeChange"
+          @current-change="m_handlePageChange"
+          layout="total,sizes,prev, pager, next"
+          background
+          :total="m_page.totalElements"
+        ></el-pagination>
+      </div>
     </div>
   </div>
 </template>
@@ -140,11 +183,19 @@ export default {
         block: "", //机构类型
         radio: "" //全部 已收藏 推荐
       },
-      modeforms: [
-        {
-          name: "王小虎"
-        }
-      ], //表格数据
+      dateTime: false,
+      m_page: {
+        sizes: [10, 20, 40, 50, 100], //每页最大显示数
+        size: 20,
+        totalElements: 0,
+        totalPages: 3,
+        number: 1
+      },
+
+      modeforms: [], //表格数据
+      page_data: {
+        loadTxt: "请求列表中"
+      },
       dirname: [
         //审核状态
         {
@@ -171,10 +222,81 @@ export default {
         }
       ]
     };
-  }
+  },
   // mounted() {
   //   console.log(this.$route.query.userid);
   // }
+  beforeMount() {
+    this.generator();
+  },
+  methods: {
+    //不收藏
+    costofhand(row) {
+      let params = `?id=${row.id}&isUse=${0}`;
+      this.$axios
+        .get(`api/blade-food/recipe/changeInfo${params}`, {})
+        .then(res => {
+          // console.log(res);
+          this.$message({
+            message: "设置成功",
+            type: "success"
+          });
+          this.generator();
+        });
+    },
+    //收藏
+    handleto(row) {
+      let params = `?id=${row.id}&isUse=${1}`;
+      this.$axios
+        .get(`api/blade-food/recipe/changeInfo${params}`, {})
+        .then(res => {
+          // console.log(res);
+          this.$message({
+            message: "设置成功",
+            type: "success"
+          });
+          this.generator();
+        });
+    },
+    //获取表格
+    generator() {
+      this.loadFlag = true;
+      this.$axios
+        .get(
+          `api/blade-food/recipe/openRecipeList?size=${this.m_page.size}&current=${this.m_page.number}`,
+          {}
+        )
+        .then(res => {
+          this.loadFlag = false;
+          console.log(res);
+          this.modeforms = res.data.data.records;
+          this.m_page.totalElements = res.data.data.total;
+        });
+    },
+    searchterm() {
+      this.generator();
+      console.log(this.keyword.input); //关键字
+    },
+    emptyset() {
+      this.keyword.input = "";
+      this.keyword.getDate = "";
+      this.keyword.value = "";
+      this.keyword.block = "";
+      this.keyword.radio = "";
+    },
+    seecol() {
+      this.dateTime = true;
+    },
+    //页码
+    m_handlePageChange(currPage) {
+      this.m_page.number = currPage;
+      this.generator();
+    },
+    m_handleSizeChange(currSize) {
+      this.m_page.size = currSize;
+      this.generator();
+    }
+  }
 };
 </script>
 
@@ -190,7 +312,7 @@ export default {
   height: 53px;
   /* background-color: red; */
   font-size: 13px;
-  padding-top: 20px;
+  padding-top: 35px;
 }
 .key_end {
   width: 100%;
