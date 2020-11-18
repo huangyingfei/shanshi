@@ -694,13 +694,15 @@ export default {
             bar.push([item, this.subquery.belongRegion.split(",")[i]]);
           });
           this.valuepark = bar;
-          this.ruleForm.desc = this.subquery.function; //功用
-          let picture = [];
-          if (this.inquired.pic) {
+            let picture = [];//图片
+          if (this.subquery.pic) {
             picture[0] = {
-              url: this.inquired.pic
+              url: this.subquery.pic
             };
           }
+          this.productImgs = picture;
+          this.ruleForm.desc = this.subquery.function; //功用
+       
           this.productImgs = picture;
           this.ruleForm.delivery = this.subquery.isPub == 0 ? true : false; //公开
           // console.log(this.ruleForm.delivery);
@@ -907,6 +909,13 @@ export default {
           });
           this.valuepark = bar;
           this.ruleForm.desc = this.subquery.function; //功用
+            let picture = [];//图片
+          if (this.subquery.pic) {
+            picture[0] = {
+              url: this.subquery.pic
+            };
+          }
+          this.productImgs = picture;
           this.ruleForm.delivery = this.subquery.isPub == 0 ? true : false; //公开
           // console.log(this.ruleForm.delivery);
           this.ruleForm.delivery1 = this.subquery.isUse == 0 ? true : false; //常用

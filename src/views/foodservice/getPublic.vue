@@ -1337,8 +1337,11 @@ export default {
               bar.push([item, this.handler.belongRegion.split(",")[i]]);
             });
             this.valuepark1 = bar;
-            // console.log(this.valuepark1);
-            this.rectangle = this.inquired.pic;
+          
+     
+              this.rectangle = this.handler.pic;
+     
+        
             this.ruleForm1.delivery1 = this.handler.isUse == 0 ? true : false; //常用
             // this.ruleForm1.delivery = this.handler.isPub == 0 ? false : true; //公开
             // this.toBack = this.handler.dishMxVos;

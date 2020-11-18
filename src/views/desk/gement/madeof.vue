@@ -254,19 +254,26 @@
               ></el-input>
             </el-form-item>
 
-            <el-form-item label="图片" style=" width:300px ">
-              <el-upload
-                action="https://jsonplaceholder.typicode.com/posts/"
-                list-type="picture-card"
-                :on-preview="handlePictureCardPreview"
-                :on-remove="handleRemove"
-              >
-                <i class="el-icon-plus"></i>
-              </el-upload>
-              <el-dialog :visible.sync="dialogVisible">
-                <img width="100%" :src="dialogImageUrl" alt />
-              </el-dialog>
-            </el-form-item>
+           <el-form-item label="图片" style="width: 350px">
+                  <el-upload
+                    action="api/blade-resource/oss/endpoint/put-file"
+                    list-type="picture-card"
+                    :limit="imgLimit"
+                    :file-list="productImgs"
+                    :on-exceed="handleExceed"
+                    :on-preview="handlePictureCardPreview"
+                    :before-upload="beforeAvatarUpload"
+                    :on-success="handleAvatarSuccess"
+                    :on-remove="handleRemove"
+                    :headers="headerObj"
+                  >
+                    <!-- <img v-if="dialogImageUrl" :src="dialogImageUrl" class="avatar" /> -->
+                    <i class="el-icon-plus"></i>
+                  </el-upload>
+                  <el-dialog append-to-body :visible.sync="dialogVisible">
+                    <img width="100%" :src="dialogImageUrl" alt />
+                  </el-dialog>
+                </el-form-item>
 
             <el-form-item label="公开" style=" width:150px ">
               <el-switch v-model="ruleForm.delivery"></el-switch>
@@ -545,6 +552,14 @@ export default {
         time: " ", //时间
         examineto: "" //审核
       },
+      dialogImageUrl: "", //图片
+      imgLimit: 1, //文件个数
+      productImgs: [],
+      dialogVisible: false,
+      headerObj: {
+        "Blade-Auth": ""
+      }, //上传图片请求头
+      rectangle: "",
       mailto: [], //营养素含量
       loadFlag: false, //加载flag
       attributes: [], //表格数据
@@ -717,8 +732,15 @@ export default {
             bar.push([item, this.handler.belongRegion.split(",")[i]]);
           });
           this.valuepark = bar;
+
+             let picture = [];//图片
+          if (this.handler.pic) {
+            picture[0] = {
+              url: this.handler.pic
+            };
+          }
           this.ruleForm.region = this.handler.function; //特点
-          this.ruleForm.desc = this.handler.remark; //做法
+          this.ruleForm.desc = this.handler.remark; //做法    
           this.ruleForm.delivery1 = this.handler.isUse == 1 ? false : true; //常用
           this.ruleForm.delivery = this.handler.isPub == 1 ? false : true; //公开
           if (this.handler.dishMxVos) {
@@ -763,6 +785,7 @@ export default {
           function: this.ruleForm.region, //特点
           remark: this.ruleForm.desc, //做法
           dishMxVos: next,
+             pic: this.dialogImageUrl,//图片
           // isPub: this.ruleForm.delivery == false ? 0 : 1, //公开
           isUse: this.ruleForm.delivery1 == false ? 1 : 0, //常用
           status: "1", //
@@ -813,6 +836,7 @@ export default {
             function: this.ruleForm.region, //特点
             remark: this.ruleForm.desc, //做法
             dishMxVos: next,
+               pic: this.dialogImageUrl,//图片
             // isPub: this.ruleForm.delivery == false ? 0 : 1, //公开
             isUse: this.ruleForm.delivery1 == false ? 1 : 0, //常用
             status: "2", //
@@ -872,6 +896,12 @@ export default {
           this.valuepark = bar;
           this.ruleForm.region = this.handler.function; //特点
           this.ruleForm.desc = this.handler.remark; //做法
+              let picture = [];//图片
+          if (this.handler.pic) {
+            picture[0] = {
+              url: this.handler.pic
+            };
+          }
           this.ruleForm.delivery1 = this.handler.isUse == 1 ? false : true; //常用
           this.ruleForm.delivery = this.handler.isPub == 1 ? false : true; //公开
           if (this.handler.dishMxVos) {
@@ -945,7 +975,7 @@ export default {
           this.myStr = res.data.data;
           let str = [];
           this.myStr.forEach((item, index) => {
-            console.log(item);
+            // console.log(item);
             str[index] = {
               value: item.id,
               label: item.typeName
@@ -1135,13 +1165,42 @@ export default {
           this.data1 = Front;
         });
     },
+     //移除图片
     handleRemove(file, fileList) {
       console.log(file, fileList);
     },
+    //预览图片
     handlePictureCardPreview(file) {
-      //上传图片
+      console.log(file.url);
+
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
+    },
+    handleExceed(files, fileList) {
+      //图片上传超过数量限制
+      this.$message.error("上传图片不能超过1张!");
+      console.log(files, fileList);
+    },
+    // 上传成功
+    handleAvatarSuccess(res, file) {
+      console.log(res);
+      this.dialogImageUrl = URL.createObjectURL(file.raw);
+      this.dialogImageUrl = res.data.link;
+      // this.imageUrl = URL.createObjectURL(file.raw);
+      // this.imageUrl = res.data.link;
+      console.log(this.dialogImageUrl);
+    },
+    beforeAvatarUpload(file) {
+      // const isJPG = file.type === "image/jpeg";
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      // if (!isJPG) {
+      //   this.$message.error("上传图片只能是 JPG 格式!");
+      // }
+      if (!isLt2M) {
+        this.$message.error("上传图片大小不能超过 2MB!");
+      }
+      return isLt2M;
     },
     //页码
     m_handlePageChange(currPage) {
