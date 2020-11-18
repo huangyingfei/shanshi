@@ -306,17 +306,24 @@
                   </el-form-item>
 
                   <el-form-item label="图片" style="width:350px">
-                    <el-upload
-                      action="https://jsonplaceholder.typicode.com/posts/"
-                      list-type="picture-card"
-                      :on-preview="handlePictureCardPreview"
-                      :on-remove="handleRemove"
-                    >
-                      <i class="el-icon-plus"></i>
-                    </el-upload>
-                    <el-dialog :visible.sync="dialogVisible">
-                      <img width="100%" :src="dialogImageUrl" alt />
-                    </el-dialog>
+                   <el-upload
+              action="api/blade-resource/oss/endpoint/put-file"
+              list-type="picture-card"
+              :limit="imgLimit"
+              :file-list="productImgs"
+              :on-exceed="handleExceed"
+              :on-preview="handlePictureCardPreview"
+              :before-upload="beforeAvatarUpload"
+              :on-success="handleAvatarSuccess"
+              :on-remove="handleRemove"
+              :headers="headerObj"
+            >
+              <!-- <img v-if="dialogImageUrl" :src="dialogImageUrl" class="avatar" /> -->
+              <i class="el-icon-plus"></i>
+            </el-upload>
+            <el-dialog append-to-body :visible.sync="dialogVisible">
+              <img width="100%" :src="dialogImageUrl" alt />
+            </el-dialog>
                   </el-form-item>
 
                   <el-form-item label="分享平台" style="  ">
@@ -575,17 +582,13 @@
                       </el-option>
                     </el-select>
                   </el-form-item>
-                  <el-form-item label="功用" style="width:450px">
-                    <!-- <el-input
-              style=" width: 450px;  "
-              type="textarea"
-              v-model="ruleForm.desc"
-              placeholder="请输入"
-            ></el-input> -->
+                  <el-form-item label="功用" style="width:350px">
+                  
                     <span>{{ ruleFormUsers.desc }}</span>
                   </el-form-item>
-                  <el-form-item label="图片">
-                    <el-upload
+                  <el-form-item label="图片"  style="width:350px">
+                    <img style="width:200px;height:200px" :src="this.rectangle" alt="">
+                    <!-- <el-upload
                       action="https://jsonplaceholder.typicode.com/posts/"
                       list-type="picture-card"
                       :on-preview="handlePictureCardPreview"
@@ -595,10 +598,10 @@
                     </el-upload>
                     <el-dialog :visible.sync="dialogVisible">
                       <img width="100%" :src="dialogImageUrl" alt />
-                    </el-dialog>
+                    </el-dialog> -->
                   </el-form-item>
 
-                  <el-form-item label="常用" style="   ">
+                  <el-form-item label="常用" style="">
                     <el-switch v-model="ruleFormUsers.delivery1"></el-switch>
                   </el-form-item>
                 </el-form>
@@ -668,6 +671,14 @@ export default {
       loadFlag: false, //加载flag
       data: JSON.parse(JSON.stringify(data)), //树形结构
       activeName: "first",
+       dialogImageUrl: "", //图片
+      imgLimit: 1, //文件个数
+      productImgs: [],
+      dialogVisible: false,
+      headerObj: {
+        "Blade-Auth": ""
+      }, //上传图片请求头
+      rectangle:"",
       ruleFormUsers: {
         //公共食材库
         region: "",
@@ -786,8 +797,15 @@ export default {
     this.Provinces(); //省市区
     this.queryLite(); //获取分类
     this.treeDrawing(); //树形渲染数
+        this.Takeone();
   },
   methods: {
+     //初始数据获取token
+    Takeone() {
+      let str = JSON.parse(localStorage.getItem("saber-token"));
+      this.headerObj["Blade-Auth"] = `bearer ${str.content}`;
+      console.log(this.headerObj);
+    },
     //加食材
     addition(index) {
       console.log(index);
@@ -804,12 +822,13 @@ export default {
       this.ruleForm.resource = "";
       this.active = [];
       this.valuepark = [];
+          this.productImgs = [];
       // this.valuepark.length = 0;
       this.ruleForm.desc = "";
       this.ruleForm.delivery = false;
       this.ruleForm.delivery1 = false;
          this.mailto.forEach(item=>{
-            console.log(item)
+            // console.log(item)
         item.children.forEach(item1=>{
              item1.result=""   
         })
@@ -908,6 +927,7 @@ export default {
           seasons: this.active, //季节
           belongRegions: this.valuepark, //所属区域
           function: this.ruleForm.desc, //功用
+             pic: this.dialogImageUrl,
           isUse: this.ruleForm.delivery1 == false ? 1 : 0, //是否常用
           isPub: this.ruleForm.delivery == false ? 1 : 0, //是否公开
 
@@ -969,6 +989,7 @@ export default {
           seasons: this.active, //季节
           belongRegions: this.valuepark, //所属区域
           function: this.ruleForm.desc, //功用
+             pic: this.dialogImageUrl,
           isUse: this.ruleForm.delivery1 == false ? 1 : 0, //是否常用
           isPub: this.ruleForm.delivery == false ? 1 : 0, //是否分享平台
 
@@ -993,10 +1014,7 @@ export default {
           });
             return false;
           }
-        });
-      // console.log(123123);
-
-     
+        });     
     },
     //查看
     classification(data) {
@@ -1039,6 +1057,14 @@ export default {
             });
             this.valuepark = bar;
             this.ruleForm.desc = this.inquired.function; //功用
+
+                 let picture = [];//图片
+          if (this.inquired.pic) {
+            picture[0] = {
+              url: this.inquired.pic
+            };
+          };
+          this.productImgs = picture;
             this.ruleForm.delivery = this.inquired.isPub == 1 ? false : true; //公开
             // console.log(this.ruleForm.delivery);
             this.ruleForm.delivery1 = this.inquired.isUse == 1 ? false : true; //常用
@@ -1082,6 +1108,8 @@ export default {
             this.valuepark1 = addItem;
             // console.log(this.valuepark1);
             this.ruleFormUsers.desc = this.inquired.function; //功用
+             this.rectangle=this.inquired.pic;
+            //  console.log(this.dialogImageUrl);
             this.ruleFormUsers.delivery =
               this.inquired.isPub == 0 ? false : true; //公开
             // console.log(this.ruleForm.delivery);
@@ -1154,23 +1182,7 @@ export default {
     remove(node, data) {
       console.log(data);
       this.saveall = data.id;
-      // this.$axios
-      //   .post(`api/blade-food/blade-food/food/remove?ids=${this.saveall}`, {
-      //     headers: {
-      //       "Content-Type": "application/json"
-      //     }
-      //   })
-      //   .then(res => {
-      //     console.log(res);
-      //     this.$message({
-      //       message: "删除成功",
-      //       type: "success"
-      //     });
-      //     this.treeDrawing();
-      //   })
-      //   .catch(() => {
-      //     this.$message.error("删除失败");
-      //   });
+    
       this.$confirm("确认删除该食材?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -1306,6 +1318,43 @@ export default {
           // this.$set(this.national, arr)
           this.options = arr;
         });
+    },
+     //移除图片
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
+    },
+    //预览图片
+    handlePictureCardPreview(file) {
+      console.log(file.url);
+
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
+    handleExceed(files, fileList) {
+      //图片上传超过数量限制
+      this.$message.error("上传图片不能超过1张!");
+      console.log(files, fileList);
+    },
+    // 上传成功
+    handleAvatarSuccess(res, file) {
+      console.log(res);
+      this.dialogImageUrl = URL.createObjectURL(file.raw);
+      this.dialogImageUrl = res.data.link;
+      // this.imageUrl = URL.createObjectURL(file.raw);
+      // this.imageUrl = res.data.link;
+      console.log(this.dialogImageUrl);
+    },
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === "image/jpeg";
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!isJPG) {
+        this.$message.error("上传图片只能是 JPG 格式!");
+      }
+      if (!isLt2M) {
+        this.$message.error("上传图片大小不能超过 2MB!");
+      }
+      return isJPG && isLt2M;
     }
   }
 };
@@ -1421,7 +1470,7 @@ export default {
 }
 .saveas {
   width: 95%;
-  height: 490px;
+  height: 450px;
   margin-left: 40px;
   /* background-color: red; */
 }

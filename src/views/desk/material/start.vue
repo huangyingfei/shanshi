@@ -322,30 +322,25 @@
             ></el-input>
           </el-form-item>
 
-          <el-form-item label="图片" style="width:350px">
-            <!-- <el-upload
+          <el-form-item label="图片" style="width:400px">
+            <el-upload
               action="api/blade-resource/oss/endpoint/put-file"
               list-type="picture-card"
+              :limit="imgLimit"
+              :file-list="productImgs"
+              :on-exceed="handleExceed"
               :on-preview="handlePictureCardPreview"
+              :before-upload="beforeAvatarUpload"
+              :on-success="handleAvatarSuccess"
               :on-remove="handleRemove"
               :headers="headerObj"
             >
+              <!-- <img v-if="dialogImageUrl" :src="dialogImageUrl" class="avatar" /> -->
               <i class="el-icon-plus"></i>
             </el-upload>
-            <el-dialog :visible.sync="dialogVisible">
+            <el-dialog append-to-body :visible.sync="dialogVisible">
               <img width="100%" :src="dialogImageUrl" alt />
-            </el-dialog> -->
-            <el-upload
-              class="avatar-uploader"
-              action="api/blade-resource/oss/endpoint/put-file"
-              :headers="headerObj"
-              :show-file-list="false"
-              :on-success="handleAvatarSuccess"
-              :before-upload="beforeAvatarUpload"
-            >
-              <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            </el-upload>
+            </el-dialog>
           </el-form-item>
 
           <el-form-item label="公开" style="  ">
@@ -436,6 +431,8 @@ export default {
       input1: "",
       input: "",
       dialogImageUrl: "", //图片
+      imgLimit: 1, //文件个数
+      productImgs: [],
       dialogVisible: false,
       imageUrl: "",
       ruleForm: {
@@ -630,6 +627,7 @@ export default {
       this.ruleForm.resource = "";
       this.active = [];
       this.valuepark = [];
+      this.productImgs = [];
       // this.valuepark.length = 0;
       this.ruleForm.desc = "";
       this.ruleForm.delivery = false;
@@ -693,7 +691,7 @@ export default {
               seasons: this.active, //季节
               belongRegions: this.valuepark, //所属区域
               function: this.ruleForm.desc, //功用
-              pic: this.imageUrl,
+              pic: this.dialogImageUrl,
               isUse: this.ruleForm.delivery1 == false ? 1 : 0, //是否常用
               isPub: this.ruleForm.delivery == false ? 1 : 0, //是否公开
 
@@ -769,6 +767,7 @@ export default {
               seasons: this.active, //季节
               belongRegions: this.valuepark, //所属区域
               function: this.ruleForm.desc, //功用
+              pic: this.dialogImageUrl,
               isUse: this.ruleForm.delivery1 == false ? 1 : 0, //是否常用
               isPub: this.ruleForm.delivery == false ? 1 : 0, //是否公开
 
@@ -930,7 +929,7 @@ export default {
     prepare(data, index) {
       this.valuepark.length = 0;
       this.active.length = 0;
-      console.log(index);
+      // console.log(index);
       this.gavatorta = index;
       // console.log(data);
       // this.term = data.id;
@@ -973,6 +972,16 @@ export default {
             this.active.push(item);
           });
           this.ruleForm.desc = this.inquired.function; //功用
+          // this.productImgs = this.inquired.pic; //图片
+          let picture = [];
+          if (this.inquired.pic) {
+            picture[0] = {
+              url: this.inquired.pic
+            };
+          }
+          this.productImgs = picture;
+
+          console.log(this.productImgs);
           this.ruleForm.delivery = this.inquired.isPub == 1 ? false : true; //公开
           // console.log(this.ruleForm.delivery);
           this.ruleForm.delivery1 = this.inquired.isUse == 1 ? false : true; //常用
@@ -1143,32 +1152,40 @@ export default {
           });
         });
     },
-    //删除
-    // handleRemove(file, fileList) {
-    //   console.log(file, fileList);
-    // },
-    // handlePictureCardPreview(file) {
-    //   console.log(file.url);
-    //   this.dialogImageUrl = file.url;
-    //   this.dialogVisible = true;
-    // },
-    handleAvatarSuccess(res, file) {
-      console.log(file);
-      console.log(file.response.data.link);
+    //移除图片
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
+    },
+    //预览图片
+    handlePictureCardPreview(file) {
+      console.log(file.url);
 
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
+    handleExceed(files, fileList) {
+      //图片上传超过数量限制
+      this.$message.error("上传图片不能超过1张!");
+      console.log(files, fileList);
+    },
+    // 上传成功
+    handleAvatarSuccess(res, file) {
+      console.log(res);
+      this.dialogImageUrl = URL.createObjectURL(file.raw);
+      this.dialogImageUrl = res.data.link;
       // this.imageUrl = URL.createObjectURL(file.raw);
-      this.imageUrl = URL.createObjectURL(file.response.data.link);
-      console.log(this.imageUrl);
+      // this.imageUrl = res.data.link;
+      console.log(this.dialogImageUrl);
     },
     beforeAvatarUpload(file) {
       const isJPG = file.type === "image/jpeg";
       const isLt2M = file.size / 1024 / 1024 < 2;
 
       if (!isJPG) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
+        this.$message.error("上传图片只能是 JPG 格式!");
       }
       if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 2MB!");
+        this.$message.error("上传图片大小不能超过 2MB!");
       }
       return isJPG && isLt2M;
     }
@@ -1305,36 +1322,5 @@ export default {
   height: 500px;
   margin-left: 40px;
   /* background-color: red; */
-}
-.custom-tree-node {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 14px;
-  padding-right: 8px;
-}
-.avatar-uploader .el-upload {
-  border: 1px dashed #d9d9d9;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-.avatar-uploader .el-upload:hover {
-  border-color: #409eff;
-}
-.avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 178px;
-  height: 178px;
-  line-height: 178px;
-  text-align: center;
-}
-.avatar {
-  width: 178px;
-  height: 178px;
-  display: block;
 }
 </style>
