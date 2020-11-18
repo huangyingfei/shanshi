@@ -201,7 +201,7 @@
         <el-card class="box-car" shadow="never">
           <div class="clearfix panel_head">
             <el-button-group>
-              <el-button size="small" @click="showFoodList = false" style="bo"
+              <el-button size="small" @click="showFoodList = false"
                 >食谱</el-button
               >
               <el-button size="small" @click="showFoodList = true"
@@ -209,6 +209,7 @@
               >
             </el-button-group>
           </div>
+
           <el-tabs
             v-show="!showFoodList"
             v-model="activeName"
@@ -291,13 +292,13 @@
                   v-model="dishSharePub"
                   class="input-with-select"
                 >
-                  <el-button slot="append" icon="el-icon-search" @click="dishShareSearchPub()"></el-button>
+                  <el-button slot="append" icon="el-icon-search" @click="dishShareSearchPub(1)"></el-button>
                 </el-input>
               </div>
               <div style="margin-top: 3px; font-size: 10px">
-                <el-link :underline="false"  style="margin-right: 5px" @click="dishShareSearchPub()">全部</el-link>
+                <el-link :underline="false"  style="margin-right: 5px" @click="dishShareSearchPub(1)">全部</el-link>
                 |
-                <el-link :underline="false"  style="margin-left: 5px" @click="dishShareSearchPub(1)">收藏</el-link>
+                <el-link :underline="false"  style="margin-left: 5px" @click="dishShareSearchPub(1,undefined,undefined,0)">常用</el-link>
               </div>
 
               <div style="margin-top: 5px; margin-bottom: 2px">
@@ -326,15 +327,48 @@
                   v-model="dishSharePri"
                   class="input-with-select"
                 >
-                  <el-button slot="append" icon="el-icon-search" @click="dishShareSearchPri()"></el-button>
+                  <el-button slot="append" icon="el-icon-search" @click="dishShareSearchPri(0)"></el-button>
                 </el-input>
               </div>
               <div style="margin-top: 3px; font-size: 10px">
-                <el-link :underline="false"  style="margin-right: 5px" @click="dishShareSearchPri()">全部</el-link>
+                <el-link :underline="false"  style="margin-right: 5px" @click="dishShareSearchPri(0)">全部</el-link>
                 |
-                <el-link :underline="false"  style="margin-left: 5px" @click="dishShareSearchPri(0)">公开</el-link>
+                <el-link :underline="false"  style="margin-left: 5px" @click="dishShareSearchPri(0,0)">公开</el-link>
                 |
-                <el-link :underline="false"  style="margin-left: 5px" @click="dishShareSearchPri(1)">隐藏</el-link>
+                <el-link :underline="false"  style="margin-left: 5px" @click="dishShareSearchPri(0,1)">隐藏</el-link>
+              </div>
+              <div class="select-item" >
+                <!--<el-select v-model="belongRegion" placeholder="请选择">-->
+                  <!--<el-option-->
+                    <!--v-for="item in belongRegionOption"-->
+                    <!--:key="item.value"-->
+                    <!--:label="item.label"-->
+                    <!--:value="item.value">-->
+                  <!--</el-option>-->
+
+                <!--</el-select>-->
+
+                <el-cascader
+                  :options="belongRegionOption"  v-model="belongRegion" @change="dishShareSearchPri(0)"
+                  :props="{ checkStrictly: true,label:'name',value:'code' }"
+                  clearable></el-cascader>
+                <el-select v-model="seasonl" placeholder="请选择" >
+                  <el-option
+                    v-for="item in seasonlOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value" @change="dishShareSearchPri(0)">
+                  </el-option>
+                </el-select>
+                <el-select v-model="isUse" placeholder="请选择">
+                  <el-option
+                    v-for="item in isUseOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                    @change="dishShareSearchPri(0)">
+                  </el-option>
+                </el-select>
               </div>
 
               <div style="margin-top: 5px; margin-bottom: 2px">
@@ -515,7 +549,7 @@
 <script>
   import foodsWeek from "@/views/foods/components/foodsweek";
   import {getList} from "@/api/system/special"
-  import {mealList,getDishByBaseId,dishDetail,save,detail,update} from "@/api/system/meals"
+  import {mealList,getDishByBaseId,dishDetail,save,detail,update,grantTree} from "@/api/system/meals"
 export default {
   components: {
     foodsWeek,
@@ -545,6 +579,43 @@ document.oncontextmenu = function(){return false};
 
     const data = [];
     return {
+      belongRegionOption:[],
+      seasonlOptions:[
+        {
+          label:'全部',
+          value:undefined
+        },
+        {
+          label:'春',
+          value:'1'
+        },
+        {
+          label:'夏',
+          value:'2'
+        },
+        {
+          label:'秋',
+          value:'3'
+        },
+        {
+          label:'冬',
+          value:'4'
+        }
+      ],
+      isUseOptions:[
+        {
+          label:'全部',
+          value:undefined
+        },
+        {
+          label:'常用',
+          value:0
+        },
+        {
+          label:'不常用',
+          value:1
+        }
+      ],
       recipeNameSharePub:'',
       recipeNameSharePri:'',
       dishSharePri:'',
@@ -777,9 +848,10 @@ document.oncontextmenu = function(){return false};
         this.peopleMealListLeft=res.data.data;
       })
     },
-    dishShareSearchPub(pub){
+    dishShareSearchPub(isPrivate,belongRegion,seasonl,isUse){
       //公共
-      getDishByBaseId(pub).then(res=>{
+      let dishSharePub= this.dishSharePub?this.dishSharePub:undefined
+      getDishByBaseId(isPrivate,dishSharePub,belongRegion,seasonl,isUse).then(res=>{
         if(res.data.success){
           let data=[];
           res.data.data.forEach(_=>{
@@ -800,9 +872,14 @@ document.oncontextmenu = function(){return false};
         }
       })
     },
-    dishShareSearchPri(pri){
+    dishShareSearchPri(isPrivate,typeTemp){
       //私人
-      getDishByBaseId(pri).then(res=>{
+      let dishSharePri= this.dishSharePri?this.dishSharePri:undefined;
+      let belongRegion= this.belongRegion?this.belongRegion[0]:undefined;
+      let seasonl= this.seasonl?this.seasonl:undefined;
+      let isUse= this.isUse?this.isUse:undefined;
+      debugger
+      getDishByBaseId(isPrivate,dishSharePri,belongRegion,seasonl,isUse,typeTemp).then(res=>{
         if(res.data.success){
           let data=[];
           res.data.data.forEach(_=>{
@@ -832,6 +909,20 @@ document.oncontextmenu = function(){return false};
       this.dishShareSearchPub(1)
       this.dishShareSearchPri(0)
 
+      grantTree().then(res=>{
+        res.data.data.forEach(_=>{
+          if(_.children){
+            _.children.forEach(__=>{
+              if(__.children){
+                __.children.forEach(___=>{
+                  delete __.children
+                })
+              }
+            })
+          }
+        })
+          this.belongRegionOption=res.data.data
+      })
     },
 
   GetAbsoluteLocation(element)
@@ -1567,4 +1658,18 @@ document.oncontextmenu = function(){return false};
   .el-checkbox{
    width: 35px;
   }
+  .select-item{
+    /*display: flex;*/
+    /*justify-content: start;*/
+    /*font-size: 12px!important*/
+  }
+  .el-input{
+    font-size: 12px!important;
+  }
+.select-item .el-input__icon{
+  width:5px !important;
+}
+.select-item  .el-input--suffix .el-input__inner{
+  padding-right: 15px!important;
+}
 </style>

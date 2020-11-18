@@ -13,14 +13,24 @@ export const mealList = (searchType,isPub,recipeName,isUse) => {
     }
   })
 }
+export const grantTree = () => {
+  return request({
+    url: '/api/blade-system/region/region-tree',
+    method: 'get',
+  })
+}
 
-export  const getDishByBaseId=(isPrivate)=>{
+export  const getDishByBaseId=(isPrivate,dishName,belongRegion,seasonl,isUse,typeTemp)=>{
   return request({
     url: '/api/blade-food/basetype/getDishByBaseId',
     method: 'get',
     params: {
       isPrivate,
       dishName,
+      belongRegion,
+      seasonl,
+      isUse,
+      typeTemp
     }
   })
 }
