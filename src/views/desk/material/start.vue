@@ -338,6 +338,7 @@
               <!-- <img v-if="dialogImageUrl" :src="dialogImageUrl" class="avatar" /> -->
               <i class="el-icon-plus"></i>
             </el-upload>
+            <span style="color:#e0e0e0">上传图片不能超过2M</span>
             <el-dialog append-to-body :visible.sync="dialogVisible">
               <img width="100%" :src="dialogImageUrl" alt />
             </el-dialog>
@@ -1178,16 +1179,18 @@ export default {
       console.log(this.dialogImageUrl);
     },
     beforeAvatarUpload(file) {
-      const isJPG = file.type === "image/jpeg";
+      // const isJPG = file.type === "image/jpeg";
+
       const isLt2M = file.size / 1024 / 1024 < 2;
 
-      if (!isJPG) {
-        this.$message.error("上传图片只能是 JPG 格式!");
-      }
+      // if (!isJPG) {
+      //   this.$message.error("上传图片只能是 JPG 格式!");
+      // }
       if (!isLt2M) {
         this.$message.error("上传图片大小不能超过 2MB!");
       }
-      return isJPG && isLt2M;
+      // return isJPG && isLt2M;
+      return isLt2M;
     }
   }
 };

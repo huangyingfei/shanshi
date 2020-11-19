@@ -320,14 +320,22 @@
 
             <el-form-item label="图片" style=" width:500px ">
               <el-upload
-                action="https://jsonplaceholder.typicode.com/posts/"
+                action="api/blade-resource/oss/endpoint/put-file"
                 list-type="picture-card"
+                :limit="imgLimit"
+                :file-list="productImgs"
+                :on-exceed="handleExceed"
                 :on-preview="handlePictureCardPreview"
+                :before-upload="beforeAvatarUpload"
+                :on-success="handleAvatarSuccess"
                 :on-remove="handleRemove"
+                :headers="headerObj"
               >
+                <!-- <img v-if="dialogImageUrl" :src="dialogImageUrl" class="avatar" /> -->
                 <i class="el-icon-plus"></i>
               </el-upload>
-              <el-dialog :visible.sync="dialogVisible">
+              <span style="color:#e0e0e0">上传图片不能超过2M</span>
+              <el-dialog append-to-body :visible.sync="dialogVisible">
                 <img width="100%" :src="dialogImageUrl" alt />
               </el-dialog>
             </el-form-item>
@@ -479,6 +487,13 @@ export default {
         time: " ", //时间
         examineto: "" //审核
       },
+      dialogImageUrl: "", //图片
+      imgLimit: 1, //文件个数
+      productImgs: [],
+      dialogVisible: false,
+      headerObj: {
+        "Blade-Auth": ""
+      }, //上传图片请求头
       mailto: [], //营养素含量
       loadFlag: false, //加载flag
       attributes: [], //表格数据
@@ -500,8 +515,6 @@ export default {
       noinst: "",
       phoneId: "",
       editor: "",
-      dialogVisible: false,
-      dialogImageUrl: "",
       examine: {
         desc1: "" //拒绝理由
       },
@@ -593,8 +606,14 @@ export default {
     this.Protocol(); //营养素含量
     this.queryLite(); //获取分类
     this.Provinces(); //省市区
+    this.Takeone();
   },
   methods: {
+    Takeone() {
+      let str = JSON.parse(localStorage.getItem("saber-token"));
+      this.headerObj["Blade-Auth"] = `bearer ${str.content}`;
+      console.log(this.headerObj);
+    },
     searchType() {
       this.auditing();
       // console.log(this.value1);
@@ -675,7 +694,16 @@ export default {
             bar.push([item, this.subquery.belongRegion.split(",")[i]]);
           });
           this.valuepark = bar;
+            let picture = [];//图片
+          if (this.subquery.pic) {
+            picture[0] = {
+              url: this.subquery.pic
+            };
+          }
+          this.productImgs = picture;
           this.ruleForm.desc = this.subquery.function; //功用
+       
+          this.productImgs = picture;
           this.ruleForm.delivery = this.subquery.isPub == 0 ? true : false; //公开
           // console.log(this.ruleForm.delivery);
           this.ruleForm.delivery1 = this.subquery.isUse == 0 ? true : false; //常用
@@ -753,6 +781,7 @@ export default {
             seasons: this.active, //季节
             belongRegions: this.valuepark, //所属区域
             function: this.ruleForm.desc, //功用
+            pic: this.dialogImageUrl,
             isUse: this.ruleForm.delivery1 == false ? 1 : 0, //是否常用
             isPub: this.ruleForm.delivery == false ? 1 : 0, //是否公开
             nutritions: food
@@ -814,6 +843,7 @@ export default {
           seasons: this.active, //季节
           belongRegions: this.valuepark, //所属区域
           function: this.ruleForm.desc, //功用
+          pic: this.dialogImageUrl,
           isUse: this.ruleForm.delivery1 == false ? 1 : 0, //是否常用
           isPub: this.ruleForm.delivery == false ? 1 : 0, //是否公开
           nutritions: food
@@ -879,6 +909,13 @@ export default {
           });
           this.valuepark = bar;
           this.ruleForm.desc = this.subquery.function; //功用
+            let picture = [];//图片
+          if (this.subquery.pic) {
+            picture[0] = {
+              url: this.subquery.pic
+            };
+          }
+          this.productImgs = picture;
           this.ruleForm.delivery = this.subquery.isPub == 0 ? true : false; //公开
           // console.log(this.ruleForm.delivery);
           this.ruleForm.delivery1 = this.subquery.isUse == 0 ? true : false; //常用
@@ -1002,13 +1039,44 @@ export default {
         });
     },
 
+    //移除图片
     handleRemove(file, fileList) {
       console.log(file, fileList);
     },
+    //预览图片
     handlePictureCardPreview(file) {
-      //上传图片
+      console.log(file.url);
+
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
+    },
+    handleExceed(files, fileList) {
+      //图片上传超过数量限制
+      this.$message.error("上传图片不能超过1张!");
+      console.log(files, fileList);
+    },
+    // 上传成功
+    handleAvatarSuccess(res, file) {
+      console.log(res);
+      this.dialogImageUrl = URL.createObjectURL(file.raw);
+      this.dialogImageUrl = res.data.link;
+      // this.imageUrl = URL.createObjectURL(file.raw);
+      // this.imageUrl = res.data.link;
+      console.log(this.dialogImageUrl);
+    },
+    beforeAvatarUpload(file) {
+      // const isJPG = file.type === "image/jpeg";
+
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      // if (!isJPG) {
+      //   this.$message.error("上传图片只能是 JPG 格式!");
+      // }
+      if (!isLt2M) {
+        this.$message.error("上传图片大小不能超过 2MB!");
+      }
+      // return isJPG && isLt2M;
+      return isLt2M;
     }
   }
 };

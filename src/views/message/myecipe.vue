@@ -163,7 +163,7 @@
               v-if="scope.row.isUse == 1"
               >不收藏</el-button
             >
-            <el-button type="text" size="small">复制</el-button>
+            <!-- <el-button type="text" size="small">复制</el-button> -->
             <el-button
               @click="getPublicDomain(scope.row)"
               type="text"
@@ -393,7 +393,7 @@ export default {
       this.loadFlag = true;
       this.$axios
         .get(
-          `api/blade-food/recipe/page?size=${this.m_page.size}&current=1&ascs=id&searchType=0&recipeName=${this.wupload.input}&isUse=${this.empty}&isPub=${this.callback}&isBoard=${this.blicity}`,
+          `api/blade-food/recipe/page?size=${this.m_page.size}&current=${this.m_page.number}&ascs=id&searchType=0&recipeName=${this.wupload.input}&isUse=${this.empty}&isPub=${this.callback}&isBoard=${this.blicity}`,
           {}
         )
         .then(res => {
@@ -420,7 +420,7 @@ export default {
 .unsaved {
   width: 100%;
   /* height: 700px; */
-  、height: 100%;
+  height: 100%;
   background-color: #fff;
 }
 

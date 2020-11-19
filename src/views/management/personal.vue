@@ -587,7 +587,7 @@
                     <span>{{ ruleFormUsers.desc }}</span>
                   </el-form-item>
                   <el-form-item label="图片"  style="width:350px">
-                    <img style="width:200px;height:200px" :src="this.rectangle" alt="">
+                    <img  v-if="this.rectangle!=''"  style="width:200px;height:200px" :src="this.rectangle" alt="">
                     <!-- <el-upload
                       action="https://jsonplaceholder.typicode.com/posts/"
                       list-type="picture-card"
