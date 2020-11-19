@@ -348,7 +348,7 @@ export default {
       this.ruleForm.adding = row.foodName;
       this.ruleForm.adding1 = row.foodName1;
       this.ruleForm.desc = row.reason;
-      this.ruleForm.resource = row.isActive == 0 ? "否" : "1";
+      this.ruleForm.resource = row.isActive == 0 ? "否" : "是";
 
       this.support = row.foodId; //食材一ID
       this.editor = row.foodId1; //食材二ID
@@ -416,7 +416,7 @@ export default {
       });
     },
     DeleteUser(row) {
-      console.log(row);
+      // console.log(row);
       this.term = row.id;
       // this.$axios
       //   .post(`api/blade-food/foodmutual/remove?ids=${this.term}`)

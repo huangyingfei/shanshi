@@ -263,7 +263,7 @@ export default {
       this.loadFlag = true;
       this.$axios
         .get(
-          `api/blade-food/recipe/openRecipeList?size=${this.m_page.size}&current=${this.m_page.number}`,
+          `api/blade-food/recipe/shareRecipeList?size=${this.m_page.size}&current=${this.m_page.number}`,
           {}
         )
         .then(res => {

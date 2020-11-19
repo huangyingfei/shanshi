@@ -63,6 +63,7 @@
       <el-table
         :data="attributes"
         border
+        stripe
         style="width: 100%"
         :element-loading-text="page_data.loadTxt"
         v-loading="loadFlag"
@@ -185,6 +186,7 @@
         <div class="unsigned">
           <el-form
             :model="ruleForm"
+            :rules="rules"
             :inline="true"
             ref="ruleForm"
             label-width="100px"
@@ -334,13 +336,16 @@
                 <!-- <img v-if="dialogImageUrl" :src="dialogImageUrl" class="avatar" /> -->
                 <i class="el-icon-plus"></i>
               </el-upload>
-              <span style="color:#e0e0e0">上传图片不能超过2M</span>
+              <span style="color:#e0e0e0;  font-size: 11px;"
+                >上传图片不能超过2M 只能是JPG PNG格式</span
+              >
               <el-dialog append-to-body :visible.sync="dialogVisible">
                 <img width="100%" :src="dialogImageUrl" alt />
               </el-dialog>
             </el-form-item>
 
             <el-switch
+              :disabled="true"
               style=" width:200px "
               v-model="ruleForm.delivery"
               active-text="公开"
@@ -400,7 +405,7 @@
           </el-table>
         </div>
         <!-- 公共库所分类 -->
-        <div class="worm1">公共库所属分类</div>
+        <!-- <div v-if="this.according == 1" class="worm1">公共库所属分类</div>
         <el-form
           :model="ruleForm"
           :rules="rules"
@@ -408,7 +413,7 @@
           label-width="100px"
           class="demo-ruleForm"
         >
-          <el-form-item label="公共库分类">
+          <el-form-item v-if="this.according == 1" label="公共库分类">
             <el-select
               v-if="this.according == 1"
               v-model="menu"
@@ -423,8 +428,8 @@
               </el-option>
             </el-select>
           </el-form-item>
-        </el-form>
-        <div class="worm1">拒绝原因</div>
+        </el-form> -->
+        <div class="worm1" v-if="this.according == 1">拒绝原因</div>
         <el-form
           :model="examine"
           ref="examine"
@@ -432,16 +437,20 @@
           label-width="100px"
           class="demo-ruleForm"
         >
-          <el-form-item label="拒绝原因" style=" width:200px " prop="desc1">
+          <el-form-item
+            v-if="this.according == 1"
+            label="拒绝原因"
+            style=" width:200px "
+            prop="desc1"
+          >
             <el-input
-              v-if="this.according == 1"
               style=" width: 450px;  "
               type="textarea"
               v-model="examine.desc1"
             ></el-input>
           </el-form-item>
         </el-form>
-        <div class="worm1">记录</div>
+        <!-- <div class="worm1">记录</div> -->
         <el-timeline>
           <!-- <el-timeline-item timestamp="2018/4/12" placement="top">
             <el-card>
@@ -467,7 +476,10 @@
         >
           拒 绝</el-button
         >
-        <el-button type="primary" @click="Disagree" v-if="this.according == 1"
+        <el-button
+          type="primary"
+          @click="Disagree('ruleForm')"
+          v-if="this.according == 1"
           >同 意</el-button
         >
       </div>
@@ -537,17 +549,28 @@ export default {
         type: [],
         temps: ""
       },
-
+      rules: {
+        name: [{ required: true, message: "请输入食材名", trigger: "blur" }],
+        buffer: [
+          { required: true, message: "请输入食材真名", trigger: "blur" }
+        ],
+        fooddata: [
+          //食材分类
+          { required: true, message: "请选择食物分类", trigger: "change" }
+        ],
+        besaved: [{ required: true, message: "请输入食部", trigger: "blur" }],
+        timers: [{ required: true, message: "请输入重量", trigger: "blur" }]
+      },
       active: [], //季节
       valuepark: [], //省市区
       menu: "", //公共分类
       fication: [],
       foodPos: [], //食材分类
-      rules: {
-        desc1: [
-          { required: true, message: "请输入拒绝理由", trigger: "change" }
-        ]
-      },
+      // rules: {
+      //   desc1: [
+      //     { required: true, message: "请输入拒绝理由", trigger: "change" }
+      //   ]
+      // },
 
       options: [], //省市区
       mState: [
@@ -649,8 +672,9 @@ export default {
     },
     //查看
     seecol(row, index) {
-      console.log(index);
-      console.log(row);
+      this.according = index;
+      // console.log(index);
+      // console.log(row);
       this.examine.desc1 = "";
       this.valuepark.length = 0;
       this.active.length = 0;
@@ -666,7 +690,7 @@ export default {
           // console.log(res);
           this.subquery = res.data.data;
           console.log(this.subquery);
-          this.menu = this.subquery.foodPubType;
+          // this.menu = this.subquery.foodPubType;
           this.flour = this.subquery.id; //ID
           this.agree = this.subquery.status; //审核状态
           this.dsquery.establish = this.subquery.orgName; //创建机构
@@ -694,7 +718,7 @@ export default {
             bar.push([item, this.subquery.belongRegion.split(",")[i]]);
           });
           this.valuepark = bar;
-            let picture = [];//图片
+          let picture = []; //图片
           if (this.subquery.pic) {
             picture[0] = {
               url: this.subquery.pic
@@ -702,7 +726,7 @@ export default {
           }
           this.productImgs = picture;
           this.ruleForm.desc = this.subquery.function; //功用
-       
+
           this.productImgs = picture;
           this.ruleForm.delivery = this.subquery.isPub == 0 ? true : false; //公开
           // console.log(this.ruleForm.delivery);
@@ -766,7 +790,7 @@ export default {
             id: this.subquery.id,
             refuseReason: this.examine.desc1,
             status: 2, //审核状态
-            foodPubType: this.menu, //公共库所属分类
+            // foodPubType: this.menu, //公共库所属分类
             foodName: this.ruleForm.name, //食材名
             foodAlias: this.ruleForm.foodFood, //食物别名1
             foodAlias1: this.ruleForm.ovenFood, //食物别名2
@@ -801,65 +825,77 @@ export default {
           });
       }
     },
-    Disagree() {
-      // console.log(this.ruleForm.fooddata);
-      let food = [];
-      this.mailto.forEach((item, index) => {
-        item.children.forEach((item1, indx1) => {
-          if (item1.children) {
-            item1.children.forEach((item2, index2) => {
-              if (item2.result != null) {
+    //同意
+    Disagree(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          // alert("submit!");
+          let food = [];
+          this.mailto.forEach((item, index) => {
+            item.children.forEach((item1, indx1) => {
+              if (item1.children) {
+                item1.children.forEach((item2, index2) => {
+                  if (item2.result != null) {
+                    food.push({
+                      nutrientId: item2.id,
+                      value: item2.result
+                    });
+                  }
+                });
+              }
+              if (item1.result != null) {
                 food.push({
-                  nutrientId: item2.id,
-                  value: item2.result
+                  nutrientId: item1.id,
+                  value: item1.result
                 });
               }
             });
-          }
-          if (item1.result != null) {
-            food.push({
-              nutrientId: item1.id,
-              value: item1.result
-            });
-          }
-        });
-      });
-      this.$axios
-        .post(`api/blade-food/food/audit`, {
-          id: this.flour, //ID
-          status: 1, //审核状态
-          foodPubType: this.menu, //公共库所属分类
-          foodName: this.ruleForm.name, //食材名
-          foodAlias: this.ruleForm.foodFood, //食物别名1
-          foodAlias1: this.ruleForm.ovenFood, //食物别名2
-          foodReal: this.ruleForm.buffer, //食材真名
-          foodType: this.ruleForm.fooddata, //食材分类
-          foodType1: this.ruleForm.foods, //食物分类1
-          foodType2: this.ruleForm.dogfood, //食物分类2
-          foodEat: this.ruleForm.besaved, //食部
-          weight: this.ruleForm.timers, //重量
-          water: this.ruleForm.content, //水分
-          color: this.ruleForm.resource, //色系
-          seasons: this.active, //季节
-          belongRegions: this.valuepark, //所属区域
-          function: this.ruleForm.desc, //功用
-          pic: this.dialogImageUrl,
-          isUse: this.ruleForm.delivery1 == false ? 1 : 0, //是否常用
-          isPub: this.ruleForm.delivery == false ? 1 : 0, //是否公开
-          nutritions: food
-        })
-        .then(res => {
-          console.log(res);
-          this.$message({
-            message: "审核成功",
-            type: "success"
           });
-          this.auditing();
-          this.seekeys = false;
-        })
-        .catch(() => {
-          this.$message.error("审核失败");
-        });
+          this.$axios
+            .post(`api/blade-food/food/audit`, {
+              id: this.flour, //ID
+              status: 1, //审核状态
+              // foodPubType: this.menu, //公共库所属分类
+              foodName: this.ruleForm.name, //食材名
+              foodAlias: this.ruleForm.foodFood, //食物别名1
+              foodAlias1: this.ruleForm.ovenFood, //食物别名2
+              foodReal: this.ruleForm.buffer, //食材真名
+              foodType: this.ruleForm.fooddata, //食材分类
+              foodType1: this.ruleForm.foods, //食物分类1
+              foodType2: this.ruleForm.dogfood, //食物分类2
+              foodEat: this.ruleForm.besaved, //食部
+              weight: this.ruleForm.timers, //重量
+              water: this.ruleForm.content, //水分
+              color: this.ruleForm.resource, //色系
+              seasons: this.active, //季节
+              belongRegions: this.valuepark, //所属区域
+              function: this.ruleForm.desc, //功用
+              pic: this.dialogImageUrl,
+              isUse: this.ruleForm.delivery1 == false ? 1 : 0, //是否常用
+              isPub: this.ruleForm.delivery == false ? 1 : 0, //是否公开
+              nutritions: food
+            })
+            .then(res => {
+              console.log(res);
+              this.$message({
+                message: "审核成功",
+                type: "success"
+              });
+              this.auditing();
+              this.seekeys = false;
+            })
+            .catch(() => {
+              this.$message.error("审核失败");
+            });
+        } else {
+          this.$message({
+            message: "食材未填全",
+            type: "warning"
+          });
+          return false;
+        }
+      });
+      // console.log(this.ruleForm.fooddata);
     },
     //审核
     Directory(row, index) {
@@ -909,7 +945,7 @@ export default {
           });
           this.valuepark = bar;
           this.ruleForm.desc = this.subquery.function; //功用
-            let picture = [];//图片
+          let picture = []; //图片
           if (this.subquery.pic) {
             picture[0] = {
               url: this.subquery.pic
@@ -1087,6 +1123,7 @@ export default {
   width: 99%;
   height: 100%;
   background-color: #fff;
+  margin-left: 0;
   /* height: 600px; */
 }
 .custom {

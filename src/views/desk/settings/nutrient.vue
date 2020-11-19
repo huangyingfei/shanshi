@@ -114,7 +114,7 @@ export default {
     },
     //删除
     DeleteUser(row) {
-      this.$confirm("确认删除该来源比例?", "提示", {
+      this.$confirm("确认删除该标准?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"

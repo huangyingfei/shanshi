@@ -317,21 +317,26 @@ export default {
     },
     //删除
     DeleteUser(row) {
-      console.log(row);
       this.term = row.id;
-      this.$axios
-        .post(`api/blade-food/food/remove?ids=${this.term}`)
-
-        .then(res => {
-          console.log(res);
-          this.$message({
-            message: "删除成功",
-            type: "success"
-          });
-          this.generator();
+      this.$confirm("确认删除该相克食材?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.$axios
+            .post(`api/blade-food/foodmutual/remove?ids=${this.term}`, {})
+            .then(res => {
+              // console.log(res);
+              this.generator();
+              this.$message.success("删除成功");
+            });
         })
         .catch(() => {
-          this.$message.error("删除失败");
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
         });
     },
     //编辑
@@ -466,7 +471,7 @@ export default {
     generator() {
       this.loadFlag1 = true;
       this.$axios(
-        `api/blade-food/foodmutual/list?size=${this.m_page.size}&current=${this.m_page.number}`
+        `api/blade-food/foodmutual/list?size=${this.m_page.size}&current=${this.m_page.number}&name=${this.input}&isActive=${this.value}&foodName=${this.temps}`
       ).then(res => {
         this.loadFlag1 = false;
         this.tableData = res.data.data.records;
