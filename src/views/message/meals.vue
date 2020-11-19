@@ -20,7 +20,13 @@
     >
       <div class="el-popover__title">{{curentHoverFood.name}}</div>
 
-      <p>我也不知道啥啥啥</p>
+      <showfoods-week
+        :headers="headers"
+        :datas="datas"
+        days="5"
+
+      >
+      </showfoods-week>
     </div>
 
 
@@ -126,7 +132,7 @@
       <el-col :span="24">
         <el-form :gutter="10" :inline="true" :model="WeekInfo">
           <el-form-item label="选择人群">
-            <el-select v-model="WeekInfo.crowd" placeholder="选择人群"    >
+            <el-select v-model="WeekInfo.crowd" placeholder="选择人群"  >
               <el-option  v-for="(item ,index) in crowdData" :label="item.peopleName" :value="item.id" :key="item.id"></el-option>
             </el-select>
           </el-form-item>
@@ -352,21 +358,21 @@
                   :options="belongRegionOption"  v-model="belongRegion" @change="dishShareSearchPri(0)"
                   :props="{ checkStrictly: true,label:'name',value:'code' }"
                   clearable></el-cascader>
-                <el-select v-model="seasonl" placeholder="请选择" >
+                <el-select v-model="seasonl" placeholder="请选择" @change="dishShareSearchPri(0)">
                   <el-option
                     v-for="item in seasonlOptions"
                     :key="item.value"
                     :label="item.label"
-                    :value="item.value" @change="dishShareSearchPri(0)">
+                    :value="item.value" >
                   </el-option>
                 </el-select>
-                <el-select v-model="isUse" placeholder="请选择">
+                <el-select v-model="isUse" placeholder="请选择" @change="dishShareSearchPri(0)">
                   <el-option
                     v-for="item in isUseOptions"
                     :key="item.value"
                     :label="item.label"
                     :value="item.value"
-                    @change="dishShareSearchPri(0)">
+                    >
                   </el-option>
                 </el-select>
               </div>
@@ -548,13 +554,16 @@
 
 <script>
   import foodsWeek from "@/views/foods/components/foodsweek";
+  import showfoodsWeek from "@/views/foods/components/showfoodsweek";
   import {getList} from "@/api/system/special"
   import {mealList,getDishByBaseId,dishDetail,save,detail,update,grantTree} from "@/api/system/meals"
 export default {
   components: {
     foodsWeek,
+    showfoodsWeek
   },
   mounted(){
+
     this.initData()
 
     if(this.$route.query.userid){
@@ -579,6 +588,9 @@ document.oncontextmenu = function(){return false};
 
     const data = [];
     return {
+      isUse:'',
+      belongRegion:'',
+      seasonl:'',
       belongRegionOption:[],
       seasonlOptions:[
         {
@@ -743,7 +755,8 @@ document.oncontextmenu = function(){return false};
     };
   },
   beforeMount() {},
-  methods: {
+  methods: {sub(){debugger},
+
     recipeNameShareSearchPub(type){
       debugger
       if(type){
@@ -877,7 +890,7 @@ document.oncontextmenu = function(){return false};
       let dishSharePri= this.dishSharePri?this.dishSharePri:undefined;
       let belongRegion= this.belongRegion?this.belongRegion[0]:undefined;
       let seasonl= this.seasonl?this.seasonl:undefined;
-      let isUse= this.isUse?this.isUse:undefined;
+      let isUse= (this.isUse||this.isUse==0)&&this.isUse!=""?this.isUse:undefined;
       debugger
       getDishByBaseId(isPrivate,dishSharePri,belongRegion,seasonl,isUse,typeTemp).then(res=>{
         if(res.data.success){
@@ -940,8 +953,8 @@ document.oncontextmenu = function(){return false};
           offsetTop += element.offsetTop;
           offsetLeft += element.offsetLeft;
       }
-      return { absoluteTop: offsetTop, absoluteLeft: offsetLeft,
-          offsetWidth: offsetWidth, offsetHeight: offsetHeight };
+      return { absoluteTop: offsetTop-300, absoluteLeft: offsetLeft-300,
+          offsetWidth: offsetWidth+500, offsetHeight: offsetHeight };
   },
 
   MoveFoodLayer(ev){
@@ -960,10 +973,11 @@ document.oncontextmenu = function(){return false};
       var pose= this.GetAbsoluteLocation(ev.srcElement);
 
       pose.absoluteLeft+=ev.srcElement.offsetWidth+30;
-
+      debugger
       setTimeout(() => {
         that.$refs.layershipu.style.top=pose.absoluteTop+'px';
         that.$refs.layershipu.style.left=pose.absoluteLeft+'px';
+        that.$refs.layershipu.style.width=pose.offsetWidth+'px';
         that.$refs.layershipu.style.display="block";
       }, 200);
 
@@ -1659,9 +1673,9 @@ document.oncontextmenu = function(){return false};
    width: 35px;
   }
   .select-item{
-    /*display: flex;*/
-    /*justify-content: start;*/
-    /*font-size: 12px!important*/
+    display: flex;
+    justify-content: start;
+    font-size: 12px!important
   }
   .el-input{
     font-size: 12px!important;
