@@ -282,12 +282,12 @@
                   <el-form-item label="所属季节" style="width: 350px">
                     <el-select
                       style=" width: 185px; "
-                      v-model="active"
+                      v-model="winter"
                       multiple
                       placeholder="请选择季节"
                     >
                       <el-option
-                        v-for="item in before"
+                        v-for="item in context"
                         :key="item.value"
                         :label="item.label"
                         :value="item.value"
@@ -758,6 +758,25 @@ export default {
       ],
       really1: "",
       really2: "0",
+      context:[
+            {
+          value: "1",
+          label: "春季"
+        },
+        {
+          value: "2",
+          label: "夏季"
+        },
+        {
+          value: "3",
+          label: "秋季"
+        },
+        {
+          value: "4",
+          label: "冬季"
+        }
+      ],
+      winter:[],
       //季节查询
       before: [
         {
@@ -1050,23 +1069,27 @@ export default {
             this.ruleForm.content = this.inquired.water; //水分
             this.ruleForm.resource = this.inquired.color + ""; //色系
             // this.active.push(this.inquired.season); //所属季节
+        
             this.inquired.season.split(",").forEach(item => {
               this.active.push(item);
             });
             //所属区域
-            let bar = [];
-            this.inquired.provinces.split(",").forEach((item, i) => {
-              bar.push([item, this.inquired.belongRegion.split(",")[i]]);
+     
+           if(this.inquired.provinces){
+                  let bar = [];
+                this.inquired.provinces.split(",").forEach((item, i) => {
+            bar.push([item, this.inquired.belongRegion.split(",")[i]]);
             });
-            this.valuepark = bar;
+              this.valuepark = bar;
+            }
             this.ruleForm.desc = this.inquired.function; //功用
 
-                 let picture = [];//图片
+          let picture = [];//图片
           if (this.inquired.pic) {
             picture[0] = {
               url: this.inquired.pic
-            };
-          };
+            }
+          }
           this.productImgs = picture;
             this.ruleForm.delivery = this.inquired.isPub == 1 ? false : true; //公开
             // console.log(this.ruleForm.delivery);
