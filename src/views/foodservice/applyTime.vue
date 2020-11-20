@@ -542,12 +542,15 @@ export default {
           });
           this.ruleForm1.region = this.handler.function; //特点
           this.ruleForm1.desc = this.handler.remark; //做法
-          let bar = [];
-          this.handler.provinces.split(",").forEach((item, i) => {
-            // console.log(item);
-            bar.push([item, this.handler.belongRegion.split(",")[i]]);
-          });
-          this.valuepark = bar;
+          if (this.handler.provinces) {
+            let bar = [];
+            this.handler.provinces.split(",").forEach((item, i) => {
+              // console.log(item);
+              bar.push([item, this.handler.belongRegion.split(",")[i]]);
+            });
+            this.valuepark = bar;
+          }
+
           // console.log(this.valuepark);
           this.rectangle = this.handler.pic;
           this.ruleForm1.delivery1 = this.handler.isUse == 0 ? true : false; //常用
