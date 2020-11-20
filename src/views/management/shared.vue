@@ -36,6 +36,7 @@
       ></el-date-picker>
       <div>
         <el-button
+          @click="searchStr"
           size="small"
           icon="el-icon-search"
           type="primary"
@@ -43,6 +44,7 @@
           >搜索</el-button
         >
         <el-button
+          @click="notEmpty"
           size="small"
           icon="el-icon-delete"
           type="primary"
@@ -93,7 +95,15 @@
         ></el-table-column>
         <el-table-column label="审核状态" width="150" align="center">
           <template slot-scope="scope">
-            <p class="stop" v-if="scope.row.status == 0">待审核</p>
+            <el-tag type="danger" v-if="scope.row.status == 0">待审核</el-tag>
+            <el-tag v-else-if="scope.row.status == 3">无需审核</el-tag>
+            <el-tag type="success" v-else-if="scope.row.status == 1"
+              >审核通过</el-tag
+            >
+            <el-tag type="warning" v-else-if="scope.row.status == 2"
+              >审核不通过</el-tag
+            >
+            <!-- <p class="stop" v-if="scope.row.status == 0">待审核</p>
             <p style="color:#409eff" v-else-if="scope.row.status == 3">
               无需审核
             </p>
@@ -102,15 +112,15 @@
             </p>
             <p style="color:#e6a23c" v-else-if="scope.row.status == 2">
               审核不通过
-            </p>
+            </p> -->
           </template>
         </el-table-column>
         <!--操作格-->
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button
+              type="text"
               icon="el-icon-view"
-              type="primary"
               size="small"
               @click="seecol(scope.row)"
               >查看</el-button
@@ -388,6 +398,12 @@ export default {
   },
 
   methods: {
+    notEmpty() {
+      this.input = ""; //菜品名称
+      this.value = ""; //审核状态
+      this.editor = ""; //提交人
+      this.searchStr = ""; //提交日期
+    },
     seecol(row) {
       this.flour = row.id;
 

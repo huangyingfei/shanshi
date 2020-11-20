@@ -309,9 +309,9 @@
                     <!-- <img v-if="dialogImageUrl" :src="dialogImageUrl" class="avatar" /> -->
                     <i class="el-icon-plus"></i>
                   </el-upload>
-                   <span style="color:#e0e0e0;  font-size: 11px;"
-                >上传图片不能超过2M 只能是JPG PNG格式</span
-              >
+                  <span style="color:#e0e0e0;  font-size: 11px;"
+                    >上传图片不能超过2M 只能是JPG PNG格式</span
+                  >
                   <el-dialog append-to-body :visible.sync="dialogVisible">
                     <img width="100%" :src="dialogImageUrl" alt />
                   </el-dialog>
@@ -349,7 +349,7 @@
                 style="margin-left: 10px"
                 type="primary"
                 @click="addLine"
-                >添加行数</el-button
+                >添加</el-button
               >
               <!-- <el-button @click="save">保存</el-button> -->
               <el-table
@@ -449,12 +449,12 @@
                 <!--操作格-->
                 <el-table-column label="操作" align="center">
                   <template slot-scope="scope">
-                    <el-button
+                    <!-- <el-button
                       type="text"
                       size="small"
                       style="margin-left: 10px"
                       >查看</el-button
-                    >
+                    > -->
                     <el-button
                       type="text"
                       size="small"
@@ -991,10 +991,10 @@ export default {
     this.Provinces(); //省市区
     this.Addraudit(); //树形结构渲染
     this.obtains(); //左边树形结构
-    this.Takeone();//获取token
+    this.Takeone(); //获取token
   },
   methods: {
-     Takeone() {
+    Takeone() {
       let str = JSON.parse(localStorage.getItem("saber-token"));
       this.headerObj["Blade-Auth"] = `bearer ${str.content}`;
       console.log(this.headerObj);
@@ -1319,14 +1319,15 @@ export default {
                   name: item.name,
                   address: item.baseTypeName,
                   stats: item.value,
-                  spring: item.nutritionNlValue
-                  // malloc: item.nutritionNlValue
+                  spring: item.nutritionNlValue,
+                  malloc: item.nutritionNlValue
                 };
               });
               this.officeonce = arr;
+              this.graph();
               // this.addLine();
             }
-            console.log(this.officeonce);
+            // console.log(this.officeonce);
           } else {
             this.valuepark1.length = 0;
             this.value2.length = 0;
@@ -1346,11 +1347,9 @@ export default {
               bar.push([item, this.handler.belongRegion.split(",")[i]]);
             });
             this.valuepark1 = bar;
-          
-     
-              this.rectangle = this.handler.pic;
-     
-        
+
+            this.rectangle = this.handler.pic;
+
             this.ruleForm1.delivery1 = this.handler.isUse == 0 ? true : false; //常用
             // this.ruleForm1.delivery = this.handler.isPub == 0 ? false : true; //公开
             // this.toBack = this.handler.dishMxVos;
@@ -1366,14 +1365,15 @@ export default {
                   name: item.name,
                   address: item.baseTypeName,
                   stats: item.value,
-                  spring: item.nutritionNlValue
+                  spring: item.nutritionNlValue,
+                  malloc: item.nutritionNlValue
                   // malloc: item.nutritionNlValue
                 };
               });
               this.officeonce = arr;
-
+              this.graph();
               // this.addLine();
-              console.log(this.officeonce);
+              // console.log(this.officeonce);
             }
           }
         });
@@ -1594,7 +1594,7 @@ export default {
     multi(data) {
       // console.log(data)
       this.key = data.id;
-      this.$axios(`blade-food/dish/changeIsPub`, {
+      this.$axios(`api/blade-food/dish/changeIsPub`, {
         id: this.key,
         isPub: 1
       })
@@ -1613,7 +1613,7 @@ export default {
     //设置公开
     docs(data) {
       this.terms = data.id;
-      this.$axios(`blade-food/dish/changeIsPub`, {
+      this.$axios(`api/blade-food/dish/changeIsPub`, {
         id: this.terms,
         isPub: 0
       })

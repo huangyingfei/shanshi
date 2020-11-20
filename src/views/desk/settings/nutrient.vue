@@ -34,7 +34,7 @@
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button
-              type="primary"
+              type="text"
               size="small"
               icon="el-icon-edit"
               style=" margin-left: 20px;"
@@ -42,7 +42,7 @@
               >编辑</el-button
             >
             <el-button
-              type="danger"
+              type="text"
               size="small"
               icon="el-icon-delete"
               style=" margin-left: 20px;"

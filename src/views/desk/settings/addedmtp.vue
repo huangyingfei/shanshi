@@ -215,8 +215,8 @@
       </el-tab-pane>
     </el-tabs>
     <div class="Aconfirm">
-      <el-button type="primary" v-if="window" @click="Submit">保存</el-button>
-      <el-button type="success" v-else @click="Atom">編輯保存</el-button>
+      <el-button type="primary" @click="Submit">保存</el-button>
+      <el-button type="success" @click="Atom">編輯保存</el-button>
     </div>
   </div>
 </template>

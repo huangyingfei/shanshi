@@ -18,7 +18,6 @@
       <el-date-picker
         format="yyyy 年 MM 月 dd 日"
         value-format="yyyy-MM-dd"
-        c
         v-model="value1"
         type="date"
         placeholder="选择日期"
@@ -55,7 +54,9 @@
           style=" margin-left: 20px; "
           >搜索</el-button
         >
-        <el-button size="medium" style=" margin-left: 20px; ">清空</el-button>
+        <el-button @click="notEmpty" size="medium" style=" margin-left: 20px; "
+          >清空</el-button
+        >
       </div>
     </div>
     <!-- 审核表格 -->
@@ -106,10 +107,24 @@
         ></el-table-column>
         <el-table-column label="审核状态" align="center">
           <template slot-scope="scope">
-            <p class="stop" v-if="scope.row.status == 0">待审核</p>
-            <p v-else-if="scope.row.status == 3">无需审核</p>
-            <p v-else-if="scope.row.status == 1">审核通过</p>
-            <p v-else-if="scope.row.status == 2">审核不通过</p>
+            <el-tag type="danger" v-if="scope.row.status == 0">待审核</el-tag>
+            <el-tag v-else-if="scope.row.status == 3">无需审核</el-tag>
+            <el-tag type="success" v-else-if="scope.row.status == 1"
+              >审核通过</el-tag
+            >
+            <el-tag type="warning" v-else-if="scope.row.status == 2"
+              >审核不通过</el-tag
+            >
+            <!-- <p class="stop" v-if="scope.row.status == 0">待审核</p>
+            <p style="color:#409eff" v-else-if="scope.row.status == 3">
+              无需审核
+            </p>
+            <p style="color:#67c23a" v-else-if="scope.row.status == 1">
+              审核通过
+            </p>
+            <p style="color:#e6a23c" v-else-if="scope.row.status == 2">
+              审核不通过
+            </p> -->
           </template>
         </el-table-column>
         <!--操作格-->
@@ -632,6 +647,15 @@ export default {
     this.Takeone();
   },
   methods: {
+    notEmpty() {
+      console.log(12321);
+      this.input = "";
+      this.noinst = "";
+      this.value1 = "";
+      this.editor = "";
+      this.phoneId = "";
+      this.mState1 = "";
+    },
     Takeone() {
       let str = JSON.parse(localStorage.getItem("saber-token"));
       this.headerObj["Blade-Auth"] = `bearer ${str.content}`;

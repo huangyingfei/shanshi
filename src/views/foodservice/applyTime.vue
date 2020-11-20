@@ -43,7 +43,7 @@
           >搜索</el-button
         >
         <el-button
-        @click="notEmpty"
+          @click="notEmpty"
           size="small"
           icon="el-icon-delete"
           type="primary"
@@ -58,6 +58,7 @@
         :data="tmquery"
         border
         style="width: 100%"
+        :element-loading-text="page_data.loadTxt"
         v-loading="loadFlag"
         empty-text="没有数据~"
       >
@@ -94,7 +95,15 @@
         ></el-table-column>
         <el-table-column label="审核状态" width="150" align="center">
           <template slot-scope="scope">
-            <p class="stop" v-if="scope.row.status == 0">待审核</p>
+            <el-tag type="danger" v-if="scope.row.status == 0">待审核</el-tag>
+            <el-tag v-else-if="scope.row.status == 3">无需审核</el-tag>
+            <el-tag type="success" v-else-if="scope.row.status == 1"
+              >审核通过</el-tag
+            >
+            <el-tag type="warning" v-else-if="scope.row.status == 2"
+              >审核不通过</el-tag
+            >
+            <!-- <p class="stop" v-if="scope.row.status == 0">待审核</p>
             <p style="color:#409eff" v-else-if="scope.row.status == 3">
               无需审核
             </p>
@@ -103,15 +112,15 @@
             </p>
             <p style="color:#e6a23c" v-else-if="scope.row.status == 2">
               审核不通过
-            </p>
+            </p> -->
           </template>
         </el-table-column>
         <!--操作格-->
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button
+              type="text"
               icon="el-icon-view"
-              type="primary"
               size="small"
               @click="seecol(scope.row)"
               >查看</el-button
@@ -119,6 +128,19 @@
           </template>
         </el-table-column>
       </el-table>
+      <!-- 分页 -->
+      <div class="pagingClass">
+        <el-pagination
+          :page-sizes="m_page.sizes"
+          :page-size="m_page.size"
+          :current-page="m_page.number"
+          @size-change="m_handleSizeChange"
+          @current-change="m_handlePageChange"
+          layout="total,sizes,prev, pager, next"
+          background
+          :total="m_page.totalElements"
+        ></el-pagination>
+      </div>
     </div>
     <!-- 查看 -->
     <el-dialog
@@ -189,7 +211,13 @@
               <span>{{ ruleForm1.desc }}</span>
             </el-form-item>
             <el-form-item label="图片" style="width: 350px">
-              <el-upload
+              <img
+                v-if="this.rectangle != ''"
+                style="width:200px;height:200px"
+                :src="this.rectangle"
+                alt=""
+              />
+              <!-- <el-upload
                 action="https://jsonplaceholder.typicode.com/posts/"
                 list-type="picture-card"
                 :on-preview="handlePictureCardPreview"
@@ -199,7 +227,7 @@
               </el-upload>
               <el-dialog :visible.sync="dialogVisible">
                 <img width="100%" :src="dialogImageUrl" alt />
-              </el-dialog>
+              </el-dialog> -->
             </el-form-item>
             <!-- <el-form-item label="常用" style="">
                 <el-switch v-model="ruleForm1.delivery1"></el-switch>
@@ -222,12 +250,19 @@
             :data="officeonce"
             border
             v-loading="loadFlag1"
-            style="width: 100%"
+            style="width: 70%"
             :summary-method="getSummaries"
           >
-            <el-table-column prop="id" label="序号" width="100" align="center">
+            <el-table-column
+              v-if="show"
+              prop="id"
+              label="序号"
+              width="100"
+              align="center"
+            >
             </el-table-column>
             <el-table-column
+              v-if="show"
               prop="frame"
               label="分类ID "
               width="100"
@@ -258,7 +293,9 @@
             >
               <template slot-scope="scope">
                 <el-input
+                  :disabled="true"
                   style="width: 90px"
+                  @blur="graph"
                   @input="hello(scope.row, scope.$index)"
                   v-model="scope.row.stats"
                   clearable
@@ -297,6 +334,44 @@
             <!--操作格-->
           </el-table>
         </div>
+        <!-- 菜品营养素信息 -->
+        <div class="mationtxt">菜品营养素信息</div>
+        <div class="saveas">
+          <el-table
+            :data="mailto"
+            style="width: 70%; margin-bottom: 20px"
+            row-key="id"
+            v-loading="loadFlag"
+            :default-expand-all="false"
+            :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+          >
+            <el-table-column
+              prop="title"
+              label="营养素"
+              align="center"
+              width="200"
+            ></el-table-column>
+            <el-table-column
+              prop="unit"
+              label="单位"
+              width="180"
+              align="center"
+            ></el-table-column>
+
+            <el-table-column label="含量" align="center">
+              <template slot-scope="scope">
+                <el-input
+                  :disabled="true"
+                  v-model="scope.row.result"
+                  type="text"
+                  v-if="scope.row.level != 1 ? true : false"
+                  placeholder="请输入内容"
+                ></el-input>
+              </template>
+              <!-- v-if="scope.row.dients" -->
+            </el-table-column>
+          </el-table>
+        </div>
       </div>
     </el-dialog>
   </div>
@@ -320,14 +395,24 @@ export default {
       mailto: [], //营养素含量
       active: [], //季节
       valuepark: [], //省市区
-      
-      input:"",//菜品名称
-      value:"",//审批状态
-      editor:"",//提交人
-      getDate:"",//提交日期
 
+      input: "", //菜品名称
+      value: "", //审批状态
+      editor: "", //提交人
+      getDate: "", //提交日期
+      rectangle: "",
       //季节查询
       value1: [], //所属季节
+      page_data: {
+        loadTxt: "请求列表中"
+      },
+      m_page: {
+        sizes: [10, 20, 40, 50, 100], //每页最大显示数
+        size: 20,
+        totalElements: 0,
+        totalPages: 3,
+        number: 1
+      },
       before: [
         {
           value: "0",
@@ -395,11 +480,46 @@ export default {
   },
 
   methods: {
-    notEmpty(){
-      this.input="";
-      this.value="";
-      this.editor="";
-      this.getDate="";
+    notEmpty() {
+      this.input = "";
+      this.value = "";
+      this.editor = "";
+      this.getDate = "";
+    },
+    //失去焦点事件
+    graph() {
+      // console.log(this.officeonce);
+      let next = [];
+      this.officeonce.forEach(item => {
+        // console.log(item);
+        next.push({
+          foodId: item.id,
+          val: item.stats
+        });
+      });
+      console.log(next);
+      this.$axios
+        .post(`api/blade-food/dish/calNutriByFoodIds`, {
+          recipeVals: next
+        })
+        .then(res => {
+          // console.log(res);
+          this.atomic = res.data.data;
+          // console.log(this.atomic);
+          // let touch=[];
+          this.atomic.forEach(item => {
+            // console.log(item);
+            for (let item1 of this.mailto) {
+              // console.log(item1);
+              for (let arr of item1.children) {
+                // console.log(arr);
+                if (arr.id == item.nutrientId) {
+                  arr.result = item.total;
+                }
+              }
+            }
+          });
+        });
     },
     seecol(row) {
       this.valuepark.length = 0;
@@ -429,21 +549,24 @@ export default {
           });
           this.valuepark = bar;
           // console.log(this.valuepark);
+          this.rectangle = this.handler.pic;
           this.ruleForm1.delivery1 = this.handler.isUse == 0 ? true : false; //常用
           if (this.handler.dishMxVos) {
             let arr = [];
             this.handler.dishMxVos.forEach((item, index) => {
               arr[index] = {
-                id: item.id,
+                id: item.foodId,
                 frame: item.baseTypeId,
                 name: item.name,
                 address: item.baseTypeName,
                 stats: item.value,
-                spring: item.nutritionNlValue
+                spring: item.nutritionNlValue,
+                malloc: item.nutritionNlValue
                 // malloc: item.nutritionNlValue
               };
             });
             this.officeonce = arr;
+            this.graph();
           }
         });
     },
@@ -470,11 +593,15 @@ export default {
     auditing() {
       this.loadFlag = true;
       this.$axios
-        .get(`api/blade-food/dish/appPubDishOrgan?size=${10}&current=${1}`, {})
+        .get(
+          `api/blade-food/dish/appPubDishOrgan?size=${this.m_page.size}&current=${this.m_page.number}`,
+          {}
+        )
         .then(res => {
           // console.log(res);
           this.loadFlag = false;
           this.tmquery = res.data.data.records;
+          this.m_page.totalElements = res.data.data.total;
           // console.log(this.tmquery);
         });
     },
@@ -491,6 +618,15 @@ export default {
 
           this.mailto = res.data.data;
         });
+    },
+    //页码
+    m_handlePageChange(currPage) {
+      this.m_page.number = currPage;
+      this.auditing();
+    },
+    m_handleSizeChange(currSize) {
+      this.m_page.size = currSize;
+      this.auditing();
     },
     //省市区
     handleChange(value) {
@@ -536,7 +672,8 @@ export default {
 <style scoped>
 .dients {
   width: 100%;
-  height: 1000px;
+  /* height: 1000px; */
+  height: 100%;
   background-color: #fff;
 }
 .header {
@@ -554,7 +691,7 @@ export default {
 .stop {
   color: #ff455b;
 }
-.navbar{
+.navbar {
   margin-top: 39px;
 }
 .mationtxt {
@@ -572,5 +709,12 @@ export default {
   padding-left: 20px;
   font-size: 16px;
   font-weight: bold;
+}
+.pagingClass {
+  text-align: right;
+  /* margin: 20px 0; */
+  margin-top: 20px;
+  margin-right: 40px;
+  margin-bottom: 60px;
 }
 </style>

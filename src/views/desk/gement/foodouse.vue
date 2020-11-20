@@ -308,7 +308,7 @@
             </el-dialog>
           </el-form-item>
           <el-form-item label="公开" style="">
-            <el-switch  v-model="ruleForm.delivery"></el-switch>
+            <el-switch v-model="ruleForm.delivery"></el-switch>
           </el-form-item>
 
           <el-form-item label="常用" style="">
@@ -1453,10 +1453,11 @@ export default {
     multi(data) {
       // console.log(data)
       this.key = data.id;
-      this.$axios(`api/blade-food/dish/changeIsPub`, {
-        id: this.key,
-        isPub: 1
-      })
+      this.$axios
+        .post(`api/blade-food/dish/changeIsPub`, {
+          id: this.key,
+          isPub: 1
+        })
         .then(res => {
           this.obtains();
           console.log(res);
@@ -1472,10 +1473,11 @@ export default {
     //设置公开
     docs(data) {
       this.terms = data.id;
-      this.$axios(`blade-food/dish/changeIsPub`, {
-        id: this.terms,
-        isPub: 0
-      })
+      this.$axios
+        .post(`api/blade-food/dish/changeIsPub`, {
+          id: this.terms,
+          isPub: 0
+        })
         .then(res => {
           this.obtains();
           console.log(res);

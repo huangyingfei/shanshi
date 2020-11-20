@@ -21,6 +21,9 @@
           <span class="custom-tree-node" slot-scope="{ node, data }">
             <span>{{ node.label }}</span>
             <span>
+              <el-button type="text" size="mini" @click="() => defcustom(data)">
+                查看
+              </el-button>
               <el-button
                 v-if="data.into == 1"
                 type="text"
@@ -29,14 +32,7 @@
               >
                 添加
               </el-button>
-              <el-button
-                v-if="data.into != 1"
-                type="text"
-                size="mini"
-                @click="() => defcustom(data)"
-              >
-                查看
-              </el-button>
+
               <el-button
                 type="text"
                 size="mini"
@@ -194,14 +190,24 @@
           </el-form-item>
           <el-form-item style="width: 355px" label="图片">
             <el-upload
-              action="https://jsonplaceholder.typicode.com/posts/"
+              action="api/blade-resource/oss/endpoint/put-file"
               list-type="picture-card"
+              :limit="imgLimit"
+              :file-list="productImgs"
+              :on-exceed="handleExceed"
               :on-preview="handlePictureCardPreview"
+              :before-upload="beforeAvatarUpload"
+              :on-success="handleAvatarSuccess"
               :on-remove="handleRemove"
+              :headers="headerObj"
             >
+              <!-- <img v-if="dialogImageUrl" :src="dialogImageUrl" class="avatar" /> -->
               <i class="el-icon-plus"></i>
             </el-upload>
-            <el-dialog :visible.sync="dialogVisible">
+            <span style="color:#e0e0e0;  font-size: 11px;"
+              >上传图片不能超过2M 只能是JPG PNG格式</span
+            >
+            <el-dialog append-to-body :visible.sync="dialogVisible">
               <img width="100%" :src="dialogImageUrl" alt />
             </el-dialog>
           </el-form-item>
@@ -375,7 +381,7 @@
 
         <div slot="footer" class="dialog-footer">
           <el-button @click="dateTime = false">取 消</el-button>
-          <el-button @click="resetForm('ruleForm')">重置</el-button>
+          <!-- <el-button @click="resetForm('ruleForm')">重置</el-button> -->
           <el-button
             v-if="this.under == 1"
             @click="cameras('ruleForm')"
@@ -408,13 +414,13 @@
           @click="addition(1)"
           >添加员工</el-button
         >
-        <el-button
+        <!-- <el-button
           icon="el-icon-download"
           style="margin-left: 20px"
           size="medium"
           type="primary"
           >导出</el-button
-        >
+        > -->
       </div>
       <!-- 表格数据 -->
       <div class="address">
@@ -498,14 +504,14 @@
             <template slot-scope="scope">
               <el-button
                 @click="editorTheme(scope.row, 2)"
-                type="primary"
+                type="text"
                 size="small"
                 icon="el-icon-edit"
                 style="margin-left: 20px"
                 >编辑</el-button
               >
               <el-button
-                type="danger"
+                type="text"
                 size="small"
                 icon="el-icon-delete"
                 style="margin-left: 20px"
@@ -531,6 +537,13 @@ export default {
       dateTime: false, //弹框
       department: false, //部门弹框
       obtained: false, //子部门弹框
+      dialogImageUrl: "", //图片
+      imgLimit: 1, //文件个数
+      productImgs: [],
+      dialogVisible: false,
+      headerObj: {
+        "Blade-Auth": ""
+      }, //上传图片请求头
       acetone: {
         name: "", //子部门名称
         sorting: "" //部门排序
@@ -958,8 +971,15 @@ export default {
   beforeMount() {
     this.getStorage(); //获取部门树形结构
     this.getToolkit(); //获取班级
+    this.Takeone();
   },
   methods: {
+    //初始数据获取token
+    Takeone() {
+      let str = JSON.parse(localStorage.getItem("saber-token"));
+      this.headerObj["Blade-Auth"] = `bearer ${str.content}`;
+      console.log(this.headerObj);
+    },
     resetForm(formName) {
       console.log(12321);
       this.$refs[formName].resetFields();
@@ -990,6 +1010,7 @@ export default {
               deptId: this.view,
               name: this.ruleForm.name, //姓名
               sex: this.ruleForm.radio, //性别
+              pic: this.dialogImageUrl, //图片
               marriage: this.ruleForm.marriages, //婚姻状况
               birthDate: this.ruleForm.value1, //出生日期
               mobile: this.ruleForm.phones, //手机号码
@@ -1012,12 +1033,33 @@ export default {
                 message: "添加成功",
                 type: "success"
               });
+              this.loadFlag1 = true;
+              this.$axios
+                .get(`api/blade-food/teacher/list?deptId=${this.view}`, {})
+                .then(res => {
+                  // console.log(res);
+                  // this.store = res.data.data.records;
+                  // console.log(this.store);
+                  this.$message({
+                    message: "查询成功",
+                    type: "success"
+                  });
+                  this.loadFlag1 = false;
+                  this.tableData = res.data.data.records;
+                })
+                .catch(() => {
+                  this.$message.error("查询失败");
+                });
             })
             .catch(() => {
               this.$message.error("添加失败");
             });
         } else {
-          console.log("error submit!!");
+          // console.log("error submit!!");
+          this.$message({
+            message: "信息未填全",
+            type: "warning"
+          });
           return false;
         }
       });
@@ -1029,6 +1071,7 @@ export default {
           id: this.edits,
           name: this.ruleForm.name, //姓名
           sex: this.ruleForm.radio, //性别
+          pic: this.dialogImageUrl, //图片
           marriage: this.ruleForm.marriages, //婚姻状况
           birthDate: this.ruleForm.value1, //出生日期
           mobile: this.ruleForm.phones, //手机号码
@@ -1045,12 +1088,30 @@ export default {
         })
         .then(res => {
           console.log(res);
+
           this.$message({
             message: "编辑成功",
             type: "success"
           });
 
           this.dateTime = false;
+          this.loadFlag1 = true;
+          this.$axios
+            .get(`api/blade-food/teacher/list?deptId=${this.view}`, {})
+            .then(res => {
+              // console.log(res);
+              // this.store = res.data.data.records;
+              // console.log(this.store);
+              this.$message({
+                message: "查询成功",
+                type: "success"
+              });
+              this.loadFlag1 = false;
+              this.tableData = res.data.data.records;
+            })
+            .catch(() => {
+              this.$message.error("查询失败");
+            });
         })
         .catch(() => {
           this.$message.error("编辑失败");
@@ -1097,6 +1158,13 @@ export default {
       this.dateTime = true;
       this.ruleForm.name = row.name; //姓名
       this.ruleForm.radio = row.sex + ""; //性别
+      let picture = [];
+      if (row.pic) {
+        picture[0] = {
+          url: row.pic
+        };
+      }
+      this.productImgs = picture;
       this.ruleForm.marriages = row.marriage + ""; //婚姻状况
       this.ruleForm.value1 = row.birthDate; //出生日期
       this.ruleForm.phones = row.mobile; //手机号码
@@ -1229,6 +1297,7 @@ export default {
     defcustom(data) {
       // console.log(data);
       this.view = data.id;
+      console.log(this.view);
       this.loadFlag1 = true;
       this.$axios
         .get(`api/blade-food/teacher/list?deptId=${this.view}`, {})
@@ -1268,7 +1337,7 @@ export default {
                 fwork[index2].children = [];
                 if (item2.children) {
                   item2.children.forEach((item3, index3) => {
-                    console.log(item3);
+                    // console.log(item3);
                     fwork[index2].children[index3] = {
                       id: item3.id,
                       label: item3.classType
@@ -1311,6 +1380,43 @@ export default {
         console.log(auto);
         this.data = auto;
       });
+    },
+    //移除图片
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
+    },
+    //预览图片
+    handlePictureCardPreview(file) {
+      console.log(file.url);
+
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
+    handleExceed(files, fileList) {
+      //图片上传超过数量限制
+      this.$message.error("上传图片不能超过1张!");
+      console.log(files, fileList);
+    },
+    // 上传成功
+    handleAvatarSuccess(res, file) {
+      console.log(res);
+      this.dialogImageUrl = URL.createObjectURL(file.raw);
+      this.dialogImageUrl = res.data.link;
+      // this.imageUrl = URL.createObjectURL(file.raw);
+      // this.imageUrl = res.data.link;
+      console.log(this.dialogImageUrl);
+    },
+    beforeAvatarUpload(file) {
+      // const isJPG = file.type === "image/jpeg";
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      // if (!isJPG) {
+      //   this.$message.error("上传图片只能是 JPG 格式!");
+      // }
+      if (!isLt2M) {
+        this.$message.error("上传图片大小不能超过 2MB!");
+      }
+      return isLt2M;
     }
   }
 };
@@ -1358,5 +1464,8 @@ export default {
   height: 50px;
   /* background-color: yellow; */
   line-height: 50px;
+}
+.address {
+  margin-top: 50px;
 }
 </style>
