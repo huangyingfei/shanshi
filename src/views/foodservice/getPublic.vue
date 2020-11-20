@@ -271,7 +271,7 @@
                   <el-select v-model="value1" multiple placeholder="请选择">
                     <el-option
                       style="width: 200px"
-                      v-for="item in before"
+                      v-for="item in context"
                       :key="item.value"
                       :label="item.label"
                       :value="item.value"
@@ -937,6 +937,24 @@ export default {
       //季节查询
       value1: [], //所属季节
       value2: [], //所属季节
+      context: [
+        {
+          value: "1",
+          label: "春季"
+        },
+        {
+          value: "2",
+          label: "夏季"
+        },
+        {
+          value: "3",
+          label: "秋季"
+        },
+        {
+          value: "4",
+          label: "冬季"
+        }
+      ],
       before: [
         {
           value: "",
@@ -1290,12 +1308,15 @@ export default {
             });
             this.ruleForm.region = this.handler.function; //特点
             this.ruleForm.desc = this.handler.remark; //做法
-            let bar = [];
-            this.handler.provinces.split(",").forEach((item, i) => {
-              // console.log(item);
-              bar.push([item, this.handler.belongRegion.split(",")[i]]);
-            });
-            this.valuepark = bar;
+            if (this.handler.provinces) {
+              let bar = [];
+              this.handler.provinces.split(",").forEach((item, i) => {
+                // console.log(item);
+                bar.push([item, this.handler.belongRegion.split(",")[i]]);
+              });
+              this.valuepark = bar;
+            }
+
             // console.log(this.valuepark);
             let picture = [];
             if (this.handler.pic) {
@@ -1339,14 +1360,15 @@ export default {
             });
             this.ruleForm1.region = this.handler.function; //特点
             this.ruleForm1.desc = this.handler.remark; //做法
-
-            let bar = [];
-            this.handler.provinces.split(",").forEach((item, i) => {
-              //所属区域
-              console.log(item);
-              bar.push([item, this.handler.belongRegion.split(",")[i]]);
-            });
-            this.valuepark1 = bar;
+            if (this.handler.provinces) {
+              let bar = [];
+              this.handler.provinces.split(",").forEach((item, i) => {
+                //所属区域
+                console.log(item);
+                bar.push([item, this.handler.belongRegion.split(",")[i]]);
+              });
+              this.valuepark1 = bar;
+            }
 
             this.rectangle = this.handler.pic;
 
@@ -1951,7 +1973,7 @@ export default {
   width: 100%;
   height: 50px;
   /* background-color:red; */
-  /* float: left; */
+  float: left;
   margin-bottom: 50px;
   margin-top: 20px;
   text-align: center;
