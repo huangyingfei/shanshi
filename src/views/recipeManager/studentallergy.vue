@@ -76,7 +76,7 @@
                 { required: true, trigger: "blur" },
               ],
               change:({value,column})=>{
-                debugger;
+                // debugger;
                 if(value!='' && value!=null){
                   getStudentClass(value).then(res => {
 /*                    console.log(res);*/

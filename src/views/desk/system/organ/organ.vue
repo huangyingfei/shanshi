@@ -836,7 +836,7 @@ export default {
             data["expireTime"]=getDate(data.expireTime)
             this.form = data;
           })
-            debugger
+            // debugger
             if(type=="edit"){
                this.findObject(this.option.group, "account").readonly=true;
             }
@@ -924,7 +924,7 @@ export default {
       };
       if (level == 0) {
         lazyList().then((res) => {
-          debugger
+          // debugger
           let data = res.data.data;
           data.forEach((e) => {
             list.push({
@@ -937,7 +937,7 @@ export default {
       }
       if (level == 1) {
         lazyList(code).then((res) => {
-          debugger
+          // debugger
           let data = res.data.data;
           data.forEach((e) => {
             list.push({
@@ -950,7 +950,7 @@ export default {
         });
       } else if (level == 2) {
         lazyList(code).then((res) => {
-          debugger
+          // debugger
           let data = res.data.data;
           data.forEach((e) => {
             list.push({

@@ -32,7 +32,7 @@
           <avue-form :option="option" v-model="specialForm"   @submit="submit" disabled>
             <template slot-scope="scope" slot="moren" >
               <div style="display: flex;justify-content: start;flex-wrap: wrap">
-              <div  v-for="item in morenData" >
+              <div  v-for="(item, index) in morenData" :key="index" >
                 <div  style="display: flex;justify-content: flex-start;margin-right: 20px">
                 <avue-checkbox v-model="item.mealCheck"  :dic="item.dicData"></avue-checkbox>
                 <avue-input-number style="width: 100px!important;margin: auto 6px"  v-model="item.mealNum"></avue-input-number>%
@@ -165,7 +165,7 @@
               span:24,
               multiple:true,
               change:(data)=>{
-                debugger
+                // debugger
                 let people=data.value;
                 if(people.length>0){
                   for(let i=0;i<people.length;i++ ){
@@ -272,7 +272,7 @@
           ids.forEach(_=>{
             people.push(_.studentId)
           })
-          debugger
+          // debugger
           this.$set(this.specialForm,"people",people)
           this.$set(this.morenData[0],"mealNum",!res.data.data.breakfast?undefined:res.data.data.breakfast)
           this.$set(this.morenData[1],"mealNum",!res.data.data.breakfastSnack?undefined:res.data.data.breakfastSnack)
@@ -371,7 +371,7 @@
           dinner:this.morenData[4].mealNum,
           dinnerSnack:this.morenData[5].mealNum,
         }
-        debugger
+        // debugger
         submit(row).then(res=>{
             if(res.data.success){
               this.$message({

@@ -103,7 +103,7 @@
             if (data.data == null) {
               this.saveOrUpdate = false;//新增
             } else {
-              debugger
+              // debugger
               this.saveOrUpdate = true;
               this.ruleForm.webTitle = data.data.webTitle;
               this.ruleForm.webLogo = data.data.webLogo;
@@ -121,7 +121,7 @@
         this.saveWeb();
       },
       saveWeb() {
-        debugger
+        // debugger
         var params;
         if (!this.saveOrUpdate) {//新增
           params = {

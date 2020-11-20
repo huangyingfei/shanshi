@@ -1022,13 +1022,16 @@ export default {
   watch: {
     'datas':{
       handler(data){
-        data[0].weeks.forEach(_=>{
-          _.foods.forEach(__=>{
-            let count=0;
-            __.children.forEach(___=>{
-              count+= parseInt(___.count?___.count:0)
+        // debugger
+        data.forEach(item=>{
+          item.weeks.forEach(_=>{
+            _.foods.forEach(__=>{
+              let count=0;
+              __.children.forEach(___=>{
+                count+= parseInt(___.count?___.count:0)
+              })
+              this.$set(__,"count",count);
             })
-            this.$set(__,"count",count);
           })
         })
         this.getFoodScore();
@@ -1040,6 +1043,7 @@ export default {
   mounted() {
     this.init();
   },
+
   methods: {
     //同步修改高度
     resizeExpendHeight() {

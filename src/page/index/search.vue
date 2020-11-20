@@ -90,7 +90,6 @@
         };
         this.menuList = [];
         findMenu(this.menu);
-        console.log("this.menu",this.menu)
         this.menus = this.menuList;
       },
       querySearch() {
