@@ -23,8 +23,8 @@ module.exports = {
     proxy: {
       "/api": {
         //本地服务接口地址
-        // target: "http://30.40.15.33", //公司
-        target: "http://192.168.2.216", //家里
+        target: "http://30.40.15.33", //公司
+        // target: "http://192.168.2.216", //家里
         //远程演示服务地址,可用于直接启动项目
         // target: "https://saber.bladex.vip/api",
         ws: true,

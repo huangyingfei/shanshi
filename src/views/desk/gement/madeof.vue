@@ -10,12 +10,14 @@
       ></el-input>
       <span style="margin: 0 10px;">创建机构:</span>
       <el-input
-        v-model="editor"
+        v-model="noinst"
         placeholder="请输入内容"
         style="width:200px"
       ></el-input>
       <span style="margin: 0 10px;">提交日期:</span>
       <el-date-picker
+        format="yyyy 年 MM 月 dd 日"
+        value-format="yyyy-MM-dd"
         v-model="value1"
         type="date"
         placeholder="选择日期"
@@ -31,25 +33,29 @@
       <div class="tostring">
         <span style="margin-right: 10px; ">联系电话:</span>
         <el-input
-          v-model="editor"
+          v-model="phoneId"
           placeholder="请输入内容"
           style="width:200px"
         ></el-input>
         <span style="margin: 0 10px;">审核状态:</span>
-        <el-select v-model="value" placeholder="请选择">
+        <el-select v-model="mState1" placeholder="请选择">
           <el-option
-            v-for="item in options"
+            v-for="item in mState"
             :key="item.value"
             :label="item.label"
             :value="item.value"
           ></el-option>
         </el-select>
         <el-button
+          @click="searchStr"
           size="medium"
           icon="el-icon-search"
           type="primary"
           style=" margin-left: 20px; "
           >搜索</el-button
+        >
+        <el-button @click="notEmpty" size="medium" style=" margin-left: 20px; "
+          >清空</el-button
         >
       </div>
     </div>
@@ -104,9 +110,17 @@
           width="170"
           align="center"
         ></el-table-column>
-        <el-table-column label="审核状态" width="100" align="center">
+        <el-table-column label="审核状态" width="110" align="center">
           <template slot-scope="scope">
-            <p class="stop" v-if="scope.row.status == 0">待审核</p>
+            <el-tag type="danger" v-if="scope.row.status == 0">待审核</el-tag>
+            <el-tag v-else-if="scope.row.status == 3">无需审核</el-tag>
+            <el-tag type="success" v-else-if="scope.row.status == 1"
+              >审核通过</el-tag
+            >
+            <el-tag type="warning" v-else-if="scope.row.status == 2"
+              >审核不通过</el-tag
+            >
+            <!-- <p class="stop" v-if="scope.row.status == 0">待审核</p>
             <p style="color:#409eff" v-else-if="scope.row.status == 3">
               无需审核
             </p>
@@ -115,7 +129,7 @@
             </p>
             <p style="color:#e6a23c" v-else-if="scope.row.status == 2">
               审核不通过
-            </p>
+            </p> -->
           </template>
         </el-table-column>
         <!--操作格-->
@@ -578,9 +592,11 @@ export default {
       attributes: [], //表格数据
       seekeys: false, //审核弹框
       value1: "", //日期
+      noinst: "",
       input: "",
       input1: "",
       editor: "",
+      phoneId: "",
       examine: {
         desc1: "" //拒绝理由
       },
@@ -622,7 +638,29 @@ export default {
       //     { required: true, message: "请选择公共库分类", trigger: "change" }
       //   ]
       // },
-
+      mState: [
+        {
+          value: "",
+          label: "全部"
+        },
+        {
+          value: "1",
+          label: "待审核"
+        },
+        {
+          value: "2",
+          label: "审核通过"
+        },
+        {
+          value: "3",
+          label: "审核不通过"
+        },
+        {
+          value: "4",
+          label: "无需审核"
+        }
+      ],
+      mState1: "",
       options: [], //省市区
 
       season: [
@@ -674,6 +712,14 @@ export default {
   },
 
   methods: {
+    notEmpty() {
+      this.input = ""; //菜品名称
+      this.noinst = ""; //创建机构
+      this.value1 = ""; //提交日期
+      this.editor = ""; //提交人
+      this.phoneId = ""; //联系电话
+      this.mState1 = ""; //审核状态
+    },
     //初始数据获取token
     Takeone() {
       let str = JSON.parse(localStorage.getItem("saber-token"));

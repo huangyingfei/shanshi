@@ -1473,7 +1473,7 @@ export default {
 }
 .saveas {
   width: 95%;
-  height: 450px;
+  height: 400px;
   margin-left: 40px;
   /* background-color: red; */
 }
@@ -1483,7 +1483,7 @@ export default {
   float: left;
   /* background-color: yellow; */
   margin-bottom: 50px;
-  margin-top: 20px;
+  margin-top: 30px;
   text-align: center;
   line-height: 100px;
 }

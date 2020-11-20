@@ -25,12 +25,7 @@
         style=" margin-left: 20px; "
         >搜索</el-button
       >
-      <el-button
-        size="medium"
-        @click="notEmpty"
-        icon="el-icon-search"
-        type="primary"
-        style=" margin-left: 20px; "
+      <el-button size="medium" @click="notEmpty" style=" margin-left: 20px; "
         >清空</el-button
       >
     </div>
