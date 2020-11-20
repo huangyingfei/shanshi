@@ -249,7 +249,7 @@
           });
       },
       changeInfo(id,type) {
-        debugger;
+        // debugger;
         var isPub;//是否公开
         var isRecommend;//是否推荐
         var isUse;//是否收藏

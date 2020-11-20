@@ -49,7 +49,7 @@ export default {
   },
   methods: {
     // func(data){
-    //   debugger
+    //   // debugger
     //    data.forEach(_=>{
     //      if(_.children){
     //        return this.func(_.children);
@@ -77,7 +77,7 @@ export default {
         });
         console.log(arr)
         tree().then((res) => {
-          debugger
+          // debugger
           let data = res.data.data;
           data.forEach((_) => {
             if (_.children) {
@@ -103,7 +103,7 @@ export default {
           });
              this.data = data;
             console.log(this.data);
-        });       
+        });
       });
     },
 

@@ -21,7 +21,7 @@
         <!-- <el-button type="danger"
                    size="small"
                    icon="el-icon-delete"
-            
+
                    plain
                    @click="handleDelete">删 除 -->
         <!-- </el-button> -->
@@ -182,7 +182,7 @@ export default {
             searchSpan: 8,
             search: true,
           },
-        
+
           {
             label: "离校原因",
             prop: "reason",
@@ -242,7 +242,7 @@ export default {
       this.onLoad(this.page);
     },
     searchChange(params, done) {
-        debugger
+        // debugger
         if(params.admissionDate){
             params.admissionDateMin=params.admissionDate[0];
             params.admissionDateMax=params.admissionDate[1];
@@ -264,7 +264,7 @@ export default {
     // selectionClear() {
     //   this.selectionList = [];
     //   this.$refs.crud.toggleSelection();
-    // },   
+    // },
     handleView(row){
       this.$router.push({ path: "/oprate/addStudent",query:{id:row.id,detailFlag:true} });
     },

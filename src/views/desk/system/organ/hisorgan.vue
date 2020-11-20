@@ -792,7 +792,7 @@ export default {
             data["expireTime"]=getDate(data.expireTime)
             this.form = data;
           })
-            debugger
+            // debugger
             if(type=="edit"){
                this.findObject(this.option.group, "account").readonly=true;
             }

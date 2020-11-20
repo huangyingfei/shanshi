@@ -512,7 +512,7 @@
       },
       updateClass(node, data) {
         if (data.parentId != 0) {
-          debugger;
+          // debugger;
           this.outerVisible = true;
           let classs = this.classes.filter((_) => {
             return _.type == data.classType;
@@ -595,7 +595,7 @@
           this.tclass.classAlias = classs.alias;
           this.tclass.classEdu = classs.edu;
         }
-        debugger;
+        // debugger;
         this.tclass.classType = classs.type;
         this.tclass.classPName = classs.pName;
         this.tclass.classTitle = classs.title;
@@ -613,7 +613,7 @@
       },
       submitClass() {
         let row = {};
-        debugger;
+        // debugger;
         if (this.tclass.classType == 1) {
           row = {
             id: this.addValue.id,
@@ -875,7 +875,7 @@
         this.$refs.crud.toggleSelection();
       },
       handleUpdate(row, index, type) {
-        debugger;
+        // debugger;
         let rows = [];
         if (type == "2") {
           rows.push({

@@ -594,7 +594,7 @@ export default {
             }
 
           })
-            debugger
+            // // // debugger
             if(type=="edit"){
                this.findObject(this.option.group, "account").readonly=true;
             }
@@ -608,7 +608,7 @@ export default {
       this.findObject(this.option.group, "account").readonly=false;
     },
      beforeClose(done) {
-       debugger
+       // debugger
         this.clear();
         this.$refs.crud.tableForm = {};
         done();

@@ -1020,7 +1020,7 @@ export default {
       }
     },
     fun() {
-      debugger;
+      // debugger;
 
       this.$set(
         this.findObject(this.option.column, "leaveClassName"),
@@ -1041,7 +1041,7 @@ export default {
   },
   mounted() {
     if (this.$route.query.id) {
-      debugger;
+      // debugger;
       if (this.$route.query.detailFlag) {
         this.option.detail = true;
         if (this.$route.query.addView) {

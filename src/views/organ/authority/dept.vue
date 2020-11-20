@@ -23,7 +23,7 @@
         <el-button type="danger"
                    size="small"
                    icon="el-icon-delete"
-                  
+
                    plain
                    @click="handleDelete">删 除
         </el-button>
@@ -212,7 +212,7 @@
         });
       },
       handleAdd(row) {
-        debugger
+        // debugger
         this.$refs.crud.value.parentId = row.id;
         this.$refs.crud.option.column.filter(item => {
           if (item.prop === "parentId") {
