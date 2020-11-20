@@ -980,8 +980,50 @@ export default {
   },
   data() {
     return {
-      empty_image: "/img/tianjia.png",
+      intakeValue:[
+        {
+          name:"谷类",
+          code:"gl"
+        },
+        {
+          name:"薯类",
+          code:"sl"
+        },
+        {
+          name:"蔬菜",
+          code:"sc"
+        },
+        {
+          name:"水果",
+          code:"sg"
+        },
+        {
+          name:"畜禽肉类-蛋类-水产品",
+          code:"xql:scp:dl"
+        },
+        {
+          name:"大豆",
+          code:"dd"
+        },{
+          name:"坚果",
+          code:"jg"
+        },
+        ,{
+          name:"乳制品",
+          code:"rzp"
+        },
+        ,{
+          name:"食用油",
+          code:"syy"
+        },
+        ,{
+          name:"盐",
+          code:"sy"
+        }
 
+
+      ],
+      empty_image: "/img/tianjia.png",
       dialog_choice: {
         opened: false, // 是否显示
         data_id: "", // 主数据ID
@@ -1210,17 +1252,21 @@ export default {
             let intake={};
             let  data=[];
             intake.mealSelect="推荐范围("+resData.recipeCalDTOList.gl.mealSelect+"%)"
-            data.push({name:"谷类",range:resData.recipeCalDTOList.gl.rang_min+"-"+resData.recipeCalDTOList.gl.rang_max+"("+resData.recipeCalDTOList.gl.recomRangMin+"-"+resData.recipeCalDTOList.gl.recomRangMax+")",jl:resData.recipeCalDTOList.gl.jl,grade:resData.recipeCalDTOList.gl.grade,point:resData.recipeCalDTOList.gl.point})
-            data.push({name:"薯类",range:resData.recipeCalDTOList.sl.rang_min+"-"+resData.recipeCalDTOList.sl.rang_max+"("+resData.recipeCalDTOList.sl.recomRangMin+"-"+resData.recipeCalDTOList.sl.recomRangMax+")",jl:resData.recipeCalDTOList.sl.jl,grade:resData.recipeCalDTOList.sl.grade,point:resData.recipeCalDTOList.sl.point})
-            data.push({name:"蔬菜",range:resData.recipeCalDTOList.sc.rang_min+"-"+resData.recipeCalDTOList.sc.rang_max+"("+resData.recipeCalDTOList.sc.recomRangMin+"-"+resData.recipeCalDTOList.sc.recomRangMax+")",jl:resData.recipeCalDTOList.sc.jl,grade:resData.recipeCalDTOList.sc.grade,point:resData.recipeCalDTOList.sc.point})
-            data.push({name:"水果",range:resData.recipeCalDTOList.sg.rang_min+"-"+resData.recipeCalDTOList.sg.rang_max+"("+resData.recipeCalDTOList.sg.recomRangMin+"-"+resData.recipeCalDTOList.sg.recomRangMax+")",jl:resData.recipeCalDTOList.sg.jl,grade:resData.recipeCalDTOList.sg.grade,point:resData.recipeCalDTOList.sg.point})
-            data.push({name:"畜禽肉类-蛋类-水产品",range:resData.recipeCalDTOList["xql:scp:dl"].rang_min+"-"+resData.recipeCalDTOList["xql:scp:dl"].rang_max+"("+resData.recipeCalDTOList["xql:scp:dl"].recomRangMin+"-"+resData.recipeCalDTOList["xql:scp:dl"].recomRangMax+")",jl:resData.recipeCalDTOList["xql:scp:dl"].jl,grade:resData.recipeCalDTOList["xql:scp:dl"].grade,point:resData.recipeCalDTOList["xql:scp:dl"].point})
-            data.push({name:"大豆",range:resData.recipeCalDTOList.dd.rang_min+"-"+resData.recipeCalDTOList.dd.rang_max+"("+resData.recipeCalDTOList.dd.recomRangMin+"-"+resData.recipeCalDTOList.dd.recomRangMax+")",jl:resData.recipeCalDTOList.dd.jl,grade:resData.recipeCalDTOList.dd.grade,point:resData.recipeCalDTOList.dd.point})
-            data.push({name:"坚果",range:resData.recipeCalDTOList.jg.rang_min+"-"+resData.recipeCalDTOList.jg.rang_max+"("+resData.recipeCalDTOList.jg.recomRangMin+"-"+resData.recipeCalDTOList.jg.recomRangMax+")",jl:resData.recipeCalDTOList.jg.jl,grade:resData.recipeCalDTOList.jg.grade,point:resData.recipeCalDTOList.jg.point})
-            data.push({name:"乳制品",range:resData.recipeCalDTOList.rzp.rang_min+"-"+resData.recipeCalDTOList.rzp.rang_max+"("+resData.recipeCalDTOList.rzp.recomRangMin+"-"+resData.recipeCalDTOList.rzp.recomRangMax+")",jl:resData.recipeCalDTOList.rzp.jl,grade:resData.recipeCalDTOList.rzp.grade,point:resData.recipeCalDTOList.rzp.point})
-            data.push({name:"食用油",range:resData.recipeCalDTOList.syy.rang_min+"-"+resData.recipeCalDTOList.syy.rang_max+"("+resData.recipeCalDTOList.syy.recomRangMin+"-"+resData.recipeCalDTOList.syy.recomRangMax+")",jl:resData.recipeCalDTOList.syy.jl,grade:resData.recipeCalDTOList.syy.grade,point:resData.recipeCalDTOList.syy.point})
-            data.push({name:"盐",range:resData.recipeCalDTOList.sy.rang_min+"-"+resData.recipeCalDTOList.sy.rang_max+"("+resData.recipeCalDTOList.sy.recomRangMin+"-"+resData.recipeCalDTOList.sy.recomRangMax+")",jl:resData.recipeCalDTOList.sy.jl,grade:resData.recipeCalDTOList.sy.grade,point:resData.recipeCalDTOList.sy.point})
+            this.intakeValue.forEach(_=>{
+              data.push({name:_.name,range:resData.recipeCalDTOList.gl.rang_min+"-"+resData.recipeCalDTOList[_.code].rang_max+"("+resData.recipeCalDTOList[_.code].recomRangMin+"-"+resData.recipeCalDTOList[_.code].recomRangMax+")",jl:resData.recipeCalDTOList[_.code].jl,grade:resData.recipeCalDTOList[_.code].grade,point:resData.recipeCalDTOList[_.code].point})
+            })
             intake.data=data;
+            let nutrition=[];
+            nutrition.push({name:"能量",dris:resData.nutritionCalDTOList["101"].dris,realIntake:resData.nutritionCalDTOList["101"].realIntake,realPropor:resData.nutritionCalDTOList["101"].realPropor,reqPropor:resData.nutritionCalDTOList["101"].min+"-"+resData.nutritionCalDTOList["101"].max,grade:resData.nutritionCalDTOList["101"].grade,point:resData.nutritionCalDTOList["101"].point})
+            nutrition.push({name:"蛋白质",dris:resData.nutritionCalDTOList["102"].dris,realIntake:resData.nutritionCalDTOList["102"].realIntake,realPropor:resData.nutritionCalDTOList["102"].realPropor,reqPropor:resData.nutritionCalDTOList["102"].min+"-"+resData.nutritionCalDTOList["102"].max,grade:resData.nutritionCalDTOList["102"].grade,point:resData.nutritionCalDTOList["102"].point})
+            nutrition.push({name:"钙",dris:resData.nutritionCalDTOList["201"].dris,realIntake:resData.nutritionCalDTOList["201"].realIntake,realPropor:resData.nutritionCalDTOList["201"].realPropor,reqPropor:resData.nutritionCalDTOList["201"].min+"-"+resData.nutritionCalDTOList["201"].max,grade:resData.nutritionCalDTOList["201"].grade,point:resData.nutritionCalDTOList["201"].point})
+            nutrition.push({name:"纳",dris:resData.nutritionCalDTOList["204"].dris,realIntake:resData.nutritionCalDTOList["204"].realIntake,realPropor:resData.nutritionCalDTOList["204"].realPropor,reqPropor:resData.nutritionCalDTOList["204"].min+"-"+resData.nutritionCalDTOList["204"].max,grade:resData.nutritionCalDTOList["204"].grade,point:resData.nutritionCalDTOList["204"].point})
+            nutrition.push({name:"铁",dris:resData.nutritionCalDTOList["301"].dris,realIntake:resData.nutritionCalDTOList["301"].realIntake,realPropor:resData.nutritionCalDTOList["301"].realPropor,reqPropor:resData.nutritionCalDTOList["301"].min+"-"+resData.nutritionCalDTOList["301"].max,grade:resData.nutritionCalDTOList["101"].grade,point:resData.nutritionCalDTOList["301"].point})
+            nutrition.push({name:"锌",dris:resData.nutritionCalDTOList["303"].dris,realIntake:resData.nutritionCalDTOList["303"].realIntake,realPropor:resData.nutritionCalDTOList["303"].realPropor,reqPropor:resData.nutritionCalDTOList["303"].min+"-"+resData.nutritionCalDTOList["303"].max,grade:resData.nutritionCalDTOList["101"].grade,point:resData.nutritionCalDTOList["101"].point})
+            nutrition.push({name:"能量",dris:resData.nutritionCalDTOList["101"].dris,realIntake:resData.nutritionCalDTOList["101"].realIntake,realPropor:resData.nutritionCalDTOList["101"].realPropor,reqPropor:resData.nutritionCalDTOList["101"].min+"-"+resData.nutritionCalDTOList["101"].max,grade:resData.nutritionCalDTOList["101"].grade,point:resData.nutritionCalDTOList["101"].point})
+            nutrition.push({name:"能量",dris:resData.nutritionCalDTOList["101"].dris,realIntake:resData.nutritionCalDTOList["101"].realIntake,realPropor:resData.nutritionCalDTOList["101"].realPropor,reqPropor:resData.nutritionCalDTOList["101"].min+"-"+resData.nutritionCalDTOList["101"].max,grade:resData.nutritionCalDTOList["101"].grade,point:resData.nutritionCalDTOList["101"].point})
+            nutrition.push({name:"能量",dris:resData.nutritionCalDTOList["101"].dris,realIntake:resData.nutritionCalDTOList["101"].realIntake,realPropor:resData.nutritionCalDTOList["101"].realPropor,reqPropor:resData.nutritionCalDTOList["101"].min+"-"+resData.nutritionCalDTOList["101"].max,grade:resData.nutritionCalDTOList["101"].grade,point:resData.nutritionCalDTOList["101"].point})
+
             that.$emit('childfn', Math.floor(this.getData(res.data.data) * 100) / 100,intake);
           }
         })
@@ -1229,6 +1275,7 @@ export default {
       }
 
     },
+
     //处理数据
     getData(data){
       let lastScore=100;
