@@ -300,12 +300,15 @@
               <!-- <img v-if="dialogImageUrl" :src="dialogImageUrl" class="avatar" /> -->
               <i class="el-icon-plus"></i>
             </el-upload>
+            <span style="color:#e0e0e0;  font-size: 11px;"
+              >上传图片不能超过2M 只能是JPG PNG格式</span
+            >
             <el-dialog append-to-body :visible.sync="dialogVisible">
               <img width="100%" :src="dialogImageUrl" alt />
             </el-dialog>
           </el-form-item>
           <el-form-item label="公开" style="">
-            <el-switch v-model="ruleForm.delivery"></el-switch>
+            <el-switch  v-model="ruleForm.delivery"></el-switch>
           </el-form-item>
 
           <el-form-item label="常用" style="">
@@ -1389,13 +1392,15 @@ export default {
                 name: item.name,
                 address: item.baseTypeName,
                 stats: item.value,
-                spring: item.nutritionNlValue
+                spring: item.nutritionNlValue,
+                malloc: item.nutritionNlValue
               };
             });
             this.officeonce = arr;
             // console.log(this.officeonce);
 
             // this.addLine();
+            this.graph();
           }
 
           // console.log(this.officeonce);
@@ -1448,7 +1453,7 @@ export default {
     multi(data) {
       // console.log(data)
       this.key = data.id;
-      this.$axios(`blade-food/dish/changeIsPub`, {
+      this.$axios(`api/blade-food/dish/changeIsPub`, {
         id: this.key,
         isPub: 1
       })
@@ -1535,16 +1540,16 @@ export default {
       console.log(this.dialogImageUrl);
     },
     beforeAvatarUpload(file) {
-      const isJPG = file.type === "image/jpeg";
+      // const isJPG = file.type === "image/jpeg";
       const isLt2M = file.size / 1024 / 1024 < 2;
 
-      if (!isJPG) {
-        this.$message.error("上传图片只能是 JPG 格式!");
-      }
+      // if (!isJPG) {
+      //   this.$message.error("上传图片只能是 JPG 格式!");
+      // }
       if (!isLt2M) {
         this.$message.error("上传图片大小不能超过 2MB!");
       }
-      return isJPG && isLt2M;
+      return isLt2M;
     }
   }
 };

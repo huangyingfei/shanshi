@@ -43,6 +43,7 @@
           >搜索</el-button
         >
         <el-button
+        @click="notEmpty"
           size="small"
           icon="el-icon-delete"
           type="primary"
@@ -319,6 +320,11 @@ export default {
       mailto: [], //营养素含量
       active: [], //季节
       valuepark: [], //省市区
+      
+      input:"",//菜品名称
+      value:"",//审批状态
+      editor:"",//提交人
+      getDate:"",//提交日期
 
       //季节查询
       value1: [], //所属季节
@@ -389,6 +395,12 @@ export default {
   },
 
   methods: {
+    notEmpty(){
+      this.input="";
+      this.value="";
+      this.editor="";
+      this.getDate="";
+    },
     seecol(row) {
       this.valuepark.length = 0;
       this.officeonce.length = 0;

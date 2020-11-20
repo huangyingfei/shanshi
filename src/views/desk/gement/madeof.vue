@@ -192,6 +192,7 @@
         <div class="unsigned">
           <el-form
             :model="ruleForm"
+            :rules="rules"
             :inline="true"
             ref="ruleForm"
             label-width="100px"
@@ -203,7 +204,7 @@
 
             <el-form-item
               label="菜品分类"
-              prop="autosave"
+              prop="fooddata"
               style=" width: 350px;   "
             >
               <el-select v-model="ruleForm.fooddata" placeholder="请选择">
@@ -254,29 +255,35 @@
               ></el-input>
             </el-form-item>
 
-           <el-form-item label="图片" style="width: 350px">
-                  <el-upload
-                    action="api/blade-resource/oss/endpoint/put-file"
-                    list-type="picture-card"
-                    :limit="imgLimit"
-                    :file-list="productImgs"
-                    :on-exceed="handleExceed"
-                    :on-preview="handlePictureCardPreview"
-                    :before-upload="beforeAvatarUpload"
-                    :on-success="handleAvatarSuccess"
-                    :on-remove="handleRemove"
-                    :headers="headerObj"
-                  >
-                    <!-- <img v-if="dialogImageUrl" :src="dialogImageUrl" class="avatar" /> -->
-                    <i class="el-icon-plus"></i>
-                  </el-upload>
-                  <el-dialog append-to-body :visible.sync="dialogVisible">
-                    <img width="100%" :src="dialogImageUrl" alt />
-                  </el-dialog>
-                </el-form-item>
+            <el-form-item label="图片" style="width: 350px">
+              <el-upload
+                action="api/blade-resource/oss/endpoint/put-file"
+                list-type="picture-card"
+                :limit="imgLimit"
+                :file-list="productImgs"
+                :on-exceed="handleExceed"
+                :on-preview="handlePictureCardPreview"
+                :before-upload="beforeAvatarUpload"
+                :on-success="handleAvatarSuccess"
+                :on-remove="handleRemove"
+                :headers="headerObj"
+              >
+                <!-- <img v-if="dialogImageUrl" :src="dialogImageUrl" class="avatar" /> -->
+                <i class="el-icon-plus"></i>
+              </el-upload>
+              <span style="color:#e0e0e0;  font-size: 11px;"
+                >上传图片不能超过2M 只能是JPG PNG格式</span
+              >
+              <el-dialog append-to-body :visible.sync="dialogVisible">
+                <img width="100%" :src="dialogImageUrl" alt />
+              </el-dialog>
+            </el-form-item>
 
             <el-form-item label="公开" style=" width:150px ">
-              <el-switch v-model="ruleForm.delivery"></el-switch>
+              <el-switch
+                :disabled="true"
+                v-model="ruleForm.delivery"
+              ></el-switch>
             </el-form-item>
 
             <el-form-item label="常用" style="   ">
@@ -451,6 +458,7 @@
             <el-table-column label="含量" align="center">
               <template slot-scope="scope">
                 <el-input
+                  :disabled="true"
                   v-model="scope.row.result"
                   type="text"
                   v-if="scope.row.level != 1 ? true : false"
@@ -462,7 +470,7 @@
           </el-table>
         </div>
         <!-- 公共库所分类 -->
-        <div class="worm1">公共库所属分类</div>
+        <div v-if="this.nbottoms == 2" class="worm1">公共库所属分类</div>
         <el-form
           :model="ruleForm"
           :rules="rules"
@@ -470,7 +478,7 @@
           label-width="100px"
           class="demo-ruleForm"
         >
-          <el-form-item label="公共库分类">
+          <el-form-item v-if="this.nbottoms == 2" label="公共库分类">
             <el-select
               v-if="this.nbottoms == 2"
               v-model="menu"
@@ -486,7 +494,7 @@
             </el-select>
           </el-form-item>
         </el-form>
-        <div class="worm1">拒绝原因</div>
+        <div v-if="this.nbottoms == 2" class="worm1">拒绝原因</div>
         <el-form
           :model="examine"
           ref="examine"
@@ -494,7 +502,12 @@
           label-width="100px"
           class="demo-ruleForm"
         >
-          <el-form-item label="拒绝原因" style=" width:200px " prop="desc1">
+          <el-form-item
+            v-if="this.nbottoms == 2"
+            label="拒绝原因"
+            style=" width:200px "
+            prop="desc1"
+          >
             <el-input
               v-if="this.nbottoms == 2"
               style=" width: 450px;  "
@@ -503,7 +516,7 @@
             ></el-input>
           </el-form-item>
         </el-form>
-        <div class="worm1">记录</div>
+        <!-- <div class="worm1">记录</div> -->
         <el-timeline>
           <!-- <el-timeline-item timestamp="2018/4/12" placement="top">
             <el-card>
@@ -568,14 +581,13 @@ export default {
       input: "",
       input1: "",
       editor: "",
-      dialogVisible: false,
-      dialogImageUrl: "",
       examine: {
         desc1: "" //拒绝理由
       },
       rules: {
-        desc1: [
-          { required: true, message: "请输入拒绝理由", trigger: "change" }
+        name: [{ required: true, message: "请输入活动名称", trigger: "blur" }],
+        fooddata: [
+          { required: true, message: "请选择菜品分类", trigger: "change" }
         ]
       },
       ruleForm: {
@@ -605,11 +617,11 @@ export default {
       fication: [],
       source: [], //公共分类
       foodPos: [], //食材分类
-      rules: {
-        // region: [
-        //   { required: true, message: "请选择公共库分类", trigger: "change" }
-        // ]
-      },
+      // rules: {
+      //   region: [
+      //     { required: true, message: "请选择公共库分类", trigger: "change" }
+      //   ]
+      // },
 
       options: [], //省市区
 
@@ -658,9 +670,16 @@ export default {
     this.muito(); //获取分类
     this.Provinces(); //省市区
     this.Addraudit(); //树形结构渲染
+    this.Takeone();
   },
 
   methods: {
+    //初始数据获取token
+    Takeone() {
+      let str = JSON.parse(localStorage.getItem("saber-token"));
+      this.headerObj["Blade-Auth"] = `bearer ${str.content}`;
+      console.log(this.headerObj);
+    },
     //添加行数
     addLine() {
       var newValue = {
@@ -696,13 +715,56 @@ export default {
           console.log(this.tmquery);
         });
     },
+    //失去焦点事件
+    graph() {
+      // console.log(this.officeonce);
+      let next = [];
+      this.officeonce.forEach(item => {
+        // console.log(item);
+        next.push({
+          foodId: item.id,
+          val: item.stats
+        });
+      });
+      console.log(next);
+      this.$axios
+        .post(`api/blade-food/dish/calNutriByFoodIds`, {
+          recipeVals: next
+        })
+        .then(res => {
+          // console.log(res);
+          this.atomic = res.data.data;
+          // console.log(this.atomic);
+          // let touch=[];
+          this.atomic.forEach(item => {
+            // console.log(item);
+            for (let item1 of this.mailto) {
+              // console.log(item1);
+              for (let arr of item1.children) {
+                // console.log(arr);
+                if (arr.id == item.nutrientId) {
+                  arr.result = item.total;
+                }
+                //   if (arr.children) {
+                //     for (let add of arr.children) {
+                //       console.log(add);
+                //       if (add.id == item.nutrientId) {
+                //         add.result = item.value;
+                //       }
+                //     }
+                //   }
+              }
+            }
+          });
+        });
+    },
     //查看
-    seecol(row) {
+    seecol(row, index) {
       // console.log(row);
       this.seekeys = true;
       this.active.length = "";
       this.valuepark = "";
-      // this.nbottoms = index;
+      this.nbottoms = index;
       console.log(row);
       this.stone = row.id;
       this.dsquery.establish = row.tenentName;
@@ -733,14 +795,14 @@ export default {
           });
           this.valuepark = bar;
 
-             let picture = [];//图片
+          let picture = []; //图片
           if (this.handler.pic) {
             picture[0] = {
               url: this.handler.pic
             };
           }
           this.ruleForm.region = this.handler.function; //特点
-          this.ruleForm.desc = this.handler.remark; //做法    
+          this.ruleForm.desc = this.handler.remark; //做法
           this.ruleForm.delivery1 = this.handler.isUse == 1 ? false : true; //常用
           this.ruleForm.delivery = this.handler.isPub == 1 ? false : true; //公开
           if (this.handler.dishMxVos) {
@@ -754,10 +816,12 @@ export default {
                 name: item.name,
                 address: item.baseTypeName,
                 stats: item.value,
-                spring: item.nutritionNlValue
+                spring: item.nutritionNlValue,
+                malloc: item.nutritionNlValue
               };
             });
             this.officeonce = arr;
+            this.graph();
           }
         });
     },
@@ -785,7 +849,7 @@ export default {
           function: this.ruleForm.region, //特点
           remark: this.ruleForm.desc, //做法
           dishMxVos: next,
-             pic: this.dialogImageUrl,//图片
+          pic: this.dialogImageUrl, //图片
           // isPub: this.ruleForm.delivery == false ? 0 : 1, //公开
           isUse: this.ruleForm.delivery1 == false ? 1 : 0, //常用
           status: "1", //
@@ -836,7 +900,7 @@ export default {
             function: this.ruleForm.region, //特点
             remark: this.ruleForm.desc, //做法
             dishMxVos: next,
-               pic: this.dialogImageUrl,//图片
+            pic: this.dialogImageUrl, //图片
             // isPub: this.ruleForm.delivery == false ? 0 : 1, //公开
             isUse: this.ruleForm.delivery1 == false ? 1 : 0, //常用
             status: "2", //
@@ -896,7 +960,7 @@ export default {
           this.valuepark = bar;
           this.ruleForm.region = this.handler.function; //特点
           this.ruleForm.desc = this.handler.remark; //做法
-              let picture = [];//图片
+          let picture = []; //图片
           if (this.handler.pic) {
             picture[0] = {
               url: this.handler.pic
@@ -915,10 +979,12 @@ export default {
                 name: item.name,
                 address: item.baseTypeName,
                 stats: item.value,
+                spring: item.nutritionNlValue,
                 malloc: item.nutritionNlValue
               };
             });
             this.officeonce = arr;
+            this.graph();
           }
         });
       // this.officeonce.length = 0;
@@ -1165,7 +1231,7 @@ export default {
           this.data1 = Front;
         });
     },
-     //移除图片
+    //移除图片
     handleRemove(file, fileList) {
       console.log(file, fileList);
     },
@@ -1220,7 +1286,7 @@ export default {
   width: 99%;
   background-color: #fff;
   /* height: 600px; */
-  margin-left: 10px;
+  /* margin-left: 10px; */
 }
 .custom {
   width: 100%;
