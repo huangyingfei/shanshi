@@ -262,7 +262,7 @@
         const menuList = this.$refs.treeMenu.getCheckedKeys();
         // const dataScopeList = this.$refs.treeDataScope.getCheckedKeys();
         // const apiScopeList = this.$refs.treeApiScope.getCheckedKeys();
-        grant(this.idsArray, menuList, dataScopeList, apiScopeList).then(() => {
+        grant(this.idsArray, menuList).then(() => {
           this.box = false;
           this.$message({
             type: "success",

@@ -1,0 +1,205 @@
+<template>
+  <div class="showscore">
+    <h3>周食谱营养分析报告（平均每人每日量）</h3>
+    <span>幼儿园名称：华园健康智慧幼儿园</span><br/>
+    <span>日期：{{startTime}}-{{endTime}}  </span>    <span> 总评分（优秀分数90分）：{{score}}</span>
+    <hr></hr>
+    <h4>  一、平均每人进食量  《中国学龄前儿童平衡膳食宝塔》</h4>
+    <el-table
+      :data="intake.data"
+      style="width: 100%">
+      <el-table-column
+        prop="name"
+        label="种属"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="range"
+        :label="intake.mealSelect"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="jl"
+        label="食谱净量(平均年龄4.05)"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="grade"
+        label="评价">
+      </el-table-column>
+      <el-table-column
+        prop="point"
+        label="扣分">
+      </el-table-column>
+    </el-table>
+    <h4>  二、营养素摄入量</h4>
+    <el-table
+      :data="tableData"
+      style="width: 100%">
+      <el-table-column
+        prop="date"
+        label="营养素"
+        width="90">
+      </el-table-column>
+      <el-table-column
+        prop="name"
+        label="DRIs"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="address"
+        label="实际摄入">
+      </el-table-column>
+      <el-table-column
+        prop="address"
+        label="要求比例">
+      </el-table-column>
+      <el-table-column
+        prop="address"
+        label="实际比例">
+      </el-table-column>
+      <el-table-column
+        prop="address"
+        label="评价">
+      </el-table-column>
+      <el-table-column
+        prop="address"
+        label="扣分">
+      </el-table-column>
+    </el-table>
+    <h4>  三、能量来源分布（2013年（中国营养学会））</h4>
+    <el-table
+      :data="tableData"
+      style="width: 100%">
+      <el-table-column
+        prop="date"
+        label="能量占比"
+        width="90">
+      </el-table-column>
+      <el-table-column
+        prop="name"
+        label="要求（%）"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="address"
+        label="实际(%)">
+      </el-table-column>
+      <el-table-column
+        prop="address"
+        label="评价">
+      </el-table-column>
+      <el-table-column
+        prop="address"
+        label="扣分">
+      </el-table-column>
+    </el-table>
+    <h4>  四、蛋白质来源分布</h4>
+    <el-table
+      :data="tableData"
+      style="width: 100%">
+      <el-table-column
+        prop="date"
+        label="优质蛋白质"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="name"
+        label="要求"
+        width="90">
+      </el-table-column>
+      <el-table-column
+        prop="address"
+        label="实际">
+      </el-table-column>
+      <el-table-column
+        prop="address"
+        label="实际和">
+      </el-table-column>
+      <el-table-column
+        prop="address"
+        label="评价">
+      </el-table-column>
+      <el-table-column
+        prop="address"
+        label="扣分">
+      </el-table-column>
+    </el-table>
+    <h4>  五、配餐能量结构</h4>
+    <el-table
+      :data="tableData"
+      style="width: 100%">
+      <el-table-column
+        prop="date"
+        label="餐别"
+        width="90">
+      </el-table-column>
+      <el-table-column
+        prop="name"
+        label="要求（%）"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="address"
+        label="实际">
+      </el-table-column>
+      <el-table-column
+        prop="address"
+        label="评价">
+      </el-table-column>
+      <el-table-column
+        prop="address"
+        label="扣分">
+      </el-table-column>
+    </el-table>
+    <span class="fontColor">注：此评分分析仅供参考</span>
+  </div>
+</template>
+<script>
+  export  default {
+    props:{
+      startTime:'',
+      endTime:'',
+      scoreResult:[],
+      score:'',
+      intake:{},
+    },
+    data(){
+      return {
+
+        tableData: [{
+          date: '2016-05-02',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-04',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1517 弄'
+        }, {
+          date: '2016-05-01',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1519 弄'
+        }, {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄'
+        }]
+      }
+    }
+  }
+</script>
+<style>
+  .showscore h3{
+    text-align: center;
+  }
+  .showscore  span {
+    margin-right: 15px;
+  }
+  .showscore {
+   padding-left: 10px;
+  }
+  .fontColor{
+    color: red;
+    font-size: 12px;
+  }
+</style>

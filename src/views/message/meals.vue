@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="meals">
     <div
       ref="layershipu"
       id="tooltip_shipu"
@@ -248,8 +248,8 @@
               </div>
 
               <ul class="foodWeekListHis">
-                <li  v-for="f in mealListLeft" :key="f.id" @mouseover="ShowFoodTips($event,f)"  @mouseout="HidenFoodTips($event)">
-                 {{f.recipeName}}
+                <li  v-for="f in mealListLeft" :key="f.id" >
+                  <span  @mouseover="ShowFoodTips($event,f)"  @mouseout="HidenFoodTips($event)">{{f.recipeName}}</span> <img style="width: 20px" @click="mealLoad(f.id,f.recipeName)" src="/img/arrow.png" alt />
                 </li>
 
               </ul>
@@ -281,8 +281,8 @@
               </div>
 
               <ul class="foodWeekListHis">
-                <li  v-for="f in peopleMealListLeft" :key="f.id" @click="personMealhandleNodeClick(f.id)"  @mouseover="ShowFoodTips($event,f)"  @mouseout="HidenFoodTips($event)">
-                  {{f.recipeName}}
+                <li  v-for="f in peopleMealListLeft" :key="f.id"  >
+                  <span  @mouseover="ShowFoodTips($event,f)"  @mouseout="HidenFoodTips($event)">{{f.recipeName}}</span>  <img style="width: 20px" @click="mealLoad(f.id,f.recipeName)" src="/img/arrow.png" alt />
                 </li>
               </ul>
             </el-tab-pane>
@@ -451,12 +451,12 @@
     </div>
     <!-- 分数弹框 -->
     <el-drawer
-      title="我是标题"
+      title="我是标题" id="drawerid"
       :modal-append-to-body="false"
       :visible.sync="drawer"
       :with-header="false"
     >
-      <span>22222</span>
+      <show-score :intake="intake"  :startTime="startTime"   :endTime="endTime" :score="score"></show-score>
     </el-drawer>
     <!-- 分数弹框 结束-->
     <!-- 智能配平弹框 -->
@@ -563,20 +563,20 @@
   import {mealList,getDishByBaseId,dishDetail,save,detail,update,grantTree} from "@/api/system/meals"
   import nutrient from "@/views/foods/components/nutrient";
   import nutrientWithColor from "@/views/foods/components/nutrientWithColor";
+  import showScore from "@/views/foods/components/showscore";
   export default {
   components: {
     foodsWeek,
     showfoodsWeek,
     nutrient,
-    nutrientWithColor
+    nutrientWithColor,
+    showScore
   },
   mounted(){
-
     this.initData()
-
     if(this.$route.query.userid){
       this.id=this.$route.query.userid;
-      this.personMealhandleNodeClick(this.$route.query.userid)
+      this.personMealhandleNodeClick(this.$route.query.userid,this)
     }
   },
   created() {
@@ -587,13 +587,11 @@
       event.stopPropagation();
 
     };
-
 document.oncontextmenu = function(){return false};
 
 
   },
   data() {
-
     const data = [];
     return {
       isUse:'',
@@ -642,6 +640,7 @@ document.oncontextmenu = function(){return false};
       dishSharePub:'',
       id:'',
       score:'0',
+      intake:[],
       drawer: false, //分数弹框
       pointscan: false, //智能配餐弹框
       secondary: [
@@ -795,9 +794,18 @@ document.oncontextmenu = function(){return false};
         })
       }
     },
+   mealLoad(id,name){
+     let that=this;
+     this.$confirm("请确定是否导入食谱："+name+"?", "提示", {
+       confirmButtonText: "确定",
+       cancelButtonText: "取消",
+       type: "warning"
+     }).then(()=>{
+       that.personMealhandleNodeClick(id,that)
+     })
+   },
 
-    personMealhandleNodeClick(id){
-      let that=this;
+    personMealhandleNodeClick(id,that){
       detail(id).then(res=>{
         if(res.data.success){
           let mealsType=[];
@@ -864,8 +872,10 @@ document.oncontextmenu = function(){return false};
       }
 
     },
-    parentFn(score){
+    parentFn(score,intake){
+    console.log(intake)
       this.score=score;
+       this.intake=intake;
     },
     initMealData(){
       //公开
@@ -1472,7 +1482,8 @@ document.oncontextmenu = function(){return false};
 
         var year = d.getFullYear();
         that.year=year;
-        that.startTime=d;
+
+
         var begin_year;
         var end_year;
         begin_year = year;
@@ -1545,7 +1556,8 @@ document.oncontextmenu = function(){return false};
         }else{
           that.WeekInfo.Weekdetails = full_weekDetails;
         }
-        that.endTime=new Date(begin_mouth+"-"+begin_day);
+        that.startTime=new Date(year+"-"+begin_mouth+"-"+begin_day);
+        that.endTime=new Date(year+"-"+end_mouth+"-"+end_day);
 
         //获取每天
         that.WeekList = [];
@@ -1592,68 +1604,68 @@ document.oncontextmenu = function(){return false};
 };
 </script>
 
-<style scoped>
-.el-row {
+<style>
+.meals .el-row {
   padding: 5px;
 }
-.el-select .el-input {
+.meals .el-select .el-input {
   width: 120px;
 }
-.el-form-item {
+.meals .el-form-item {
   margin-bottom: 0px;
 }
-.el-divider {
+.meals .el-divider {
   margin: 0px !important;
 }
-.clearfix:before,
+.meals .clearfix:before,
 .clearfix:after {
   display: table;
   content: "";
 }
-.clearfix:after {
+.meals .clearfix:after {
   clear: both;
 }
-.box-car {
+.meals .box-car {
   border: 1px solid #ebebeb !important;
   border-radius: 3px !important;
   padding: 0px;
   height: 600px;
 }
-.el-card__body {
+.meals .el-card__body {
   padding: 0px !important;
 }
-.panel_head {
+.meals .panel_head {
   background-color: rgba(0, 172, 160, 1);
   padding-top: 10px;
   text-align: center;
   border-radius: 3px;
 }
-.panel_head button {
+.meals .panel_head button {
   border-bottom: 0px;
   border-bottom-right-radius: 0px;
   border-bottom-left-radius: 0px;
   margin-bottom: 1px;
 }
-.foodWeekListHis {
+.meals .foodWeekListHis {
   padding: 5px;
 }
-.foodWeekListHis li {
+.meals .foodWeekListHis li {
   list-style: none;
   margin-bottom: 5px;
 }
-.foodPanel {
+.meals .foodPanel {
    height: calc(100vh - 180px);
   overflow-y: scroll;
   overflow-x: auto;
 }
-.foodrate {
+.meals .foodrate {
   width: 100%;
   height: 50px;
   /* background-color: red; */
   text-align: center;
   margin-bottom: 50px;
 }
-.scores {
+.meals .scores {
   cursor: pointer;
   width: 180px;
   height: 90px;
@@ -1666,7 +1678,7 @@ document.oncontextmenu = function(){return false};
   background-image: url("/img/yuan.png");
   background-size: 100% 100%; */
 }
-.scores1 {
+.meals .scores1 {
   width: 90px;
   height: 90px;
   /* background-color: yellow; */
@@ -1674,7 +1686,7 @@ document.oncontextmenu = function(){return false};
   background-image: url("/img/yuan.png");
   background-size: 100% 100%;
 }
-.scores2 {
+.meals  .scores2 {
   width: 80px;
   height: 65px;
   margin-top: 10px;
@@ -1684,50 +1696,50 @@ document.oncontextmenu = function(){return false};
   background-image: url("/img/fenshu1.png");
   background-size: 100% 100%;
 }
-.gnus {
+.meals .gnus {
   font-size: 24px;
   text-align: center;
   color: #ffffff;
 }
-.picture {
+.meals .picture {
   width: 30px;
   height: 30px;
   margin-top: 20px;
   margin-left: 2px;
 }
-.vertical {
+.meals .vertical {
   font-size: 20px;
   color: #00bfaf;
   line-height: 30px;
   padding-left: 5px;
 }
-.scorefor {
+.meals .scorefor {
   text-align: center;
   color: #ffffff;
   font-size: 15px;
   margin-top: -23px;
 }
-.header {
+.meals .header {
   width: 100%;
   height: 120px;
   /* background-color: red; */
 }
-.time {
+.meals .time {
   width: 100%;
   height: 55px;
 }
-.nutrition {
+.meals .nutrition {
   width: 100%;
   height: 55px;
   /* background-color: blue; */
 }
-.action {
+.meals .action {
   width: 23%;
   height: 700px;
   /* background: yellow; */
   float: left;
 }
-.onblur {
+.meals .onblur {
   width: 75%;
   height: 700px;
   /* background-color: red; */
@@ -1735,14 +1747,14 @@ document.oncontextmenu = function(){return false};
   margin-left: 15px;
   margin-bottom: 70px;
 }
-.arrow {
+.meals .arrow {
   width: 100%;
   height: 50px;
   line-height: 50px;
   /* background-color: blue; */
   display: flex;
 }
-.season {
+.meals .season {
   width: 80px;
   height: 30px;
   text-align: center;
@@ -1752,7 +1764,7 @@ document.oncontextmenu = function(){return false};
   background-color: rgba(255, 0, 0, 1);
 }
 
-.season1 {
+.meals .season1 {
   width: 80px;
   height: 30px;
   margin-left: 20px;
@@ -1762,7 +1774,7 @@ document.oncontextmenu = function(){return false};
   margin-top: 10px;
   background-color: rgba(0, 172, 160, 1);
 }
-.season2 {
+.meals .season2 {
   width: 80px;
   height: 30px;
   margin-left: 20px;
@@ -1772,12 +1784,12 @@ document.oncontextmenu = function(){return false};
   margin-top: 10px;
   background-color: rgba(255, 153, 51, 1);
 }
-.fonts {
+.meals .fonts {
   width: 100%;
   /* height: 500px; */
   /* background-color: yellow; */
 }
-  .el-checkbox{
+.meals  .el-checkbox{
    width: 35px;
   }
   .select-item{
@@ -1785,13 +1797,17 @@ document.oncontextmenu = function(){return false};
     justify-content: start;
     font-size: 12px!important
   }
-  .el-input{
+.meals .el-input{
     font-size: 12px!important;
   }
-.select-item .el-input__icon{
+.meals .select-item .el-input__icon{
   width:5px !important;
 }
-.select-item  .el-input--suffix .el-input__inner{
+.meals .select-item  .el-input--suffix .el-input__inner{
   padding-right: 15px!important;
+}
+.meals .el-drawer__open .el-drawer.rtl{
+  width: 50%!important;
+  overflow-y: scroll;
 }
 </style>

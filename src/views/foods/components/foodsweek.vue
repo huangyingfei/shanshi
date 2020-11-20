@@ -1022,7 +1022,7 @@ export default {
   watch: {
     'datas':{
       handler(data){
-        // debugger
+        debugger
         data.forEach(item=>{
           item.weeks.forEach(_=>{
             _.foods.forEach(__=>{
@@ -1154,7 +1154,7 @@ export default {
         }
       });
       this.resizeExpendHeight();
-      this.getFoodScore();
+      // this.getFoodScore();
     },
     //获取分数
     getFoodScore(){
@@ -1206,7 +1206,22 @@ export default {
       if(foods.recipeVals.length>0){
         calRecipe(foods).then(res=>{
           if(res.data.success){
-            that.$emit('childfn', Math.floor(this.getData(res.data.data) * 100) / 100 );
+            let resData=res.data.data;
+            let intake={};
+            let  data=[];
+            intake.mealSelect="推荐范围("+resData.recipeCalDTOList.gl.mealSelect+"%)"
+            data.push({name:"谷类",range:resData.recipeCalDTOList.gl.rang_min+"-"+resData.recipeCalDTOList.gl.rang_max+"("+resData.recipeCalDTOList.gl.recomRangMin+"-"+resData.recipeCalDTOList.gl.recomRangMax+")",jl:resData.recipeCalDTOList.gl.jl,grade:resData.recipeCalDTOList.gl.grade,point:resData.recipeCalDTOList.gl.point})
+            data.push({name:"薯类",range:resData.recipeCalDTOList.sl.rang_min+"-"+resData.recipeCalDTOList.sl.rang_max+"("+resData.recipeCalDTOList.sl.recomRangMin+"-"+resData.recipeCalDTOList.sl.recomRangMax+")",jl:resData.recipeCalDTOList.sl.jl,grade:resData.recipeCalDTOList.sl.grade,point:resData.recipeCalDTOList.sl.point})
+            data.push({name:"蔬菜",range:resData.recipeCalDTOList.sc.rang_min+"-"+resData.recipeCalDTOList.sc.rang_max+"("+resData.recipeCalDTOList.sc.recomRangMin+"-"+resData.recipeCalDTOList.sc.recomRangMax+")",jl:resData.recipeCalDTOList.sc.jl,grade:resData.recipeCalDTOList.sc.grade,point:resData.recipeCalDTOList.sc.point})
+            data.push({name:"水果",range:resData.recipeCalDTOList.sg.rang_min+"-"+resData.recipeCalDTOList.sg.rang_max+"("+resData.recipeCalDTOList.sg.recomRangMin+"-"+resData.recipeCalDTOList.sg.recomRangMax+")",jl:resData.recipeCalDTOList.sg.jl,grade:resData.recipeCalDTOList.sg.grade,point:resData.recipeCalDTOList.sg.point})
+            data.push({name:"畜禽肉类-蛋类-水产品",range:resData.recipeCalDTOList["xql:scp:dl"].rang_min+"-"+resData.recipeCalDTOList["xql:scp:dl"].rang_max+"("+resData.recipeCalDTOList["xql:scp:dl"].recomRangMin+"-"+resData.recipeCalDTOList["xql:scp:dl"].recomRangMax+")",jl:resData.recipeCalDTOList["xql:scp:dl"].jl,grade:resData.recipeCalDTOList["xql:scp:dl"].grade,point:resData.recipeCalDTOList["xql:scp:dl"].point})
+            data.push({name:"大豆",range:resData.recipeCalDTOList.dd.rang_min+"-"+resData.recipeCalDTOList.dd.rang_max+"("+resData.recipeCalDTOList.dd.recomRangMin+"-"+resData.recipeCalDTOList.dd.recomRangMax+")",jl:resData.recipeCalDTOList.dd.jl,grade:resData.recipeCalDTOList.dd.grade,point:resData.recipeCalDTOList.dd.point})
+            data.push({name:"坚果",range:resData.recipeCalDTOList.jg.rang_min+"-"+resData.recipeCalDTOList.jg.rang_max+"("+resData.recipeCalDTOList.jg.recomRangMin+"-"+resData.recipeCalDTOList.jg.recomRangMax+")",jl:resData.recipeCalDTOList.jg.jl,grade:resData.recipeCalDTOList.jg.grade,point:resData.recipeCalDTOList.jg.point})
+            data.push({name:"乳制品",range:resData.recipeCalDTOList.rzp.rang_min+"-"+resData.recipeCalDTOList.rzp.rang_max+"("+resData.recipeCalDTOList.rzp.recomRangMin+"-"+resData.recipeCalDTOList.rzp.recomRangMax+")",jl:resData.recipeCalDTOList.rzp.jl,grade:resData.recipeCalDTOList.rzp.grade,point:resData.recipeCalDTOList.rzp.point})
+            data.push({name:"食用油",range:resData.recipeCalDTOList.syy.rang_min+"-"+resData.recipeCalDTOList.syy.rang_max+"("+resData.recipeCalDTOList.syy.recomRangMin+"-"+resData.recipeCalDTOList.syy.recomRangMax+")",jl:resData.recipeCalDTOList.syy.jl,grade:resData.recipeCalDTOList.syy.grade,point:resData.recipeCalDTOList.syy.point})
+            data.push({name:"盐",range:resData.recipeCalDTOList.sy.rang_min+"-"+resData.recipeCalDTOList.sy.rang_max+"("+resData.recipeCalDTOList.sy.recomRangMin+"-"+resData.recipeCalDTOList.sy.recomRangMax+")",jl:resData.recipeCalDTOList.sy.jl,grade:resData.recipeCalDTOList.sy.grade,point:resData.recipeCalDTOList.sy.point})
+            intake.data=data;
+            that.$emit('childfn', Math.floor(this.getData(res.data.data) * 100) / 100,intake);
           }
         })
       }else{
