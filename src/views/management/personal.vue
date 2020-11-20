@@ -743,7 +743,7 @@ export default {
       valuepark1: [], //公共沈世渠
       valuepark2: [], //查询省市区
       options: [],
-      active: [], //季节
+ 
       active1: [], //公共所属季节
       //全部 常用
       really: [
@@ -758,6 +758,7 @@ export default {
       ],
       really1: "",
       really2: "0",
+           active: [], //季节
       context:[
             {
           value: "1",
