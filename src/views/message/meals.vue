@@ -475,7 +475,7 @@
         </div>
         <div class="nutrition">
           <span style="margin-right: 20px">选择营养素</span>
-          <el-select v-model="ncode" placeholder="请选择">
+          <el-select v-model="ncode" placeholder="请选择" @change="ncodeChange">
             <el-option
               v-for="item in nutritionValue"
               :key="item.code"
@@ -488,7 +488,7 @@
           <el-input
             style="width: 140px"
             placeholder="请输入内容"
-            v-model="input"
+            v-model="nvalue"
             clearable
           >
           </el-input>
@@ -497,12 +497,12 @@
           <el-input
             style="width: 140px"
             placeholder="请输入内容"
-            v-model="input"
+            v-model="exceptValue"
             clearable
           >
           </el-input>
 
-          <el-button style="margin-left: 30px" type="primary"
+          <el-button style="margin-left: 30px" type="primary"  @click="startTrim"
             >开始配平</el-button
           >
           <el-button type="primary" @click="application">应用</el-button>
@@ -741,6 +741,7 @@ document.oncontextmenu = function(){return false};
         },
       ],
       ncode:'101',
+
       nutritionValue:[
         {
           name:"能量",
@@ -788,6 +789,8 @@ document.oncontextmenu = function(){return false};
           value:'0'
         },
       ],
+      nvalue:'',
+      exceptValue:'',
       mealListLeft:[
         // {name:"周一食谱",id:"1"},
         // {name:"周二食谱",id:"2"},
@@ -1238,6 +1241,40 @@ document.oncontextmenu = function(){return false};
     tfractio() {
       this.drawer = true;
     },
+    ncodeChange(){
+   debugger
+      let that=this;
+     this.nutrition.forEach(_=>{
+       if(_.code==that.ncode){
+         that.nvalue=_.realIntake
+       }
+     })
+
+
+    },
+    startTrim(){
+      console.log(this.datas,"this.datas")
+      console.log(this.smartDatas,"this.smartDatas")
+      let that=this;
+      this.smartDatas.forEach(week=>{
+      week.weeks.forEach(_=>{
+          _.foods.forEach(__=>{
+            __.children.forEach(___=>{
+              let flag=false;
+              ___.nutrientIds.forEach((n)=>{
+                if(n.id=that.ncode){
+                  flag=true;
+                }
+              })
+              ___.count=___.count+___.count*((that.exceptValue-that.nvalue)/that.nvalue)
+            })
+          })
+        })
+        that.ncodeChange();
+      })
+      debugger
+
+    },
     application(){
       this.datas= this.smartDatas;
       this.pointscan = false;
@@ -1247,6 +1284,7 @@ document.oncontextmenu = function(){return false};
         this.smartDatas=JSON.parse(localStorage.getItem("mealsDatas"))
     },
     wrapscan() {
+      this.ncodeChange();
       localStorage.setItem("mealsDatas",JSON.stringify(this.datas))
       this.smartDatas=this.datas
       this.pointscan = true;

@@ -95,11 +95,11 @@ export default {
       tenantMode: this.website.tenantMode,
       loginForm: {
         //租户ID
-        tenantId: "000000",
+        tenantId: "",
         //用户名
-        username: "admin",
+        username: "",
         //密码
-        password: "admin",
+        password: "",
         //账号类型
         type: "account",
         //验证码的值
