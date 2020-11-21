@@ -502,7 +502,7 @@ export default {
           // console.log(this.prtree);
 
           let trees = [];
-          this.prtree.forEach((item, index) => {
+          this.prtree.forEach((cadddritem, index) => {
             trees[index] = {
               id: item.id,
               label: item.typeName
@@ -525,7 +525,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .el-button--success {
   color: #fff;
   background-color: #00aca0;
@@ -544,6 +544,7 @@ export default {
   height: 50px;
   float: left;
   margin-left: 20px;
+  margin-top: 25px;
   /* background-color: #fff; */
   line-height: 50px;
   /* background-color: red; */
@@ -559,12 +560,13 @@ export default {
 .cadddr {
   width: 100%;
   height: 50px;
-  margin-left: 20px;
-  margin-top: 20px;
+  float: left;
+  /* margin-left: 20px; */
+  /* margin-top: 20px; */
   line-height: 50px;
 }
 .address {
-  margin-top: 70px;
+  /* margin-top: 70px; */
 }
 .stop {
   color: #ff455b;

@@ -3,14 +3,14 @@ module.exports = {
   publicPath: "/",
   lintOnSave: true,
   productionSourceMap: false,
-  chainWebpack: config => {
+  chainWebpack: (config) => {
     //忽略的打包文件
     config.externals({
       vue: "Vue",
       "vue-router": "VueRouter",
       vuex: "Vuex",
       axios: "axios",
-      "element-ui": "ELEMENT"
+      "element-ui": "ELEMENT",
     });
     const entry = config.entry("app");
     entry.add("babel-polyfill").end();
@@ -30,9 +30,9 @@ module.exports = {
         // target: "https://saber.bladex.vip/api",
         ws: true,
         pathRewrite: {
-          "^/api": "/"
-        }
-      }
-    }
-  }
+          "^/api": "/",
+        },
+      },
+    },
+  },
 };

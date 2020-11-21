@@ -748,11 +748,24 @@ export default {
       //这部分应该是保存提交你添加的内容
       console.log(JSON.stringify(this.officeonce));
     },
+    searchStr() {
+      console.log(this.input); //菜品名称
+      console.log(this.noinst); //创建机构
+      console.log(this.value1); //提交日期
+      console.log(this.editor); //提交人
+      console.log(this.phoneId); //联系电话
+      console.log(this.mState1); //审核状态
+      // this.auditing();
+    },
     //获取表格数据
     auditing() {
       this.loadFlag = true;
       this.$axios
-        .get(`api/blade-food/dish/appPubDish?size=${10}&current=${1}`, {})
+        .get(
+          `api/blade-food/dish/appPubDish?size=${10}&current=${1}&dishName=${
+            this.input
+          }`
+        )
         .then(res => {
           this.loadFlag = false;
           // console.log(res);
@@ -1406,5 +1419,12 @@ export default {
 }
 .stop {
   color: #ff455b;
+}
+.pagingClass {
+  text-align: right;
+  /* margin: 20px 0; */
+  margin-top: 20px;
+  margin-right: 40px;
+  margin-bottom: 60px;
 }
 </style>
