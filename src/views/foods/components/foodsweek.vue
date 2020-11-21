@@ -182,13 +182,13 @@
               headers.find((p) => p.name == "week2").date
             }})
           </div>
-          <div class="">
-            <el-checkbox
-              label="设置为假期"
-              :checked="headers.find((p) => p.name == 'week2').is_vacation"
-              @change="onCheck('week2', $event)"
-            ></el-checkbox>
-          </div>
+          <!--<div class="">-->
+            <!--<el-checkbox-->
+              <!--label="设置为假期"-->
+              <!--:checked="headers.find((p) => p.name == 'week2').is_vacation"-->
+              <!--@change="onCheck('week2', $event)"-->
+            <!--&gt;</el-checkbox>-->
+          <!--</div>-->
         </template>
         <template slot-scope="scope">
           <div
@@ -310,13 +310,13 @@
               headers.find((p) => p.name == "week3").date
             }})
           </div>
-          <div class="">
-            <el-checkbox
-              label="设置为假期"
-              :checked="headers.find((p) => p.name == 'week3').is_vacation"
-              @change="onCheck('week3', $event)"
-            ></el-checkbox>
-          </div>
+          <!--<div class="">-->
+            <!--<el-checkbox-->
+              <!--label="设置为假期"-->
+              <!--:checked="headers.find((p) => p.name == 'week3').is_vacation"-->
+              <!--@change="onCheck('week3', $event)"-->
+            <!--&gt;</el-checkbox>-->
+          <!--</div>-->
         </template>
         <template slot-scope="scope">
           <div
@@ -438,13 +438,13 @@
               headers.find((p) => p.name == "week4").date
             }})
           </div>
-          <div class="">
-            <el-checkbox
-              label="设置为假期"
-              :checked="headers.find((p) => p.name == 'week4').is_vacation"
-              @change="onCheck('week4', $event)"
-            ></el-checkbox>
-          </div>
+          <!--<div class="">-->
+            <!--<el-checkbox-->
+              <!--label="设置为假期"-->
+              <!--:checked="headers.find((p) => p.name == 'week4').is_vacation"-->
+              <!--@change="onCheck('week4', $event)"-->
+            <!--&gt;</el-checkbox>-->
+          <!--</div>-->
         </template>
         <template slot-scope="scope">
           <div
@@ -566,13 +566,13 @@
               headers.find((p) => p.name == "week5").date
             }})
           </div>
-          <div class="">
-            <el-checkbox
-              label="设置为假期"
-              :checked="headers.find((p) => p.name == 'week5').is_vacation"
-              @change="onCheck('week5', $event)"
-            ></el-checkbox>
-          </div>
+          <!--<div class="">-->
+            <!--<el-checkbox-->
+              <!--label="设置为假期"-->
+              <!--:checked="headers.find((p) => p.name == 'week5').is_vacation"-->
+              <!--@change="onCheck('week5', $event)"-->
+            <!--&gt;</el-checkbox>-->
+          <!--</div>-->
         </template>
         <template slot-scope="scope">
           <div
@@ -694,13 +694,13 @@
               headers.find((p) => p.name == "week6").date
             }})
           </div>
-          <div class="">
-            <el-checkbox
-              label="设置为假期"
-              :checked="headers.find((p) => p.name == 'week6').is_vacation"
-              @change="onCheck('week6', $event)"
-            ></el-checkbox>
-          </div>
+          <!--<div class="">-->
+            <!--<el-checkbox-->
+              <!--label="设置为假期"-->
+              <!--:checked="headers.find((p) => p.name == 'week6').is_vacation"-->
+              <!--@change="onCheck('week6', $event)"-->
+            <!--&gt;</el-checkbox>-->
+          <!--</div>-->
         </template>
         <template slot-scope="scope">
           <div
@@ -822,13 +822,13 @@
               headers.find((p) => p.name == "week7").date
             }})
           </div>
-          <div class="">
-            <el-checkbox
-              label="设置为假期"
-              :checked="headers.find((p) => p.name == 'week7').is_vacation"
-              @change="onCheck('week7', $event)"
-            ></el-checkbox>
-          </div>
+          <!--<div class="">-->
+            <!--<el-checkbox-->
+              <!--label="设置为假期"-->
+              <!--:checked="headers.find((p) => p.name == 'week7').is_vacation"-->
+              <!--@change="onCheck('week7', $event)"-->
+            <!--&gt;</el-checkbox>-->
+          <!--</div>-->
         </template>
         <template slot-scope="scope">
           <div
@@ -1253,11 +1253,10 @@ export default {
               ___.children.forEach(____=>{
                    recipeVals.push({
                      foodId:____.id,
-                     val:___.count?___.count:0,
+                     val:____.count?____.count:0,
                      mealType:that.getmealTypeData(_.name),
                      week:__.name.slice(4)
                    })
-
               })
             }
           })
@@ -1295,6 +1294,7 @@ export default {
             this.nutritionValue.forEach(_=>{
               nutrition.push({name:_.name,dris:resData.nutritionCalDTOList[_.code].dris,realIntake:resData.nutritionCalDTOList[_.code].realIntake,realPropor:resData.nutritionCalDTOList[_.code].realPropor,reqPropor:resData.nutritionCalDTOList[_.code].min+"-"+resData.nutritionCalDTOList[_.code].max,grade:resData.nutritionCalDTOList[_.code].grade,point:resData.nutritionCalDTOList[_.code].point})
             })
+            debugger
 
             let power=[];
             this.powerValue.forEach(_=>{

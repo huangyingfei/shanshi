@@ -1,15 +1,17 @@
 <template>
   <div>
-    <h4 v-if="titleFlag">周期：2020年8月第一周</h4>
+    <h4 v-if="titleFlag">周期：{{WeekTtitle}}</h4>
     <div class="color"><span class="red">不足</span><span class="green">适量</span><span class="orange">过量</span></div>
     <div class="item-blo font">
       <span>营养素</span>
       <span>含量</span>
+      <span>DRIs%</span>
     </div>
     <div class="item-mid">
-    <span v-for="(item,index) in data" class="item-blo">
-      <span>{{ item.label }}</span>
-      <span>12.2</span>
+    <span v-for="(item,index) in nutrition" class="item-blo">
+      <span>{{ item.name }}</span>
+      <span>{{item.realIntake}}</span>
+      <span>{{item.dris}}</span>
     </span>
     </div>
   </div>
@@ -17,28 +19,14 @@
 <script>
   import {list } from "@/api/system/nutrientsetting";
   export default {
+    props:{
+      nutrition:[],
+      WeekTtitle:'',
+      titleFlag:false
+    },
     data() {
       return {
         titleFlag:false,
-        data: [{
-          label:"能量",
-          value:"12.3"
-        },{
-          label:"能量",
-          value:"12.3"
-        },{
-          label:"能量",
-          value:"12.3"
-        },{
-          label:"能量",
-          value:"12.3"
-        },{
-          label:"能量",
-          value:"12.3"
-        },{
-          label:"能量",
-          value:"12.3"
-        }],
       };
     },
     created() {
@@ -60,7 +48,7 @@
   .color{
     display: flex;
     justify-content: space-between;
-    width: 130px;
+    width: 150px;
     font-size: 8px;
     color: #FFFFFF;
   }
@@ -88,9 +76,13 @@
 }
   .item-blo {
     display: flex;
-    width: 130px;
+    width: 180px;
     font-size: 12px;
-    justify-content: space-between;
+    justify-content: start;
+  }
+  .item-blo span{
+    width: 60px;
+    text-align: left;
   }
   .font{
     color: #ccc;

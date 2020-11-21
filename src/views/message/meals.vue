@@ -44,7 +44,7 @@
       tabindex="0"
       x-placement="bottom"
     >
-      <nutrient></nutrient>
+      <nutrient :nutritionValue="nutritionValue"></nutrient>
     </div>
 
     <el-row :gutter="20" style="padding: 0px; margin-top: 5px">
@@ -183,9 +183,9 @@
 
             <el-popover
               placement="right"
-              width="400"
+              width="300"
               trigger="click">
-              <nutrient-with-color></nutrient-with-color>
+              <nutrient-with-color :nutrition="nutrition"  :WeekTtitle="WeekInfo.WeekTtitle" :titleFlag="true"></nutrient-with-color>
               <el-button  slot="reference" style="margin-left: 10px" size="medium"
               >营养素</el-button
               >
@@ -505,7 +505,7 @@
           <el-button style="margin-left: 30px" type="primary"
             >开始配平</el-button
           >
-          <el-button type="primary">应用</el-button>
+          <el-button type="primary" @click="application">应用</el-button>
           <el-button type="primary" @click="resetMeals">重置</el-button>
         </div>
       </div>
@@ -540,7 +540,7 @@
       <!--</div>-->
       <!-- 表格 -->
       <div class="onblur">
-        <nutrient-with-color></nutrient-with-color>
+        <nutrient-with-color :nutrition="nutrition"  ></nutrient-with-color>
 
         <smartfoods-week    @childfn="parentFn"
                        :headers="headers"
@@ -550,6 +550,17 @@
                        :dragnode="drogNode"
                             :nutritionValue="nutritionValue"
                        ref="child" > </smartfoods-week>
+      </div>
+
+      <div class="scores">
+        <div class="scores1">
+          <p class="gnus">{{score}}</p>
+          <p class="scorefor">分</p>
+        </div>
+        <div class="scores2">
+          <img class="picture" src="/img/fenshu.png" alt="" />
+          <p class="vertical">真棒</p>
+        </div>
       </div>
     </el-dialog>
     <!-- 智能配平弹框结束 -->
@@ -733,38 +744,48 @@ document.oncontextmenu = function(){return false};
       nutritionValue:[
         {
           name:"能量",
-          code:"101"
+          code:"101",
+          value:'0'
         },
         {
           name:"蛋白质",
-          code:"102"
+          code:"102",
+          value:'0'
         },
         {
           name:"钙",
-          code:"201"
+          code:"201",
+          value:'0'
         },{
           name:"纳",
-          code:"204"
+          code:"204",
+          value:'0'
         },{
           name:"铁",
-          code:"301"
+          code:"301",
+          value:'0'
         },{
           name:"锌",
-          code:"303"
+          code:"303",
+          value:'0'
         }
         ,{
           name:"维生素A",
-          code:"401"
+          code:"401",
+          value:'0'
         },{
           name:"维生素B1",
-          code:"405"
+          code:"405",
+          value:'0'
         },{
           name:"维生素B2",
-          code:"406"
+          code:"406",
+          value:'0'
         }
         ,{
           name:"维生素C",
-          code:"415"
+          code:"415",
+          value:'0'
         },
       ],
       mealListLeft:[
@@ -924,6 +945,7 @@ document.oncontextmenu = function(){return false};
       this.score=score;
       this.intake=intake;
       this.nutrition=nutrition
+      console.log(this.nutrition)
       this.power=power
       this.protein=protein
       this.meal=meal
@@ -1121,7 +1143,7 @@ document.oncontextmenu = function(){return false};
 
           that.$refs.layershipu.style.top='300px';
           that.$refs.layershipu.style.left='300px';
-          debugger
+         // debugger
           if(that.day==5){
             that.$refs.layershipu.style.width='682px';
           }
@@ -1162,17 +1184,30 @@ document.oncontextmenu = function(){return false};
           let data = res.data.data;
           if (data.dishMxVos) {
             let children = [];
+            this.nutritionValue.forEach(_=>{_.value='0'})
             data.dishMxVos.forEach(_ => {
               let item = {};
               item["id"] = _.foodId;
               item["name"] = _.name;
               item["count"] = _.value
+              let nutrientIds=[];
+              _.foodNutritions.forEach(__=>{
+                this.nutritionValue.forEach(n=>{
+                  if(n.code==__.nutrientId+""){
+                    nutrientIds.push({id:__.nutrientId,name:n.name, value:__.value/100*_.foodEat*0.01})
+                  }
+                })
+              })
+              this.nutritionValue.forEach(n=>{
+                _.foodNutritions.forEach(__=>{
+                  if(n.code==__.nutrientId+""){
+                      n.value=parseFloat(n.value)+parseFloat((__.value/100*_.foodEat*0.01)*_.value)
+                  }
+                })
+              })
+              item["nutrientIds"]=nutrientIds;
               children.push(item);
             })
-            // let dishCount = 0
-            // data.dishMxVos.forEach(_ => {
-            //   dishCount += parseFloat(_.value)
-            // })
             node.data = {
               id: data.id,
               label: data.dishName,
@@ -1180,10 +1215,13 @@ document.oncontextmenu = function(){return false};
                 id: data.id,
                 name: data.dishName,
                 // count: dishCount,
-                children: children
+                children: children,
+                dishNutrient:this.nutritionValue
               }
             }
           }
+
+          console.log("node.data",node.data)
           that.drogNode = JSON.parse(JSON.stringify(node.data));
           ev.dataTransfer.setData("Text", JSON.stringify(node.data));
           that.drogNodeStats = true;
@@ -1200,9 +1238,13 @@ document.oncontextmenu = function(){return false};
     tfractio() {
       this.drawer = true;
     },
+    application(){
+      this.datas= this.smartDatas;
+      this.pointscan = false;
+    },
     resetMeals(){
-    debugger
-        this.datas=JSON.parse(localStorage.getItem("mealsDatas"))
+  //  debugger
+        this.smartDatas=JSON.parse(localStorage.getItem("mealsDatas"))
     },
     wrapscan() {
       localStorage.setItem("mealsDatas",JSON.stringify(this.datas))
@@ -1723,7 +1765,7 @@ document.oncontextmenu = function(){return false};
   text-align: center;
   margin-bottom: 50px;
 }
-.meals .scores {
+.scores {
   cursor: pointer;
   width: 180px;
   height: 90px;
@@ -1736,7 +1778,7 @@ document.oncontextmenu = function(){return false};
   background-image: url("/img/yuan.png");
   background-size: 100% 100%; */
 }
-.meals .scores1 {
+.scores1 {
   width: 90px;
   height: 90px;
   /* background-color: yellow; */
@@ -1744,7 +1786,7 @@ document.oncontextmenu = function(){return false};
   background-image: url("/img/yuan.png");
   background-size: 100% 100%;
 }
-.meals  .scores2 {
+ .scores2 {
   width: 80px;
   height: 65px;
   margin-top: 10px;
@@ -1754,24 +1796,24 @@ document.oncontextmenu = function(){return false};
   background-image: url("/img/fenshu1.png");
   background-size: 100% 100%;
 }
-.meals .gnus {
+.gnus {
   font-size: 24px;
   text-align: center;
   color: #ffffff;
 }
-.meals .picture {
+.picture {
   width: 30px;
   height: 30px;
   margin-top: 20px;
   margin-left: 2px;
 }
-.meals .vertical {
+.vertical {
   font-size: 20px;
   color: #00bfaf;
   line-height: 30px;
   padding-left: 5px;
 }
-.meals .scorefor {
+.scorefor {
   text-align: center;
   color: #ffffff;
   font-size: 15px;
