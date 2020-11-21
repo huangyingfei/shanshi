@@ -1938,6 +1938,13 @@ export default {
   font-size: 14px;
   float: left;
 }
+.mationinput {
+  width: 95%;
+  /* height: 700px; */
+  /* display: flex; */
+  margin-left: 40px;
+  margin-bottom: 20px;
+}
 .export2 {
   width: 77px;
   height: 30px;

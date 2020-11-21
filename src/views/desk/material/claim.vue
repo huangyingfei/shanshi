@@ -512,7 +512,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .unsaved {
   width: 100%;
   height: 100%;
@@ -521,12 +521,12 @@ export default {
   margin-top: -19px;
 }
 .update {
-  width: 1135px;
+  width: 100%;
   height: 50px;
   float: left;
   margin-left: 20px;
   /* background-color: #fff; */
-  margin-top: 15px;
+  margin-top: 30px;
   /* background-color: red; */
 }
 .update .el-input {
@@ -539,13 +539,15 @@ export default {
 }
 .cadddr {
   width: 100%;
-  height: 75px;
-  margin-left: 20px;
-  margin-top: 20px;
+  height: 50px;
+  /* margin-left: 20px; */
+  margin-top: 10px;
+  float: left;
+  /* background-color: red; */
   line-height: 50px;
 }
 .address {
-  margin-top: 72px;
+  /* margin-top: 72px; */
 }
 .pagingClass {
   text-align: right;

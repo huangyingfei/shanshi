@@ -662,6 +662,12 @@ export default {
       console.log(this.headerObj);
     },
     searchType() {
+      console.log(this.input); //食材名称
+      console.log(this.noinst); //创建机构
+      console.log(this.value1); //提交日期；
+      console.log(this.editor); //提交人
+      console.log(this.phoneId); //电话
+      console.log(this.mState); //审核状态
       this.auditing();
       // console.log(this.value1);
     },
@@ -670,7 +676,7 @@ export default {
       this.loadFlag = true;
       this.$axios
         .get(
-          `api/blade-food/food/getAuditList?size=${this.m_page.size}&current=${this.m_page.number}&name=${this.input}&orgName=${this.noinst}&mobile=${this.phoneId}&createName=${this.editor}&createtime=${this.value1}`,
+          `api/blade-food/food/getAuditList?size=${this.m_page.size}&current=${this.m_page.number}&dishName=${this.input}&orgName=${this.noinst}&mobile=${this.phoneId}&createName=${this.editor}&createtime=${this.value1}`,
           {
             headers: {
               "Content-Type": "application/json"
@@ -1226,5 +1232,12 @@ export default {
 }
 .stop {
   color: #ff455b;
+}
+.pagingClass {
+  text-align: right;
+  /* margin: 20px 0; */
+  margin-top: 20px;
+  margin-right: 40px;
+  margin-bottom: 60px;
 }
 </style>

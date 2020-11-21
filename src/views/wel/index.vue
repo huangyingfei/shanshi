@@ -269,6 +269,9 @@ export default {
 </script>
 
 <style>
+.wel {
+  width: 100%;
+}
 .el-font-size {
   font-size: 14px;
 }

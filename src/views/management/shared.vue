@@ -128,6 +128,19 @@
           </template>
         </el-table-column>
       </el-table>
+      <!-- 分页 -->
+      <div class="pagingClass">
+        <el-pagination
+          :page-sizes="m_page.sizes"
+          :page-size="m_page.size"
+          :current-page="m_page.number"
+          @size-change="m_handleSizeChange"
+          @current-change="m_handlePageChange"
+          layout="total,sizes,prev, pager, next"
+          background
+          :total="m_page.totalElements"
+        ></el-pagination>
+      </div>
     </div>
     <!-- 查看 -->
     <el-dialog
@@ -342,6 +355,13 @@ export default {
         type: [],
         temps: ""
       },
+      m_page: {
+        sizes: [10, 20, 40, 50, 100], //每页最大显示数
+        size: 20,
+        totalElements: 0,
+        totalPages: 3,
+        number: 1
+      },
       //季节查询
       before: [
         {
@@ -487,6 +507,15 @@ export default {
           this.foodPos = cation;
         });
     },
+    //页码
+    m_handlePageChange(currPage) {
+      this.m_page.number = currPage;
+      this.auditing();
+    },
+    m_handleSizeChange(currSize) {
+      this.m_page.size = currSize;
+      this.auditing();
+    },
     //获取表格数据
     auditing() {
       this.$axios
@@ -494,7 +523,8 @@ export default {
         .then(res => {
           // console.log(res);
           this.tmquery = res.data.data.records;
-          console.log(this.tmquery);
+          this.m_page.totalElements = res.data.data.total;
+          // console.log(this.tmquery);
         });
     },
     //营养素含量
@@ -555,7 +585,7 @@ export default {
 <style scoped>
 .dients {
   width: 100%;
-  height: 1000px;
+  height: 100%;
   background-color: #fff;
 }
 .header {
@@ -572,5 +602,12 @@ export default {
 }
 .stop {
   color: #ff455b;
+}
+.pagingClass {
+  text-align: right;
+  /* margin: 20px 0; */
+  margin-top: 20px;
+  margin-right: 40px;
+  margin-bottom: 60px;
 }
 </style>

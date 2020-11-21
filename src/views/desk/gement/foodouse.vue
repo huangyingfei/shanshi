@@ -499,7 +499,7 @@
           </el-table-column>
         </el-table>
       </div>
-      <div style="text-align: center;">
+      <!-- <div style="text-align: center;">
         <el-button @click="saveItem" type="primary" v-if="this.editable == 2"
           >编辑保存</el-button
         >
@@ -509,7 +509,18 @@
           v-if="this.editable == 1"
           >保存并新增</el-button
         >
-      </div>
+      </div> -->
+    </div>
+    <div class="gmsave">
+      <el-button @click="saveItem" type="primary" v-if="this.editable == 2"
+        >编辑保存</el-button
+      >
+      <el-button
+        @click="savefiles('ruleForm')"
+        type="primary"
+        v-if="this.editable == 1"
+        >保存并新增</el-button
+      >
     </div>
   </div>
 </template>
@@ -1565,18 +1576,17 @@ export default {
 }
 .coffee {
   width: 29%;
-  height: 1300px;
+  height: 1130px;
   background-color: #fff;
   float: left;
   border-right: 1px solid #e0e0e0;
-  margin-bottom: 40px;
 }
 .mation {
   width: 70%;
-  height: 1300px;
+  height: 1130px;
   background-color: #fff;
   float: left;
-  margin-bottom: 40px;
+  /* margin-bottom: 40px; */
 }
 .import {
   width: 200px;
@@ -1676,5 +1686,13 @@ export default {
   /* height: 500px; */
   margin-left: 40px;
   /* background-color: red; */
+}
+.gmsave {
+  float: left;
+  text-align: center;
+  width: 100%;
+  height: 100px;
+  margin-bottom: 40px;
+  background-color: #fff;
 }
 </style>
