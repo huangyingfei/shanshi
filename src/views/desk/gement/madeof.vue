@@ -87,19 +87,19 @@
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="tenentName"
+          prop="orgName"
           label="创建机构"
           width="180"
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="userName"
+          prop="createName"
           label="提交人"
           width="90"
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="phone"
+          prop="mobile"
           label="联系电话"
           width="140"
           align="center"
@@ -644,19 +644,19 @@ export default {
           label: "全部"
         },
         {
-          value: "1",
+          value: "0",
           label: "待审核"
         },
         {
-          value: "2",
+          value: "1",
           label: "审核通过"
         },
         {
-          value: "3",
+          value: "2",
           label: "审核不通过"
         },
         {
-          value: "4",
+          value: "3",
           label: "无需审核"
         }
       ],
@@ -749,22 +749,20 @@ export default {
       console.log(JSON.stringify(this.officeonce));
     },
     searchStr() {
-      console.log(this.input); //菜品名称
-      console.log(this.noinst); //创建机构
-      console.log(this.value1); //提交日期
-      console.log(this.editor); //提交人
-      console.log(this.phoneId); //联系电话
-      console.log(this.mState1); //审核状态
-      // this.auditing();
+      // console.log(this.input); //菜品名称
+      // console.log(this.noinst); //创建机构
+      // console.log(this.value1); //提交日期
+      // console.log(this.editor); //提交人
+      // console.log(this.phoneId); //联系电话
+      // console.log(this.mState1); //审核状态
+      this.auditing();
     },
     //获取表格数据
     auditing() {
       this.loadFlag = true;
       this.$axios
         .get(
-          `api/blade-food/dish/appPubDish?size=${10}&current=${1}&dishName=${
-            this.input
-          }`
+          `api/blade-food/dish/appPubDish?size=${this.m_page.size}&current=${this.m_page.number}&dishName=${this.input}&orgName=${this.noinst}&createTimeStr=${this.value1}&mobile=${this.phoneId}&status=${this.mState1}&createName=${this.editor}`
         )
         .then(res => {
           this.loadFlag = false;
@@ -819,16 +817,16 @@ export default {
     },
     //查看
     seecol(row, index) {
-      // console.log(row);
+      console.log(row);
       this.seekeys = true;
       this.active.length = "";
       this.valuepark = "";
       this.nbottoms = index;
       console.log(row);
       this.stone = row.id;
-      this.dsquery.establish = row.tenentName;
-      this.dsquery.submit = row.userName;
-      this.dsquery.phone = row.phone;
+      this.dsquery.establish = row.orgName;
+      this.dsquery.submit = row.createName;
+      this.dsquery.phone = row.mobile;
       this.dsquery.time = row.createTime;
       this.dsquery.examineto = row.status;
       this.seekeys = true;

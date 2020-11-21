@@ -28,6 +28,8 @@
       ></el-input>
       <span style="margin-right: 10px;margin-left: 15px;">提交日期:</span>
       <el-date-picker
+        format="yyyy 年 MM 月 dd 日"
+        value-format="yyyy-MM-dd"
         size="small"
         v-model="getDate"
         type="date"
@@ -36,6 +38,7 @@
       ></el-date-picker>
       <div>
         <el-button
+          @click="searchStr"
           size="small"
           icon="el-icon-search"
           type="primary"
@@ -438,8 +441,12 @@ export default {
       dirname: [
         //审核状态
         {
-          value: "0",
+          value: "",
           label: "全部"
+        },
+        {
+          value: "0",
+          label: "待审核"
         },
         {
           value: "1",
@@ -451,11 +458,7 @@ export default {
         },
         {
           value: "3",
-          label: "待审批"
-        },
-        {
-          value: "4",
-          label: "已取消"
+          label: "无需审核"
         }
       ],
       officeonce: [
@@ -592,12 +595,21 @@ export default {
           this.foodPos = obtain;
         });
     },
+    searchStr() {
+      // console.log(this.input); //菜品名称
+      // console.log(this.noinst); //创建机构
+      // console.log(this.value1); //提交日期
+      // console.log(this.editor); //提交人
+      // console.log(this.phoneId); //联系电话
+      // console.log(this.mState1); //审核状态
+      this.auditing();
+    },
     //获取表格数据
     auditing() {
       this.loadFlag = true;
       this.$axios
         .get(
-          `api/blade-food/dish/appPubDishOrgan?size=${this.m_page.size}&current=${this.m_page.number}`,
+          `api/blade-food/dish/appPubDishOrgan?size=${this.m_page.size}&current=${this.m_page.number}&dishName=${this.input}&status=${this.value}&createName=${this.editor}&createTimeStr=${this.getDate}`,
           {}
         )
         .then(res => {
