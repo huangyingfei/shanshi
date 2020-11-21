@@ -1030,6 +1030,7 @@ export default {
       this.value1 = [];
       this.valuepark = [];
       this.officeonce = [];
+      this.productImgs = [];
       // console.log(this.editable);
       // this.$router.go(0);
       this.mailto.forEach(item => {
