@@ -1020,9 +1020,45 @@ export default {
           name:"盐",
           code:"sy"
         }
+      ],
+      nutritionValue:[
+        {
+            name:"能量",
+            code:"101"
+         },
+        {
+          name:"蛋白质",
+          code:"102"
+        },
+        {
+          name:"钙",
+          code:"201"
+        },{
+          name:"纳",
+          code:"204"
+        },{
+          name:"铁",
+          code:"301"
+        },{
+          name:"维生素A",
+          code:"401"
+        },{
+          name:"维生素B1",
+          code:"405"
+        },{
+          name:"维生素B2",
+          code:"406"
+        }
+        ,{
+          name:"维生素C",
+          code:"415"
+        },
+
+
 
 
       ],
+      powerValue:[{name:"脂肪占总能量",code:"103"},{name:"蛋白占总能量",code:"102"},{name:"碳水化合物占总能量",code:"104"}],
       empty_image: "/img/tianjia.png",
       dialog_choice: {
         opened: false, // 是否显示
@@ -1064,7 +1100,6 @@ export default {
   watch: {
     'datas':{
       handler(data){
-        debugger
         data.forEach(item=>{
           item.weeks.forEach(_=>{
             _.foods.forEach(__=>{
@@ -1257,17 +1292,29 @@ export default {
             })
             intake.data=data;
             let nutrition=[];
-            nutrition.push({name:"能量",dris:resData.nutritionCalDTOList["101"].dris,realIntake:resData.nutritionCalDTOList["101"].realIntake,realPropor:resData.nutritionCalDTOList["101"].realPropor,reqPropor:resData.nutritionCalDTOList["101"].min+"-"+resData.nutritionCalDTOList["101"].max,grade:resData.nutritionCalDTOList["101"].grade,point:resData.nutritionCalDTOList["101"].point})
-            nutrition.push({name:"蛋白质",dris:resData.nutritionCalDTOList["102"].dris,realIntake:resData.nutritionCalDTOList["102"].realIntake,realPropor:resData.nutritionCalDTOList["102"].realPropor,reqPropor:resData.nutritionCalDTOList["102"].min+"-"+resData.nutritionCalDTOList["102"].max,grade:resData.nutritionCalDTOList["102"].grade,point:resData.nutritionCalDTOList["102"].point})
-            nutrition.push({name:"钙",dris:resData.nutritionCalDTOList["201"].dris,realIntake:resData.nutritionCalDTOList["201"].realIntake,realPropor:resData.nutritionCalDTOList["201"].realPropor,reqPropor:resData.nutritionCalDTOList["201"].min+"-"+resData.nutritionCalDTOList["201"].max,grade:resData.nutritionCalDTOList["201"].grade,point:resData.nutritionCalDTOList["201"].point})
-            nutrition.push({name:"纳",dris:resData.nutritionCalDTOList["204"].dris,realIntake:resData.nutritionCalDTOList["204"].realIntake,realPropor:resData.nutritionCalDTOList["204"].realPropor,reqPropor:resData.nutritionCalDTOList["204"].min+"-"+resData.nutritionCalDTOList["204"].max,grade:resData.nutritionCalDTOList["204"].grade,point:resData.nutritionCalDTOList["204"].point})
-            nutrition.push({name:"铁",dris:resData.nutritionCalDTOList["301"].dris,realIntake:resData.nutritionCalDTOList["301"].realIntake,realPropor:resData.nutritionCalDTOList["301"].realPropor,reqPropor:resData.nutritionCalDTOList["301"].min+"-"+resData.nutritionCalDTOList["301"].max,grade:resData.nutritionCalDTOList["101"].grade,point:resData.nutritionCalDTOList["301"].point})
-            nutrition.push({name:"锌",dris:resData.nutritionCalDTOList["303"].dris,realIntake:resData.nutritionCalDTOList["303"].realIntake,realPropor:resData.nutritionCalDTOList["303"].realPropor,reqPropor:resData.nutritionCalDTOList["303"].min+"-"+resData.nutritionCalDTOList["303"].max,grade:resData.nutritionCalDTOList["101"].grade,point:resData.nutritionCalDTOList["101"].point})
-            nutrition.push({name:"能量",dris:resData.nutritionCalDTOList["101"].dris,realIntake:resData.nutritionCalDTOList["101"].realIntake,realPropor:resData.nutritionCalDTOList["101"].realPropor,reqPropor:resData.nutritionCalDTOList["101"].min+"-"+resData.nutritionCalDTOList["101"].max,grade:resData.nutritionCalDTOList["101"].grade,point:resData.nutritionCalDTOList["101"].point})
-            nutrition.push({name:"能量",dris:resData.nutritionCalDTOList["101"].dris,realIntake:resData.nutritionCalDTOList["101"].realIntake,realPropor:resData.nutritionCalDTOList["101"].realPropor,reqPropor:resData.nutritionCalDTOList["101"].min+"-"+resData.nutritionCalDTOList["101"].max,grade:resData.nutritionCalDTOList["101"].grade,point:resData.nutritionCalDTOList["101"].point})
-            nutrition.push({name:"能量",dris:resData.nutritionCalDTOList["101"].dris,realIntake:resData.nutritionCalDTOList["101"].realIntake,realPropor:resData.nutritionCalDTOList["101"].realPropor,reqPropor:resData.nutritionCalDTOList["101"].min+"-"+resData.nutritionCalDTOList["101"].max,grade:resData.nutritionCalDTOList["101"].grade,point:resData.nutritionCalDTOList["101"].point})
+            this.nutritionValue.forEach(_=>{
+              nutrition.push({name:_.name,dris:resData.nutritionCalDTOList[_.code].dris,realIntake:resData.nutritionCalDTOList[_.code].realIntake,realPropor:resData.nutritionCalDTOList[_.code].realPropor,reqPropor:resData.nutritionCalDTOList[_.code].min+"-"+resData.nutritionCalDTOList[_.code].max,grade:resData.nutritionCalDTOList[_.code].grade,point:resData.nutritionCalDTOList[_.code].point})
+            })
 
-            that.$emit('childfn', Math.floor(this.getData(res.data.data) * 100) / 100,intake);
+            let power=[];
+            this.powerValue.forEach(_=>{
+              power.push({name:_.name,req:resData.powerCalDTOList[_.code].min+"-"+resData.powerCalDTOList[_.code].min,real:resData.powerCalDTOList[_.code].real,grade:resData.powerCalDTOList[_.code].grade,point:resData.powerCalDTOList[_.code].point})
+            })
+
+            let protein=[];
+            protein=resData.proteinCalDTOList;
+            let sum=0;
+            resData.proteinCalDTOList.forEach(_=>{
+              sum+=parseFloat(_.real)
+            })
+            protein.forEach(_=>{
+              _["realSum"]=sum
+              _["req"]=">="+_.min
+            })
+            let meal=[];
+            meal=resData.mealTypeCalDTOList
+            console.log(protein)
+            that.$emit('childfn', Math.floor(this.getData(res.data.data) * 100) / 100,intake,nutrition,power,protein,meal);
           }
         })
       }else{

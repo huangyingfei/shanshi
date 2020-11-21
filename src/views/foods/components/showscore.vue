@@ -34,121 +34,122 @@
     </el-table>
     <h4>  二、营养素摄入量</h4>
     <el-table
-      :data="tableData"
+      :data="nutrition"
       style="width: 100%">
       <el-table-column
-        prop="date"
-        label="营养素"
-        width="90">
-      </el-table-column>
-      <el-table-column
         prop="name"
-        label="DRIs"
-        width="180">
+        label="营养素"
+        width="100">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="dris"
+        label="DRIs"
+        width="100">
+      </el-table-column>
+      <el-table-column
+        prop="realIntake"
         label="实际摄入">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="reqPropor"
         label="要求比例">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="realPropor"
         label="实际比例">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="grade"
         label="评价">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="point"
         label="扣分">
       </el-table-column>
     </el-table>
     <h4>  三、能量来源分布（2013年（中国营养学会））</h4>
     <el-table
-      :data="tableData"
+      :data="power"
       style="width: 100%">
       <el-table-column
-        prop="date"
-        label="能量占比"
-        width="90">
-      </el-table-column>
-      <el-table-column
         prop="name"
-        label="要求（%）"
-        width="180">
+        label="能量占比"
+        width="200">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="req"
+        label="要求（%）"
+        width="200">
+      </el-table-column>
+      <el-table-column
+        prop="real"
         label="实际(%)">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="grade"
         label="评价">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="point"
         label="扣分">
       </el-table-column>
     </el-table>
     <h4>  四、蛋白质来源分布</h4>
     <el-table
-      :data="tableData"
+      :data="protein"
       style="width: 100%">
       <el-table-column
-        prop="date"
+        prop="typeCode"
         label="优质蛋白质"
         width="180">
       </el-table-column>
       <el-table-column
-        prop="name"
+        prop="req"
         label="要求"
         width="90">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="real"
         label="实际">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="realSum"
         label="实际和">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="grade"
         label="评价">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="point"
         label="扣分">
       </el-table-column>
     </el-table>
     <h4>  五、配餐能量结构</h4>
     <el-table
-      :data="tableData"
+      :data="meal"
       style="width: 100%">
       <el-table-column
-        prop="date"
+        prop="mealTypeName"
         label="餐别"
-        width="90">
-      </el-table-column>
-      <el-table-column
-        prop="name"
-        label="要求（%）"
         width="180">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="min"
+        label="要求（%）"
+        width="120">
+      </el-table-column>
+      <el-table-column
+        prop="real"
+        width="200"
         label="实际">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="grade"
         label="评价">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="point"
         label="扣分">
       </el-table-column>
     </el-table>
@@ -163,27 +164,15 @@
       scoreResult:[],
       score:'',
       intake:{},
+      nutrition:[],
+      power:[],
+      protein:[],
+      meal:[]
+
     },
     data(){
       return {
 
-        tableData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }]
       }
     }
   }

@@ -456,7 +456,7 @@
       :visible.sync="drawer"
       :with-header="false"
     >
-      <show-score :intake="intake"  :startTime="startTime"   :endTime="endTime" :score="score"></show-score>
+      <show-score :intake="intake"   :nutrition="nutrition" :power="power"  :meal="meal" :protein="protein"  :startTime="startTimeStr"   :endTime="endTimeStr" :score="score"></show-score>
     </el-drawer>
     <!-- 分数弹框 结束-->
     <!-- 智能配平弹框 -->
@@ -468,28 +468,19 @@
       width="600px"
     >
       <div class="header">
-        <div class="time">
-          <span class="demonstration" style="padding-right: 10px">日期</span>
-          <span></span>
+        <div class="headerTime">
+          <span class="demonstration" style="padding-right: 20px">日期：{{startTimeStr}}-{{endTimeStr}}</span>
 
-          <el-checkbox style="padding-left: 50px" v-model="focus"
-            >调整食材的量</el-checkbox
-          >
-          <el-checkbox style="padding-left: 50px" v-model="tment"
-            >调整菜品的量</el-checkbox
-          >
-          <el-checkbox style="padding-left: 50px" v-model="changed"
-            >保留整数</el-checkbox
-          >
+          <el-radio v-model="foodRadio" label="1">调整食材的量</el-radio>
         </div>
         <div class="nutrition">
-          <span>选择营养素</span>
-          <el-select v-model="value" placeholder="请选择">
+          <span style="margin-right: 20px">选择营养素</span>
+          <el-select v-model="ncode" placeholder="请选择">
             <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              v-for="item in nutritionValue"
+              :key="item.code"
+              :label="item.name"
+              :value="item.code"
             >
             </el-option>
           </el-select>
@@ -515,41 +506,50 @@
             >开始配平</el-button
           >
           <el-button type="primary">应用</el-button>
-          <el-button type="primary">重置</el-button>
+          <el-button type="primary" @click="resetMeals">重置</el-button>
         </div>
       </div>
-      <div class="action">
-        <div class="arrow">
-          <div class="season">不足</div>
-          <div class="season1">适量</div>
-          <div class="season2">过量</div>
-        </div>
-        <div class="fonts">
-          <el-table
-            style="width: 100%; margin-bottom: 20px"
-            row-key="id"
-            :data="secondary"
-            :border="false"
-            :default-expand-all="false"
-            :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-          >
-            <el-table-column
-              prop="date"
-              align="center"
-              label="营养素"
-              width="140"
-            >
-            </el-table-column>
-            <el-table-column prop="name" align="center" label="含量" width="80">
-            </el-table-column>
-            <el-table-column prop="address" align="center" label="DRIs%">
-            </el-table-column>
-          </el-table>
-        </div>
-      </div>
+      <!--<div class="action">-->
+        <!--<div class="arrow">-->
+          <!--<div class="season">不足</div>-->
+          <!--<div class="season1">适量</div>-->
+          <!--<div class="season2">过量</div>-->
+        <!--</div>-->
+        <!--<div class="fonts">-->
+          <!--<el-table-->
+            <!--style="width: 100%; margin-bottom: 20px"-->
+            <!--row-key="id"-->
+            <!--:data="secondary"-->
+            <!--:border="false"-->
+            <!--:default-expand-all="false"-->
+            <!--:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"-->
+          <!--&gt;-->
+            <!--<el-table-column-->
+              <!--prop="date"-->
+              <!--align="center"-->
+              <!--label="营养素"-->
+              <!--width="140"-->
+            <!--&gt;-->
+            <!--</el-table-column>-->
+            <!--<el-table-column prop="name" align="center" label="含量" width="80">-->
+            <!--</el-table-column>-->
+            <!--<el-table-column prop="address" align="center" label="DRIs%">-->
+            <!--</el-table-column>-->
+          <!--</el-table>-->
+        <!--</div>-->
+      <!--</div>-->
       <!-- 表格 -->
       <div class="onblur">
-        <foods-week :headers="headers" :datas="datas" days="5"> </foods-week>
+        <nutrient-with-color></nutrient-with-color>
+
+        <smartfoods-week    @childfn="parentFn"
+                       :headers="headers"
+                       :datas="smartDatas"
+                       days="5"
+                       :crowd="WeekInfo.crowd"
+                       :dragnode="drogNode"
+                            :nutritionValue="nutritionValue"
+                       ref="child" > </smartfoods-week>
       </div>
     </el-dialog>
     <!-- 智能配平弹框结束 -->
@@ -562,15 +562,17 @@
   import {getList} from "@/api/system/special"
   import {mealList,getDishByBaseId,dishDetail,save,detail,update,grantTree} from "@/api/system/meals"
   import nutrient from "@/views/foods/components/nutrient";
-  import nutrientWithColor from "@/views/foods/components/nutrientWithColor";
+  import nutrientWithColor from "@/views/foods/components/nutrientwithcolor";
   import showScore from "@/views/foods/components/showscore";
+  import smartfoodsWeek from "@/views/foods/components/smartfoodsweek";
   export default {
   components: {
     foodsWeek,
     showfoodsWeek,
     nutrient,
     nutrientWithColor,
-    showScore
+    showScore,
+    smartfoodsWeek
   },
   mounted(){
     this.initData()
@@ -594,6 +596,7 @@ document.oncontextmenu = function(){return false};
   data() {
     const data = [];
     return {
+      foodRadio:'1',
       isUse:'',
       belongRegion:'',
       seasonl:'',
@@ -640,7 +643,11 @@ document.oncontextmenu = function(){return false};
       dishSharePub:'',
       id:'',
       score:'0',
-      intake:[],
+      intake:{},
+      nutrition:[],
+      power:[],
+      meal:[],
+      protein:[],
       drawer: false, //分数弹框
       pointscan: false, //智能配餐弹框
       secondary: [
@@ -685,6 +692,7 @@ document.oncontextmenu = function(){return false};
       showHeaders:[],
       // 表格数据
       datas: [],
+      smartDatas:[],
       showDatas:[],
       title:'',
       WeekList: [], //所选的时间周期
@@ -721,7 +729,44 @@ document.oncontextmenu = function(){return false};
           },
         },
       ],
-
+      ncode:'101',
+      nutritionValue:[
+        {
+          name:"能量",
+          code:"101"
+        },
+        {
+          name:"蛋白质",
+          code:"102"
+        },
+        {
+          name:"钙",
+          code:"201"
+        },{
+          name:"纳",
+          code:"204"
+        },{
+          name:"铁",
+          code:"301"
+        },{
+          name:"锌",
+          code:"303"
+        }
+        ,{
+          name:"维生素A",
+          code:"401"
+        },{
+          name:"维生素B1",
+          code:"405"
+        },{
+          name:"维生素B2",
+          code:"406"
+        }
+        ,{
+          name:"维生素C",
+          code:"415"
+        },
+      ],
       mealListLeft:[
         // {name:"周一食谱",id:"1"},
         // {name:"周二食谱",id:"2"},
@@ -737,7 +782,9 @@ document.oncontextmenu = function(){return false};
       year:'',
       month:'',
       startTime:'',
+      startTimeStr:'',
       endTime:'',
+      endTimeStr:'',
       mealTypeData:[
         {
           name:"早餐",
@@ -872,10 +919,14 @@ document.oncontextmenu = function(){return false};
       }
 
     },
-    parentFn(score,intake){
+    parentFn(score,intake,nutrition,power,protein,meal){
     console.log(intake)
       this.score=score;
-       this.intake=intake;
+      this.intake=intake;
+      this.nutrition=nutrition
+      this.power=power
+      this.protein=protein
+      this.meal=meal
     },
     initMealData(){
       //公开
@@ -1149,7 +1200,13 @@ document.oncontextmenu = function(){return false};
     tfractio() {
       this.drawer = true;
     },
+    resetMeals(){
+    debugger
+        this.datas=JSON.parse(localStorage.getItem("mealsDatas"))
+    },
     wrapscan() {
+      localStorage.setItem("mealsDatas",JSON.stringify(this.datas))
+      this.smartDatas=this.datas
       this.pointscan = true;
     },
     getmealTypeData(name){
@@ -1557,8 +1614,9 @@ document.oncontextmenu = function(){return false};
           that.WeekInfo.Weekdetails = full_weekDetails;
         }
         that.startTime=new Date(year+"-"+begin_mouth+"-"+begin_day);
+        that.startTimeStr=year+"-"+begin_mouth+"-"+begin_day;
         that.endTime=new Date(year+"-"+end_mouth+"-"+end_day);
-
+        that.endTimeStr=year+"-"+end_mouth+"-"+end_day;
         //获取每天
         that.WeekList = [];
 
@@ -1724,7 +1782,7 @@ document.oncontextmenu = function(){return false};
   height: 120px;
   /* background-color: red; */
 }
-.meals .time {
+.headerTime {
   width: 100%;
   height: 55px;
 }
@@ -1739,11 +1797,14 @@ document.oncontextmenu = function(){return false};
   /* background: yellow; */
   float: left;
 }
-.meals .onblur {
-  width: 75%;
+.onblur {
+  width: 100%;
+  display: flex;
+  justify-content: start;
   height: 700px;
   /* background-color: red; */
   float: left;
+  margin-top: 20px;
   margin-left: 15px;
   margin-bottom: 70px;
 }

@@ -1,7 +1,7 @@
 <template>
   <div style="padding: 0px; height: 1080px">
 
-    <div class="title">{{title}}</div>
+    <div class="title" >{{title}}</div>
     <!-- table-week start   -->
     <el-table class="table-week" style="width: 100%" :data="datas" border fit>
       <el-table-column align="center" width="80" fixed class-name="col-date3 colNoneBorder" >

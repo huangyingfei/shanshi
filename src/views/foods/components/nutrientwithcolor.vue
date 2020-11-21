@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h4>周期：2020年8月第一周</h4>
+    <h4 v-if="titleFlag">周期：2020年8月第一周</h4>
     <div class="color"><span class="red">不足</span><span class="green">适量</span><span class="orange">过量</span></div>
     <div class="item-blo font">
       <span>营养素</span>
@@ -19,6 +19,7 @@
   export default {
     data() {
       return {
+        titleFlag:false,
         data: [{
           label:"能量",
           value:"12.3"
