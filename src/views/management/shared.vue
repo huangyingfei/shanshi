@@ -2,7 +2,7 @@
   <div class="dients">
     <!-- <h2>已申请分享平台的食材</h2> -->
     <div class="header">
-      <span style=" margin-right: 10px;">菜品名称:</span>
+      <span style=" margin-right: 10px;">食材名称:</span>
       <el-input
         v-model="input"
         placeholder="请输入内容"
@@ -19,15 +19,17 @@
           :value="item.value"
         ></el-option>
       </el-select>
-      <span style="margin-right: 10px;margin-left: 15px;">提交人:</span>
+      <!-- <span style="margin-right: 10px;margin-left: 15px;">提交人:</span>
       <el-input
         size="small"
         v-model="editor"
         placeholder="请输入内容"
         style="width:200px;    height: 30px;"
-      ></el-input>
+      ></el-input> -->
       <span style="margin-right: 10px;margin-left: 15px;">提交日期:</span>
       <el-date-picker
+        format="yyyy 年 MM 月 dd 日"
+        value-format="yyyy-MM-dd"
         size="small"
         v-model="getDate"
         type="date"
@@ -388,8 +390,12 @@ export default {
       dirname: [
         //审核状态
         {
-          value: "0",
+          value: "",
           label: "全部"
+        },
+        {
+          value: "0",
+          label: "待审核"
         },
         {
           value: "1",
@@ -401,11 +407,7 @@ export default {
         },
         {
           value: "3",
-          label: "待审批"
-        },
-        {
-          value: "4",
-          label: "已取消"
+          label: "无需审核"
         }
       ]
     };
@@ -422,7 +424,7 @@ export default {
       this.input = ""; //菜品名称
       this.value = ""; //审核状态
       this.editor = ""; //提交人
-      this.searchStr = ""; //提交日期
+      this.getDate = ""; //提交日期
     },
     seecol(row) {
       this.flour = row.id;
@@ -516,10 +518,15 @@ export default {
       this.m_page.size = currSize;
       this.auditing();
     },
+    searchStr() {
+      this.auditing();
+    },
     //获取表格数据
     auditing() {
       this.$axios
-        .get(`api/blade-food/food/searchOrgFood?size=${10}&current=${1}`, {})
+        .get(
+          `api/blade-food/food/searchOrgFood?size=${this.m_page.size}&current=${this.m_page.number}&foodName=${this.input}&status=${this.value}&createTime=${this.getDate}`
+        )
         .then(res => {
           // console.log(res);
           this.tmquery = res.data.data.records;

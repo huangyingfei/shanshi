@@ -530,7 +530,7 @@ export default {
       m_page: {
         //分頁
         sizes: [10, 20, 40, 50, 100], //每页最大显示数
-        size: 10,
+        size: 20,
         totalElements: 0,
         totalPages: 3,
         number: 1
@@ -594,19 +594,19 @@ export default {
           label: "全部"
         },
         {
-          value: "1",
+          value: "0",
           label: "待审核"
         },
         {
-          value: "2",
+          value: "1",
           label: "审核通过"
         },
         {
-          value: "3",
+          value: "2",
           label: "审核不通过"
         },
         {
-          value: "4",
+          value: "3",
           label: "无需审核"
         }
       ],
@@ -676,7 +676,7 @@ export default {
       this.loadFlag = true;
       this.$axios
         .get(
-          `api/blade-food/food/getAuditList?size=${this.m_page.size}&current=${this.m_page.number}&dishName=${this.input}&orgName=${this.noinst}&mobile=${this.phoneId}&createName=${this.editor}&createtime=${this.value1}`,
+          `api/blade-food/food/getAuditList?size=${this.m_page.size}&current=${this.m_page.number}&dishName=${this.input}&orgName=${this.noinst}&createTimeStr=${this.value1}&mobile=${this.phoneId}&status=${this.mState1}&createName=${this.editor}`,
           {
             headers: {
               "Content-Type": "application/json"
