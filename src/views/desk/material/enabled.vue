@@ -635,7 +635,8 @@ export default {
       value: "", //审核状态
       tableData1: [],
       flour: "", //ID
-      according: "0"
+      according: "0",
+      timezone: ""
     };
   },
   beforeMount() {
@@ -648,7 +649,7 @@ export default {
   },
   methods: {
     notEmpty() {
-      console.log(12321);
+      // console.log(12321);
       this.input = "";
       this.noinst = "";
       this.value1 = "";
@@ -659,15 +660,21 @@ export default {
     Takeone() {
       let str = JSON.parse(localStorage.getItem("saber-token"));
       this.headerObj["Blade-Auth"] = `bearer ${str.content}`;
-      console.log(this.headerObj);
+      // console.log(this.headerObj);
     },
     searchType() {
-      console.log(this.input); //食材名称
-      console.log(this.noinst); //创建机构
-      console.log(this.value1); //提交日期；
-      console.log(this.editor); //提交人
-      console.log(this.phoneId); //电话
-      console.log(this.mState); //审核状态
+      // console.log(this.input); //食材名称
+      // console.log(this.noinst); //创建机构
+      // console.log(this.value1); //提交日期；
+      // console.log(this.editor); //提交人
+      // console.log(this.phoneId); //电话
+      // console.log(this.mState); //审核状态
+      if (this.value1) {
+        this.timezone = this.value1;
+      } else {
+        this.timezone = "";
+      }
+      // console.log(this.timezone);
       this.auditing();
       // console.log(this.value1);
     },
@@ -676,7 +683,7 @@ export default {
       this.loadFlag = true;
       this.$axios
         .get(
-          `api/blade-food/food/getAuditList?size=${this.m_page.size}&current=${this.m_page.number}&dishName=${this.input}&orgName=${this.noinst}&createTimeStr=${this.value1}&mobile=${this.phoneId}&status=${this.mState1}&createName=${this.editor}`,
+          `api/blade-food/food/getAuditList?size=${this.m_page.size}&current=${this.m_page.number}&foodName=${this.input}&orgName=${this.noinst}&createTimeStr=${this.timezone}&mobile=${this.phoneId}&status=${this.mState1}&createName=${this.editor}`,
           {
             headers: {
               "Content-Type": "application/json"
