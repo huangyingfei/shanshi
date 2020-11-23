@@ -718,7 +718,7 @@ export default {
       // console.log(row);
       this.examine.desc1 = "";
       // this.valuepark.length = 0;
-      // this.active.length = 0;
+      this.active= [];
       this.seekeys = true;
       let design = `?id=${row.id}`;
       this.$axios
@@ -775,7 +775,6 @@ export default {
           this.productImgs = picture;
           this.ruleForm.desc = this.subquery.function; //功用
 
-          this.productImgs = picture;
           this.ruleForm.delivery = this.subquery.isPub == 0 ? true : false; //公开
           // console.log(this.ruleForm.delivery);
           this.ruleForm.delivery1 = this.subquery.isUse == 0 ? true : false; //常用
@@ -875,6 +874,7 @@ export default {
     },
     //同意
     Disagree(formName) {
+      console.log(this.dialogImageUrl)
       this.$refs[formName].validate(valid => {
         if (valid) {
           // alert("submit!");
@@ -943,13 +943,14 @@ export default {
           return false;
         }
       });
-      // console.log(this.ruleForm.fooddata);
+      console.log(this.ruleForm.fooddata);
     },
     //审核
     Directory(row, index) {
       console.log(index);
       this.according = index;
       this.examine.desc1 = "";
+           this.active= [];
       // this.valuepark.length = 0;
       // this.active.length = 0;
       this.seekeys = true;
@@ -1006,6 +1007,7 @@ export default {
             };
           }
           this.productImgs = picture;
+          this.dialogImageUrl=this.subquery.pic;
           this.ruleForm.delivery = this.subquery.isPub == 0 ? true : false; //公开
           // console.log(this.ruleForm.delivery);
           this.ruleForm.delivery1 = this.subquery.isUse == 0 ? true : false; //常用
