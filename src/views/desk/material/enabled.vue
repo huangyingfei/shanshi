@@ -231,6 +231,7 @@
               style=" width: 350px;   "
             >
               <el-select
+                disabled
                 style="width:185px"
                 v-model="ruleForm.fooddata"
                 placeholder="请选择"
@@ -529,8 +530,8 @@ export default {
       },
       m_page: {
         //分頁
-        sizes: [10, 20, 40, 50, 100], //每页最大显示数
-        size: 20,
+        sizes: [10, 20, 30, 40, 50, 100], //每页最大显示数
+        size: 10,
         totalElements: 0,
         totalPages: 3,
         number: 1
@@ -636,7 +637,8 @@ export default {
       tableData1: [],
       flour: "", //ID
       according: "0",
-      timezone: ""
+      timezone: "",
+      classification: "" //分类ID
     };
   },
   beforeMount() {
@@ -653,9 +655,11 @@ export default {
       this.input = "";
       this.noinst = "";
       this.value1 = "";
+      this.timezone = "";
       this.editor = "";
       this.phoneId = "";
       this.mState1 = "";
+      this.auditing();
     },
     Takeone() {
       let str = JSON.parse(localStorage.getItem("saber-token"));
@@ -713,8 +717,8 @@ export default {
       // console.log(index);
       // console.log(row);
       this.examine.desc1 = "";
-      this.valuepark.length = 0;
-      this.active.length = 0;
+      // this.valuepark.length = 0;
+      // this.active.length = 0;
       this.seekeys = true;
       let design = `?id=${row.id}`;
       this.$axios
@@ -739,17 +743,24 @@ export default {
           this.ruleForm.move = this.subquery.foodAlias; //食物别名
           this.ruleForm.move1 = this.subquery.foodAlias1; //食物别名2
           this.ruleForm.buffer = this.subquery.foodReal; //食物真名
-          this.ruleForm.fooddata = this.subquery.foodType; //食物分类
+          this.ruleForm.fooddata = this.subquery.foodTypeName; //食物分类
+          // this.classification = this.subquery.foodType;
+          // console.log(this.classification);
           this.ruleForm.foods = this.subquery.foodType1; //食物分类1
           this.ruleForm.dogfood = this.subquery.foodType2; //食物分类2
           this.ruleForm.besaved = this.subquery.foodEat; //食部
           this.ruleForm.timers = this.subquery.weight; //重量
           this.ruleForm.content = this.subquery.water; //水分
           this.ruleForm.resource = this.subquery.color + ""; //色系
-          this.subquery.season.split(",").forEach(item => {
-            //所属季节
-            this.active.push(item);
-          });
+          if (this.subquery.season) {
+            this.subquery.season.split(",").forEach(item => {
+              //所属季节
+              this.active.push(item);
+            });
+          } else {
+            this.active = "";
+          }
+
           let bar = [];
           this.subquery.provinces.split(",").forEach((item, i) => {
             bar.push([item, this.subquery.belongRegion.split(",")[i]]);
@@ -829,10 +840,10 @@ export default {
             status: 2, //审核状态
             // foodPubType: this.menu, //公共库所属分类
             foodName: this.ruleForm.name, //食材名
-            foodAlias: this.ruleForm.foodFood, //食物别名1
-            foodAlias1: this.ruleForm.ovenFood, //食物别名2
+            foodAlias: this.ruleForm.move, //食物别名1
+            foodAlias1: this.ruleForm.move1, //食物别名2
             foodReal: this.ruleForm.buffer, //食材真名
-            foodType: this.ruleForm.fooddata, //食材分类
+            foodType: this.classification, //食材分类
             foodType1: this.ruleForm.foods, //食物分类1
             foodType2: this.ruleForm.dogfood, //食物分类2
             foodEat: this.ruleForm.besaved, //食部
@@ -894,10 +905,10 @@ export default {
               status: 1, //审核状态
               // foodPubType: this.menu, //公共库所属分类
               foodName: this.ruleForm.name, //食材名
-              foodAlias: this.ruleForm.foodFood, //食物别名1
-              foodAlias1: this.ruleForm.ovenFood, //食物别名2
+              foodAlias: this.ruleForm.move, //食物别名1
+              foodAlias1: this.ruleForm.move1, //食物别名2
               foodReal: this.ruleForm.buffer, //食材真名
-              foodType: this.ruleForm.fooddata, //食材分类
+              foodType: this.classification, //食材分类
               foodType1: this.ruleForm.foods, //食物分类1
               foodType2: this.ruleForm.dogfood, //食物分类2
               foodEat: this.ruleForm.besaved, //食部
@@ -939,8 +950,8 @@ export default {
       console.log(index);
       this.according = index;
       this.examine.desc1 = "";
-      this.valuepark.length = 0;
-      this.active.length = 0;
+      // this.valuepark.length = 0;
+      // this.active.length = 0;
       this.seekeys = true;
       // console.log(row);
       let design = `?id=${row.id}`;
@@ -965,17 +976,23 @@ export default {
           this.ruleForm.move = this.subquery.foodAlias; //食物别名
           this.ruleForm.move1 = this.subquery.foodAlias1; //食物别名2
           this.ruleForm.buffer = this.subquery.foodReal; //食物真名
-          this.ruleForm.fooddata = this.subquery.foodType; //食物分类
+          this.ruleForm.fooddata = this.subquery.foodTypeName; //食物分类
+          this.classification = this.subquery.foodType;
+          console.log(this.classification);
           this.ruleForm.foods = this.subquery.foodType1; //食物分类1
           this.ruleForm.dogfood = this.subquery.foodType2; //食物分类2
           this.ruleForm.besaved = this.subquery.foodEat; //食部
           this.ruleForm.timers = this.subquery.weight; //重量
           this.ruleForm.content = this.subquery.water; //水分
           this.ruleForm.resource = this.subquery.color + ""; //色系
-          this.subquery.season.split(",").forEach(item => {
-            //所属季节
-            this.active.push(item);
-          });
+          if (this.subquery.season) {
+            this.subquery.season.split(",").forEach(item => {
+              //所属季节
+              this.active.push(item);
+            });
+          } else {
+            this.active = "";
+          }
           let bar = [];
           this.subquery.provinces.split(",").forEach((item, i) => {
             bar.push([item, this.subquery.belongRegion.split(",")[i]]);

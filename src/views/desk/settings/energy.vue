@@ -2,6 +2,7 @@
   <div class="Energy">
     <div class="sourceof">
       <el-button
+        style="  margin-top: 30px;margin-left:20px"
         size="medium"
         icon="el-icon-circle-plus-outline"
         type="primary"
@@ -45,7 +46,7 @@
         <el-table-column label="操作" align="center" width="260">
           <template slot-scope="scope">
             <el-button
-              type="primary"
+              type="text"
               size="small"
               icon="el-icon-edit"
               style=" margin-left: 20px;"
@@ -53,7 +54,7 @@
               >编辑</el-button
             >
             <el-button
-              type="danger"
+              type="text"
               size="small"
               icon="el-icon-delete"
               style=" margin-left: 20px;"
@@ -194,6 +195,7 @@ export default {
 }
 .sourceof {
   width: 100%;
+  height: 100px;
 }
 .pagingClass {
   /* width: 500px; */

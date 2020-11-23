@@ -300,6 +300,7 @@ export default {
       this.input = "";
       this.temps = "";
       this.value = "";
+      this.generator(); //获取表格数据
     },
     filterNode(value, data) {
       if (!value) return true;
