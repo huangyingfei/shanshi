@@ -38,7 +38,7 @@
         </div>
       </div>
     </div>
-    <!-- 排行榜 -->
+
     <div class="dishes">
       <!-- 菜谱排行榜 -->
       <div class="variety">

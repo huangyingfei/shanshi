@@ -112,7 +112,7 @@ export default {
       },
       loginRules: {
         tenantId: [
-          { required: false, message: "请输入租户ID", trigger: "blur" }
+          { required: false, message: "请输入机构ID", trigger: "blur" }
         ],
         username: [
           { required: true, message: "请输入用户名", trigger: "blur" }

@@ -68,7 +68,7 @@ export default {
   login: {
     title: "登录 ",
     info: "华园教育膳食管理系统",
-    tenantId: "请输入租户ID",
+    tenantId: "请输入机构ID",
     username: "请输入账号",
     password: "请输入密码",
     wechat: "微信",

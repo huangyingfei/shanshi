@@ -46,8 +46,8 @@ export const orderClass = (rows) => {
 export const getList = (current, size, params,classId) => {
   return request({
     url: '/api/blade-food/student/page',
-    method: 'post',
-    data: {
+    method: 'get',
+    params: {
       ...params,
       current,
       size,
@@ -89,7 +89,7 @@ export const detail = (id) => {
   return request({
     url: '/api/blade-food/student/detail?id='+id,
     method: 'get',
-    
+
   })
 }
 
@@ -98,7 +98,7 @@ export const getById = (id) => {
   return request({
     url: '/api/blade-food/class/getById?classId='+id,
     method: 'get',
-    
+
   })
 }
 

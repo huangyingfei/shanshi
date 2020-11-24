@@ -1454,7 +1454,7 @@
  .foodWeekListHis {
     padding: 0 0 0 10px;
    overflow-y: scroll;
-   height: 350px;
+   height: 450px;
   }
   .meals .foodWeekListHis li {
     list-style: none;
@@ -1638,7 +1638,7 @@
   margin-left: 5px;
   margin-top: 15px;
   overflow-y: scroll;
-  height: 350px;
+  height: 450px;
 }
 
 </style>

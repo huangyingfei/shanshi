@@ -131,7 +131,6 @@
         option: {
           height: "auto",
           tip: false,
-          simplePage: true,
           searchShow: true,
           searchMenuSpan: 6,
           tree: true,
@@ -436,6 +435,7 @@
         console.log(page.currentPage,page.pageSize,this.page,page)
         getList(page.currentPage, page.pageSize, Object.assign(params, this.query)).then(res => {
           this.data = res.data.data.records;
+          debugger
           this.page.total = res.data.data.total;
           this.loading = false;
           this.selectionClear();

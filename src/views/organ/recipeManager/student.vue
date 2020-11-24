@@ -1,14 +1,14 @@
 <template>
   <div>
     <el-row>
-      <el-col :span="5">
-        <div class="box">
-          <el-scrollbar>
+      <el-col    :span="5">
+        <div>
+          <el-scrollbar >
             <basic-container>
               <el-input placeholder="输入关键字进行过滤" v-model="filterText">
               </el-input>
 
-              <el-tree default-expand-all
+              <el-tree id="boxTree" default-expand-all
                        :data="treeData"
                 :props="treeProps"
                 @node-click="nodeClick"
@@ -78,7 +78,7 @@
         </div>
       </el-col>
       <el-col :span="19">
-        <basic-container>
+        <basic-container  id="boxCrud" >
           <avue-crud
             :option="option"
             :search.sync="search"
@@ -502,8 +502,11 @@
     },
     mounted() {
       this.initData();
+      debugger
+      document.getElementById('boxTree').style.height= document.getElementById("boxCrud").offsetHeight+"px";
     },
     methods: {
+
       allowDrag(draggingNode) {
         return draggingNode.data.classType == 3;
       },
@@ -995,8 +998,9 @@
 </script>
 
 <style>
-  .box {
-    height: 800px;
+
+  #boxTree{
+    overflow-y: scroll;
   }
   .el-tree {
     margin-top: 20px;
