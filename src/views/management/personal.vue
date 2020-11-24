@@ -230,11 +230,13 @@
                   </el-form-item>
 
                   <el-form-item
+                  
                     label="食部(%)"
                     prop="besaved"
                     style="width: 350px"
                   >
                     <el-input
+                             type="number"
                       v-model="ruleForm.besaved"
                       placeholder="请输入"
                     ></el-input>
@@ -246,6 +248,7 @@
                     style="width: 350px"
                   >
                     <el-input
+                             type="number"
                       v-model="ruleForm.timers"
                       placeholder="请输入"
                     ></el-input>
@@ -253,6 +256,7 @@
 
                   <el-form-item label="水分(%)" style="width: 350px">
                     <el-input
+                             type="number"
                       placeholder="请输入水分"
                       v-model="ruleForm.content"
                     ></el-input>
@@ -372,7 +376,7 @@
                     <template slot-scope="scope">
                       <el-input
                         v-model="scope.row.result"
-                        type="text"
+                               type="number"
                         v-if="scope.row.level != 1 ? true : false"
                         placeholder="请输入内容"
                       ></el-input>

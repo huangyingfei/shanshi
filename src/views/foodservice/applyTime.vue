@@ -472,7 +472,8 @@ export default {
           spring: "", //能量
           malloc: "" //能量kcal
         }
-      ]
+      ],
+      timezone: "" //提交时间
     };
   },
   beforeMount() {
@@ -488,6 +489,8 @@ export default {
       this.value = "";
       this.editor = "";
       this.getDate = "";
+      this.timezone = "";
+      this.auditing();
     },
     //失去焦点事件
     graph() {
@@ -602,6 +605,11 @@ export default {
       // console.log(this.editor); //提交人
       // console.log(this.phoneId); //联系电话
       // console.log(this.mState1); //审核状态
+      if (this.getDate) {
+        this.timezone = this.getDate;
+      } else {
+        this.timezone = "";
+      }
       this.auditing();
     },
     //获取表格数据

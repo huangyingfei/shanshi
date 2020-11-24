@@ -214,7 +214,6 @@
           >
             <el-select
               style=" width: 185px; "
-              v-if="this.gavatorta == 1"
               v-model="ruleForm.fooddata"
               placeholder="请选择"
             >
@@ -226,7 +225,7 @@
               >
               </el-option>
             </el-select>
-            <el-select
+            <!-- <el-select
               v-if="this.gavatorta == 2"
               style=" width: 185px; "
               disabled
@@ -240,7 +239,7 @@
                 :value="item.value"
               >
               </el-option>
-            </el-select>
+            </el-select> -->
           </el-form-item>
 
           <el-form-item label="食物分类1" style=" width: 350px;  ">
@@ -259,17 +258,23 @@
 
           <el-form-item label="食部(%)" prop="besaved" style=" width: 350px;  ">
             <el-input
+              type="number"
               v-model="ruleForm.besaved"
               placeholder="请输入"
             ></el-input>
           </el-form-item>
 
           <el-form-item label="重量（g）" prop="timers" style=" width: 350px; ">
-            <el-input v-model="ruleForm.timers" placeholder="请输入"></el-input>
+            <el-input
+              type="number"
+              v-model="ruleForm.timers"
+              placeholder="请输入"
+            ></el-input>
           </el-form-item>
 
           <el-form-item label="水分(%)" style=" width: 350px;   ">
             <el-input
+              type="number"
               placeholder="请输入水分"
               v-model="ruleForm.content"
             ></el-input>
@@ -383,7 +388,7 @@
             <template slot-scope="scope">
               <el-input
                 v-model="scope.row.result"
-                type="text"
+                type="number"
                 v-if="scope.row.level != 1 ? true : false"
                 placeholder="请输入内容"
               ></el-input>
@@ -930,8 +935,8 @@ export default {
 
     //查看
     prepare(data, index) {
-      this.valuepark.length = 0;
-      this.active.length = 0;
+      this.valuepark = [];
+      this.active = [];
       // console.log(index);
       this.gavatorta = index;
       // console.log(data);
@@ -949,7 +954,7 @@ export default {
           this.ruleForm.foodFood = this.inquired.foodAlias; //食物别名1
           this.ruleForm.ovenFood = this.inquired.foodAlias1; //食物别名2
           this.ruleForm.buffer = this.inquired.foodReal; //食材真名
-          this.ruleForm.fooddata = this.inquired.foodType; //食材分类
+          this.ruleForm.fooddata = this.inquired.foodPubType; //食材分类
           this.ruleForm.foods = this.inquired.foodType1; //食物分类1
           this.ruleForm.dogfood = this.inquired.foodType2; //食物分类2
           this.ruleForm.besaved = this.inquired.foodEat; //食部
@@ -958,22 +963,32 @@ export default {
           this.ruleForm.resource = this.inquired.color + ""; //色系
           // this.valuepark = this.inquired.belongRegionName; //所属区域
 
-          let bar = [];
-          this.inquired.provinces.split(",").forEach((item, i) => {
-            bar.push([item, this.inquired.belongRegion.split(",")[i]]);
-          });
-          this.valuepark = bar;
+          if (this.inquired.provinces) {
+            let bar = [];
+            this.inquired.provinces.split(",").forEach((item, i) => {
+              bar.push([item, this.inquired.belongRegion.split(",")[i]]);
+            });
+            this.valuepark = bar;
+          } else {
+            this.inquired.provinces = "";
+          }
+
           // console.log(this.valuepark);
           // this.valuepark.push(
           //   this.inquired.provinces.split(','),
           //   this.inquired.belongRegion.split(','),
           // );
 
-          console.log(this.valuepark);
+          // console.log(this.valuepark);
           // this.active.push(this.inquired.season); //所属季节
-          this.inquired.season.split(",").forEach(item => {
-            this.active.push(item);
-          });
+          if (this.inquired.season) {
+            this.inquired.season.split(",").forEach(item => {
+              this.active.push(item);
+            });
+          } else {
+            this.active = "";
+          }
+
           this.ruleForm.desc = this.inquired.function; //功用
           // this.productImgs = this.inquired.pic; //图片
           let picture = [];

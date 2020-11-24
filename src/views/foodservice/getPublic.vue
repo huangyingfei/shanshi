@@ -401,15 +401,11 @@
                   width="120"
                   align="center"
                 ></el-table-column>
-                <el-table-column
-                  prop="stats"
-                  label="用量(g)"
-                  width="120"
-                  align="center"
-                >
+                <el-table-column prop="stats" label="用量(g)" align="center">
                   <template slot-scope="scope">
                     <el-input
-                      style="width: 90px"
+                      type="number"
+                      style="width: 100px"
                       @blur="graph"
                       @input="hello(scope.row, scope.$index)"
                       v-model="scope.row.stats"
