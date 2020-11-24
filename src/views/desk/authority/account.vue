@@ -782,6 +782,7 @@ export default {
       done();
     },
     currentChange(currentPage) {
+      debugger
       this.page.currentPage = currentPage;
     },
     sizeChange(pageSize) {
@@ -791,6 +792,7 @@ export default {
       this.onLoad(this.page, this.query);
     },
     onLoad(page, params = {}) {
+      debugger
       this.loading = true;
       getList(
         page.currentPage,

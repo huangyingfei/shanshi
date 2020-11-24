@@ -153,7 +153,9 @@ export default {
 
     return {
       ableFlag:false,
-      form: {},
+      form: {
+        nutrientDisplay:false
+      },
       region: [], //省市区
       regionDetail: "", //详细地址
       box: false,
@@ -608,7 +610,7 @@ export default {
     initData() {
       var params={};
       this.query["tenantType"] = 2;
-
+      this.$set(this.form,"nutrientDisplay",false)
       getList(
         this.page.currentPage,
         this.page.pageSize,
@@ -732,6 +734,7 @@ export default {
           loading();
         }
       );
+      this.onLoad();
     },
     rowUpdate(row, index, done, loading) {
         this.ableFlag=true;
@@ -777,7 +780,7 @@ export default {
           loading();
         }
       );
-
+      this.onLoad();
     },
     rowDel(row) {
       this.$confirm("确定将选择数据删除?", {
@@ -834,12 +837,14 @@ export default {
             data["nutrientDisplay"]=data.nutrientDisplay==1?true:false;
             data["startUseTime"]=getDate(data.startUseTime)
             data["expireTime"]=getDate(data.expireTime)
+            debugger
             this.form = data;
           })
             // debugger
             if(type=="edit"){
                this.findObject(this.option.group, "account").readonly=true;
             }
+
       }
       done();
     },

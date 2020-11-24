@@ -954,7 +954,7 @@
 </template>
 <script>
   import foodsChoice from "@/views/foods/components/foodschoice";
-  import {calRecipe} from "@/api/system/meals"
+  // import {calRecipe} from "@/api/system/meals"
 export default {
   name: "foodsWeek",
   components: {
@@ -1111,7 +1111,7 @@ export default {
             })
           })
         })
-        this.getFoodScore();
+        // this.getFoodScore();
       },
       deep:true,
     }
@@ -1233,142 +1233,142 @@ export default {
       this.resizeExpendHeight();
       // this.getFoodScore();
     },
-    //获取分数
-    getFoodScore(){
-      this.dragnode.node={};
-      let day=[0,0,0,0,0,0,0]
-      let days=0;
-      let foods={}
-      let mealTypes=[]
-      foods["peopleId"]=this.crowd;
-      let recipeVals=[];
-      var that=this;
-      this.datas.forEach(_=>{
-        let index=0
-        _.weeks.forEach(__=>{
-          __.foods.forEach(___=>{
-            if( ___.children){
-              day[index]+=1;
-              mealTypes.push(that.getmealTypeData(_.name));
-              ___.children.forEach(____=>{
-                   recipeVals.push({
-                     foodId:____.id,
-                     val:____.count?____.count:0,
-                     mealType:that.getmealTypeData(_.name),
-                     week:__.name.slice(4)
-                   })
-              })
-            }
-          })
-          index++;
+    // //获取分数
+    // getFoodScore(){
+    //   this.dragnode.node={};
+    //   let day=[0,0,0,0,0,0,0]
+    //   let days=0;
+    //   let foods={}
+    //   let mealTypes=[]
+    //   foods["peopleId"]=this.crowd;
+    //   let recipeVals=[];
+    //   var that=this;
+    //   this.datas.forEach(_=>{
+    //     let index=0
+    //     _.weeks.forEach(__=>{
+    //       __.foods.forEach(___=>{
+    //         if( ___.children){
+    //           day[index]+=1;
+    //           mealTypes.push(that.getmealTypeData(_.name));
+    //           ___.children.forEach(____=>{
+    //                recipeVals.push({
+    //                  foodId:____.id,
+    //                  val:____.count?____.count:0,
+    //                  mealType:that.getmealTypeData(_.name),
+    //                  week:__.name.slice(4)
+    //                })
+    //           })
+    //         }
+    //       })
+    //       index++;
+    //
+    //     })
+    //   })
+    //   if(mealTypes.length>0){
+    //     let obj=Array.from(new Set(mealTypes))
+    //     let resultObj="";
+    //     for(let i=0;i<obj.length;i++){
+    //       resultObj+=obj[i]+","
+    //     }
+    //     foods["mealTypes"]=resultObj.substring(0,resultObj.length-1)
+    //   }
+    //   for(let i=0;i<day.length;i++){
+    //     if(day[i]>0){
+    //       days++;
+    //     }
+    //   }
+    //   foods["recipeVals"]=recipeVals
+    //   foods["days"]=days;
+    //   if(foods.recipeVals.length>0){
+    //     calRecipe(foods).then(res=>{
+    //       if(res.data.success){
+    //         let resData=res.data.data;
+    //         let intake={};
+    //         let  data=[];
+    //         intake.mealSelect="推荐范围("+resData.recipeCalDTOList.gl.mealSelect+"%)"
+    //         that.intakeValue.forEach(_=>{
+    //           data.push({name:_.name,range:resData.recipeCalDTOList.gl.rang_min+"-"+resData.recipeCalDTOList[_.code].rang_max+"("+resData.recipeCalDTOList[_.code].recomRangMin+"-"+resData.recipeCalDTOList[_.code].recomRangMax+")",jl:resData.recipeCalDTOList[_.code].jl,grade:resData.recipeCalDTOList[_.code].grade,point:resData.recipeCalDTOList[_.code].point})
+    //         })
+    //         intake.data=data;
+    //         let nutrition=[];
+    //         that.nutritionValue.forEach(_=>{
+    //           nutrition.push({code:_.code,name:_.name,dris:resData.nutritionCalDTOList[_.code].dris,realIntake:resData.nutritionCalDTOList[_.code].realIntake,realPropor:resData.nutritionCalDTOList[_.code].realPropor,reqPropor:resData.nutritionCalDTOList[_.code].min+"-"+resData.nutritionCalDTOList[_.code].max,grade:resData.nutritionCalDTOList[_.code].grade,point:resData.nutritionCalDTOList[_.code].point})
+    //         })
+    //       //  debugger
+    //
+    //         let power=[];
+    //         that.powerValue.forEach(_=>{
+    //           power.push({name:_.name,req:resData.powerCalDTOList[_.code].min+"-"+resData.powerCalDTOList[_.code].min,real:resData.powerCalDTOList[_.code].real,grade:resData.powerCalDTOList[_.code].grade,point:resData.powerCalDTOList[_.code].point})
+    //         })
+    //
+    //         let protein=[];
+    //         protein=resData.proteinCalDTOList;
+    //         let sum=0;
+    //         resData.proteinCalDTOList.forEach(_=>{
+    //           sum+=parseFloat(_.real)
+    //         })
+    //         protein.forEach(_=>{
+    //           _["realSum"]=sum
+    //           _["req"]=">="+_.min
+    //         })
+    //         let meal=[];
+    //         meal=resData.mealTypeCalDTOList
+    //         that.$emit('childfn', Math.floor(that.getData(res.data.data) * 100) / 100,intake,nutrition,power,protein,meal);
+    //       }
+    //     })
+    //   }else{
+    //     that.$emit('childfn', 0);
+    //   }
+    //
+    // },
 
-        })
-      })
-      if(mealTypes.length>0){
-        let obj=Array.from(new Set(mealTypes))
-        let resultObj="";
-        for(let i=0;i<obj.length;i++){
-          resultObj+=obj[i]+","
-        }
-        foods["mealTypes"]=resultObj.substring(0,resultObj.length-1)
-      }
-      for(let i=0;i<day.length;i++){
-        if(day[i]>0){
-          days++;
-        }
-      }
-      foods["recipeVals"]=recipeVals
-      foods["days"]=days;
-      if(foods.recipeVals.length>0){
-        calRecipe(foods).then(res=>{
-          if(res.data.success){
-            let resData=res.data.data;
-            let intake={};
-            let  data=[];
-            intake.mealSelect="推荐范围("+resData.recipeCalDTOList.gl.mealSelect+"%)"
-            that.intakeValue.forEach(_=>{
-              data.push({name:_.name,range:resData.recipeCalDTOList.gl.rang_min+"-"+resData.recipeCalDTOList[_.code].rang_max+"("+resData.recipeCalDTOList[_.code].recomRangMin+"-"+resData.recipeCalDTOList[_.code].recomRangMax+")",jl:resData.recipeCalDTOList[_.code].jl,grade:resData.recipeCalDTOList[_.code].grade,point:resData.recipeCalDTOList[_.code].point})
-            })
-            intake.data=data;
-            let nutrition=[];
-            that.nutritionValue.forEach(_=>{
-              nutrition.push({code:_.code,name:_.name,dris:resData.nutritionCalDTOList[_.code].dris,realIntake:resData.nutritionCalDTOList[_.code].realIntake,realPropor:resData.nutritionCalDTOList[_.code].realPropor,reqPropor:resData.nutritionCalDTOList[_.code].min+"-"+resData.nutritionCalDTOList[_.code].max,grade:resData.nutritionCalDTOList[_.code].grade,point:resData.nutritionCalDTOList[_.code].point})
-            })
-          //  debugger
-
-            let power=[];
-            that.powerValue.forEach(_=>{
-              power.push({name:_.name,req:resData.powerCalDTOList[_.code].min+"-"+resData.powerCalDTOList[_.code].min,real:resData.powerCalDTOList[_.code].real,grade:resData.powerCalDTOList[_.code].grade,point:resData.powerCalDTOList[_.code].point})
-            })
-
-            let protein=[];
-            protein=resData.proteinCalDTOList;
-            let sum=0;
-            resData.proteinCalDTOList.forEach(_=>{
-              sum+=parseFloat(_.real)
-            })
-            protein.forEach(_=>{
-              _["realSum"]=sum
-              _["req"]=">="+_.min
-            })
-            let meal=[];
-            meal=resData.mealTypeCalDTOList
-            that.$emit('childfn', Math.floor(that.getData(res.data.data) * 100) / 100,intake,nutrition,power,protein,meal);
-          }
-        })
-      }else{
-        that.$emit('childfn', 0);
-      }
-
-    },
-
-    //处理数据
-    getData(data){
-      let lastScore=100;
-      if(data.mealTypeCalDTOList&&data.mealTypeCalDTOList.length){
-        for(let i=0;i<data.mealTypeCalDTOList.length;i++){
-          lastScore= parseFloat(lastScore)-parseFloat(data.mealTypeCalDTOList[i].point);
-        }
-      }
-      if(data.nutritionCalDTOList){
-        lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["101"].point);
-        lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["102"].point);
-        lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["201"].point);
-        lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["204"].point);
-        lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["301"].point);
-        lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["303"].point);
-        lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["401"].point);
-        lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["405"].point);
-        lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["406"].point);
-        lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["415"].point);
-      }
-      if(data.powerCalDTOList){
-        lastScore= parseFloat(lastScore)-parseFloat(data.powerCalDTOList["102"].point);
-        lastScore= parseFloat(lastScore)-parseFloat(data.powerCalDTOList["103"].point);
-        lastScore= parseFloat(lastScore)-parseFloat(data.powerCalDTOList["104"].point);
-      }
-      if(data.recipeCalDTOList){
-        lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["dd"].point);
-        lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["gl"].point);
-        lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["jg"].point);
-        lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["rzp"].point);
-        lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["sc"].point);
-        lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["sg"].point);
-        lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["sl"].point);
-        lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["sy"].point);
-        lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["syy"].point);
-        lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["xql:scp:dl"].point);
-      }
-      var real=0;
-      if(data.proteinCalDTOList&&data.proteinCalDTOList.length){
-        for(let i=0;i<data.proteinCalDTOList.length;i++){
-          real+=parseFloat(data.proteinCalDTOList[i].real);
-        }
-        var point =10/parseFloat(data.proteinCalDTOList[0].min)*(parseFloat(data.proteinCalDTOList[0].min)-real>0?parseFloat(data.proteinCalDTOList[0].min-real):parseFloat(real-data.proteinCalDTOList[0].min));
-        lastScore=lastScore-(point<10?point:10);
-      }
-      return lastScore;
-    },
+    // //处理数据
+    // getData(data){
+    //   let lastScore=100;
+    //   if(data.mealTypeCalDTOList&&data.mealTypeCalDTOList.length){
+    //     for(let i=0;i<data.mealTypeCalDTOList.length;i++){
+    //       lastScore= parseFloat(lastScore)-parseFloat(data.mealTypeCalDTOList[i].point);
+    //     }
+    //   }
+    //   if(data.nutritionCalDTOList){
+    //     lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["101"].point);
+    //     lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["102"].point);
+    //     lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["201"].point);
+    //     lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["204"].point);
+    //     lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["301"].point);
+    //     lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["303"].point);
+    //     lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["401"].point);
+    //     lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["405"].point);
+    //     lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["406"].point);
+    //     lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["415"].point);
+    //   }
+    //   if(data.powerCalDTOList){
+    //     lastScore= parseFloat(lastScore)-parseFloat(data.powerCalDTOList["102"].point);
+    //     lastScore= parseFloat(lastScore)-parseFloat(data.powerCalDTOList["103"].point);
+    //     lastScore= parseFloat(lastScore)-parseFloat(data.powerCalDTOList["104"].point);
+    //   }
+    //   if(data.recipeCalDTOList){
+    //     lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["dd"].point);
+    //     lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["gl"].point);
+    //     lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["jg"].point);
+    //     lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["rzp"].point);
+    //     lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["sc"].point);
+    //     lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["sg"].point);
+    //     lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["sl"].point);
+    //     lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["sy"].point);
+    //     lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["syy"].point);
+    //     lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["xql:scp:dl"].point);
+    //   }
+    //   var real=0;
+    //   if(data.proteinCalDTOList&&data.proteinCalDTOList.length){
+    //     for(let i=0;i<data.proteinCalDTOList.length;i++){
+    //       real+=parseFloat(data.proteinCalDTOList[i].real);
+    //     }
+    //     var point =10/parseFloat(data.proteinCalDTOList[0].min)*(parseFloat(data.proteinCalDTOList[0].min)-real>0?parseFloat(data.proteinCalDTOList[0].min-real):parseFloat(real-data.proteinCalDTOList[0].min));
+    //     lastScore=lastScore-(point<10?point:10);
+    //   }
+    //   return lastScore;
+    // },
     //新增菜谱
     appendDragFood(res, id, wk) {
       if (!res.id) return;
