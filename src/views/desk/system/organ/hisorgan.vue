@@ -140,6 +140,7 @@ export default {
         total: 0,
       },
       option: {
+        height: "auto",
         align: "center",
         menuAlign: "center",
         tip: false,

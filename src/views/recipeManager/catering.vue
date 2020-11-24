@@ -248,7 +248,7 @@
                 </el-input>
               </div>
             <div style=" font-size: 10px;margin:0 15px;display: flex;justify-content: space-between">
-                <el-link :underline="false" :class="{'dishColor':dishSelect=='1'}"   @click="dishShareSearchPub('1',1,2)">全部</el-link>
+                <el-link :underline="false" :class="{'dishColor':dishSelect=='1'}"   @click="dishShareSearchPub('1',1)">全部</el-link>
                 |
                 <el-link :underline="false" :class="{'dishColor':dishSelect=='2'}"  @click="dishShareSearchPub('2',1,0)">公开</el-link>
                 |
@@ -699,7 +699,6 @@
         }else{
           if(this.dishSelect=="1"){
             isPrivate=1
-            typeTemp=2;
           }
           if(this.dishSelect=="2"){
             isPrivate=1
@@ -736,7 +735,7 @@
 
       initData(){
         this.initMealData();
-        this.dishShareSearchPub('1',1,2)
+        this.dishShareSearchPub('1',1)
         grantTree().then(res=>{
           res.data.data.forEach(_=>{
             if(_.children){
@@ -1411,6 +1410,9 @@
 </script>
 
 <style>
+  .meals{
+    height: 100%;
+  }
   .meals .el-row {
     padding: 5px;
   }
@@ -1432,9 +1434,9 @@
     border: 1px solid #ebebeb !important;
     border-radius: 3px !important;
     padding: 0px;
-    height: 600px;
+    /*height: 500px;*/
   }
-  .el-card__body {
+  .meals .el-card__body {
     padding: 0px !important;
   }
   .meals .panel_head {
@@ -1452,7 +1454,7 @@
  .foodWeekListHis {
     padding: 0 0 0 10px;
    overflow-y: scroll;
-   height: 450px;
+   height: 350px;
   }
   .meals .foodWeekListHis li {
     list-style: none;

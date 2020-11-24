@@ -149,6 +149,7 @@ export default {
         total: 0,
       },
       option: {
+        height: "auto",
         align: "center",
         menuAlign: "center",
         tip: false,
@@ -449,11 +450,9 @@ export default {
   },
   methods: {
     initData() {
-
        grantTree()
           .then(res => {
             console.log("res",res)
-
             this.goverAreasDic = res.data.data;
         })
     },
@@ -686,7 +685,8 @@ export default {
         page.pageSize,
         Object.assign(params, this.query)
       ).then((res) => {
-        this.data = res.data.data;
+        debugger
+        this.data = res.data.data.records;
         this.loading = false;
         this.selectionClear();
       });

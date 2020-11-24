@@ -44,6 +44,7 @@ export default {
         title4: "幼儿其他信息",
       },
       option: {
+        height: "auto",
         detail: false,
         column: [
           {

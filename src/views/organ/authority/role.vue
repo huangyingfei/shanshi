@@ -111,6 +111,7 @@
           pageSizes:[8,16,24,32,40,48]
         },
         option: {
+          height: "auto",
           tip: false,
           simplePage: true,
           searchShow: true,

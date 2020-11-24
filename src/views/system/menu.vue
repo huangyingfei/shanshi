@@ -69,6 +69,7 @@
           total: 0,
         },
         option: {
+          height: "auto",
           lazy: true,
           tip: false,
           simplePage: true,

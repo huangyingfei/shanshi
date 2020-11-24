@@ -302,9 +302,9 @@
                 </el-input>
               </div>
               <div style=" font-size: 10px;margin:0 15px;display: flex;justify-content: space-between">
-                <el-link :underline="false"  :class="{'recipeColor':dishSelectPub=='1'}"  @click="dishShareSearchPub('1',1)">全部</el-link>
+                <el-link :underline="false"  :class="{'recipeColor':dishSelectPub=='1'}"  @click="dishShareSearchPub('1')">全部</el-link>
                 |
-                <el-link :underline="false" :class="{'recipeColor':dishSelectPub=='2'}"  @click="dishShareSearchPub('2',1,0)">常用</el-link>
+                <el-link :underline="false" :class="{'recipeColor':dishSelectPub=='2'}"  @click="dishShareSearchPub('2',0)">常用</el-link>
               </div>
 
               <div style="margin-top: 5px; margin-bottom: 2px">
@@ -968,20 +968,17 @@ document.oncontextmenu = function(){return false};
         this.peopleMealListLeft=res.data.data;
       })
     },
-    dishShareSearchPub(dishSelectPub,isPrivate,isUse){
+    dishShareSearchPub(dishSelectPub,isUse){
       //公共
       if(dishSelectPub){
         this.dishSelectPub=dishSelectPub
       }else{
-          if(this.dishSelectPub=='1'){
-            isPrivate=1;
-          }
           if(this.dishSelectPub=='2'){
             isUse=0;
          }
       }
       let dishSharePub= this.dishSharePub?this.dishSharePub:undefined
-      getDishByBaseId(isPrivate,undefined,dishSharePub,undefined,undefined,isUse).then(res=>{
+      getDishByBaseId(1,0,dishSharePub,undefined,undefined,isUse).then(res=>{
         if(res.data.success){
           let data=[];
           res.data.data.forEach(_=>{
@@ -1009,7 +1006,6 @@ document.oncontextmenu = function(){return false};
         this.dishSelectPri=dishSelectPri;
       }else{
         if(this.dishSelectPri=='1'){
-          typeTemp=2
         }
         if(this.dishSelectPri=='2'){
           typeTemp=0
