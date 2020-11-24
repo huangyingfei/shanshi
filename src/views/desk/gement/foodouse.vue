@@ -1,5 +1,5 @@
 <template>
-  <div class="often">
+  <div class="notice">
     <div class="coffee">
       <el-input
         style="width: 250px; height: 35px;margin-left: 20px;margin-top: 10px;"
@@ -229,10 +229,10 @@
           label-width="100px"
           class="demo-ruleForm"
         >
-          <el-form-item label="菜品名字" prop="name" style="width: 350px">
+          <el-form-item label="菜品名字" prop="name" style="width: 345px">
             <el-input style="width: 200px" v-model="ruleForm.name"></el-input>
           </el-form-item>
-          <el-form-item label="菜品分类" prop="fooddata" style="width: 350px">
+          <el-form-item label="菜品分类" prop="fooddata" style="width: 345px">
             <el-select
               style="width: 200px"
               v-model="ruleForm.fooddata"
@@ -247,7 +247,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="所属区域" style="width: 350px">
+          <el-form-item label="所属区域" style="width: 345px">
             <el-cascader
               style="width: 200px"
               v-model="valuepark"
@@ -258,7 +258,7 @@
             ></el-cascader>
           </el-form-item>
 
-          <el-form-item label="所属季节" style="width: 350px">
+          <el-form-item label="所属季节" style="width:345px">
             <el-select v-model="value1" multiple placeholder="请选择">
               <el-option
                 style="width: 200px"
@@ -270,21 +270,21 @@
             </el-select>
           </el-form-item>
 
-          <el-form-item label="特点" style="width: 350px">
+          <el-form-item label="特点" style="width: 345px">
             <el-input
               type="textarea"
               style="width: 200px"
               v-model="ruleForm.region"
             ></el-input>
           </el-form-item>
-          <el-form-item label="做法" style="width: 350px">
+          <el-form-item label="做法" style="width: 345px">
             <el-input
               type="textarea"
               style="width: 200px"
               v-model="ruleForm.desc"
             ></el-input>
           </el-form-item>
-          <el-form-item label="图片" style="width: 350px">
+          <el-form-item label="图片" style="width: 345px">
             <el-upload
               action="api/blade-resource/oss/endpoint/put-file"
               list-type="picture-card"
@@ -356,6 +356,7 @@
           v-loading="loadFlag1"
           show-summary
           style="width: 100%"
+          max-height="300"
           :summary-method="getSummaries"
         >
           <el-table-column
@@ -466,7 +467,7 @@
         <el-table
           :data="mailto"
           max-height="400"
-          style="width: 100%; margin-bottom: 20px"
+          style="width: 99%; margin-bottom: 20px"
           row-key="id"
           v-loading="loadFlag"
           :default-expand-all="false"
@@ -528,7 +529,7 @@
 <script>
 let id = 1000;
 export default {
-  name: "often",
+  name: "notice",
 
   data() {
     const data = [
@@ -1569,21 +1570,22 @@ export default {
 </script>
 
 <style scoped>
-.often {
+.notice {
   width: 100%;
-  height: 100%;
-  margin-left: -10px;
+  height: 1400px;
+  background-color: #fff;
 }
 .coffee {
   width: 29%;
-  height: 1130px;
+  height: 1320px;
   background-color: #fff;
   float: left;
+  margin-left: -10px;
   border-right: 1px solid #e0e0e0;
 }
 .mation {
   width: 70%;
-  height: 1130px;
+  height: 1320px;
   background-color: #fff;
   float: left;
   /* margin-bottom: 40px; */
@@ -1691,7 +1693,8 @@ export default {
   float: left;
   text-align: center;
   width: 100%;
-  height: 100px;
+  height: 150px;
+  line-height: 150px;
   margin-bottom: 40px;
   background-color: #fff;
 }

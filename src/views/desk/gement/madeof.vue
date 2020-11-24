@@ -698,7 +698,8 @@ export default {
           malloc: "" //能量kcal
         }
       ],
-      nbottoms: ""
+      nbottoms: "",
+      timezone: "" //搜索时间
     };
   },
   beforeMount() {
@@ -755,6 +756,11 @@ export default {
       // console.log(this.editor); //提交人
       // console.log(this.phoneId); //联系电话
       // console.log(this.mState1); //审核状态
+      if (this.value1) {
+        this.timezone = this.value1;
+      } else {
+        this.timezone = "";
+      }
       this.auditing();
     },
     //获取表格数据
@@ -762,7 +768,7 @@ export default {
       this.loadFlag = true;
       this.$axios
         .get(
-          `api/blade-food/dish/appPubDish?size=${this.m_page.size}&current=${this.m_page.number}&dishName=${this.input}&orgName=${this.noinst}&createTimeStr=${this.value1}&mobile=${this.phoneId}&status=${this.mState1}&createName=${this.editor}`
+          `api/blade-food/dish/appPubDish?size=${this.m_page.size}&current=${this.m_page.number}&dishName=${this.input}&orgName=${this.noinst}&createTimeStr=${this.timezone}&mobile=${this.phoneId}&status=${this.mState1}&createName=${this.editor}`
         )
         .then(res => {
           this.loadFlag = false;

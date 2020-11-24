@@ -73,18 +73,6 @@
                       placeholder="请输入内容"
                       style=" margin-left: 20px; width: 140px;"
                     ></el-input>
-                    <!-- 男下限+女下限 -->
-                    <el-input
-                      v-model="nvo.resultMin"
-                      placeholder="男下限+女下限"
-                      style=" margin-left: 20px; width: 140px;"
-                    ></el-input>
-                    <!-- 男上限+女上限 -->
-                    <el-input
-                      v-model="nvo.resultMax"
-                      placeholder="男上限+女上限"
-                      style=" margin-left: 20px; width: 140px;"
-                    ></el-input>
                   </div>
                   <div v-if="item.sexNum == 1" style="display: inline-block;">
                     <el-input
@@ -174,18 +162,6 @@
                   placeholder="请输入内容"
                   style=" margin-left: 20px; width: 140px;"
                 ></el-input>
-                <!-- 男下限+女下限 -->
-                <!-- <el-input
-                  v-model="nvo.resultMin"
-                  placeholder="男下限+女下限"
-                  style=" margin-left: 20px; width: 140px;"
-                ></el-input> -->
-                <!-- 男上限+女上限 -->
-                <!-- <el-input
-                  v-model="nvo.resultMax"
-                  placeholder="男上限+女上限"
-                  style=" margin-left: 20px; width: 140px;"
-                ></el-input> -->
               </div>
               <div v-if="item.sexNum == 1" style="display: inline-block;">
                 <el-input
@@ -305,66 +281,7 @@ export default {
     Atom() {
       this.newProtein.name = this.ruleForm.name;
       this.newProtein.isDef = this.ruleForm.region;
-      console.log(this.newProtein.nutritionVos);
-      let list = this.newProtein.nutritionVos;
-      for (let i = 0; i < list.length; i++) {
-        if (list[i].nutritionCoeffientVos.length == 0) {
-          // }
-          for (let k = 0; k < list[i].nutritionVos.length; k++) {
-            let pulse = list[i].nutritionVos;
-            // console.log(pulse);
-            for (
-              let n = 0;
-              n < list[i].nutritionVos[k].nutritionCoeffientVos.length;
-              n++
-            ) {
-              let inner = list[i].nutritionVos[k].nutritionCoeffientVos;
-              // console.log(inner);
-              list[i].nutritionVos[k].nutritionCoeffientVos[n].resultMin =
-                (parseInt(
-                  list[i].nutritionVos[k].nutritionCoeffientVos[n].manMin
-                ) +
-                  parseInt(
-                    list[i].nutritionVos[k].nutritionCoeffientVos[n].womanMin
-                  )) /
-                2;
-              list[i].nutritionVos[k].nutritionCoeffientVos[n].resultMax =
-                (parseInt(
-                  list[i].nutritionVos[k].nutritionCoeffientVos[n].manMax
-                ) +
-                  parseInt(
-                    list[i].nutritionVos[k].nutritionCoeffientVos[n].womanMax
-                  )) /
-                2;
-            }
-          }
-        } else {
-          for (let j = 0; j < list[i].nutritionCoeffientVos.length; j++) {
-            list[i].nutritionCoeffientVos[j].resultMin =
-              (parseInt(list[i].nutritionCoeffientVos[j].manMin) +
-                parseInt(list[i].nutritionCoeffientVos[j].womanMin)) /
-              2;
-            list[i].nutritionCoeffientVos[j].resultMax =
-              (parseInt(list[i].nutritionCoeffientVos[j].manMax) +
-                parseInt(list[i].nutritionCoeffientVos[j].womanMax)) /
-              2;
 
-            if (
-              list[i].nutritionCoeffientVos[j].manMin == null ||
-              list[i].nutritionCoeffientVos[j].womanMin == null
-            ) {
-              list[i].nutritionCoeffientVos[j].resultMin = 0;
-            }
-            if (
-              list[i].nutritionCoeffientVos[j].manMax == null ||
-              list[i].nutritionCoeffientVos[j].womanMax == null
-            ) {
-              list[i].nutritionCoeffientVos[j].resultMax = 0;
-            }
-          }
-        }
-      }
-      console.log(this.newProtein.nutritionVos);
       this.$axios
         .post(`api/blade-food/nutritionsetting/updateNutAndCoef`, {
           isDef: this.ruleForm.region == "是" ? 0 : 1,
@@ -385,69 +302,72 @@ export default {
     },
     //提交
     Submit() {
-      this.newProtein.name = this.ruleForm.name;
-      this.newProtein.isDef = this.ruleForm.region;
-      console.log(this.newProtein.nutritionVos);
-      let list = this.newProtein.nutritionVos;
-      for (let i = 0; i < list.length; i++) {
-        if (list[i].nutritionCoeffientVos.length == 0) {
-          // }
-          for (let k = 0; k < list[i].nutritionVos.length; k++) {
-            let pulse = list[i].nutritionVos;
-            // console.log(pulse);
-            for (
-              let n = 0;
-              n < list[i].nutritionVos[k].nutritionCoeffientVos.length;
-              n++
-            ) {
-              let inner = list[i].nutritionVos[k].nutritionCoeffientVos;
-              // console.log(inner);
-              list[i].nutritionVos[k].nutritionCoeffientVos[n].resultMin =
-                (parseInt(
-                  list[i].nutritionVos[k].nutritionCoeffientVos[n].manMin
-                ) +
-                  parseInt(
-                    list[i].nutritionVos[k].nutritionCoeffientVos[n].womanMin
-                  )) /
-                2;
-              list[i].nutritionVos[k].nutritionCoeffientVos[n].resultMax =
-                (parseInt(
-                  list[i].nutritionVos[k].nutritionCoeffientVos[n].manMax
-                ) +
-                  parseInt(
-                    list[i].nutritionVos[k].nutritionCoeffientVos[n].womanMax
-                  )) /
-                2;
-            }
-          }
-        } else {
-          for (let j = 0; j < list[i].nutritionCoeffientVos.length; j++) {
-            list[i].nutritionCoeffientVos[j].resultMin =
-              (parseInt(list[i].nutritionCoeffientVos[j].manMin) +
-                parseInt(list[i].nutritionCoeffientVos[j].womanMin)) /
-              2;
-            list[i].nutritionCoeffientVos[j].resultMax =
-              (parseInt(list[i].nutritionCoeffientVos[j].manMax) +
-                parseInt(list[i].nutritionCoeffientVos[j].womanMax)) /
-              2;
-            // console.log(list[i].nutritionCoeffientVos[j].resultMin);
-            // console.log(list[i].nutritionCoeffientVos[j].resultMax);
-            if (
-              list[i].nutritionCoeffientVos[j].manMin == null ||
-              list[i].nutritionCoeffientVos[j].womanMin == null
-            ) {
-              list[i].nutritionCoeffientVos[j].resultMin = 0;
-            }
-            if (
-              list[i].nutritionCoeffientVos[j].manMax == null ||
-              list[i].nutritionCoeffientVos[j].womanMax == null
-            ) {
-              list[i].nutritionCoeffientVos[j].resultMax = 0;
-            }
-          }
-        }
-      }
-      console.log(this.newProtein.nutritionVos);
+      // console.log(this.ruleForm.name);
+      // console.log(this.ruleForm.region);
+      // console.log(this.newProtein.nutritionVos);
+      // this.newProtein.name = this.ruleForm.name;
+      // this.newProtein.isDef = this.ruleForm.region;
+      // console.log(this.newProtein.nutritionVos);
+      // let list = this.newProtein.nutritionVos;
+      // for (let i = 0; i < list.length; i++) {
+      //   if (list[i].nutritionCoeffientVos.length == 0) {
+      //     // }
+      //     for (let k = 0; k < list[i].nutritionVos.length; k++) {
+      //       let pulse = list[i].nutritionVos;
+      //       // console.log(pulse);
+      //       for (
+      //         let n = 0;
+      //         n < list[i].nutritionVos[k].nutritionCoeffientVos.length;
+      //         n++
+      //       ) {
+      //         let inner = list[i].nutritionVos[k].nutritionCoeffientVos;
+      //         // console.log(inner);
+      //         list[i].nutritionVos[k].nutritionCoeffientVos[n].resultMin =
+      //           (parseInt(
+      //             list[i].nutritionVos[k].nutritionCoeffientVos[n].manMin
+      //           ) +
+      //             parseInt(
+      //               list[i].nutritionVos[k].nutritionCoeffientVos[n].womanMin
+      //             )) /
+      //           2;
+      //         list[i].nutritionVos[k].nutritionCoeffientVos[n].resultMax =
+      //           (parseInt(
+      //             list[i].nutritionVos[k].nutritionCoeffientVos[n].manMax
+      //           ) +
+      //             parseInt(
+      //               list[i].nutritionVos[k].nutritionCoeffientVos[n].womanMax
+      //             )) /
+      //           2;
+      //       }
+      //     }
+      //   } else {
+      //     for (let j = 0; j < list[i].nutritionCoeffientVos.length; j++) {
+      //       list[i].nutritionCoeffientVos[j].resultMin =
+      //         (parseInt(list[i].nutritionCoeffientVos[j].manMin) +
+      //           parseInt(list[i].nutritionCoeffientVos[j].womanMin)) /
+      //         2;
+      //       list[i].nutritionCoeffientVos[j].resultMax =
+      //         (parseInt(list[i].nutritionCoeffientVos[j].manMax) +
+      //           parseInt(list[i].nutritionCoeffientVos[j].womanMax)) /
+      //         2;
+      //       // console.log(list[i].nutritionCoeffientVos[j].resultMin);
+      //       // console.log(list[i].nutritionCoeffientVos[j].resultMax);
+      //       if (
+      //         list[i].nutritionCoeffientVos[j].manMin == null ||
+      //         list[i].nutritionCoeffientVos[j].womanMin == null
+      //       ) {
+      //         list[i].nutritionCoeffientVos[j].resultMin = 0;
+      //       }
+      //       if (
+      //         list[i].nutritionCoeffientVos[j].manMax == null ||
+      //         list[i].nutritionCoeffientVos[j].womanMax == null
+      //       ) {
+      //         list[i].nutritionCoeffientVos[j].resultMax = 0;
+      //       }
+      //     }
+      //   }
+      // }
+      // console.log(this.newProtein.nutritionVos);
       this.$axios
         .post(`api/blade-food/nutritionsetting/saveNutAndCoef`, {
           isDef: this.ruleForm.region,
@@ -625,7 +545,7 @@ export default {
 }
 .accto {
   width: 1100px;
-  height: 85px;
+  height: 70px;
 
   margin-left: 50px;
   color: #b4bbc5;

@@ -1208,7 +1208,7 @@ export default {
   overflow: auto;
 }
 .cation {
-  width: 29%;
+  width: 28.5%;
   height: 1300px;
   background-color: #fff;
   float: left;
