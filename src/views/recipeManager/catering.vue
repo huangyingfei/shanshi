@@ -1411,12 +1411,12 @@
 
 <style>
   .meals{
-    height: 100%;
+    height: auto;
   }
   .meals .el-row {
     padding: 5px;
   }
-   .el-form-item {
+  .meals  .el-form-item {
     margin-bottom: 0px;
   }
    .el-divider {
@@ -1638,7 +1638,7 @@
   margin-left: 5px;
   margin-top: 15px;
   overflow-y: scroll;
-  height: 450px;
+  height: 350px;
 }
 
 </style>

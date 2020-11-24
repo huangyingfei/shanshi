@@ -28,7 +28,7 @@
     </div>
 
 
-       <div
+    <div
       ref="foodmenudLayer"
       id="foodmenudLayer"
       class="el-popover el-popper el-popover--plain"
@@ -229,7 +229,6 @@
                   v-model="recipeNameSharePub"
                   class="input-with-select"
                   @change="recipeNameShareSearchPub()">
-                  <!--<el-button slot="append" icon="el-icon-search" @click="recipeNameShareSearchPub()"></el-button>-->
                 </el-input>
               </div>
               <div style="font-size: 10px;margin:0 10px;display: flex;justify-content:space-around">
@@ -345,15 +344,7 @@
                 <el-link :underline="false"  :class="{'recipeColor':dishSelectPri=='3'}"  @click="dishShareSearchPri('3',1)">隐藏</el-link>
               </div>
               <div class="select-item" >
-                <!--<el-select v-model="belongRegion" placeholder="请选择">-->
-                  <!--<el-option-->
-                    <!--v-for="item in belongRegionOption"-->
-                    <!--:key="item.value"-->
-                    <!--:label="item.label"-->
-                    <!--:value="item.value">-->
-                  <!--</el-option>-->
 
-                <!--</el-select>-->
 
                 <el-cascader  size="mini"
                   :options="belongRegionOption"   style="width: 100px"  v-model="belongRegion" @change="dishShareSearchPri()"
@@ -396,28 +387,6 @@
             </el-tab-pane>
           </el-tabs>
 
-          <!--<div-->
-            <!--class="foodSelectMenue"-->
-            <!--v-show="showFoodList"-->
-            <!--style="margin-top: 0px; padding: 5px"-->
-          <!--&gt;-->
-            <!--<el-input placeholder="输入关键字进行过滤" v-model="filterText">-->
-            <!--</el-input>-->
-
-            <!--<el-tree-->
-              <!--class="filter-tree"-->
-              <!--:data="menue_data"-->
-              <!--:props="defaultProps"-->
-              <!--default-expand-all-->
-              <!--:filter-node-method="filterNode"-->
-              <!--draggable-->
-              <!--@node-drag-start="foodmenueDragStart"-->
-              <!--:allow-drop="foodmenueDragEnd"-->
-              <!--@node-drag-over="foodmenueDragMove"-->
-              <!--ref="tree"-->
-            <!--&gt;-->
-            <!--</el-tree>-->
-          <!--</div>-->
         </el-card>
       </el-col>
       <el-col :span="19">
@@ -506,35 +475,6 @@
           <el-button type="primary" @click="resetMeals">重置</el-button>
         </div>
       </div>
-      <!--<div class="action">-->
-        <!--<div class="arrow">-->
-          <!--<div class="season">不足</div>-->
-          <!--<div class="season1">适量</div>-->
-          <!--<div class="season2">过量</div>-->
-        <!--</div>-->
-        <!--<div class="fonts">-->
-          <!--<el-table-->
-            <!--style="width: 100%; margin-bottom: 20px"-->
-            <!--row-key="id"-->
-            <!--:data="secondary"-->
-            <!--:border="false"-->
-            <!--:default-expand-all="false"-->
-            <!--:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"-->
-          <!--&gt;-->
-            <!--<el-table-column-->
-              <!--prop="date"-->
-              <!--align="center"-->
-              <!--label="营养素"-->
-              <!--width="140"-->
-            <!--&gt;-->
-            <!--</el-table-column>-->
-            <!--<el-table-column prop="name" align="center" label="含量" width="80">-->
-            <!--</el-table-column>-->
-            <!--<el-table-column prop="address" align="center" label="DRIs%">-->
-            <!--</el-table-column>-->
-          <!--</el-table>-->
-        <!--</div>-->
-      <!--</div>-->
       <!-- 表格 -->
       <div class="onblur">
         <nutrient-with-color :nutrition="nutrition"  ></nutrient-with-color>
