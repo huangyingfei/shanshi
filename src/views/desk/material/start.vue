@@ -100,6 +100,8 @@
       </div>
       <!-- 结束 -->
       <!-- 树形组件 -->
+      <!-- :default-expand-all="false"
+            :expand-on-click-node="false" -->
       <div class="monly">
         <div class="block">
           <p></p>
@@ -109,10 +111,8 @@
             v-loading="loadFlag"
             :props="defaultProps"
             :default-expand-all="false"
-            :expand-on-click-node="false"
             @node-click="handleNodeClick"
             :filter-node-method="filterNode"
-            ref="tree"
           >
             <span class="custom-tree-node" slot-scope="{ node, data }">
               <span>{{ node.label }}</span>
@@ -970,7 +970,7 @@ export default {
             });
             this.valuepark = bar;
           } else {
-            this.inquired.provinces = "";
+            this.valuepark = [];
           }
 
           // console.log(this.valuepark);
@@ -986,7 +986,7 @@ export default {
               this.active.push(item);
             });
           } else {
-            this.active = "";
+            this.active = [];
           }
 
           this.ruleForm.desc = this.inquired.function; //功用
@@ -1224,8 +1224,9 @@ export default {
 }
 .cation {
   width: 28.5%;
-  height: 1300px;
+  height: 600px;
   background-color: #fff;
+  overflow-y: auto;
   float: left;
   border-right: 1px solid #e0e0e0;
   margin-bottom: 40px;
@@ -1235,8 +1236,9 @@ export default {
 }
 .mation {
   width: 69%;
-  height: 1300px;
+  height: 600px;
   background-color: #fff;
+  overflow-y: auto;
   float: left;
   margin-bottom: 40px;
 }
