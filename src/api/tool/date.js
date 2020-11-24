@@ -36,11 +36,7 @@ export function getInervalHour(startDate, endDate) {
 }
 
 export function getDate(strDate) {
-  var st = strDate;
-  var a = st.split(" ");
-  var b = a[0].split("-");
-  var c = a[1].split(":");
-  var date = new Date(b[0], b[1], b[2], c[0], c[1], c[2]);
+  var date = new Date(strDate);
   return date;
 }
 

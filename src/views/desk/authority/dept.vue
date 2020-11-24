@@ -23,7 +23,6 @@
         <el-button type="danger"
                    size="small"
                    icon="el-icon-delete"
-
                    plain
                    @click="handleDelete">删 除
         </el-button>
@@ -72,6 +71,7 @@
           total: 0,
         },
         option: {
+          height: "auto",
           lazy: true,
           tip: false,
           simplePage: true,

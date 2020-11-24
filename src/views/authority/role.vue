@@ -107,6 +107,7 @@
           total: 0
         },
         option: {
+          height: "auto",
           tip: false,
           simplePage: true,
           searchShow: true,

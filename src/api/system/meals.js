@@ -20,7 +20,7 @@ export const grantTree = () => {
   })
 }
 
-export  const getDishByBaseId=(isPrivate,dishName,belongRegion,season,isUse,typeTemp)=>{
+export  const getDishByBaseId=(isPrivate,typeTemp,dishName,belongRegion,season,isUse)=>{
   return request({
     url: '/api/blade-food/basetype/getDishByBaseId',
     method: 'get',

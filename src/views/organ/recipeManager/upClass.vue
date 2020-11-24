@@ -38,7 +38,7 @@
         ></avue-select>
       </template>
       <template slot="className" slot-scope="scope">
-          
+
         <avue-input
           v-model="scope.className"
           placeholder="请输入内容"
@@ -72,6 +72,7 @@ export default {
         },
       ],
       option: {
+        height: "auto",
         addBtn: false,
         menu:false,
         column: [
@@ -87,7 +88,7 @@ export default {
             label: "班级别名",
             prop: "oldClassAlias",
           },
-         
+
           {
             label: "升班后年级",
             prop: "parentId",

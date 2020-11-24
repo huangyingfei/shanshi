@@ -186,7 +186,7 @@ export default {
       dateTime: false,
       m_page: {
         sizes: [10, 20, 40, 50, 100], //每页最大显示数
-        size: 20,
+        size: 10,
         totalElements: 0,
         totalPages: 3,
         number: 1

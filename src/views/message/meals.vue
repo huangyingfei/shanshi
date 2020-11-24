@@ -28,7 +28,7 @@
     </div>
 
 
-       <div
+    <div
       ref="foodmenudLayer"
       id="foodmenudLayer"
       class="el-popover el-popper el-popover--plain"
@@ -127,16 +127,12 @@
     <el-row :gutter="20">
       <el-col :span="24">
         <el-form :gutter="10" :inline="true" :model="WeekInfo">
-          <el-form-item label="选择人群">
-            <el-select v-model="WeekInfo.crowd" placeholder="选择人群"  >
-              <el-option  v-for="(item ,index) in crowdData" :label="item.peopleName" :value="item.id" :key="item.id"></el-option>
-            </el-select>
-          </el-form-item>
 
           <el-form-item>
-            <!--&lt;!&ndash;<el-switch v-model="WeekInfo.shareOrg" inactive-text="分享组织">&ndash;&gt;-->
-            <!--</el-switch>-->
-
+            选择人群
+            <el-select v-model="WeekInfo.crowd" placeholder="选择人群"  class="crow-item" >
+              <el-option  v-for="(item ,index) in crowdData" :label="item.peopleName" :value="item.id" :key="item.id"></el-option>
+            </el-select>
             <el-switch
               style="margin-left: 10px"
               v-model="WeekInfo.sharePlant"
@@ -160,14 +156,14 @@
 
             <el-button
               @click="wrapscan"
-              style="margin-left: 30px"
+              style="margin-left: 10px"
               size="medium"
               type="success"
               >智能配平</el-button
             >
             <el-button
               @click="buttonend"
-              style="margin-left: 30px"
+              style="margin-left: 10px"
               size="medium"
               type="success"
             >保存食谱</el-button
@@ -207,14 +203,14 @@
     </el-row>
 
     <el-row :gutter="20" style="padding: 0px; margin-top: 0px">
-      <el-col :span="4">
+      <el-col :span="5">
         <el-card class="box-car" shadow="never">
           <div class="clearfix panel_head">
             <el-button-group>
-              <el-button size="small" @click="showFoodList = false"
+              <el-button size="small" :class="{'showFoodListColor':!showFoodList}"  @click="showFoodList = false"
                 >食谱</el-button
               >
-              <el-button size="small" @click="showFoodList = true"
+              <el-button size="small"  :class="{'showFoodListColor':showFoodList}"   @click="showFoodList = true"
                 >菜品</el-button
               >
             </el-button-group>
@@ -223,65 +219,63 @@
           <el-tabs
             v-show="!showFoodList"
             v-model="activeName"
-            @tab-click="handleClick"
           >
             <!--//分享食谱-->
-            <el-tab-pane label="分享食谱" name="first">
-              <div style="margin-top: 0px; padding: 5px">
+            <el-tab-pane label="分享食谱" name="first" >
+              <div style="margin-top: -5px; padding:5px">
                 <el-input
                   size="small"
                   placeholder="请输入内容"
                   v-model="recipeNameSharePub"
                   class="input-with-select"
-                >
-                  <el-button slot="append" icon="el-icon-search" @click="recipeNameShareSearchPub()"></el-button>
+                  @change="recipeNameShareSearchPub()">
                 </el-input>
               </div>
-              <div style="margin-top: 3px; font-size: 10px">
-                <el-link :underline="false"  style="margin-right: 5px" @click="recipeNameShareSearchPub()">全部</el-link>
+              <div style="font-size: 10px;margin:0 10px;display: flex;justify-content:space-around">
+                <el-link :underline="false" :class="{'recipeColor':recipeSelectPub=='1'}"   @click="recipeNameShareSearchPub('1')">全部</el-link>
                  |
-                <el-link :underline="false"  style="margin-left: 5px" @click="recipeNameShareSearchPub(1)">收藏</el-link>
+                <el-link :underline="false"  :class="{'recipeColor':recipeSelectPub=='2'}"  @click="recipeNameShareSearchPub('2',1)">收藏</el-link>
               </div>
 
               <div style="margin-top: 5px; margin-bottom: 2px">
-                <el-divider></el-divider>
+                <!--<el-divider></el-divider>-->
               </div>
 
               <ul class="foodWeekListHis">
-                <li  v-for="f in mealListLeft" :key="f.id" >
+                <li  v-for="f in mealListLeft" :key="f.id"  style="font-size: 14px">
                   <span  @mouseover="ShowFoodTips($event,f)"  @mouseout="HidenFoodTips($event)">{{f.recipeName}}</span> <img style="width: 20px" @click="mealLoad(f.id,f.recipeName)" src="/img/arrow.png" alt />
                 </li>
-
               </ul>
             </el-tab-pane>
 
 
             <!--//个人食谱-->
             <el-tab-pane label="个人食谱" name="second">
-              <div style="margin-top: 0px; padding: 5px">
+              <div style="margin-top: -5px; padding: 5px">
                 <el-input
                   size="small"
                   placeholder="请输入内容"
                   v-model="recipeNameSharePri"
                   class="input-with-select"
+                  @change="recipeNameShareSearchPri()"
                 >
-                  <el-button slot="append" icon="el-icon-search" @click="recipeNameShareSearchPri()"></el-button>
+                  <!--<el-button slot="append" icon="el-icon-search" @click="recipeNameShareSearchPri()"></el-button>-->
                 </el-input>
               </div>
-              <div style="margin-top: 3px; font-size: 10px">
-                <el-link :underline="false"  style="margin-right: 5px" @click="recipeNameShareSearchPri()">全部</el-link>
+              <div style="font-size: 10px;margin:0 10px;display: flex;justify-content: space-between">
+                <el-link :underline="false"  :class="{'recipeColor':recipeSelectPri=='1'}" @click="recipeNameShareSearchPri('1')">全部</el-link>
                 |
-                <el-link :underline="false"  style="margin-left: 5px" @click="recipeNameShareSearchPri(0)">公开</el-link>
+                <el-link :underline="false"   :class="{'recipeColor':recipeSelectPri=='2'}" @click="recipeNameShareSearchPri('2',0)">公开</el-link>
                 |
-                <el-link :underline="false"  style="margin-left: 5px" @click="recipeNameShareSearchPri(1)">隐藏</el-link>
+                <el-link :underline="false"   :class="{'recipeColor':recipeSelectPri=='3'}" @click="recipeNameShareSearchPri('3',1)">隐藏</el-link>
               </div>
 
               <div style="margin-top: 5px; margin-bottom: 2px">
-                <el-divider></el-divider>
+                <!--<el-divider></el-divider>-->
               </div>
 
               <ul class="foodWeekListHis">
-                <li  v-for="f in peopleMealListLeft" :key="f.id"  >
+                <li  v-for="f in peopleMealListLeft" :key="f.id"  style="font-size: 14px" >
                   <span  @mouseover="ShowFoodTips($event,f)"  @mouseout="HidenFoodTips($event)">{{f.recipeName}}</span>  <img style="width: 20px" @click="mealLoad(f.id,f.recipeName)" src="/img/arrow.png" alt />
                 </li>
               </ul>
@@ -295,24 +289,25 @@
           >
             <el-tab-pane label="公共菜品" name="thread">
 
-              <div style="margin-top: 0px; padding: 5px">
+              <div style="margin-top: -5px; padding: 5px">
                 <el-input
                   size="small"
                   placeholder="请输入内容"
                   v-model="dishSharePub"
                   class="input-with-select"
+                  @change="dishShareSearchPub()"
                 >
-                  <el-button slot="append" icon="el-icon-search" @click="dishShareSearchPub(1)"></el-button>
+                  <!--<el-button slot="append" icon="el-icon-search" ></el-button>-->
                 </el-input>
               </div>
-              <div style="margin-top: 3px; font-size: 10px">
-                <el-link :underline="false"  style="margin-right: 5px" @click="dishShareSearchPub(1)">全部</el-link>
+              <div style=" font-size: 10px;margin:0 15px;display: flex;justify-content: space-between">
+                <el-link :underline="false"  :class="{'recipeColor':dishSelectPub=='1'}"  @click="dishShareSearchPub('1')">全部</el-link>
                 |
-                <el-link :underline="false"  style="margin-left: 5px" @click="dishShareSearchPub(1,undefined,undefined,0)">常用</el-link>
+                <el-link :underline="false" :class="{'recipeColor':dishSelectPub=='2'}"  @click="dishShareSearchPub('2',0)">常用</el-link>
               </div>
 
               <div style="margin-top: 5px; margin-bottom: 2px">
-                <el-divider></el-divider>
+                <!--<el-divider></el-divider>-->
               </div>
 
               <el-tree
@@ -330,39 +325,32 @@
               </el-tree>
             </el-tab-pane>
             <el-tab-pane label="个人菜品" name="four">
-              <div style="margin-top: 0px; padding: 5px">
+              <div style="margin-top: -5px; padding: 5px">
                 <el-input
                   size="small"
                   placeholder="请输入内容"
                   v-model="dishSharePri"
                   class="input-with-select"
+                  @change="dishShareSearchPri()"
                 >
-                  <el-button slot="append" icon="el-icon-search" @click="dishShareSearchPri(0)"></el-button>
+                  <!--<el-button slot="append" icon="el-icon-search"></el-button>-->
                 </el-input>
               </div>
-              <div style="margin-top: 3px; font-size: 10px">
-                <el-link :underline="false"  style="margin-right: 5px" @click="dishShareSearchPri(0)">全部</el-link>
+              <div style=" font-size: 10px;margin:0 15px;display: flex;justify-content: space-between">
+                <el-link :underline="false" :class="{'recipeColor':dishSelectPri=='1'}" @click="dishShareSearchPri('1',2)">全部</el-link>
                 |
-                <el-link :underline="false"  style="margin-left: 5px" @click="dishShareSearchPri(0,0)">公开</el-link>
+                <el-link :underline="false" :class="{'recipeColor':dishSelectPri=='2'}"  @click="dishShareSearchPri('2',0)">公开</el-link>
                 |
-                <el-link :underline="false"  style="margin-left: 5px" @click="dishShareSearchPri(0,1)">隐藏</el-link>
+                <el-link :underline="false"  :class="{'recipeColor':dishSelectPri=='3'}"  @click="dishShareSearchPri('3',1)">隐藏</el-link>
               </div>
               <div class="select-item" >
-                <!--<el-select v-model="belongRegion" placeholder="请选择">-->
-                  <!--<el-option-->
-                    <!--v-for="item in belongRegionOption"-->
-                    <!--:key="item.value"-->
-                    <!--:label="item.label"-->
-                    <!--:value="item.value">-->
-                  <!--</el-option>-->
 
-                <!--</el-select>-->
 
-                <el-cascader
-                  :options="belongRegionOption"  v-model="belongRegion" @change="dishShareSearchPri(0)"
+                <el-cascader  size="mini"
+                  :options="belongRegionOption"   style="width: 100px"  v-model="belongRegion" @change="dishShareSearchPri()"
                   :props="{ checkStrictly: true,label:'name',value:'code' }"
                   clearable></el-cascader>
-                <el-select v-model="seasonl" placeholder="请选择" @change="dishShareSearchPri(0)">
+                <el-select  size="mini" v-model="seasonl"  clearable  style="width: 60px" placeholder="请选择" @change="dishShareSearchPri()">
                   <el-option
                     v-for="item in seasonlOptions"
                     :key="item.value"
@@ -370,7 +358,7 @@
                     :value="item.value" >
                   </el-option>
                 </el-select>
-                <el-select v-model="isUse" placeholder="请选择" @change="dishShareSearchPri(0)">
+                <el-select size="mini"  v-model="isUse"  clearable  style="width: 70px"  placeholder="请选择" @change="dishShareSearchPri()">
                   <el-option
                     v-for="item in isUseOptions"
                     :key="item.value"
@@ -382,7 +370,7 @@
               </div>
 
               <div style="margin-top: 5px; margin-bottom: 2px">
-                <el-divider></el-divider>
+                <!--<el-divider></el-divider>-->
               </div>
               <el-tree
                 class="filter-tree"
@@ -399,31 +387,9 @@
             </el-tab-pane>
           </el-tabs>
 
-          <!--<div-->
-            <!--class="foodSelectMenue"-->
-            <!--v-show="showFoodList"-->
-            <!--style="margin-top: 0px; padding: 5px"-->
-          <!--&gt;-->
-            <!--<el-input placeholder="输入关键字进行过滤" v-model="filterText">-->
-            <!--</el-input>-->
-
-            <!--<el-tree-->
-              <!--class="filter-tree"-->
-              <!--:data="menue_data"-->
-              <!--:props="defaultProps"-->
-              <!--default-expand-all-->
-              <!--:filter-node-method="filterNode"-->
-              <!--draggable-->
-              <!--@node-drag-start="foodmenueDragStart"-->
-              <!--:allow-drop="foodmenueDragEnd"-->
-              <!--@node-drag-over="foodmenueDragMove"-->
-              <!--ref="tree"-->
-            <!--&gt;-->
-            <!--</el-tree>-->
-          <!--</div>-->
         </el-card>
       </el-col>
-      <el-col :span="20">
+      <el-col :span="19">
         <div class="foodPanel">
           <foods-week
             @childfn="parentFn"
@@ -475,7 +441,7 @@
         </div>
         <div class="nutrition">
           <span style="margin-right: 20px">选择营养素</span>
-          <el-select v-model="ncode" placeholder="请选择" @change="ncodeChange">
+          <el-select v-model="node.nowCode" placeholder="请选择" @change="ncodeChange">
             <el-option
               v-for="item in nutritionValue"
               :key="item.code"
@@ -485,10 +451,10 @@
             </el-option>
           </el-select>
           <span style="padding-right: 10px; padding-left: 30px">起始值(%)</span>
-          <el-input
+          <el-input disabled
             style="width: 140px"
             placeholder="请输入内容"
-            v-model="nvalue"
+            v-model="node.nowValue"
             clearable
           >
           </el-input>
@@ -497,7 +463,7 @@
           <el-input
             style="width: 140px"
             placeholder="请输入内容"
-            v-model="exceptValue"
+            v-model="node.exceptValue"
             clearable
           >
           </el-input>
@@ -509,35 +475,6 @@
           <el-button type="primary" @click="resetMeals">重置</el-button>
         </div>
       </div>
-      <!--<div class="action">-->
-        <!--<div class="arrow">-->
-          <!--<div class="season">不足</div>-->
-          <!--<div class="season1">适量</div>-->
-          <!--<div class="season2">过量</div>-->
-        <!--</div>-->
-        <!--<div class="fonts">-->
-          <!--<el-table-->
-            <!--style="width: 100%; margin-bottom: 20px"-->
-            <!--row-key="id"-->
-            <!--:data="secondary"-->
-            <!--:border="false"-->
-            <!--:default-expand-all="false"-->
-            <!--:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"-->
-          <!--&gt;-->
-            <!--<el-table-column-->
-              <!--prop="date"-->
-              <!--align="center"-->
-              <!--label="营养素"-->
-              <!--width="140"-->
-            <!--&gt;-->
-            <!--</el-table-column>-->
-            <!--<el-table-column prop="name" align="center" label="含量" width="80">-->
-            <!--</el-table-column>-->
-            <!--<el-table-column prop="address" align="center" label="DRIs%">-->
-            <!--</el-table-column>-->
-          <!--</el-table>-->
-        <!--</div>-->
-      <!--</div>-->
       <!-- 表格 -->
       <div class="onblur">
         <nutrient-with-color :nutrition="nutrition"  ></nutrient-with-color>
@@ -608,15 +545,12 @@ document.oncontextmenu = function(){return false};
     const data = [];
     return {
       foodRadio:'1',
-      isUse:'',
-      belongRegion:'',
-      seasonl:'',
+      isUse:undefined,
+      belongRegion:undefined,
+      seasonl:undefined,
       belongRegionOption:[],
       seasonlOptions:[
-        {
-          label:'全部',
-          value:undefined
-        },
+
         {
           label:'春',
           value:'1'
@@ -635,10 +569,6 @@ document.oncontextmenu = function(){return false};
         }
       ],
       isUseOptions:[
-        {
-          label:'全部',
-          value:undefined
-        },
         {
           label:'常用',
           value:0
@@ -711,6 +641,10 @@ document.oncontextmenu = function(){return false};
       FoodTypeList: [], //所选餐点类型
       rebuild: false,
       showFoodList: false,
+      recipeSelectPub:'1',
+      recipeSelectPri:'1',
+      dishSelectPub:'1',
+      dishSelectPri:'1',
       personMenuDishList:[],
       menuDishList: [
         {
@@ -789,8 +723,11 @@ document.oncontextmenu = function(){return false};
           value:'0'
         },
       ],
-      nvalue:'',
-      exceptValue:'',
+      node:{
+        nowCode:'101',
+        nowValue:'',
+        exceptValue:'',
+      },
       mealListLeft:[
         // {name:"周一食谱",id:"1"},
         // {name:"周二食谱",id:"2"},
@@ -838,32 +775,40 @@ document.oncontextmenu = function(){return false};
     };
   },
   beforeMount() {},
-  methods: {sub(){},
-// debugger
-    recipeNameShareSearchPub(type){
-      // debugger
-      if(type){
-        mealList(1,undefined,this.recipeNameSharePub,1).then(res=>{
-          this.mealListLeft=res.data.data;
-        })
-      }else{
-        mealList(1,undefined,this.recipeNameSharePub).then(res=>{
-          this.mealListLeft=res.data.data;
-        })
+  methods: {
+    recipeNameShareSearchPub(recipeSelectPub,isUse){
+    if(recipeSelectPub){
+      this.recipeSelectPub=recipeSelectPub;
+    }else{
+      if( this.recipeSelectPub=='2'){
+        isUse='1';
       }
+    }
+    mealList(1,undefined,this.recipeNameSharePub,isUse).then(res=>{
+      this.mealListLeft=res.data.data;
+    })
     },
-    recipeNameShareSearchPri(type){
+    recipeNameShareSearchPri(recipeSelectPri,isPub){
       // debugger
-      if(!type&&type!=0){
-        mealList(2,undefined,this.recipeNameSharePri).then(res=>{
+      if(recipeSelectPri){
+        this.recipeSelectPri=recipeSelectPri;
+      }else{
+        if( this.recipeSelectPri=='2'){
+          isPub='0';
+        }
+        if( this.recipeSelectPri=='3'){
+          isPub='1';
+        }
+      }
+        mealList(2,isPub,this.recipeNameSharePri).then(res=>{
           this.peopleMealListLeft=res.data.data;
         })
-      }
-      else{
-        mealList(2,type,this.recipeNameSharePri,undefined).then(res=>{
-          this.peopleMealListLeft=res.data.data;
-        })
-      }
+      // }
+      // else{
+      //   mealList(2,type,this.recipeNameSharePri,undefined).then(res=>{
+      //     this.peopleMealListLeft=res.data.data;
+      //   })
+      // }
     },
    mealLoad(id,name){
      let that=this;
@@ -948,10 +893,10 @@ document.oncontextmenu = function(){return false};
       this.score=score;
       this.intake=intake;
       this.nutrition=nutrition
-      console.log(this.nutrition)
       this.power=power
       this.protein=protein
       this.meal=meal
+      this.ncodeChange();
     },
     initMealData(){
       //公开
@@ -963,10 +908,17 @@ document.oncontextmenu = function(){return false};
         this.peopleMealListLeft=res.data.data;
       })
     },
-    dishShareSearchPub(isPrivate,belongRegion,seasonl,isUse){
+    dishShareSearchPub(dishSelectPub,isUse){
       //公共
+      if(dishSelectPub){
+        this.dishSelectPub=dishSelectPub
+      }else{
+          if(this.dishSelectPub=='2'){
+            isUse=0;
+         }
+      }
       let dishSharePub= this.dishSharePub?this.dishSharePub:undefined
-      getDishByBaseId(isPrivate,dishSharePub,belongRegion,seasonl,isUse).then(res=>{
+      getDishByBaseId(1,0,dishSharePub,undefined,undefined,isUse).then(res=>{
         if(res.data.success){
           let data=[];
           res.data.data.forEach(_=>{
@@ -986,15 +938,28 @@ document.oncontextmenu = function(){return false};
           this.menuDishList=data;
         }
       })
+
     },
-    dishShareSearchPri(isPrivate,typeTemp){
+    dishShareSearchPri(dishSelectPri,typeTemp){
       //私人
+      if(dishSelectPri){
+        this.dishSelectPri=dishSelectPri;
+      }else{
+        if(this.dishSelectPri=='1'){
+        }
+        if(this.dishSelectPri=='2'){
+          typeTemp=0
+        }
+        if(this.dishSelectPri=='3'){
+          typeTemp=1
+        }
+      }
       let dishSharePri= this.dishSharePri?this.dishSharePri:undefined;
       let belongRegion= this.belongRegion?this.belongRegion[0]:undefined;
       let seasonl= this.seasonl?this.seasonl:undefined;
       let isUse= (this.isUse||this.isUse==0)&&this.isUse!=""?this.isUse:undefined;
       // debugger
-      getDishByBaseId(isPrivate,dishSharePri,belongRegion,seasonl,isUse,typeTemp).then(res=>{
+      getDishByBaseId(0,typeTemp,dishSharePri,belongRegion,seasonl,isUse).then(res=>{
         if(res.data.success){
           let data=[];
           res.data.data.forEach(_=>{
@@ -1021,8 +986,8 @@ document.oncontextmenu = function(){return false};
         this.crowdData=res.data.data;
         this.WeekInfo.crowd=this.crowdData[0].id;
       })
-      this.dishShareSearchPub(1)
-      this.dishShareSearchPri(0)
+      this.dishShareSearchPub()
+      this.dishShareSearchPri()
 
       grantTree().then(res=>{
         res.data.data.forEach(_=>{
@@ -1242,19 +1207,14 @@ document.oncontextmenu = function(){return false};
       this.drawer = true;
     },
     ncodeChange(){
-   debugger
       let that=this;
      this.nutrition.forEach(_=>{
-       if(_.code==that.ncode){
-         that.nvalue=_.realIntake
+       if(_.code==that.node.nowCode){
+         that.$set(that.node,"nowValue",_.realIntake)
        }
      })
-
-
     },
     startTrim(){
-      console.log(this.datas,"this.datas")
-      console.log(this.smartDatas,"this.smartDatas")
       let that=this;
       this.smartDatas.forEach(week=>{
       week.weeks.forEach(_=>{
@@ -1262,15 +1222,18 @@ document.oncontextmenu = function(){return false};
             __.children.forEach(___=>{
               let flag=false;
               ___.nutrientIds.forEach((n)=>{
-                if(n.id=that.ncode){
+                if(n.id=that.node.nowCode){
                   flag=true;
                 }
               })
-              ___.count=___.count+___.count*((that.exceptValue-that.nvalue)/that.nvalue)
+              if(flag){
+                ___.count=( parseFloat(___.count)+(parseFloat(___.count)*((parseFloat(that.node.exceptValue)-parseFloat(that.node.nowValue))/parseFloat(that.node.nowValue))))
+                ___.count=___.count.toFixed(2);
+              }
             })
           })
         })
-        that.ncodeChange();
+
       })
       debugger
 
@@ -1746,9 +1709,9 @@ document.oncontextmenu = function(){return false};
 .meals .el-row {
   padding: 5px;
 }
-.meals .el-select .el-input {
-  width: 120px;
-}
+/*.meals .el-select .el-input {*/
+  /*width: 120px;*/
+/*}*/
 .meals .el-form-item {
   margin-bottom: 0px;
 }
@@ -1785,7 +1748,9 @@ document.oncontextmenu = function(){return false};
   margin-bottom: 1px;
 }
 .meals .foodWeekListHis {
-  padding: 5px;
+  padding: 0 0 0 10px;
+  overflow-y: scroll;
+  height: 450px;
 }
 .meals .foodWeekListHis li {
   list-style: none;
@@ -1809,7 +1774,7 @@ document.oncontextmenu = function(){return false};
   height: 90px;
   /* background-color: red; */
   position: absolute;
-  top: 110px;
+  top: 180px;
   right: 70px;
   display: flex;
   /* border-radius: 50%;
@@ -1934,21 +1899,43 @@ document.oncontextmenu = function(){return false};
    width: 35px;
   }
   .select-item{
+    margin-top: 5px;
     display: flex;
-    justify-content: start;
+    justify-content: space-between;
     font-size: 12px!important
   }
 .meals .el-input{
     font-size: 12px!important;
   }
-.meals .select-item .el-input__icon{
-  width:5px !important;
+/*.meals .select-item .el-input__icon{*/
+  /*width:5px !important;*/
+/*}*/
+/*.meals .select-item  .el-input--suffix .el-input__inner{*/
+  /*padding-right: 15px!important;*/
+/*}*/
+/*.meals .el-drawer__open .el-drawer.rtl{*/
+  /*width: 50%!important;*/
+  /*overflow-y: scroll;*/
+/*}*/
+.showFoodListColor{
+  color: #00b1a2 !important;
+  border-color: #b3e8e3 !important;
+  background-color: #e6f7f6 !important;
 }
-.meals .select-item  .el-input--suffix .el-input__inner{
-  padding-right: 15px!important;
+.recipeColor{
+  color: #00b1a2 !important;
 }
-.meals .el-drawer__open .el-drawer.rtl{
-  width: 50%!important;
+.dishColor{
+  color: #00b1a2 !important;
+}
+.filter-tree{
+  font-size: 14px;
+  margin-left: 5px;
+  margin-top: 15px;
   overflow-y: scroll;
+  height: 450px;
+}
+.crow-item{
+  width:100px;
 }
 </style>
