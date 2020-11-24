@@ -66,6 +66,7 @@
         border
         stripe
         style="width: 100%"
+        max-height="400"
         :element-loading-text="page_data.loadTxt"
         v-loading="loadFlag"
         empty-text="没有数据~"
@@ -266,6 +267,7 @@
               style=" width: 350px;  "
             >
               <el-input
+                type="number"
                 v-model="ruleForm.besaved"
                 placeholder="请输入食部"
               ></el-input>
@@ -277,6 +279,7 @@
               style=" width: 350px; "
             >
               <el-input
+                type="number"
                 v-model="ruleForm.timers"
                 placeholder="请输入重量"
               ></el-input>
@@ -284,6 +287,7 @@
 
             <el-form-item label="水分(%)" style=" width: 350px;   ">
               <el-input
+                type="number"
                 v-model="ruleForm.content"
                 placeholder="请输入水分"
               ></el-input>
@@ -411,7 +415,7 @@
               <template slot-scope="scope">
                 <el-input
                   v-model="scope.row.result"
-                  type="text"
+                  type="number"
                   v-if="scope.row.level != 1 ? true : false"
                   placeholder="请输入内容"
                 ></el-input>
@@ -718,7 +722,7 @@ export default {
       // console.log(row);
       this.examine.desc1 = "";
       // this.valuepark.length = 0;
-      this.active= [];
+      this.active = [];
       this.seekeys = true;
       let design = `?id=${row.id}`;
       this.$axios
@@ -874,7 +878,7 @@ export default {
     },
     //同意
     Disagree(formName) {
-      console.log(this.dialogImageUrl)
+      console.log(this.dialogImageUrl);
       this.$refs[formName].validate(valid => {
         if (valid) {
           // alert("submit!");
@@ -950,7 +954,7 @@ export default {
       console.log(index);
       this.according = index;
       this.examine.desc1 = "";
-           this.active= [];
+      this.active = [];
       // this.valuepark.length = 0;
       // this.active.length = 0;
       this.seekeys = true;
@@ -1007,7 +1011,7 @@ export default {
             };
           }
           this.productImgs = picture;
-          this.dialogImageUrl=this.subquery.pic;
+          this.dialogImageUrl = this.subquery.pic;
           this.ruleForm.delivery = this.subquery.isPub == 0 ? true : false; //公开
           // console.log(this.ruleForm.delivery);
           this.ruleForm.delivery1 = this.subquery.isUse == 0 ? true : false; //常用
@@ -1197,7 +1201,7 @@ export default {
   /* background-color: red; */
 }
 .navbar {
-  margin-top: 50px;
+  margin-top: 20px;
 }
 .update1 {
   width: 100%;

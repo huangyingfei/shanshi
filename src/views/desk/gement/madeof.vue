@@ -6,13 +6,13 @@
       <el-input
         v-model="input"
         placeholder="请输入内容"
-        style="width:200px"
+        style="width:190px"
       ></el-input>
       <span style="margin: 0 10px;">创建机构:</span>
       <el-input
         v-model="noinst"
         placeholder="请输入内容"
-        style="width:200px"
+        style="width:190px"
       ></el-input>
       <span style="margin: 0 10px;">提交日期:</span>
       <el-date-picker
@@ -21,13 +21,13 @@
         v-model="value1"
         type="date"
         placeholder="选择日期"
-        style="width:200px"
+        style="width:190px"
       ></el-date-picker>
       <span style="margin: 0 10px;">提交人:</span>
       <el-input
         v-model="editor"
         placeholder="请输入内容"
-        style="width:200px"
+        style="width:190px"
       ></el-input>
 
       <div class="tostring">
@@ -35,7 +35,7 @@
         <el-input
           v-model="phoneId"
           placeholder="请输入内容"
-          style="width:200px"
+          style="width:190px"
         ></el-input>
         <span style="margin: 0 10px;">审核状态:</span>
         <el-select v-model="mState1" placeholder="请选择">
@@ -64,7 +64,8 @@
       <el-table
         :data="tmquery"
         border
-        style="width: 100%"
+        style="width: 100%;height:100%"
+        max-height="400"
         v-loading="loadFlag"
         empty-text="没有数据~"
       >
@@ -120,16 +121,6 @@
             <el-tag type="warning" v-else-if="scope.row.status == 2"
               >审核不通过</el-tag
             >
-            <!-- <p class="stop" v-if="scope.row.status == 0">待审核</p>
-            <p style="color:#409eff" v-else-if="scope.row.status == 3">
-              无需审核
-            </p>
-            <p style="color:#67c23a" v-else-if="scope.row.status == 1">
-              审核通过
-            </p>
-            <p style="color:#e6a23c" v-else-if="scope.row.status == 2">
-              审核不通过
-            </p> -->
           </template>
         </el-table-column>
         <!--操作格-->
@@ -170,7 +161,7 @@
     </div>
     <!-- 审核食材 查看 -->
     <el-dialog
-      title="审核食材"
+      title="审核菜品"
       :fullscreen="true"
       append-to-body
       :visible.sync="seekeys"
@@ -202,7 +193,7 @@
         </div>
       </div>
       <div class="stored">
-        <div class="mationtxt">食材主要信息</div>
+        <div class="mationtxt">菜品主要信息</div>
         <div class="unsigned">
           <el-form
             :model="ruleForm"
@@ -221,7 +212,11 @@
               prop="fooddata"
               style=" width: 350px;   "
             >
-              <el-select v-model="ruleForm.fooddata" placeholder="请选择">
+              <el-select
+                disabled
+                v-model="ruleForm.fooddata"
+                placeholder="请选择"
+              >
                 <el-option
                   v-for="item in foodPos"
                   :key="item.value"
@@ -311,7 +306,6 @@
           <el-button style="margin-left: 10px;" type="primary" @click="addLine"
             >添加</el-button
           >
-          <!-- <el-button @click="save">保存</el-button> -->
           <el-table
             :data="officeonce"
             border
@@ -607,9 +601,10 @@ export default {
         ]
       },
       ruleForm: {
+        name: "", //菜品名字
         restorename: "", //食材名
 
-        fooddata: "", //食材分类
+        fooddata: "", //菜品分类
 
         region: "", //特点
 
@@ -621,8 +616,8 @@ export default {
       },
       m_page: {
         //分頁
-        sizes: [10, 20, 40, 50, 100], //每页最大显示数
-        size: 20,
+        sizes: [10, 20, 30, 40, 50, 100], //每页最大显示数
+        size: 10,
         totalElements: 0,
         totalPages: 3,
         number: 1
@@ -699,7 +694,8 @@ export default {
         }
       ],
       nbottoms: "",
-      timezone: "" //搜索时间
+      timezone: "", //搜索时间
+      classification: "" //分类ID
     };
   },
   beforeMount() {
@@ -717,9 +713,11 @@ export default {
       this.input = ""; //菜品名称
       this.noinst = ""; //创建机构
       this.value1 = ""; //提交日期
+      this.timezone = "";
       this.editor = ""; //提交人
       this.phoneId = ""; //联系电话
       this.mState1 = ""; //审核状态
+      this.auditing();
     },
     //初始数据获取token
     Takeone() {
@@ -825,8 +823,8 @@ export default {
     seecol(row, index) {
       console.log(row);
       this.seekeys = true;
-      this.active.length = "";
-      this.valuepark = "";
+      this.active = [];
+      this.valuepark = [];
       this.nbottoms = index;
       console.log(row);
       this.stone = row.id;
@@ -847,7 +845,7 @@ export default {
           console.log(res);
           this.handler = res.data.data;
           this.ruleForm.name = this.handler.dishName; //菜品名字
-          this.ruleForm.fooddata = this.handler.dishType; //菜品分类
+          this.ruleForm.fooddata = this.handler.dishTypeName; //菜品分类
           // console.log(this.handler);
           this.handler.season.split(",").forEach(item => {
             this.active.push(item);
@@ -864,6 +862,7 @@ export default {
               url: this.handler.pic
             };
           }
+          this.productImgs = picture;
           this.ruleForm.region = this.handler.function; //特点
           this.ruleForm.desc = this.handler.remark; //做法
           this.ruleForm.delivery1 = this.handler.isUse == 1 ? false : true; //常用
@@ -906,7 +905,7 @@ export default {
         .post(`api/blade-food/dish/auditDish`, {
           id: this.stone, //ID
           dishName: this.ruleForm.name, //菜品名
-          dishType: this.ruleForm.fooddata, //菜品分类
+          dishType: this.classification, //菜品分类
           belongRegions: this.valuepark, //所属区域
           seasons: this.active, //所属季节
           function: this.ruleForm.region, //特点
@@ -957,7 +956,7 @@ export default {
           .post(`api/blade-food/dish/auditDish`, {
             id: this.stone, //ID
             dishName: this.ruleForm.name, //菜品名
-            dishType: this.ruleForm.fooddata, //菜品分类
+            dishType: this.classification, //菜品分类
             belongRegions: this.valuepark, //所属区域
             seasons: this.active, //所属季节
             function: this.ruleForm.region, //特点
@@ -988,15 +987,16 @@ export default {
     },
     //审核
     Directory(row, index) {
-      this.active.length = "";
-      this.valuepark = "";
+      this.active = [];
+      this.valuepark = [];
+      this.productImgs = [];
       // console.log(index);
       this.nbottoms = index;
       console.log(row);
       this.stone = row.id;
-      this.dsquery.establish = row.tenentName;
-      this.dsquery.submit = row.userName;
-      this.dsquery.phone = row.phone;
+      this.dsquery.establish = row.orgName;
+      this.dsquery.submit = row.createName;
+      this.dsquery.phone = row.mobile;
       this.dsquery.time = row.createTime;
       this.dsquery.examineto = row.status;
       this.seekeys = true;
@@ -1011,16 +1011,28 @@ export default {
           console.log(res);
           this.handler = res.data.data;
           this.ruleForm.name = this.handler.dishName; //菜品名字
-          this.ruleForm.fooddata = this.handler.dishType; //菜品分类
+          // this.handler.dishType
+          this.classification = this.handler.dishType;
+          console.log(this.classification);
+          this.ruleForm.fooddata = this.handler.dishTypeName; //菜品分类
           // console.log(this.handler);
-          this.handler.season.split(",").forEach(item => {
-            this.active.push(item);
-          });
-          let bar = [];
-          this.handler.provinces.split(",").forEach((item, i) => {
-            bar.push([item, this.handler.belongRegion.split(",")[i]]);
-          });
-          this.valuepark = bar;
+          if (this.handler.season) {
+            this.handler.season.split(",").forEach(item => {
+              this.active.push(item);
+            });
+          } else {
+            this.active = "";
+          }
+          if (this.handler.provinces) {
+            let bar = [];
+            this.handler.provinces.split(",").forEach((item, i) => {
+              bar.push([item, this.handler.belongRegion.split(",")[i]]);
+            });
+            this.valuepark = bar;
+          } else {
+            this.handler.provinces = "";
+          }
+
           this.ruleForm.region = this.handler.function; //特点
           this.ruleForm.desc = this.handler.remark; //做法
           let picture = []; //图片
@@ -1029,6 +1041,8 @@ export default {
               url: this.handler.pic
             };
           }
+          this.productImgs = picture;
+          this.dialogImageUrl = this.handler.pic;
           this.ruleForm.delivery1 = this.handler.isUse == 1 ? false : true; //常用
           this.ruleForm.delivery = this.handler.isPub == 1 ? false : true; //公开
           if (this.handler.dishMxVos) {

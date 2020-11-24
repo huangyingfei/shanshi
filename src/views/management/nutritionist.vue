@@ -25,6 +25,9 @@
         style=" margin-left: 20px; "
         >搜索</el-button
       >
+      <el-button @click="notEmpty" size="medium" style=" margin-left: 20px; "
+        >清空</el-button
+      >
     </div>
     <!-- 添加食材 -->
     <div class="cadddr">
@@ -312,6 +315,12 @@ export default {
   },
   computed: {},
   methods: {
+    notEmpty() {
+      this.input = "";
+      this.temps = "";
+      this.value = "";
+      this.generator(); //获取表格数据
+    },
     search() {
       this.generator();
     },
@@ -502,7 +511,7 @@ export default {
           // console.log(this.prtree);
 
           let trees = [];
-          this.prtree.forEach((cadddritem, index) => {
+          this.prtree.forEach((item, index) => {
             trees[index] = {
               id: item.id,
               label: item.typeName
