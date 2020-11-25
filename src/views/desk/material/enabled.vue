@@ -394,8 +394,7 @@
             :data="mailto"
             style="width: 60%;margin-bottom: 20px;"
             row-key="id"
-            border
-            :default-expand-all="false"
+            :default-expand-all="true"
             :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
           >
             <el-table-column
@@ -425,7 +424,7 @@
           </el-table>
         </div>
         <!-- 公共库所分类 -->
-        <!-- <div v-if="this.according == 1" class="worm1">公共库所属分类</div>
+        <div v-if="this.according == 1" class="worm1">公共库所属分类</div>
         <el-form
           :model="ruleForm"
           :rules="rules"
@@ -448,7 +447,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-        </el-form> -->
+        </el-form>
         <div class="worm1" v-if="this.according == 1">拒绝原因</div>
         <el-form
           :model="examine"
@@ -907,7 +906,7 @@ export default {
             .post(`api/blade-food/food/audit`, {
               id: this.flour, //ID
               status: 1, //审核状态
-              // foodPubType: this.menu, //公共库所属分类
+              foodPubType: this.menu, //公共库所属分类
               foodName: this.ruleForm.name, //食材名
               foodAlias: this.ruleForm.move, //食物别名1
               foodAlias1: this.ruleForm.move1, //食物别名2
@@ -998,11 +997,24 @@ export default {
           } else {
             this.active = "";
           }
-          let bar = [];
-          this.subquery.provinces.split(",").forEach((item, i) => {
-            bar.push([item, this.subquery.belongRegion.split(",")[i]]);
-          });
-          this.valuepark = bar;
+          //省市
+          if (this.subquery.provinces) {
+            let bar = [];
+            this.subquery.provinces.split(",").forEach((item, i) => {
+              if (item == this.subquery.belongRegion.split(",")[i]) {
+                bar.push([item]);
+              } else {
+                bar.push([item, this.subquery.belongRegion.split(",")[i]]);
+              }
+            });
+            // this.subquery.provinces.split(",").forEach((item, i) => {
+            //   bar.push([item, this.subquery.belongRegion.split(",")[i]]);
+            // });
+            this.valuepark = bar;
+          } else {
+            this.valuepark = [];
+          }
+
           this.ruleForm.desc = this.subquery.function; //功用
           let picture = []; //图片
           if (this.subquery.pic) {
@@ -1138,6 +1150,7 @@ export default {
     //移除图片
     handleRemove(file, fileList) {
       console.log(file, fileList);
+      this.dialogImageUrl = "";
     },
     //预览图片
     handlePictureCardPreview(file) {
@@ -1269,5 +1282,10 @@ export default {
   margin-top: 20px;
   margin-right: 40px;
   margin-bottom: 60px;
+}
+.saveas {
+  height: 400px;
+  /* background-color: red; */
+  overflow-y: auto;
 }
 </style>

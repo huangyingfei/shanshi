@@ -3,7 +3,7 @@
     <!-- <div>食材不宜同食</div> -->
     <!-- 搜索 -->
     <div class="update">
-      名称:
+      相克标题:
       <el-input v-model="input" placeholder="请输入内容"></el-input>
       <span class="exact">食材名称:</span>
 
@@ -47,7 +47,7 @@
         v-loading="loadFlag1"
         :data="tableData"
         border
-        max-height="400"
+        max-height="500"
         :element-loading-text="page_data.loadTxt"
         style="width: 100%;height:100%"
       >
@@ -55,7 +55,7 @@
         </el-table-column>
         <el-table-column
           prop="name"
-          label="名称"
+          label="相克标题"
           width="160"
           align="center"
         ></el-table-column>
@@ -157,10 +157,12 @@
           <el-input type="textarea" v-model="ruleForm.desc"></el-input>
         </el-form-item>
         <el-form-item label="是否有效">
-          <el-radio-group v-model="ruleForm.resource">
+          <el-radio v-model="radio" label="1">是</el-radio>
+          <el-radio v-model="radio" label="0">否</el-radio>
+          <!-- <el-radio-group v-model="ruleForm.resource">
             <el-radio label="是"></el-radio>
             <el-radio label="否"></el-radio>
-          </el-radio-group>
+          </el-radio-group> -->
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -191,17 +193,17 @@
         >
         </el-input>
         <p></p>
-        <el-tree
-          :data="data"
-          v-loading="loadFlag"
-          node-key="id"
-          :default-expand-all="false"
-          :expand-on-click-node="false"
-          @node-click="handleNodeClick"
-          :filter-node-method="filterNode"
-          ref="tree"
-        >
-          <!-- <span class="custom-tree-node" slot-scope="{ node, data }">
+        <div class="rolling">
+          <el-tree
+            :data="data"
+            v-loading="loadFlag"
+            node-key="id"
+            :default-expand-all="false"
+            @node-click="handleNodeClick"
+            :filter-node-method="filterNode"
+            ref="tree"
+          >
+            <!-- <span class="custom-tree-node" slot-scope="{ node, data }">
                       <span>{{ node.label }}</span>
                       <span>
                         <el-button
@@ -214,7 +216,8 @@
                      
                       </span>
                     </span> -->
-        </el-tree>
+          </el-tree>
+        </div>
       </div>
       <div slot="footer" class="dialog-footer">
         <el-button @click="addEffect = false">取 消</el-button>
@@ -241,9 +244,9 @@ export default {
         adding1: "", //食材2
         region: "",
         region1: "",
-        desc: "",
-        resource: ""
+        desc: ""
       },
+      radio: "1", //是否有效
       rules: {
         name: [{ required: true, message: "请输入名称", trigger: "blur" }],
         adding: [{ required: true, message: "请选择食材", trigger: "change" }],
@@ -325,7 +328,8 @@ export default {
       this.ruleForm.adding = "";
       this.ruleForm.adding1 = "";
       this.ruleForm.desc = "";
-      this.ruleForm.resource = "";
+      //this.ruleForm.resource = "";
+      this.radio = "1";
       this.dateTime = true;
     },
     //添加相克食物
@@ -334,6 +338,7 @@ export default {
       // console.log(this.dataindex1);
       // console.log(123123);
       this.addEffect = true;
+      this.treeDrawing();
     },
     //编辑
     editorTheme(row, index1) {
@@ -345,7 +350,9 @@ export default {
       this.ruleForm.adding = row.foodName;
       this.ruleForm.adding1 = row.foodName1;
       this.ruleForm.desc = row.reason;
-      this.ruleForm.resource = row.isActive == 0 ? "否" : "是";
+      // this.ruleForm.resource = row.isActive == 0 ? "否" : "是";
+      this.radio = row.isActive + "";
+      console.log(this.radio);
 
       this.support = row.foodId; //食材一ID
       this.editor = row.foodId1; //食材二ID
@@ -362,7 +369,8 @@ export default {
           foodId: this.support, //食材1
           foodId1: this.editor, //食材2
           reason: this.ruleForm.desc, //不宜同事原因
-          isActive: this.ruleForm.resource == "是" ? 1 : 0 //是否
+          // isActive: this.ruleForm.resource == "是" ? 1 : 0 //是否
+          isActive: this.radio
         })
         .then(res => {
           console.log(res);
@@ -379,6 +387,7 @@ export default {
     },
     //保存
     setlist(formName) {
+      console.log(this.radio);
       this.$refs[formName].validate(valid => {
         if (valid) {
           // alert('submit!');
@@ -388,7 +397,8 @@ export default {
               foodId: this.support, //食材1
               foodId1: this.editor, //食材2
               reason: this.ruleForm.desc, //不宜同事原因
-              isActive: this.ruleForm.resource == "是" ? 1 : 0 //是否
+              // isActive: this.ruleForm.resource == "是" ? 1 : 0 //是否
+              isActive: this.radio
             })
             .then(res => {
               console.log(res);
@@ -557,5 +567,10 @@ export default {
   margin-top: 20px;
   margin-right: 40px;
   margin-bottom: 60px;
+}
+.rolling {
+  width: 100%;
+  height: 300px;
+  overflow-y: auto;
 }
 </style>
