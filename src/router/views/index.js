@@ -166,4 +166,17 @@ export default [
       }
     ]
   },
+  {
+    path: "/recipeManager",
+    component: Layout,
+    redirect: "/recipeManager/auditRecipeConfirm",
+    children: [
+      {
+        path: "auditRecipeConfirm",
+        name: "确认审核",
+        component: () =>
+          import(/* webpackChunkName: "views" */  "@/views/recipeManager/auditRecipeConfirm")
+      }
+    ]
+  },
 ];
