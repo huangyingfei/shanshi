@@ -3,14 +3,14 @@ module.exports = {
   publicPath: "/",
   lintOnSave: true,
   productionSourceMap: false,
-  chainWebpack: (config) => {
+  chainWebpack: config => {
     //忽略的打包文件
     config.externals({
       vue: "Vue",
       "vue-router": "VueRouter",
       vuex: "Vuex",
       axios: "axios",
-      "element-ui": "ELEMENT",
+      "element-ui": "ELEMENT"
     });
     const entry = config.entry("app");
     entry.add("babel-polyfill").end();
@@ -23,16 +23,15 @@ module.exports = {
     proxy: {
       "/api": {
         //本地服务接口地址
-        target: "http://30.40.15.33", //公司
-        // target: "http://30.40.58.127", //公司
-        // target: "http://192.168.2.215", //家里
+        // target: "http://30.40.15.33", //公司
+        target: "http://192.168.2.215", //家里
         //远程演示服务地址,可用于直接启动项目
         // target: "https://saber.bladex.vip/api",
         ws: true,
         pathRewrite: {
-          "^/api": "/",
-        },
-      },
-    },
-  },
+          "^/api": "/"
+        }
+      }
+    }
+  }
 };

@@ -62,6 +62,7 @@
         border
         style="width: 100%"
         v-loading="loadFlag"
+        :element-loading-text="page_data.loadTxt"
         empty-text="没有数据~"
       >
         <el-table-column
@@ -332,6 +333,10 @@ export default {
       input: "",
       value: "",
       getDate: "", //提交日期
+      loadFlag: false, //加载flag
+      page_data: {
+        loadTxt: "请求列表中"
+      },
       tmquery: [], //表格
       mailto: [], //营养素含量
       active: [], //季节
@@ -409,7 +414,8 @@ export default {
           value: "3",
           label: "无需审核"
         }
-      ]
+      ],
+      timezone: "" //搜索时间
     };
   },
   beforeMount() {
@@ -420,12 +426,6 @@ export default {
   },
 
   methods: {
-    notEmpty() {
-      this.input = ""; //菜品名称
-      this.value = ""; //审核状态
-      this.editor = ""; //提交人
-      this.getDate = ""; //提交日期
-    },
     seecol(row) {
       this.flour = row.id;
 
@@ -518,16 +518,33 @@ export default {
       this.m_page.size = currSize;
       this.auditing();
     },
+    //清空
+    notEmpty() {
+      this.input = ""; //菜品名称
+      this.value = ""; //审核状态
+      this.editor = ""; //提交人
+      this.getDate = ""; //提交日期
+      this.timezone = "";
+      this.auditing();
+    },
+    //搜索
     searchStr() {
+      if (this.getDate) {
+        this.timezone = this.getDate;
+      } else {
+        this.getDate = "";
+      }
       this.auditing();
     },
     //获取表格数据
     auditing() {
+      this.loadFlag = true;
       this.$axios
         .get(
-          `api/blade-food/food/searchOrgFood?size=${this.m_page.size}&current=${this.m_page.number}&foodName=${this.input}&status=${this.value}&createTime=${this.getDate}`
+          `api/blade-food/food/searchOrgFood?size=${this.m_page.size}&current=${this.m_page.number}&foodName=${this.input}&status=${this.value}&createTime=${this.timezone}`
         )
         .then(res => {
+          this.loadFlag = false;
           // console.log(res);
           this.tmquery = res.data.data.records;
           this.m_page.totalElements = res.data.data.total;

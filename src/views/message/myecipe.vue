@@ -18,7 +18,7 @@
         format="yyyy 年 MM 月 dd 日"
         value-format="yyyy-MM-dd"
       ></el-date-picker>
-      <span style="margin-right: 10px;margin-left: 25px;">人群名称:</span>
+      <!-- <span style="margin-right: 10px;margin-left: 25px;">人群名称:</span>
       <el-select v-model="wupload.block" placeholder="请选择">
         <el-option
           size="mini"
@@ -28,7 +28,7 @@
           :label="item.label"
           :value="item.value"
         ></el-option>
-      </el-select>
+      </el-select> -->
       <el-button
         @click="searchStr"
         size="small"
@@ -267,7 +267,8 @@ export default {
       callback: "",
       modeforms: [], //表格数据
       keydown: [],
-      radio: 3
+      radio: 3,
+      timezone: ""
     };
   },
   beforeMount() {
@@ -363,7 +364,12 @@ export default {
     //搜索
     searchStr() {
       // console.log(this.wupload.input);
-      console.log(this.wupload.getDate);
+      // console.log(this.wupload.input);
+      if (this.wupload.getDate) {
+        this.timezone = this.wupload.getDate;
+      } else {
+        this.timezone = "";
+      }
       this.generator();
     },
     //收藏
@@ -385,7 +391,9 @@ export default {
     notEmpty() {
       this.wupload.input = "";
       this.wupload.getDate = "";
-      this.wupload.block = "";
+      // this.wupload.block = "";
+      this.timezone = "";
+      this.generator();
     },
     //获取列表
     generator() {
@@ -393,7 +401,7 @@ export default {
       this.loadFlag = true;
       this.$axios
         .get(
-          `api/blade-food/recipe/page?size=${this.m_page.size}&current=${this.m_page.number}&ascs=id&searchType=0&recipeName=${this.wupload.input}&isUse=${this.empty}&isPub=${this.callback}&isBoard=${this.blicity}`,
+          `api/blade-food/recipe/page?size=${this.m_page.size}&current=${this.m_page.number}&ascs=id&searchType=0&recipeName=${this.wupload.input}&isUse=${this.empty}&isPub=${this.callback}&isBoard=${this.blicity}&createTimeStr=${this.timezone}`,
           {}
         )
         .then(res => {

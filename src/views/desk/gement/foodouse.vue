@@ -399,19 +399,14 @@
             width="120"
             align="center"
           ></el-table-column>
-          <el-table-column
-            prop="stats"
-            label="用量(g)"
-            width="120"
-            align="center"
-          >
+          <el-table-column prop="stats" label="用量(g)" align="center">
             <template slot-scope="scope">
               <el-input
-                style="width: 90px"
+                type="number"
+                style="width: 100px"
                 @blur="graph"
                 @input="hello(scope.row, scope.$index)"
                 v-model="scope.row.stats"
-                clearable
               >
               </el-input>
             </template>
@@ -1368,7 +1363,7 @@ export default {
           this.handler = res.data.data;
           console.log(this.handler);
           this.ruleForm.name = this.handler.dishName; //菜品名字
-          this.ruleForm.fooddata = this.handler.dishType; //菜品分类
+          this.ruleForm.fooddata = this.handler.dishPubType; //菜品分类
           // this.value1.push(this.handler.season); //季节
           this.handler.season.split(",").forEach(item => {
             this.value1.push(item);

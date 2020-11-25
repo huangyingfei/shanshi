@@ -47,8 +47,9 @@
         v-loading="loadFlag1"
         :data="tableData"
         border
+        max-height="400"
         :element-loading-text="page_data.loadTxt"
-        style="width: 100%"
+        style="width: 100%;height:100%"
       >
         <el-table-column label="序号" type="index" width="50" align="center">
         </el-table-column>
