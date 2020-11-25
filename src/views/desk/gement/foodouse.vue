@@ -8,8 +8,6 @@
         clearable
       ></el-input>
       <div class="import">
-        <!-- <el-button type="primary" plain size="mini">导入</el-button>
-        <el-button type="primary" plain size="mini">导出</el-button> -->
         <el-button @click="increasevalue(1)" type="primary" size="mini"
           >加分类</el-button
         >
