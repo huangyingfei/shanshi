@@ -6,6 +6,7 @@
            class="avue-sidebar--tip">{{$t('menuTip')}}
       </div>
       <el-menu unique-opened
+               :default-openeds="opened"
                :default-active="nowTagValue"
                mode="vertical"
                :show-timeout="200"
@@ -30,7 +31,10 @@
     components: {sidebarItem, logo},
     inject: ["index"],
     data() {
-      return {};
+
+      return {
+        opened:['/desk','/organ']
+      };
     },
     created() {
       this.index.openMenu(this.menuId);

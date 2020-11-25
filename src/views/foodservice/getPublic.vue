@@ -842,32 +842,39 @@
           ></el-tree>
         </div>
       </div> -->
-      <el-tabs v-model="angelfood" @tab-click="foodmatters">
-        <el-tab-pane label="公共食材库" name="third"></el-tab-pane>
-        <el-tab-pane label="个人食材库" name="fourth"></el-tab-pane>
-        <div class="block">
-          <p></p>
-          <el-tree
-            :data="data1"
-            node-key="id"
-            v-loading="loadFlag2"
-            :default-expand-all="false"
-            :expand-on-click-node="false"
-            @node-click="handleNodeClick"
-          >
-          </el-tree>
-        </div>
-      </el-tabs>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dateTime = false">取 消</el-button>
-        <el-button @click="dateTime = false" type="primary">确 定</el-button>
-      </div>
+      <!--<el-tabs v-model="angelfood" @tab-click="foodmatters">-->
+        <!--<el-tab-pane label="公共食材库" name="third"></el-tab-pane>-->
+        <!--<el-tab-pane label="个人食材库" name="fourth"></el-tab-pane>-->
+        <!--<div class="block">-->
+          <!--<p></p>-->
+          <!--<el-tree-->
+            <!--:data="data1"-->
+            <!--node-key="id"-->
+            <!--v-loading="loadFlag2"-->
+            <!--:default-expand-all="false"-->
+            <!--:expand-on-click-node="false"-->
+            <!--@node-click="handleNodeClick"-->
+          <!--&gt;-->
+          <!--</el-tree>-->
+        <!--</div>-->
+      <!--</el-tabs>-->
+        <foodbase @addevent="parent"></foodbase>
+      <!--<div slot="footer" class="dialog-footer">-->
+        <!--<el-button @click="dateTime = false">取 消</el-button>-->
+        <!--<el-button @click="dateTime = false" type="primary">确 定</el-button>-->
+      <!--</div>-->
     </el-dialog>
   </div>
 </template>
 
 <script>
+  import foodbase from './foodbase'
 export default {
+  components: {
+
+    foodbase
+
+  },
   data() {
     const data = [
       //树形结构
@@ -1008,6 +1015,10 @@ export default {
     this.Takeone(); //获取token
   },
   methods: {
+    parent(data){
+        console.log(data);
+        this.dateTime=false;
+    },
     Takeone() {
       let str = JSON.parse(localStorage.getItem("saber-token"));
       this.headerObj["Blade-Auth"] = `bearer ${str.content}`;

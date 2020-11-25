@@ -140,6 +140,13 @@ export default {
             prop: "birthDate",
             type: "date",
             span: 8,
+            rules: [
+              {
+                required: true,
+                message: "请输入出生日期",
+                trigger: "blur",
+              },
+            ],
             change: (v) => {
               if (v.value && typeof v.value == "string") {
                 let s = v.value.replace(/-/g, "/");
@@ -147,18 +154,18 @@ export default {
                 this.$set(
                   this.form,
                   "age",
-                  Math.ceil(
-                    (new Date().getTime() - date.getTime()) / 31536000000
-                  )
+
+                  ((new Date().getTime() - date.getTime()) / 31536000000).toFixed(2)
+
                 );
               }
               if (v.value && v.value != "" && typeof v.value != "string") {
                 this.$set(
                   this.form,
                   "age",
-                  Math.ceil(
-                    (new Date().getTime() - v.value.getTime()) / 31536000000
-                  )
+
+                  ((new Date().getTime() - v.value.getTime()) / 31536000000).toFixed(2)
+
                 );
               }
             },
@@ -972,11 +979,14 @@ export default {
   },
   methods: {
     validateChildNo(rule, value, callback) {
-      if (value === "") {
+      if (value === ""||value=="undefined"||!value) {
         callback(new Error("请输入幼儿号"));
       } else if (this.form.classId === "") {
         callback(new Error("请选择班级"));
       } else {
+        if(value>=1000000000000000){
+          callback(new Error("幼儿号需在15位数以内"));
+        }
         let student = {};
         student["classId"] = this.form.classId;
         student["childNo"] = value;
@@ -1055,6 +1065,7 @@ export default {
           "display",
           false
         );
+
       }
       detail(this.$route.query.id).then((res) => {
         this.form = res.data.data;
@@ -1075,6 +1086,10 @@ export default {
         "display",
         false
       );
+      debugger
+      if(this.$route.query.selectClassId){
+        this.$set(this.form,"classId",this.$route.query.selectClassId+"")
+      }
     }
   },
 };

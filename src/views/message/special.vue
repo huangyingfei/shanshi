@@ -265,30 +265,32 @@
     },
     methods: {
       nodeClick(data){
+        let that=this;
         detailByPeopleId(data.id).then(res=>{
-          this.specialForm=res.data.data;
+          that.specialForm=res.data.data;
           let ids=res.data.data.ids;
+          debugger
           let people=[];
           ids.forEach(_=>{
             people.push(_.studentId)
           })
           // debugger
-          this.$set(this.specialForm,"people",people)
-          this.$set(this.morenData[0],"mealNum",!res.data.data.breakfast?undefined:res.data.data.breakfast)
-          this.$set(this.morenData[1],"mealNum",!res.data.data.breakfastSnack?undefined:res.data.data.breakfastSnack)
-          this.$set(this.morenData[2],"mealNum",!res.data.data.lunch?undefined:res.data.data.lunch)
-          this.$set(this.morenData[3],"mealNum",!res.data.data.lunchSnack?undefined:res.data.data.lunchSnack)
-          this.$set(this.morenData[4],"mealNum",!res.data.data.dinner?undefined:res.data.data.dinner)
-          this.$set(this.morenData[5],"mealNum",!res.data.data.dinnerSnack?undefined:res.data.data.dinnerSnack)
+          that.$set(that.specialForm,"people",people)
+          that.$set(that.morenData[0],"mealNum",!res.data.data.breakfast?undefined:res.data.data.breakfast)
+          that.$set(that.morenData[1],"mealNum",!res.data.data.breakfastSnack?undefined:res.data.data.breakfastSnack)
+          that.$set(that.morenData[2],"mealNum",!res.data.data.lunch?undefined:res.data.data.lunch)
+          that.$set(that.morenData[3],"mealNum",!res.data.data.lunchSnack?undefined:res.data.data.lunchSnack)
+          that.$set(that.morenData[4],"mealNum",!res.data.data.dinner?undefined:res.data.data.dinner)
+          that.$set(that.morenData[5],"mealNum",!res.data.data.dinnerSnack?undefined:res.data.data.dinnerSnack)
           if(res.data.data.defaultMeal){
             let defaultMeal =res.data.data.defaultMeal.split(",");
-            this.morenData.forEach(_=>{
-                this.$set(_,"mealCheck",false)
+            that.morenData.forEach(_=>{
+              that.$set(_,"mealCheck",false)
               })
             for(let i=0;i<defaultMeal.length;i++){
-              this.morenData.forEach(_=>{
+              that.morenData.forEach(_=>{
                 if(_.dicData[0].value==defaultMeal[i]){
-                  this.$set(_,"mealCheck",true)
+                  that.$set(_,"mealCheck",true)
                 }
               })
             }

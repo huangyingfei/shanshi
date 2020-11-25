@@ -1271,6 +1271,7 @@ document.oncontextmenu = function(){return false};
 
       let recipeCycles=[];
       let flag=false;
+
       this.datas.forEach(_=>{
         _.weeks.forEach(__=>{
           __.foods.forEach(___=>{
@@ -1294,7 +1295,7 @@ document.oncontextmenu = function(){return false};
                 dishId:___.id,
                 value:___.count,
                 year:this.year,
-                month:this.month,
+                month:__.week.date,
                 childrens:children
               })
             }

@@ -246,10 +246,6 @@ export default {
             type: "select",
             display: false,
             dicData: [
-              {
-                label: "已停用",
-                value: 1,
-              },
                {
                 label: "已删除",
                 value: 2,

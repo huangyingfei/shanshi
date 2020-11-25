@@ -340,7 +340,7 @@
       },
       handleRole() {
         if (this.selectionList.length !== 1) {
-          this.$message.warning("只能选择一条数据");
+          this.$message.warning("请选择至少一条数据");
           return;
         }
         this.menuTreeObj = [];

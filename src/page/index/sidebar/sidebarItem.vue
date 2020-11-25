@@ -1,7 +1,7 @@
 <template>
   <div class="menu-wrapper">
     <template v-for="item in menu" >
-      <el-menu-item  default-active="/desk"
+      <el-menu-item
         v-if="validatenull(item[childrenKey]) && vaildRoles(item)"
         :index="item[pathKey]"
         @click="open(item)"

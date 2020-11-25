@@ -98,15 +98,16 @@
             @on-load="onLoad"
           >
             <template slot="menuLeft">
-              <router-link to="/oprate/addStudent">
+              <!--<router-link  to="/oprate/addStudent?selectClassId="+selectClassId>-->
                 <el-button
                   type="el-button el-button--primary el-button--small"
                   size="small"
                   icon="el-icon-plus"
+                  @click="addStudent"
                 >
                   添加学生
                 </el-button>
-              </router-link>
+              <!--</router-link>-->
               <el-button
                 type="danger"
                 size="small"
@@ -142,10 +143,7 @@
                 type="text"
                 icon="el-icon-edit"
                 size="small"
-                @click.stop="
-                  leaveVisible = true;
-                  rowId = scope.row.id;
-                "
+                @click.stop="leaveSchool(scope)"
               >离校
               </el-button>
               <el-button
@@ -167,24 +165,25 @@
       width="30%"
       :before-close="handleClose"
     >
-      <el-row>
-        <el-col :span="5">离校原因</el-col>
-        <el-col :span="19">
-          <el-input v-model="leaveReason" placeholder="请输入内容"></el-input>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="5">离校时间</el-col>
-        <el-col :span="19">
-          <avue-date v-model="leaveDate" placeholder="请选择日期"></avue-date>
-        </el-col>
-      </el-row>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="cancel()">取 消</el-button>
-        <el-button type="primary" @click="handleUpdate(rowId, null, 2)"
-        >确 定</el-button
-        >
-      </span>
+      <avue-form :option="leaveOption" v-model="leaveData" @submit="handleUpdate(rowId,null,2)" @error="error"></avue-form>
+      <!--<el-row>-->
+        <!--<el-col :span="5">离校原因</el-col>-->
+        <!--<el-col :span="19">-->
+          <!--<el-input v-model="leaveReason" placeholder="请输入内容"></el-input>-->
+        <!--</el-col>-->
+      <!--</el-row>-->
+      <!--<el-row>-->
+        <!--<el-col :span="5">离校时间</el-col>-->
+        <!--<el-col :span="19">-->
+          <!--<avue-date v-model="leaveDate" placeholder="请选择日期"></avue-date>-->
+        <!--</el-col>-->
+      <!--</el-row>-->
+      <!--<span slot="footer" class="dialog-footer">-->
+        <!--<el-button @click="cancel()">取 消</el-button>-->
+        <!--<el-button type="primary" @click="handleUpdate(rowId, null, 2)"-->
+        <!--&gt;确 定</el-button-->
+        <!--&gt;-->
+      <!--</span>-->
     </el-dialog>
 
     <el-dialog
@@ -263,7 +262,34 @@
   export default {
     data() {
       return {
+        leaveData:{},
+        leaveOption:{
+          column:[
+            {
+              label:'离校原因',
+              prop:'leaveReason',
+              rules: [{
+                required: true,
+                message: "请输入离校原因",
+                trigger: "blur"
+              }],
+              span:24
+
+            }, {
+              label:'离校时间',
+              prop:'leaveDate',
+              type:"date",
+              rules: [{
+                required: true,
+                message: "请输入离校时间",
+                trigger: "blur"
+              }],
+              span:24
+            }
+          ]
+        },
         rowId: "",
+        rowName:'',
         leaveReason: "",
         leaveDate: "",
         outerVisible: false,
@@ -325,7 +351,8 @@
         },
         roleGrantList: [],
         roleTreeObj: [],
-        classId: "",
+        classId: "",//包括年级学校
+        selectClassId:'',//只有班级
         treeData: [],
         treeProps: {
           children: "children",
@@ -359,6 +386,12 @@
               prop: "name",
               search: true,
               display: false,
+            },
+            {
+              label: "班级名称",
+              prop: "className",
+              display: false,
+              width:100
             },
             {
               label: "性别",
@@ -503,7 +536,8 @@
     mounted() {
       this.initData();
       debugger
-      document.getElementById('boxTree').style.height= document.getElementById("boxCrud").offsetHeight+"px";
+      document.getElementById('boxTree').style.height=(document.body.clientHeight-215)+"px";
+        //document.getElementById("boxCrud").offsetHeight+"px";
     },
     methods: {
 
@@ -671,6 +705,10 @@
       },
       nodeClick(data) {
         this.classId = data.id;
+        debugger
+        if(data.classType&&data.classType==3){
+          this.selectClassId=data.id;
+        }
         this.page.currentPage = 1;
         this.onLoad(this.page);
       },
@@ -842,7 +880,7 @@
         })
           .then(() => {
             let rows = [];
-            rows.push({ id: row.id, isDelete: 1 });
+            rows.push({ id: row.id, isDelete: 1, leaveClassName:this.form.className });
             return removeStuId(rows);
           })
           .then(() => {
@@ -854,10 +892,13 @@
           });
       },
       handleView(row){
-        this.$router.push({ path: "/oprate/addStudent",query:{id:row.id,detailFlag:true,addView:true} });
+        this.$router.push({ path: "/oprate/addStudent",query:{id:row.id,detailFlag:true,addView:true } });
       },
       handleEdit(row) {
         this.$router.push({ path: "/oprate/addStudent", query: { id: row.id } });
+      },
+      addStudent(){
+        this.$router.push({ path: "/oprate/addStudent",query:{selectClassId: this.selectClassId} });
       },
       searchReset() {
         this.query = {};
@@ -877,15 +918,24 @@
         this.selectionList = [];
         this.$refs.crud.toggleSelection();
       },
+      leaveSchool(scope){
+        debugger
+        this.leaveVisible = true;
+        this.rowId = scope.row.id;
+        this.rowName=scope.row.className;
+        this.$set(this.leaveData,'leaveDate',new Date())
+      },
       handleUpdate(row, index, type) {
         // debugger;
         let rows = [];
         if (type == "2") {
+          debugger
           rows.push({
             id: row,
             isDelete: type,
-            leaveDate: formateDate(this.leaveDate, "yyyy-MM-dd"),
-            reason: this.leaveReason,
+            leaveDate: formateDate(this.leaveData.leaveDate, "yyyy-MM-dd"),
+            reason: this.leaveData.leaveReason,
+            leaveClassName:this.rowName
           });
           this.emptyDialog();
           removeStuId(rows).then((res) => {
@@ -897,7 +947,7 @@
           });
           this.leaveVisible = false;
         } else {
-          rows.push({ id: row.id, isDelete: type });
+          rows.push({ id: row.id, isDelete: type,leaveClassName:row.className });
           this.$confirm("是否确认毕业?", {
             confirmButtonText: "确定",
             cancelButtonText: "取消",
@@ -927,7 +977,7 @@
             let id = this.ids.split(",");
             let row = [];
             for (let i = 0; i < id.length; i++) {
-              row.push({ id: id[i], isDelete: 1 });
+              row.push({ id: id[i], isDelete: 1});
             }
             return removeStuId(row);
           })

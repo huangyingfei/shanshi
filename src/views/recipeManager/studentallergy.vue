@@ -19,13 +19,20 @@
                @refresh-change="refreshChange"
                @on-load="onLoad">
       <template slot="menuLeft">
-        <el-button type="danger"
-                   size="small"
-                   icon="el-icon-delete"
-                   plain
-                   v-if="permission.studentallergy_delete"
-                   @click="handleDelete">删 除
+        <el-button
+          type="el-button el-button--primary el-button--small"
+          size="small"
+          icon="el-icon-plus"
+          @click="handleAdd"
+        >
+          新增
         </el-button>
+        <el-button type="danger"
+                                size="small"
+                                icon="el-icon-delete"
+                                plain
+                                @click="handleDelete">删 除
+      </el-button>
       </template>
     </avue-crud>
   </basic-container>
@@ -58,6 +65,7 @@
           viewBtn: false,
           selection: true,
           dialogClickModal: false,
+          addBtn:false,
           column: [
             {
               label: "姓名",
@@ -123,7 +131,10 @@
                 required: true,
                 message: "请选择过敏食材",
                 trigger: "blur"
-              }]
+              }],
+              click(){
+                debugger
+              }
             },
             {
               label: "过敏症状",
@@ -213,6 +224,9 @@
               message: "操作成功!"
             });
           });
+      },
+      handleAdd(){
+       this.$router.push({ path: "/recipeManager/addstudenttallergy"});
       },
       handleDelete() {
         if (this.selectionList.length === 0) {
