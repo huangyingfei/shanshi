@@ -143,10 +143,8 @@
                 type="text"
                 icon="el-icon-edit"
                 size="small"
-                @click.stop="
-                  leaveVisible = true;
-                  rowId = scope.row.id;
-                "
+
+                @click.stop="leaveSchool(scope)"
               >离校
               </el-button>
               <el-button

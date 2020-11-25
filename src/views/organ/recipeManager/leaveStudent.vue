@@ -174,6 +174,7 @@ export default {
             label: "离校或毕业所在班级",
             prop: "leaveClassName",
             display: false,
+            width:100
           },
           {
             label: "离毕日期",

@@ -164,7 +164,7 @@ export default {
                   this.form,
                   "age",
 
-                    ((new Date().getTime() - date.getTime()) / 31536000000).toFixed(2)
+                  ((new Date().getTime() - v.value.getTime()) / 31536000000).toFixed(2)
 
                 );
               }
