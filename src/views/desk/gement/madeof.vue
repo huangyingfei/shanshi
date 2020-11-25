@@ -595,7 +595,7 @@ export default {
         desc1: "" //拒绝理由
       },
       rules: {
-        name: [{ required: true, message: "请输入活动名称", trigger: "blur" }],
+        name: [{ required: true, message: "请输入菜品名", trigger: "blur" }],
         fooddata: [
           { required: true, message: "请选择菜品分类", trigger: "change" }
         ]

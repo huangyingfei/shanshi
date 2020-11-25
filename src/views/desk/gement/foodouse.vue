@@ -668,7 +668,8 @@ export default {
       modify: "",
       editable: "1",
       fallen: "",
-      auto: ""
+      auto: "",
+      dptGross: "" //计算百分比
     };
   },
   computed: {
@@ -997,15 +998,15 @@ export default {
           //   console.log(res);
           this.inquired = res.data.data;
           console.log(this.inquired);
-          // if (this.inquired.nutritions) {
-          //   this.inquired.nutritions.forEach((item, index) => {
-          //     // console.log(item);
-          //     if (item.nutrientId == 101) {
-          //       this.officeonce[this.csListIndex].malloc = item.value;
-          //       this.officeonce[this.csListIndex].spring = item.value;
-          //     }
-          //   });
-          // }
+          if (this.inquired.nutritions) {
+            this.inquired.nutritions.forEach((item, index) => {
+              // console.log(item);
+              if (item.nutrientId == 101) {
+                this.officeonce[this.csListIndex].malloc = item.value;
+                this.officeonce[this.csListIndex].spring = item.value;
+              }
+            });
+          }
 
           //   this.getInput.cs = this.inquired.foodName; //食材名
           this.officeonce[this.csListIndex].id = this.inquired.id;
