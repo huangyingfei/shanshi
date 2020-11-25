@@ -1,28 +1,24 @@
 <template>
-  <div style="padding: 0px; height: 1080px">
-    <div
-      ref="contextmenuFood"
-      id="contextmenuFood"
-      class="el-popover el-popper el-popover--plain"
-      style="
-        display: none;
-        width: 200px;
-        height: 300px;
-        position: absolute;
-        top: 10px;
-        left: 10px;
-        z-index: 2064;
-      "
-      v-show="layershipu"
-      tabindex="0"
-      x-placement="bottom"
-    >
+  <div style="padding: 0px;">
+    <div ref="contextmenuFood"
+         id="contextmenuFood"
+         class="el-popover el-popper el-popover--plain"
+         style="display: none;
+                width: 200px;
+                height: 300px;
+                position: absolute;
+                top: 10px;
+                left: 10px;
+                z-index: 2064;"
+         v-show="layershipu"
+         tabindex="0"
+         x-placement="bottom">
       <div class="el-popover__title">{{ dragnode.name }}</div>
 
       <p>弹出菜单</p>
     </div>
     <!-- table-week start   -->
-    <el-table class="table-week" style="width: 100%" :data="datas" border fit>
+    <el-table class="table-week" :data="datas" border fit>
       <el-table-column align="center" width="100" fixed class-name="col-date3 colNoneBorder" >
         <template slot="header"> 菜品/食物 </template>
         <template slot-scope="scope">
@@ -33,8 +29,7 @@
       <el-table-column
         v-if="headers.find((p) => p.name == 'week1')"
         align="center"
-        width="400"
-      >
+        width="400">
         <template slot="header">
           <div class="">
             {{ headers.find((p) => p.name == "week1").lable }}({{
@@ -939,27 +934,51 @@
         </template>
       </el-table-column>
     </el-table>
+        <!-- 审核确认取消通过按钮 -->
+    <el-row  style="text-align: center; overflow: auto;">
+      <el-col :span="6">
+      </el-col>
+      <el-col :span="4">
+        <el-button @click="seekeys = false">取 消
+        </el-button>
+      </el-col>
+      <el-col :span="4">
+        <el-button
+          type="primary"
+          @click="restore(examine)">拒 绝
+        </el-button>
+      </el-col>
+      <el-col :span="4">
+        <el-button
+          type="primary"
+          @click="Disagree('ruleForm')">同 意
+        </el-button>
+      <el-col :span="6">
+      </el-col>
+      </el-col>
+
+    </el-row>
     <!-- table-week end   -->
     <!-- foods choice start-->
-    <el-dialog
+    <!-- <el-dialog
       :title="'选择食谱 / 菜品'"
       append-to-body
       :visible.sync="dialog_choice.opened"
       width="600px"
     >
       <foods-choice v-if="dialog_choice.opened" @change="onChoiceChange" />
-    </el-dialog>
+    </el-dialog> -->
     <!-- foods choice end -->
   </div>
 </template>
 <script>
-  import foodsChoice from "@/views/foods/components/foodschoice";
+  // import foodsChoice from "@/views/foods/components/foodschoice";
   // import {calRecipe} from "@/api/system/meals"
 export default {
   name: "foodsWeek",
-  components: {
-    foodsChoice,
-  },
+  // components: {
+  //   foodsChoice,
+  // },
   props: {
     // 表格头部
     headers: [],
@@ -1100,7 +1119,8 @@ export default {
   watch: {
     'datas':{
       handler(data){
-        
+        console.log('data-------------------------------------')
+        console.log(data)
         data.forEach(item=>{
           item.weeks.forEach(_=>{
             _.foods.forEach(__=>{
