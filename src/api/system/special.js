@@ -25,7 +25,7 @@ export const getClassStudent = () => {
 }
 export const detailByPeopleId = (id) => {
   return request({
-    url: '/api/blade-food/specialpeople/detailByPeopleId',
+    url: '/api/blade-food/specialpeople/detail',
     method: 'get',
     params: {
       id,

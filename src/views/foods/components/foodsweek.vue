@@ -1281,39 +1281,67 @@ export default {
       foods["days"]=days;
       if(foods.recipeVals.length>0){
         calRecipe(foods).then(res=>{
-          if(res.data.success){
-            let resData=res.data.data;
-            let intake={};
-            let  data=[];
-            intake.mealSelect="推荐范围("+resData.recipeCalDTOList.gl.mealSelect+"%)"
-            that.intakeValue.forEach(_=>{
-              data.push({name:_.name,range:resData.recipeCalDTOList.gl.rang_min+"-"+resData.recipeCalDTOList[_.code].rang_max+"("+resData.recipeCalDTOList[_.code].recomRangMin+"-"+resData.recipeCalDTOList[_.code].recomRangMax+")",jl:resData.recipeCalDTOList[_.code].jl,grade:resData.recipeCalDTOList[_.code].grade,point:resData.recipeCalDTOList[_.code].point})
-            })
-            intake.data=data;
-            let nutrition=[];
-            that.nutritionValue.forEach(_=>{
-              nutrition.push({code:_.code,name:_.name,dris:resData.nutritionCalDTOList[_.code].dris,realIntake:resData.nutritionCalDTOList[_.code].realIntake,realPropor:resData.nutritionCalDTOList[_.code].realPropor,reqPropor:resData.nutritionCalDTOList[_.code].min+"-"+resData.nutritionCalDTOList[_.code].max,grade:resData.nutritionCalDTOList[_.code].grade,point:resData.nutritionCalDTOList[_.code].point})
-            })
-          //  debugger
+          if(res.data.success) {
+            let resData = res.data.data;
+            if (resData.nutritionCalDTOList) {
+              let intake = {};
+              let data = [];
+              intake.mealSelect = "推荐范围(" + resData.recipeCalDTOList.gl.mealSelect + "%)"
+              that.intakeValue.forEach(_ => {
+                data.push({
+                  name: _.name,
+                  range: resData.recipeCalDTOList.gl.rang_min + "-" + resData.recipeCalDTOList[_.code].rang_max + "(" + resData.recipeCalDTOList[_.code].recomRangMin + "-" + resData.recipeCalDTOList[_.code].recomRangMax + ")",
+                  jl: resData.recipeCalDTOList[_.code].jl,
+                  grade: resData.recipeCalDTOList[_.code].grade,
+                  point: resData.recipeCalDTOList[_.code].point
+                })
+              })
+              intake.data = data;
+              let nutrition = [];
+              that.nutritionValue.forEach(_ => {
+                nutrition.push({
+                  code: _.code,
+                  name: _.name,
+                  dris: resData.nutritionCalDTOList[_.code].dris,
+                  realIntake: resData.nutritionCalDTOList[_.code].realIntake,
+                  realPropor: resData.nutritionCalDTOList[_.code].realPropor,
+                  reqPropor: resData.nutritionCalDTOList[_.code].min + "-" + resData.nutritionCalDTOList[_.code].max,
+                  grade: resData.nutritionCalDTOList[_.code].grade,
+                  point: resData.nutritionCalDTOList[_.code].point
+                })
+              })
+              //  debugger
 
-            let power=[];
-            that.powerValue.forEach(_=>{
-              power.push({name:_.name,req:resData.powerCalDTOList[_.code].min+"-"+resData.powerCalDTOList[_.code].min,real:resData.powerCalDTOList[_.code].real,grade:resData.powerCalDTOList[_.code].grade,point:resData.powerCalDTOList[_.code].point})
-            })
+              let power = [];
+              that.powerValue.forEach(_ => {
+                power.push({
+                  name: _.name,
+                  req: resData.powerCalDTOList[_.code].min + "-" + resData.powerCalDTOList[_.code].min,
+                  real: resData.powerCalDTOList[_.code].real,
+                  grade: resData.powerCalDTOList[_.code].grade,
+                  point: resData.powerCalDTOList[_.code].point
+                })
+              })
 
-            let protein=[];
-            protein=resData.proteinCalDTOList;
-            let sum=0;
-            resData.proteinCalDTOList.forEach(_=>{
-              sum+=parseFloat(_.real)
-            })
-            protein.forEach(_=>{
-              _["realSum"]=sum
-              _["req"]=">="+_.min
-            })
-            let meal=[];
-            meal=resData.mealTypeCalDTOList
-            that.$emit('childfn', Math.floor(that.getData(res.data.data) * 100) / 100,intake,nutrition,power,protein,meal);
+              let protein = [];
+              protein = resData.proteinCalDTOList;
+              let sum = 0;
+              resData.proteinCalDTOList.forEach(_ => {
+                sum += parseFloat(_.real)
+              })
+              protein.forEach(_ => {
+                _["realSum"] = sum
+                _["req"] = ">=" + _.min
+              })
+              let meal = [];
+              meal = resData.mealTypeCalDTOList
+              that.$emit('childfn', Math.floor(that.getData(res.data.data) * 100) / 100, intake, nutrition, power, protein, meal);
+            }
+          }else{
+            that.$message({
+              message: "食材营养素数据不全",
+              type: "info"
+            });
           }
         })
       }else{

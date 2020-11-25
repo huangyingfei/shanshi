@@ -140,6 +140,13 @@ export default {
             prop: "birthDate",
             type: "date",
             span: 8,
+            rules: [
+              {
+                required: true,
+                message: "请输入出生日期",
+                trigger: "blur",
+              },
+            ],
             change: (v) => {
               if (v.value && typeof v.value == "string") {
                 let s = v.value.replace(/-/g, "/");
@@ -147,18 +154,18 @@ export default {
                 this.$set(
                   this.form,
                   "age",
-                  Math.ceil(
-                    (new Date().getTime() - date.getTime()) / 31536000000
-                  )
+
+                    ((new Date().getTime() - date.getTime()) / 31536000000).toFixed(2)
+
                 );
               }
               if (v.value && v.value != "" && typeof v.value != "string") {
                 this.$set(
                   this.form,
                   "age",
-                  Math.ceil(
-                    (new Date().getTime() - v.value.getTime()) / 31536000000
-                  )
+
+                    ((new Date().getTime() - date.getTime()) / 31536000000).toFixed(2)
+
                 );
               }
             },
@@ -583,6 +590,7 @@ export default {
             prop: "oneBirthDate",
             type: "date",
             span: 8,
+
           },
           {
             label: "联系地址",
@@ -972,7 +980,7 @@ export default {
   },
   methods: {
     validateChildNo(rule, value, callback) {
-      if (value === "") {
+      if (value === ""||value=="undefined"||!value) {
         callback(new Error("请输入幼儿号"));
       } else if (this.form.classId === "") {
         callback(new Error("请选择班级"));
@@ -1075,6 +1083,9 @@ export default {
         "display",
         false
       );
+    }
+    if(this.$route.query.selectClassId){
+      this.$set(this.form,"classId",this.$route.query.selectClassId+"")
     }
   },
 };

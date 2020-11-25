@@ -20,13 +20,20 @@
       @refresh-change="refreshChange"
       @on-load="onLoad"
     >
+      <el-button
+        type="el-button el-button--primary el-button--small"
+        size="small"
+        icon="el-icon-plus"
+        @click="handleAdd"
+      >
+        新增
+      </el-button>
       <template slot="menuLeft">
         <el-button
           type="danger"
           size="small"
           icon="el-icon-delete"
           plain
-          v-if="permission.studentallergy_delete"
           @click="handleDelete"
           >删 除
         </el-button>
@@ -68,6 +75,7 @@ export default {
         border: true,
         index: true,
         viewBtn: false,
+        addBtn:false,
         selection: true,
         dialogClickModal: false,
         column: [
@@ -238,6 +246,9 @@ export default {
             message: "操作成功!"
           });
         });
+    },
+    handleAdd(){
+      this.$router.push({ path: "/recipeManager/addstudenttallergy"});
     },
     handleDelete() {
       if (this.selectionList.length === 0) {

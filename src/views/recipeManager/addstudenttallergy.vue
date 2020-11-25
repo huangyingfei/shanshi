@@ -8,14 +8,14 @@
       :visible.sync="dialog"
       :close-on-click-modal="false"
     >
-      <foodbase @addevent="parent"></foodbase>
+      <!--<foodbase @addevent="parent"></foodbase>-->
     </el-dialog>
   </basic-container>
 </template>
 
 <script>
   import {getList, getDetail, add, update, remove,getTree,getStudentClass} from "@/api/food/studentallergy";
-  import foodbase from "@/views/foodservice/foodbase";
+  // import foodbase from "@/views/foodservice/foodbase";
 
   import {
     save,
@@ -25,9 +25,9 @@
     getChildNo,
   } from "@/api/system/student";
   export default {
-    components: {
-      foodbase
-    },
+    // components: {
+    //   foodbase
+    // },
     data() {
       return {
         form: {

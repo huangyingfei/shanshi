@@ -166,4 +166,17 @@ export default [
       }
     ]
   },
+  {
+    path: "/recipeManager",
+    component: Layout,
+    redirect: "/recipeManager/addstudenttallergy",
+    children: [
+      {
+        path: "addstudenttallergy",
+        name: "过敏信息",
+        component: () =>
+          import(/* webpackChunkName: "views" */  "@/views/recipeManager/addstudenttallergy")
+      }
+    ]
+  },
 ];
