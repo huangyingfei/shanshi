@@ -15,14 +15,14 @@
 						type= "text"
 						icon= "el-icon-user-solid"
 						size= "small"
-						v-if= "scope.row.isPub!=0"
+						v-if="scope.row.status==0"
 						@click="seecol(scope.row)">审核
 					</el-button>
 					<el-button
 						type="text"
 						icon="el-icon-view"
 						size="small"
-						v-if="scope.row.isPub==0"
+						v-if="scope.row.status!=0"
 						@click="seecol(scope.row)">查看
 					</el-button>
 				</template>
@@ -129,7 +129,8 @@ export default {
 			this.$router.push({
 				path: "/recipeManager/auditRecipeConfirm",
 				query: {
-					userid: row.id
+					userid: row.id,
+					tenantId: row.tenantId
 				}
 			});
 		},

@@ -1,24 +1,7 @@
 <template>
   <div style="padding: 0px;">
-    <div ref="contextmenuFood"
-         id="contextmenuFood"
-         class="el-popover el-popper el-popover--plain"
-         style="display: none;
-                width: 200px;
-                height: 300px;
-                position: absolute;
-                top: 10px;
-                left: 10px;
-                z-index: 2064;"
-         v-show="layershipu"
-         tabindex="0"
-         x-placement="bottom">
-      <div class="el-popover__title">{{ dragnode.name }}</div>
-
-      <p>弹出菜单</p>
-    </div>
     <!-- table-week start   -->
-    <el-table class="table-week" :data="datas" border fit>
+    <el-table class="table-week" :data="datas" border max-height = "450px">
       <el-table-column align="center" width="100" fixed class-name="col-date3 colNoneBorder" >
         <template slot="header"> 菜品/食物 </template>
         <template slot-scope="scope">
@@ -36,13 +19,6 @@
               headers.find((p) => p.name == "week1").date
             }})
           </div>
-          <div class="">
-            <!--<el-checkbox-->
-              <!--label="设置为假期"-->
-              <!--:checked="headers.find((p) => p.name == 'week1').is_vacation"-->
-              <!--@change="onCheck('week1', $event)"-->
-            <!--&gt;</el-checkbox>-->
-          </div>
         </template>
         <template slot-scope="scope">
           <div
@@ -50,8 +26,7 @@
             @drop="drop($event, scope.row.id, 'week1')"
             @dragleave="ondragleave($event)"
             @dragenter="ondragenter($event)"
-            @dragover="ondragover($event)"
-          >
+            @dragover="ondragover($event)">
             <!-- table start -->
             <el-table
               class="table-foods"
@@ -69,41 +44,7 @@
                 align="left"
               ></el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
-                <template slot-scope="scope1">
-                  <div style="display: flex">
-                    <el-input
-                      style="flex: 1"
-                      v-model="scope1.row.count"
-                      v-if="!scope1.row.children"
-                      type="text"
-                      size="mini"
-                      placeholder="请输入内容"
-                    ></el-input>
-                    <el-input
-                      style="flex: 1"
-                      v-model="scope1.row.count"
-                      v-if="scope1.row.children"
-                      disabled
-                      type="text"
-                      size="mini"
-                      placeholder="请输入内容"
-                    ></el-input>
-                    <div style="width: 35px; text-algin: center">
-                      <el-link
-                        v-if="scope1.row.children"
-                        type="primary"
-                        @click="
-                          onRemove(
-                            scope.row.id,
-                            scope.row.weeks.find((p) => p.name == 'week1').id,
-                            scope1.row.id
-                          )
-                        "
-                        >移除</el-link
-                      >
-                    </div>
-                  </div>
-                </template>
+
               </el-table-column>
               <el-table-column label="图片" align="center">
                 <template slot-scope="scope1">
@@ -114,54 +55,15 @@
                     "
                     style="width: 100px; height: 100px; margin: 0 auto"
                   >
-                    <el-upload
-                      :multiple="false"
-                      :show-file-list="false"
-                      :action="upload_url"
-                      :on-change="
-                        onUploadImage(
-                          scope.row.id,
-                          scope.row.weeks.find((p) => p.name == 'week1').id,
-                          $event
-                        )
-                      "
-                    >
-                      <img
-                        v-if="
-                          scope.row.weeks.find((p) => p.name == 'week1').image
-                        "
-                        :src="
-                          scope.row.weeks.find((p) => p.name == 'week1').image
-                        "
-                        style="width: 100%; height: 100%"
-                      />
-                      <img
-                        v-if="
-                          !scope.row.weeks.find((p) => p.name == 'week1').image
-                        "
-                        :src="empty_image"
-                        style="width: 100%; height: 100%"
-                      />
-                    </el-upload>
+                    <el-image 
+                      style="width: 100px; height: 100px"
+                      :src="scope1.row.url" >
+                    </el-image>
                   </div>
                 </template>
               </el-table-column>
             </el-table>
             <!-- table end -->
-            <!--<div style="padding: 6px; background: #fff">-->
-              <!--<el-button-->
-                <!--type="primary"-->
-                <!--size="mini"-->
-                <!--plain-->
-                <!--@click="-->
-                  <!--onChoice(-->
-                    <!--scope.row.id,-->
-                    <!--scope.row.weeks.find((p) => p.name == 'week1').id-->
-                  <!--)-->
-                <!--"-->
-                <!--&gt;选择食谱/菜品</el-button-->
-              <!--&gt;-->
-            <!--</div>-->
           </div>
         </template>
       </el-table-column>
@@ -177,13 +79,6 @@
               headers.find((p) => p.name == "week2").date
             }})
           </div>
-          <!--<div class="">-->
-            <!--<el-checkbox-->
-              <!--label="设置为假期"-->
-              <!--:checked="headers.find((p) => p.name == 'week2').is_vacation"-->
-              <!--@change="onCheck('week2', $event)"-->
-            <!--&gt;</el-checkbox>-->
-          <!--</div>-->
         </template>
         <template slot-scope="scope">
           <div
@@ -210,41 +105,7 @@
                 align="left"
               ></el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
-                <template slot-scope="scope1">
-                  <div style="display: flex">
-                    <el-input
-                      style="flex: 1"
-                      v-model="scope1.row.count"
-                      v-if="!scope1.row.children"
-                      type="text"
-                      size="mini"
-                      placeholder="请输入内容"
-                    ></el-input>
-                    <el-input
-                      style="flex: 1"
-                      v-model="scope1.row.count"
-                      v-if="scope1.row.children"
-                      disabled
-                      type="text"
-                      size="mini"
-                      placeholder="请输入内容"
-                    ></el-input>
-                    <div style="width: 35px; text-algin: center">
-                      <el-link
-                        v-if="scope1.row.children"
-                        type="primary"
-                        @click="
-                          onRemove(
-                            scope.row.id,
-                            scope.row.weeks.find((p) => p.name == 'week2').id,
-                            scope1.row.id
-                          )
-                        "
-                        >移除</el-link
-                      >
-                    </div>
-                  </div>
-                </template>
+
               </el-table-column>
               <el-table-column label="图片" align="center">
                 <template slot-scope="scope1">
@@ -253,43 +114,17 @@
                       scope1.$index === 0 &&
                       scope.row.weeks.find((p) => p.name == 'week2')
                     "
-                    style="width: 100px; height: 100px; margin: 0 auto"
-                  >
-                    <img
-                      v-if="
-                        scope.row.weeks.find((p) => p.name == 'week2').image
-                      "
-                      :src="
-                        scope.row.weeks.find((p) => p.name == 'week2').image
-                      "
-                      style="width: 100%; height: 100%"
-                    />
-                    <img
-                      v-if="
-                        !scope.row.weeks.find((p) => p.name == 'week2').image
-                      "
-                      :src="empty_image"
-                      style="width: 100%; height: 100%"
-                    />
+                    style="width: 100px; height: 100px; margin: 0 auto">
+                    <el-image 
+                      style="width: 100px; height: 100px"
+                      :src="scope1.row.url" >
+                    </el-image>
+                  
                   </div>
                 </template>
               </el-table-column>
             </el-table>
             <!-- table end -->
-            <!--<div style="padding: 6px; background: #fff">-->
-              <!--<el-button-->
-                <!--type="primary"-->
-                <!--size="mini"-->
-                <!--plain-->
-                <!--@click="-->
-                  <!--onChoice(-->
-                    <!--scope.row.id,-->
-                    <!--scope.row.weeks.find((p) => p.name == 'week2').id-->
-                  <!--)-->
-                <!--"-->
-                <!--&gt;选择食谱/菜品</el-button-->
-              <!--&gt;-->
-            <!--</div>-->
           </div>
         </template>
       </el-table-column>
@@ -305,13 +140,6 @@
               headers.find((p) => p.name == "week3").date
             }})
           </div>
-          <!--<div class="">-->
-            <!--<el-checkbox-->
-              <!--label="设置为假期"-->
-              <!--:checked="headers.find((p) => p.name == 'week3').is_vacation"-->
-              <!--@change="onCheck('week3', $event)"-->
-            <!--&gt;</el-checkbox>-->
-          <!--</div>-->
         </template>
         <template slot-scope="scope">
           <div
@@ -338,41 +166,7 @@
                 align="left"
               ></el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
-                <template slot-scope="scope1">
-                  <div style="display: flex">
-                    <el-input
-                      style="flex: 1"
-                      v-model="scope1.row.count"
-                      v-if="!scope1.row.children"
-                      type="text"
-                      size="mini"
-                      placeholder="请输入内容"
-                    ></el-input>
-                    <el-input
-                      style="flex: 1"
-                      v-model="scope1.row.count"
-                      v-if="scope1.row.children"
-                      disabled
-                      type="text"
-                      size="mini"
-                      placeholder="请输入内容"
-                    ></el-input>
-                    <div style="width: 35px; text-algin: center">
-                      <el-link
-                        v-if="scope1.row.children"
-                        type="primary"
-                        @click="
-                          onRemove(
-                            scope.row.id,
-                            scope.row.weeks.find((p) => p.name == 'week3').id,
-                            scope1.row.id
-                          )
-                        "
-                        >移除</el-link
-                      >
-                    </div>
-                  </div>
-                </template>
+
               </el-table-column>
               <el-table-column label="图片" align="center">
                 <template slot-scope="scope1">
@@ -404,20 +198,6 @@
               </el-table-column>
             </el-table>
             <!-- table end -->
-            <!--<div style="padding: 6px; background: #fff">-->
-              <!--<el-button-->
-                <!--type="primary"-->
-                <!--size="mini"-->
-                <!--plain-->
-                <!--@click="-->
-                  <!--onChoice(-->
-                    <!--scope.row.id,-->
-                    <!--scope.row.weeks.find((p) => p.name == 'week3').id-->
-                  <!--)-->
-                <!--"-->
-                <!--&gt;选择食谱/菜品</el-button-->
-              <!--&gt;-->
-            <!--</div>-->
           </div>
         </template>
       </el-table-column>
@@ -433,13 +213,6 @@
               headers.find((p) => p.name == "week4").date
             }})
           </div>
-          <!--<div class="">-->
-            <!--<el-checkbox-->
-              <!--label="设置为假期"-->
-              <!--:checked="headers.find((p) => p.name == 'week4').is_vacation"-->
-              <!--@change="onCheck('week4', $event)"-->
-            <!--&gt;</el-checkbox>-->
-          <!--</div>-->
         </template>
         <template slot-scope="scope">
           <div
@@ -466,41 +239,7 @@
                 align="left"
               ></el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
-                <template slot-scope="scope1">
-                  <div style="display: flex">
-                    <el-input
-                      style="flex: 1"
-                      v-model="scope1.row.count"
-                      v-if="!scope1.row.children"
-                      type="text"
-                      size="mini"
-                      placeholder="请输入内容"
-                    ></el-input>
-                    <el-input
-                      style="flex: 1"
-                      v-model="scope1.row.count"
-                      v-if="scope1.row.children"
-                      disabled
-                      type="text"
-                      size="mini"
-                      placeholder="请输入内容"
-                    ></el-input>
-                    <div style="width: 35px; text-algin: center">
-                      <el-link
-                        v-if="scope1.row.children"
-                        type="primary"
-                        @click="
-                          onRemove(
-                            scope.row.id,
-                            scope.row.weeks.find((p) => p.name == 'week4').id,
-                            scope1.row.id
-                          )
-                        "
-                        >移除</el-link
-                      >
-                    </div>
-                  </div>
-                </template>
+
               </el-table-column>
               <el-table-column label="图片" align="center">
                 <template slot-scope="scope1">
@@ -532,20 +271,6 @@
               </el-table-column>
             </el-table>
             <!-- table end -->
-            <!--<div style="padding: 6px; background: #fff">-->
-              <!--<el-button-->
-                <!--type="primary"-->
-                <!--size="mini"-->
-                <!--plain-->
-                <!--@click="-->
-                  <!--onChoice(-->
-                    <!--scope.row.id,-->
-                    <!--scope.row.weeks.find((p) => p.name == 'week4').id-->
-                  <!--)-->
-                <!--"-->
-                <!--&gt;选择食谱/菜品</el-button-->
-              <!--&gt;-->
-            <!--</div>-->
           </div>
         </template>
       </el-table-column>
@@ -561,13 +286,6 @@
               headers.find((p) => p.name == "week5").date
             }})
           </div>
-          <!--<div class="">-->
-            <!--<el-checkbox-->
-              <!--label="设置为假期"-->
-              <!--:checked="headers.find((p) => p.name == 'week5').is_vacation"-->
-              <!--@change="onCheck('week5', $event)"-->
-            <!--&gt;</el-checkbox>-->
-          <!--</div>-->
         </template>
         <template slot-scope="scope">
           <div
@@ -594,41 +312,7 @@
                 align="left"
               ></el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
-                <template slot-scope="scope1">
-                  <div style="display: flex">
-                    <el-input
-                      style="flex: 1"
-                      v-model="scope1.row.count"
-                      v-if="!scope1.row.children"
-                      type="text"
-                      size="mini"
-                      placeholder="请输入内容"
-                    ></el-input>
-                    <el-input
-                      style="flex: 1"
-                      v-model="scope1.row.count"
-                      v-if="scope1.row.children"
-                      disabled
-                      type="text"
-                      size="mini"
-                      placeholder="请输入内容"
-                    ></el-input>
-                    <div style="width: 35px; text-algin: center">
-                      <el-link
-                        v-if="scope1.row.children"
-                        type="primary"
-                        @click="
-                          onRemove(
-                            scope.row.id,
-                            scope.row.weeks.find((p) => p.name == 'week5').id,
-                            scope1.row.id
-                          )
-                        "
-                        >移除</el-link
-                      >
-                    </div>
-                  </div>
-                </template>
+
               </el-table-column>
               <el-table-column label="图片" align="center">
                 <template slot-scope="scope1">
@@ -660,20 +344,6 @@
               </el-table-column>
             </el-table>
             <!-- table end -->
-            <!--<div style="padding: 6px; background: #fff">-->
-              <!--<el-button-->
-                <!--type="primary"-->
-                <!--size="mini"-->
-                <!--plain-->
-                <!--@click="-->
-                  <!--onChoice(-->
-                    <!--scope.row.id,-->
-                    <!--scope.row.weeks.find((p) => p.name == 'week5').id-->
-                  <!--)-->
-                <!--"-->
-                <!--&gt;选择食谱/菜品</el-button-->
-              <!--&gt;-->
-            <!--</div>-->
           </div>
         </template>
       </el-table-column>
@@ -689,13 +359,6 @@
               headers.find((p) => p.name == "week6").date
             }})
           </div>
-          <!--<div class="">-->
-            <!--<el-checkbox-->
-              <!--label="设置为假期"-->
-              <!--:checked="headers.find((p) => p.name == 'week6').is_vacation"-->
-              <!--@change="onCheck('week6', $event)"-->
-            <!--&gt;</el-checkbox>-->
-          <!--</div>-->
         </template>
         <template slot-scope="scope">
           <div
@@ -722,41 +385,7 @@
                 align="left"
               ></el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
-                <template slot-scope="scope1">
-                  <div style="display: flex">
-                    <el-input
-                      style="flex: 1"
-                      v-model="scope1.row.count"
-                      v-if="!scope1.row.children"
-                      type="text"
-                      size="mini"
-                      placeholder="请输入内容"
-                    ></el-input>
-                    <el-input
-                      style="flex: 1"
-                      v-model="scope1.row.count"
-                      v-if="scope1.row.children"
-                      disabled
-                      type="text"
-                      size="mini"
-                      placeholder="请输入内容"
-                    ></el-input>
-                    <div style="width: 35px; text-algin: center">
-                      <el-link
-                        v-if="scope1.row.children"
-                        type="primary"
-                        @click="
-                          onRemove(
-                            scope.row.id,
-                            scope.row.weeks.find((p) => p.name == 'week6').id,
-                            scope1.row.id
-                          )
-                        "
-                        >移除</el-link
-                      >
-                    </div>
-                  </div>
-                </template>
+
               </el-table-column>
               <el-table-column label="图片" align="center">
                 <template slot-scope="scope1">
@@ -788,20 +417,7 @@
               </el-table-column>
             </el-table>
             <!-- table end -->
-            <!--<div style="padding: 6px; background: #fff">-->
-              <!--<el-button-->
-                <!--type="primary"-->
-                <!--size="mini"-->
-                <!--plain-->
-                <!--@click="-->
-                  <!--onChoice(-->
-                    <!--scope.row.id,-->
-                    <!--scope.row.weeks.find((p) => p.name == 'week6').id-->
-                  <!--)-->
-                <!--"-->
-                <!--&gt;选择食谱/菜品</el-button-->
-              <!--&gt;-->
-            <!--</div>-->
+
           </div>
         </template>
       </el-table-column>
@@ -817,13 +433,7 @@
               headers.find((p) => p.name == "week7").date
             }})
           </div>
-          <!--<div class="">-->
-            <!--<el-checkbox-->
-              <!--label="设置为假期"-->
-              <!--:checked="headers.find((p) => p.name == 'week7').is_vacation"-->
-              <!--@change="onCheck('week7', $event)"-->
-            <!--&gt;</el-checkbox>-->
-          <!--</div>-->
+
         </template>
         <template slot-scope="scope">
           <div
@@ -833,152 +443,20 @@
             @dragenter="ondragenter($event)"
             @dragover="ondragover($event)"
           >
-            <!-- table start -->
-            <el-table
-              class="table-foods"
-              style="width: 100%"
-              :data="scope.row.weeks.find((p) => p.name == 'week7').foods"
-              row-key="id"
-                @expand-change="expandchange"
-              :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-              :span-method="onTableSpanMethod"
-            >
-              <el-table-column
-                label="食品/食材"
-                prop="name"
-                header-align="center"
-                align="left"
-              ></el-table-column>
-              <el-table-column label="用量(g)" prop="count" align="center">
-                <template slot-scope="scope1">
-                  <div style="display: flex">
-                    <el-input
-                      style="flex: 1"
-                      v-model="scope1.row.count"
-                      v-if="!scope1.row.children"
-                      type="text"
-                      size="mini"
-                      placeholder="请输入内容"
-                    ></el-input>
-                    <el-input
-                      style="flex: 1"
-                      v-model="scope1.row.count"
-                      v-if="scope1.row.children"
-                      disabled
-                      type="text"
-                      size="mini"
-                      placeholder="请输入内容"
-                    ></el-input>
-                    <div style="width: 35px; text-algin: center">
-                      <el-link
-                        v-if="scope1.row.children"
-                        type="primary"
-                        @click="
-                          onRemove(
-                            scope.row.id,
-                            scope.row.weeks.find((p) => p.name == 'week7').id,
-                            scope1.row.id
-                          )
-                        "
-                        >移除</el-link
-                      >
-                    </div>
-                  </div>
-                </template>
-              </el-table-column>
-              <el-table-column label="图片" align="center">
-                <template slot-scope="scope1">
-                  <div
-                    v-if="
-                      scope1.$index === 0 &&
-                      scope.row.weeks.find((p) => p.name == 'week7')
-                    "
-                    style="width: 100px; height: 100px; margin: 0 auto"
-                  >
-                    <img
-                      v-if="
-                        scope.row.weeks.find((p) => p.name == 'week7').image
-                      "
-                      :src="
-                        scope.row.weeks.find((p) => p.name == 'week7').image
-                      "
-                      style="width: 100%; height: 100%"
-                    />
-                    <img
-                      v-if="
-                        !scope.row.weeks.find((p) => p.name == 'week7').image
-                      "
-                      :src="empty_image"
-                      style="width: 100%; height: 100%"
-                    />
-                  </div>
-                </template>
-              </el-table-column>
-            </el-table>
-            <!-- table end -->
-            <!--<div style="padding: 6px; background: #fff">-->
-              <!--<el-button-->
-                <!--type="primary"-->
-                <!--size="mini"-->
-                <!--plain-->
-                <!--@click="-->
-                  <!--onChoice(-->
-                    <!--scope.row.id,-->
-                    <!--scope.row.weeks.find((p) => p.name == 'week7').id-->
-                  <!--)-->
-                <!--"-->
-                <!--&gt;选择食谱/菜品</el-button-->
-              <!--&gt;-->
-            <!--</div>-->
+
           </div>
         </template>
       </el-table-column>
     </el-table>
-        <!-- 审核确认取消通过按钮 -->
-    <el-row  style="text-align: center; overflow: auto;">
-      <el-col :span="6">
-      </el-col>
-      <el-col :span="4">
-        <el-button @click="seekeys = false">取 消
-        </el-button>
-      </el-col>
-      <el-col :span="4">
-        <el-button
-          type="primary"
-          @click="restore(examine)">拒 绝
-        </el-button>
-      </el-col>
-      <el-col :span="4">
-        <el-button
-          type="primary"
-          @click="Disagree('ruleForm')">同 意
-        </el-button>
-      <el-col :span="6">
-      </el-col>
-      </el-col>
-
-    </el-row>
     <!-- table-week end   -->
-    <!-- foods choice start-->
-    <!-- <el-dialog
-      :title="'选择食谱 / 菜品'"
-      append-to-body
-      :visible.sync="dialog_choice.opened"
-      width="600px"
-    >
-      <foods-choice v-if="dialog_choice.opened" @change="onChoiceChange" />
-    </el-dialog> -->
-    <!-- foods choice end -->
   </div>
 </template>
 <script>
-  // import foodsChoice from "@/views/foods/components/foodschoice";
-  // import {calRecipe} from "@/api/system/meals"
+import {calRecipe} from "@/api/recipeManager/auditRecipe.js"
+
 export default {
   name: "foodsWeek",
-  // components: {
-  //   foodsChoice,
-  // },
+
   props: {
     // 表格头部
     headers: [],
@@ -994,6 +472,7 @@ export default {
       default: 800,
     },
     crowd:'',
+    tenantId:'',
 
     dragnode: {},
   },
@@ -1115,31 +594,11 @@ export default {
   },
   // 计算属性computed,计算的是Name依赖的值,它不能计算在data中已经定义过的变量。
   computed: {},
-  // 当属性的值发生变化时，就会调用对应属性的方法，方法里面的形参对应的是属性的新值和旧值
-  watch: {
-    'datas':{
-      handler(data){
-        console.log('data-------------------------------------')
-        console.log(data)
-        data.forEach(item=>{
-          item.weeks.forEach(_=>{
-            _.foods.forEach(__=>{
-              let count=0;
-              __.children.forEach(___=>{
-                count+= parseInt(___.count?___.count:0)
-              })
-              this.$set(__,"count",count);
-            })
-          })
-        })
-        // this.getFoodScore();
-      },
-      deep:true,
-    }
-  },
   // 组件第一次加载
   mounted() {
     this.init();
+    console.log("this.datas")
+    console.log(this.datas)
   },
 
   methods: {
@@ -1192,7 +651,7 @@ export default {
                 return;
               }
             }
-          });
+          });getmealTypeData
         }
       });
     },
@@ -1252,144 +711,145 @@ export default {
         }
       });
       this.resizeExpendHeight();
-      // this.getFoodScore();
+      this.getFoodScore();
     },
     // //获取分数
-    // getFoodScore(){
-    //   this.dragnode.node={};
-    //   let day=[0,0,0,0,0,0,0]
-    //   let days=0;
-    //   let foods={}
-    //   let mealTypes=[]
-    //   foods["peopleId"]=this.crowd;
-    //   let recipeVals=[];
-    //   var that=this;
-    //   this.datas.forEach(_=>{
-    //     let index=0
-    //     _.weeks.forEach(__=>{
-    //       __.foods.forEach(___=>{
-    //         if( ___.children){
-    //           day[index]+=1;
-    //           mealTypes.push(that.getmealTypeData(_.name));
-    //           ___.children.forEach(____=>{
-    //                recipeVals.push({
-    //                  foodId:____.id,
-    //                  val:____.count?____.count:0,
-    //                  mealType:that.getmealTypeData(_.name),
-    //                  week:__.name.slice(4)
-    //                })
-    //           })
-    //         }
-    //       })
-    //       index++;
-    //
-    //     })
-    //   })
-    //   if(mealTypes.length>0){
-    //     let obj=Array.from(new Set(mealTypes))
-    //     let resultObj="";
-    //     for(let i=0;i<obj.length;i++){
-    //       resultObj+=obj[i]+","
-    //     }
-    //     foods["mealTypes"]=resultObj.substring(0,resultObj.length-1)
-    //   }
-    //   for(let i=0;i<day.length;i++){
-    //     if(day[i]>0){
-    //       days++;
-    //     }
-    //   }
-    //   foods["recipeVals"]=recipeVals
-    //   foods["days"]=days;
-    //   if(foods.recipeVals.length>0){
-    //     calRecipe(foods).then(res=>{
-    //       if(res.data.success){
-    //         let resData=res.data.data;
-    //         let intake={};
-    //         let  data=[];
-    //         intake.mealSelect="推荐范围("+resData.recipeCalDTOList.gl.mealSelect+"%)"
-    //         that.intakeValue.forEach(_=>{
-    //           data.push({name:_.name,range:resData.recipeCalDTOList.gl.rang_min+"-"+resData.recipeCalDTOList[_.code].rang_max+"("+resData.recipeCalDTOList[_.code].recomRangMin+"-"+resData.recipeCalDTOList[_.code].recomRangMax+")",jl:resData.recipeCalDTOList[_.code].jl,grade:resData.recipeCalDTOList[_.code].grade,point:resData.recipeCalDTOList[_.code].point})
-    //         })
-    //         intake.data=data;
-    //         let nutrition=[];
-    //         that.nutritionValue.forEach(_=>{
-    //           nutrition.push({code:_.code,name:_.name,dris:resData.nutritionCalDTOList[_.code].dris,realIntake:resData.nutritionCalDTOList[_.code].realIntake,realPropor:resData.nutritionCalDTOList[_.code].realPropor,reqPropor:resData.nutritionCalDTOList[_.code].min+"-"+resData.nutritionCalDTOList[_.code].max,grade:resData.nutritionCalDTOList[_.code].grade,point:resData.nutritionCalDTOList[_.code].point})
-    //         })
-    //       //  debugger
-    //
-    //         let power=[];
-    //         that.powerValue.forEach(_=>{
-    //           power.push({name:_.name,req:resData.powerCalDTOList[_.code].min+"-"+resData.powerCalDTOList[_.code].min,real:resData.powerCalDTOList[_.code].real,grade:resData.powerCalDTOList[_.code].grade,point:resData.powerCalDTOList[_.code].point})
-    //         })
-    //
-    //         let protein=[];
-    //         protein=resData.proteinCalDTOList;
-    //         let sum=0;
-    //         resData.proteinCalDTOList.forEach(_=>{
-    //           sum+=parseFloat(_.real)
-    //         })
-    //         protein.forEach(_=>{
-    //           _["realSum"]=sum
-    //           _["req"]=">="+_.min
-    //         })
-    //         let meal=[];
-    //         meal=resData.mealTypeCalDTOList
-    //         that.$emit('childfn', Math.floor(that.getData(res.data.data) * 100) / 100,intake,nutrition,power,protein,meal);
-    //       }
-    //     })
-    //   }else{
-    //     that.$emit('childfn', 0);
-    //   }
-    //
-    // },
+    getFoodScore(){
+      this.dragnode.node={};
+      let day=[0,0,0,0,0,0,0]
+      let days=0;
+      let foods={}
+      let mealTypes=[]
+      foods["peopleId"]=this.crowd;
+      let recipeVals=[];
+      var that=this;
+      this.datas.forEach(_=>{
+        let index=0
+        _.weeks.forEach(__=>{
+          __.foods.forEach(___=>{
+            if( ___.children){
+              day[index]+=1;
+              mealTypes.push(that.getmealTypeData(_.name));
+              ___.children.forEach(____=>{
+                   recipeVals.push({
+                     foodId:____.id,
+                     val:____.count?____.count:0,
+                     mealType:that.getmealTypeData(_.name),
+                     week:__.name.slice(4)
+                   })
+              })
+            }
+          })
+          index++;
+    
+        })
+      })
+      if(mealTypes.length>0){
+        let obj=Array.from(new Set(mealTypes))
+        let resultObj="";
+        for(let i=0;i<obj.length;i++){
+          resultObj+=obj[i]+","
+        }
+        foods["mealTypes"]=resultObj.substring(0,resultObj.length-1)
+      }
+      for(let i=0;i<day.length;i++){
+        if(day[i]>0){
+          days++;
+        }
+      }
+      foods["recipeVals"]=recipeVals
+      foods["days"]=days;
+      foods["tenantId"]=this.tenantId
+      if(foods.recipeVals.length>0){
+        calRecipe(foods).then(res=>{
+          if(res.data.success){
+            let resData=res.data.data;
+            let intake={};
+            let  data=[];
+            intake.mealSelect="推荐范围("+resData.recipeCalDTOList.gl.mealSelect+"%)"
+            that.intakeValue.forEach(_=>{
+              data.push({name:_.name,range:resData.recipeCalDTOList.gl.rang_min+"-"+resData.recipeCalDTOList[_.code].rang_max+"("+resData.recipeCalDTOList[_.code].recomRangMin+"-"+resData.recipeCalDTOList[_.code].recomRangMax+")",jl:resData.recipeCalDTOList[_.code].jl,grade:resData.recipeCalDTOList[_.code].grade,point:resData.recipeCalDTOList[_.code].point})
+            })
+            intake.data=data;
+            let nutrition=[];
+            that.nutritionValue.forEach(_=>{
+              nutrition.push({code:_.code,name:_.name,dris:resData.nutritionCalDTOList[_.code].dris,realIntake:resData.nutritionCalDTOList[_.code].realIntake,realPropor:resData.nutritionCalDTOList[_.code].realPropor,reqPropor:resData.nutritionCalDTOList[_.code].min+"-"+resData.nutritionCalDTOList[_.code].max,grade:resData.nutritionCalDTOList[_.code].grade,point:resData.nutritionCalDTOList[_.code].point})
+            })
+          //  debugger
+    
+            let power=[];
+            that.powerValue.forEach(_=>{
+              power.push({name:_.name,req:resData.powerCalDTOList[_.code].min+"-"+resData.powerCalDTOList[_.code].min,real:resData.powerCalDTOList[_.code].real,grade:resData.powerCalDTOList[_.code].grade,point:resData.powerCalDTOList[_.code].point})
+            })
+    
+            let protein=[];
+            protein=resData.proteinCalDTOList;
+            let sum=0;
+            resData.proteinCalDTOList.forEach(_=>{
+              sum+=parseFloat(_.real)
+            })
+            protein.forEach(_=>{
+              _["realSum"]=sum
+              _["req"]=">="+_.min
+            })
+            let meal=[];
+            meal=resData.mealTypeCalDTOList
+            that.$emit('childfn', Math.floor(that.getData(res.data.data) * 100) / 100,intake,nutrition,power,protein,meal);
+          }
+        })
+      }else{
+        that.$emit('childfn', 0);
+      }
+    
+    },
 
-    // //处理数据
-    // getData(data){
-    //   let lastScore=100;
-    //   if(data.mealTypeCalDTOList&&data.mealTypeCalDTOList.length){
-    //     for(let i=0;i<data.mealTypeCalDTOList.length;i++){
-    //       lastScore= parseFloat(lastScore)-parseFloat(data.mealTypeCalDTOList[i].point);
-    //     }
-    //   }
-    //   if(data.nutritionCalDTOList){
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["101"].point);
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["102"].point);
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["201"].point);
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["204"].point);
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["301"].point);
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["303"].point);
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["401"].point);
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["405"].point);
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["406"].point);
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["415"].point);
-    //   }
-    //   if(data.powerCalDTOList){
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.powerCalDTOList["102"].point);
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.powerCalDTOList["103"].point);
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.powerCalDTOList["104"].point);
-    //   }
-    //   if(data.recipeCalDTOList){
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["dd"].point);
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["gl"].point);
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["jg"].point);
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["rzp"].point);
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["sc"].point);
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["sg"].point);
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["sl"].point);
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["sy"].point);
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["syy"].point);
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["xql:scp:dl"].point);
-    //   }
-    //   var real=0;
-    //   if(data.proteinCalDTOList&&data.proteinCalDTOList.length){
-    //     for(let i=0;i<data.proteinCalDTOList.length;i++){
-    //       real+=parseFloat(data.proteinCalDTOList[i].real);
-    //     }
-    //     var point =10/parseFloat(data.proteinCalDTOList[0].min)*(parseFloat(data.proteinCalDTOList[0].min)-real>0?parseFloat(data.proteinCalDTOList[0].min-real):parseFloat(real-data.proteinCalDTOList[0].min));
-    //     lastScore=lastScore-(point<10?point:10);
-    //   }
-    //   return lastScore;
-    // },
+    //处理数据
+    getData(data){
+      let lastScore=100;
+      if(data.mealTypeCalDTOList&&data.mealTypeCalDTOList.length){
+        for(let i=0;i<data.mealTypeCalDTOList.length;i++){
+          lastScore= parseFloat(lastScore)-parseFloat(data.mealTypeCalDTOList[i].point);
+        }
+      }
+      if(data.nutritionCalDTOList){
+        lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["101"].point);
+        lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["102"].point);
+        lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["201"].point);
+        lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["204"].point);
+        lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["301"].point);
+        lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["303"].point);
+        lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["401"].point);
+        lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["405"].point);
+        lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["406"].point);
+        lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["415"].point);
+      }
+      if(data.powerCalDTOList){
+        lastScore= parseFloat(lastScore)-parseFloat(data.powerCalDTOList["102"].point);
+        lastScore= parseFloat(lastScore)-parseFloat(data.powerCalDTOList["103"].point);
+        lastScore= parseFloat(lastScore)-parseFloat(data.powerCalDTOList["104"].point);
+      }
+      if(data.recipeCalDTOList){
+        lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["dd"].point);
+        lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["gl"].point);
+        lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["jg"].point);
+        lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["rzp"].point);
+        lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["sc"].point);
+        lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["sg"].point);
+        lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["sl"].point);
+        lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["sy"].point);
+        lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["syy"].point);
+        lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["xql:scp:dl"].point);
+      }
+      var real=0;
+      if(data.proteinCalDTOList&&data.proteinCalDTOList.length){
+        for(let i=0;i<data.proteinCalDTOList.length;i++){
+          real+=parseFloat(data.proteinCalDTOList[i].real);
+        }
+        var point =10/parseFloat(data.proteinCalDTOList[0].min)*(parseFloat(data.proteinCalDTOList[0].min)-real>0?parseFloat(data.proteinCalDTOList[0].min-real):parseFloat(real-data.proteinCalDTOList[0].min));
+        lastScore=lastScore-(point<10?point:10);
+      }
+      return lastScore;
+    },
     //新增菜谱
     appendDragFood(res, id, wk) {
       if (!res.id) return;
@@ -1564,8 +1024,5 @@ export default {
 .drapInActive .el-table th {
   background-color: red !important;
 }
-.colNoneBorder
-{
-  /* border-bottom: 1px solid transparent !important; */
-}
+
 </style>
