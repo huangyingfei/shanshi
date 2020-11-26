@@ -34,7 +34,7 @@ export const remove = (ids) => {
 
 export const add = (row) => {
   return request({
-    url: '/api/blade-food/studentallergy/submit',
+    url: '/api/blade-food/studentallergy/save',
     method: 'post',
     data: row
   })

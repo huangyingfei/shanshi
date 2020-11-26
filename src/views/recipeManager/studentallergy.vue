@@ -39,6 +39,17 @@
           >删 除
         </el-button>
       </template>
+
+
+      <!--<template slot-scope="scope" slot="menu">-->
+        <!--<el-button-->
+          <!--type="text"-->
+          <!--icon="el-icon-edit"-->
+          <!--size="small"-->
+          <!--@click.stop="handleEdit(scope.row)"-->
+        <!--&gt;编辑-->
+        <!--</el-button>-->
+      <!--</template>-->
     </avue-crud>
   </basic-container>
 </template>
@@ -77,6 +88,7 @@ export default {
         index: true,
         viewBtn: false,
         addBtn:false,
+        EditBtn:false,
         selection: true,
         dialogClickModal: false,
         column: [
@@ -247,6 +259,9 @@ export default {
             message: "操作成功!"
           });
         });
+    },
+    handleEdit(scope){
+      this.$router.push({ path: "/recipeManager/addstudenttallergy",query:{id:scope.id}});
     },
     handleAdd(){
       this.$router.push({ path: "/recipeManager/addstudenttallergy"});

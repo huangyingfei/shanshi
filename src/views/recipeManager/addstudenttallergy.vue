@@ -19,7 +19,7 @@
               :props="defaultProps"
               v-loading="loadFlag2"
               :default-expand-all="false"
-              @node-click="handleNodeClickPub"
+              @node-click="handleNodeClick"
             >
             </el-tree>
           </div>
@@ -34,13 +34,18 @@
               show-checkbox
               v-loading="loadFlag2"
               :default-expand-all="false"
-              @node-click="handleNodeClickPri"
+              @check-change="handleCheckChange"
             >
             </el-tree>
           </div>
         </el-tab-pane>
 
       </el-tabs>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialog = false">取 消</el-button>
+        <el-button @click="certain" type="primary">确 定</el-button>
+      </div>
     </el-dialog>
   </basic-container>
 </template>
@@ -56,9 +61,11 @@
           children: 'foods',
           label: 'foodName'
         },
+        loadFlag2:false,
         form: {
-          loadFlag2:false
+
         },
+        foodIdArr:[],
         dialog: false, //弹出框
         option: {
           detail: false,
@@ -121,18 +128,16 @@
             },
             {
               label: "过敏食材",
-              prop: "foodId",
+              prop: "foodIds",
               hide:true,
               span:24,
               rules: [{
                 required: true,
                 message: "请选择过敏食材",
-                trigger: "blur"
+                trigger: this.validatefoodIds
               }],
               click:()=>{
-                debugger
                 this.dialog=true;
-             //   this.$set(this.form,"dialog",true)
               }
             },
             {
@@ -162,48 +167,101 @@
       };
     },
     methods: {
-
-      handleNodeClickPub(){
+      validatefoodIds(rule, value, callback) {
+        debugger
+        if (value === ""||value=="undefined"||!value) {
+          callback(new Error("请选择过敏食材"));
+        }
+        callback();
+      },
+      certain(){
+        this.dialog = false;
+        if(this.form.foodIds!=''){
+          this.$set(this.form,'foodIds',this.form.foodIds.substring(0,this.form.foodIds.length-1))
+        }
 
       },
-      handleNodeClickPri(){
-
+      handleCheckChange(data, checked, indeterminate) {
+        debugger
+        if(checked&&!data.foods){
+          let flag=false;
+          for(let i=0;i<this.foodIdArr.length;i++){
+            if(this.foodIdArr[i].foodId==data.id){
+              flag=true;
+            }
+          }
+          if(!flag){
+             this.foodIdArr.push({foodId:data.id})
+              let foodIds=this.form.foodIds;
+              foodIds+=data.foodName+","
+              this.$set( this.form,'foodIds',foodIds.substring(0,foodIds.length))
+          }
+        }else if(!data.foods){
+          let id='';
+          for(let i=0;i<this.foodIdArr.length;i++){
+            if(this.foodIdArr[i].foodId==data.id){
+              id=i;
+            }
+          }
+          if(id!=''){
+            this.foodIdArr.splice(id,1)
+            this.$set( this.form,'foodIds',this.form.foodIds.replace(","+data.foodName,""))
+          }
+        }
+        debugger
+        console.log(this.form.foodIds);
+        console.log(this.foodIdArr);
       },
+
       submit(form, done) {
-        add(form).then(() => {
-          this.onLoad(this.page);
+        let that=this;
+        let row={
+          studentId:this.form.studentId,
+          foods:this.foodIdArr,
+          symptom:this.form.symptom,
+          remark:this.form.remark
+        }
+        add(row).then(() => {
           this.$message({
             type: "success",
             message: "操作成功!"
           });
           done();
+          this.$router.push({ path: "/recipeManager/studentallergy" });
+
         }, error => {
           loading();
           window.console.log(error);
         });
+        this.foodIdArr=[];
+        this.$set(this.form,'foodIds','')
       },
 
     },
     mounted() {
+      this.foodIdArr=[];
       debugger
       if (this.$route.query.id) {
-
+        getDetail(this.$route.query.id).then(res => {
+          // this.form = res.data.data;
+        });
       }else{
-        getFoodByBaseId(0).then(res=>{
-          res.data.data.forEach(_=>{
-            _.foodName=_.typeName
-            _.disabled=true
-          })
-            this.foodDataPri=res.data.data;
-        })//机构
-        getFoodByBaseId(1).then(res=>{
-          res.data.data.forEach(_=>{
-            _.foodName=_.typeName
-            _.disabled=true
-          })
-          this.foodDataPub=res.data.data;
-        })//平台
+
       }
+      getFoodByBaseId(0).then(res=>{
+        res.data.data.forEach(_=>{
+          _.foodName=_.typeName
+          _.disabled=true
+        })
+        this.foodDataPri=res.data.data;
+      })//机构
+      getFoodByBaseId(1).then(res=>{
+        res.data.data.forEach(_=>{
+          _.foodName=_.typeName
+          _.disabled=true
+        })
+        this.foodDataPub=res.data.data;
+      })//平台
     }
   };
 </script>
