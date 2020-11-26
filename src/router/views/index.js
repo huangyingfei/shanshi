@@ -178,6 +178,9 @@ export default [
           import(/* webpackChunkName: "views" */  "@/views/recipeManager/auditRecipeConfirm")
       }
     ],
+  },{
+    path: "/recipeManager2",
+    component: Layout,
     redirect: "/recipeManager/addstudenttallergy",
     children: [
       {
