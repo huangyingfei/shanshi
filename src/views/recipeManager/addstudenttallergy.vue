@@ -8,29 +8,56 @@
       :visible.sync="dialog"
       :close-on-click-modal="false"
     >
-      <foodbase @addevent="parent"></foodbase>
+      <el-tabs v-model="angelfood" @tab-click="foodmatters">
+        <el-tab-pane label="公共食材库" name="third">
+          <div class="block">
+            <p></p>
+            <el-tree
+              :data="foodDataPub"
+              node-key="id"
+              show-checkbox
+              :props="defaultProps"
+              v-loading="loadFlag2"
+              :default-expand-all="false"
+              @node-click="handleNodeClickPub"
+            >
+            </el-tree>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="个人食材库" name="fourth">
+          <div class="block">
+            <p></p>
+            <el-tree
+              :data="foodDataPri"
+              node-key="id"
+              :props="defaultProps"
+              show-checkbox
+              v-loading="loadFlag2"
+              :default-expand-all="false"
+              @node-click="handleNodeClickPri"
+            >
+            </el-tree>
+          </div>
+        </el-tab-pane>
+
+      </el-tabs>
     </el-dialog>
   </basic-container>
 </template>
 
 <script>
-  import {getList, getDetail, add, update, remove,getTree,getStudentClass} from "@/api/food/studentallergy";
-  import foodbase from "@/views/foodservice/foodbase";
+  import {getList, getDetail, add, update, remove,getTree,getStudentClass,getFoodByBaseId} from "@/api/food/studentallergy";
 
-  import {
-    save,
-    detail,
-    getById,
-    updateStu,
-    getChildNo,
-  } from "@/api/system/student";
   export default {
-    components: {
-      foodbase
-    },
     data() {
       return {
+        angelfood: "fourth",
+        defaultProps:{
+          children: 'foods',
+          label: 'foodName'
+        },
         form: {
+          loadFlag2:false
         },
         dialog: false, //弹出框
         option: {
@@ -135,9 +162,12 @@
       };
     },
     methods: {
-      parent(data){
-        console.log(data);
-        this.dialog=false;
+
+      handleNodeClickPub(){
+
+      },
+      handleNodeClickPri(){
+
       },
       submit(form, done) {
         add(form).then(() => {
@@ -155,10 +185,24 @@
 
     },
     mounted() {
+      debugger
       if (this.$route.query.id) {
 
       }else{
-
+        getFoodByBaseId(0).then(res=>{
+          res.data.data.forEach(_=>{
+            _.foodName=_.typeName
+            _.disabled=true
+          })
+            this.foodDataPri=res.data.data;
+        })//机构
+        getFoodByBaseId(1).then(res=>{
+          res.data.data.forEach(_=>{
+            _.foodName=_.typeName
+            _.disabled=true
+          })
+          this.foodDataPub=res.data.data;
+        })//平台
       }
     }
   };

@@ -20,15 +20,16 @@
       @refresh-change="refreshChange"
       @on-load="onLoad"
     >
-      <el-button
-        type="el-button el-button--primary el-button--small"
-        size="small"
-        icon="el-icon-plus"
-        @click="handleAdd"
-      >
-        新增
-      </el-button>
+
       <template slot="menuLeft">
+        <el-button
+          type="el-button el-button--primary el-button--small"
+          size="small"
+          icon="el-icon-plus"
+          @click="handleAdd"
+        >
+          新增
+        </el-button>
         <el-button
           type="danger"
           size="small"

@@ -66,3 +66,12 @@ export const getStudentClass = (id) => {
     }
   })
 }
+
+export const getFoodByBaseId = (isPrivate) => {
+  return request({
+    url: '/api/blade-food/basetype/getFoodByBaseId?isPrivate='+isPrivate,
+    method: 'get',
+  })
+}
+
+
