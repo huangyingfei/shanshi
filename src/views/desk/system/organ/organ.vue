@@ -72,7 +72,7 @@
         </el-button>
           <el-button
           type="text"
-          icon="el-icon-circle-plus-outline"
+          icon="el-icon-edit"
           size="small"
           v-show="scope.row.status==0"
           @click.stop="handleStop(scope.row, scope.index)"
@@ -80,11 +80,19 @@
         </el-button>
          <el-button
           type="text"
-          icon="el-icon-circle-plus-outline"
+          icon="el-icon-edit"
           size="small"
           v-show="scope.row.status==1"
           @click.stop="handleStart(scope.row, scope.index)"
           >启用
+        </el-button>
+        <el-button
+          type="text"
+          icon="el-icon-delete"
+          size="small"
+          v-show="scope.row.status==1"
+          @click.stop="rowDel(scope.row, scope.index)"
+        >删除
         </el-button>
       </template>
 
@@ -154,7 +162,7 @@ export default {
     return {
       ableFlag:false,
       form: {
-        nutrientDisplay:false
+        // nutrientDisplay:false
       },
       region: [], //省市区
       regionDetail: "", //详细地址
@@ -188,7 +196,9 @@ export default {
         index: true,
         selection: true,
         viewBtn: true,
-        menuWidth: 400,
+        // menuWidth: 400,
+        delBtn:false,
+        menuWidth: 350,
         dialogWidth: 900,
         dialogClickModal: false,
         column: [
@@ -196,6 +206,7 @@ export default {
             label: "机构ID",
             prop: "tenantId",
             display: false,
+             width:150
           },
           {
             label: "机构名称",

@@ -177,6 +177,15 @@ export default [
         component: () =>
           import(/* webpackChunkName: "views" */  "@/views/recipeManager/auditRecipeConfirm")
       }
+    ],
+    redirect: "/recipeManager/addstudenttallergy",
+    children: [
+      {
+        path: "addstudenttallergy",
+        name: "过敏信息",
+        component: () =>
+          import(/* webpackChunkName: "views" */  "@/views/recipeManager/addstudenttallergy")
+      }
     ]
   },
-];
+]

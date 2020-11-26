@@ -997,7 +997,7 @@
                   dishId:___.id,
                   value:___.count,
                   year:this.year,
-                  month:this.month,
+                  month:__.week.date,
                   childrens:children
                 })
               }

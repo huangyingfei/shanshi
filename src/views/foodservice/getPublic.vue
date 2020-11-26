@@ -842,7 +842,7 @@
           ></el-tree>
         </div>
       </div> -->
-      <el-tabs v-model="angelfood" @tab-click="foodmatters">
+      <!-- <el-tabs v-model="angelfood" @tab-click="foodmatters">
         <el-tab-pane label="公共食材库" name="third"></el-tab-pane>
         <el-tab-pane label="个人食材库" name="fourth"></el-tab-pane>
         <div class="block">
@@ -857,7 +857,8 @@
           >
           </el-tree>
         </div>
-      </el-tabs>
+      </el-tabs> -->
+      <addition @child-event="perent"></addition>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dateTime = false">取 消</el-button>
         <el-button @click="dateTime = false" type="primary">确 定</el-button>
@@ -867,7 +868,11 @@
 </template>
 
 <script>
+import addition from "./foodbase";
 export default {
+  components: {
+    addition
+  },
   data() {
     const data = [
       //树形结构
@@ -1008,6 +1013,9 @@ export default {
     this.Takeone(); //获取token
   },
   methods: {
+    perent(data) {
+      console.log(data);
+    },
     Takeone() {
       let str = JSON.parse(localStorage.getItem("saber-token"));
       this.headerObj["Blade-Auth"] = `bearer ${str.content}`;

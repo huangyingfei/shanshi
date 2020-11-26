@@ -51,6 +51,7 @@
 import { getList,removeStuId } from "@/api/system/student";
 import { mapGetters } from "vuex";
 import { nation } from "@/api/tool/data";
+import { formateDate} from "@/api/tool/date";
 export default {
   data() {
     return {
@@ -94,7 +95,7 @@ export default {
         addBtn:false,
         column: [
           {
-            label: "学界",
+            label: "学级",
             prop: "educationalCircles",
             search: true,
             display: false,
@@ -173,6 +174,7 @@ export default {
             label: "离校或毕业所在班级",
             prop: "leaveClassName",
             display: false,
+            width:100
           },
           {
             label: "离毕日期",
@@ -245,13 +247,13 @@ export default {
     searchChange(params, done) {
         // debugger
         if(params.admissionDate){
-            params.admissionDateMin=params.admissionDate[0];
-            params.admissionDateMax=params.admissionDate[1];
+          params.admissionDateMin=formateDate(params.admissionDate[0], "yyyy-MM-dd HH:mm:ss")
+          params.admissionDateMax=formateDate(params.admissionDate[1], "yyyy-MM-dd HH:mm:ss")
             delete params.admissionDate
         }
           if(params.leaveDate){
-            params.leaveDateMin=params.leaveDate[0];
-            params.leaveDateMax=params.leaveDate[1];
+            params.leaveDateMin=formateDate(params.leaveDate[0], "yyyy-MM-dd HH:mm:ss")
+            params.leaveDateMax=formateDate(params.leaveDate[1], "yyyy-MM-dd HH:mm:ss")
             delete params.leaveDate
         }
       this.query = params;

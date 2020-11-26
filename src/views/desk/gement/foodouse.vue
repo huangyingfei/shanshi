@@ -3,13 +3,11 @@
     <div class="coffee">
       <el-input
         style="width: 250px; height: 35px;margin-left: 20px;margin-top: 10px;"
-        placeholder="请输入内容"
+        placeholder="输入关键字进行查询"
         v-model="filterText"
         clearable
       ></el-input>
       <div class="import">
-        <!-- <el-button type="primary" plain size="mini">导入</el-button>
-        <el-button type="primary" plain size="mini">导出</el-button> -->
         <el-button @click="increasevalue(1)" type="primary" size="mini"
           >加分类</el-button
         >
@@ -57,6 +55,7 @@
             v-model="valuepark1"
             :options="options"
             @change="gProvinces"
+            :props="{ checkStrictly: true }"
           ></el-cascader>
         </div>
         <div class="country2">
@@ -103,7 +102,6 @@
             :props="defaultProps"
             node-key="id"
             :default-expand-all="false"
-            :expand-on-click-node="false"
             @node-click="handleNodeClick1"
             :filter-node-method="filterNode"
             ref="tree"
@@ -142,7 +140,7 @@
                   size="mini"
                   @click="() => append(data)"
                 >
-                  常用
+                  设置常用
                 </el-button>
                 <el-button
                   type="text"
@@ -150,7 +148,7 @@
                   size="mini"
                   @click="() => insert(data)"
                 >
-                  不常用
+                  取消常用
                 </el-button>
                 <el-button
                   v-if="data.isPub == 0"
@@ -158,7 +156,7 @@
                   size="mini"
                   @click="() => multi(data)"
                 >
-                  隐藏
+                  取消公开
                 </el-button>
                 <el-button
                   v-if="data.isPub == 1"
@@ -166,7 +164,7 @@
                   size="mini"
                   @click="() => docs(data)"
                 >
-                  公开
+                  设置公开
                 </el-button>
                 <el-button
                   v-if="data.delete == 1"
@@ -198,7 +196,13 @@
         class="demo-ruleForm"
       >
         <el-form-item label="分类名称" prop="name">
-          <el-input style="width: 280px" v-model="increasered.name"></el-input>
+          <el-input
+            type="text"
+            maxlength="10"
+            show-word-limit
+            style="width: 280px"
+            v-model="increasered.name"
+          ></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -219,8 +223,8 @@
     </el-dialog>
     <!-- 结束 -->
     <div class="mation">
-      <div class="mationtxt">菜品信息</div>
       <div class="mationinput">
+        <div class="mationtxt">菜品信息</div>
         <el-form
           :model="ruleForm"
           :rules="rules"
@@ -315,198 +319,187 @@
             <el-switch v-model="ruleForm.delivery1"></el-switch>
           </el-form-item>
         </el-form>
+        <!-- 菜品所含食材信息 -->
+        <div class="mationtxt">菜品所含食材信息</div>
+        <div>
+          <el-button style="margin-left: 10px;" type="primary" @click="addLine"
+            >添加</el-button
+          >
+          <!-- <el-button @click="save">保存</el-button> -->
+          <el-table
+            :data="officeonce"
+            border
+            v-loading="loadFlag1"
+            show-summary
+            style="width: 100%"
+            :summary-method="getSummaries"
+          >
+            <el-table-column
+              v-if="show"
+              prop="id"
+              label="序号"
+              width="100"
+              align="center"
+            >
+            </el-table-column>
+            <el-table-column
+              v-if="show"
+              prop="frame"
+              label="分类ID "
+              width="100"
+              align="center"
+            >
+            </el-table-column>
+            <el-table-column label="食材名称" width="190" align="center">
+              <template slot-scope="scope">
+                <el-input
+                  style="width: 90px"
+                  v-model="scope.row.name"
+                  :disabled="true"
+                >
+                </el-input>
+                <el-button
+                  type="primary"
+                  size="small"
+                  style="   margin-left: 10px;"
+                  @click="columnEvent(scope.row, scope.$index)"
+                  plain
+                  >选择</el-button
+                >
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="address"
+              label="食材分类"
+              width="120"
+              align="center"
+            ></el-table-column>
+            <el-table-column prop="stats" label="用量(g)" align="center">
+              <template slot-scope="scope">
+                <el-input
+                  type="number"
+                  style="width: 100px"
+                  @blur="graph"
+                  @input="hello(scope.row, scope.$index)"
+                  v-model="scope.row.stats"
+                >
+                </el-input>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="spring"
+              label="能量"
+              width="120"
+              align="center"
+            ></el-table-column>
+            <el-table-column
+              prop="malloc"
+              label="能量(kcal)"
+              width="120"
+              align="center"
+            >
+              <template slot-scope="scope">
+                <!-- {{scope.row.malloc}} -->
+                <!-- <span v-if="!scope.row.stats">{{ scope.row.malloc }}</span>
+              <span v-else>{{
+                (scope.row.stats / 100) * scope.row.malloc
+              }}</span> -->
+                <el-input
+                  :disabled="true"
+                  style="width: 90px"
+                  v-model="scope.row.malloc"
+                  clearable
+                >
+                </el-input>
+              </template>
+            </el-table-column>
+
+            <!--操作格-->
+            <el-table-column label="操作" align="center">
+              <template slot-scope="scope">
+                <!-- <el-button type="text" size="small" style="margin-left: 10px"
+                >查看</el-button
+              > -->
+                <el-button
+                  type="text"
+                  size="small"
+                  style="margin-left: 10px"
+                  @click="handleDelete(scope.$index, scope.row)"
+                  >删除</el-button
+                >
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+        <!-- 菜品营养素信息 -->
+        <div class="mationtxt">菜品营养素信息</div>
+        <div class="saveas">
+          <el-table
+            :data="mailto"
+            max-height="400"
+            style="width: 99%; margin-bottom: 20px"
+            row-key="id"
+            v-loading="loadFlag"
+            :default-expand-all="true"
+            :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+          >
+            <el-table-column
+              prop="title"
+              label="营养素"
+              align="center"
+              width="200"
+            ></el-table-column>
+            <el-table-column
+              prop="unit"
+              label="单位"
+              width="180"
+              align="center"
+            ></el-table-column>
+
+            <el-table-column label="含量" align="center">
+              <template slot-scope="scope">
+                <el-input
+                  :disabled="true"
+                  v-model="scope.row.result"
+                  type="text"
+                  v-if="scope.row.level != 1 ? true : false"
+                  placeholder="请输入内容"
+                ></el-input>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
       </div>
-      <!-- 树形结构 -->
-      <el-dialog
-        title="添加菜品"
-        append-to-body
-        width="40%"
-        :visible.sync="dateTime"
-        :close-on-click-modal="false"
-      >
-        <div class="block">
+    </div>
+    <!-- 树形结构 -->
+    <el-dialog
+      title="添加菜品"
+      append-to-body
+      width="40%"
+      :visible.sync="dateTime"
+      :close-on-click-modal="false"
+    >
+      <div class="block">
+        <div class="rolling">
           <p></p>
           <el-tree
             :data="data1"
             node-key="id"
             :default-expand-all="false"
-            :expand-on-click-node="false"
             @node-click="handleNodeClick"
             :filter-node-method="filterNode"
             ref="tree"
           ></el-tree>
         </div>
-
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="dateTime = false">取 消</el-button>
-          <el-button @click="setlist" type="primary">确 定</el-button>
-          <!-- <el-button @click="setlist" type="primary">编辑 确 定</el-button> -->
-        </div>
-      </el-dialog>
-      <!-- 菜品所含食材信息 -->
-      <div class="mationtxt">菜品所含食材信息</div>
-      <div>
-        <el-button style="margin-left: 10px;" type="primary" @click="addLine"
-          >添加</el-button
-        >
-        <!-- <el-button @click="save">保存</el-button> -->
-        <el-table
-          :data="officeonce"
-          border
-          v-loading="loadFlag1"
-          show-summary
-          style="width: 100%"
-          max-height="300"
-          :summary-method="getSummaries"
-        >
-          <el-table-column
-            v-if="show"
-            prop="id"
-            label="序号"
-            width="100"
-            align="center"
-          >
-          </el-table-column>
-          <el-table-column
-            v-if="show"
-            prop="frame"
-            label="分类ID "
-            width="100"
-            align="center"
-          >
-          </el-table-column>
-          <el-table-column label="食品名称" width="190" align="center">
-            <template slot-scope="scope">
-              <el-input
-                style="width: 90px"
-                v-model="scope.row.name"
-                :disabled="true"
-              >
-              </el-input>
-              <el-button
-                type="primary"
-                size="small"
-                style="   margin-left: 10px;"
-                @click="columnEvent(scope.row, scope.$index)"
-                plain
-                >选择</el-button
-              >
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="address"
-            label="食品分类"
-            width="120"
-            align="center"
-          ></el-table-column>
-          <el-table-column prop="stats" label="用量(g)" align="center">
-            <template slot-scope="scope">
-              <el-input
-                type="number"
-                style="width: 100px"
-                @blur="graph"
-                @input="hello(scope.row, scope.$index)"
-                v-model="scope.row.stats"
-              >
-              </el-input>
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="spring"
-            label="能量"
-            width="120"
-            align="center"
-          ></el-table-column>
-          <el-table-column
-            prop="malloc"
-            label="能量(kcal)"
-            width="120"
-            align="center"
-          >
-            <template slot-scope="scope">
-              <!-- {{scope.row.malloc}} -->
-              <!-- <span v-if="!scope.row.stats">{{ scope.row.malloc }}</span>
-              <span v-else>{{
-                (scope.row.stats / 100) * scope.row.malloc
-              }}</span> -->
-              <el-input
-                :disabled="true"
-                style="width: 90px"
-                v-model="scope.row.malloc"
-                clearable
-              >
-              </el-input>
-            </template>
-          </el-table-column>
-
-          <!--操作格-->
-          <el-table-column label="操作" align="center">
-            <template slot-scope="scope">
-              <!-- <el-button type="text" size="small" style="margin-left: 10px"
-                >查看</el-button
-              > -->
-              <el-button
-                type="text"
-                size="small"
-                style="margin-left: 10px"
-                @click="handleDelete(scope.$index, scope.row)"
-                >删除</el-button
-              >
-            </template>
-          </el-table-column>
-        </el-table>
       </div>
-      <!-- 菜品营养素信息 -->
-      <div class="mationtxt">菜品营养素信息</div>
-      <div class="saveas">
-        <el-table
-          :data="mailto"
-          max-height="400"
-          style="width: 99%; margin-bottom: 20px"
-          row-key="id"
-          v-loading="loadFlag"
-          :default-expand-all="false"
-          :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-        >
-          <el-table-column
-            prop="title"
-            label="营养素"
-            align="center"
-            width="200"
-          ></el-table-column>
-          <el-table-column
-            prop="unit"
-            label="单位"
-            width="180"
-            align="center"
-          ></el-table-column>
 
-          <el-table-column label="含量" align="center">
-            <template slot-scope="scope">
-              <el-input
-                :disabled="true"
-                v-model="scope.row.result"
-                type="text"
-                v-if="scope.row.level != 1 ? true : false"
-                placeholder="请输入内容"
-              ></el-input>
-            </template>
-            <!-- v-if="scope.row.dients" -->
-          </el-table-column>
-        </el-table>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dateTime = false">取 消</el-button>
+        <el-button @click="setlist" type="primary">确 定</el-button>
+        <!-- <el-button @click="setlist" type="primary">编辑 确 定</el-button> -->
       </div>
-      <!-- <div style="text-align: center;">
-        <el-button @click="saveItem" type="primary" v-if="this.editable == 2"
-          >编辑保存</el-button
-        >
-        <el-button
-          @click="savefiles('ruleForm')"
-          type="primary"
-          v-if="this.editable == 1"
-          >保存并新增</el-button
-        >
-      </div> -->
-    </div>
+    </el-dialog>
+
     <div class="gmsave">
       <el-button @click="saveItem" type="primary" v-if="this.editable == 2"
         >编辑保存</el-button
@@ -675,7 +668,8 @@ export default {
       modify: "",
       editable: "1",
       fallen: "",
-      auto: ""
+      auto: "",
+      dptGross: "" //计算百分比
     };
   },
   computed: {
@@ -731,9 +725,20 @@ export default {
     //省市区查询
     gProvinces() {
       // console.log(this.valuepark1[1]);
-      if (this.valuepark1[1]) {
+      // if (this.valuepark1[1]) {
+      //   this.fallen = this.valuepark1[1];
+      // } else {
+      //   this.fallen = "";
+      // }
+      if (this.valuepark1.length == 1) {
+        this.fallen = this.valuepark1[0];
+        console.log(this.fallen);
+      }
+      if (this.valuepark1.length == 2) {
         this.fallen = this.valuepark1[1];
-      } else {
+        console.log(this.fallen);
+      }
+      if (!this.valuepark1.length) {
         this.fallen = "";
       }
 
@@ -871,21 +876,28 @@ export default {
       //     return false;
       //   }
       // });
-      this.$axios
-        .post(`api/blade-food/basetype/save`, {
-          typeName: this.increasered.name,
-          type: 2
-        })
-        .then(res => {
-          // console.log(res);
-          this.increase = false;
-          this.obtains();
-          this.muito();
-          this.$message({
-            message: "新增成功",
-            type: "success"
+      if (this.increasered.name != "") {
+        this.$axios
+          .post(`api/blade-food/basetype/save`, {
+            typeName: this.increasered.name,
+            type: 2
+          })
+          .then(res => {
+            // console.log(res);
+            this.increase = false;
+            this.obtains();
+            this.muito();
+            this.$message({
+              message: "新增成功",
+              type: "success"
+            });
           });
+      } else {
+        this.$message({
+          message: "分类名称未填",
+          type: "warning"
         });
+      }
     },
     fontName() {
       this.$axios
@@ -1353,8 +1365,8 @@ export default {
       // console.log(data);
       this.editable = index;
       this.auto = data.id;
-      this.valuepark.length = 0;
-      this.value1.length = 0;
+      this.valuepark = [];
+      this.value1 = [];
       // this.csListIndex = index;
       this.$axios
         .get(`api/blade-food/dish/dishDetail?id=${this.auto}`, {})
@@ -1365,17 +1377,36 @@ export default {
           this.ruleForm.name = this.handler.dishName; //菜品名字
           this.ruleForm.fooddata = this.handler.dishPubType; //菜品分类
           // this.value1.push(this.handler.season); //季节
-          this.handler.season.split(",").forEach(item => {
-            this.value1.push(item);
-          });
+          if (this.handler.season) {
+            this.handler.season.split(",").forEach(item => {
+              this.value1.push(item);
+            });
+          } else {
+            this.value1 = [];
+          }
+
           this.ruleForm.region = this.handler.function; //特点
           this.ruleForm.desc = this.handler.remark; //做法
 
-          let bar = [];
-          this.handler.provinces.split(",").forEach((item, i) => {
-            bar.push([item, this.handler.belongRegion.split(",")[i]]);
-          });
-          this.valuepark = bar;
+          // let bar = [];
+          // this.handler.provinces.split(",").forEach((item, i) => {
+          //   bar.push([item, this.handler.belongRegion.split(",")[i]]);
+          // });
+          // this.valuepark = bar;
+          if (this.handler.provinces) {
+            let bar = [];
+            this.handler.provinces.split(",").forEach((item, i) => {
+              if (item == this.handler.belongRegion.split(",")[i]) {
+                bar.push([item]);
+              } else {
+                bar.push([item, this.handler.belongRegion.split(",")[i]]);
+              }
+            });
+            this.valuepark = bar;
+            // console.log(this.valuepark);
+          } else {
+            this.valuepark = [];
+          }
           let picture = [];
           if (this.handler.pic) {
             picture[0] = {
@@ -1383,6 +1414,7 @@ export default {
             };
           }
           this.productImgs = picture;
+          this.dialogImageUrl = this.handler.pic;
           // console.log(this.valuepark);
           this.ruleForm.delivery1 = this.handler.isUse == 1 ? false : true; //常用
           this.ruleForm.delivery = this.handler.isPub == 1 ? false : true; //公开
@@ -1567,12 +1599,12 @@ export default {
 <style scoped>
 .notice {
   width: 100%;
-  height: 1400px;
+  height: 800px;
   background-color: #fff;
 }
 .coffee {
   width: 29%;
-  height: 1320px;
+  height: 700px;
   background-color: #fff;
   float: left;
   margin-left: -10px;
@@ -1580,7 +1612,7 @@ export default {
 }
 .mation {
   width: 70%;
-  height: 1320px;
+  height: 700px;
   background-color: #fff;
   float: left;
   /* margin-bottom: 40px; */
@@ -1652,7 +1684,7 @@ export default {
 .monly {
   width: 100%;
   height: 300px;
-
+  overflow-y: auto;
   margin-top: 10px;
 }
 .custom-tree-node {
@@ -1673,8 +1705,9 @@ export default {
 }
 .mationinput {
   width: 95%;
-  /* height: 700px; */
+  height: 700px;
   /* display: flex; */
+  overflow-y: auto;
   margin-left: 40px;
   margin-bottom: 20px;
 }
@@ -1692,5 +1725,10 @@ export default {
   line-height: 150px;
   margin-bottom: 40px;
   background-color: #fff;
+}
+.rolling {
+  width: 100%;
+  height: 300px;
+  overflow-y: auto;
 }
 </style>
