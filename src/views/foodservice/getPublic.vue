@@ -1015,6 +1015,28 @@ export default {
   methods: {
     perent(data) {
       console.log(data);
+      this.inquired = data;
+      if (this.inquired != "") {
+        this.inquired.nutritions.forEach((item, index) => {
+          // console.log(item);
+          if (item.nutrientId == 101) {
+            this.officeonce[this.csListIndex].malloc = item.value;
+            this.officeonce[this.csListIndex].spring = item.value;
+          }
+        });
+        //   this.getInput.cs = this.inquired.foodName; //食材名
+        this.officeonce[this.csListIndex].id = this.inquired.id;
+        this.officeonce[this.csListIndex].frame = this.inquired.foodType;
+        this.officeonce[this.csListIndex].name = this.inquired.foodName;
+        this.officeonce[this.csListIndex].address = this.inquired.foodTypeName;
+        // this.officeonce[this.csListIndex].name = this.inquired.foodName;
+        //   console.log(this.getInput);
+        this.temp.length = 0;
+        this.officeonce.forEach((item, i) => {
+          this.temp[i] = Number(item.malloc);
+        });
+        console.log(this.temp);
+      }
     },
     Takeone() {
       let str = JSON.parse(localStorage.getItem("saber-token"));

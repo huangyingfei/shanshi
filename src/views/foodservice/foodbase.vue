@@ -23,7 +23,8 @@ export default {
   data() {
     return {
       angelfood: "fourth",
-      loadFlag2: false
+      loadFlag2: false,
+      more: "0"
     };
   },
   beforeMount() {
@@ -51,6 +52,7 @@ export default {
 
           this.inquired = res.data.data;
           console.log(this.inquired);
+          7;
           if (this.inquired != null) {
             this.$emit("child-event", this.inquired);
           } else {
