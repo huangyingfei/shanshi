@@ -1100,6 +1100,7 @@ export default {
   watch: {
     'datas':{
       handler(data){
+        
         data.forEach(item=>{
           item.weeks.forEach(_=>{
             _.foods.forEach(__=>{
