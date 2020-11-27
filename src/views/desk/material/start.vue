@@ -114,6 +114,7 @@
             :default-expand-all="false"
             @node-click="handleNodeClick"
             :filter-node-method="filterNode"
+            ref="tree"
           >
             <span class="custom-tree-node" slot-scope="{ node, data }">
               <span>{{ node.label }}</span>
@@ -328,12 +329,12 @@
               :file-list="productImgs"
               :on-exceed="handleExceed"
               :on-preview="handlePictureCardPreview"
+              :on-change="handleChangePic"
               :before-upload="beforeAvatarUpload"
               :on-success="handleAvatarSuccess"
               :on-remove="handleRemove"
               :headers="headerObj"
             >
-              <!-- <img v-if="dialogImageUrl" :src="dialogImageUrl" class="avatar" /> -->
               <i class="el-icon-plus"></i>
             </el-upload>
             <span style="color: #e0e0e0; font-size: 11px"
@@ -1249,6 +1250,15 @@ export default {
       // this.imageUrl = URL.createObjectURL(file.raw);
       // this.imageUrl = res.data.link;
       console.log(this.dialogImageUrl);
+    },
+    handleChangePic(file, productImgs) {
+      console.log(file);
+      console.log(productImgs);
+      if (productImgs.length > 1) {
+        productImgs.splice(0, 1);
+        // this.productImgs = [productImgs[productImgs.length - 1].raw];
+        // console.log(1);
+      }
     },
     beforeAvatarUpload(file) {
       // const isJPG = file.type === "image/jpeg";

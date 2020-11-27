@@ -374,7 +374,12 @@
               width="120"
               align="center"
             ></el-table-column>
-            <el-table-column prop="stats" label="用量(g)" align="center">
+            <el-table-column
+              width="130"
+              prop="stats"
+              label="用量(g)"
+              align="center"
+            >
               <template slot-scope="scope">
                 <el-input
                   type="number"
@@ -388,13 +393,14 @@
             </el-table-column>
             <el-table-column
               prop="spring"
-              label="能量"
-              width="120"
+              label="能量(每百克)"
+              width="110"
               align="center"
             ></el-table-column>
+
             <el-table-column
               prop="malloc"
-              label="能量(kcal)"
+              label="能量(Kcal)"
               width="120"
               align="center"
             >
@@ -413,7 +419,14 @@
                 </el-input>
               </template>
             </el-table-column>
-
+            <el-table-column
+              v-if="show"
+              prop="fruits"
+              label="foodEat11"
+              width="120"
+              align="center"
+            >
+            </el-table-column>
             <!--操作格-->
             <el-table-column label="操作" align="center">
               <template slot-scope="scope">
@@ -612,7 +625,8 @@ export default {
           address: "", //食品分类
           stats: "", //用量
           spring: "", //能量
-          malloc: "" //能量kcal
+          malloc: "", //能量kcal
+          fruits: ""
         }
       ],
       temp: [],
@@ -669,7 +683,8 @@ export default {
       editable: "1",
       fallen: "",
       auto: "",
-      dptGross: "" //计算百分比
+      dptGross: [], //计算百分比
+      gross: ""
     };
   },
   computed: {
@@ -841,30 +856,38 @@ export default {
     //删除分类
     deleteMesh(data) {
       // let addid = `?id=${data.id}&type=2`;
-      this.$confirm("确认删除该菜品分类?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      })
-        .then(() => {
-          this.$axios
-            .post(`api/blade-food/basetype/remove`, {
-              id: data.id,
-              type: 2
-            })
-            .then(res => {
-              // console.log(res);
-              this.obtains();
-              this.muito();
-              this.$message.success("删除成功");
-            });
+      console.log(data);
+      if (data.children.length == 0) {
+        this.$confirm("确认删除该菜品分类?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
         })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
+          .then(() => {
+            this.$axios
+              .post(`api/blade-food/basetype/remove`, {
+                id: data.id,
+                type: 2
+              })
+              .then(res => {
+                // console.log(res);
+                this.obtains();
+                this.muito();
+                this.$message.success("删除成功");
+              });
+          })
+          .catch(() => {
+            this.$message({
+              type: "info",
+              message: "已取消删除"
+            });
           });
+      } else {
+        this.$message({
+          message: "该分类不能删除",
+          type: "warning"
         });
+      }
     },
     //增加分类
     palette() {
@@ -934,10 +957,10 @@ export default {
       const { columns, data } = param;
       const sums = [];
       columns.forEach((column, index) => {
-        // if (index === 0) {
-        //   sums[index] = '总价';
-        //   return;
-        // }
+        if (index === 0) {
+          sums[index] = "能量合计";
+          return;
+        }
         const values = data.map(item => Number(item[column.property]));
         if (
           !values.every(value => isNaN(value)) &&
@@ -971,16 +994,26 @@ export default {
       // row.malloc = (row.malloc / 100) * row.stats;
       // console.log(row.malloc);
       if (row.stats) {
-        console.log(this.temp[i]);
-        row.malloc = ((this.temp[i] / 100) * Number(row.stats)).toFixed(2);
+        console.log(this.temp[i]); //能量
+        // console.log(row.stats); //输入的用量
+        // console.log(row.fruits);
+        // row.malloc = ((this.temp[i] / 100) * Number(row.stats)).toFixed(2);
+
+        row.malloc = (
+          ((this.temp[i] / 100) * Number(row.stats) * row.fruits) /
+          100
+        ).toFixed(2);
+        //  console.log(this.gross);
         // console.log(row.malloc);
+        // row.malloc = (Number(this.gross) * Number(this.dptGross)) / 100;
+        console.log(row.malloc);
       } else {
         row.malloc = this.temp[i];
       }
     },
-    handleNodeClick1(data) {
-      console.log(data);
-    },
+    // handleNodeClick1(data) {
+    //   console.log(data);
+    // },
 
     //点击查看详情
     handleNodeClick(data) {
@@ -1009,15 +1042,20 @@ export default {
           }
 
           //   this.getInput.cs = this.inquired.foodName; //食材名
+          // this.dptGross = this.inquired.foodEat;
+          console.log(this.dptGross);
           this.officeonce[this.csListIndex].id = this.inquired.id;
           this.officeonce[this.csListIndex].frame = this.inquired.foodType;
           this.officeonce[this.csListIndex].name = this.inquired.foodName;
+          // this.officeonce[this.csListIndex].fr = this.inquired.foodEat;
           this.officeonce[
             this.csListIndex
           ].address = this.inquired.foodTypeName;
+          this.officeonce[this.csListIndex].fruits = this.inquired.foodEat;
           // this.officeonce[this.csListIndex].name = this.inquired.foodName;
           //   console.log(this.getInput);
           this.temp.length = 0;
+          console.log(this.officeonce);
           this.officeonce.forEach((item, i) => {
             this.temp[i] = Number(item.malloc);
           });
@@ -1033,7 +1071,8 @@ export default {
         address: "", //食品分类
         stats: "", //用量
         spring: "", //能量
-        malloc: "" //能量kcal
+        malloc: "", //能量kcal
+        fruits: ""
       };
       //添加新的行数
       this.officeonce.push(newValue);
@@ -1419,10 +1458,12 @@ export default {
           this.ruleForm.delivery1 = this.handler.isUse == 1 ? false : true; //常用
           this.ruleForm.delivery = this.handler.isPub == 1 ? false : true; //公开
           // this.toBack = this.handler.dishMxVos;
-          // console.log(this.toBack);
+          console.log(this.handler.dishMxVos);
           if (this.handler.dishMxVos) {
             let arr = [];
+            this.temp.length = 0;
             this.handler.dishMxVos.forEach((item, index) => {
+              this.temp[index] = Number(item.nutritionNlValue);
               // console.log(item);
               // this.officeonce[this.csListIndex].id = item.id;
               arr[index] = {
@@ -1432,7 +1473,8 @@ export default {
                 address: item.baseTypeName,
                 stats: item.value,
                 spring: item.nutritionNlValue,
-                malloc: item.nutritionNlValue
+                malloc: item.nutritionNlValue,
+                fruits: item.foodEat
               };
             });
             this.officeonce = arr;
@@ -1683,7 +1725,7 @@ export default {
 }
 .monly {
   width: 100%;
-  height: 300px;
+  height: 450px;
   overflow-y: auto;
   margin-top: 10px;
 }
