@@ -597,8 +597,7 @@ export default {
   // 组件第一次加载
   mounted() {
     this.init();
-    console.log("this.datas")
-    console.log(this.datas)
+
   },
 
   methods: {

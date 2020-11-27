@@ -158,7 +158,7 @@
       <el-col :span="4">
         <el-button
           type="primary"
-          @click="Disagree('ruleForm')">同 意
+          @click="auditRecipeConfirmAgree({status: 1})">同 意
         </el-button>
       <el-col :span="6">
       </el-col>
@@ -201,7 +201,7 @@
 <script>
   import foodsWeek from "@/views/recipeManager/auditRecipeConfirm/foodsWeek.vue";
   import showfoodsWeek from "@/views/foods/components/showfoodsweek";
-  import {getSpecialPeopleList,detail} from "@/api/recipeManager/auditRecipe.js"
+  import {getSpecialPeopleList,detail,auditRecipe} from "@/api/recipeManager/auditRecipe.js"
   import {mealList,getDishByBaseId,dishDetail,save,update,grantTree} from "@/api/system/meals"
   import nutrient from "@/views/foods/components/nutrient";
   import nutrientWithColor from "@/views/foods/components/nutrientwithcolor";
@@ -466,6 +466,7 @@
       ]
     };
   },
+  
   beforeMount() {},
   methods: {
     recipeNameShareSearchPub(recipeSelectPub,isUse){
@@ -502,33 +503,46 @@
       //   })
       // }
     },
-
-  openAuditRecipeBox() {
-    this.$prompt('请输入拒绝原因', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-    }).then(({ value }) => {
-      this.$message({
-        type: 'success',
-        message: '你的邮箱是: ' + value
+    auditRecipeConfirmAgree(auditSign){
+      debugger
+      let params = {
+        id: this.$route.query.userid,//食谱主键
+        ...auditSign      
+      }
+      auditRecipe(auditSign).then(res =>{
+        debugger
+        return res
+      })
+    },
+    
+    openAuditRecipeBox() {
+      this.$prompt('请输入拒绝原因', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        inputPattern: /\S/,
+        inputErrorMessage: '请输入拒绝原因'
+      }).then(({ value }) => {
+        auditRecipe({
+          id: this.id,
+          status: 2,       //1-审核通过 2-不通过 
+          refuseReason: value
+        }).then((res) =>{
+          console.log(res);
+        })
+      }).catch((err) => {
+      
       });
-    }).catch(() => {
-      this.$message({
-        type: 'info',
-        message: '取消输入'
-      });       
-    });
-  },    
-  mealLoad(id,name){
-    let that=this;
-    this.$confirm("请确定是否导入食谱："+name+"?", "提示", {
-      confirmButtonText: "确定",
-      cancelButtonText: "取消",
-      type: "warning"
-    }).then(()=>{
-      that.personMealhandleNodeClick(id,that)
-    })
-  },
+    },    
+    mealLoad(id,name){
+      let that=this;
+      this.$confirm("请确定是否导入食谱："+name+"?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(()=>{
+        that.personMealhandleNodeClick(id,that)
+      })
+    },
     //获取食谱列表数据
     personMealhandleNodeClick(id,that){
       detail(id).then(res=>{
@@ -591,8 +605,6 @@
           that.$set(__,"foods",foods);
         })
       })
-      console.log(datas!="showDatas")
-      console.log("datas!=showDatas")
       if(datas!="showDatas"){
         
         this.$refs.child.getFoodScore();
@@ -600,7 +612,7 @@
 
     },
     parentFn(score,intake,nutrition,power,protein,meal){
-    console.log(intake)
+
       this.score=score;
       this.intake=intake;
       this.nutrition=nutrition
@@ -803,8 +815,7 @@
           }
           let recipeCycles=res.data.data.recipeCycles;
           that.detailPushData("showDatas",recipeCycles,that);
-          console.log(that.showDatas)
-          console.log(that.showHeaders)
+
 
           that.$refs.layershipu.style.top='300px';
           that.$refs.layershipu.style.left='300px';
@@ -886,7 +897,6 @@
             }
           }
 
-          console.log("node.data",node.data)
           that.drogNode = JSON.parse(JSON.stringify(node.data));
           ev.dataTransfer.setData("Text", JSON.stringify(node.data));
           that.drogNodeStats = true;
@@ -1152,7 +1162,6 @@
         }
         this.datas.push(row);
       }
-      console.log(this.datas)
     },
 
     ///初始化远程数据

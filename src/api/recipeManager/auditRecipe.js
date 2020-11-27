@@ -46,12 +46,13 @@ export const calRecipe = (recipe) => {
 //确定审核食谱
 export const auditRecipe = (params) => {
   return request({
-    url: '/api/blade-food/recipe/audit ',
+    url: '/api/blade-food/recipe/audit',
     method: 'post',
     params: {
-      id: params.id,      //食谱主键
-      status: params.status,       //1-审核通过 2-不通过 
-      refuseReason: params.refuseReason //拒绝原因
+      ...params,
+      // id: params.id,      //食谱主键
+      // status: params.status,       //1-审核通过 2-不通过 
+      // refuseReason: params.refuseReason //拒绝原因
     }
   })
 }
