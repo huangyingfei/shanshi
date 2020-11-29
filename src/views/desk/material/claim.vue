@@ -1,229 +1,232 @@
 <template>
+<div>
   <div class="unsaved">
     <!-- <div>食材不宜同食</div> -->
     <!-- 搜索 -->
-    <div class="update">
-      相克标题:
-      <el-input v-model="input" placeholder="请输入内容"></el-input>
-      <span class="exact">食材名称:</span>
+        <!-- <div class="crumbs"></div> -->
+        <div class="update">
+    相克标题:
+    <el-input v-model="input" placeholder="请输入内容"></el-input>
+    <span class="exact">食材名称:</span>
 
-      <el-input v-model="temps" placeholder="请输入内容"></el-input>
-      <span style="  margin-left: 20px;  margin-right: 10px;">是否有效:</span>
-      <el-select v-model="value" placeholder="请选择">
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        ></el-option>
-      </el-select>
-      <el-button
-        size="medium"
-        @click="searchType"
-        icon="el-icon-search"
-        type="primary"
-        style=" margin-left: 20px; "
-        >搜索</el-button
-      >
-      <el-button size="medium" @click="notEmpty" style=" margin-left: 20px; "
-        >清空</el-button
-      >
-    </div>
-    <!-- 添加食材 -->
-    <div class="cadddr">
-      <el-button
-        icon="el-icon-plus"
-        size="medium"
-        type="primary"
-        @click="addShard(1)"
-        >添加相克食材</el-button
-      >
-
-      <!-- <el-button size="medium" type="danger" icon="el-icon-delete" style=" margin-left: 20px; ">删除</el-button> -->
-    </div>
-
-    <div class="address">
-      <el-table
-        v-loading="loadFlag1"
-        :data="tableData"
-        border
-        max-height="500"
-        :element-loading-text="page_data.loadTxt"
-        style="width: 100%;height:100%"
-      >
-        <el-table-column label="序号" type="index" width="50" align="center">
-        </el-table-column>
-        <el-table-column
-          prop="name"
-          label="相克标题"
-          width="160"
-          align="center"
-        ></el-table-column>
-        <el-table-column
-          prop="foodName"
-          label="食材一"
-          width="160"
-          align="center"
-        ></el-table-column>
-        <el-table-column
-          prop="foodName1"
-          label="食材二"
-          width="160"
-          align="center"
-        ></el-table-column>
-        <el-table-column
-          prop="reason"
-          label="不宜同食原因"
-          width="180"
-          align="center"
-        ></el-table-column>
-        <el-table-column label="是否有效" width="120" align="center">
-          <template slot-scope="scope">
-            <p class="stop" v-if="scope.row.isActive == 1">是</p>
-            <p style="color:#409eff" v-else-if="scope.row.isActive == 0">
-              否
-            </p>
-          </template>
-        </el-table-column>
-
-        <!--操作格-->
-        <el-table-column label="操作" align="center">
-          <template slot-scope="scope">
-            <el-button
-              @click="editorTheme(scope.row, 2)"
-              type="text"
-              size="small"
-              icon="el-icon-edit"
-              style=" margin-left: 20px;"
-              >编辑</el-button
-            >
-            <el-button
-              type="text"
-              size="small"
-              icon="el-icon-delete"
-              style=" margin-left: 20px;"
-              @click="DeleteUser(scope.row)"
-              >删除</el-button
-            >
-          </template>
-        </el-table-column>
-      </el-table>
-      <!-- 分页 -->
-      <div class="pagingClass">
-        <el-pagination
-          :page-sizes="m_page.sizes"
-          :page-size="m_page.size"
-          :current-page="m_page.number"
-          @size-change="m_handleSizeChange"
-          @current-change="m_handlePageChange"
-          layout="total,sizes,prev, pager, next"
-          background
-          :total="m_page.totalElements"
-        ></el-pagination>
-      </div>
-    </div>
-    <!-- 添加相克食材 -->
-    <el-dialog
-      title="食材"
-      append-to-body
-      :visible.sync="dateTime"
-      :close-on-click-modal="false"
+    <el-input v-model="temps" placeholder="请输入内容"></el-input>
+    <span style="  margin-left: 20px;  margin-right: 10px;">是否有效:</span>
+    <el-select v-model="value" placeholder="请选择">
+      <el-option
+        v-for="item in options"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value"
+      ></el-option>
+    </el-select>
+    <el-button
+      size="medium"
+      @click="searchType"
+      icon="el-icon-search"
+      type="primary"
+      style=" margin-left: 20px; "
+      >搜索</el-button
     >
-      <el-form
-        :model="ruleForm"
-        :rules="rules"
-        ref="ruleForm"
-        label-width="100px"
-        class="demo-ruleForm"
-      >
-        <el-form-item label="名称" prop="name">
-          <el-input v-model="ruleForm.name"></el-input>
-        </el-form-item>
-        <el-form-item label="食材一" prop="adding">
-          <el-input
-            readonly
-            v-on:click.native="obtain(1)"
-            v-model="ruleForm.adding"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="食材二" prop="adding1">
-          <el-input
-            readonly
-            v-on:click.native="obtain(2)"
-            v-model="ruleForm.adding1"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="不宜同食原因">
-          <el-input type="textarea" v-model="ruleForm.desc"></el-input>
-        </el-form-item>
-        <el-form-item label="是否有效">
-          <el-radio v-model="radio" label="1">是</el-radio>
-          <el-radio v-model="radio" label="0">否</el-radio>
-          <!-- <el-radio-group v-model="ruleForm.resource">
-            <el-radio label="是"></el-radio>
-            <el-radio label="否"></el-radio>
-          </el-radio-group> -->
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dateTime = false">取 消</el-button>
-        <el-button
-          v-if="this.under == 1"
-          @click="setlist('ruleForm')"
-          type="primary"
-          >确 定</el-button
-        >
-        <el-button @click="hardware('ruleForm')" v-else type="primary"
-          >编辑 确 定</el-button
-        >
-      </div>
-    </el-dialog>
-    <!-- 食材 -->
-    <el-dialog
-      title="个人食材"
-      width="40%"
-      append-to-body
-      :visible.sync="addEffect"
+    <el-button size="medium" @click="notEmpty" style=" margin-left: 20px; "
+      >清空</el-button
     >
-      <div class="block">
-        <el-input
-          style="width:290px; margin-left: 9px;margin-top: 10px;"
-          placeholder="输入关键字进行查询"
-          v-model="filterText"
-        >
-        </el-input>
-        <p></p>
-        <div class="rolling">
-          <el-tree
-            :data="data"
-            v-loading="loadFlag"
-            node-key="id"
-            :default-expand-all="false"
-            @node-click="handleNodeClick"
-            :filter-node-method="filterNode"
-            ref="tree"
+  </div>
+  <!-- 添加食材 -->
+  <div class="cadddr">
+    <el-button
+      icon="el-icon-plus"
+      size="medium"
+      type="primary"
+      @click="addShard(1)"
+      >添加相克食材</el-button
+    >
+
+    <!-- <el-button size="medium" type="danger" icon="el-icon-delete" style=" margin-left: 20px; ">删除</el-button> -->
+  </div>
+
+  <div class="address">
+    <el-table
+      v-loading="loadFlag1"
+      :data="tableData"
+      border
+      max-height="500"
+      :element-loading-text="page_data.loadTxt"
+      style="width: 100%;height:100%"
+    >
+      <el-table-column label="序号" type="index" width="50" align="center">
+      </el-table-column>
+      <el-table-column
+        prop="name"
+        label="相克标题"
+        width="160"
+        align="center"
+      ></el-table-column>
+      <el-table-column
+        prop="foodName"
+        label="食材一"
+        width="160"
+        align="center"
+      ></el-table-column>
+      <el-table-column
+        prop="foodName1"
+        label="食材二"
+        width="160"
+        align="center"
+      ></el-table-column>
+      <el-table-column
+        prop="reason"
+        label="不宜同食原因"
+        width="180"
+        align="center"
+      ></el-table-column>
+      <el-table-column label="是否有效" width="120" align="center">
+        <template slot-scope="scope">
+          <p class="stop" v-if="scope.row.isActive == 1">是</p>
+          <p style="color:#409eff" v-else-if="scope.row.isActive == 0">
+            否
+          </p>
+        </template>
+      </el-table-column>
+
+      <!--操作格-->
+      <el-table-column label="操作" align="center">
+        <template slot-scope="scope">
+          <el-button
+            @click="editorTheme(scope.row, 2)"
+            type="text"
+            size="small"
+            icon="el-icon-edit"
+            style=" margin-left: 20px;"
+            >编辑</el-button
           >
-            <!-- <span class="custom-tree-node" slot-scope="{ node, data }">
-                      <span>{{ node.label }}</span>
-                      <span>
-                        <el-button
-                          type="text"
-                          size="mini"
-                          @click="() => prepare(data)"
-                        >
-                          查看
-                        </el-button>   
-                     
-                      </span>
-                    </span> -->
-          </el-tree>
-        </div>
+          <el-button
+            type="text"
+            size="small"
+            icon="el-icon-delete"
+            style=" margin-left: 20px;"
+            @click="DeleteUser(scope.row)"
+            >删除</el-button
+          >
+        </template>
+      </el-table-column>
+    </el-table>
+    <!-- 分页 -->
+    <div class="pagingClass">
+      <el-pagination
+        :page-sizes="m_page.sizes"
+        :page-size="m_page.size"
+        :current-page="m_page.number"
+        @size-change="m_handleSizeChange"
+        @current-change="m_handlePageChange"
+        layout="total,sizes,prev, pager, next"
+        background
+        :total="m_page.totalElements"
+      ></el-pagination>
+    </div>
+  </div>
+  <!-- 添加相克食材 -->
+  <el-dialog
+    title="食材"
+    append-to-body
+    :visible.sync="dateTime"
+    :close-on-click-modal="false"
+  >
+    <el-form
+      :model="ruleForm"
+      :rules="rules"
+      ref="ruleForm"
+      label-width="100px"
+      class="demo-ruleForm"
+    >
+      <el-form-item label="名称" prop="name">
+        <el-input v-model="ruleForm.name"></el-input>
+      </el-form-item>
+      <el-form-item label="食材一" prop="adding">
+        <el-input
+          readonly
+          v-on:click.native="obtain(1)"
+          v-model="ruleForm.adding"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="食材二" prop="adding1">
+        <el-input
+          readonly
+          v-on:click.native="obtain(2)"
+          v-model="ruleForm.adding1"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="不宜同食原因">
+        <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+      </el-form-item>
+      <el-form-item label="是否有效">
+        <el-radio v-model="radio" label="1">是</el-radio>
+        <el-radio v-model="radio" label="0">否</el-radio>
+        <!-- <el-radio-group v-model="ruleForm.resource">
+          <el-radio label="是"></el-radio>
+          <el-radio label="否"></el-radio>
+        </el-radio-group> -->
+      </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="dateTime = false">取 消</el-button>
+      <el-button
+        v-if="this.under == 1"
+        @click="setlist('ruleForm')"
+        type="primary"
+        >确 定</el-button
+      >
+      <el-button @click="hardware('ruleForm')" v-else type="primary"
+        >编辑 确 定</el-button
+      >
+    </div>
+  </el-dialog>
+  <!-- 食材 -->
+  <el-dialog
+    title="个人食材"
+    width="40%"
+    append-to-body
+    :visible.sync="addEffect"
+  >
+    <div class="block">
+      <el-input
+        style="width:290px; margin-left: 9px;margin-top: 10px;"
+        placeholder="输入关键字进行查询"
+        v-model="filterText"
+      >
+      </el-input>
+      <p></p>
+      <div class="rolling">
+        <el-tree
+          :data="data"
+          v-loading="loadFlag"
+          node-key="id"
+          :default-expand-all="false"
+          @node-click="handleNodeClick"
+          :filter-node-method="filterNode"
+          ref="tree"
+        >
+          <!-- <span class="custom-tree-node" slot-scope="{ node, data }">
+                    <span>{{ node.label }}</span>
+                    <span>
+                      <el-button
+                        type="text"
+                        size="mini"
+                        @click="() => prepare(data)"
+                      >
+                        查看
+                      </el-button>   
+                   
+                    </span>
+                  </span> -->
+        </el-tree>
       </div>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="addEffect = false">取 消</el-button>
-        <el-button @click="addEffect = false" type="primary">确 定</el-button>
-      </div>
-    </el-dialog>
+    </div>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="addEffect = false">取 消</el-button>
+      <el-button @click="addEffect = false" type="primary">确 定</el-button>
+    </div>
+  </el-dialog>
+  </div>
   </div>
 </template>
 
@@ -525,12 +528,33 @@ export default {
 </script>
 
 <style scoped>
+
+.avue-view {
+  padding: 0 10px !important;
+  width: 100% !important;
+  height: 100% !important;
+  background-color: #fff!important;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  z-index: 999;
+}
 .unsaved {
   width: 100%;
   height: 100%;
   background-color: #fff;
   font-size: 14px;
-  margin-top: -19px;
+   position: absolute;
+
+  top: 50px;
+  left: 10px;
+  bottom: 9px;
+  right: 0px;
+}
+.crumbs{
+  width: 100%;
+  height: 100%;
+    position: absolute;
+
 }
 .update {
   width: 100%;
@@ -554,6 +578,7 @@ export default {
   height: 50px;
   /* margin-left: 20px; */
   margin-top: 10px;
+  margin-left: 10px;
   float: left;
   /* background-color: red; */
   line-height: 50px;
