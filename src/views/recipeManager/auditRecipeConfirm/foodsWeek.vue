@@ -1,7 +1,7 @@
 <template>
   <div style="padding: 0px;">
     <!-- table-week start   -->
-    <el-table class="table-week" :data="datas" border max-height = "450px">
+    <el-table class="foods-table-week" :data="datas" border max-height = "450px">
       <el-table-column align="center" width="100" fixed class-name="col-date3 colNoneBorder" >
         <template slot="header"> 菜品/食物 </template>
         <template slot-scope="scope">
@@ -992,19 +992,19 @@ export default {
   },
 };
 </script>
-<style>
-.table-week th {
+<style scoped>
+.foods-table-week th {
   background: #f8fbfc !important;
 }
-.table-week td {
+.foods-table-week td {
   padding: 0 !important;
   vertical-align: top !important;
 }
 
-.table-week td .cell {
+.foods-table-week td .cell {
   padding: 0 !important;
 }
-.table-week .col-date3 {
+.foods-table-week .col-date3 {
   vertical-align: middle !important;
   background: #f8fbfc !important;
 }
