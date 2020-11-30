@@ -8,7 +8,7 @@
             <!-- 左边 -->
             <div class="personal">
               <el-input
-                style="width:290px; margin-left: 9px;"
+                style="width:270px; margin-left: 9px;"
                 placeholder="输入关键字进行查询"
                 v-model="filterText"
               >
@@ -93,7 +93,6 @@
                     v-loading="loadFlag"
                     node-key="id"
                     :default-expand-all="false"
-                    :expand-on-click-node="false"
                     @node-click="handleNodeClick"
                     :filter-node-method="filterNode"
                     ref="tree"
@@ -101,19 +100,19 @@
                     <span class="custom-tree-node" slot-scope="{ node, data }">
                       <span>{{ node.label }}</span>
                       <span>
-                        <el-button
+                        <!-- <el-button
                           v-if="data.view == 1"
                           type="text"
                           size="mini"
                           @click="() => prepare(data, 2)"
                         >
                           查看
-                        </el-button>
+                        </el-button> -->
                         <el-button
                           type="text"
                           v-if="data.isUse == 1"
                           size="mini"
-                          @click="() => append(data)"
+                          @click.stop="() => append(data)"
                         >
                           常用
                         </el-button>
@@ -121,7 +120,7 @@
                           type="text"
                           v-if="data.isUse == 0"
                           size="mini"
-                          @click="() => insert(data)"
+                          @click.stop="() => insert(data)"
                         >
                           不常用
                         </el-button>
@@ -146,7 +145,7 @@
                           v-if="data.delete == 1"
                           type="text"
                           size="mini"
-                          @click="() => remove(node, data)"
+                          @click.stop="() => remove(node, data)"
                         >
                           删除
                         </el-button>
@@ -230,13 +229,12 @@
                   </el-form-item>
 
                   <el-form-item
-                  
                     label="食部(%)"
                     prop="besaved"
                     style="width: 350px"
                   >
                     <el-input
-                             type="number"
+                      type="number"
                       v-model="ruleForm.besaved"
                       placeholder="请输入"
                     ></el-input>
@@ -248,7 +246,7 @@
                     style="width: 350px"
                   >
                     <el-input
-                             type="number"
+                      type="number"
                       v-model="ruleForm.timers"
                       placeholder="请输入"
                     ></el-input>
@@ -256,7 +254,7 @@
 
                   <el-form-item label="水分(%)" style="width: 350px">
                     <el-input
-                             type="number"
+                      type="number"
                       placeholder="请输入水分"
                       v-model="ruleForm.content"
                     ></el-input>
@@ -286,7 +284,7 @@
                   <el-form-item label="所属季节" style="width: 350px">
                     <el-select
                       style=" width: 185px; "
-                      v-model="winter"
+                      v-model="active"
                       multiple
                       placeholder="请选择季节"
                     >
@@ -310,27 +308,26 @@
                   </el-form-item>
 
                   <el-form-item label="图片" style="width:350px">
-                   <el-upload
-              action="api/blade-resource/oss/endpoint/put-file"
-              list-type="picture-card"
-              :limit="imgLimit"
-              :file-list="productImgs"
-              :on-exceed="handleExceed"
-              :on-preview="handlePictureCardPreview"
-              :before-upload="beforeAvatarUpload"
-              :on-success="handleAvatarSuccess"
-              :on-remove="handleRemove"
-              :headers="headerObj"
-            >
-              <!-- <img v-if="dialogImageUrl" :src="dialogImageUrl" class="avatar" /> -->
-              <i class="el-icon-plus"></i>
-            </el-upload>
-            <span style="color:#e0e0e0;  font-size: 11px;"
-              >上传图片不能超过2M 只能是JPG PNG格式</span
-            >
-            <el-dialog append-to-body :visible.sync="dialogVisible">
-              <img width="100%" :src="dialogImageUrl" alt />
-            </el-dialog>
+                    <el-upload
+                      action="api/blade-resource/oss/endpoint/put-file"
+                      list-type="picture-card"
+                      :file-list="productImgs"
+                      :on-change="handleChangePic"
+                      :on-preview="handlePictureCardPreview"
+                      :before-upload="beforeAvatarUpload"
+                      :on-success="handleAvatarSuccess"
+                      :on-remove="handleRemove"
+                      :headers="headerObj"
+                    >
+                      <!-- <img v-if="dialogImageUrl" :src="dialogImageUrl" class="avatar" /> -->
+                      <i class="el-icon-plus"></i>
+                    </el-upload>
+                    <span style="color:#e0e0e0;  font-size: 11px;"
+                      >上传图片不能超过2M 只能是JPG PNG格式</span
+                    >
+                    <el-dialog append-to-body :visible.sync="dialogVisible">
+                      <img width="100%" :src="dialogImageUrl" alt />
+                    </el-dialog>
                   </el-form-item>
 
                   <el-form-item label="分享平台" style="  ">
@@ -376,7 +373,7 @@
                     <template slot-scope="scope">
                       <el-input
                         v-model="scope.row.result"
-                               type="number"
+                        type="number"
                         v-if="scope.row.level != 1 ? true : false"
                         placeholder="请输入内容"
                       ></el-input>
@@ -389,13 +386,13 @@
           </div>
           <div class="base">
             <el-button
-              v-if="this.gavatorta == 2"
+              v-if="this.gavatorta == 1"
               type="primary"
               @click="saved('ruleForm')"
               >编辑保存</el-button
             >
             <el-button
-              v-if="this.gavatorta == 1"
+              v-if="this.gavatorta == 0"
               type="primary"
               @click="iptables('ruleForm')"
               >保存并新增</el-button
@@ -410,11 +407,11 @@
             <!-- 全国查找 -->
 
             <div class="personal">
-              <!-- <el-input
+              <el-input
                 style="width:290px; margin-left: 9px;"
                 placeholder="输入关键字进行查询"
-                v-model="filterText"
-              > -->
+                v-model="filterText1"
+              >
               </el-input>
               <div class="country">
                 <div class="country1">
@@ -463,26 +460,25 @@
                 <div class="block">
                   <p></p>
                   <el-tree
-                    :data="data"
+                    :data="data1"
                     node-key="id"
-                    v-loading="loadFlag"
+                    v-loading="loadFlag1"
                     :default-expand-all="false"
-                    :expand-on-click-node="false"
-                    @node-click="handleNodeClick"
-                    :filter-node-method="filterNode"
+                    @node-click="handleNodeClick1"
+                    :filter-node-method="filterNode1"
                     ref="tree"
                   >
                     <span class="custom-tree-node" slot-scope="{ node, data }">
                       <span>{{ node.label }}</span>
                       <span>
-                        <el-button
+                        <!-- <el-button
                           type="text"
                           size="mini"
                           v-if="data.view == 1"
                           @click="() => prepare(data)"
                         >
                           查看
-                        </el-button>
+                        </el-button> -->
                       </span>
                     </span>
                   </el-tree>
@@ -496,17 +492,12 @@
               <div class="mationinput">
                 <el-form
                   :model="ruleFormUsers"
-         
                   :inline="true"
                   ref="ruleFormUsers"
                   label-width="100px"
                   class="demo-ruleForm"
                 >
-                  <el-form-item
-                    label="食材名"
-          
-                    style=" width: 350px;   "
-                  >
+                  <el-form-item label="食材名" style=" width: 350px;   ">
                     <span>{{ ruleFormUsers.name }}</span>
                   </el-form-item>
                   <el-form-item label="食物别名" style=" width: 350px;  ">
@@ -519,11 +510,7 @@
                     <span>{{ ruleFormUsers.buffer }}</span>
                   </el-form-item>
 
-                  <el-form-item
-                    label="食材分类"
-          
-                    style=" width: 350px;   "
-                  >
+                  <el-form-item label="食材分类" style=" width: 350px;   ">
                     <el-select
                       disabled
                       v-model="ruleFormUsers.fooddata"
@@ -590,11 +577,15 @@
                     </el-select>
                   </el-form-item>
                   <el-form-item label="功用" style="width:350px">
-                  
                     <span>{{ ruleFormUsers.desc }}</span>
                   </el-form-item>
-                  <el-form-item label="图片"  style="width:350px">
-                    <img  v-if="this.rectangle!=''"  style="width:200px;height:200px" :src="this.rectangle" alt="">
+                  <el-form-item label="图片" style="width:350px">
+                    <img
+                      v-if="this.rectangle != ''"
+                      style="width:200px;height:200px"
+                      :src="this.rectangle"
+                      alt=""
+                    />
                     <!-- <el-upload
                       action="https://jsonplaceholder.typicode.com/posts/"
                       list-type="picture-card"
@@ -673,19 +664,21 @@ export default {
     const data = [];
     return {
       filterText: "",
+      filterText1: "",
       display: "2",
       checked: true,
       loadFlag: false, //加载flag
+      loadFlag1: false, //公共食材加载
       data: JSON.parse(JSON.stringify(data)), //树形结构
       activeName: "first",
-       dialogImageUrl: "", //图片
+      dialogImageUrl: "", //图片
       imgLimit: 1, //文件个数
       productImgs: [],
       dialogVisible: false,
       headerObj: {
         "Blade-Auth": ""
       }, //上传图片请求头
-      rectangle:"",
+      rectangle: "",
       ruleFormUsers: {
         //公共食材库
         region: "",
@@ -747,7 +740,7 @@ export default {
       valuepark1: [], //公共沈世渠
       valuepark2: [], //查询省市区
       options: [],
- 
+      active: [],
       active1: [], //公共所属季节
       //全部 常用
       really: [
@@ -762,9 +755,8 @@ export default {
       ],
       really1: "",
       really2: "0",
-           active: [], //季节
-      context:[
-            {
+      context: [
+        {
           value: "1",
           label: "春季"
         },
@@ -781,7 +773,7 @@ export default {
           label: "冬季"
         }
       ],
-      winter:[],
+      winter: [],
       //季节查询
       before: [
         {
@@ -810,12 +802,15 @@ export default {
       lower: 0,
       waterfall: "2",
       fallen: "",
-      gavatorta: "1"
+      gavatorta: "0"
     };
   },
   watch: {
     filterText(val) {
       console.log(this.$refs.tree);
+      this.$refs.tree.filter(val);
+    },
+    filterText1(val) {
       this.$refs.tree.filter(val);
     }
   },
@@ -824,10 +819,11 @@ export default {
     this.Provinces(); //省市区
     this.queryLite(); //获取分类
     this.treeDrawing(); //树形渲染数
-        this.Takeone();
+    this.Takeone();
+    this.publicDomain(); //公共食材库
   },
   methods: {
-     //初始数据获取token
+    //初始数据获取token
     Takeone() {
       let str = JSON.parse(localStorage.getItem("saber-token"));
       this.headerObj["Blade-Auth"] = `bearer ${str.content}`;
@@ -849,17 +845,17 @@ export default {
       this.ruleForm.resource = "";
       this.active = [];
       this.valuepark = [];
-          this.productImgs = [];
+      this.productImgs = [];
       // this.valuepark.length = 0;
       this.ruleForm.desc = "";
       this.ruleForm.delivery = false;
       this.ruleForm.delivery1 = false;
-         this.mailto.forEach(item=>{
-            // console.log(item)
-        item.children.forEach(item1=>{
-             item1.result=""   
-        })
-      })
+      this.mailto.forEach(item => {
+        // console.log(item)
+        item.children.forEach(item1 => {
+          item1.result = "";
+        });
+      });
     },
     resetForm() {
       // console.log(this.ruleForm.delivery1);
@@ -890,6 +886,12 @@ export default {
 
       return data.label.indexOf(value) !== -1;
     }, //树形结构搜索
+    filterNode1(value, data1) {
+      // console.log(data1);
+      if (!value) return true;
+
+      return data1.label.indexOf(value) !== -1;
+    },
     buttonClick(flat) {
       // console.log(index);
       // console.log(flat);
@@ -899,10 +901,10 @@ export default {
     },
     handleClick(tab) {
       // console.log(tab);
-      this.lower = tab.index;
-      console.log(this.lower);
-      this.treeDrawing();
-      this.Protocol();
+      // this.lower = tab.index;
+      // console.log(this.lower);
+      // this.treeDrawing();
+      // this.Protocol();
       // console.log(event);
     },
     //编辑保存
@@ -954,7 +956,7 @@ export default {
           seasons: this.active, //季节
           belongRegions: this.valuepark, //所属区域
           function: this.ruleForm.desc, //功用
-             pic: this.dialogImageUrl,
+          pic: this.dialogImageUrl,
           isUse: this.ruleForm.delivery1 == false ? 1 : 0, //是否常用
           isPub: this.ruleForm.delivery == false ? 1 : 0, //是否公开
 
@@ -973,75 +975,246 @@ export default {
     },
     //保存
     iptables(formName) {
-       this.$refs[formName].validate((valid) => {
-          if (valid) {
-            // alert('submit!');
-             let food = [];
-      this.mailto.forEach(item => {
-        // console.log(item);
-        item.children.forEach(item1 => {
-          if (item1.result != null) {
-            food.push({
-              nutrientId: item1.id,
-              value: item1.result
-            });
-          }
-          if (item1.children) {
-            item1.children.forEach(item2 => {
-              // console.log(item2);
-              if (item2.result != null) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          // alert('submit!');
+          let food = [];
+          this.mailto.forEach(item => {
+            // console.log(item);
+            item.children.forEach(item1 => {
+              if (item1.result != null) {
                 food.push({
-                  nutrientId: item2.id,
-                  value: item2.result
+                  nutrientId: item1.id,
+                  value: item1.result
+                });
+              }
+              if (item1.children) {
+                item1.children.forEach(item2 => {
+                  // console.log(item2);
+                  if (item2.result != null) {
+                    food.push({
+                      nutrientId: item2.id,
+                      value: item2.result
+                    });
+                  }
                 });
               }
             });
-          }
-        });
-      });
-      console.log(food);
-      this.$axios
-        .post(`api/blade-food/food/save`, {
-          foodName: this.ruleForm.name, //食材名
-          foodAlias: this.ruleForm.foodFood, //食物别名1
-          foodAlias1: this.ruleForm.ovenFood, //食物别名2
-          foodReal: this.ruleForm.buffer, //食材真名
-          foodType: this.ruleForm.fooddata, //食材分类
-          foodType1: this.ruleForm.foods, //食物分类1
-          foodType2: this.ruleForm.dogfood, //食物分类2
-          foodEat: this.ruleForm.besaved, //食部
-          weight: this.ruleForm.timers, //重量
-          water: this.ruleForm.content, //水分
-          color: this.ruleForm.resource, //色系
-          seasons: this.active, //季节
-          belongRegions: this.valuepark, //所属区域
-          function: this.ruleForm.desc, //功用
-             pic: this.dialogImageUrl,
-          isUse: this.ruleForm.delivery1 == false ? 1 : 0, //是否常用
-          isPub: this.ruleForm.delivery == false ? 1 : 0, //是否分享平台
-
-          nutritions: food
-        })
-        .then(res => {
-          console.log(res);
-          this.treeDrawing();
-          this.$message({
-            message: "保存成功",
-            type: "success"
           });
-        })
-        .catch(() => {
-          this.$message.error("保存失败");
-        });
-          } else {
-            // console.log('error submit!!');
-             this.$message({
+          console.log(food);
+          this.$axios
+            .post(`api/blade-food/food/save`, {
+              foodName: this.ruleForm.name, //食材名
+              foodAlias: this.ruleForm.foodFood, //食物别名1
+              foodAlias1: this.ruleForm.ovenFood, //食物别名2
+              foodReal: this.ruleForm.buffer, //食材真名
+              foodType: this.ruleForm.fooddata, //食材分类
+              foodType1: this.ruleForm.foods, //食物分类1
+              foodType2: this.ruleForm.dogfood, //食物分类2
+              foodEat: this.ruleForm.besaved, //食部
+              weight: this.ruleForm.timers, //重量
+              water: this.ruleForm.content, //水分
+              color: this.ruleForm.resource, //色系
+              seasons: this.active, //季节
+              belongRegions: this.valuepark, //所属区域
+              function: this.ruleForm.desc, //功用
+              pic: this.dialogImageUrl,
+              isUse: this.ruleForm.delivery1 == false ? 1 : 0, //是否常用
+              isPub: this.ruleForm.delivery == false ? 1 : 0, //是否分享平台
+
+              nutritions: food
+            })
+            .then(res => {
+              console.log(res);
+              this.treeDrawing();
+              this.$message({
+                message: "保存成功",
+                type: "success"
+              });
+            })
+            .catch(() => {
+              this.$message.error("保存失败");
+            });
+        } else {
+          // console.log('error submit!!');
+          this.$message({
             message: "食材未填全",
             type: "warning"
           });
-            return false;
-          }
-        });     
+          return false;
+        }
+      });
+    },
+    //个人食材库
+    handleNodeClick(data) {
+      console.log(data);
+      if (data.view == 0) {
+        return;
+      } else {
+        this.gavatorta = data.view;
+        this.active = [];
+        console.log(data);
+        this.flour = data.id;
+        this.$axios
+          .get(`api/blade-food/food/detail?id=${this.flour}`, {})
+          .then(res => {
+            // console.log(res);
+            this.inquired = res.data.data;
+            console.log(this.inquired);
+
+            this.ruleForm.name = this.inquired.foodName; //食材名
+            this.ruleForm.foodFood = this.inquired.foodAlias; //食物别名1
+            this.ruleForm.ovenFood = this.inquired.foodAlias1; //食物别名2
+            this.ruleForm.buffer = this.inquired.foodReal; //食材真名
+            this.ruleForm.fooddata = this.inquired.foodType; //食材分类
+            this.ruleForm.foods = this.inquired.foodType1; //食物分类1
+            this.ruleForm.dogfood = this.inquired.foodType2; //食物分类2
+            this.ruleForm.besaved = this.inquired.foodEat; //食部
+            this.ruleForm.timers = this.inquired.weight; //重量
+            this.ruleForm.content = this.inquired.water; //水分
+            this.ruleForm.resource = this.inquired.color + ""; //色系
+            // this.active.push(this.inquired.season); //所属季节
+
+            if (this.inquired.season) {
+              this.inquired.season.split(",").forEach(item => {
+                this.active.push(item);
+              });
+            } else {
+              this.active = [];
+            }
+            //所属区域
+
+            if (this.inquired.provinces) {
+              let bar = [];
+              this.inquired.provinces.split(",").forEach((item, i) => {
+                if (item == this.inquired.belongRegion.split(",")[i]) {
+                  bar.push([item]);
+                } else {
+                  bar.push([item, this.inquired.belongRegion.split(",")[i]]);
+                }
+              });
+              // this.inquired.provinces.split(",").forEach((item, i) => {
+              //   bar.push([item, this.inquired.belongRegion.split(",")[i]]);
+              // });
+              this.valuepark = bar;
+              // console.log(this.valuepark);
+            } else {
+              this.valuepark = [];
+            }
+            this.ruleForm.desc = this.inquired.function; //功用
+
+            let picture = []; //图片
+            if (this.inquired.pic) {
+              picture[0] = {
+                url: this.inquired.pic
+              };
+            }
+            this.productImgs = picture;
+            this.ruleForm.delivery = this.inquired.isPub == 1 ? false : true; //公开
+            // console.log(this.ruleForm.delivery);
+            this.ruleForm.delivery1 = this.inquired.isUse == 1 ? false : true; //常用
+            let units = this.inquired.nutritions;
+            units.forEach(item => {
+              // console.log(item);
+              for (let item1 of this.mailto) {
+                for (let arr of item1.children) {
+                  if (arr.id == item.nutrientId) {
+                    arr.result = item.value;
+                  }
+                  if (arr.children) {
+                    for (let add of arr.children) {
+                      if (add.id == item.nutrientId) {
+                        add.result = item.value;
+                      }
+                    }
+                  }
+                }
+              }
+            });
+          });
+      }
+    },
+    //公共食材库
+    handleNodeClick1(data) {
+      console.log(data);
+      if (data.view == 0) {
+        return;
+      } else {
+        // this.gavatorta = index;
+        // this.active =[];
+        // this.active1.length = 0;
+        console.log(data);
+        this.flour = data.id;
+        this.$axios
+          .get(`api/blade-food/food/detail?id=${this.flour}`, {})
+          .then(res => {
+            // console.log(res);
+            this.inquired = res.data.data;
+            console.log(this.inquired);
+            this.ruleFormUsers.name = this.inquired.foodName; //食材名
+            this.ruleFormUsers.ovenFood = this.inquired.foodAlias1; //食物别名2
+            this.ruleFormUsers.buffer = this.inquired.foodReal; //食材真名
+            this.ruleFormUsers.fooddata = this.inquired.foodTypeName; //食材分类
+            this.ruleFormUsers.foods = this.inquired.foodType1; //食物分类1
+            this.ruleFormUsers.dogfood = this.inquired.foodType2; //食物分类2
+            this.ruleFormUsers.besaved = this.inquired.foodEat; //食部
+            this.ruleFormUsers.timers = this.inquired.weight; //重量
+            this.ruleFormUsers.content = this.inquired.water; //水分
+            this.ruleFormUsers.resource = this.inquired.color + ""; //色系
+            if (this.inquired.season) {
+              this.inquired.season.split(",").forEach(item => {
+                this.active1.push(item);
+              });
+            } else {
+              this.inquired.season = [];
+            }
+
+            //所属区域
+            if (this.inquired.provinces) {
+              let addItem = [];
+              this.inquired.provinces.split(",").forEach((item, i) => {
+                if (item == this.inquired.belongRegion.split(",")[i]) {
+                  addItem.push([item]);
+                } else {
+                  addItem.push([
+                    item,
+                    this.inquired.belongRegion.split(",")[i]
+                  ]);
+                }
+              });
+              this.valuepark1 = addItem;
+            } else {
+              this.inquired.provinces = [];
+            }
+            // console.log(this.valuepark1);
+            this.ruleFormUsers.desc = this.inquired.function; //功用
+            this.rectangle = this.inquired.pic;
+            //  console.log(this.dialogImageUrl);
+            this.ruleFormUsers.delivery =
+              this.inquired.isPub == 0 ? false : true; //公开
+            // console.log(this.ruleForm.delivery);
+            this.ruleFormUsers.delivery1 =
+              this.inquired.isUse == 0 ? false : true; //常用
+            let units = this.inquired.nutritions;
+            units.forEach(item => {
+              // console.log(item);
+              for (let item1 of this.typeTree) {
+                for (let arr of item1.children) {
+                  if (arr.id == item.nutrientId) {
+                    arr.result = item.value;
+                  }
+                  if (arr.children) {
+                    for (let add of arr.children) {
+                      if (add.id == item.nutrientId) {
+                        add.result = item.value;
+                      }
+                    }
+                  }
+                }
+              }
+            });
+          });
+      }
     },
     //查看
     classification(data) {
@@ -1074,28 +1247,28 @@ export default {
             this.ruleForm.content = this.inquired.water; //水分
             this.ruleForm.resource = this.inquired.color + ""; //色系
             // this.active.push(this.inquired.season); //所属季节
-        
+
             this.inquired.season.split(",").forEach(item => {
               this.active.push(item);
             });
             //所属区域
-     
-           if(this.inquired.provinces){
-                  let bar = [];
-                this.inquired.provinces.split(",").forEach((item, i) => {
-            bar.push([item, this.inquired.belongRegion.split(",")[i]]);
-            });
+
+            if (this.inquired.provinces) {
+              let bar = [];
+              this.inquired.provinces.split(",").forEach((item, i) => {
+                bar.push([item, this.inquired.belongRegion.split(",")[i]]);
+              });
               this.valuepark = bar;
             }
             this.ruleForm.desc = this.inquired.function; //功用
 
-          let picture = [];//图片
-          if (this.inquired.pic) {
-            picture[0] = {
-              url: this.inquired.pic
+            let picture = []; //图片
+            if (this.inquired.pic) {
+              picture[0] = {
+                url: this.inquired.pic
+              };
             }
-          }
-          this.productImgs = picture;
+            this.productImgs = picture;
             this.ruleForm.delivery = this.inquired.isPub == 1 ? false : true; //公开
             // console.log(this.ruleForm.delivery);
             this.ruleForm.delivery1 = this.inquired.isUse == 1 ? false : true; //常用
@@ -1139,7 +1312,7 @@ export default {
             this.valuepark1 = addItem;
             // console.log(this.valuepark1);
             this.ruleFormUsers.desc = this.inquired.function; //功用
-             this.rectangle=this.inquired.pic;
+            this.rectangle = this.inquired.pic;
             //  console.log(this.dialogImageUrl);
             this.ruleFormUsers.delivery =
               this.inquired.isPub == 0 ? false : true; //公开
@@ -1213,7 +1386,7 @@ export default {
     remove(node, data) {
       console.log(data);
       this.saveall = data.id;
-    
+
       this.$confirm("确认删除该食材?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -1235,13 +1408,48 @@ export default {
           });
         });
     },
+    //公共食材渲染
+    publicDomain() {
+      this.loadFlag1 = true;
+      this.$axios
+        .get(
+          `api/blade-food/basetype/getFoodByBaseId?isPrivate=1&typeTemp=${this.waterfall}&regionId=${this.fallen}&season=${this.before1}&isUse=${this.really1}`,
+          {}
+        )
+        .then(res => {
+          // console.log(res);
+          this.loadFlag1 = false;
+          this.prtree = res.data.data;
 
+          let trees = [];
+          this.prtree.forEach((item, index) => {
+            trees[index] = {
+              id: item.id,
+              label: item.typeName,
+              view: 0
+            };
+            trees[index].children = [];
+            item.foods.forEach((item1, index1) => {
+              trees[index].children[index1] = {
+                id: item1.id,
+                label: item1.foodName,
+                isPub: item1.isPub,
+                isUse: item1.isUse,
+                view: 1,
+                delete: 1
+              };
+            });
+          });
+          // console.log(trees);
+          this.data1 = trees;
+        });
+    },
     //树形渲染
     treeDrawing() {
       this.loadFlag = true;
       this.$axios
         .get(
-          `api/blade-food/basetype/getFoodByBaseId?isPrivate=${this.lower}&typeTemp=${this.waterfall}&regionId=${this.fallen}&season=${this.before1}&isUse=${this.really1}`,
+          `api/blade-food/basetype/getFoodByBaseId?isPrivate=0&typeTemp=${this.waterfall}&regionId=${this.fallen}&season=${this.before1}&isUse=${this.really1}`,
           {}
         )
         .then(res => {
@@ -1253,7 +1461,8 @@ export default {
           this.prtree.forEach((item, index) => {
             trees[index] = {
               id: item.id,
-              label: item.typeName
+              label: item.typeName,
+              view: 0
             };
             trees[index].children = [];
             item.foods.forEach((item1, index1) => {
@@ -1350,7 +1559,7 @@ export default {
           this.options = arr;
         });
     },
-     //移除图片
+    //移除图片
     handleRemove(file, fileList) {
       console.log(file, fileList);
     },
@@ -1365,6 +1574,15 @@ export default {
       //图片上传超过数量限制
       this.$message.error("上传图片不能超过1张!");
       console.log(files, fileList);
+    },
+    handleChangePic(file, productImgs) {
+      console.log(file);
+      console.log(productImgs);
+      if (productImgs.length > 1) {
+        productImgs.splice(0, 1);
+        // this.productImgs = [productImgs[productImgs.length - 1].raw];
+        // console.log(1);
+      }
     },
     // 上传成功
     handleAvatarSuccess(res, file) {
@@ -1385,7 +1603,7 @@ export default {
       if (!isLt2M) {
         this.$message.error("上传图片大小不能超过 2MB!");
       }
-      return  isLt2M;
+      return isLt2M;
     }
   }
 };
@@ -1489,7 +1707,7 @@ export default {
   /* height: 700px; */
   /* display: flex; */
   margin-left: 40px;
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
 }
 .worm {
   width: 100%;
@@ -1509,7 +1727,7 @@ export default {
   width: 100%;
   height: 100px;
   float: left;
-  /* background-color: yellow; */
+  background-color: #fff;
   margin-bottom: 50px;
   margin-top: 30px;
   text-align: center;

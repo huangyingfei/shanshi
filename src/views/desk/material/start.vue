@@ -15,7 +15,7 @@
 <el-button type="primary" plain size="mini">加分类</el-button> -->
           <el-button
             style="margin-left: 9px"
-            @click="addition(1)"
+            @click="addition(0)"
             type="primary"
             size="mini"
             >加食材</el-button
@@ -124,21 +124,21 @@
               <span class="custom-tree-node" slot-scope="{ node, data }">
                 <span>{{ node.label }}</span>
                 <span>
-                  <el-button
+                  <!-- <el-button
                     v-if="data.view == 1"
                     type="text"
                     size="mini"
                     style="color: #00bfaf"
-                    @click="() => prepare(data, 2)"
+                    @click.stop="() => prepare(data, 2)"
                   >
                     查看
-                  </el-button>
+                  </el-button> -->
                   <el-button
                     type="text"
                     v-if="data.isUse == 1"
                     style="color: #00bfaf"
                     size="mini"
-                    @click="() => append(data)"
+                    @click.stop="() => append(data)"
                   >
                     常用
                   </el-button>
@@ -147,7 +147,7 @@
                     v-if="data.isUse == 0"
                     style="color: #00bfaf"
                     size="mini"
-                    @click="() => insert(data)"
+                    @click.stop="() => insert(data)"
                   >
                     不常用
                   </el-button>
@@ -156,7 +156,7 @@
                     style="color: #00bfaf"
                     type="text"
                     size="mini"
-                    @click="() => multi(data)"
+                    @click.stop="() => multi(data)"
                   >
                     隐藏
                   </el-button>
@@ -165,7 +165,7 @@
                     style="color: #00bfaf"
                     type="text"
                     size="mini"
-                    @click="() => docs(data)"
+                    @click.stop="() => docs(data)"
                   >
                     公开
                   </el-button>
@@ -174,7 +174,7 @@
                     style="color: #00bfaf"
                     type="text"
                     size="mini"
-                    @click="() => remove(node, data)"
+                    @click.stop="() => remove(node, data)"
                   >
                     删除
                   </el-button>
@@ -327,28 +327,26 @@
             </el-form-item>
 
             <el-form-item label="图片" style="width: 400px">
-              <!-- <el-upload
-        action="api/blade-resource/oss/endpoint/put-file"
-        list-type="picture-card"
-       
-        :file-list="productImgs"
-        
-        :on-preview="handlePictureCardPreview"
-        :on-change="handleChangePic"
-        :before-upload="beforeAvatarUpload"
-        :on-success="handleAvatarSuccess"
-        :on-remove="handleRemove"
-        :headers="headerObj"
-      >
-        <i class="el-icon-plus"></i>
-      </el-upload>
-      <span style="color: #e0e0e0; font-size: 11px"
-        >上传图片不能超过2M 只能是JPG PNG格式</span
-      >
-      <el-dialog append-to-body :visible.sync="dialogVisible">
-        <img width="100%" :src="dialogImageUrl" alt />
-      </el-dialog> -->
               <el-upload
+                action="api/blade-resource/oss/endpoint/put-file"
+                list-type="picture-card"
+                :file-list="productImgs"
+                :on-preview="handlePictureCardPreview"
+                :on-change="handleChangePic"
+                :before-upload="beforeAvatarUpload"
+                :on-success="handleAvatarSuccess"
+                :on-remove="handleRemove"
+                :headers="headerObj"
+              >
+                <i class="el-icon-plus"></i>
+              </el-upload>
+              <span style="color: #e0e0e0; font-size: 11px"
+                >上传图片不能超过2M 只能是JPG PNG格式</span
+              >
+              <el-dialog append-to-body :visible.sync="dialogVisible">
+                <img width="100%" :src="dialogImageUrl" alt />
+              </el-dialog>
+              <!-- <el-upload
                 class="avatar-uploader"
                 action="api/blade-resource/oss/endpoint/put-file"
                 :show-file-list="false"
@@ -360,7 +358,7 @@
               >
                 <img v-if="imageUrl" :src="imageUrl" class="avatar" />
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-              </el-upload>
+              </el-upload> -->
             </el-form-item>
 
             <el-form-item label="公开" style="">
@@ -446,22 +444,20 @@
   </el-table>
 </div> -->
         <div class="footadd">
-      
-    <el-button
-      type="primary"
-      v-if="this.gavatorta == 1"
-      @click="totally('ruleForm')"
-      >保存并新增</el-button
-    >
-    <el-button
-      v-if="this.gavatorta == 2"
-      type="primary"
-      @click="saved('ruleForm')"
-      >编辑保存</el-button
-    >
-  
-    <!-- <el-button @click="resetForm('ruleForm')">重置</el-button> -->
+          <el-button
+            type="primary"
+            v-if="this.gavatorta == 0"
+            @click="totally('ruleForm')"
+            >保存并新增</el-button
+          >
+          <el-button
+            v-if="this.gavatorta == 1"
+            type="primary"
+            @click="saved('ruleForm')"
+            >编辑保存</el-button
+          >
 
+          <!-- <el-button @click="resetForm('ruleForm')">重置</el-button> -->
         </div>
       </div>
     </div>
@@ -476,11 +472,11 @@ export default {
     const data = [];
     return {
       headerObj: {
-        "Blade-Auth": "",
+        "Blade-Auth": ""
       }, //上传图片请求头
       defaultProps: {
         children: "children",
-        label: "label",
+        label: "label"
       },
       display: "2",
       loadFlag: false, // 加载flag
@@ -512,7 +508,7 @@ export default {
         delivery1: false, //常用
         autosave: "",
         type: [],
-        temps: "",
+        temps: ""
       },
       valuepark: [], //省市区
       valuepark1: [], //
@@ -524,85 +520,85 @@ export default {
       season: [
         {
           value: "1",
-          label: "春季",
+          label: "春季"
         },
         {
           value: "2",
-          label: "夏季",
+          label: "夏季"
         },
         {
           value: "3",
-          label: "秋季",
+          label: "秋季"
         },
         {
           value: "4",
-          label: "冬季",
-        },
+          label: "冬季"
+        }
       ],
 
       // fooddata: "",
       rules: {
         name: [{ required: true, message: "请输入食材名", trigger: "blur" }],
         buffer: [
-          { required: true, message: "请输入食材真名", trigger: "blur" },
+          { required: true, message: "请输入食材真名", trigger: "blur" }
         ],
         fooddata: [
           //食材分类
-          { required: true, message: "请选择食物分类", trigger: "change" },
+          { required: true, message: "请选择食物分类", trigger: "change" }
         ],
         besaved: [{ required: true, message: "请输入食部", trigger: "blur" }],
-        timers: [{ required: true, message: "请输入重量", trigger: "blur" }],
+        timers: [{ required: true, message: "请输入重量", trigger: "blur" }]
       },
       //全部 常用
       really: [
         {
           value: "",
-          label: "全部",
+          label: "全部"
         },
         {
           value: "0",
-          label: "常用",
-        },
+          label: "常用"
+        }
       ],
       really1: "",
       //季节查询
       before: [
         {
           value: "",
-          label: "全部",
+          label: "全部"
         },
         {
           value: "1",
-          label: "春季",
+          label: "春季"
         },
         {
           value: "2",
-          label: "夏季",
+          label: "夏季"
         },
         {
           value: "3",
-          label: "秋季",
+          label: "秋季"
         },
         {
           value: "4",
-          label: "冬季",
-        },
+          label: "冬季"
+        }
       ],
       before1: "",
 
       examine: [
         {
           value: "选项1",
-          label: "全国",
+          label: "全国"
         },
         {
           value: "选项2",
-          label: "浙江",
+          label: "浙江"
         },
         {
           value: "选项3",
-          label: "上海",
-        },
+          label: "上海"
+        }
       ],
       value: "",
       options: [],
@@ -610,8 +606,8 @@ export default {
       waterfall: "2",
       fallen: "",
       used: "",
-      gavatorta: "1",
-      energy: [],
+      gavatorta: "0",
+      energy: []
     };
   },
   computed: {},
@@ -627,7 +623,7 @@ export default {
     filterText(val) {
       console.log(this.$refs.tree);
       this.$refs.tree.filter(val);
-    },
+    }
   },
   methods: {
     Takeone() {
@@ -706,9 +702,9 @@ export default {
       this.ruleForm.delivery1 = false;
       // this.mailto=this.energy;
       // console.log(this.energy)
-      this.mailto.forEach((item) => {
+      this.mailto.forEach(item => {
         console.log(item);
-        item.children.forEach((item1) => {
+        item.children.forEach(item1 => {
           item1.result = "";
         });
       });
@@ -717,7 +713,7 @@ export default {
     totally(formName) {
       console.log(this.mailto);
       console.log(this.ruleForm);
-      this.$refs[formName].validate((valid) => {
+      this.$refs[formName].validate(valid => {
         if (valid) {
           let food = [];
           this.mailto.forEach((item, index) => {
@@ -730,7 +726,7 @@ export default {
                   if (item2.result != null) {
                     food.push({
                       nutrientId: item2.id,
-                      value: item2.result,
+                      value: item2.result
                     });
                   }
                 });
@@ -738,7 +734,7 @@ export default {
               if (item1.result != null) {
                 food.push({
                   nutrientId: item1.id,
-                  value: item1.result,
+                  value: item1.result
                 });
               }
             });
@@ -767,13 +763,13 @@ export default {
               isUse: this.ruleForm.delivery1 == false ? 1 : 0, //是否常用
               isPub: this.ruleForm.delivery == false ? 1 : 0, //是否公开
 
-              nutritions: food,
+              nutritions: food
             })
-            .then((res) => {
+            .then(res => {
               console.log(res);
               this.$message({
                 message: "保存成功",
-                type: "success",
+                type: "success"
               });
               this.Addraudit();
             })
@@ -784,7 +780,7 @@ export default {
           // console.log("error submit!!");
           this.$message({
             message: "食材未填全",
-            type: "warning",
+            type: "warning"
           });
           return false;
         }
@@ -794,7 +790,7 @@ export default {
     saved(formName) {
       // console.log(this.mailto);
       console.log(this.ruleForm);
-      this.$refs[formName].validate((valid) => {
+      this.$refs[formName].validate(valid => {
         if (valid) {
           let food = [];
           this.mailto.forEach((item, index) => {
@@ -807,7 +803,7 @@ export default {
                   if (item2.result != null) {
                     food.push({
                       nutrientId: item2.id,
-                      value: item2.result,
+                      value: item2.result
                     });
                   }
                 });
@@ -815,7 +811,7 @@ export default {
               if (item1.result != null) {
                 food.push({
                   nutrientId: item1.id,
-                  value: item1.result,
+                  value: item1.result
                 });
               }
             });
@@ -843,13 +839,13 @@ export default {
               isUse: this.ruleForm.delivery1 == false ? 1 : 0, //是否常用
               isPub: this.ruleForm.delivery == false ? 1 : 0, //是否公开
 
-              nutritions: food,
+              nutritions: food
             })
-            .then((res) => {
+            .then(res => {
               console.log(res);
               this.$message({
                 message: "编辑成功",
-                type: "success",
+                type: "success"
               });
               this.Addraudit();
             })
@@ -860,7 +856,7 @@ export default {
         } else {
           this.$message({
             message: "食材未填全",
-            type: "warning",
+            type: "warning"
           });
           return false;
         }
@@ -878,7 +874,7 @@ export default {
           `api/blade-food/basetype/getFoodByBaseId?isPrivate=1&typeTemp=${this.waterfall}&season=${this.before1}&isUse=${this.really1}&regionId=${this.fallen}`,
           {}
         )
-        .then((res) => {
+        .then(res => {
           this.loadFlag = false;
           // console.log(res);
           this.fication = res.data.data;
@@ -889,6 +885,7 @@ export default {
             Front[index] = {
               id: item.id,
               label: item.typeName,
+              view: 0
             };
             Front[index].children = [];
             item.foods.forEach((item1, index1) => {
@@ -899,7 +896,7 @@ export default {
                 isPub: item1.isPub,
                 isUse: item1.isUse,
                 view: 1,
-                delete: 1,
+                delete: 1
               };
             });
           });
@@ -911,17 +908,126 @@ export default {
     },
     //点击查看详情
     handleNodeClick(data) {
-      console.log(data);
+      // console.log(data);
+      if (data.view == 0) {
+        return;
+      } else {
+        this.gavatorta = data.view;
+        // console.log(this.gavatorta);
+        this.mailto.forEach(item => {
+          // console.log(item);
+          item.children.forEach(item1 => {
+            item1.result = "";
+          });
+        });
+        this.valuepark = [];
+        this.active = [];
+
+        this.flour = data.id;
+
+        this.$axios
+          .get(`api/blade-food/food/detail?id=${this.flour}`, {})
+          .then(res => {
+            // console.log(res);
+
+            this.inquired = res.data.data;
+            console.log(this.inquired);
+            this.ruleForm.name = this.inquired.foodName; //食材名
+            this.ruleForm.foodFood = this.inquired.foodAlias; //食物别名1
+            this.ruleForm.ovenFood = this.inquired.foodAlias1; //食物别名2
+            this.ruleForm.buffer = this.inquired.foodReal; //食材真名
+            this.ruleForm.fooddata = this.inquired.foodPubType; //食材分类
+            this.ruleForm.foods = this.inquired.foodType1; //食物分类1
+            this.ruleForm.dogfood = this.inquired.foodType2; //食物分类2
+            this.ruleForm.besaved = this.inquired.foodEat; //食部
+            this.ruleForm.timers = this.inquired.weight; //重量
+            this.ruleForm.content = this.inquired.water; //水分
+            this.ruleForm.resource = this.inquired.color + ""; //色系
+            // this.valuepark = this.inquired.belongRegionName; //所属区域
+
+            if (this.inquired.provinces) {
+              let bar = [];
+              this.inquired.provinces.split(",").forEach((item, i) => {
+                if (item == this.inquired.belongRegion.split(",")[i]) {
+                  bar.push([item]);
+                } else {
+                  bar.push([item, this.inquired.belongRegion.split(",")[i]]);
+                }
+              });
+              // this.inquired.provinces.split(",").forEach((item, i) => {
+              //   bar.push([item, this.inquired.belongRegion.split(",")[i]]);
+              // });
+              this.valuepark = bar;
+              // console.log(this.valuepark);
+            } else {
+              this.valuepark = [];
+            }
+
+            // console.log(this.valuepark);
+            // this.valuepark.push(
+            //   this.inquired.provinces.split(','),
+            //   this.inquired.belongRegion.split(','),
+            // );
+
+            // console.log(this.valuepark);
+            // this.active.push(this.inquired.season); //所属季节
+            if (this.inquired.season) {
+              this.inquired.season.split(",").forEach(item => {
+                this.active.push(item);
+              });
+            } else {
+              this.active = [];
+            }
+
+            this.ruleForm.desc = this.inquired.function; //功用
+            // this.productImgs = this.inquired.pic; //图片
+            let picture = [];
+            if (this.inquired.pic) {
+              picture[0] = {
+                url: this.inquired.pic
+              };
+            }
+            this.productImgs = picture;
+            this.dialogImageUrl = this.inquired.pic;
+            console.log(this.productImgs);
+            this.ruleForm.delivery = this.inquired.isPub == 1 ? false : true; //公开
+            // console.log(this.ruleForm.delivery);
+            this.ruleForm.delivery1 = this.inquired.isUse == 1 ? false : true; //常用
+
+            let units = this.inquired.nutritions;
+            // this.arr = this.mailto;
+            // console.log(this.mailto);
+            units.forEach(item => {
+              // console.log(item);
+              for (let item1 of this.mailto) {
+                // console.log(item1);
+                for (let arr of item1.children) {
+                  // console.log(arr);
+                  if (arr.id == item.nutrientId) {
+                    arr.result = item.value;
+                  }
+                  if (arr.children) {
+                    for (let add of arr.children) {
+                      if (add.id == item.nutrientId) {
+                        add.result = item.value;
+                      }
+                    }
+                  }
+                }
+              }
+            });
+          });
+      }
     },
     // 分类
     queryLite() {
       this.$axios
         .get(`api/blade-food/basetype/list?type=1`, {
           headers: {
-            "Content-Type": "application/json",
-          },
+            "Content-Type": "application/json"
+          }
         })
-        .then((res) => {
+        .then(res => {
           // console.log(res);
           this.tionDate = res.data.data;
           // console.log(this.tionDate);
@@ -930,7 +1036,7 @@ export default {
           this.tionDate.forEach((item, index) => {
             cation[index] = {
               value: item.id,
-              label: item.typeName,
+              label: item.typeName
             };
           });
           // console.log(cation);
@@ -942,10 +1048,10 @@ export default {
       this.$axios
         .get(`api/blade-food/nutrition/tree`, {
           headers: {
-            "Content-Type": "application/json",
-          },
+            "Content-Type": "application/json"
+          }
         })
-        .then((res) => {
+        .then(res => {
           // console.log(res);
           this.mailto = res.data.data;
           this.energy = this.mailto;
@@ -962,10 +1068,10 @@ export default {
       this.$axios
         .get(`api/blade-system/region/selectCityOrProvince`, {
           headers: {
-            "Content-Type": "application/json",
-          },
+            "Content-Type": "application/json"
+          }
         })
-        .then((res) => {
+        .then(res => {
           // console.log(res);
           this.national = res.data.data;
           // console.log(this.national);
@@ -973,7 +1079,7 @@ export default {
           this.national.forEach((item, index) => {
             arr[index] = {
               value: item.id,
-              label: item.name,
+              label: item.name
             };
             arr[index].children = [];
             // console.log(item.children instanceof Array);
@@ -981,7 +1087,7 @@ export default {
               item.children.forEach((item1, index1) => {
                 arr[index].children[index1] = {
                   value: item1.id,
-                  label: item1.name,
+                  label: item1.name
                 };
               });
             }
@@ -999,112 +1105,6 @@ export default {
 
     //查看
     prepare(data, index) {
-      this.mailto.forEach((item) => {
-        console.log(item);
-        item.children.forEach((item1) => {
-          item1.result = "";
-        });
-      });
-      this.valuepark = [];
-      this.active = [];
-      // console.log(index);
-      this.gavatorta = index;
-      // console.log(data);
-      // this.term = data.id;
-      this.flour = data.id;
-      // console.log(this.flour);
-      this.$axios
-        .get(`api/blade-food/food/detail?id=${this.flour}`, {})
-        .then((res) => {
-          // console.log(res);
-
-          this.inquired = res.data.data;
-          console.log(this.inquired);
-          this.ruleForm.name = this.inquired.foodName; //食材名
-          this.ruleForm.foodFood = this.inquired.foodAlias; //食物别名1
-          this.ruleForm.ovenFood = this.inquired.foodAlias1; //食物别名2
-          this.ruleForm.buffer = this.inquired.foodReal; //食材真名
-          this.ruleForm.fooddata = this.inquired.foodPubType; //食材分类
-          this.ruleForm.foods = this.inquired.foodType1; //食物分类1
-          this.ruleForm.dogfood = this.inquired.foodType2; //食物分类2
-          this.ruleForm.besaved = this.inquired.foodEat; //食部
-          this.ruleForm.timers = this.inquired.weight; //重量
-          this.ruleForm.content = this.inquired.water; //水分
-          this.ruleForm.resource = this.inquired.color + ""; //色系
-          // this.valuepark = this.inquired.belongRegionName; //所属区域
-
-          if (this.inquired.provinces) {
-            let bar = [];
-            this.inquired.provinces.split(",").forEach((item, i) => {
-              if (item == this.inquired.belongRegion.split(",")[i]) {
-                bar.push([item]);
-              } else {
-                bar.push([item, this.inquired.belongRegion.split(",")[i]]);
-              }
-            });
-            // this.inquired.provinces.split(",").forEach((item, i) => {
-            //   bar.push([item, this.inquired.belongRegion.split(",")[i]]);
-            // });
-            this.valuepark = bar;
-            // console.log(this.valuepark);
-          } else {
-            this.valuepark = [];
-          }
-
-          // console.log(this.valuepark);
-          // this.valuepark.push(
-          //   this.inquired.provinces.split(','),
-          //   this.inquired.belongRegion.split(','),
-          // );
-
-          // console.log(this.valuepark);
-          // this.active.push(this.inquired.season); //所属季节
-          if (this.inquired.season) {
-            this.inquired.season.split(",").forEach((item) => {
-              this.active.push(item);
-            });
-          } else {
-            this.active = [];
-          }
-
-          this.ruleForm.desc = this.inquired.function; //功用
-          // this.productImgs = this.inquired.pic; //图片
-          let picture = [];
-          if (this.inquired.pic) {
-            picture[0] = {
-              url: this.inquired.pic,
-            };
-          }
-          this.productImgs = picture;
-          this.dialogImageUrl = this.inquired.pic;
-          console.log(this.productImgs);
-          this.ruleForm.delivery = this.inquired.isPub == 1 ? false : true; //公开
-          // console.log(this.ruleForm.delivery);
-          this.ruleForm.delivery1 = this.inquired.isUse == 1 ? false : true; //常用
-
-          let units = this.inquired.nutritions;
-          // this.arr = this.mailto;
-          // console.log(this.mailto);
-          units.forEach((item) => {
-            // console.log(item);
-            for (let item1 of this.mailto) {
-              // console.log(item1);
-              for (let arr of item1.children) {
-                // console.log(arr);
-                if (arr.id == item.nutrientId) {
-                  arr.result = item.value;
-                }
-                if (arr.children) {
-                  for (let add of arr.children) {
-                    if (add.id == item.nutrientId) {
-                      add.result = item.value;
-                    }
-                  }
-                }
-              }
-            }
-          });
-        });
       // console.log(this.term);
       // this.$axios
       //   .get(`api/blade-food/basetype/list?id=${this.term}&isPub=1`, {
@@ -1131,13 +1131,13 @@ export default {
       this.$axios
         .post(`api/blade-food/food/changeIsUse`, {
           id: this.term,
-          isUse: 0,
+          isUse: 0
         })
-        .then((res) => {
+        .then(res => {
           console.log(res);
           this.$message({
             message: "设置成功",
-            type: "success",
+            type: "success"
           });
           this.Addraudit();
         })
@@ -1152,13 +1152,13 @@ export default {
       this.$axios
         .post(`api/blade-food/food/changeIsUse`, {
           id: this.term,
-          isUse: 1,
+          isUse: 1
         })
-        .then((res) => {
+        .then(res => {
           console.log(res);
           this.$message({
             message: "设置成功",
-            type: "success",
+            type: "success"
           });
           this.Addraudit();
         })
@@ -1172,13 +1172,13 @@ export default {
       this.$axios
         .post(`api/blade-food/food/changeIsPublic`, {
           id: this.term,
-          isPub: 1,
+          isPub: 1
         })
-        .then((res) => {
+        .then(res => {
           console.log(res);
           this.$message({
             message: "设置成功",
-            type: "success",
+            type: "success"
           });
           this.Addraudit();
         })
@@ -1192,13 +1192,13 @@ export default {
       this.$axios
         .post(`api/blade-food/food/changeIsPublic`, {
           id: this.term,
-          isPub: 0,
+          isPub: 0
         })
-        .then((res) => {
+        .then(res => {
           console.log(res);
           this.$message({
             message: "设置成功",
-            type: "success",
+            type: "success"
           });
           this.Addraudit();
         })
@@ -1230,12 +1230,12 @@ export default {
       this.$confirm("确认删除该食材?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning",
+        type: "warning"
       })
         .then(() => {
           this.$axios
             .post(`api/blade-food/food/remove?ids=${this.saveall}`, {})
-            .then((res) => {
+            .then(res => {
               console.log(res);
               this.$message.success("删除成功");
               this.Addraudit();
@@ -1244,7 +1244,7 @@ export default {
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消删除",
+            message: "已取消删除"
           });
         });
     },
@@ -1278,7 +1278,7 @@ export default {
       console.log(file);
       console.log(productImgs);
       if (productImgs.length > 1) {
-        // productImgs.splice(0, 1);
+        productImgs.splice(0, 1);
         // this.productImgs = [productImgs[productImgs.length - 1].raw];
         // console.log(1);
       }
@@ -1311,8 +1311,8 @@ export default {
         this.$message.error("上传头像图片大小不能超过 2MB!");
       }
       return isJPG && isLt2M;
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -1375,7 +1375,7 @@ export default {
   position: relative;
   /* bottom: 0; */
   /* left: 0; */
-  >button{
+  > button {
     position: fixed;
     bottom: 10px;
     right: 30%;
