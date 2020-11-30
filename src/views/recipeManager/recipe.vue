@@ -1,9 +1,4 @@
 <template>
-  <div>
-    <h2>食谱库</h2>
-  </div>
-</template>
-<template>
   <basic-container>
     <avue-crud :option="option"
                :table-loading="loading"
@@ -33,6 +28,27 @@
         </el-button>
       </template>
       <template slot-scope="scope" slot="menu">
+        <el-button
+          type="text"
+          icon="el-icon-view"
+          size="small"
+          @click="seeRecipeInfo(scope.row,1)"
+        >查看
+        </el-button>
+        <el-button
+          type="text"
+          icon="el-icon-edit"
+          size="small"
+          @click="updateInfo(scope.row,scope)"
+        >编辑
+        </el-button>
+          <el-button
+          type="text"
+          icon="el-icon-delete"
+          size="small"
+          @click="changeInfo(scope.row.id,1)"
+        >删除
+        </el-button>
         <el-button
           type="text"
           icon="el-icon-circle-plus-outline"
@@ -82,13 +98,77 @@
         >收藏
         </el-button>
       </template>
-
-      <template slot-scope="{row}"
+      <!-- <template slot-scope="{row}"
                 slot="category">
         <el-tag>{{row.categoryName}}</el-tag>
-      </template>
+      </template> -->
     </avue-crud>
+    <el-dialog
+      title="提示"
+      :visible.sync="dialogVisible"
+      width="80%"
+      :append-to-body = "true"
+      :before-close="handleClose">
+      <el-row :gutter="20">
+        <el-col :span="8">食谱名称：{{dialogListData.recipeName}}</el-col>
+        <el-col :span="8">食谱周期：{{dialogListData.recipeDay}}</el-col>
+        <el-col :span="8">收藏：{{dialogListData.isUse == 1?"已收藏":"未收藏"}}</el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="8">创建机构：{{dialogListData.orgName}}</el-col>
+        <el-col :span="8">创建人：{{dialogListData.createName}}</el-col>
+        <el-col :span="8">创建时间：{{dialogListData.createTime}}</el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="24">
+          <el-table
+            :data="recipeTableData"
+            border
+            style="width: 100% "
+            class="recipeTableWeekData"
+            >
+            <el-table-column
+              type="index"
+              :index="indexMethod">
+            </el-table-column>
+            <el-table-column
+              prop="week1"
+              label="周一"
+              width="180">
+            </el-table-column>
+            <el-table-column
+              prop="week2"
+              label="周二"
+              width="180">
+            </el-table-column>
+            <el-table-column
+              prop="week3"
+              label="周三">
+            </el-table-column>
+            <el-table-column
+              prop="week4"
+              label="周四"
+              width="180">
+            </el-table-column>
+            <el-table-column
+              prop="week5"
+              label="周五"
+              width="180">
+            </el-table-column>
+            <el-table-column
+              prop="week6"
+              label="周六">
+            </el-table-column>
+            <el-table-column
+              prop="week7"
+              label="周日" >
+            </el-table-column>
+          </el-table>
+        </el-col>
+      </el-row>
+    </el-dialog>
   </basic-container>
+  
 </template>
 
 <script>
@@ -98,6 +178,8 @@
   export default {
     data() {
       return {
+        dialogVisible: false,//弹框打开或者关闭
+        recipeTableData:[],
         form: {},
         query: {},
         loading: true,
@@ -106,6 +188,15 @@
           currentPage: 1,
           total: 0
         },
+        dialogListData:{
+          recipeName: '',
+          recipeDay: '',
+          isUse: '',
+          orgName:'',
+          createName: '',
+          createTime: ''
+        },
+
         selectionList: [],
         option: {
           height: 'auto',
@@ -115,9 +206,12 @@
           searchMenuSpan: 6,
           border: true,
           index: true,
-          viewBtn: true,
+          editBtn: false,
+          delBtn: false,
           selection: true,
-          menuWidth:500,
+          menuWidth:450,
+          dialogHeight: '600',
+          dialogWidth: '80%',
           dialogClickModal: false,
           addBtn:false,
           column: [
@@ -167,21 +261,33 @@
             {
               label: "创建机构",
               prop: "orgName",
+              search: true,
             },
             {
               label: "创建人",
               prop: "createName",
-              span: 24,
+              // span: 24,
               minRows: 6,
             },
             {
               label: "创建时间",
               prop: "createTime",
-              width: 180,
-              span: 24,
+              type:'datetime',
+              width: 140,
+              // span: 24,
               minRows: 6,
+              search: true,
+              searchRange:true,
             },
           ]
+        },
+        ownthis:{},
+        infoData:[],
+        infoOption:{
+          column: [{
+            label: '年龄',
+            prop: 'sex',
+          }]
         },
         data: []
       };
@@ -202,9 +308,89 @@
           ids.push(ele.id);
         });
         return ids.join(",");
-      }
+      },
     },
     methods: {
+      updateInfo(row,that){
+        console.log(this);
+        console.log(that)
+        console.log(row)
+        this.$router.push({
+          path: './catering',
+          query: {
+            userid: row.id,
+            tenantId: row.tenantId
+				  }
+        })
+      }
+      ,
+      indexMethod(index){
+        let _tableLineHead = ["早餐","早点","午餐","午点","晚餐","晚点"]
+        return _tableLineHead[index]
+      },
+      seeRecipeInfo(row){
+        this.dialogListData = row
+        debugger
+        getDetail(row.id).then(res => {
+          let recipeCycles = res.data.data.recipeCycles
+          let recipeTableData1 = [];
+          let recipeTableData = {
+            mealsType1:[],
+            mealsType2:[],
+            mealsType3:[],
+            mealsType4:[],
+            mealsType5:[],
+            mealsType6:[],
+            
+          }
+          for(let i in recipeCycles){
+            let mealsTypeNum = recipeCycles[i].mealsType
+            switch (mealsTypeNum) {
+              case 1:
+                recipeTableData.mealsType1.push(recipeCycles[i])    
+                break;
+              case 2:
+                recipeTableData.mealsType2.push(recipeCycles[i]) 
+                break;
+              case 3:
+                recipeTableData.mealsType3.push(recipeCycles[i]) 
+                break;
+              case 4:
+                recipeTableData.mealsType4.push(recipeCycles[i]) 
+                break;
+              case 5:
+                recipeTableData.mealsType5.push(recipeCycles[i]) 
+                break;
+              case 6:
+                recipeTableData.mealsType6.push(recipeCycles[i]) 
+                break;             
+              default:
+                break;
+            }
+          }
+          for (let key in recipeTableData) {
+            var weekData = {
+              week1:'',
+              week2:'',
+              week3:'',
+              week4:'',
+              week5:'',
+              week6:'',
+              week7:'',
+            }
+            for (let index = 0; index < recipeTableData[key].length; index++) {
+              var weekNum = "week" +recipeTableData[key][index].week;
+
+              // weekData[weekNum].push(recipeTableData[key][index].recipeConncts[0].dishName)
+              weekData[weekNum] += recipeTableData[key][index].recipeConncts[0].dishName+"\n"
+            }
+            console.log(weekData);
+            recipeTableData1.push(weekData)
+          }
+          this.recipeTableData = recipeTableData1
+          this.dialogVisible = true
+        });
+      },
       rowSave(row, done, loading) {
         add(row).then(() => {
           this.onLoad(this.page);
@@ -309,7 +495,7 @@
       beforeOpen(done, type) {
         if (["edit", "view"].includes(type)) {
           getDetail(this.form.id).then(res => {
-            this.form = res.data.data;
+            // this.form = res.data.data;
           });
         }
         done();
@@ -359,4 +545,7 @@
 </script>
 
 <style>
+.recipeTableWeekData .cell {
+  white-space: pre-line!important; 
+}
 </style>
