@@ -686,7 +686,7 @@ export default {
         Object.assign(params, this.query)
       ).then((res) => {
         debugger
-        this.data = res.data.data.records;
+        this.data = res.data.data;
         this.loading = false;
         this.selectionClear();
       });

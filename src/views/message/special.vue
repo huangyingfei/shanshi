@@ -339,7 +339,7 @@
         this.initData();
       },
 
-      submit(){
+      submit(form, done){
         let people=this.specialForm.people;
         for(let i=0;i<people.length;i++ ){
           this.findObject(this.option.column,"people").dicData.forEach(_=>{
@@ -380,7 +380,11 @@
                 type: "success",
                 message: "提交成功!",
               });
-              this.initData()
+              if(!this.specialForm.id){
+                this.initData()
+                this.empty();
+              }
+              done()
 
             }else{
               this.$message({

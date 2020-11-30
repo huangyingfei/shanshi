@@ -43,8 +43,12 @@ const user = {
     menuAll: getStore({name: 'menuAll'}) || [],
     token: getStore({name: 'token'}) || '',
     refreshToken: getStore({name: 'refreshToken'}) || '',
+    webLogo:getStore({name:'webLogo'}) || ''
   },
   actions: {
+    setWebLogo({commit},webLogo){
+      commit('SET_WEBLOG', webLogo);
+    },
     //根据用户名登录
     LoginByUsername({commit}, userInfo) {
       return new Promise((resolve, reject) => {
@@ -201,6 +205,11 @@ const user = {
     },
   },
   mutations: {
+    SET_WEBLOG:(state,webLogo)=>{
+       setWebLogo(webLogo);
+       state.webLogo=webLogo;
+       setStore({name:'webLogo',content:state.webLogo})
+    },
     SET_TOKEN: (state, token) => {
       setToken(token);
       state.token = token;

@@ -42,7 +42,7 @@ export const add = (row) => {
 
 export const update = (row) => {
   return request({
-    url: '/api/blade-food/studentallergy/submit',
+    url: '/api/blade-food/studentallergy/update',
     method: 'post',
     data: row
   })

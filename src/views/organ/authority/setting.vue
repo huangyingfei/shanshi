@@ -105,22 +105,23 @@
             } else {
               // debugger
               this.saveOrUpdate = true;
-              this.ruleForm.webTitle = data.data.webTitle;
-              this.ruleForm.webLogo = data.data.webLogo;
-              this.ruleForm.id = data.data.id;
-              this.ruleForm.startUseTime=data.data.startUseTime
-              this.ruleForm.endTime=data.data.endTime
+              this.$set( this.ruleForm,"webTitle" , data.data.webTitle);
+              this.$set(this.ruleForm,"webLogo", data.data.webLogo);
+              this.$set(this.ruleForm,"id" , data.data.id);
+              this.$set(this.ruleForm,"startUseTime",data.data.startUseTime)
+              this.$set(this.ruleForm,"endTime",data.data.endTime)
               let s = data.data.endTime.replace(/-/g, "/");
               var date = new Date(data.data.endTime);
-              this.ruleForm.day= Math.ceil((date.getTime()-new Date().getTime()) / 1000 / 60 / 60 /24)
+              this.$set(this.ruleForm,"day", Math.ceil((date.getTime()-new Date().getTime()) / 1000 / 60 / 60 /24))
             }
           }
         })
       },
-      submitForm() {
-        this.saveWeb();
+      submitForm(form,done) {
+        this.saveWeb(done);
+
       },
-      saveWeb() {
+      saveWeb(done) {
         // debugger
         var params;
         if (!this.saveOrUpdate) {//新增
@@ -144,6 +145,7 @@
               message: '保存成功',
               type: 'success'
             });
+            done()
           } else {
             this.$message.error('保存失败');
           }

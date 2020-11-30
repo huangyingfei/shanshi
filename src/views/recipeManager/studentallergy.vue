@@ -41,15 +41,22 @@
       </template>
 
 
-      <!--<template slot-scope="scope" slot="menu">-->
-        <!--<el-button-->
-          <!--type="text"-->
-          <!--icon="el-icon-edit"-->
-          <!--size="small"-->
-          <!--@click.stop="handleEdit(scope.row)"-->
-        <!--&gt;编辑-->
-        <!--</el-button>-->
-      <!--</template>-->
+      <template slot-scope="scope" slot="menu">
+        <el-button
+          type="text"
+          icon="el-icon-edit"
+          size="small"
+          @click.stop="handleEdit(scope.row)"
+        >编辑
+        </el-button>
+        <el-button
+          type="text"
+          icon="el-icon-edit"
+          size="small"
+          @click.stop="rowDel(scope.row)"
+        >删除
+        </el-button>
+      </template>
     </avue-crud>
   </basic-container>
 </template>
@@ -88,8 +95,9 @@ export default {
         index: true,
         viewBtn: false,
         addBtn:false,
-        EditBtn:false,
+        editBtn:false,
         selection: true,
+        delBtn:false,
         dialogClickModal: false,
         column: [
           {
@@ -107,7 +115,7 @@ export default {
             },
             rules: [{ required: true, trigger: "blur" }],
             change: ({ value, column }) => {
-              // debugger;
+
               if (value != "" && value != null) {
                 getStudentClass(value).then(res => {
                   /*                    console.log(res);*/
@@ -261,10 +269,10 @@ export default {
         });
     },
     handleEdit(scope){
-      this.$router.push({ path: "/recipeManager/addstudenttallergy",query:{id:scope.id}});
+      this.$router.push({name:"修改过敏信息",query:{id:scope.id}});
     },
     handleAdd(){
-      this.$router.push({ path: "/recipeManager/addstudenttallergy"});
+      this.$router.push({  name: "新增过敏信息"});
     },
     handleDelete() {
       if (this.selectionList.length === 0) {
