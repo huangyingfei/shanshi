@@ -407,12 +407,12 @@
             <!-- 全国查找 -->
 
             <div class="personal">
-              <el-input
+              <!-- <el-input
                 style="width:290px; margin-left: 9px;"
                 placeholder="输入关键字进行查询"
                 v-model="filterText1"
               >
-              </el-input>
+              </el-input> -->
               <div class="country">
                 <div class="country1">
                   <el-cascader
@@ -807,12 +807,13 @@ export default {
   },
   watch: {
     filterText(val) {
-      console.log(this.$refs.tree);
-      this.$refs.tree.filter(val);
-    },
-    filterText1(val) {
+      console.log(val);
+      // console.log(this.$refs.tree);
       this.$refs.tree.filter(val);
     }
+    // filterText1(val) {
+    //   this.$refs.tree.filter(val);
+    // }
   },
   beforeMount() {
     this.Protocol(); //营养素含量
@@ -882,16 +883,17 @@ export default {
       this.treeDrawing();
     },
     filterNode(value, data) {
+      console.log(data);
       if (!value) return true;
 
       return data.label.indexOf(value) !== -1;
     }, //树形结构搜索
-    filterNode1(value, data1) {
-      // console.log(data1);
-      if (!value) return true;
+    // filterNode1(value, data1) {
+    //   // console.log(data1);
+    //   if (!value) return true;
 
-      return data1.label.indexOf(value) !== -1;
-    },
+    //   return data1.label.indexOf(value) !== -1;
+    // },
     buttonClick(flat) {
       // console.log(index);
       // console.log(flat);

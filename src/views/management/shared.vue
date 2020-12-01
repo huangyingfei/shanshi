@@ -148,7 +148,7 @@
     <!-- 查看 -->
     <el-dialog
       title="查看食材"
-      :fullscreen="true"
+      width="90%"
       append-to-body
       :visible.sync="seekeys"
       :close-on-click-modal="false"
@@ -320,6 +320,11 @@
           </el-table>
         </div>
       </div>
+      <div slot="footer" class="dialog-footer">
+        <div class="cancellation">
+          <el-button @click="seekeys = false">取 消</el-button>
+        </div>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -364,7 +369,7 @@ export default {
       },
       m_page: {
         sizes: [10, 20, 40, 50, 100], //每页最大显示数
-        size: 20,
+        size: 10,
         totalElements: 0,
         totalPages: 3,
         number: 1
@@ -610,7 +615,12 @@ export default {
 .dients {
   width: 100%;
   height: 100%;
+  position: relative;
+  top: 0px;
+  left: 0px;
   background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 }
 .header {
   width: 100%;
@@ -620,8 +630,10 @@ export default {
   padding-top: 20px;
 }
 .rights {
-  width: 1200px;
-  height: 100%;
+  overflow-x: hidden;
+  width: 1100px;
+  height: 400px;
+  overflow-y: auto;
   /* background-color: red; */
 }
 .stop {
@@ -630,8 +642,9 @@ export default {
 .pagingClass {
   text-align: right;
   /* margin: 20px 0; */
-  margin-top: 20px;
-  margin-right: 40px;
+  background-color: #fff;
+  margin-top: 0px;
+  margin-right: 0px;
   margin-bottom: 60px;
 }
 </style>
