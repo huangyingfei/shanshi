@@ -2218,6 +2218,7 @@ export default {
   /* position: absolute; */
   height: 600px;
   overflow-y: auto;
+  overflow-x: hidden;
   margin-bottom: 20px;
   background-color: #fff;
   float: left;
