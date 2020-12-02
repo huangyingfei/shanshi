@@ -290,7 +290,7 @@
         </el-card>
       </el-col>
       <el-col :span="19">
-        <div class="foodPanel">
+        <div>
           <foods-week
             @childfn="parentFn"
             :headers="headers"
@@ -633,9 +633,12 @@ import Nutrition from '../nutrition.vue';
         id: this.$route.query.userid,//食谱主键
         ...auditSign      
       }
-      auditRecipe(auditSign).then(res =>{
-        debugger
-        return res
+      auditRecipe(params).then(res =>{
+        this.$message({
+          message: '审核通过',
+          type: 'success'
+        });
+         this.$router.$avueRouter.closeTag();
       })
     },
     openAuditRecipeBox() {
@@ -650,7 +653,10 @@ import Nutrition from '../nutrition.vue';
           status: 2,       //1-审核通过 2-不通过 
           refuseReason: value
         }).then((res) =>{
-          console.log(res);
+        this.$message({
+          message: '拒绝成功',
+          type: 'success'
+        });
         })
       }).catch((err) => {
       

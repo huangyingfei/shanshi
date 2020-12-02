@@ -45,10 +45,11 @@ export const calRecipe = (recipe) => {
 
 //确定审核食谱
 export const auditRecipe = (params) => {
+  console.log(params);
   return request({
     url: '/api/blade-food/recipe/audit',
     method: 'post',
-    params: {
+    data: {
       ...params,
       // id: params.id,      //食谱主键
       // status: params.status,       //1-审核通过 2-不通过 
