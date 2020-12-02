@@ -489,13 +489,14 @@
           </el-input>
           ~
           <span style="padding-right: 10px; padding-left: 10px">期望值(%)</span>
-          <el-input
-            style="width: 140px"
-            placeholder="请输入内容"
-            v-model="node.exceptValue"
-            clearable
-          >
-          </el-input>
+          <el-input-number v-model="node.exceptValue" controls-position="right"></el-input-number>
+          <!--<el-input-->
+            <!--style="width: 140px"-->
+            <!--placeholder="请输入内容"-->
+            <!--v-model="node.exceptValue"-->
+            <!--clearable-->
+          <!--&gt;-->
+          <!--</el-input>-->
 
           <el-button style="margin-left: 30px" type="primary"  @click="startTrim"
             >开始配平</el-button
@@ -541,11 +542,37 @@
       :visible.sync="jundgeallergy"
       :close-on-click-modal="false"
     >
-
+<div class="item-allergy">
+  <el-table  :span-method="objectSpanMethod"
+    :data="tableData"
+    border
+    style="width: 100%; margin-top: 20px">
+    <el-table-column
+      prop="className"
+      label="班级"
+      width="180">
+    </el-table-column>
+    <el-table-column
+      prop="studentName"
+      label="姓名">
+    </el-table-column>
+    <el-table-column
+      prop="dishName"
+      label="菜品">
+    </el-table-column>
+    <el-table-column
+      prop="foodName"
+      label="食材">
+    </el-table-column>
+    <el-table-column
+      prop="symptom"
+      label="过敏症状">
+    </el-table-column>
+  </el-table>
+</div>
 
       <div slot="footer" class="dialog-footer">
-        <el-button @click="jundgeallergy=false">取 消</el-button>
-        <el-button @click="jundgeallergy=true" type="primary">确 定</el-button>
+        <el-button @click="jundgeallergy=false" type="primary">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -590,6 +617,7 @@ document.oncontextmenu = function(){return false};
 
     const data = [];
     return {
+      tableData: [],
       jundgeallergy:false,//过敏
       foodRadio:'1',
       isUse:undefined,
@@ -824,6 +852,9 @@ document.oncontextmenu = function(){return false};
   },
   beforeMount() {},
   methods: {
+    objectSpanMethod({ row, column, rowIndex, columnIndex }) {
+
+    },
     mealsTypeById(){
       var that=this;
       detailByPeopleId(this.WeekInfo.crowd).then(res=>{
@@ -1363,7 +1394,7 @@ document.oncontextmenu = function(){return false};
         recipeCycles:recipeCycles
       }
       jundgeAllergy(row).then(res=>{
-
+        this.tableData=res.data.data.foods
       })
 
     },
@@ -1436,63 +1467,71 @@ document.oncontextmenu = function(){return false};
      })
     },
     startTrim(){
-      let that=this;
-      this.smartDatas.forEach(week=>{
-      week.weeks.forEach(_=>{
-          _.foods.forEach(__=>{
-            __.children.forEach(___=>{
-              let flag=false;
-              ___.nutrientIds.forEach(n=>{
-                if(n.id==that.node.nowCode){
-                  if(n.value!="0"){
-                    flag=true;
+      if(this.node.exceptValue) {
+        let that = this;
+        this.smartDatas.forEach(week => {
+          week.weeks.forEach(_ => {
+            _.foods.forEach(__ => {
+              __.children.forEach(___ => {
+                let flag = false;
+                ___.nutrientIds.forEach(n => {
+                  if (n.id == that.node.nowCode) {
+                    if (n.value != "0") {
+                      flag = true;
+                    }
                   }
-                }
-              })
-              if(flag){
-                let add=(((parseFloat(that.node.exceptValue)-parseFloat(that.node.nowValue))/parseFloat(that.node.nowValue)))
-                if(add>0){
-                  this.$set(___,"up",(add*parseFloat(100)).toFixed(2));delete ___["down"]
+                })
+                if (flag) {
+                  let add = (((parseFloat(that.node.exceptValue) - parseFloat(that.node.nowValue)) / parseFloat(that.node.nowValue)))
+                  if (add > 0) {
+                    this.$set(___, "up", (add * parseFloat(100)).toFixed(2));
+                    delete ___["down"]
 
-                }else  if(add<0){
-                  this.$set(___,"down",Math.abs((add*parseFloat(100)).toFixed(2)));delete ___["up"]
-                }
-                else{
+                  } else if (add < 0) {
+                    this.$set(___, "down", Math.abs((add * parseFloat(100)).toFixed(2)));
+                    delete ___["up"]
+                  }
+                  else {
                     delete __["down"]
                     delete __["up"]
+                  }
+                  let count = (parseFloat(___.count) + parseFloat(___.count) * add)
+                  this.$set(___, "count", count.toFixed(2));
                 }
-                let count=( parseFloat(___.count)+parseFloat(___.count)*add)
-                this.$set(___,"count",count.toFixed(2));
+              })
+            })
+          })
+
+        })
+        this.smartDatas.forEach(item => {
+          this.$set(item, "flag", true);
+          item.weeks.forEach(_ => {
+            _.foods.forEach(__ => {
+              let count = 0;
+              __.children.forEach(___ => {
+                count += parseFloat(___.count ? ___.count : 0)
+              })
+              if (parseFloat(__.count) > parseFloat(count)) {//下降
+                this.$set(__, "down", Math.abs(((parseFloat(count) - parseFloat(__.count)) / parseFloat(__.count) * 100).toFixed(2)));
+                delete __["up"]
               }
+              else if (parseFloat(__.count) < parseFloat(count)) {//上升
+                this.$set(__, "up", (((parseFloat(count) - parseFloat(__.count)) / parseFloat(__.count) * 100).toFixed(2)));
+                delete __["down"]
+              } else {
+                delete __["down"]
+                delete __["up"]
+              }
+              this.$set(__, "count", count);
             })
           })
         })
-
-      })
-     // debugger
-
-      this.smartDatas.forEach(item=>{
-        this.$set(item,"flag",true);
-        item.weeks.forEach(_=>{
-          _.foods.forEach(__=>{
-            let count=0;
-            __.children.forEach(___=>{
-              count+= parseFloat(___.count?___.count:0)
-            })
-            if(parseFloat(__.count)>parseFloat(count)){//下降
-              this.$set(__,"down",Math.abs(((parseFloat(count)-parseFloat(__.count))/parseFloat(__.count)*100).toFixed(2))); delete __["up"]
-            }
-            else if(parseFloat(__.count)<parseFloat(count)){//上升
-              this.$set(__,"up",(((parseFloat(count)-parseFloat(__.count))/parseFloat(__.count)*100).toFixed(2))); delete __["down"]
-            }else{
-              delete __["down"]
-              delete __["up"]
-            }
-            this.$set(__,"count",count);
-          })
-        })
-      })
-
+      }else{
+        this.$message({
+          message: "期望值不可为空",
+          type: "info",
+        });
+      }
     },
     application(){
       this.smartDatas.forEach(week=>{
@@ -1593,7 +1632,8 @@ document.oncontextmenu = function(){return false};
         recipeCategory:1,
         startTime:this.startTime,
         endTime:this.endTime,
-        isBoard:this.WeekInfo.shareTell?1:0
+        isBoard:this.WeekInfo.shareTell?1:0,
+        score:this.score
       }
       if(row.recipeName&&row.recipeCycles.length>0&&row.startTime&&!flag) {
         if (this.id) {
@@ -2002,6 +2042,11 @@ document.oncontextmenu = function(){return false};
 }
 </style>
 <style scoped>
+  .item-allergy{
+    min-height: 100px;
+    max-height: 250px;
+    overflow:scroll;
+  }
 .meals .el-row {
   padding: 5px;
 }

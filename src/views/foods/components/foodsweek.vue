@@ -1146,7 +1146,7 @@ export default {
         }
 
       }
-      },2000);
+      },200);
 
     },
     oncontextmenuFood(e, data_id, week_id, food_id) {

@@ -113,7 +113,7 @@
               <el-table-column label="图片" align="center">
                 <template slot-scope="scope1">
                   <div
-                    v-if="
+                    v-show="
                       scope1.$index === 0 &&
                       scope.row.weeks.find((p) => p.name == 'week1')
                     "
@@ -132,7 +132,7 @@
                       "
                     >
                       <img
-                        v-if="
+                        v-show="
                           scope.row.weeks.find((p) => p.name == 'week1').image
                         "
                         :src="
@@ -141,7 +141,7 @@
                         style="width: 100%; height: 100%"
                       />
                       <img
-                        v-if="
+                        v-show="
                           !scope.row.weeks.find((p) => p.name == 'week1').image
                         "
                         :src="empty_image"
