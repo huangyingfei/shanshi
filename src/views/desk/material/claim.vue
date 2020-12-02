@@ -529,7 +529,7 @@ export default {
 
 <style scoped>
 .avue-view {
-  padding: 0 0px !important;
+  padding: 0 5px !important;
 }
 .unsaved {
   width: 100%;

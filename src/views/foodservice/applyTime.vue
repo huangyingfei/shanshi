@@ -357,7 +357,8 @@
           <div class="saveas">
             <el-table
               :data="mailto"
-              style="width: 70%; margin-bottom: 20px"
+              max-height="400"
+              style="width: 60%; margin-bottom: 20px"
               row-key="id"
               v-loading="loadFlag"
               :default-expand-all="true"
@@ -757,7 +758,7 @@ export default {
 }
 .rights {
   overflow-x: hidden;
-  width: 1100px;
+  width: 100%;
   height: 400px;
   overflow-y: auto;
   /* background-color: red; */

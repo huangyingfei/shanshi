@@ -17,6 +17,7 @@
             node-key="id"
             v-loading="loadFlag"
             :default-expand-all="false"
+            :expand-on-click-node="false"
             @node-click="handleNodeClick"
           >
             <span class="custom-tree-node" slot-scope="{ node, data }">
@@ -38,10 +39,18 @@
                   编辑
                 </el-button>
                 <el-button
+                  v-if="data.tment == 1"
+                  type="text"
+                  size="mini"
+                  @click.stop="() => setDepartment(data, 2)"
+                >
+                  编辑子部门
+                </el-button>
+                <el-button
                   v-if="data.into == 1"
                   type="text"
                   size="mini"
-                  @click.stop="() => gate(data)"
+                  @click.stop="() => gate(data, 1)"
                 >
                   添加
                 </el-button>
@@ -147,12 +156,23 @@
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button @click="department = false">取 消</el-button>
-            <el-button @click="Determine" type="primary">确 定</el-button>
+            <el-button
+              v-if="this.departments == 1"
+              @click="Determine"
+              type="primary"
+              >确 定</el-button
+            >
+            <el-button
+              v-if="this.departments == 2"
+              @click="selection"
+              type="primary"
+              >编辑确定</el-button
+            >
           </div>
         </el-dialog>
         <!-- 添加子部门弹框 -->
         <el-dialog
-          title="添加部门"
+          title="子部门"
           width="30%"
           append-to-body
           :visible.sync="obtained"
@@ -167,18 +187,31 @@
             class="demo-ruleForm"
           >
             <el-form-item label="子部门名称" style="width: 355px">
-              <el-input style="width: 250px" v-model="acetone.name"></el-input>
+              <el-input
+                maxlength="10"
+                show-word-limit
+                style="width: 250px"
+                v-model="acetone.name"
+              ></el-input>
             </el-form-item>
-            <el-form-item label="子部门排序" style="width: 355px">
+            <!-- <el-form-item label="子部门排序" style="width: 355px">
               <el-input
                 style="width: 250px"
                 v-model="acetone.sorting"
               ></el-input>
-            </el-form-item>
+            </el-form-item> -->
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button @click="obtained = false">取 消</el-button>
-            <el-button @click="atomic" type="primary">确 定</el-button>
+            <el-button v-if="this.support == 0" @click="atomic" type="primary"
+              >确 定</el-button
+            >
+            <el-button
+              v-if="this.support == 1"
+              @click="addNotify"
+              type="primary"
+              >编辑确定</el-button
+            >
           </div>
         </el-dialog>
         <!-- 添加员工弹框 -->
@@ -595,10 +628,12 @@ export default {
         "Blade-Auth": ""
       }, //上传图片请求头
       acetone: {
+        id: "", //ID
         name: "", //子部门名称
         sorting: "" //部门排序
       },
       storage: {
+        id: "",
         name: "", //部门名称
         sorting: "" //部门排序
       },
@@ -1016,7 +1051,8 @@ export default {
       under: "", //添加员工下标
       edits: "", //ID
       view: "",
-      departments: "" //添加部门
+      departments: "", //添加部门
+      support: "" //添加子部门
     };
   },
   beforeMount() {
@@ -1264,21 +1300,66 @@ export default {
       this.under = index1;
       this.dateTime = true;
     },
+    //添加部门
     added(index) {
+      this.storage.name = "";
       this.departments = index;
       console.log(this.departments);
       this.department = true;
     },
-    gate(data) {
+    //添加子部门
+    gate(data, index) {
+      this.acetone.name = "";
       // console.log(data);
+      this.support = data.tment;
+      console.log(this.support);
       this.adds = data.id;
       console.log(this.adds);
       this.obtained = true;
     },
-    editorBase(data) {
+    //编辑部门
+    editorBase(data, index) {
+      this.storage.name = "";
+      this.departments = index;
+      console.log(this.departments);
       console.log(data);
-      //  this.adds = data.id;
+      this.storage.name = data.label;
+      (this.storage.id = data.id),
+        //  this.adds = data.id;
+        (this.department = true);
+    },
+    //编辑子部门
+    setDepartment(data, index) {
+      this.support = data.tment;
+      console.log(this.support);
+      console.log(data);
+      this.acetone.name = data.label;
+      this.acetone.id = data.id;
       this.obtained = true;
+    },
+    //编辑子部门
+    addNotify() {
+      this.$axios
+        .post(`api/blade-food/teacherdept/submit`, {
+          parentId: this.adds, //上级ID
+          id: this.acetone.id, //子部门ID
+          deptName: this.acetone.name //部门名称
+          // level: this.acetone.sorting //部门排序
+        })
+        .then(res => {
+          this.getStorage();
+          this.obtained = false;
+          this.acetone.name = "";
+          // this.acetone.storage = "";
+          console.log(res);
+          this.$message({
+            message: "添加成功",
+            type: "success"
+          });
+        })
+        .catch(() => {
+          this.$message.error("添加失败");
+        });
     },
     //添加子部门
     atomic() {
@@ -1303,19 +1384,46 @@ export default {
           this.$message.error("添加失败");
         });
     },
-    //添加部门
-    Determine() {
+    //编辑部门
+    selection() {
       if (this.storage.name != "") {
         this.$axios
           .post(`api/blade-food/teacherdept/submit`, {
-            deptName: this.storage.name, //部门名称
-            level: this.storage.sorting //部门排序
+            id: this.storage.id, //部门ID
+            deptName: this.storage.name //部门名称
+            // level: this.storage.sorting //部门排序
           })
           .then(res => {
             this.getStorage();
             this.department = false;
             this.storage.name = "";
-            this.storage.storage = "";
+            // this.storage.storage = "";
+            console.log(res);
+            this.$message({
+              message: "添加成功",
+              type: "success"
+            });
+          })
+          .catch(() => {
+            this.$message.error("添加失败");
+          });
+      } else {
+        this.$message.error("部门不能为空");
+      }
+    },
+    //添加部门
+    Determine() {
+      if (this.storage.name != "") {
+        this.$axios
+          .post(`api/blade-food/teacherdept/submit`, {
+            deptName: this.storage.name //部门名称
+            // level: this.storage.sorting //部门排序
+          })
+          .then(res => {
+            this.getStorage();
+            this.department = false;
+            this.storage.name = "";
+            // this.storage.storage = "";
             console.log(res);
             this.$message({
               message: "添加成功",
@@ -1354,7 +1462,28 @@ export default {
           });
         });
     },
-    handleNodeClick(data) {},
+    //查看
+    handleNodeClick(data) {
+      this.view = data.id;
+      console.log(this.view);
+      this.loadFlag1 = true;
+      this.$axios
+        .get(`api/blade-food/teacher/list?deptId=${this.view}`, {})
+        .then(res => {
+          // console.log(res);
+          // this.store = res.data.data.records;
+          // console.log(this.store);
+          this.$message({
+            message: "查询成功",
+            type: "success"
+          });
+          this.loadFlag1 = false;
+          this.tableData = res.data.data.records;
+        })
+        .catch(() => {
+          this.$message.error("查询失败");
+        });
+    },
     //查看详情
     defcustom(data) {
       // console.log(data);
@@ -1427,7 +1556,8 @@ export default {
             id: item.id,
             label: item.title,
             into: item.level,
-            view: 0
+            view: 0,
+            tment: 0
           };
           auto[index].children = [];
           if (item.children) {
@@ -1436,7 +1566,8 @@ export default {
                 id: item1.id,
                 label: item1.title,
                 into: item1.level,
-                view: 1
+                view: 1,
+                tment: 1
               };
             });
           }
