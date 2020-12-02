@@ -45,6 +45,7 @@
         border
         :element-loading-text="page_data.loadTxt"
         style="width: 100%"
+        max-height="500"
       >
         <el-table-column label="序号" type="index" width="50" align="center">
         </el-table-column>
@@ -275,7 +276,7 @@ export default {
       },
       m_page: {
         sizes: [10, 20, 40, 50, 100], //每页最大显示数
-        size: 20,
+        size: 10,
         totalElements: 0,
         totalPages: 3,
         number: 1
@@ -535,13 +536,13 @@ export default {
 </script>
 
 <style scoped>
-.el-button--success {
+/* .el-button--success {
   color: #fff;
   background-color: #00aca0;
   border-color: #00aca0;
-}
+} */
 .unsaved {
-  width: 98%;
+  width: 100%;
   height: 100%;
   /* margin-left: 10px; */
   background-color: #fff;

@@ -222,6 +222,7 @@
                 style=" width: 350px;   "
               >
                 <el-input
+                  :disabled="this.nbottoms == 1"
                   show-word-limit
                   maxlength="10"
                   v-model="ruleForm.name"
@@ -250,6 +251,7 @@
 
               <el-form-item label="所属区域" style=" width: 350px;  ">
                 <el-cascader
+                  :disabled="this.nbottoms == 1"
                   v-model="valuepark"
                   placeholder="请选择省市区"
                   :options="options"
@@ -259,7 +261,12 @@
               </el-form-item>
 
               <el-form-item label="所属季节" style="  width: 350px;  ">
-                <el-select v-model="active" multiple placeholder="请选择季节">
+                <el-select
+                  :disabled="this.nbottoms == 1"
+                  v-model="active"
+                  multiple
+                  placeholder="请选择季节"
+                >
                   <el-option
                     v-for="item in season"
                     :key="item.value"
@@ -272,6 +279,7 @@
 
               <el-form-item label="特点" style="width: 350px">
                 <el-input
+                  :disabled="this.nbottoms == 1"
                   type="textarea"
                   style="width: 200px"
                   maxlength="30"
@@ -281,6 +289,7 @@
               </el-form-item>
               <el-form-item label="做法" style="width: 350px">
                 <el-input
+                  :disabled="this.nbottoms == 1"
                   type="textarea"
                   maxlength="30"
                   show-word-limit
@@ -321,7 +330,10 @@
               </el-form-item>
 
               <el-form-item label="常用" style="   ">
-                <el-switch v-model="ruleForm.delivery1"></el-switch>
+                <el-switch
+                  :disabled="this.nbottoms == 1"
+                  v-model="ruleForm.delivery1"
+                ></el-switch>
               </el-form-item>
             </el-form>
           </div>
@@ -331,6 +343,7 @@
             <el-button
               style="margin-left: 10px;"
               type="primary"
+              :disabled="this.nbottoms == 1"
               @click="addLine"
               >添加</el-button
             >
@@ -453,23 +466,27 @@
           </div>
           <!-- 树形结构 -->
           <el-dialog
-            title="添加食品名称"
+            title="添加菜品"
             append-to-body
             :visible.sync="dateTime"
             :close-on-click-modal="false"
           >
-            <div class="monly">
-              <div class="block">
+            <el-input placeholder="输入关键字进行过滤" v-model="filterText1">
+            </el-input>
+            <div class="block">
+              <div class="rolling">
                 <p></p>
                 <el-tree
                   :data="data1"
                   node-key="id"
                   :default-expand-all="false"
-                  :expand-on-click-node="false"
                   @node-click="handleNodeClick"
+                  :filter-node-method="filterNode1"
+                  ref="tree"
                 ></el-tree>
               </div>
             </div>
+
             <div slot="footer" class="dialog-footer">
               <el-button @click="dateTime = false">取 消</el-button>
               <el-button @click="setlist" type="primary">确 定</el-button>
@@ -625,6 +642,7 @@ export default {
       dateTime: false, //弹出框
       stone: "", //id
       tmquery: [],
+      filterText1: "",
       dsquery: {
         establish: "", //创建机构
         submit: "", //提交人
@@ -762,6 +780,11 @@ export default {
       classification: "" //分类ID
     };
   },
+  watch: {
+    filterText1(val) {
+      this.$refs.tree.filter(val);
+    }
+  },
   beforeMount() {
     this.auditing();
     this.setDec(); //公共库分类
@@ -773,6 +796,12 @@ export default {
   },
 
   methods: {
+    filterNode1(value, data1) {
+      // console.log(data1);
+      if (!value) return true;
+
+      return data1.label.indexOf(value) !== -1;
+    },
     notEmpty() {
       this.input = ""; //菜品名称
       this.noinst = ""; //创建机构
@@ -916,14 +945,22 @@ export default {
           this.ruleForm.name = this.handler.dishName; //菜品名字
           this.ruleForm.fooddata = this.handler.dishTypeName; //菜品分类
           // console.log(this.handler);
-          this.handler.season.split(",").forEach(item => {
-            this.active.push(item);
-          });
-          let bar = [];
-          this.handler.provinces.split(",").forEach((item, i) => {
-            bar.push([item, this.handler.belongRegion.split(",")[i]]);
-          });
-          this.valuepark = bar;
+          if (this.handler.season) {
+            this.handler.season.split(",").forEach(item => {
+              this.active.push(item);
+            });
+          } else {
+            this.active = [];
+          }
+          if (this.handler.provinces) {
+            let bar = [];
+            this.handler.provinces.split(",").forEach((item, i) => {
+              bar.push([item, this.handler.belongRegion.split(",")[i]]);
+            });
+            this.valuepark = bar;
+          } else {
+            this.valuepark = [];
+          }
 
           let picture = []; //图片
           if (this.handler.pic) {
@@ -1199,31 +1236,6 @@ export default {
             this.graph();
           }
         });
-      // this.officeonce.length = 0;
-      // this.active.length = 0;
-      // this.seekeys = true;
-
-      // console.log(row);
-
-      // this.ruleForm.name = row.dishName;
-      // // this.ruleForm.fooddata = row.dishType;
-      // this.ruleForm.region = row.function;
-      // this.ruleForm.desc = row.remark;
-
-      // row.season.split(",").forEach((item, i) => {
-      //   console.log(item);
-      //   this.active.push(item);
-      // });
-      // row.provinces.split(",").forEach((item, i) => {
-      //   console.log(item);
-      //   this.valuepark.push([item, row.belongRegion.split(",")[i]]);
-      // });
-      // console.log(this.valuepark);
-      // // this.valuepark
-      // this.ruleForm.delivery = row.isUse == 0 ? false : true; //公开
-      // this.ruleForm.delivery1 = row.isPub == 0 ? false : true; //常用
-      // this.active.push(row.season.split(","));
-      // console.log(this.active);
     },
     // 分类
     muito() {
@@ -1330,7 +1342,7 @@ export default {
     },
     //点击查看详情
     handleNodeClick(data) {
-      //   console.log(data);
+      console.log(data);
       //   this.getInput = data.label;
       //   console.log(this.getInput);
       this.flour = data.id;
@@ -1436,13 +1448,15 @@ export default {
             // console.log(item);
             Front[index] = {
               id: item.id,
-              label: item.typeName
+              label: item.typeName,
+              view: 0
             };
             Front[index].children = [];
             item.foods.forEach((item1, index1) => {
               Front[index].children[index1] = {
                 id: item1.id,
-                label: item1.foodName
+                label: item1.foodName,
+                view: 1
               };
             });
           });
@@ -1503,6 +1517,7 @@ export default {
 <style>
 .toolbar {
   width: 99%;
+  height: 100%;
   background-color: #fff;
   /* height: 600px; */
   /* margin-left: 10px; */
@@ -1593,5 +1608,10 @@ export default {
   margin-top: 20px;
   margin-right: 40px;
   margin-bottom: 60px;
+}
+.rolling {
+  width: 100%;
+  height: 300px;
+  overflow-y: auto;
 }
 </style>

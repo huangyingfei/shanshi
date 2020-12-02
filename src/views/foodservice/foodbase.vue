@@ -1,18 +1,20 @@
 <template>
   <div>
     <el-tabs v-model="angelfood" @tab-click="foodmatters">
-      <el-tab-pane label="公共食材库" name="third"></el-tab-pane>
-      <el-tab-pane label="个人食材库" name="fourth"></el-tab-pane>
+      <el-tab-pane label="个人食材库" name="third"></el-tab-pane>
+      <el-tab-pane label="公共食材库" name="fourth"></el-tab-pane>
       <div class="block">
-        <p></p>
-        <el-tree
-          :data="data1"
-          node-key="id"
-          v-loading="loadFlag2"
-          :default-expand-all="false"
-          @node-click="handleNodeClick"
-        >
-        </el-tree>
+        <div class="rolling">
+          <p></p>
+          <el-tree
+            :data="data1"
+            node-key="id"
+            v-loading="loadFlag2"
+            :default-expand-all="false"
+            @node-click="handleNodeClick"
+          >
+          </el-tree>
+        </div>
       </div>
     </el-tabs>
   </div>
@@ -22,7 +24,7 @@
 export default {
   data() {
     return {
-      angelfood: "fourth",
+      angelfood: "third",
       loadFlag2: false,
       more: "0"
     };
@@ -96,3 +98,11 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.rolling {
+  width: 100%;
+  height: 350px;
+  overflow-y: auto;
+}
+</style>
