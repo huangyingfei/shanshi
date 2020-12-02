@@ -761,6 +761,8 @@ export default {
     tenantId:'',
 
     dragnode: {},
+
+    auditButtonShow: false,
   },
   data() {
     return {
