@@ -373,6 +373,7 @@ import Nutrition from '../nutrition.vue';
   },
   mounted(){
     this.auditButtonShow = this.$route.query.doType == 0?true:false
+    this.tenantId=this.$route.query.tenantId;
     this.initData()
     if(this.$route.query.userid){
       this.id=this.$route.query.userid;

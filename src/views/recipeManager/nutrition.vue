@@ -238,7 +238,7 @@
             </el-col>
           </el-row>
           <!-- 营养素摄入量表格结束 -->
-          <el-row>
+          <el-row :gutter="40">
             <el-col :span="12">
               <span>三.能量来源分布:</span>
             </el-col>
@@ -247,48 +247,40 @@
             </el-col>
           </el-row>
 
-          <el-row>
+          <el-row :gutter="40">
             <!-- 能量来源分布表格开始 -->
             <el-col :span="12">
               <el-table size = "small">
-                <el-table-column label="食物类别" prop="sundayRecipe" min-width="43">
-                </el-table-column>
-                <el-table-column label="谷物及制品" prop="sundayRecipe" min-width="43">
-                </el-table-column>
-                <el-table-column label="薯类、淀粉及制品" prop="sundayRecipe" min-width="60">
-                </el-table-column>
-                <el-table-column label="小吃、甜饼、速食食品" prop="sundayRecipe" min-width="60">
-                </el-table-column>
-                <el-table-column label="薯类、淀粉及制品" prop="sundayRecipe" min-width="60">
-                </el-table-column>
-                <el-table-column label="脂肪">
+                <el-table-column label="">
                   <el-table-column
                     prop="sundayRecipeWeight"
-                    label="要求" min-width="43">
+                    label="" min-width="50">
                   </el-table-column>
                   <el-table-column
                     prop="sundayRecipeWeight"
-                    label="现状" min-width="43">
+                    label="" min-width="50">
+                  </el-table-column>
+                </el-table-column>
+                <el-table-column label="脂肪" align="center">
+                  <el-table-column
+                    prop="sundayRecipeWeight"
+                    label="要求" min-width="50" align="center">
+                  </el-table-column>
+                  <el-table-column
+                    prop="sundayRecipeWeight"
+                    label="现状" min-width="50" align="center">
                   </el-table-column>
                 </el-table-column>
 
-                <el-table-column label="蛋白质">
+                <el-table-column label="蛋白质" align="center">
                   <el-table-column 
                     label="要求" 
-                    prop="sundayRecipe" min-width="43">
+                    prop="sundayRecipe" min-width="50" align="center">
                   </el-table-column>
                   <el-table-column 
                     label="现状" 
-                    prop="sundayRecipe" min-width="43">
+                    prop="sundayRecipe" min-width="50" align="center">
                   </el-table-column>
-                </el-table-column>
-                <el-table-column label="鱼虾蟹贝类" prop="sundayRecipe" min-width="43">
-                </el-table-column>
-                <el-table-column label="糖,蜜饯类" prop="sundayRecipe" min-width="43">
-                </el-table-column>
-                <el-table-column label="油脂类" prop="sundayRecipe" min-width="43">
-                </el-table-column>
-                <el-table-column label="调味品类" prop="sundayRecipe" min-width="43">
                 </el-table-column>
 
 
@@ -298,59 +290,32 @@
             <!-- 蛋白质来源分布表格开始 -->
             <el-col :span="12">
               <el-table size = "small">
-                <el-table-column label="食物类别" prop="sundayRecipe" min-width="43">
+                <el-table-column label="" prop="sundayRecipe" min-width="43" align="center">
                 </el-table-column>
-                <el-table-column label="谷物及制品" prop="sundayRecipe" min-width="43">
-                </el-table-column>
-                <el-table-column label="薯类、淀粉及制品" prop="sundayRecipe" min-width="60">
-                </el-table-column>
-                <el-table-column label="小吃、甜饼、速食食品" prop="sundayRecipe" min-width="60">
-                </el-table-column>
-                <el-table-column label="薯类、淀粉及制品" prop="sundayRecipe" min-width="60">
-                </el-table-column>
-                <el-table-column label="">
+                <el-table-column label="优质蛋白质" align="center">
                   <el-table-column
                     prop="sundayRecipeWeight"
-                    label="深色蔬菜" min-width="43">
+                    label="要求" min-width="50" align="center">
                   </el-table-column>
-                </el-table-column>
-                <el-table-column label="菌藻类" prop="sundayRecipe" min-width="43">
-                </el-table-column>
-                <el-table-column label="水果类及制品" prop="sundayRecipe" min-width="43">
-                </el-table-column>
-                <el-table-column label="坚果,种子类" prop="sundayRecipe" min-width="43">
-                </el-table-column>
-                <el-table-column label="乳类及制品" prop="sundayRecipe" min-width="43">
-                </el-table-column>
-                <el-table-column label="蛋类及制品" prop="sundayRecipe" min-width="43">
-                </el-table-column>
-                <el-table-column label="肉类及制品" prop="sundayRecipe" min-width="43">
-                </el-table-column>
-
-                <el-table-column label="">
-                  <el-table-column 
-                    label="肝类" 
-                    prop="sundayRecipe" min-width="43">
-                  </el-table-column>
-                </el-table-column>
-                <el-table-column label="鱼虾蟹贝类" prop="sundayRecipe" min-width="43">
-                </el-table-column>
-                <el-table-column label="糖,蜜饯类" prop="sundayRecipe" min-width="43">
-                </el-table-column>
-                <el-table-column label="油脂类" prop="sundayRecipe" min-width="43">
-                </el-table-column>
-                <el-table-column label="调味品类" prop="sundayRecipe" min-width="43">
-                </el-table-column>
-
-                <el-table-column label="" align="center">
                   <el-table-column
-                    prop="sundayRecipe"
-                    label="盐" min-width="43">
+                    prop="sundayRecipeWeight"
+                    label="动物性食物" min-width="60" align="center">
                   </el-table-column>
+                  <el-table-column
+                    prop="sundayRecipeWeight"
+                    label="豆类" min-width="50" align="center">
+                  </el-table-column>                  
                 </el-table-column>
+
               </el-table>
             </el-col>
             <!-- 蛋白质来源分布表格结束 -->
+          </el-row>
+
+          <el-row>
+            <el-col :span="24">
+              <span>五.配餐能量结构表:</span>
+            </el-col>
           </el-row>
 
         </section>
@@ -423,9 +388,9 @@ export default {
   width: 300mm;
   position: relative
 } */
+
 .print-page{
   width: 310mm;
-  height: 210mm;
   margin: 0 auto;
   margin-bottom: 14mm;
   border: 1px solid #bbb;
