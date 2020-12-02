@@ -1507,7 +1507,8 @@ export default {
           this.$message.error("查询失败");
         });
     },
-
+    // api/blade-food/class/tree
+ 
     //获取所属班级
     getToolkit() {
       this.$axios.get(`api/blade-food/class/tree`, {}).then(res => {
@@ -1515,29 +1516,30 @@ export default {
         this.bufs = res.data.data;
         let fwork = [];
         this.bufs.forEach((item, index) => {
-          // console.log(item);
-          item.children.forEach(item1 => {
-            // console.log(item1);
-            if (item1.children) {
-              item1.children.forEach((item2, index2) => {
-                // console.log(item2);
-                fwork[index2] = {
-                  id: item2.id,
-                  label: item2.classType
-                };
-                fwork[index2].children = [];
-                if (item2.children) {
-                  item2.children.forEach((item3, index3) => {
-                    // console.log(item3);
-                    fwork[index2].children[index3] = {
-                      id: item3.id,
-                      label: item3.classType
-                    };
-                  });
-                }
-              });
-            }
-          });
+          console.log(item);
+
+          // item.children.forEach(item1 => {
+          //   // console.log(item1);
+          //   if (item1.children) {
+          //     item1.children.forEach((item2, index2) => {
+          //       // console.log(item2);
+          //       fwork[index2] = {
+          //         id: item2.id,
+          //         label: item2.classType
+          //       };
+          //       fwork[index2].children = [];
+          //       if (item2.children) {
+          //         item2.children.forEach((item3, index3) => {
+          //           // console.log(item3);
+          //           fwork[index2].children[index3] = {
+          //             id: item3.id,
+          //             label: item3.classType
+          //           };
+          //         });
+          //       }
+          //     });
+          //   }
+          // });
         });
         console.log(fwork);
       });
