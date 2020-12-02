@@ -1995,8 +1995,13 @@ document.oncontextmenu = function(){return false};
   },
 };
 </script>
-
 <style>
+  .meals .el-drawer__open .el-drawer.rtl{
+  width: 50%!important;
+  overflow-y: scroll;
+}
+</style>
+<style scoped>
 .meals .el-row {
   padding: 5px;
 }
@@ -2067,11 +2072,6 @@ document.oncontextmenu = function(){return false};
   position: absolute;
   top: 70px;
   right: 50px;
-
-  /*display: flex;*/
-  /* border-radius: 50%;
-  background-image: url("/img/yuan.png");
-  background-size: 100% 100%; */
 }
 .scores3{
   width: 100px;
@@ -2085,8 +2085,6 @@ document.oncontextmenu = function(){return false};
   display: flex;
   justify-content:space-between;
 }
-
-
  .scores2 {
   width: 120px;
   height: 65px;
@@ -2210,10 +2208,7 @@ document.oncontextmenu = function(){return false};
 /*.meals .select-item  .el-input--suffix .el-input__inner{*/
   /*padding-right: 15px!important;*/
 /*}*/
-.meals .el-drawer__open .el-drawer.rtl{
-  width: 50%!important;
-  overflow-y: scroll;
-}
+
 .showFoodListColor{
   color: #00b1a2 !important;
   border-color: #b3e8e3 !important;

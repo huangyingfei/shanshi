@@ -330,12 +330,14 @@
     <!-- 审核确认取消通过按钮结束 -->
     <div class="scores" @click="tfractio">
       <div class="scores1">
-        <p class="gnus">{{score}}</p>
-        <p class="scorefor">分</p>
-      </div>
-      <div class="scores2">
-        <img class="picture" src="/img/fenshu.png" alt="" />
-        <p class="vertical">真棒</p>
+        <div class="scores3">
+          <p class="gnus">{{score}}</p>
+          <p class="scorefor">分</p>
+        </div>
+        <div class="scores2">
+          <img class="picture" src="/img/fenshu.png" alt="" />
+          <p class="vertical">真棒</p>
+        </div>
       </div>
     </div>
     <!-- 分数弹框 -->
@@ -630,7 +632,7 @@ import Nutrition from '../nutrition.vue';
     auditRecipeConfirmAgree(auditSign){
       let params = {
         id: this.$route.query.userid,//食谱主键
-        ...auditSign      
+        ...auditSign
       }
       auditRecipe(params).then(res =>{
         this.$message({
@@ -649,7 +651,7 @@ import Nutrition from '../nutrition.vue';
       }).then(({ value }) => {
         auditRecipe({
           id: this.id,
-          status: 2,       //1-审核通过 2-不通过 
+          status: 2,       //1-审核通过 2-不通过
           refuseReason: value
         }).then((res) =>{
         this.$message({
@@ -658,9 +660,9 @@ import Nutrition from '../nutrition.vue';
         });
         })
       }).catch((err) => {
-      
+
       });
-    }, 
+    },
     recipeNameShareSearchPub(recipeSelectPub,isUse){
     if(recipeSelectPub){
       this.recipeSelectPub=recipeSelectPub;
@@ -669,7 +671,7 @@ import Nutrition from '../nutrition.vue';
         isUse='1';
       }
     }
-    
+
     mealList(1,undefined,this.recipeNameSharePub,isUse).then(res=>{
       this.mealListLeft=res.data.data;
     })
@@ -1586,7 +1588,7 @@ import Nutrition from '../nutrition.vue';
 };
 </script>
 
-<style>
+<style scoped>
 .meals .el-row {
   padding: 5px;
 }
@@ -1650,33 +1652,32 @@ import Nutrition from '../nutrition.vue';
 }
 .scores {
   cursor: pointer;
-  width: 180px;
-  height: 90px;
+  width: 230px;
+  height: 102px;
   /* background-color: red; */
   position: absolute;
-  top: 180px;
-  right: 70px;
-  display: flex;
-  /* border-radius: 50%;
-  background-image: url("/img/yuan.png");
-  background-size: 100% 100%; */
+  top: 80px;
+  right: 50px;
+}
+.scores3{
+  width: 100px;
 }
 .scores1 {
-  width: 90px;
-  height: 90px;
+  width: 216px;
+  height: 102px;
   /* background-color: yellow; */
-  border-radius: 50%;
   background-image: url("/img/yuan.png");
   background-size: 100% 100%;
+  display: flex;
+  justify-content:space-between;
 }
- .scores2 {
-  width: 80px;
+.scores2 {
+  width: 120px;
   height: 65px;
-  margin-top: 10px;
+  margin-top: 15px;
   display: flex;
   margin-left: -5px;
   /* background-color: blue; */
-  background-image: url("/img/fenshu1.png");
   background-size: 100% 100%;
 }
 .gnus {
