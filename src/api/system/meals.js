@@ -80,8 +80,21 @@ export const detail = (id) => {
 }
 
 
+export const jundgeFood=(data)=>{
+  return request({
+    url: '/api/blade-food/recipe/jundgeFood',
+    method: 'post',
+    data:data
+  })
+}
 
-
+export const jundgeAllergy=(data)=>{
+  return request({
+    url: '/api/blade-food/recipe/jundgeAllergy',
+    method: 'post',
+    data:data
+  })
+}
 
 
 

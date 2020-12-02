@@ -139,22 +139,16 @@
               placement="right"
               width="300"
               trigger="click">
-              <p>您在星期一午餐中存在不宜同食的食物</p>
-              <p>如下：</p>
-              <p><span>1</span><span>【qq】</span>与<span>【ff】</span></p>
-              <p><span>2</span><span>【xx】</span>与<span>【ee】</span></p>
+              <div v-show="foodMutuals.length>0"  v-for="(item,index) in foodMutuals" > <p>{{index+1}}、{{item.msg}}</p></div>
+              <div v-show="foodMutuals.length==0" > <p>无相克食材</p></div>
               <el-button  slot="reference" style="margin-left: 10px" size="medium"
               >不宜同食</el-button>
             </el-popover>
 
-            <el-popover
-              placement="right"
-              width="300"
-              trigger="click">
+            <el-button style="margin-left: 10px" size="medium"  @click="allergy()"
+            >过敏</el-button>
 
-              <el-button  slot="reference" style="margin-left: 10px" size="medium"
-              >过敏</el-button>
-            </el-popover>
+
 
             <el-button style="margin-left: 10px" size="medium"  @click="dishClear"
             >清空</el-button
@@ -423,13 +417,14 @@
         <div class="foodPanel"  @mouseover="HidenFoodTips($event)">
           <foods-week
             @childfn="parentFn"
+            @jundgeFood="jundgeFood"
             :headers="headers"
             :datas="datas"
             days="5"
             :crowd="WeekInfo.crowd"
             :dragnode="drogNode"
              ref="child"
-
+            :foodMutuals="foodMutuals"
           >
           </foods-week>
         </div>
@@ -538,6 +533,21 @@
       </div>
     </el-dialog>
     <!-- 智能配平弹框结束 -->
+
+    <!--过敏-->
+    <el-dialog
+      title="食物过敏"
+      append-to-body
+      :visible.sync="jundgeallergy"
+      :close-on-click-modal="false"
+    >
+
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="jundgeallergy=false">取 消</el-button>
+        <el-button @click="jundgeallergy=true" type="primary">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -545,7 +555,7 @@
   import foodsWeek from "@/views/foods/components/foodsweek";
   import showfoodsWeek from "@/views/foods/components/showfoodsweek";
   import {getList} from "@/api/system/special"
-  import {mealList,getDishByBaseId,dishDetail,save,detail,update,grantTree} from "@/api/system/meals"
+  import {mealList,getDishByBaseId,dishDetail,save,detail,update,grantTree,jundgeFood,jundgeAllergy} from "@/api/system/meals"
   import nutrient from "@/views/foods/components/nutrient";
   import nutrientWithColor from "@/views/foods/components/nutrientwithcolor";
   import showScore from "@/views/foods/components/showscore";
@@ -577,8 +587,10 @@ document.oncontextmenu = function(){return false};
 
   },
   data() {
+
     const data = [];
     return {
+      jundgeallergy:false,//过敏
       foodRadio:'1',
       isUse:undefined,
       belongRegion:undefined,
@@ -758,6 +770,7 @@ document.oncontextmenu = function(){return false};
           value:'0'
         },
       ],
+      foodMutuals:[],
       node:{
         nowCode:'101',
         nowValue:'',
@@ -1270,7 +1283,6 @@ document.oncontextmenu = function(){return false};
       ev.srcElement.addEventListener("drag",function(e){
         that.MoveFoodLayer(e);
       });
-
       ev.srcElement.addEventListener("dragend",function(e){
          that.$refs.foodmenudLayer.style.display="none";
       });
@@ -1316,19 +1328,95 @@ document.oncontextmenu = function(){return false};
               }
             }
           }
-          console.log("node.data",node.data)
           that.drogNode = JSON.parse(JSON.stringify(node.data));
           ev.dataTransfer.setData("Text", JSON.stringify(node.data));
+          console.log("node.data",node.data)
+          console.log("this.datas",this.datas)
           that.drogNodeStats = true;
           setTimeout(() => {
             that.$refs.child.refreshData();
-            that.$refs.child.resizeExpendHeight();
+            // that.$refs.child.resizeExpendHeight();
           }, 1000);
         })
       }
 
+    },
+    //过敏
+    allergy(){
+      this.jundgeallergy=true;
+      let recipeCycles=[];
+      console.log(this.datas)
+      this.datas.forEach(data=>{
+        data.weeks.forEach(week=>{
+          week.foods.forEach(food=>{
+            let childrens=[]
+            food.children.forEach(_=>{
+              childrens.push({foodId:_.id})
+            })
+            recipeCycles.push({week:week.name.slice(4),mealsType:this.getmealTypeData(data.name),dishName:food.name,childrens:childrens})
+          })
+        })
+      })
+      let row={
+        peopleId:this.WeekInfo.crowd,
+        recipeDay:this.WeekInfo.weekType,
+        recipeCycles:recipeCycles
+      }
+      jundgeAllergy(row).then(res=>{
 
+      })
 
+    },
+    jundgeFood(res, id, wk) {
+      if (!res.id) return;
+      let recipeCycles=[];
+      let children=[];
+      let name="";
+      this.datas.forEach((data) => {
+        if (data.id === id) {
+          name=data.name;
+          data.weeks.forEach((week) => {
+            if (week.name === wk) {
+               week.foods.forEach(dish=>{
+                 dish.children.forEach(food=>{
+                   children.push({foodId:food.id})
+                 })
+               })
+            }
+          });
+        }
+      });
+      recipeCycles.push({week:wk.slice(4),mealsType:this.getmealTypeData(name),childrens:children})
+      let row={
+        peopleId:this.WeekInfo.crowd,
+        recipeDay:this.WeekInfo.weekType,
+        recipeCycles:recipeCycles
+      }
+      let that=this;
+      //食材相克
+      jundgeFood(row).then(result=>{
+        debugger
+        let foodMutuals=that.foodMutuals;
+        let msg=""
+          if(result.data.data.foodMutuals.length>0){
+            for(let i=0;i<result.data.data.foodMutuals.length;i++){
+              let flag=false;
+              that.foodMutuals.forEach(_=>{
+                if(_["data_id"]==id&&_["week_id"]==wk&&(_["foodId"]==result.data.data.foodMutuals[i].foodId&&_["foodId1"]==result.data.data.foodMutuals[i].foodId1)){
+                  flag=true;
+                }
+              })
+              if(!flag){
+                foodMutuals.push({data_id:id,week_id:wk,foodId:result.data.data.foodMutuals[i].foodId,foodId1:result.data.data.foodMutuals[i].foodId1,msg:result.data.data.msg[i]})
+              }
+              msg+=result.data.data.msg[i];
+            }
+            that.foodMutuals=foodMutuals;
+
+            this.$message.warning(msg);
+            console.log("that.foodMutuals",that.foodMutuals)
+          }
+      })
     },
     foodmenueDragEnd(a, b, c) {
       this.drogNodeStats=false;
@@ -1349,7 +1437,6 @@ document.oncontextmenu = function(){return false};
     },
     startTrim(){
       let that=this;
-      debugger
       this.smartDatas.forEach(week=>{
       week.weeks.forEach(_=>{
           _.foods.forEach(__=>{
@@ -1364,7 +1451,6 @@ document.oncontextmenu = function(){return false};
               })
               if(flag){
                 let add=(((parseFloat(that.node.exceptValue)-parseFloat(that.node.nowValue))/parseFloat(that.node.nowValue)))
-                debugger
                 if(add>0){
                   this.$set(___,"up",(add*parseFloat(100)).toFixed(2));delete ___["down"]
 
@@ -1397,7 +1483,6 @@ document.oncontextmenu = function(){return false};
               this.$set(__,"down",Math.abs(((parseFloat(count)-parseFloat(__.count))/parseFloat(__.count)*100).toFixed(2))); delete __["up"]
             }
             else if(parseFloat(__.count)<parseFloat(count)){//上升
-              debugger
               this.$set(__,"up",(((parseFloat(count)-parseFloat(__.count))/parseFloat(__.count)*100).toFixed(2))); delete __["down"]
             }else{
               delete __["down"]
@@ -1442,6 +1527,7 @@ document.oncontextmenu = function(){return false};
         })
       })
     },
+
     wrapscan() {
       this.ncodeChange();
       localStorage.setItem("mealsDatas",JSON.stringify(this.datas))
@@ -2124,10 +2210,10 @@ document.oncontextmenu = function(){return false};
 /*.meals .select-item  .el-input--suffix .el-input__inner{*/
   /*padding-right: 15px!important;*/
 /*}*/
-/*.meals .el-drawer__open .el-drawer.rtl{*/
-  /*width: 50%!important;*/
-  /*overflow-y: scroll;*/
-/*}*/
+.meals .el-drawer__open .el-drawer.rtl{
+  width: 50%!important;
+  overflow-y: scroll;
+}
 .showFoodListColor{
   color: #00b1a2 !important;
   border-color: #b3e8e3 !important;

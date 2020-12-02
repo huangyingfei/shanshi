@@ -101,7 +101,7 @@
                           onRemove(
                             scope.row.id,
                             scope.row.weeks.find((p) => p.name == 'week1').id,
-                            scope1.row.id
+                            scope1.row.id,'week1'
                           )
                         "
                         >移除</el-link
@@ -242,7 +242,7 @@
                           onRemove(
                             scope.row.id,
                             scope.row.weeks.find((p) => p.name == 'week2').id,
-                            scope1.row.id
+                            scope1.row.id,'week2'
                           )
                         "
                         >移除</el-link
@@ -370,7 +370,7 @@
                           onRemove(
                             scope.row.id,
                             scope.row.weeks.find((p) => p.name == 'week3').id,
-                            scope1.row.id
+                            scope1.row.id,'week3'
                           )
                         "
                         >移除</el-link
@@ -498,7 +498,7 @@
                           onRemove(
                             scope.row.id,
                             scope.row.weeks.find((p) => p.name == 'week4').id,
-                            scope1.row.id
+                            scope1.row.id,'week4'
                           )
                         "
                         >移除</el-link
@@ -626,7 +626,7 @@
                           onRemove(
                             scope.row.id,
                             scope.row.weeks.find((p) => p.name == 'week5').id,
-                            scope1.row.id
+                            scope1.row.id,'week5'
                           )
                         "
                         >移除</el-link
@@ -754,7 +754,7 @@
                           onRemove(
                             scope.row.id,
                             scope.row.weeks.find((p) => p.name == 'week6').id,
-                            scope1.row.id
+                            scope1.row.id,'week6'
                           )
                         "
                         >移除</el-link
@@ -882,7 +882,7 @@
                           onRemove(
                             scope.row.id,
                             scope.row.weeks.find((p) => p.name == 'week7').id,
-                            scope1.row.id
+                            scope1.row.id,'week7'
                           )
                         "
                         >移除</el-link
@@ -977,6 +977,7 @@ export default {
     crowd:'',
 
     dragnode: {},
+    foodMutuals:[]
   },
   data() {
     return {
@@ -1222,7 +1223,7 @@ export default {
       debugger
       var node = JSON.parse(JSON.stringify(this.dragnode.node));
       this.appendDragFood(node, id, week);
-
+      this.$emit('jundgeFood',node,id,week);
       ev.path.forEach((e) => {
         var cname = e.className;
         if (cname && cname.indexOf("drapIn") >= 0) {
@@ -1392,7 +1393,6 @@ export default {
     },
     //新增菜谱
     appendDragFood(res, id, wk) {
-      debugger
       if (!res.id) {;return};
       this.datas.forEach((data) => {
         if (data.id === id) {
@@ -1406,7 +1406,6 @@ export default {
                   week.foods = [];
                 }
                 week.foods.push(res);
-                debugger
                 return;
               }
             }
@@ -1501,21 +1500,33 @@ export default {
     },
 
     // 移除
-    onRemove(data_id, week_id, food_id) {
+    onRemove(data_id, week_id, food_id,week_name) {
+
+     debugger
+      var foods;
       this.datas.forEach((data) => {
         if (data.id === data_id) {
           data.weeks.forEach((week) => {
             if (week.id === week_id) {
               var idx = week.foods.findIndex((p) => p.id === food_id);
+              foods=week.foods.filter((p) => p.id === food_id)[0];
               if (idx > -1) {
                 week.foods.splice(idx, 1);
-
-                return;
               }
             }
           });
         }
       });
+      console.log(foods)
+      for(let i=0;i<this.foodMutuals.length;i++){
+        for(let j=0;j<foods.children.length;j++){
+          if(this.foodMutuals[i]["data_id"]==data_id&&week_name==this.foodMutuals[i]["week_id"]){
+            if(this.foodMutuals[i]["foodId"]==foods.children[j].id||this.foodMutuals[i]["foodId1"]==foods.children[j].id){
+              this.foodMutuals.splice(i,1)
+            }
+          }
+        }
+      }
     },
 
     // 上传图片

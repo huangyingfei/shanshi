@@ -888,7 +888,7 @@
           });
       },
       leaveSchool(scope){
-        debugger
+       // debugger
         this.leaveVisible = true;
         this.rowId = scope.row.id;
         this.rowName=scope.row.className;

@@ -97,7 +97,22 @@
               style="width: 300px"
             ></el-input>
           </el-form-item>
+          人群年龄
+          <el-input-number size="small" v-model="WeekInfo.startAge" controls-position="right" :min="1" :max="100"></el-input-number>
+          -
+          <el-input-number size="small" v-model="WeekInfo.endAge" controls-position="right"  :min="1" :max="100"></el-input-number>
+          <el-button style="margin-left: 10px" size="medium"  @click="dishClear"
+          >清空</el-button
+          >
 
+        </el-form>
+      </el-col>
+    </el-row>
+
+
+    <el-row :gutter="20">
+      <el-col :span="24">
+        <el-form :gutter="10" :inline="true" :model="WeekInfo">
           <el-form-item label="餐点设置">
             <el-checkbox-group
               v-model="WeekInfo.foodCatalog"
@@ -111,21 +126,8 @@
               <el-checkbox label="晚点" name="晚点"></el-checkbox>
             </el-checkbox-group>
           </el-form-item>
-
-        </el-form>
-      </el-col>
-    </el-row>
-
-
-    <el-row :gutter="20">
-      <el-col :span="24">
-        <el-form :gutter="10" :inline="true" :model="WeekInfo">
-
           <el-form-item>
-            人群年龄
-            <el-input-number size="small" v-model="WeekInfo.startAge" controls-position="right" :min="1" :max="100"></el-input-number>
-            -
-            <el-input-number size="small" v-model="WeekInfo.endAge" controls-position="right"  :min="1" :max="100"></el-input-number>
+
             <el-switch
               style="margin-left: 10px"
               v-model="WeekInfo.isPub"
@@ -160,9 +162,7 @@
               type="success"
             >保存食谱</el-button
             >
-            <el-button style="margin-left: 10px" size="medium"  @click="dishClear"
-            >清空</el-button
-            >
+
             <el-button style="margin-left: 10px" size="medium"
             >自动设置油盐糖</el-button
             >
