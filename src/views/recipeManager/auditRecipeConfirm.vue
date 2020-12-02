@@ -1,6 +1,6 @@
 <template>
   <div class="meals" style="overflow: auto;">
-    
+
     <!-- 周期,餐谱名称,餐点设置行 -->
     <el-row :gutter="20" style="padding: 0px; margin-top: 5px">
       <el-col :span="24">
@@ -169,28 +169,30 @@
     <!-- 真棒图标 -->
     <div class="scores" @click="tfractio">
       <div class="scores1">
-        <p class="gnus">{{score}}</p>
-        <p class="scorefor">分</p>
-      </div>
-      <div class="scores2">
-        <img class="picture" src="/img/fenshu.png" alt="" />
-        <p class="vertical">真棒</p>
+        <div class="scores3">
+          <p class="gnus">{{score}}</p>
+          <p class="scorefor">分</p>
+        </div>
+        <div class="scores2">
+          <img class="picture" src="/img/fenshu.png" alt="" />
+          <p class="vertical">真棒</p>
+        </div>
       </div>
     </div>
 
     <!-- 分数弹框 -->
-    <el-drawer  title="我是标题" 
+    <el-drawer  title="我是标题"
                 id="drawerid"
                 :modal-append-to-body= "false"
                 :visible.sync= "drawer"
                 :with-header= "false">
-      <show-score :intake= "intake"   
-                  :nutrition= "nutrition" 
-                  :power= "power"  
-                  :meal= "meal" 
-                  :protein= "protein"  
-                  :startTime= "startTimeStr"   
-                  :endTime= "endTimeStr" 
+      <show-score :intake= "intake"
+                  :nutrition= "nutrition"
+                  :power= "power"
+                  :meal= "meal"
+                  :protein= "protein"
+                  :startTime= "startTimeStr"
+                  :endTime= "endTimeStr"
                   :score= "score">
       </show-score>
     </el-drawer>
@@ -466,7 +468,7 @@
       ]
     };
   },
-  
+
   beforeMount() {},
   methods: {
     recipeNameShareSearchPub(recipeSelectPub,isUse){
@@ -507,14 +509,14 @@
       debugger
       let params = {
         id: this.$route.query.userid,//食谱主键
-        ...auditSign      
+        ...auditSign
       }
       auditRecipe(auditSign).then(res =>{
         debugger
         return res
       })
     },
-    
+
     openAuditRecipeBox() {
       this.$prompt('请输入拒绝原因', {
         confirmButtonText: '确定',
@@ -524,15 +526,15 @@
       }).then(({ value }) => {
         auditRecipe({
           id: this.id,
-          status: 2,       //1-审核通过 2-不通过 
+          status: 2,       //1-审核通过 2-不通过
           refuseReason: value
         }).then((res) =>{
           console.log(res);
         })
       }).catch((err) => {
-      
+
       });
-    },    
+    },
     mealLoad(id,name){
       let that=this;
       this.$confirm("请确定是否导入食谱："+name+"?", "提示", {
@@ -606,7 +608,7 @@
         })
       })
       if(datas!="showDatas"){
-        
+
         this.$refs.child.getFoodScore();
       }
 
@@ -1411,7 +1413,7 @@
 };
 </script>
 
-<style>
+<style scoped>
 .meals .el-row {
   padding: 5px;
 }
@@ -1476,33 +1478,32 @@
 }
 .scores {
   cursor: pointer;
-  width: 180px;
-  height: 90px;
+  width: 230px;
+  height: 102px;
   /* background-color: red; */
   position: absolute;
-  top: 180px;
-  right: 70px;
-  display: flex;
-  /* border-radius: 50%;
-  background-image: url("/img/yuan.png");
-  background-size: 100% 100%; */
+  top: 80px;
+  right: 50px;
+}
+.scores3{
+  width: 100px;
 }
 .scores1 {
-  width: 90px;
-  height: 90px;
+  width: 216px;
+  height: 102px;
   /* background-color: yellow; */
-  border-radius: 50%;
   background-image: url("/img/yuan.png");
   background-size: 100% 100%;
+  display: flex;
+  justify-content:space-between;
 }
- .scores2 {
-  width: 80px;
+.scores2 {
+  width: 120px;
   height: 65px;
-  margin-top: 10px;
+  margin-top: 15px;
   display: flex;
   margin-left: -5px;
   /* background-color: blue; */
-  background-image: url("/img/fenshu1.png");
   background-size: 100% 100%;
 }
 .gnus {

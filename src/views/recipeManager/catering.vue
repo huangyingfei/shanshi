@@ -1488,7 +1488,7 @@
   };
 </script>
 
-<style>
+<style scoped>
   .meals{
     height: auto;
   }
@@ -1551,37 +1551,37 @@
     text-align: center;
     margin-bottom: 50px;
   }
-  .scores {
-    cursor: pointer;
-    width: 180px;
-    height: 90px;
-    /* background-color: red; */
-    position: absolute;
-    top: 160px;
-    right: 70px;
-    display: flex;
-    /* border-radius: 50%;
-    background-image: url("/img/yuan.png");
-    background-size: 100% 100%; */
-  }
-  .scores1 {
-    width: 90px;
-    height: 90px;
-    /* background-color: yellow; */
-    border-radius: 50%;
-    background-image: url("/img/yuan.png");
-    background-size: 100% 100%;
-  }
-  .scores2 {
-    width: 80px;
-    height: 65px;
-    margin-top: 10px;
-    display: flex;
-    margin-left: -5px;
-    /* background-color: blue; */
-    background-image: url("/img/fenshu1.png");
-    background-size: 100% 100%;
-  }
+  /*.scores {*/
+    /*cursor: pointer;*/
+    /*width: 180px;*/
+    /*height: 90px;*/
+    /*!* background-color: red; *!*/
+    /*position: absolute;*/
+    /*top: 160px;*/
+    /*right: 70px;*/
+    /*display: flex;*/
+    /*!* border-radius: 50%;*/
+    /*background-image: url("/img/yuan.png");*/
+    /*background-size: 100% 100%; *!*/
+  /*}*/
+  /*.scores1 {*/
+    /*width: 90px;*/
+    /*height: 90px;*/
+    /*!* background-color: yellow; *!*/
+    /*border-radius: 50%;*/
+    /*background-image: url("/img/yuan.png");*/
+    /*background-size: 100% 100%;*/
+  /*}*/
+  /*.scores2 {*/
+    /*width: 80px;*/
+    /*height: 65px;*/
+    /*margin-top: 10px;*/
+    /*display: flex;*/
+    /*margin-left: -5px;*/
+    /*!* background-color: blue; *!*/
+    /*background-image: url("/img/fenshu1.png");*/
+    /*background-size: 100% 100%;*/
+  /*}*/
   .gnus {
     font-size: 24px;
     text-align: center;
