@@ -1,7 +1,7 @@
 <template>
   <div style="padding: 0px;">
     <!-- table-week start   -->
-    <el-table class="foods-table-week" :data="datas" border max-height = "450px">
+    <el-table class="foods-table-week" :data="datas" border max-height = "430px">
       <el-table-column align="center" width="100" fixed class-name="col-date3 colNoneBorder" >
         <template slot="header"> 菜品/食物 </template>
         <template slot-scope="scope">
@@ -44,7 +44,41 @@
                 align="left"
               ></el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
-
+                <template slot-scope="scope1">
+                  <div style="display: flex">
+                    <el-input
+                      style="flex: 1"
+                      v-model="scope1.row.count"
+                      v-if="!scope1.row.children"
+                      type="text"
+                      size="mini"
+                      placeholder="请输入内容"
+                    ></el-input>
+                    <el-input
+                      style="flex: 1"
+                      v-model="scope1.row.count"
+                      v-if="scope1.row.children"
+                      disabled
+                      type="text"
+                      size="mini"
+                      placeholder="请输入内容"
+                    ></el-input>
+                    <div style="width: 35px; text-algin: center">
+                      <el-link
+                        v-if="scope1.row.children"
+                        type="primary"
+                        @click="
+                          onRemove(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week1').id,
+                            scope1.row.id
+                          )
+                        "
+                        >移除</el-link
+                      >
+                    </div>
+                  </div>
+                </template>
               </el-table-column>
               <el-table-column label="图片" align="center">
                 <template slot-scope="scope1">
@@ -105,7 +139,41 @@
                 align="left"
               ></el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
-
+                <template slot-scope="scope1">
+                  <div style="display: flex">
+                    <el-input
+                      style="flex: 1"
+                      v-model="scope1.row.count"
+                      v-if="!scope1.row.children"
+                      type="text"
+                      size="mini"
+                      placeholder="请输入内容"
+                    ></el-input>
+                    <el-input
+                      style="flex: 1"
+                      v-model="scope1.row.count"
+                      v-if="scope1.row.children"
+                      disabled
+                      type="text"
+                      size="mini"
+                      placeholder="请输入内容"
+                    ></el-input>
+                    <div style="width: 35px; text-algin: center">
+                      <el-link
+                        v-if="scope1.row.children"
+                        type="primary"
+                        @click="
+                          onRemove(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week2').id,
+                            scope1.row.id
+                          )
+                        "
+                        >移除</el-link
+                      >
+                    </div>
+                  </div>
+                </template>
               </el-table-column>
               <el-table-column label="图片" align="center">
                 <template slot-scope="scope1">
@@ -166,7 +234,41 @@
                 align="left"
               ></el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
-
+                <template slot-scope="scope1">
+                  <div style="display: flex">
+                    <el-input
+                      style="flex: 1"
+                      v-model="scope1.row.count"
+                      v-if="!scope1.row.children"
+                      type="text"
+                      size="mini"
+                      placeholder="请输入内容"
+                    ></el-input>
+                    <el-input
+                      style="flex: 1"
+                      v-model="scope1.row.count"
+                      v-if="scope1.row.children"
+                      disabled
+                      type="text"
+                      size="mini"
+                      placeholder="请输入内容"
+                    ></el-input>
+                    <div style="width: 35px; text-algin: center">
+                      <el-link
+                        v-if="scope1.row.children"
+                        type="primary"
+                        @click="
+                          onRemove(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week3').id,
+                            scope1.row.id
+                          )
+                        "
+                        >移除</el-link
+                      >
+                    </div>
+                  </div>
+                </template>
               </el-table-column>
               <el-table-column label="图片" align="center">
                 <template slot-scope="scope1">
@@ -239,7 +341,41 @@
                 align="left"
               ></el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
-
+                <template slot-scope="scope1">
+                  <div style="display: flex">
+                    <el-input
+                      style="flex: 1"
+                      v-model="scope1.row.count"
+                      v-if="!scope1.row.children"
+                      type="text"
+                      size="mini"
+                      placeholder="请输入内容"
+                    ></el-input>
+                    <el-input
+                      style="flex: 1"
+                      v-model="scope1.row.count"
+                      v-if="scope1.row.children"
+                      disabled
+                      type="text"
+                      size="mini"
+                      placeholder="请输入内容"
+                    ></el-input>
+                    <div style="width: 35px; text-algin: center">
+                      <el-link
+                        v-if="scope1.row.children"
+                        type="primary"
+                        @click="
+                          onRemove(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week4').id,
+                            scope1.row.id
+                          )
+                        "
+                        >移除</el-link
+                      >
+                    </div>
+                  </div>
+                </template>
               </el-table-column>
               <el-table-column label="图片" align="center">
                 <template slot-scope="scope1">
@@ -312,7 +448,41 @@
                 align="left"
               ></el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
-
+                <template slot-scope="scope1">
+                  <div style="display: flex">
+                    <el-input
+                      style="flex: 1"
+                      v-model="scope1.row.count"
+                      v-if="!scope1.row.children"
+                      type="text"
+                      size="mini"
+                      placeholder="请输入内容"
+                    ></el-input>
+                    <el-input
+                      style="flex: 1"
+                      v-model="scope1.row.count"
+                      v-if="scope1.row.children"
+                      disabled
+                      type="text"
+                      size="mini"
+                      placeholder="请输入内容"
+                    ></el-input>
+                    <div style="width: 35px; text-algin: center">
+                      <el-link
+                        v-if="scope1.row.children"
+                        type="primary"
+                        @click="
+                          onRemove(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week5').id,
+                            scope1.row.id
+                          )
+                        "
+                        >移除</el-link
+                      >
+                    </div>
+                  </div>
+                </template>
               </el-table-column>
               <el-table-column label="图片" align="center">
                 <template slot-scope="scope1">
@@ -385,7 +555,41 @@
                 align="left"
               ></el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
-
+                <template slot-scope="scope1">
+                  <div style="display: flex">
+                    <el-input
+                      style="flex: 1"
+                      v-model="scope1.row.count"
+                      v-if="!scope1.row.children"
+                      type="text"
+                      size="mini"
+                      placeholder="请输入内容"
+                    ></el-input>
+                    <el-input
+                      style="flex: 1"
+                      v-model="scope1.row.count"
+                      v-if="scope1.row.children"
+                      disabled
+                      type="text"
+                      size="mini"
+                      placeholder="请输入内容"
+                    ></el-input>
+                    <div style="width: 35px; text-algin: center">
+                      <el-link
+                        v-if="scope1.row.children"
+                        type="primary"
+                        @click="
+                          onRemove(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week6').id,
+                            scope1.row.id
+                          )
+                        "
+                        >移除</el-link
+                      >
+                    </div>
+                  </div>
+                </template>
               </el-table-column>
               <el-table-column label="图片" align="center">
                 <template slot-scope="scope1">
@@ -443,7 +647,89 @@
             @dragenter="ondragenter($event)"
             @dragover="ondragover($event)"
           >
-
+            <!-- table start -->
+            <el-table
+              class="table-foods"
+              style="width: 100%"
+              :data="scope.row.weeks.find((p) => p.name == 'week6').foods"
+              row-key="id"
+                @expand-change="expandchange"
+              :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+              :span-method="onTableSpanMethod"
+            >
+              <el-table-column
+                label="食品/食材"
+                prop="name"
+                header-align="center"
+                align="left"
+              ></el-table-column>
+              <el-table-column label="用量(g)" prop="count" align="center">
+                <template slot-scope="scope1">
+                  <div style="display: flex">
+                    <el-input
+                      style="flex: 1"
+                      v-model="scope1.row.count"
+                      v-if="!scope1.row.children"
+                      type="text"
+                      size="mini"
+                      placeholder="请输入内容"
+                    ></el-input>
+                    <el-input
+                      style="flex: 1"
+                      v-model="scope1.row.count"
+                      v-if="scope1.row.children"
+                      disabled
+                      type="text"
+                      size="mini"
+                      placeholder="请输入内容"
+                    ></el-input>
+                    <div style="width: 35px; text-algin: center">
+                      <el-link
+                        v-if="scope1.row.children"
+                        type="primary"
+                        @click="
+                          onRemove(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week7').id,
+                            scope1.row.id
+                          )
+                        "
+                        >移除</el-link
+                      >
+                    </div>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column label="图片" align="center">
+                <template slot-scope="scope1">
+                  <div
+                    v-if="
+                      scope1.$index === 0 &&
+                      scope.row.weeks.find((p) => p.name == 'week7')
+                    "
+                    style="width: 100px; height: 100px; margin: 0 auto"
+                  >
+                    <img
+                      v-if="
+                        scope.row.weeks.find((p) => p.name == 'week7').image
+                      "
+                      :src="
+                        scope.row.weeks.find((p) => p.name == 'week7').image
+                      "
+                      style="width: 100%; height: 100%"
+                    />
+                    <img
+                      v-if="
+                        !scope.row.weeks.find((p) => p.name == 'week7').image
+                      "
+                      :src="empty_image"
+                      style="width: 100%; height: 100%"
+                    />
+                  </div>
+                </template>
+              </el-table-column>
+            </el-table>
+            <!-- table end -->
           </div>
         </template>
       </el-table-column>
@@ -451,7 +737,7 @@
     <!-- table-week end   -->
   </div>
 </template>
-<script>
+<script>2
 import {calRecipe} from "@/api/recipeManager/auditRecipe.js"
 
 export default {
@@ -597,7 +883,6 @@ export default {
   // 组件第一次加载
   mounted() {
     this.init();
-
   },
 
   methods: {
@@ -761,6 +1046,7 @@ export default {
       foods["tenantId"]=this.tenantId
       if(foods.recipeVals.length>0){
         calRecipe(foods).then(res=>{
+
           if(res.data.success){
             let resData=res.data.data;
             let intake={};

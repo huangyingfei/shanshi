@@ -175,7 +175,7 @@ export default [
         path: "auditRecipeConfirm",
         name: "确认审核",
         component: () =>
-          import(/* webpackChunkName: "views" */  "@/views/recipeManager/auditRecipeConfirm")
+          import(/* webpackChunkName: "views" */  "@/views/recipeManager/auditRecipeConfirm/auditRecipeConfirm.vue")
       }
     ],
   },{
