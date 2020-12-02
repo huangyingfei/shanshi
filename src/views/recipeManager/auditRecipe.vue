@@ -16,14 +16,14 @@
 						icon= "el-icon-user-solid"
 						size= "small"
 						v-if="scope.row.status==0"
-						@click="seecol(scope.row)">审核
+						@click="seecol(scope.row, 0)">审核
 					</el-button>
 					<el-button
 						type="text"
 						icon="el-icon-view"
 						size="small"
 						v-if="scope.row.status!=0"
-						@click="seecol(scope.row)">查看
+						@click="seecol(scope.row, 1)">查看
 					</el-button>
 				</template>
 			</avue-crud>
@@ -125,12 +125,13 @@ export default {
 		}
 	},
 	methods: {
-		seecol(row){
+		seecol(row,doType){
 			this.$router.push({
 				path: "/recipeManager/auditRecipeConfirm",
 				query: {
 					userid: row.id,
-					tenantId: row.tenantId
+					tenantId: row.tenantId,
+					doType: doType
 				}
 			});
 		},

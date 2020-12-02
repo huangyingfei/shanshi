@@ -20,10 +20,14 @@ import avueUeditor from "avue-plugin-ueditor";
 import website from "@/config/website";
 import echarts from "echarts";
 import vueConfig from "../vue.config";
+import Print from 'vue-print-nb'
+
+
 
 Vue.prototype.$echarts = echarts;
 Vue.use(router);
 Vue.use(VueAxios, axios);
+Vue.use(Print);
 Vue.use(Element, {
   i18n: (key, value) => i18n.t(key, value)
 });

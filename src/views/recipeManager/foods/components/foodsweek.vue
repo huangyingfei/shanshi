@@ -1410,6 +1410,8 @@ export default {
           });
           if (week.foods != undefined) {
             week.foods.forEach((food) => {
+              console.log(food)
+              console.log('food')
               food.spans = count;
               food.children.forEach((c) => {
                 c.spans = count;
