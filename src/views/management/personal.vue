@@ -1627,6 +1627,9 @@ export default {
 </script>
 
 <style scoped>
+/* .avue-view {
+  padding: 0 5px !important;
+} */
 .months {
   width: 100%;
   height: 100%;

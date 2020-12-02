@@ -1115,7 +1115,6 @@ export default {
               });
               this.officeonce = arr;
               // console.log(this.officeonce);
-
               // this.addLine();
               this.graph();
             }
