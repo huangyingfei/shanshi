@@ -1,7 +1,7 @@
 <template>
-  <div style="padding-left:25px;dheight: 1080px;width: 100%">
+  <div style="padding-left:25px;height: 1080px;width: 80%">
     <!-- table-week start   -->
-    <el-table class="table-week" style="width:100%" :data="datas" border fit>
+    <el-table class="table-week" style="width:100%" :data="smartDatas" border fit>
       <el-table-column align="center" width="100" fixed class-name="col-date3 colNoneBorder" >
         <template slot="header"> 菜品/食物 </template>
         <template slot-scope="scope">
@@ -12,7 +12,7 @@
       <el-table-column
         v-if="headers.find((p) => p.name == 'week1')"
         align="center"
-        width="250"
+        width="280"
       >
         <template slot="header">
           <div class="">
@@ -51,6 +51,7 @@
                 prop="name"
                 header-align="center"
                 align="left"
+                width="120"
               ></el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
                 <template slot-scope="scope1">
@@ -72,20 +73,26 @@
                       size="mini"
                       placeholder="请输入内容"
                     ></el-input>
-                    <div style="width: 35px; text-algin: center">
-                      <!--<el-link-->
-                        <!--v-if="scope1.row.children"-->
-                        <!--type="primary"-->
-                        <!--@click="-->
-                          <!--onRemove(-->
-                            <!--scope.row.id,-->
-                            <!--scope.row.weeks.find((p) => p.name == 'week1').id,-->
-                            <!--scope1.row.id-->
-                          <!--)-->
-                        <!--"-->
-                      <!--&gt;移除</el-link-->
-                      <!--&gt;-->
-                    </div>
+                    <span class="arrow-up"  v-if="scope1.row.up"><img src="/img/arrowup.png" width="20px" height="20px"/>
+                      <span>{{scope1.row.up}}%</span>
+                    </span>
+                    <span class="arrow-down" v-if="scope1.row.down"><img src="/img/arrowdown.png" width="20px" height="20px"/>
+                      <span>{{scope1.row.down}}%</span>
+                    </span>
+                    <!--<div style="width: 35px; text-algin: center">-->
+                      <!--&lt;!&ndash;<el-link&ndash;&gt;-->
+                        <!--&lt;!&ndash;v-if="scope1.row.children"&ndash;&gt;-->
+                        <!--&lt;!&ndash;type="primary"&ndash;&gt;-->
+                        <!--&lt;!&ndash;@click="&ndash;&gt;-->
+                          <!--&lt;!&ndash;onRemove(&ndash;&gt;-->
+                            <!--&lt;!&ndash;scope.row.id,&ndash;&gt;-->
+                            <!--&lt;!&ndash;scope.row.weeks.find((p) => p.name == 'week1').id,&ndash;&gt;-->
+                            <!--&lt;!&ndash;scope1.row.id&ndash;&gt;-->
+                          <!--&lt;!&ndash;)&ndash;&gt;-->
+                        <!--&lt;!&ndash;"&ndash;&gt;-->
+                      <!--&lt;!&ndash;&gt;移除</el-link&ndash;&gt;-->
+                      <!--&lt;!&ndash;&gt;&ndash;&gt;-->
+                    <!--</div>-->
                   </div>
                 </template>
               </el-table-column>
@@ -153,7 +160,7 @@
       <el-table-column
         v-if="headers.find((p) => p.name == 'week2')"
         align="center"
-        width="250"
+        width="280"
       >
         <template slot="header">
           <div class="">
@@ -180,7 +187,7 @@
             <!-- table start -->
             <el-table
               class="table-foods"
-              style="width: 100%"
+              style="width: 120%"
               :data="scope.row.weeks.find((p) => p.name == 'week2').foods"
               row-key="id"
               @expand-change="expandchange"
@@ -192,6 +199,7 @@
                 prop="name"
                 header-align="center"
                 align="left"
+                width="120"
               ></el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
                 <template slot-scope="scope1">
@@ -213,6 +221,14 @@
                       size="mini"
                       placeholder="请输入内容"
                     ></el-input>
+                    <span class="arrow-up"  v-if="scope1.row.up"><img src="/img/arrowup.png" width="20px" height="20px"/>
+                      <span>{{scope1.row.up}}%</span>
+                    </span>
+                    <span class="arrow-down" v-if="scope1.row.down"><img src="/img/arrowdown.png" width="20px" height="20px"/>
+                      <span>{{scope1.row.down}}%</span>
+                    </span>
+                    <!--<span><img src="/img/arrowup.png" width="20px" height="20px"/>-->
+                    <!--12%</span>-->
                     <!--<div style="width: 35px; text-algin: center">-->
                       <!--<el-link-->
                         <!--v-if="scope1.row.children"-->
@@ -281,7 +297,7 @@
       <el-table-column
         v-if="headers.find((p) => p.name == 'week3')"
         align="center"
-        width="250"
+        width="280"
       >
         <template slot="header">
           <div class="">
@@ -320,6 +336,7 @@
                 prop="name"
                 header-align="center"
                 align="left"
+                width="120"
               ></el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
                 <template slot-scope="scope1">
@@ -341,6 +358,12 @@
                       size="mini"
                       placeholder="请输入内容"
                     ></el-input>
+                    <span class="arrow-up"  v-if="scope1.row.up"><img src="/img/arrowup.png" width="20px" height="20px"/>
+                      <span>{{scope1.row.up}}%</span>
+                    </span>
+                    <span class="arrow-down" v-if="scope1.row.down"><img src="/img/arrowdown.png" width="20px" height="20px"/>
+                      <span>{{scope1.row.down}}%</span>
+                    </span>
                     <!--<div style="width: 35px; text-algin: center">-->
                       <!--<el-link-->
                         <!--v-if="scope1.row.children"-->
@@ -409,7 +432,7 @@
       <el-table-column
         v-if="headers.find((p) => p.name == 'week4')"
         align="center"
-        width="250"
+        width="280"
       >
         <template slot="header">
           <div class="">
@@ -448,6 +471,7 @@
                 prop="name"
                 header-align="center"
                 align="left"
+                width="120"
               ></el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
                 <template slot-scope="scope1">
@@ -469,6 +493,12 @@
                       size="mini"
                       placeholder="请输入内容"
                     ></el-input>
+                    <span class="arrow-up"  v-if="scope1.row.up"><img src="/img/arrowup.png" width="20px" height="20px"/>
+                      <span>{{scope1.row.up}}%</span>
+                    </span>
+                    <span class="arrow-down" v-if="scope1.row.down"><img src="/img/arrowdown.png" width="20px" height="20px"/>
+                      <span>{{scope1.row.down}}%</span>
+                    </span>
                     <!--<div style="width: 35px; text-algin: center">-->
                       <!--<el-link-->
                         <!--v-if="scope1.row.children"-->
@@ -537,7 +567,7 @@
       <el-table-column
         v-if="headers.find((p) => p.name == 'week5')"
         align="center"
-        width="250"
+        width="280"
       >
         <template slot="header">
           <div class="">
@@ -576,6 +606,7 @@
                 prop="name"
                 header-align="center"
                 align="left"
+                width="120"
               ></el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
                 <template slot-scope="scope1">
@@ -597,6 +628,12 @@
                       size="mini"
                       placeholder="请输入内容"
                     ></el-input>
+                    <span class="arrow-up"  v-if="scope1.row.up"><img src="/img/arrowup.png" width="20px" height="20px"/>
+                      <span>{{scope1.row.up}}%</span>
+                    </span>
+                    <span class="arrow-down" v-if="scope1.row.down"><img src="/img/arrowdown.png" width="20px" height="20px"/>
+                      <span>{{scope1.row.down}}%</span>
+                    </span>
                     <!--<div style="width: 35px; text-algin: center">-->
                       <!--<el-link-->
                         <!--v-if="scope1.row.children"-->
@@ -665,7 +702,7 @@
       <el-table-column
         v-if="headers.find((p) => p.name == 'week6')"
         align="center"
-        width="250"
+        width="280"
       >
         <template slot="header">
           <div class="">
@@ -704,6 +741,7 @@
                 prop="name"
                 header-align="center"
                 align="left"
+                width="120"
               ></el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
                 <template slot-scope="scope1">
@@ -725,6 +763,12 @@
                       size="mini"
                       placeholder="请输入内容"
                     ></el-input>
+                    <span class="arrow-up"  v-if="scope1.row.up"><img src="/img/arrowup.png" width="20px" height="20px"/>
+                      <span>{{scope1.row.up}}%</span>
+                    </span>
+                    <span class="arrow-down" v-if="scope1.row.down"><img src="/img/arrowdown.png" width="20px" height="20px"/>
+                      <span>{{scope1.row.down}}%</span>
+                    </span>
                     <!--<div style="width: 35px; text-algin: center">-->
                       <!--<el-link-->
                         <!--v-if="scope1.row.children"-->
@@ -793,7 +837,7 @@
       <el-table-column
         v-if="headers.find((p) => p.name == 'week7')"
         align="center"
-        width="250"
+        width="280"
       >
         <template slot="header">
           <div class="">
@@ -832,6 +876,7 @@
                 prop="name"
                 header-align="center"
                 align="left"
+                width="120"
               ></el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
                 <template slot-scope="scope1">
@@ -853,6 +898,12 @@
                       size="mini"
                       placeholder="请输入内容"
                     ></el-input>
+                    <span class="arrow-up"  v-if="scope1.row.up"><img src="/img/arrowup.png" width="20px" height="20px"/>
+                      <span>{{scope1.row.up}}%</span>
+                    </span>
+                    <span class="arrow-down" v-if="scope1.row.down"><img src="/img/arrowdown.png" width="20px" height="20px"/>
+                      <span>{{scope1.row.down}}%</span>
+                    </span>
                     <!--<div style="width: 35px; text-algin: center">-->
                       <!--<el-link-->
                         <!--v-if="scope1.row.children"-->
@@ -943,7 +994,7 @@
       // 表格头部
       headers: [],
       // 表格数据
-      datas: [],
+      smartDatas: [],
       // 5天制 6天制 7天制
       days: {
         type: Number,
@@ -1042,21 +1093,26 @@
     computed: {},
     // 当属性的值发生变化时，就会调用对应属性的方法，方法里面的形参对应的是属性的新值和旧值
     watch: {
-      'datas':{
+      'smartDatas':{
         handler(data){
           data.forEach(item=>{
-            item.weeks.forEach(_=>{
-              _.foods.forEach(__=>{
-                let count=0;
-                __.children.forEach(___=>{
-                  count+= parseInt(___.count?___.count:0)
+            if(!item.flag){
+              item.weeks.forEach(_=>{
+                _.foods.forEach(__=>{
+                  let count=0;
+                  __.children.forEach(___=>{
+                    count+= parseFloat(___.count?___.count:0)
+                  })
+                  this.$set(__,"count",count);
                 })
-                this.$set(__,"count",count);
               })
-            })
+            }
           })
-          this.getFoodScore();
-
+          this.smartDatas.forEach(item=> {
+            this.$set(item, "flag", false);
+          })
+          console.log(data)
+          this.getFoodScoreSmart();
         },
         deep:true,
       }
@@ -1105,7 +1161,7 @@
         }
       },
       GetCurentNode(data_id, week_id, food_id) {
-        this.datas.forEach((data) => {
+        this.smartDatas.forEach((data) => {
           if (data.id === data_id) {
             data.weeks.forEach((week) => {
               if (week.id === week_id) {
@@ -1179,7 +1235,7 @@
       //   // this.getFoodScore();
       // },
       //获取分数
-      getFoodScore(){
+      getFoodScoreSmart(){
         this.dragnode.node={};
         let day=[0,0,0,0,0,0,0]
         let days=0;
@@ -1188,7 +1244,7 @@
         foods["peopleId"]=this.crowd;
         let recipeVals=[];
         var that=this;
-        this.datas.forEach(_=>{
+        this.smartDatas.forEach(_=>{
           let index=0
           _.weeks.forEach(__=>{
             __.foods.forEach(___=>{
@@ -1198,7 +1254,7 @@
                 ___.children.forEach(____=>{
                   recipeVals.push({
                     foodId:____.id,
-                    val:___.count?___.count:0,
+                    val:____.count?____.count:0,
                     mealType:that.getmealTypeData(_.name),
                     week:__.name.slice(4)
                   })
@@ -1237,10 +1293,15 @@
               })
               intake.data=data;
               let nutrition=[];
-              debugger
+            //  debugger
               that.nutritionValue.forEach(_=>{
-                nutrition.push({code:_.code,name:_.name,dris:resData.nutritionCalDTOList[_.code].dris,realIntake:resData.nutritionCalDTOList[_.code].realIntake,realPropor:resData.nutritionCalDTOList[_.code].realPropor,reqPropor:resData.nutritionCalDTOList[_.code].min+"-"+resData.nutritionCalDTOList[_.code].max,grade:resData.nutritionCalDTOList[_.code].grade,point:resData.nutritionCalDTOList[_.code].point})
+                if(resData.nutritionCalDTOList[_.code].dris==0){
+                  nutrition.push({code:_.code,name:_.name,realIntake:resData.nutritionCalDTOList[_.code].realIntake,dris:(resData.nutritionCalDTOList[_.code].realIntake).toFixed(2),realPropor:resData.nutritionCalDTOList[_.code].realPropor,reqPropor:resData.nutritionCalDTOList[_.code].min+"-"+resData.nutritionCalDTOList[_.code].max,grade:resData.nutritionCalDTOList[_.code].grade,point:resData.nutritionCalDTOList[_.code].point})
+                }else{
+                  nutrition.push({code:_.code,name:_.name,realIntake:resData.nutritionCalDTOList[_.code].realIntake,dris:(resData.nutritionCalDTOList[_.code].realIntake/resData.nutritionCalDTOList[_.code].dris).toFixed(2),realPropor:resData.nutritionCalDTOList[_.code].realPropor,reqPropor:resData.nutritionCalDTOList[_.code].min+"-"+resData.nutritionCalDTOList[_.code].max,grade:resData.nutritionCalDTOList[_.code].grade,point:resData.nutritionCalDTOList[_.code].point})
+                }
               })
+              console.log(nutrition)
 
               let power=[];
               that.powerValue.forEach(_=>{
@@ -1317,7 +1378,7 @@
       //新增菜谱
       appendDragFood(res, id, wk) {
         if (!res.id) return;
-        this.datas.forEach((data) => {
+        this.smartDatas.forEach((data) => {
           if (data.id === id) {
             data.weeks.forEach((week) => {
               if (week.name === wk) {
@@ -1343,7 +1404,7 @@
       // 处理数据
       refreshData() {
         // 计算食物数量 主要用于合并单元格
-        this.datas.forEach((item) => {
+        this.smartDatas.forEach((item) => {
           item.weeks.forEach((week) => {
             var count = 0;
             week.foods.forEach((food) => {
@@ -1393,7 +1454,7 @@
       // 选择菜谱结果
       onChoiceChange(res) {
         // console.log(res);
-        this.datas.forEach((data) => {
+        this.smartDatas.forEach((data) => {
           if (data.id === this.dialog_choice.data_id) {
             data.weeks.forEach((week) => {
               if (week.id === this.dialog_choice.week_id) {
@@ -1403,7 +1464,6 @@
                     message: "已经存在，请重新选择",
                     type: "error",
                   });
-
                   return;
                 } else {
                   week.foods.push(res);
@@ -1487,6 +1547,12 @@
   }
   .drapInActive .el-table th {
     background-color: red !important;
+  }
+  .arrow-up ,.arrow-down{
+    font-size: 8px;
+  }
+  .arrow-up img ,.arrow-down img{
+    margin-right: -6px;
   }
   .colNoneBorder
   {

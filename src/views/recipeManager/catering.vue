@@ -160,6 +160,9 @@
               type="success"
             >保存食谱</el-button
             >
+            <el-button style="margin-left: 10px" size="medium"  @click="dishClear"
+            >清空</el-button
+            >
             <el-button style="margin-left: 10px" size="medium"
             >自动设置油盐糖</el-button
             >
@@ -298,7 +301,7 @@
         </el-card>
       </el-col>
       <el-col :span="19">
-        <div class="foodPanel">
+        <div class="foodPanel" @mouseover="HidenFoodTips($event)">
           <foods-week
             @childfn="parentFn"
             :headers="headers"
@@ -602,15 +605,82 @@
       },
       mealLoad(id,name){
         let that=this;
-        this.$confirm("请确定是否导入食谱："+name+"?", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(()=>{
-          that.personMealhandleNodeClick(id,that)
-        })
+        if(this.WeekInfo.weekValue){
+          this.$confirm("请确定是否导入食谱："+name+"?", "提示", {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning"
+          }).then(()=>{
+            that.inserMeal(id,that)
+          })
+        }else{
+          this.$message({
+            message: "请先选择周期",
+            type: "info"
+          });
+        }
       },
+      inserMeal(id,that){
+        detail(id).then(res=>{
+          if(res.data.success){
+            let mealsType=[];
+            let data=res.data.data;
+            data.recipeCycles.forEach(_=>{
+              mealsType.push(_.mealsType);
+            })
+            let arr= Array.from(new Set(mealsType));
+            for(let i=0;i< that.WeekInfo.foodCatalog.length;i++){
+              if(arr.indexOf(parseInt(that.getmealTypeData(that.WeekInfo.foodCatalog[i])))==-1){
+                arr.push(parseInt(that.getmealTypeData(that.WeekInfo.foodCatalog[i])))
+              }
+            }
+            arr.sort()
+            //   debugger
+            let foodCatalog= []
+            for(let i=0;i<arr.length;i++){
+              foodCatalog.push(that.getmealTypeDataValue(arr[i]))
+            }
+            that.$set(that.WeekInfo,"foodCatalog",foodCatalog)
 
+            that.AppendFoodType();
+            let recipeCycles=res.data.data.recipeCycles;
+            setTimeout(function () {
+              that.insertDishesData("datas",recipeCycles,that);
+            }, 1000);
+
+
+          }})
+      },
+      //菜品数据导入
+      insertDishesData(datas,recipeCycles,that){
+        that[datas].forEach(_=>{
+          _.weeks.forEach(__=>{
+            let foods=[];
+            for(let i=0;i<recipeCycles.length;i++){
+              if(recipeCycles[i].mealsType+""==that.getmealTypeData(_.name)&&recipeCycles[i].week+""==__.name.slice(4)){
+                let recipeConncts=recipeCycles[i].recipeConncts;
+                for(let k=0;k<recipeConncts.length;k++){//菜品
+                  let food={};
+                  let recipevals=recipeConncts[k].recipevals;  let children=[];
+                  for(let j=0;j<recipevals.length;j++){//食材
+                    children.push({id:recipevals[j].foodId,name:recipevals[j].foodName,count:recipevals[j].val})
+                  }
+                  food.id=recipeConncts[k].dishId;
+                  food.name=recipeConncts[k].dishName;
+                  food.count=recipeConncts[k].value;
+                  food.children=children;
+                  foods.push(food)
+                }
+              }
+            }
+            that.$set(__,"foods",foods);
+          })
+
+        })
+        if(datas!="showDatas"){
+          this.$refs.child.getFoodScore();
+        }
+      },
       personMealhandleNodeClick(id,that){
         detail(id).then(res=>{
           if(res.data.success){
@@ -639,13 +709,13 @@
             that.WeekInfo.isUse=data.isUse==1?true:false;
             that.WeekInfo.isPub=data.isPub==0?true:false
             setTimeout(function () {
-              that.detailPushData("datas",recipeCycles,that);
+              that.dishesData("datas",recipeCycles,that);
             }, 1000);
           }
         })
       },
       //详情数据绑定前端
-      detailPushData(datas,recipeCycles,that){
+      dishesData(datas,recipeCycles,that){
         that[datas].forEach(_=>{
           _.weeks.forEach(__=>{
             /////
@@ -709,7 +779,6 @@
             typeTemp=1;
           }
         }
-        debugger
         let dishSharePub= this.dishSharePub?this.dishSharePub:undefined
         getDishByBaseId(isPrivate,typeTemp,dishSharePub,this.belongRegion?(this.belongRegion.length>1?this.belongRegion[1]:this.belongRegion[0]):undefined,this.seasonl,this.isUse).then(res=>{
           if(res.data.success){
@@ -778,6 +847,16 @@
         this.$refs.foodmenudLayer.style.left=x+'px';
         this.$refs.foodmenudLayer.style.width='180px';
         this.$refs.foodmenudLayer.style.display="block";
+      },
+      //清空菜品
+      dishClear(){
+        console.log(this.datas)
+        this.datas.forEach(_=>{
+          _.weeks.forEach(week=>{
+            this.$set(week,"foods",[])
+            this.$set(week,"image","")
+          })
+        })
       },
       //食谱跟随显示
       ShowFoodTips(ev,f){
@@ -852,7 +931,7 @@
               }
             }
             let recipeCycles=res.data.data.recipeCycles;
-            that.detailPushData("showDatas",recipeCycles,that);
+            that.dishesData("showDatas",recipeCycles,that);
             // console.log(that.showDatas)
             // console.log(that.showHeaders)
 
@@ -1018,7 +1097,7 @@
           endTime:this.endTime,
           isBoard:this.WeekInfo.shareTell?1:0
         }
-        if(row.recipeName&&row.recipeCycles.length>0&&row.startTime&&!flag) {
+        if(row.recipeName&&row.recipeCycles.length>0&&row.startTime&&!flag&&this.WeekInfo.startAge&&this.WeekInfo.endAge) {
           if (this.id) {
             row["id"] = this.id;
             update(row).then(res => {

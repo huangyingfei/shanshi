@@ -206,7 +206,6 @@ const user = {
   },
   mutations: {
     SET_WEBLOG:(state,webLogo)=>{
-       setWebLogo(webLogo);
        state.webLogo=webLogo;
        setStore({name:'webLogo',content:state.webLogo})
     },

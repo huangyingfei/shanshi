@@ -113,6 +113,7 @@
               let s = data.data.endTime.replace(/-/g, "/");
               var date = new Date(data.data.endTime);
               this.$set(this.ruleForm,"day", Math.ceil((date.getTime()-new Date().getTime()) / 1000 / 60 / 60 /24))
+
             }
           }
         })
@@ -145,12 +146,14 @@
               message: '保存成功',
               type: 'success'
             });
+            this.$store.dispatch("setWebLogo",this.ruleForm.webLogo)
+            this.getOneWeb();
             done()
           } else {
             this.$message.error('保存失败');
           }
         });
-        this.getOneWeb();
+
       }
     }
   };
