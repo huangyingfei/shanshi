@@ -34,7 +34,7 @@ export const remove = (ids) => {
 
 export const add = (row) => {
   return request({
-    url: '/api/blade-food/studentallergy/submit',
+    url: '/api/blade-food/studentallergy/save',
     method: 'post',
     data: row
   })
@@ -42,7 +42,7 @@ export const add = (row) => {
 
 export const update = (row) => {
   return request({
-    url: '/api/blade-food/studentallergy/submit',
+    url: '/api/blade-food/studentallergy/update',
     method: 'post',
     data: row
   })
@@ -66,3 +66,12 @@ export const getStudentClass = (id) => {
     }
   })
 }
+
+export const getFoodByBaseId = (isPrivate) => {
+  return request({
+    url: '/api/blade-food/basetype/getFoodByBaseId?isPrivate='+isPrivate,
+    method: 'get',
+  })
+}
+
+

@@ -20,15 +20,16 @@
       @refresh-change="refreshChange"
       @on-load="onLoad"
     >
-      <el-button
-        type="el-button el-button--primary el-button--small"
-        size="small"
-        icon="el-icon-plus"
-        @click="handleAdd"
-      >
-        新增
-      </el-button>
+
       <template slot="menuLeft">
+        <el-button
+          type="el-button el-button--primary el-button--small"
+          size="small"
+          icon="el-icon-plus"
+          @click="handleAdd"
+        >
+          新增
+        </el-button>
         <el-button
           type="danger"
           size="small"
@@ -36,6 +37,24 @@
           plain
           @click="handleDelete"
           >删 除
+        </el-button>
+      </template>
+
+
+      <template slot-scope="scope" slot="menu">
+        <el-button
+          type="text"
+          icon="el-icon-edit"
+          size="small"
+          @click.stop="handleEdit(scope.row)"
+        >编辑
+        </el-button>
+        <el-button
+          type="text"
+          icon="el-icon-edit"
+          size="small"
+          @click.stop="rowDel(scope.row)"
+        >删除
         </el-button>
       </template>
     </avue-crud>
@@ -76,7 +95,9 @@ export default {
         index: true,
         viewBtn: false,
         addBtn:false,
+        editBtn:false,
         selection: true,
+        delBtn:false,
         dialogClickModal: false,
         column: [
           {
@@ -94,7 +115,7 @@ export default {
             },
             rules: [{ required: true, trigger: "blur" }],
             change: ({ value, column }) => {
-              // debugger;
+
               if (value != "" && value != null) {
                 getStudentClass(value).then(res => {
                   /*                    console.log(res);*/
@@ -247,8 +268,11 @@ export default {
           });
         });
     },
+    handleEdit(scope){
+      this.$router.push({name:"修改过敏信息",query:{id:scope.id}});
+    },
     handleAdd(){
-      this.$router.push({ path: "/recipeManager/addstudenttallergy"});
+      this.$router.push({  name: "新增过敏信息"});
     },
     handleDelete() {
       if (this.selectionList.length === 0) {

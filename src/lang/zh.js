@@ -67,7 +67,7 @@ export default {
   },
   login: {
     title: "登录 ",
-    info: "华园教育膳食管理系统",
+    info: "华园紫杭膳食营养智慧管理系统",
     tenantId: "请输入租户ID",
     username: "请输入账号",
     password: "请输入密码",

@@ -1328,7 +1328,7 @@ export default {
 
 <style scoped>
 .avue-view {
-  padding: 0 5px !important;
+  padding: 0 0px !important;
 }
 /* .avue-view {
   padding: 0 10px !important;

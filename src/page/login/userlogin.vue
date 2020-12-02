@@ -7,17 +7,17 @@
     :model="loginForm"
     label-width="0"
   >
-    <el-form-item v-if="tenantMode" prop="tenantId">
-      <el-input
-        size="small"
-        @keyup.enter.native="handleLogin"
-        v-model="loginForm.tenantId"
-        auto-complete="off"
-        :placeholder="$t('login.tenantId')"
-      >
-        <i slot="prefix" class="icon-quanxian" />
-      </el-input>
-    </el-form-item>
+    <!--<el-form-item v-if="tenantMode" prop="tenantId">-->
+      <!--&lt;!&ndash;<el-input&ndash;&gt;-->
+        <!--&lt;!&ndash;size="small"&ndash;&gt;-->
+        <!--&lt;!&ndash;@keyup.enter.native="handleLogin"&ndash;&gt;-->
+        <!--&lt;!&ndash;v-model="loginForm.tenantId"&ndash;&gt;-->
+        <!--&lt;!&ndash;auto-complete="off"&ndash;&gt;-->
+        <!--&lt;!&ndash;:placeholder="$t('login.tenantId')"&ndash;&gt;-->
+      <!--&lt;!&ndash;&gt;&ndash;&gt;-->
+        <!--&lt;!&ndash;<i slot="prefix" class="icon-quanxian" />&ndash;&gt;-->
+      <!--&lt;!&ndash;</el-input>&ndash;&gt;-->
+    <!--</el-form-item>-->
     <el-form-item prop="username">
       <el-input
         size="small"
@@ -46,30 +46,30 @@
         <i slot="prefix" class="icon-mima" />
       </el-input>
     </el-form-item>
-    <el-form-item v-if="this.website.captchaMode" prop="code">
-      <el-row :span="24">
-        <el-col :span="16">
-          <el-input
-            size="small"
-            @keyup.enter.native="handleLogin"
-            v-model="loginForm.code"
-            auto-complete="off"
-            :placeholder="$t('login.code')"
-          >
-            <i slot="prefix" class="icon-yanzhengma" />
-          </el-input>
-        </el-col>
-        <el-col :span="8">
-          <div class="login-code">
-            <img
-              :src="loginForm.image"
-              class="login-code-img"
-              @click="refreshCode"
-            />
-          </div>
-        </el-col>
-      </el-row>
-    </el-form-item>
+    <!--<el-form-item v-if="this.website.captchaMode" prop="code">-->
+      <!--<el-row :span="24">-->
+        <!--<el-col :span="16">-->
+          <!--<el-input-->
+            <!--size="small"-->
+            <!--@keyup.enter.native="handleLogin"-->
+            <!--v-model="loginForm.code"-->
+            <!--auto-complete="off"-->
+            <!--:placeholder="$t('login.code')"-->
+          <!--&gt;-->
+            <!--<i slot="prefix" class="icon-yanzhengma" />-->
+          <!--</el-input>-->
+        <!--</el-col>-->
+        <!--<el-col :span="8">-->
+          <!--<div class="login-code">-->
+            <!--<img-->
+              <!--:src="loginForm.image"-->
+              <!--class="login-code-img"-->
+              <!--@click="refreshCode"-->
+            <!--/>-->
+          <!--</div>-->
+        <!--</el-col>-->
+      <!--</el-row>-->
+    <!--</el-form-item>-->
     <el-form-item>
       <el-button
         type="primary"

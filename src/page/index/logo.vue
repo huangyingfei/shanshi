@@ -25,10 +25,9 @@
 import { mapGetters } from "vuex";
 export default {
   name: "logo",
-  webLogo:'',
   data() {
     return {
-      webLogo:'',
+
     };
   },
   created() {},
@@ -36,14 +35,15 @@ export default {
     this.init()
   },
   computed: {
-    ...mapGetters(["website", "keyCollapse"])
+    ...mapGetters(["website", "keyCollapse","webLogo"])
   },
   methods: {
     init(){
+
       getOneWeb().then(res=>{
         if(res.data.success){
-          this.webLogo=res.data.data.webLogo
           router.$avueRouter.setTitle(res.data.data.webTitle);
+          this.$store.dispatch("setWebLogo",res.data.data.webLogo)
         }
       })
     }

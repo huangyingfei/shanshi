@@ -169,26 +169,26 @@ export default [
   {
     path: "/recipeManager",
     component: Layout,
-    redirect: "/recipeManager/auditRecipeConfirm",
     children: [
       {
         path: "auditRecipeConfirm",
         name: "确认审核",
         component: () =>
-          import(/* webpackChunkName: "views" */  "@/views/recipeManager/auditRecipeConfirm/auditRecipeConfirm.vue")
-      }
-    ],
-  },{
-    path: "/recipeManager2",
-    component: Layout,
-    redirect: "/recipeManager/addstudenttallergy",
-    children: [
+          import(/* webpackChunkName: "views" */  "@/views/recipeManager/auditRecipeConfirm")
+      },
       {
         path: "addstudenttallergy",
-        name: "过敏信息",
+        name:"新增过敏信息",
+        component: () =>
+          import(/* webpackChunkName: "views" */  "@/views/recipeManager/addstudenttallergy")
+      },
+      {
+        path: "addstudenttallergy2",
+        name:"修改过敏信息",
         component: () =>
           import(/* webpackChunkName: "views" */  "@/views/recipeManager/addstudenttallergy")
       }
-    ]
+    ],
+
   },
 ]

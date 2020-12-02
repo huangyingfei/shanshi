@@ -919,7 +919,7 @@ export default {
         page.pageSize,
         Object.assign(params, this.query)
       ).then((res) => {
-        this.data = res.data.data.records;
+        this.data = res.data.data;
         this.loading = false;
         this.selectionClear();
       });
