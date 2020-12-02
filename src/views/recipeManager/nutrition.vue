@@ -1,24 +1,22 @@
 <template>
   <div>
     <el-dialog
-      title="提示"
+      title=""
       :visible.sync="nutritionDialogVisible"
       :fullscreen = "true"
       :modal= "false"
-      :before-close="handleClose">
+      :before-close="handleClose"> 
+
       <div>
-        <section class="print-page page-a4" ref="printSec" id="printMe">
-        <span>带量食谱</span>
+        <section class="print-page" ref="printSec" id="printMe">
           <el-row>
-            <el-col :span="24">
+            <el-col :span="24" style="text-align:center;font-weight:bold;font-size: 16px">
               <span>华园健康智慧幼儿园带量食谱</span>
             </el-col>
           </el-row>
 
           <el-row>
-            <el-col :span="20">
-            </el-col>
-            <el-col :span="4">
+            <el-col :span="24" style="text-align:right">
               <span>2020-08-31~2020-09-04</span>
             </el-col>
           </el-row>
@@ -102,10 +100,10 @@
           </el-row>
           <!-- 食谱表格结束 -->      
           <el-row>
-            <el-col :span="20">
+            <el-col :span="12">
               <span>一.平均每人进食量</span>
             </el-col>
-            <el-col :span="4">
+            <el-col :span="12" style="text-align:right">
               <span>2020-08-31~2020-09-04</span>
             </el-col>
           </el-row>
@@ -314,16 +312,101 @@
 
           <el-row>
             <el-col :span="24">
-              <span>五.配餐能量结构表:</span>
+              <span>五.配餐能量结构表</span>
             </el-col>
           </el-row>
-
+          <!-- 食谱表格开始 -->
+          <el-row>
+            <el-col :span="24">
+              <el-table size = "small" border="ture" :header-cell-style="cateringEnergyHead">
+                <el-table-column label="" align="center" prop="monday1">
+                </el-table-column>
+                <el-table-column label="标准" align="center" prop="monday1">
+                </el-table-column>
+                <el-table-column label="平均" align="center" prop="monday1">
+                </el-table-column>
+                <el-table-column label="单位" align="center" prop="monday1">
+                </el-table-column>
+                <el-table-column label="星期一(Mon)" align="center">
+                  <el-table-column
+                    prop="mondayRecipe"
+                    label="食谱"  min-width="50">
+                  </el-table-column>
+                  <el-table-column
+                    prop="mondayRecipeWeight"
+                    label="带量/人(克)" min-width="60">
+                  </el-table-column>
+                </el-table-column>
+                <el-table-column label="星期二(Tue)" align="center">
+                  <el-table-column
+                    prop="tuesdayRecipe"
+                    label="食谱" min-width="50">
+                  </el-table-column>
+                  <el-table-column
+                    prop="tuesdayRecipeWeight"
+                    label="带量/人(克)" min-width="60">
+                  </el-table-column>
+                </el-table-column>
+                <el-table-column label="星期三(Wed)" align="center">
+                  <el-table-column
+                    prop="wednesdayRecipe"
+                    label="食谱" min-width="50">
+                  </el-table-column>
+                  <el-table-column
+                    prop="wednesdayRecipeWeight"
+                    label="带量/人(克)" min-width="60">
+                  </el-table-column>
+                </el-table-column>
+                <el-table-column label="星期四(Thu)" align="center">
+                  <el-table-column
+                    prop="thursdayRecipe"
+                    label="食谱" min-width="50">
+                  </el-table-column>
+                  <el-table-column
+                    prop="thursdayRecipeWeight"
+                    label="带量/人(克)" min-width="60">
+                  </el-table-column>
+                </el-table-column>
+                <el-table-column label="星期五(Fri)" align="center">
+                  <el-table-column
+                    prop="fridayRecipe"
+                    label="食谱" min-width="50">
+                  </el-table-column>
+                  <el-table-column
+                    prop="fridayRecipeWeight"
+                    label="带量/人(克)" min-width="60">
+                  </el-table-column>
+                </el-table-column>
+                <el-table-column label="星期六(Sat)" align="center">
+                  <el-table-column
+                    prop="saturdayRecipe"
+                    label="食谱" min-width="50">
+                  </el-table-column>
+                  <el-table-column
+                    prop="saturdayRecipeWeight"
+                    label="带量/人(克)" min-width="60">
+                  </el-table-column>
+                </el-table-column>
+                <el-table-column label="星期日(Sun)" align="center">
+                  <el-table-column
+                    prop="sundayRecipe"
+                    label="食谱" min-width="50">
+                  </el-table-column>
+                  <el-table-column
+                    prop="sundayRecipeWeight"
+                    label="带量/人(克)" min-width="60">
+                  </el-table-column>
+                </el-table-column>
+              </el-table>
+            </el-col>
+          </el-row>
+          <!-- 食谱表格结束 -->      
         </section>
       </div>
-      <div>
+      <div class="fixed">
         <el-row type="flex" justify="center">
           <el-col :span="4">
-            <el-button>取消</el-button>
+            <el-button @click="nutritionDialogVisible=false">取消</el-button>
           </el-col>
           <el-col :span="4">
             <el-button>导出Excel</el-button>
@@ -366,6 +449,12 @@ export default {
   },
 
   methods:{
+    cateringEnergyHead({row,colunm, rowIndex,columnIndex}){
+      if(rowIndex===1 ){
+        return {display: 'none'}
+      }
+
+    },
     openNutritionDialog(){
       console.log(this);
       let getMenuText = this.$refs;
@@ -384,17 +473,24 @@ export default {
 </script>
 
 <style scoped>
-/* .page-a4{
-  width: 300mm;
+.page-a4{
+  height: 100%;
   position: relative
-} */
+}
 
 .print-page{
   width: 310mm;
   margin: 0 auto;
   margin-bottom: 14mm;
-  border: 1px solid #bbb;
   border-bottom: 0;
 }
+.fixed{ 
+  position:fixed; 
+  left:0px; 
+  bottom:0px; 
+  width:100%;  
+  background-color:rgb(255, 255, 255); 
+  z-index:9999;
+  }
 
 </style>
