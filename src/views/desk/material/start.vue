@@ -1317,13 +1317,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+// .avue-view {
+//   padding: 0 10px !important;
+//   width: 100% !important;
+//   height: 100% !important;
+//   background-color: #fff;
+//   -webkit-box-sizing: border-box;
+//   box-sizing: border-box;
+// }
 .avue-view {
-  padding: 0 10px !important;
-  width: 100% !important;
-  height: 100% !important;
-  background-color: #fff;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
+  padding: 0 5px !important;
 }
 .notice {
   /* background-color: #fff; */
@@ -1360,6 +1363,7 @@ export default {
   /* height: 100%; */
   /* height: 600px; */
   overflow-y: auto;
+  overflow-x: hidden;
   background-color: #fff;
   position: absolute;
   left: 401px;
@@ -1438,6 +1442,7 @@ export default {
 .country1 {
   width: 90px;
   float: left;
+  margin-left: 10px;
 }
 .country2 {
   width: 90px;
@@ -1496,27 +1501,27 @@ export default {
     position: relative;
     overflow: hidden;
 } */
-.avatar-uploader .el-upload {
-  border: 1px dashed #d9d9d9 !important;
-  border-radius: 6px !important;
-  cursor: pointer !important;
-  position: relative !important;
-  overflow: hidden !important;
-}
-.avatar-uploader .el-upload:hover {
-  border-color: #409eff;
-}
-.avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 178px;
-  height: 178px;
-  line-height: 178px;
-  text-align: center;
-}
-.avatar {
-  width: 178px;
-  height: 178px;
-  display: block;
-}
+// .avatar-uploader .el-upload {
+//   border: 1px dashed #d9d9d9 !important;
+//   border-radius: 6px !important;
+//   cursor: pointer !important;
+//   position: relative !important;
+//   overflow: hidden !important;
+// }
+// .avatar-uploader .el-upload:hover {
+//   border-color: #409eff;
+// }
+// .avatar-uploader-icon {
+//   font-size: 28px;
+//   color: #8c939d;
+//   width: 178px;
+//   height: 178px;
+//   line-height: 178px;
+//   text-align: center;
+// }
+// .avatar {
+//   width: 178px;
+//   height: 178px;
+//   display: block;
+// }
 </style>

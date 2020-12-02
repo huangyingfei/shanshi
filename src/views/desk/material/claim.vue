@@ -4,9 +4,10 @@
       <!-- <div>食材不宜同食</div> -->
       <!-- 搜索 -->
       <!-- <div class="crumbs"></div> -->
+
       <div class="update">
-        相克标题:
-        <el-input v-model="input" placeholder="请输入内容"></el-input>
+        <!-- 相克标题:
+        <el-input v-model="input" placeholder="请输入内容"></el-input> -->
         <span class="exact">食材名称:</span>
 
         <el-input v-model="temps" placeholder="请输入内容"></el-input>
@@ -49,18 +50,17 @@
           v-loading="loadFlag1"
           :data="tableData"
           border
-          max-height="500"
           :element-loading-text="page_data.loadTxt"
           style="width: 100%;height:100%"
         >
           <el-table-column label="序号" type="index" width="50" align="center">
           </el-table-column>
-          <el-table-column
+          <!-- <el-table-column
             prop="name"
             label="相克标题"
             width="160"
             align="center"
-          ></el-table-column>
+          ></el-table-column> -->
           <el-table-column
             prop="foodName"
             label="食材一"
@@ -138,9 +138,9 @@
           label-width="100px"
           class="demo-ruleForm"
         >
-          <el-form-item label="名称" prop="name">
+          <!-- <el-form-item label="名称" prop="name">
             <el-input v-model="ruleForm.name"></el-input>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="食材一" prop="adding">
             <el-input
               readonly
@@ -251,7 +251,7 @@ export default {
       },
       radio: "1", //是否有效
       rules: {
-        name: [{ required: true, message: "请输入名称", trigger: "blur" }],
+        // name: [{ required: true, message: "请输入名称", trigger: "blur" }],
         adding: [{ required: true, message: "请选择食材", trigger: "change" }],
         adding1: [{ required: true, message: "请选择食材", trigger: "change" }]
       },
@@ -529,26 +529,19 @@ export default {
 
 <style scoped>
 .avue-view {
-  padding: 0 10px !important;
-  width: 100% !important;
-  height: 100% !important;
-  background-color: #fff !important;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  z-index: 999;
+  padding: 0 0px !important;
 }
 .unsaved {
   width: 100%;
   height: 100%;
   background-color: #fff;
   font-size: 14px;
-  position: absolute;
-
-  top: 50px;
-  left: 10px;
+  position: relative;
+  top: 0px;
+  left: 0px;
   bottom: 9px;
-  right: 0px;
 }
+
 .crumbs {
   width: 100%;
   height: 100%;
@@ -587,8 +580,9 @@ export default {
 .pagingClass {
   text-align: right;
   /* margin: 20px 0; */
-  margin-top: 20px;
-  margin-right: 40px;
+  background-color: #fff;
+  margin-top: 0px;
+  margin-right: 0px;
   margin-bottom: 60px;
 }
 .rolling {

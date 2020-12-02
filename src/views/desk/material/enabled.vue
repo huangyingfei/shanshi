@@ -67,7 +67,6 @@
           border
           stripe
           style="width: 100%"
-          max-height="400"
           :element-loading-text="page_data.loadTxt"
           v-loading="loadFlag"
           empty-text="没有数据~"
@@ -167,6 +166,7 @@
       </div>
       <!-- 审核食材 查看 -->
       <el-dialog
+        style="margin-top: 10px!important;"
         title="审核食材"
         width="90%"
         append-to-body
@@ -372,9 +372,8 @@
                   <el-upload
                     action="api/blade-resource/oss/endpoint/put-file"
                     list-type="picture-card"
-                    :limit="imgLimit"
                     :file-list="productImgs"
-                    :on-exceed="handleExceed"
+                    :on-change="handleChangePic"
                     :on-preview="handlePictureCardPreview"
                     :before-upload="beforeAvatarUpload"
                     :on-success="handleAvatarSuccess"
@@ -521,7 +520,7 @@
             </el-timeline> -->
           </div>
         </div>
-        <div slot="footer" class="dialog-footer11" style="text-align: center">
+        <div slot="footer" class="dialog-footer" style="text-align: center">
           <el-button type="primary" @click="seekeys = false">取 消</el-button>
           <el-button
             type="primary"
@@ -1279,6 +1278,15 @@ export default {
       console.log(file, fileList);
       this.dialogImageUrl = "";
     },
+    handleChangePic(file, productImgs) {
+      console.log(file);
+      console.log(productImgs);
+      if (productImgs.length > 1) {
+        productImgs.splice(0, 1);
+        // this.productImgs = [productImgs[productImgs.length - 1].raw];
+        // console.log(1);
+      }
+    },
     //预览图片
     handlePictureCardPreview(file) {
       console.log(file.url);
@@ -1320,28 +1328,34 @@ export default {
 
 <style scoped>
 .avue-view {
+  padding: 0 0px !important;
+}
+/* .avue-view {
   padding: 0 10px !important;
   width: 100% !important;
   height: 100% !important;
   background-color: #fff;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
-}
+} */
 .levelName {
   height: 100%;
-  position: relative;
+  height: 380px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  /* position: relative; */
   /* overflow-y: auto; */
 }
 .toolbar {
-  width: 99%;
+  width: 100%;
   height: 100%;
   background-color: #fff;
   /* margin-left: 0; */
-  position: absolute;
-  top: 50px;
-  left: 10px;
-  bottom: 20px;
-  right: 10px;
+  position: relative;
+  top: 0px;
+  left: 0px;
+  bottom: 10px;
+  right: 0px;
   /* height: 600px; */
 }
 .custom {
@@ -1424,21 +1438,14 @@ export default {
 .pagingClass {
   text-align: right;
   /* margin: 20px 0; */
-  margin-top: 20px;
-  margin-right: 40px;
+  background-color: #fff;
+  margin-top: 0px;
+  margin-right: 0px;
   margin-bottom: 60px;
 }
 .saveas {
   height: 400px;
   /* background-color: red; */
   overflow-y: auto;
-}
-.dialog-footer11 {
-  width: 100%;
-  height: 50px;
-  /* background-color: red; */
-  position: fixed;
-  bottom: 10px;
-  /* left: 0; */
 }
 </style>

@@ -295,6 +295,7 @@
             @childfn="parentFn"
             :headers="headers"
             :datas="datas"
+            :auditButtonShow ="auditButtonShow"
             :tenantId ="tenantId"
             days="5"
             :crowd="WeekInfo.crowd"
@@ -307,9 +308,7 @@
     </el-row>
 
     <!-- 审核确认取消通过按钮 -->
-    <el-row  style="text-align: center; overflow: auto;">
-      <el-col :span="6">
-      </el-col>
+    <el-row type="flex" justify="center" v-if="auditButtonShow">
       <el-col :span="4">
         <el-button @click="seekeys = false">取 消
         </el-button>
@@ -325,8 +324,6 @@
           type="primary"
           @click="auditRecipeConfirmAgree({status: 1})">同 意
         </el-button>
-      <el-col :span="6">
-      </el-col>
       </el-col>
 
     </el-row>
@@ -375,7 +372,8 @@ import Nutrition from '../nutrition.vue';
     showScore
   },
   mounted(){
-    this.tenantId = this.$route.query.tenantId
+    this.auditButtonShow = this.$route.query.doType == 0?true:false
+    this.tenantId=this.$route.query.tenantId;
     this.initData()
     if(this.$route.query.userid){
       this.id=this.$route.query.userid;
@@ -395,6 +393,7 @@ import Nutrition from '../nutrition.vue';
   data() {
     const data = [];
     return {
+      auditButtonShow: false,
       tenantId:'',
       foodRadio:'1',
       isUse:undefined,

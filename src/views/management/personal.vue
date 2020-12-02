@@ -114,7 +114,7 @@
                           size="mini"
                           @click.stop="() => append(data)"
                         >
-                          常用
+                          设置常用
                         </el-button>
                         <el-button
                           type="text"
@@ -122,7 +122,7 @@
                           size="mini"
                           @click.stop="() => insert(data)"
                         >
-                          不常用
+                          取消常用
                         </el-button>
 
                         <!-- <el-button
@@ -386,6 +386,7 @@
           </div>
           <div class="base">
             <el-button
+              :disabled="this.edients == 0"
               v-if="this.gavatorta == 1"
               type="primary"
               @click="saved('ruleForm')"
@@ -802,7 +803,8 @@ export default {
       lower: 0,
       waterfall: "2",
       fallen: "",
-      gavatorta: "0"
+      gavatorta: "0",
+      edients: "" //公开
     };
   },
   watch: {
@@ -817,6 +819,7 @@ export default {
   },
   beforeMount() {
     this.Protocol(); //营养素含量
+    this.ToString(); //公共
     this.Provinces(); //省市区
     this.queryLite(); //获取分类
     this.treeDrawing(); //树形渲染数
@@ -906,7 +909,7 @@ export default {
       // this.lower = tab.index;
       // console.log(this.lower);
       // this.treeDrawing();
-      // this.Protocol();
+      this.Protocol();
       // console.log(event);
     },
     //编辑保存
@@ -1054,6 +1057,7 @@ export default {
         return;
       } else {
         this.gavatorta = data.view;
+        this.edients = data.isPub;
         this.active = [];
         console.log(data);
         this.flour = data.id;
@@ -1198,6 +1202,7 @@ export default {
             this.ruleFormUsers.delivery1 =
               this.inquired.isUse == 0 ? false : true; //常用
             let units = this.inquired.nutritions;
+            console.log();
             units.forEach(item => {
               // console.log(item);
               for (let item1 of this.typeTree) {
@@ -1222,126 +1227,126 @@ export default {
     classification(data) {
       console.log(data);
     },
-    prepare(data, index) {
-      this.gavatorta = index;
-      this.active.length = 0;
-      this.active1.length = 0;
-      console.log(data);
-      this.flour = data.id;
-      this.$axios
-        .get(`api/blade-food/food/detail?id=${this.flour}`, {})
-        .then(res => {
-          // console.log(res);
-          this.inquired = res.data.data;
-          console.log(this.inquired);
-          this.valuepark.length = 0;
-          this.active.length = 0;
-          if (this.lower == 0) {
-            this.ruleForm.name = this.inquired.foodName; //食材名
-            this.ruleForm.foodFood = this.inquired.foodAlias; //食物别名1
-            this.ruleForm.ovenFood = this.inquired.foodAlias1; //食物别名2
-            this.ruleForm.buffer = this.inquired.foodReal; //食材真名
-            this.ruleForm.fooddata = this.inquired.foodType; //食材分类
-            this.ruleForm.foods = this.inquired.foodType1; //食物分类1
-            this.ruleForm.dogfood = this.inquired.foodType2; //食物分类2
-            this.ruleForm.besaved = this.inquired.foodEat; //食部
-            this.ruleForm.timers = this.inquired.weight; //重量
-            this.ruleForm.content = this.inquired.water; //水分
-            this.ruleForm.resource = this.inquired.color + ""; //色系
-            // this.active.push(this.inquired.season); //所属季节
+    // prepare(data, index) {
+    //   this.gavatorta = index;
+    //   this.active.length = 0;
+    //   this.active1.length = 0;
+    //   console.log(data);
+    //   this.flour = data.id;
+    //   this.$axios
+    //     .get(`api/blade-food/food/detail?id=${this.flour}`, {})
+    //     .then(res => {
+    //       // console.log(res);
+    //       this.inquired = res.data.data;
+    //       console.log(this.inquired);
+    //       this.valuepark.length = 0;
+    //       this.active.length = 0;
+    //       if (this.lower == 0) {
+    //         this.ruleForm.name = this.inquired.foodName; //食材名
+    //         this.ruleForm.foodFood = this.inquired.foodAlias; //食物别名1
+    //         this.ruleForm.ovenFood = this.inquired.foodAlias1; //食物别名2
+    //         this.ruleForm.buffer = this.inquired.foodReal; //食材真名
+    //         this.ruleForm.fooddata = this.inquired.foodType; //食材分类
+    //         this.ruleForm.foods = this.inquired.foodType1; //食物分类1
+    //         this.ruleForm.dogfood = this.inquired.foodType2; //食物分类2
+    //         this.ruleForm.besaved = this.inquired.foodEat; //食部
+    //         this.ruleForm.timers = this.inquired.weight; //重量
+    //         this.ruleForm.content = this.inquired.water; //水分
+    //         this.ruleForm.resource = this.inquired.color + ""; //色系
+    //         // this.active.push(this.inquired.season); //所属季节
 
-            this.inquired.season.split(",").forEach(item => {
-              this.active.push(item);
-            });
-            //所属区域
+    //         this.inquired.season.split(",").forEach(item => {
+    //           this.active.push(item);
+    //         });
+    //         //所属区域
 
-            if (this.inquired.provinces) {
-              let bar = [];
-              this.inquired.provinces.split(",").forEach((item, i) => {
-                bar.push([item, this.inquired.belongRegion.split(",")[i]]);
-              });
-              this.valuepark = bar;
-            }
-            this.ruleForm.desc = this.inquired.function; //功用
+    //         if (this.inquired.provinces) {
+    //           let bar = [];
+    //           this.inquired.provinces.split(",").forEach((item, i) => {
+    //             bar.push([item, this.inquired.belongRegion.split(",")[i]]);
+    //           });
+    //           this.valuepark = bar;
+    //         }
+    //         this.ruleForm.desc = this.inquired.function; //功用
 
-            let picture = []; //图片
-            if (this.inquired.pic) {
-              picture[0] = {
-                url: this.inquired.pic
-              };
-            }
-            this.productImgs = picture;
-            this.ruleForm.delivery = this.inquired.isPub == 1 ? false : true; //公开
-            // console.log(this.ruleForm.delivery);
-            this.ruleForm.delivery1 = this.inquired.isUse == 1 ? false : true; //常用
-            let units = this.inquired.nutritions;
-            units.forEach(item => {
-              // console.log(item);
-              for (let item1 of this.mailto) {
-                for (let arr of item1.children) {
-                  if (arr.id == item.nutrientId) {
-                    arr.result = item.value;
-                  }
-                  if (arr.children) {
-                    for (let add of arr.children) {
-                      if (add.id == item.nutrientId) {
-                        add.result = item.value;
-                      }
-                    }
-                  }
-                }
-              }
-            });
-          } else {
-            this.ruleFormUsers.name = this.inquired.foodName; //食材名
-            this.ruleFormUsers.ovenFood = this.inquired.foodAlias1; //食物别名2
-            this.ruleFormUsers.buffer = this.inquired.foodReal; //食材真名
-            this.ruleFormUsers.fooddata = this.inquired.foodType; //食材分类
-            this.ruleFormUsers.foods = this.inquired.foodType1; //食物分类1
-            this.ruleFormUsers.dogfood = this.inquired.foodType2; //食物分类2
-            this.ruleFormUsers.besaved = this.inquired.foodEat; //食部
-            this.ruleFormUsers.timers = this.inquired.weight; //重量
-            this.ruleFormUsers.content = this.inquired.water; //水分
-            this.ruleFormUsers.resource = this.inquired.color + ""; //色系
-            this.inquired.season.split(",").forEach(item => {
-              this.active1.push(item);
-            });
-            //所属区域
-            let addItem = [];
-            this.inquired.provinces.split(",").forEach((item, i) => {
-              addItem.push([item, this.inquired.belongRegion.split(",")[i]]);
-            });
-            this.valuepark1 = addItem;
-            // console.log(this.valuepark1);
-            this.ruleFormUsers.desc = this.inquired.function; //功用
-            this.rectangle = this.inquired.pic;
-            //  console.log(this.dialogImageUrl);
-            this.ruleFormUsers.delivery =
-              this.inquired.isPub == 0 ? false : true; //公开
-            // console.log(this.ruleForm.delivery);
-            this.ruleFormUsers.delivery1 =
-              this.inquired.isUse == 0 ? false : true; //常用
-            let units = this.inquired.nutritions;
-            units.forEach(item => {
-              // console.log(item);
-              for (let item1 of this.typeTree) {
-                for (let arr of item1.children) {
-                  if (arr.id == item.nutrientId) {
-                    arr.result = item.value;
-                  }
-                  if (arr.children) {
-                    for (let add of arr.children) {
-                      if (add.id == item.nutrientId) {
-                        add.result = item.value;
-                      }
-                    }
-                  }
-                }
-              }
-            });
-          }
-        });
-    },
+    //         let picture = []; //图片
+    //         if (this.inquired.pic) {
+    //           picture[0] = {
+    //             url: this.inquired.pic
+    //           };
+    //         }
+    //         this.productImgs = picture;
+    //         this.ruleForm.delivery = this.inquired.isPub == 1 ? false : true; //公开
+    //         // console.log(this.ruleForm.delivery);
+    //         this.ruleForm.delivery1 = this.inquired.isUse == 1 ? false : true; //常用
+    //         let units = this.inquired.nutritions;
+    //         units.forEach(item => {
+    //           // console.log(item);
+    //           for (let item1 of this.mailto) {
+    //             for (let arr of item1.children) {
+    //               if (arr.id == item.nutrientId) {
+    //                 arr.result = item.value;
+    //               }
+    //               if (arr.children) {
+    //                 for (let add of arr.children) {
+    //                   if (add.id == item.nutrientId) {
+    //                     add.result = item.value;
+    //                   }
+    //                 }
+    //               }
+    //             }
+    //           }
+    //         });
+    //       } else {
+    //         this.ruleFormUsers.name = this.inquired.foodName; //食材名
+    //         this.ruleFormUsers.ovenFood = this.inquired.foodAlias1; //食物别名2
+    //         this.ruleFormUsers.buffer = this.inquired.foodReal; //食材真名
+    //         this.ruleFormUsers.fooddata = this.inquired.foodType; //食材分类
+    //         this.ruleFormUsers.foods = this.inquired.foodType1; //食物分类1
+    //         this.ruleFormUsers.dogfood = this.inquired.foodType2; //食物分类2
+    //         this.ruleFormUsers.besaved = this.inquired.foodEat; //食部
+    //         this.ruleFormUsers.timers = this.inquired.weight; //重量
+    //         this.ruleFormUsers.content = this.inquired.water; //水分
+    //         this.ruleFormUsers.resource = this.inquired.color + ""; //色系
+    //         this.inquired.season.split(",").forEach(item => {
+    //           this.active1.push(item);
+    //         });
+    //         //所属区域
+    //         let addItem = [];
+    //         this.inquired.provinces.split(",").forEach((item, i) => {
+    //           addItem.push([item, this.inquired.belongRegion.split(",")[i]]);
+    //         });
+    //         this.valuepark1 = addItem;
+    //         // console.log(this.valuepark1);
+    //         this.ruleFormUsers.desc = this.inquired.function; //功用
+    //         this.rectangle = this.inquired.pic;
+    //         //  console.log(this.dialogImageUrl);
+    //         this.ruleFormUsers.delivery =
+    //           this.inquired.isPub == 0 ? false : true; //公开
+    //         // console.log(this.ruleForm.delivery);
+    //         this.ruleFormUsers.delivery1 =
+    //           this.inquired.isUse == 0 ? false : true; //常用
+    //         let units = this.inquired.nutritions;
+    //         units.forEach(item => {
+    //           // console.log(item);
+    //           for (let item1 of this.typeTree) {
+    //             for (let arr of item1.children) {
+    //               if (arr.id == item.nutrientId) {
+    //                 arr.result = item.value;
+    //               }
+    //               if (arr.children) {
+    //                 for (let add of arr.children) {
+    //                   if (add.id == item.nutrientId) {
+    //                     add.result = item.value;
+    //                   }
+    //                 }
+    //               }
+    //             }
+    //           }
+    //         });
+    //       }
+    //     });
+    // },
     //个人常用
     append(data) {
       console.log(data);
@@ -1482,6 +1487,19 @@ export default {
           this.data = trees;
         });
     },
+    ToString() {
+      this.$axios
+        .get(`api/blade-food/nutrition/tree`, {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+        .then(res => {
+          // console.log(res);
+
+          this.typeTree = res.data.data;
+        });
+    },
     //营养素含量
     Protocol() {
       this.$axios
@@ -1492,11 +1510,8 @@ export default {
         })
         .then(res => {
           // console.log(res);
-          if (this.lower == 0) {
-            this.mailto = res.data.data;
-          } else {
-            this.typeTree = res.data.data;
-          }
+
+          this.mailto = res.data.data;
         });
     },
     // 分类
@@ -1726,14 +1741,17 @@ export default {
   /* background-color: red; */
 }
 .base {
-  width: 100%;
-  height: 100px;
+  width: 20%;
+  height: 50px;
+  position: fixed;
+  bottom: 0px;
+  left: 60%;
   float: left;
   background-color: #fff;
-  margin-bottom: 50px;
-  margin-top: 30px;
+  /* margin-bottom: 50px; */
+  /* margin-top: 30px; */
   text-align: center;
-  line-height: 100px;
+  line-height: 50px;
 }
 .onblur {
   width: 100%;

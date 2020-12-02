@@ -153,14 +153,14 @@
                       >
                         取消常用
                       </el-button>
-                      <el-button
+                      <!-- <el-button
                         v-if="data.isPub == 0"
                         type="text"
                         size="mini"
                         @click.stop="() => multi(data)"
                       >
                         取消公开
-                      </el-button>
+                      </el-button> -->
                       <el-button
                         v-else-if="data.isPub == 1"
                         type="text"
@@ -517,7 +517,11 @@
           <!-- 结束 -->
         </div>
         <div class="autosave">
-          <el-button v-if="this.editable == 1" @click="saveItem" type="primary"
+          <el-button
+            :disabled="this.edients == 0"
+            v-if="this.editable == 1"
+            @click="saveItem"
+            type="primary"
             >编辑保存</el-button
           >
           <el-button
@@ -1032,7 +1036,8 @@ export default {
       autosaved: "",
       modify: "",
       more: "0",
-      auto: "" //ID
+      auto: "", //ID
+      edients: ""
     };
   },
   beforeMount() {
@@ -1378,6 +1383,7 @@ export default {
         this.valuepark = [];
         this.editable = data.view;
         this.auto = data.id;
+        this.edients = data.isPub;
         this.$axios
           .get(`api/blade-food/dish/dishDetail?id=${this.auto}`, {})
           .then(res => {
@@ -1513,120 +1519,120 @@ export default {
       }
     },
     //点击查看详情
-    prepare(data, index) {
-      console.log(data);
-      console.log(index);
-      this.editable = index;
-      this.auto = data.id;
-      this.$axios
-        .get(`api/blade-food/dish/dishDetail?id=${this.auto}`, {})
-        .then(res => {
-          // console.log(res);
-          this.valuepark.length = 0;
-          this.value1.length = 0;
-          this.handler = res.data.data;
-          console.log(this.handler);
-          if (this.lower == 0) {
-            this.ruleForm.name = this.handler.dishName; //菜品名字
-            this.ruleForm.fooddata = this.handler.dishType; //菜品分类
-            // this.value1.push(this.handler.season); //季节
-            this.handler.season.split(",").forEach(item => {
-              this.value1.push(item);
-            });
-            this.ruleForm.region = this.handler.function; //特点
-            this.ruleForm.desc = this.handler.remark; //做法
-            if (this.handler.provinces) {
-              let bar = [];
-              this.handler.provinces.split(",").forEach((item, i) => {
-                // console.log(item);
-                bar.push([item, this.handler.belongRegion.split(",")[i]]);
-              });
-              this.valuepark = bar;
-            }
+    // prepare(data, index) {
+    //   console.log(data);
+    //   console.log(index);
+    //   this.editable = index;
+    //   this.auto = data.id;
+    //   this.$axios
+    //     .get(`api/blade-food/dish/dishDetail?id=${this.auto}`, {})
+    //     .then(res => {
+    //       // console.log(res);
+    //       this.valuepark.length = 0;
+    //       this.value1.length = 0;
+    //       this.handler = res.data.data;
+    //       console.log(this.handler);
+    //       if (this.lower == 0) {
+    //         this.ruleForm.name = this.handler.dishName; //菜品名字
+    //         this.ruleForm.fooddata = this.handler.dishType; //菜品分类
+    //         // this.value1.push(this.handler.season); //季节
+    //         this.handler.season.split(",").forEach(item => {
+    //           this.value1.push(item);
+    //         });
+    //         this.ruleForm.region = this.handler.function; //特点
+    //         this.ruleForm.desc = this.handler.remark; //做法
+    //         if (this.handler.provinces) {
+    //           let bar = [];
+    //           this.handler.provinces.split(",").forEach((item, i) => {
+    //             // console.log(item);
+    //             bar.push([item, this.handler.belongRegion.split(",")[i]]);
+    //           });
+    //           this.valuepark = bar;
+    //         }
 
-            // console.log(this.valuepark);
-            let picture = [];
-            if (this.handler.pic) {
-              picture[0] = {
-                url: this.handler.pic
-              };
-            }
-            this.productImgs = picture;
-            this.ruleForm.delivery1 = this.handler.isUse == 1 ? false : true; //常用
-            this.ruleForm.delivery = this.handler.isPub == 1 ? false : true; //公开
-            // this.toBack = this.handler.dishMxVos;
-            // console.log(this.toBack);
-            if (this.handler.dishMxVos) {
-              let arr = [];
-              this.handler.dishMxVos.forEach((item, index) => {
-                // console.log(item);
-                // this.officeonce[this.csListIndex].id = item.id;
-                arr[index] = {
-                  id: item.foodId,
-                  frame: item.baseTypeId,
-                  name: item.name,
-                  address: item.baseTypeName,
-                  stats: item.value,
-                  spring: item.nutritionNlValue,
-                  malloc: item.nutritionNlValue
-                };
-              });
-              this.officeonce = arr;
-              this.graph();
-              // this.addLine();
-            }
-            // console.log(this.officeonce);
-          } else {
-            this.valuepark1.length = 0;
-            this.value2.length = 0;
-            this.ruleForm1.name = this.handler.dishName; //菜品名字
-            this.ruleForm1.fooddata = this.handler.dishType; //菜品分类
-            // this.value2.push(this.handler.season); //季节
-            this.handler.season.split(",").forEach(item => {
-              this.value2.push(item);
-            });
-            this.ruleForm1.region = this.handler.function; //特点
-            this.ruleForm1.desc = this.handler.remark; //做法
-            if (this.handler.provinces) {
-              let bar = [];
-              this.handler.provinces.split(",").forEach((item, i) => {
-                //所属区域
-                console.log(item);
-                bar.push([item, this.handler.belongRegion.split(",")[i]]);
-              });
-              this.valuepark1 = bar;
-            }
+    //         // console.log(this.valuepark);
+    //         let picture = [];
+    //         if (this.handler.pic) {
+    //           picture[0] = {
+    //             url: this.handler.pic
+    //           };
+    //         }
+    //         this.productImgs = picture;
+    //         this.ruleForm.delivery1 = this.handler.isUse == 1 ? false : true; //常用
+    //         this.ruleForm.delivery = this.handler.isPub == 1 ? false : true; //公开
+    //         // this.toBack = this.handler.dishMxVos;
+    //         // console.log(this.toBack);
+    //         if (this.handler.dishMxVos) {
+    //           let arr = [];
+    //           this.handler.dishMxVos.forEach((item, index) => {
+    //             // console.log(item);
+    //             // this.officeonce[this.csListIndex].id = item.id;
+    //             arr[index] = {
+    //               id: item.foodId,
+    //               frame: item.baseTypeId,
+    //               name: item.name,
+    //               address: item.baseTypeName,
+    //               stats: item.value,
+    //               spring: item.nutritionNlValue,
+    //               malloc: item.nutritionNlValue
+    //             };
+    //           });
+    //           this.officeonce = arr;
+    //           this.graph();
+    //           // this.addLine();
+    //         }
+    //         // console.log(this.officeonce);
+    //       } else {
+    //         this.valuepark1.length = 0;
+    //         this.value2.length = 0;
+    //         this.ruleForm1.name = this.handler.dishName; //菜品名字
+    //         this.ruleForm1.fooddata = this.handler.dishType; //菜品分类
+    //         // this.value2.push(this.handler.season); //季节
+    //         this.handler.season.split(",").forEach(item => {
+    //           this.value2.push(item);
+    //         });
+    //         this.ruleForm1.region = this.handler.function; //特点
+    //         this.ruleForm1.desc = this.handler.remark; //做法
+    //         if (this.handler.provinces) {
+    //           let bar = [];
+    //           this.handler.provinces.split(",").forEach((item, i) => {
+    //             //所属区域
+    //             console.log(item);
+    //             bar.push([item, this.handler.belongRegion.split(",")[i]]);
+    //           });
+    //           this.valuepark1 = bar;
+    //         }
 
-            this.rectangle = this.handler.pic;
+    //         this.rectangle = this.handler.pic;
 
-            this.ruleForm1.delivery1 = this.handler.isUse == 0 ? true : false; //常用
-            // this.ruleForm1.delivery = this.handler.isPub == 0 ? false : true; //公开
-            // this.toBack = this.handler.dishMxVos;
-            // console.log(this.toBack);
-            if (this.handler.dishMxVos) {
-              let arr = [];
-              this.handler.dishMxVos.forEach((item, index) => {
-                // console.log(item);
-                // this.officeonce[this.csListIndex].id = item.id;
-                arr[index] = {
-                  id: item.foodId,
-                  frame: item.baseTypeId,
-                  name: item.name,
-                  address: item.baseTypeName,
-                  stats: item.value,
-                  spring: item.nutritionNlValue,
-                  malloc: item.nutritionNlValue
-                  // malloc: item.nutritionNlValue
-                };
-              });
-              this.officeonce = arr;
-              this.graph();
-              // this.addLine();
-              // console.log(this.officeonce);
-            }
-          }
-        });
-    },
+    //         this.ruleForm1.delivery1 = this.handler.isUse == 0 ? true : false; //常用
+    //         // this.ruleForm1.delivery = this.handler.isPub == 0 ? false : true; //公开
+    //         // this.toBack = this.handler.dishMxVos;
+    //         // console.log(this.toBack);
+    //         if (this.handler.dishMxVos) {
+    //           let arr = [];
+    //           this.handler.dishMxVos.forEach((item, index) => {
+    //             // console.log(item);
+    //             // this.officeonce[this.csListIndex].id = item.id;
+    //             arr[index] = {
+    //               id: item.foodId,
+    //               frame: item.baseTypeId,
+    //               name: item.name,
+    //               address: item.baseTypeName,
+    //               stats: item.value,
+    //               spring: item.nutritionNlValue,
+    //               malloc: item.nutritionNlValue
+    //               // malloc: item.nutritionNlValue
+    //             };
+    //           });
+    //           this.officeonce = arr;
+    //           this.graph();
+    //           // this.addLine();
+    //           // console.log(this.officeonce);
+    //         }
+    //       }
+    //     });
+    // },
     foodmatters(tab) {
       // console.log(tab);
       console.log(tab.index);
@@ -1847,10 +1853,11 @@ export default {
     multi(data) {
       // console.log(data)
       this.key = data.id;
-      this.$axios(`api/blade-food/dish/changeIsPub`, {
-        id: this.key,
-        isPub: 1
-      })
+      this.$axios
+        .post(`api/blade-food/dish/changeIsPub`, {
+          id: this.key,
+          isPub: 1
+        })
         .then(res => {
           this.obtains();
           console.log(res);
@@ -1866,10 +1873,11 @@ export default {
     //设置公开
     docs(data) {
       this.terms = data.id;
-      this.$axios(`api/blade-food/dish/changeIsPub`, {
-        id: this.terms,
-        isPub: 0
-      })
+      this.$axios
+        .post(`api/blade-food/dish/changeIsPub`, {
+          id: this.terms,
+          isPub: 0
+        })
         .then(res => {
           this.obtains();
           console.log(res);
@@ -2186,7 +2194,7 @@ export default {
   /* position: relative; */
   /* position: absolute; */
   background-color: #fff;
-  margin-bottom: 50px;
+  /* margin-bottom: 50px; */
 }
 .monly {
   width: 100%;
@@ -2210,6 +2218,7 @@ export default {
   /* position: absolute; */
   height: 600px;
   overflow-y: auto;
+  overflow-x: hidden;
   margin-bottom: 20px;
   background-color: #fff;
   float: left;

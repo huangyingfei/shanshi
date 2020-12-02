@@ -131,7 +131,7 @@ export default {
 				query: {
 					userid: row.id,
 					tenantId: row.tenantId,
-					doType: doType
+					doType: doType,
 				}
 			});
 		},
