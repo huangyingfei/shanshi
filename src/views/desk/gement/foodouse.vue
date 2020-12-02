@@ -179,47 +179,7 @@
           </div>
         </div>
       </div>
-      <!-- 添加分类 -->
-      <el-dialog
-        title="分类"
-        width="30%"
-        append-to-body
-        :visible.sync="increase"
-        :close-on-click-modal="false"
-      >
-        <el-form
-          :model="increasered"
-          :rules="logout"
-          ref="increasered"
-          label-width="100px"
-          class="demo-ruleForm"
-        >
-          <el-form-item label="分类名称" prop="name">
-            <el-input
-              type="text"
-              maxlength="10"
-              show-word-limit
-              style="width: 280px"
-              v-model="increasered.name"
-            ></el-input>
-          </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="increase = false">取 消</el-button>
-          <el-button
-            @click="palette('formName')"
-            v-if="this.autosaved == 1"
-            type="primary"
-            >确 定</el-button
-          >
-          <el-button
-            @click="fontName('formName')"
-            v-if="this.autosaved == 2"
-            type="primary"
-            >编辑确定</el-button
-          >
-        </div>
-      </el-dialog>
+
       <!-- 结束 -->
       <div class="mation">
         <div class="mationinput">
@@ -291,9 +251,8 @@
               <el-upload
                 action="api/blade-resource/oss/endpoint/put-file"
                 list-type="picture-card"
-                :limit="imgLimit"
                 :file-list="productImgs"
-                :on-exceed="handleExceed"
+                :on-change="handleChangePic"
                 :on-preview="handlePictureCardPreview"
                 :before-upload="beforeAvatarUpload"
                 :on-success="handleAvatarSuccess"
@@ -486,6 +445,47 @@
           </div>
         </div>
       </div>
+      <!-- 添加分类 -->
+      <el-dialog
+        title="分类"
+        width="30%"
+        append-to-body
+        :visible.sync="increase"
+        :close-on-click-modal="false"
+      >
+        <el-form
+          :model="increasered"
+          :rules="logout"
+          ref="increasered"
+          label-width="100px"
+          class="demo-ruleForm"
+        >
+          <el-form-item label="分类名称" prop="name">
+            <el-input
+              type="text"
+              maxlength="10"
+              show-word-limit
+              style="width: 280px"
+              v-model="increasered.name"
+            ></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="increase = false">取 消</el-button>
+          <el-button
+            @click="palette('formName')"
+            v-if="this.autosaved == 1"
+            type="primary"
+            >确 定</el-button
+          >
+          <el-button
+            @click="fontName('formName')"
+            v-if="this.autosaved == 2"
+            type="primary"
+            >编辑确定</el-button
+          >
+        </div>
+      </el-dialog>
       <!-- 树形结构 -->
       <el-dialog
         title="添加菜品"
@@ -1728,6 +1728,15 @@ export default {
       this.$message.error("上传图片不能超过1张!");
       console.log(files, fileList);
     },
+    handleChangePic(file, productImgs) {
+      console.log(file);
+      console.log(productImgs);
+      if (productImgs.length > 1) {
+        productImgs.splice(0, 1);
+        // this.productImgs = [productImgs[productImgs.length - 1].raw];
+        // console.log(1);
+      }
+    },
     // 上传成功
     handleAvatarSuccess(res, file) {
       console.log(res);
@@ -1758,15 +1767,17 @@ export default {
   width: 100%;
   /* height: 100%; */
   position: absolute;
+  /* background-color: #fff; */
   overflow-y: auto;
   top: 50px;
   left: 10px;
-  bottom: 9px;
-  right: 10px;
+  bottom: 0px;
+  right: 0px;
+  /* box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1); */
 }
 .coffee {
   /* width: 350px; */
-  width: 29%;
+  width: 350px;
   /* height: 600px; */
   /* height: 100%; */
   background-color: #fff;
@@ -1781,6 +1792,7 @@ export default {
 }
 .mation {
   overflow-y: auto;
+  overflow-x: hidden;
   background-color: #fff;
   position: absolute;
   left: 351px;
@@ -1857,7 +1869,11 @@ export default {
   width: 100%;
   /* height: 450px; */
   overflow-y: auto;
-  margin-top: 10px;
+  position: absolute;
+  /* background-color: red; */
+  top: 197px;
+  bottom: 10px;
+  margin-top: 5px;
 }
 .custom-tree-node {
   flex: 1;
@@ -1877,10 +1893,10 @@ export default {
 }
 .mationinput {
   width: 95%;
-  height: 700px;
+  /* height: 700px; */
   /* display: flex; */
-  overflow-y: auto;
-  margin-left: 40px;
+  /* overflow-y: auto; */
+  margin-left: 10px;
   margin-bottom: 20px;
 }
 .saveas {
@@ -1893,12 +1909,17 @@ export default {
   /* float: left; */
   text-align: center;
   width: 100%;
+  background-color: #fff;
+  /* width: 100%; */
   /* height: 50px;
   line-height: 50px; */
   /* margin-bottom: 40px; */
   /* background-color: #fff; */
   position: fixed;
+  /* left: 0; */
+  /* right: 30%; */
   bottom: 10px;
+  z-index: 999;
 }
 .rolling {
   width: 100%;

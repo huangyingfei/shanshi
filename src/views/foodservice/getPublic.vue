@@ -2186,7 +2186,7 @@ export default {
   /* position: relative; */
   /* position: absolute; */
   background-color: #fff;
-  margin-bottom: 50px;
+  /* margin-bottom: 50px; */
 }
 .monly {
   width: 100%;
