@@ -212,7 +212,7 @@
             <el-form-item label="水分(%)" style=" width: 350px;   ">
               <span>{{ ruleFormUsers.content }}</span>
             </el-form-item>
-            <el-form-item label="色系" style="  ">
+            <el-form-item label="色系" style="width: 650px;  ">
               <el-radio-group v-model="ruleFormUsers.resource">
                 <el-radio disabled label="1">绿</el-radio>
                 <el-radio disabled label="2">红</el-radio>
@@ -256,7 +256,7 @@
             ></el-input> -->
               <span>{{ ruleFormUsers.desc }}</span>
             </el-form-item>
-            <el-form-item label="图片">
+            <el-form-item label="图片" style="width: 350px;">
               <el-upload
                 action="https://jsonplaceholder.typicode.com/posts/"
                 list-type="picture-card"
@@ -283,10 +283,10 @@
           <el-table
             :data="mailto"
             max-height="400"
-            style="width: 70%; margin-bottom: 20px"
+            style="width: 60%; margin-bottom: 20px"
             row-key="id"
             :border="false"
-            :default-expand-all="false"
+            :default-expand-all="true"
             :tree-props="{
               children: 'children',
               hasChildren: 'hasChildren'
@@ -612,6 +612,9 @@ export default {
 };
 </script>
 <style scoped>
+/* .avue-view {
+  padding: 0 5px !important;
+} */
 .dients {
   width: 100%;
   height: 100%;
@@ -620,7 +623,7 @@ export default {
   left: 0px;
   background-color: #fff;
   border-radius: 5px;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1); */
 }
 .header {
   width: 100%;
@@ -631,7 +634,7 @@ export default {
 }
 .rights {
   overflow-x: hidden;
-  width: 1100px;
+  height: 100%;
   height: 400px;
   overflow-y: auto;
   /* background-color: red; */

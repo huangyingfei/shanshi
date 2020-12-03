@@ -81,37 +81,73 @@
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="peopleName"
+          prop="orgName"
           label="提交人"
           align="center"
         ></el-table-column>
 
         <el-table-column
-          prop="avgAge"
+          prop="createTime"
           label="提交时间"
           align="center"
         ></el-table-column>
 
-        <el-table-column
-          prop="proportion"
-          label="审批状态"
-          align="center"
-        ></el-table-column>
-
+        <el-table-column label="审批状态" align="center">
+          <template slot-scope="scope">
+            <el-tag type="danger" v-if="scope.row.status == 0">待审核</el-tag>
+            <el-tag v-else-if="scope.row.status == 3">无需审核</el-tag>
+            <el-tag type="success" v-else-if="scope.row.status == 1"
+              >审核通过</el-tag
+            >
+            <el-tag type="warning" v-else-if="scope.row.status == 2"
+              >审核不通过</el-tag
+            >
+          </template>
+        </el-table-column>
+        <!--操作格-->
         <el-table-column label="操作" width="200" align="center">
-          <el-button type="text" size="small" @click="seecol(scope.row)"
-            >查看</el-button
-          >
+          <template slot-scope="scope">
+            <el-button type="text" size="small" @click="overview(scope.row)"
+              >查看</el-button
+            >
+          </template>
         </el-table-column>
       </el-table>
+      <el-dialog
+        title="食材"
+        append-to-body
+        width="80%"
+        :visible.sync="dateTime"
+        :close-on-click-modal="false"
+      >
+        <el-row :gutter="20">
+          <el-col :span="8">食谱名称：{{ dialogListData.recipeName }}</el-col>
+          <el-col :span="8">食谱周期：{{ dialogListData.recipeDay }}</el-col>
+          <el-col :span="8"
+            >收藏：{{ dialogListData.isUse == 1 ? "已收藏" : "未收藏" }}</el-col
+          >
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="8">创建机构：{{ dialogListData.orgName }}</el-col>
+          <el-col :span="8">创建人：{{ dialogListData.createName }}</el-col>
+          <el-col :span="8">创建时间：{{ dialogListData.createTime }}</el-col>
+        </el-row>
+        <toolbar :routerData="transmitData"></toolbar>
+      </el-dialog>
     </div>
   </div>
 </template>
 
 <script>
+import toolbar from "../PublicLicense/sharing";
 export default {
+  components: {
+    toolbar
+  },
   data() {
     return {
+      transmitData: "123",
+      dateTime: false, //弹框
       loadFlag: false, //加载flag
       page_data: {
         loadTxt: "请求列表中"
@@ -124,6 +160,16 @@ export default {
         submit: "", //提交人
         getDate: "" //提交日期
       },
+      recipeTableData: [], //弹窗
+      dialogListData: {
+        recipeName: "",
+        recipeDay: "",
+        isUse: "",
+        orgName: "",
+        createName: "",
+        createTime: ""
+      },
+
       dirname: [
         //审核状态
         {
@@ -149,13 +195,44 @@ export default {
       ]
     };
   },
+  beforeMount() {
+    this.getforms();
+  },
   methods: {
+    indexMethod(index) {
+      let _tableLineHead = ["早餐", "早点", "午餐", "午点", "晚餐", "晚点"];
+      return _tableLineHead[index];
+    },
+    //查看
+    overview(row) {
+      console.log(row);
+      this.dialogListData = row;
+      let term = row.id;
+      this.dateTime = true;
+      this.$refs.toolbar.overview(term);
+    },
     //清空
     notEmpty() {
       this.wupload.input = ""; //食谱名称
       this.wupload.block = ""; //审核状态
       this.wupload.submit = ""; //提交人
       this.wupload.getDate = ""; //选择日期
+    },
+    //搜索
+    searchStr() {
+      // this.dateTime = true;
+    },
+    //获取表格数据
+    getforms() {
+      this.loadFlag = true;
+      this.$axios
+        .get(`api/blade-food/recipe/openRecipeList?size=10&current=1`, {})
+        .then(res => {
+          // console.log(res);
+          this.loadFlag = false;
+          this.modeforms = res.data.data.records;
+          console.log(this.modeforms);
+        });
     }
   }
 };
