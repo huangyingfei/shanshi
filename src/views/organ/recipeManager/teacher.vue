@@ -23,13 +23,13 @@
             <span class="custom-tree-node" slot-scope="{ node, data }">
               <span>{{ node.label }}</span>
               <span>
-                <el-button
+                <!-- <el-button
                   type="text"
                   size="mini"
                   @click="() => defcustom(data)"
                 >
                   查看
-                </el-button>
+                </el-button> -->
                 <el-button
                   v-if="data.view == 0"
                   type="text"
@@ -1508,7 +1508,7 @@ export default {
         });
     },
     // api/blade-food/class/tree
- 
+
     //获取所属班级
     getToolkit() {
       this.$axios.get(`api/blade-food/class/tree`, {}).then(res => {
@@ -1517,7 +1517,10 @@ export default {
         let fwork = [];
         this.bufs.forEach((item, index) => {
           console.log(item);
-
+          fwork[index] = {
+            id: item.id,
+            label: item.label
+          };
           // item.children.forEach(item1 => {
           //   // console.log(item1);
           //   if (item1.children) {
