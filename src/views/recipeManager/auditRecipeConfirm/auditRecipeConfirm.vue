@@ -355,7 +355,7 @@
 </template>
 
 <script>
-  import foodsWeek from "@/views/recipeManager/auditRecipeConfirm/foodsWeek.vue";
+  import foodsWeek from "@/views/recipeManager/auditRecipeConfirm/recipeWeek.vue";
   // import showfoodsWeek from "@/views/foods/components/showfoodsweek";
   import {getSpecialPeopleList,detail,auditRecipe} from "@/api/recipeManager/auditRecipe.js"
   import {mealList,getDishByBaseId,dishDetail,save,update,grantTree} from "@/api/system/meals"
