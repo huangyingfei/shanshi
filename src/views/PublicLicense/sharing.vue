@@ -58,68 +58,68 @@ export default {
     },
     overview(term) {
       console.log(term);
+      this.$axios
+        .get(`/api/blade-food/recipe/detail?id=${term}`, {})
+        .then(res => {
+          let recipeCycles = res.data.data.recipeCycles;
+          let recipeTableData1 = [];
+          let recipeTableData = {
+            mealsType1: [],
+            mealsType2: [],
+            mealsType3: [],
+            mealsType4: [],
+            mealsType5: [],
+            mealsType6: []
+          };
+          for (let i in recipeCycles) {
+            let mealsTypeNum = recipeCycles[i].mealsType;
+            switch (mealsTypeNum) {
+              case 1:
+                recipeTableData.mealsType1.push(recipeCycles[i]);
+                break;
+              case 2:
+                recipeTableData.mealsType2.push(recipeCycles[i]);
+                break;
+              case 3:
+                recipeTableData.mealsType3.push(recipeCycles[i]);
+                break;
+              case 4:
+                recipeTableData.mealsType4.push(recipeCycles[i]);
+                break;
+              case 5:
+                recipeTableData.mealsType5.push(recipeCycles[i]);
+                break;
+              case 6:
+                recipeTableData.mealsType6.push(recipeCycles[i]);
+                break;
+              default:
+                break;
+            }
+          }
+          for (let key in recipeTableData) {
+            var weekData = {
+              week1: "",
+              week2: "",
+              week3: "",
+              week4: "",
+              week5: "",
+              week6: "",
+              week7: ""
+            };
+            for (let index = 0; index < recipeTableData[key].length; index++) {
+              var weekNum = "week" + recipeTableData[key][index].week;
+              // weekData[weekNum].push(recipeTableData[key][index].recipeConncts[0].dishName)
+              weekData[weekNum] +=
+                recipeTableData[key][index].recipeConncts[0].dishName + "\n";
+            }
+            console.log(weekData);
+            recipeTableData1.push(weekData);
+          }
+          this.recipeTableData = recipeTableData1;
+        });
     },
     horizontal() {
-      console.log(this.transmitData);
-      //   this.$axios
-      //     .get(`/api/blade-food/recipe/detail?id=${this.term}`, {})
-      //     .then(res => {
-      //       let recipeCycles = res.data.data.recipeCycles;
-      //       let recipeTableData1 = [];
-      //       let recipeTableData = {
-      //         mealsType1: [],
-      //         mealsType2: [],
-      //         mealsType3: [],
-      //         mealsType4: [],
-      //         mealsType5: [],
-      //         mealsType6: []
-      //       };
-      //       for (let i in recipeCycles) {
-      //         let mealsTypeNum = recipeCycles[i].mealsType;
-      //         switch (mealsTypeNum) {
-      //           case 1:
-      //             recipeTableData.mealsType1.push(recipeCycles[i]);
-      //             break;
-      //           case 2:
-      //             recipeTableData.mealsType2.push(recipeCycles[i]);
-      //             break;
-      //           case 3:
-      //             recipeTableData.mealsType3.push(recipeCycles[i]);
-      //             break;
-      //           case 4:
-      //             recipeTableData.mealsType4.push(recipeCycles[i]);
-      //             break;
-      //           case 5:
-      //             recipeTableData.mealsType5.push(recipeCycles[i]);
-      //             break;
-      //           case 6:
-      //             recipeTableData.mealsType6.push(recipeCycles[i]);
-      //             break;
-      //           default:
-      //             break;
-      //         }
-      //       }
-      //       for (let key in recipeTableData) {
-      //         var weekData = {
-      //           week1: "",
-      //           week2: "",
-      //           week3: "",
-      //           week4: "",
-      //           week5: "",
-      //           week6: "",
-      //           week7: ""
-      //         };
-      //         for (let index = 0; index < recipeTableData[key].length; index++) {
-      //           var weekNum = "week" + recipeTableData[key][index].week;
-      //           // weekData[weekNum].push(recipeTableData[key][index].recipeConncts[0].dishName)
-      //           weekData[weekNum] +=
-      //             recipeTableData[key][index].recipeConncts[0].dishName + "\n";
-      //         }
-      //         console.log(weekData);
-      //         recipeTableData1.push(weekData);
-      //       }
-      //       this.recipeTableData = recipeTableData1;
-      //     });
+      //   console.log(this.transmitData);
     }
   }
 };
