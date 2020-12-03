@@ -132,7 +132,7 @@
           <el-col :span="8">创建人：{{ dialogListData.createName }}</el-col>
           <el-col :span="8">创建时间：{{ dialogListData.createTime }}</el-col>
         </el-row>
-        <toolbar :routerData="transmitData"></toolbar>
+        <toolbar :routerData="transmitData" ref="toolbar"></toolbar>
       </el-dialog>
     </div>
   </div>
@@ -209,6 +209,7 @@ export default {
       this.dialogListData = row;
       let term = row.id;
       this.dateTime = true;
+      
       this.$refs.toolbar.overview(term);
     },
     //清空
