@@ -89,7 +89,7 @@
                     "
                     style="width: 100px; height: 100px; margin: 0 auto"
                   >
-                    <el-image 
+                    <el-image
                       style="width: 100px; height: 100px"
                       :src="scope1.row.url" >
                     </el-image>
@@ -183,11 +183,11 @@
                       scope.row.weeks.find((p) => p.name == 'week2')
                     "
                     style="width: 100px; height: 100px; margin: 0 auto">
-                    <el-image 
+                    <el-image
                       style="width: 100px; height: 100px"
                       :src="scope1.row.url" >
                     </el-image>
-                  
+
                   </div>
                 </template>
               </el-table-column>
@@ -1027,7 +1027,7 @@ export default {
             }
           })
           index++;
-    
+
         })
       })
       if(mealTypes.length>0){
@@ -1063,12 +1063,12 @@ export default {
               nutrition.push({code:_.code,name:_.name,dris:resData.nutritionCalDTOList[_.code].dris,realIntake:resData.nutritionCalDTOList[_.code].realIntake,realPropor:resData.nutritionCalDTOList[_.code].realPropor,reqPropor:resData.nutritionCalDTOList[_.code].min+"-"+resData.nutritionCalDTOList[_.code].max,grade:resData.nutritionCalDTOList[_.code].grade,point:resData.nutritionCalDTOList[_.code].point})
             })
           //  debugger
-    
+
             let power=[];
             that.powerValue.forEach(_=>{
               power.push({name:_.name,req:resData.powerCalDTOList[_.code].min+"-"+resData.powerCalDTOList[_.code].min,real:resData.powerCalDTOList[_.code].real,grade:resData.powerCalDTOList[_.code].grade,point:resData.powerCalDTOList[_.code].point})
             })
-    
+
             let protein=[];
             protein=resData.proteinCalDTOList;
             let sum=0;
@@ -1087,7 +1087,7 @@ export default {
       }else{
         that.$emit('childfn', 0);
       }
-    
+
     },
 
     //处理数据
@@ -1280,7 +1280,7 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style>
 .foods-table-week th {
   background: #f8fbfc !important;
 }
@@ -1309,7 +1309,7 @@ export default {
   padding: 0 10px !important;
 }
 .drapInActive .el-table th {
-  background-color: red !important;
+  background-color: #dcdfe6 !important;
 }
 
 </style>

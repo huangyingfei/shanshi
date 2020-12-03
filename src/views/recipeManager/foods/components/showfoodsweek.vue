@@ -467,8 +467,7 @@
     padding: 0 10px !important;
   }
   .drapInActive .el-table th {
-    background-color: red !important;
-
+    background-color: #dcdfe6 !important;
   }
   .colNoneBorder
   {

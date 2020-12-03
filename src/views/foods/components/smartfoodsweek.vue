@@ -1111,7 +1111,6 @@
           this.smartDatas.forEach(item=> {
             this.$set(item, "flag", false);
           })
-          console.log(data)
           this.getFoodScoreSmart();
         },
         deep:true,
@@ -1258,12 +1257,10 @@
                     mealType:that.getmealTypeData(_.name),
                     week:__.name.slice(4)
                   })
-
                 })
               }
             })
             index++;
-
           })
         })
         if(mealTypes.length>0){
@@ -1293,12 +1290,16 @@
               })
               intake.data=data;
               let nutrition=[];
-            //  debugger
+            debugger
               that.nutritionValue.forEach(_=>{
                 if(resData.nutritionCalDTOList[_.code].dris==0){
-                  nutrition.push({code:_.code,name:_.name,realIntake:resData.nutritionCalDTOList[_.code].realIntake,dris:(resData.nutritionCalDTOList[_.code].realIntake).toFixed(2),realPropor:resData.nutritionCalDTOList[_.code].realPropor,reqPropor:resData.nutritionCalDTOList[_.code].min+"-"+resData.nutritionCalDTOList[_.code].max,grade:resData.nutritionCalDTOList[_.code].grade,point:resData.nutritionCalDTOList[_.code].point})
+                  nutrition.push({ bz:_.bz,
+                    min:_.min,
+                    max:_.max,code:_.code,name:_.name,realIntake:resData.nutritionCalDTOList[_.code].realIntake,dris:(resData.nutritionCalDTOList[_.code].realIntake).toFixed(2),realPropor:resData.nutritionCalDTOList[_.code].realPropor,reqPropor:resData.nutritionCalDTOList[_.code].min+"-"+resData.nutritionCalDTOList[_.code].max,grade:resData.nutritionCalDTOList[_.code].grade,point:resData.nutritionCalDTOList[_.code].point})
                 }else{
-                  nutrition.push({code:_.code,name:_.name,realIntake:resData.nutritionCalDTOList[_.code].realIntake,dris:(resData.nutritionCalDTOList[_.code].realIntake/resData.nutritionCalDTOList[_.code].dris).toFixed(2),realPropor:resData.nutritionCalDTOList[_.code].realPropor,reqPropor:resData.nutritionCalDTOList[_.code].min+"-"+resData.nutritionCalDTOList[_.code].max,grade:resData.nutritionCalDTOList[_.code].grade,point:resData.nutritionCalDTOList[_.code].point})
+                  nutrition.push({ bz:_.bz,
+                    min:_.min,
+                    max:_.max,code:_.code,name:_.name,realIntake:resData.nutritionCalDTOList[_.code].realIntake,dris:(resData.nutritionCalDTOList[_.code].realIntake/resData.nutritionCalDTOList[_.code].dris).toFixed(2),realPropor:resData.nutritionCalDTOList[_.code].realPropor,reqPropor:resData.nutritionCalDTOList[_.code].min+"-"+resData.nutritionCalDTOList[_.code].max,grade:resData.nutritionCalDTOList[_.code].grade,point:resData.nutritionCalDTOList[_.code].point})
                 }
               })
               console.log(nutrition)
@@ -1517,7 +1518,7 @@
     },
   };
 </script>
-<style scoped>
+<style>
   .table-week th {
     background: #f8fbfc !important;
   }
@@ -1546,7 +1547,7 @@
     padding: 0 10px !important;
   }
   .drapInActive .el-table th {
-    background-color: red !important;
+    background-color: #dcdfe6 !important;
   }
   .arrow-up ,.arrow-down{
     font-size: 8px;

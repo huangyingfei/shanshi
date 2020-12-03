@@ -746,7 +746,6 @@ export default {
           loading();
         }
       );
-      this.onLoad();
     },
     rowUpdate(row, index, done, loading) {
         this.ableFlag=true;
@@ -792,7 +791,6 @@ export default {
           loading();
         }
       );
-      this.onLoad();
     },
     rowDel(row) {
       this.$confirm("确定将选择数据删除?", {

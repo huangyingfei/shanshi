@@ -4,14 +4,17 @@
     <div class="color"><span class="red">不足</span><span class="green">适量</span><span class="orange">过量</span></div>
     <div class="item-blo font">
       <span>营养素</span>
-      <span>含量</span>
+      <span v-if="titleFlag">含量</span>
       <span>DRIs%</span>
+      <span  v-if="!titleFlag">标准</span>
     </div>
     <div class="item-mid">
-    <span v-for="(item,index) in nutrition" class="item-blo">
+    <span v-for="(item,index) in nutrition" :class="{'item-blo':true,'bgred':item.red,'bggreen':item.green,'bgorange':item.orange}">
+
       <span>{{ item.name }}</span>
-      <span>{{item.realIntake}}</span>
+      <span v-if="titleFlag">{{item.realIntake}}</span>
       <span>{{item.dris}}</span>
+       <span  v-if="!titleFlag">{{item.bz}}</span>
     </span>
     </div>
   </div>
@@ -29,6 +32,9 @@
         titleFlag:false,
       };
     },
+    mounted(){
+      debugger
+    },
     created() {
       this.onLoad();
     },
@@ -45,6 +51,18 @@
 </script>
 
 <style scoped>
+.bgorange{
+ background-color: #fff6ee;
+  color: orange;
+}
+.bggreen{
+  background-color: #e6fbf5;
+  color: green;
+}
+.bgred{
+  background-color: #feeded;
+  color: red;
+}
   .color{
     display: flex;
     justify-content: space-between;
@@ -54,34 +72,41 @@
   }
 
 .red{
-  width: 50px;
+  width: 70px;
   height: 16px;
   text-align: center;
   vertical-align: middle;
   background-color: red;
 }
 .green{
-  width: 50px;
+  width: 70px;
   height: 16px;
   text-align: center;
   vertical-align: middle;
   background-color: green;
 }
 .orange{
-  width: 50px;
+  width: 70px;
   height: 16px;
   text-align: center;
   vertical-align: middle;
   background-color: orange;
 }
   .item-blo {
+    padding-left: 10px;
     display: flex;
-    width: 180px;
+    width: 210px;
     font-size: 12px;
+    font-weight: bold;
     justify-content: start;
   }
   .item-blo span{
     width: 60px;
+    text-align: left;
+    line-height: 25px;
+  }
+  .item-blo span:nth-child(3){
+    width: 70px;
     text-align: left;
   }
   .font{
