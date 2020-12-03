@@ -23,13 +23,13 @@
             <span class="custom-tree-node" slot-scope="{ node, data }">
               <span>{{ node.label }}</span>
               <span>
-                <el-button
+                <!-- <el-button
                   type="text"
                   size="mini"
                   @click="() => defcustom(data)"
                 >
                   查看
-                </el-button>
+                </el-button> -->
                 <el-button
                   v-if="data.view == 0"
                   type="text"
@@ -1507,6 +1507,7 @@ export default {
           this.$message.error("查询失败");
         });
     },
+    // api/blade-food/class/tree
 
     //获取所属班级
     getToolkit() {
@@ -1515,29 +1516,33 @@ export default {
         this.bufs = res.data.data;
         let fwork = [];
         this.bufs.forEach((item, index) => {
-          // console.log(item);
-          item.children.forEach(item1 => {
-            // console.log(item1);
-            if (item1.children) {
-              item1.children.forEach((item2, index2) => {
-                // console.log(item2);
-                fwork[index2] = {
-                  id: item2.id,
-                  label: item2.classType
-                };
-                fwork[index2].children = [];
-                if (item2.children) {
-                  item2.children.forEach((item3, index3) => {
-                    // console.log(item3);
-                    fwork[index2].children[index3] = {
-                      id: item3.id,
-                      label: item3.classType
-                    };
-                  });
-                }
-              });
-            }
-          });
+          console.log(item);
+          fwork[index] = {
+            id: item.id,
+            label: item.label
+          };
+          // item.children.forEach(item1 => {
+          //   // console.log(item1);
+          //   if (item1.children) {
+          //     item1.children.forEach((item2, index2) => {
+          //       // console.log(item2);
+          //       fwork[index2] = {
+          //         id: item2.id,
+          //         label: item2.classType
+          //       };
+          //       fwork[index2].children = [];
+          //       if (item2.children) {
+          //         item2.children.forEach((item3, index3) => {
+          //           // console.log(item3);
+          //           fwork[index2].children[index3] = {
+          //             id: item3.id,
+          //             label: item3.classType
+          //           };
+          //         });
+          //       }
+          //     });
+          //   }
+          // });
         });
         console.log(fwork);
       });

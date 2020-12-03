@@ -310,7 +310,7 @@
     <!-- 审核确认取消通过按钮 -->
     <el-row type="flex" justify="center" v-if="auditButtonShow">
       <el-col :span="4">
-        <el-button @click="seekeys = false">取 消
+        <el-button @click="goToUrl">取 消
         </el-button>
       </el-col>
       <el-col :span="4">
@@ -355,7 +355,7 @@
 </template>
 
 <script>
-  import foodsWeek from "@/views/recipeManager/auditRecipeConfirm/foodsWeek.vue";
+  import foodsWeek from "@/views/recipeManager/auditRecipeConfirm/recipeWeek.vue";
   // import showfoodsWeek from "@/views/foods/components/showfoodsweek";
   import {getSpecialPeopleList,detail,auditRecipe} from "@/api/recipeManager/auditRecipe.js"
   import {mealList,getDishByBaseId,dishDetail,save,update,grantTree} from "@/api/system/meals"
@@ -363,7 +363,7 @@
   import nutrientWithColor from "@/views/foods/components/nutrientwithcolor";
   import showScore from "@/views/foods/components/showscore";
   import nutrition from "@/views/recipeManager/nutrition.vue";
-import Nutrition from '../nutrition.vue';
+  import Nutrition from '../nutrition.vue';
   // import smartfoodsWeek from "@/views/foods/components/smartfoodsweek";
   export default {
   components: {
@@ -639,8 +639,15 @@ import Nutrition from '../nutrition.vue';
           message: '审核通过',
           type: 'success'
         });
-         this.$router.$avueRouter.closeTag();
+
+        this.goToUrl()
       })
+    },
+    goToUrl(){
+      this.$router.$avueRouter.closeTag();
+      this.$router.push({
+      path: "/recipeManager/auditRecipe",
+      });
     },
     openAuditRecipeBox() {
       this.$prompt('请输入拒绝原因', {
@@ -658,6 +665,7 @@ import Nutrition from '../nutrition.vue';
           message: '拒绝成功',
           type: 'success'
         });
+        this.goToUrl()
         })
       }).catch((err) => {
 
@@ -1591,6 +1599,10 @@ import Nutrition from '../nutrition.vue';
 <style scoped>
 .meals .el-row {
   padding: 5px;
+}
+.meals .el-drawer__open .el-drawer.rtl{
+  width: 50%!important;
+  overflow-y: scroll;
 }
 /*.meals .el-select .el-input {*/
   /*width: 120px;*/
