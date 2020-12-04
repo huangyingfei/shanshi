@@ -14,8 +14,8 @@
 
       <el-form-item label="是否默认标准" prop="region">
         <el-select v-model="ruleForm.region" placeholder="请选择">
-          <el-option label="是" value="0"></el-option>
-          <el-option label="否" value="1"></el-option>
+          <el-option label="是" value="1"></el-option>
+          <el-option label="否" value="0"></el-option>
         </el-select>
       </el-form-item>
     </el-form>
@@ -44,17 +44,12 @@
                   <div v-if="item.sexNum == 2" style="display: inline-block;">
                     <div class=""></div>
                     <el-input
-                      v-model="nvo.manMin"
-                      placeholder="请输入内容"
-                      style=" margin-left: 20px; width: 140px;"
-                    ></el-input>
-                    <el-input
                       v-model="nvo.manMax"
                       placeholder="请输入内容"
                       style=" margin-left: 20px; width: 140px;"
                     ></el-input>
                     <el-input
-                      v-model="nvo.womanMin"
+                      v-model="nvo.manMin"
                       placeholder="请输入内容"
                       style=" margin-left: 20px; width: 140px;"
                     ></el-input>
@@ -64,34 +59,39 @@
                       style=" margin-left: 20px; width: 140px;"
                     ></el-input>
                     <el-input
-                      v-model="nvo.coefficientMin"
+                      v-model="nvo.resultMin"
                       placeholder="请输入内容"
                       style=" margin-left: 20px; width: 140px;"
                     ></el-input>
                     <el-input
                       v-model="nvo.coefficientMax"
+                      placeholder="请输入内容"
+                      style=" margin-left: 20px; width: 140px;"
+                    ></el-input>
+                    <el-input
+                      v-model="nvo.coefficientMin"
                       placeholder="请输入内容"
                       style=" margin-left: 20px; width: 140px;"
                     ></el-input>
                   </div>
                   <div v-if="item.sexNum == 1" style="display: inline-block;">
                     <el-input
-                      v-model="nvo.resultMin"
-                      placeholder="请输入内容"
-                      style=" margin-left: 20px; width: 140px;"
-                    ></el-input>
-                    <el-input
                       v-model="nvo.resultMax"
                       placeholder="请输入内容"
                       style=" margin-left: 20px; width: 140px;"
                     ></el-input>
                     <el-input
-                      v-model="nvo.coefficientMin"
+                      v-model="nvo.resultMin"
                       placeholder="请输入内容"
                       style=" margin-left: 20px; width: 140px;"
                     ></el-input>
                     <el-input
                       v-model="nvo.coefficientMax"
+                      placeholder="请输入内容"
+                      style=" margin-left: 20px; width: 140px;"
+                    ></el-input>
+                    <el-input
+                      v-model="nvo.coefficientMin"
                       placeholder="请输入内容"
                       style=" margin-left: 20px; width: 140px;"
                     ></el-input>
@@ -133,17 +133,12 @@
               <div class="nialing">{{ nvo.name }}</div>
               <div v-if="item.sexNum == 2" style="display: inline-block;">
                 <el-input
-                  v-model="nvo.manMin"
-                  placeholder="请输入内容"
-                  style=" margin-left: 20px; width: 140px;"
-                ></el-input>
-                <el-input
                   v-model="nvo.manMax"
                   placeholder="请输入内容"
                   style=" margin-left: 20px; width: 140px;"
                 ></el-input>
                 <el-input
-                  v-model="nvo.womanMin"
+                  v-model="nvo.manMin"
                   placeholder="请输入内容"
                   style=" margin-left: 20px; width: 140px;"
                 ></el-input>
@@ -153,34 +148,39 @@
                   style=" margin-left: 20px; width: 140px;"
                 ></el-input>
                 <el-input
-                  v-model="nvo.coefficientMin"
+                  v-model="nvo.womanMin"
                   placeholder="请输入内容"
                   style=" margin-left: 20px; width: 140px;"
                 ></el-input>
                 <el-input
                   v-model="nvo.coefficientMax"
+                  placeholder="请输入内容"
+                  style=" margin-left: 20px; width: 140px;"
+                ></el-input>
+                <el-input
+                  v-model="nvo.coefficientMin"
                   placeholder="请输入内容"
                   style=" margin-left: 20px; width: 140px;"
                 ></el-input>
               </div>
               <div v-if="item.sexNum == 1" style="display: inline-block;">
                 <el-input
-                  v-model="nvo.resultMin"
-                  placeholder="请输入内容"
-                  style=" margin-left: 20px; width: 140px;"
-                ></el-input>
-                <el-input
                   v-model="nvo.resultMax"
                   placeholder="请输入内容"
                   style=" margin-left: 20px; width: 140px;"
                 ></el-input>
                 <el-input
-                  v-model="nvo.coefficientMin"
+                  v-model="nvo.resultMin"
                   placeholder="请输入内容"
                   style=" margin-left: 20px; width: 140px;"
                 ></el-input>
                 <el-input
                   v-model="nvo.coefficientMax"
+                  placeholder="请输入内容"
+                  style=" margin-left: 20px; width: 140px;"
+                ></el-input>
+                <el-input
+                  v-model="nvo.coefficientMin"
                   placeholder="请输入内容"
                   style=" margin-left: 20px; width: 140px;"
                 ></el-input>
@@ -191,7 +191,7 @@
       </el-tab-pane>
     </el-tabs>
     <div class="Aconfirm">
-      <el-button type="primary" @click="Submit">保存</el-button>
+      <el-button type="primary" @click="Determines('ruleForm')">保存</el-button>
       <el-button type="success" @click="Atom">編輯保存</el-button>
     </div>
   </div>
@@ -284,7 +284,7 @@ export default {
 
       this.$axios
         .post(`api/blade-food/nutritionsetting/updateNutAndCoef`, {
-          isDef: this.ruleForm.region == "是" ? 0 : 1,
+          isDef: this.ruleForm.region == "是" ? 1 : 0,
           name: this.ruleForm.name,
           id: this.borderid,
           nutritionVos: this.newProtein.nutritionVos
@@ -301,89 +301,32 @@ export default {
         });
     },
     //提交
-    Submit() {
-      // console.log(this.ruleForm.name);
-      // console.log(this.ruleForm.region);
-      // console.log(this.newProtein.nutritionVos);
-      // this.newProtein.name = this.ruleForm.name;
-      // this.newProtein.isDef = this.ruleForm.region;
-      // console.log(this.newProtein.nutritionVos);
-      // let list = this.newProtein.nutritionVos;
-      // for (let i = 0; i < list.length; i++) {
-      //   if (list[i].nutritionCoeffientVos.length == 0) {
-      //     // }
-      //     for (let k = 0; k < list[i].nutritionVos.length; k++) {
-      //       let pulse = list[i].nutritionVos;
-      //       // console.log(pulse);
-      //       for (
-      //         let n = 0;
-      //         n < list[i].nutritionVos[k].nutritionCoeffientVos.length;
-      //         n++
-      //       ) {
-      //         let inner = list[i].nutritionVos[k].nutritionCoeffientVos;
-      //         // console.log(inner);
-      //         list[i].nutritionVos[k].nutritionCoeffientVos[n].resultMin =
-      //           (parseInt(
-      //             list[i].nutritionVos[k].nutritionCoeffientVos[n].manMin
-      //           ) +
-      //             parseInt(
-      //               list[i].nutritionVos[k].nutritionCoeffientVos[n].womanMin
-      //             )) /
-      //           2;
-      //         list[i].nutritionVos[k].nutritionCoeffientVos[n].resultMax =
-      //           (parseInt(
-      //             list[i].nutritionVos[k].nutritionCoeffientVos[n].manMax
-      //           ) +
-      //             parseInt(
-      //               list[i].nutritionVos[k].nutritionCoeffientVos[n].womanMax
-      //             )) /
-      //           2;
-      //       }
-      //     }
-      //   } else {
-      //     for (let j = 0; j < list[i].nutritionCoeffientVos.length; j++) {
-      //       list[i].nutritionCoeffientVos[j].resultMin =
-      //         (parseInt(list[i].nutritionCoeffientVos[j].manMin) +
-      //           parseInt(list[i].nutritionCoeffientVos[j].womanMin)) /
-      //         2;
-      //       list[i].nutritionCoeffientVos[j].resultMax =
-      //         (parseInt(list[i].nutritionCoeffientVos[j].manMax) +
-      //           parseInt(list[i].nutritionCoeffientVos[j].womanMax)) /
-      //         2;
-      //       // console.log(list[i].nutritionCoeffientVos[j].resultMin);
-      //       // console.log(list[i].nutritionCoeffientVos[j].resultMax);
-      //       if (
-      //         list[i].nutritionCoeffientVos[j].manMin == null ||
-      //         list[i].nutritionCoeffientVos[j].womanMin == null
-      //       ) {
-      //         list[i].nutritionCoeffientVos[j].resultMin = 0;
-      //       }
-      //       if (
-      //         list[i].nutritionCoeffientVos[j].manMax == null ||
-      //         list[i].nutritionCoeffientVos[j].womanMax == null
-      //       ) {
-      //         list[i].nutritionCoeffientVos[j].resultMax = 0;
-      //       }
-      //     }
-      //   }
-      // }
-      // console.log(this.newProtein.nutritionVos);
-      this.$axios
-        .post(`api/blade-food/nutritionsetting/saveNutAndCoef`, {
-          isDef: this.ruleForm.region,
-          name: this.ruleForm.name,
-          nutritionVos: this.newProtein.nutritionVos
-        })
-        .then(res => {
-          console.log(res);
-          this.$message({
-            message: "保存成功",
-            type: "success"
-          });
-        })
-        .catch(() => {
-          this.$message.error("保存失败");
-        });
+    Determines(formName) {
+      console.log(123);
+      console.log(formName);
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          alert("submit!");
+        } else {
+          return false;
+        }
+      });
+      // this.$axios
+      //   .post(`api/blade-food/nutritionsetting/saveNutAndCoef`, {
+      //     isDef: this.ruleForm.region,
+      //     name: this.ruleForm.name,
+      //     nutritionVos: this.newProtein.nutritionVos
+      //   })
+      //   .then(res => {
+      //     console.log(res);
+      //     this.$message({
+      //       message: "保存成功",
+      //       type: "success"
+      //     });
+      //   })
+      //   .catch(() => {
+      //     this.$message.error("保存失败");
+      //   });
     }
   }
 };
@@ -395,7 +338,7 @@ export default {
 }
 .Additiona {
   width: 100%;
-  height: 1200px;
+  height: 100%;
   background-color: #fff;
 }
 .current {

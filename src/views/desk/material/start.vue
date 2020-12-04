@@ -4,7 +4,7 @@
       <!-- 左边 -->
       <div class="cation">
         <el-input
-          style="width: 290px; margin-left: 9px; margin-top: 20px"
+          style="width: 290px; margin-left: 11px; margin-top: 20px"
           placeholder="输入关键字进行查询"
           v-model="filterText"
         >
@@ -14,7 +14,7 @@
 <el-button type="primary" plain size="mini">导出</el-button>
 <el-button type="primary" plain size="mini">加分类</el-button> -->
           <el-button
-            style="margin-left: 9px"
+            style="margin-left: 11px"
             @click="addition(0)"
             type="primary"
             size="mini"
@@ -241,14 +241,14 @@
       </el-select> -->
             </el-form-item>
 
-            <el-form-item label="食物分类1" style="width: 350px">
+            <el-form-item label="分类别称1" style="width: 350px">
               <el-input
                 v-model="ruleForm.foods"
                 placeholder="请输入食物分类"
               ></el-input>
             </el-form-item>
 
-            <el-form-item label="食物分类2" style="width: 350px">
+            <el-form-item label="分类别称2" style="width: 350px">
               <el-input
                 v-model="ruleForm.dogfood"
                 placeholder="请输入食物分类"
@@ -257,6 +257,7 @@
 
             <el-form-item label="食部(%)" prop="besaved" style="width: 350px">
               <el-input
+                @change="research"
                 type="number"
                 v-model="ruleForm.besaved"
                 placeholder="请输入"
@@ -273,6 +274,7 @@
 
             <el-form-item label="水分(%)" style="width: 350px">
               <el-input
+                @change="ofmoisture"
                 type="number"
                 placeholder="请输入水分"
                 v-model="ruleForm.content"
@@ -328,17 +330,18 @@
 
             <el-form-item label="图片" style="width: 400px">
               <el-upload
+                :class="{ hide: hideUploadEdit }"
+                accept=".jpeg,.jpg,.gif,.png"
+                :headers="headerObj"
                 action="api/blade-resource/oss/endpoint/put-file"
-                list-type="picture-card"
-                   :limit="imgLimit"
-                :file-list="productImgs"
                 :on-preview="handlePictureCardPreview"
+                list-type="picture-card"
+                :limit="1"
+                :file-list="productImgs"
                 :on-change="handleChangePic"
                 :before-upload="beforeAvatarUpload"
                 :on-success="handleAvatarSuccess"
                 :on-remove="handleRemove"
-                :headers="headerObj"
-             :class="{hide:hideUploadEdit}"
               >
                 <i class="el-icon-plus"></i>
               </el-upload>
@@ -376,10 +379,11 @@
           </div>
           <div class="saveas">
             <el-table
+              max-height="400"
               :data="mailto"
               style="width: 95%; margin-bottom: 20px"
               row-key="id"
-              :default-expand-all="false"
+              :default-expand-all="true"
               :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
             >
               <el-table-column
@@ -408,43 +412,7 @@
             </el-table>
           </div>
         </div>
-        <!-- 营养素标题 -->
-        <!-- <div class="worm">营养素含量（这里为100克食部食品中的营养素含量）</div>
-<div class="saveas">
-  <el-table
-    :data="mailto"
-    max-height="400"
-    style="width: 100%; margin-bottom: 20px"
-    row-key="id"
-    :default-expand-all="false"
-    :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-  >
-    <el-table-column
-      prop="title"
-      label="营养素"
-      align="center"
-      width="200"
-    ></el-table-column>
-    <el-table-column
-      prop="unit"
-      label="单位"
-      width="180"
-      align="center"
-    ></el-table-column>
 
-    <el-table-column label="含量" align="center">
-      <template slot-scope="scope">
-        <el-input
-          v-model="scope.row.result"
-          type="number"
-          v-if="scope.row.level != 1 ? true : false"
-          placeholder="请输入内容"
-        ></el-input>
-      </template>
-
-    </el-table-column>
-  </el-table>
-</div> -->
         <div class="footadd">
           <el-button
             type="primary"
@@ -491,6 +459,7 @@ export default {
       imgLimit: 1, //文件个数
       productImgs: [],
       dialogVisible: false,
+      hideUploadEdit: false, // 是否隐藏上传按钮
       imageUrl: "",
       ruleForm: {
         region: "",
@@ -609,8 +578,7 @@ export default {
       fallen: "",
       used: "",
       gavatorta: "0",
-      energy: [],
-     hideUploadEdit: false, // 是否隐藏上传按钮
+      energy: []
     };
   },
   computed: {},
@@ -629,6 +597,27 @@ export default {
     }
   },
   methods: {
+    ofmoisture() {
+      if (this.ruleForm.content > 100) {
+        // alert("123213");
+        this.ruleForm.content = "";
+        this.$message.error("水分不能大于100");
+      } else {
+        // console.log(this.ruleForm.besaved);
+        return;
+      }
+    },
+    research() {
+      // console.log(123);
+      if (this.ruleForm.besaved > 100) {
+        // alert("123213");
+        this.ruleForm.besaved = "";
+        this.$message.error("食部不能大于100");
+      } else {
+        // console.log(this.ruleForm.besaved);
+        return;
+      }
+    },
     Takeone() {
       let str = JSON.parse(localStorage.getItem("saber-token"));
       this.headerObj["Blade-Auth"] = `bearer ${str.content}`;
@@ -991,6 +980,8 @@ export default {
               };
             }
             this.productImgs = picture;
+            this.hideUploadEdit = this.productImgs.length >= 1;
+
             this.dialogImageUrl = this.inquired.pic;
             console.log(this.productImgs);
             this.ruleForm.delivery = this.inquired.isPub == 1 ? false : true; //公开
@@ -1252,9 +1243,9 @@ export default {
         });
     },
     //移除图片
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
+    handleRemove(file, productImgs) {
       this.dialogImageUrl = "";
+      this.hideUploadEdit = productImgs.length >= 1;
     },
     //预览图片
     handlePictureCardPreview(file) {
@@ -1278,13 +1269,13 @@ export default {
       console.log(this.dialogImageUrl);
     },
     handleChangePic(file, productImgs) {
-      console.log(file);
-      console.log(productImgs);
-      this.hideUploadEdit = productImgs.length >= 1
-      console.log(this.hideUploadEdit)
+      // console.log(file);
+      // console.log(productImgs);
+      this.hideUploadEdit = productImgs.length >= 1;
+      console.log(this.hideUploadEdit);
       // if (productImgs.length > 1) {
       //   productImgs.splice(0, 1);
- 
+
       // }
     },
     beforeAvatarUpload(file) {
@@ -1303,18 +1294,6 @@ export default {
     },
     handleAvatarSuccess(res, file) {
       this.imageUrl = URL.createObjectURL(file.raw);
-    },
-    beforeAvatarUpload(file) {
-      // const isJPG = file.type === "image/jpeg";
-      const isLt2M = file.size / 1024 / 1024 < 2;
-
-      // if (!isJPG) {
-      //   this.$message.error("上传头像图片只能是 JPG 格式!");
-      // }
-      if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 2MB!");
-      }
-      return isLt2M;
     }
   }
 };
@@ -1388,6 +1367,7 @@ export default {
     bottom: 10px;
     right: 30%;
     margin: 0 auto;
+    z-index: 999;
   }
 }
 .import {
@@ -1412,6 +1392,7 @@ export default {
   /* border-right: 1px solid #e0e0e0; */
   font-size: 14px;
   float: left;
+  margin-left: 5px;
 }
 .toLine {
   width: 2px;
@@ -1472,7 +1453,7 @@ export default {
   font-weight: bold;
 }
 .mationinput {
-  width: 99%;
+  width: 750px;
   /* height: 600px; */
   /* overflow-y: auto; */
   /* height: 700px; */
@@ -1499,8 +1480,8 @@ export default {
   /* background-color: red; */
 }
 
-.hide .el-upload--picture-card {
-  display: none!important;;
+/deep/ .hide .el-upload--picture-card {
+  display: none;
 }
 /* .demo-block .avatar-uploader .el-upload {
     border: 1px dashed #d9d9d9;
