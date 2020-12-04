@@ -337,6 +337,7 @@ export default {
     },
     //添加相克食物
     obtain(index1) {
+      this.filterText = "";
       this.dataindex1 = index1;
       // console.log(this.dataindex1);
       // console.log(123123);

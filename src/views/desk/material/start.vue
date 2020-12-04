@@ -330,6 +330,7 @@
               <el-upload
                 action="api/blade-resource/oss/endpoint/put-file"
                 list-type="picture-card"
+                   :limit="imgLimit"
                 :file-list="productImgs"
                 :on-preview="handlePictureCardPreview"
                 :on-change="handleChangePic"
@@ -337,6 +338,7 @@
                 :on-success="handleAvatarSuccess"
                 :on-remove="handleRemove"
                 :headers="headerObj"
+             :class="{hide:hideUploadEdit}"
               >
                 <i class="el-icon-plus"></i>
               </el-upload>
@@ -607,7 +609,8 @@ export default {
       fallen: "",
       used: "",
       gavatorta: "0",
-      energy: []
+      energy: [],
+     hideUploadEdit: false, // 是否隐藏上传按钮
     };
   },
   computed: {},
@@ -1277,11 +1280,12 @@ export default {
     handleChangePic(file, productImgs) {
       console.log(file);
       console.log(productImgs);
-      if (productImgs.length > 1) {
-        productImgs.splice(0, 1);
-        // this.productImgs = [productImgs[productImgs.length - 1].raw];
-        // console.log(1);
-      }
+      this.hideUploadEdit = productImgs.length >= 1
+      console.log(this.hideUploadEdit)
+      // if (productImgs.length > 1) {
+      //   productImgs.splice(0, 1);
+ 
+      // }
     },
     beforeAvatarUpload(file) {
       // const isJPG = file.type === "image/jpeg";
@@ -1301,16 +1305,16 @@ export default {
       this.imageUrl = URL.createObjectURL(file.raw);
     },
     beforeAvatarUpload(file) {
-      const isJPG = file.type === "image/jpeg";
+      // const isJPG = file.type === "image/jpeg";
       const isLt2M = file.size / 1024 / 1024 < 2;
 
-      if (!isJPG) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
-      }
+      // if (!isJPG) {
+      //   this.$message.error("上传头像图片只能是 JPG 格式!");
+      // }
       if (!isLt2M) {
         this.$message.error("上传头像图片大小不能超过 2MB!");
       }
-      return isJPG && isLt2M;
+      return isLt2M;
     }
   }
 };
@@ -1493,6 +1497,10 @@ export default {
   // margin-left: 40px;
   margin-bottom: 50px;
   /* background-color: red; */
+}
+
+.hide .el-upload--picture-card {
+  display: none!important;;
 }
 /* .demo-block .avatar-uploader .el-upload {
     border: 1px dashed #d9d9d9;

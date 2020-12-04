@@ -902,7 +902,7 @@ export default {
           });
       } else {
         this.$message({
-          message: "该分类不能删除",
+          message: "请先清空该分类下的菜品再删除分类",
           type: "warning"
         });
       }
@@ -981,8 +981,9 @@ export default {
         }
         const values = data.map(item => Number(item[column.property]));
         if (
-          !values.every(value => isNaN(value)) &&
-          column.property == "malloc"
+          (!values.every(value => isNaN(value)) &&
+            column.property == "malloc") ||
+          column.property == "stats"
         ) {
           sums[index] = values.reduce((prev, curr) => {
             const value = Number(curr);
@@ -1902,6 +1903,7 @@ export default {
   width: 95%;
   /* height: 500px; */
   margin-left: 40px;
+  margin-bottom: 50px;
   /* background-color: red; */
 }
 .gmsave {
