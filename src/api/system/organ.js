@@ -73,7 +73,7 @@ export const getList = (current, size, params) => {
       }
     })
   }
-  
+
 
   export const getDeptTree = () => {
     return request({
@@ -98,6 +98,17 @@ export const getList = (current, size, params) => {
       params:{id}
     })
   }
+export const upNId = (nutrientId) => {
+  return request({
+    url: '/api/blade-system/tenant/upNId',
+    method: 'get',
+    params:{nutrientId}
+  })
+}
 
-  
+
+
+
+
+
 

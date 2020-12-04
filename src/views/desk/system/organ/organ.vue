@@ -633,6 +633,7 @@ export default {
       getNutritionList().then((res) => {
         const column = this.findObject(this.option.group, "nutrientId");
         let data = res.data.data;
+        this.$set(this.form,"nutrientId",data[0].id)
         if (column.dicData.length > 0) {
           column.dicData = [];
         }

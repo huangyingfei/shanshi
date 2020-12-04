@@ -934,7 +934,7 @@ document.oncontextmenu = function(){return false};
         isUse='1';
       }
     }
-    mealList(1,undefined,this.recipeNameSharePub,isUse).then(res=>{
+    mealList(1,undefined,this.recipeNameSharePub,isUse,1).then(res=>{
       this.mealListLeft=res.data.data;
     })
     },
@@ -950,7 +950,7 @@ document.oncontextmenu = function(){return false};
           isPub='1';
         }
       }
-        mealList(2,isPub,this.recipeNameSharePri).then(res=>{
+        mealList(2,isPub,this.recipeNameSharePri,1).then(res=>{
           this.peopleMealListLeft=res.data.data;
         })
     },
@@ -1139,11 +1139,11 @@ document.oncontextmenu = function(){return false};
     },
     initMealData(){
       //公开
-      mealList(1).then(res=>{
+      mealList(1,undefined,undefined,undefined,1).then(res=>{
         this.mealListLeft=res.data.data;
       })
 
-      mealList(2).then(res=>{
+      mealList(2,undefined,undefined,undefined,1).then(res=>{
         this.peopleMealListLeft=res.data.data;
       })
     },
@@ -1725,7 +1725,7 @@ document.oncontextmenu = function(){return false};
               this.initMealData();
               this.$router.$avueRouter.closeTag();
               this.$router.push({
-                path: "./myecipe"
+                path: "./recipes"
               });
             }
           })
