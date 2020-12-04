@@ -304,29 +304,29 @@ export default {
     Determines(formName) {
       console.log(123);
       console.log(formName);
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          alert("submit!");
-        } else {
-          return false;
-        }
-      });
-      // this.$axios
-      //   .post(`api/blade-food/nutritionsetting/saveNutAndCoef`, {
-      //     isDef: this.ruleForm.region,
-      //     name: this.ruleForm.name,
-      //     nutritionVos: this.newProtein.nutritionVos
-      //   })
-      //   .then(res => {
-      //     console.log(res);
-      //     this.$message({
-      //       message: "保存成功",
-      //       type: "success"
-      //     });
-      //   })
-      //   .catch(() => {
-      //     this.$message.error("保存失败");
-      //   });
+      // this.$refs[formName].validate(valid => {
+      //   if (valid) {
+      //     alert("submit!");
+      //   } else {
+      //     return false;
+      //   }
+      // });
+      this.$axios
+        .post(`api/blade-food/nutritionsetting/saveNutAndCoef`, {
+          isDef: this.ruleForm.region,
+          name: this.ruleForm.name,
+          nutritionVos: this.newProtein.nutritionVos
+        })
+        .then(res => {
+          console.log(res);
+          this.$message({
+            message: "保存成功",
+            type: "success"
+          });
+        })
+        .catch(() => {
+          this.$message.error("保存失败");
+        });
     }
   }
 };
