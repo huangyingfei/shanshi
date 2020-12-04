@@ -1503,7 +1503,6 @@ export default {
               });
             });
           }
-          console.log("week.foods",week.foods);
         });
       });
     },

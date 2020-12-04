@@ -958,6 +958,7 @@ document.oncontextmenu = function(){return false};
    },
     inserMeal(id,that){
       detail(id).then(res=>{
+        debugger
         if(res.data.success){
           let mealsType=[];
           let data=res.data.data;
@@ -994,7 +995,21 @@ document.oncontextmenu = function(){return false};
                 let food={};
                 let recipevals=recipeConncts[k].recipevals;  let children=[];
                 for(let j=0;j<recipevals.length;j++){//食材
-                  children.push({id:recipevals[j].foodId,name:recipevals[j].foodName,count:recipevals[j].val})
+                  let nutrientIds=[];
+                  debugger
+                  let foodNutritionList=recipevals[j].foodNutritionList;
+                  foodNutritionList.forEach(_=>{
+                      this.nutritionValue.forEach(n=>{
+                        if(n.code==_.nutrientId+""){
+                          nutrientIds.push({id:_.nutrientId,name:n.name, value:_.value})//数值>0即可，此时的value不准确  因为要/100*食部
+                        }
+                  })})
+                  children.push({
+                    id:recipevals[j].foodId,
+                    name:recipevals[j].foodName,
+                    count:recipevals[j].val,
+                    nutrientIds:nutrientIds
+                  })
                 }
                 food.id=recipeConncts[k].dishId;
                 food.name=recipeConncts[k].dishName;
@@ -1006,8 +1021,8 @@ document.oncontextmenu = function(){return false};
           }
           that.$set(__,"foods",foods);
         })
-
       })
+      that.$refs.child.refreshData();
     },
     mealDetail(id,that){//根据id查询菜品详情
       detail(id).then(res=>{

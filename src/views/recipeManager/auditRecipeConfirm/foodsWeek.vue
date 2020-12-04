@@ -83,16 +83,30 @@
               <el-table-column label="图片" align="center">
                 <template slot-scope="scope1">
                   <div
-                    v-if="
+                    v-show="
                       scope1.$index === 0 &&
                       scope.row.weeks.find((p) => p.name == 'week1')
                     "
                     style="width: 100px; height: 100px; margin: 0 auto"
                   >
-                    <el-image
-                      style="width: 100px; height: 100px"
-                      :src="scope1.row.url" >
-                    </el-image>
+                    <el-upload
+                      :multiple="false"
+                      :show-file-list="false"
+                      :action="dialog_choice.upload_url"
+                      :headers="token"
+                      :on-success="(res,file)=>{handleAvatarSuccess(scope.row.id,
+                          scope.row.weeks.find((p) => p.name == 'week1').id,res,file)}">
+                      <img
+                        v-show="scope.row.weeks.find((p) => p.name == 'week1').image" :src="scope.row.weeks.find((p) => p.name == 'week1').image"
+                        style="width: 100%; height: 100%"/>
+                      <img
+                        v-show="
+                          !scope.row.weeks.find((p) => p.name == 'week1').image
+                        "
+                        :src="empty_image"
+                        style="width: 100%; height: 100%"
+                      />
+                    </el-upload>
                   </div>
                 </template>
               </el-table-column>
@@ -850,7 +864,7 @@ export default {
         opened: false, // 是否显示
         data_id: "", // 主数据ID
         week_id: "", // 周几数据ID
-        upload_url: "", // 上传地址
+        upload_url: "/api/blade-resource/oss/endpoint/put-file", // 上传地址
       },
       mealTypeData:[
         {
@@ -1201,7 +1215,12 @@ export default {
     // 合并单元格
     onTableSpanMethod({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 2) {
-        return [row.spans, 1];
+        //     debugger
+        if(row.spans){
+          return [row.spans, 1];
+        }else{
+          return [1,1]
+        }
       }
     },
 
@@ -1269,6 +1288,21 @@ export default {
               if (week.id === week_id) {
                 week.image =
                   "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1604519021887&di=7dc08416a5f9f6301472e0974e043186&imgtype=0&src=http%3A%2F%2Fcp1.douguo.com%2Fupload%2Fcaiku%2F7%2Ff%2F0%2Fyuan_7fb557435ef7dc525adefe1efaad2070.jpg";
+              }
+            });
+          }
+        });
+      }
+    },
+    //图片上传成功
+    handleAvatarSuccess(data_id, week_id,res, file) {
+      // debugger
+      if (res && res.success) {
+        this.datas.forEach((data) => {
+          if (data.id === data_id) {
+            data.weeks.forEach((week) => {
+              if (week.id === week_id) {
+                week.image =res.data.link;
               }
             });
           }

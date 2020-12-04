@@ -676,11 +676,8 @@
             }
             that.$set(__,"foods",foods);
           })
-
         })
-        if(datas!="showDatas"){
-          this.$refs.child.getFoodScore();
-        }
+        that.$refs.child.refreshData();
       },
       personMealhandleNodeClick(id,that){
         detail(id).then(res=>{
