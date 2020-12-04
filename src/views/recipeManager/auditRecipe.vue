@@ -10,6 +10,12 @@
 									@size-change= "sizeChange"
 									@current-change = "currentChange"
 									@refresh-change = "refreshChange">
+				<template slot="status" slot-scope="scope">
+					<el-tag type="danger" v-if="scope.row.status == 0">待审核</el-tag>
+					<el-tag v-else-if="scope.row.status == 3">无需审核</el-tag>
+					<el-tag type="success" v-else-if="scope.row.status == 1">审核通过</el-tag>
+					<el-tag type="warning" v-else-if="scope.row.status == 2">审核不通过</el-tag>
+				</template>
 				<template slot-scope="scope" slot="menu">
 					<el-button
 						type= "text"
@@ -97,7 +103,7 @@ export default {
 						search:true,
 						type: "select",
 						searchValue: 0,
-						
+						slot:true,
 						dicData: [
 							{
 								label: "全部",

@@ -264,6 +264,21 @@
               search: true,
             },
             {
+              label: "食谱类别",
+              prop: "recipeCategory",
+              type: "select",
+              dicData: [
+                {
+                  label: "学生食谱",
+                  value: 1
+                },
+                {
+                  label: "教职工食谱",
+                  value: 2
+                }
+              ],
+            },
+            {
               label: "创建人",
               prop: "createName",
               // span: 24,
