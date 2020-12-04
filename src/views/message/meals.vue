@@ -1,4 +1,5 @@
 <template>
+  <basic-container>
   <div class="meals">
     <div
       ref="layershipu"
@@ -439,7 +440,7 @@
           </div>
         <div class="scores2">
           <img class="picture" src="/img/fenshu.png" alt="" />
-          <p class="vertical">真棒</p>
+          <p class="vertical">{{scoreTitle}}</p>
         </div>
       </div>
 
@@ -489,13 +490,14 @@
           </el-input>
           ~
           <span style="padding-right: 10px; padding-left: 10px">期望值(%)</span>
-          <el-input
-            style="width: 140px"
-            placeholder="请输入内容"
-            v-model="node.exceptValue"
-            clearable
-          >
-          </el-input>
+          <el-input-number v-model="node.exceptValue" controls-position="right"></el-input-number>
+          <!--<el-input-->
+            <!--style="width: 140px"-->
+            <!--placeholder="请输入内容"-->
+            <!--v-model="node.exceptValue"-->
+            <!--clearable-->
+          <!--&gt;-->
+          <!--</el-input>-->
 
           <el-button style="margin-left: 30px" type="primary"  @click="startTrim"
             >开始配平</el-button
@@ -526,7 +528,7 @@
           </div>
           <div class="scores2">
             <img class="picture" src="/img/fenshu.png" alt="" />
-            <p class="vertical">真棒</p>
+            <p class="vertical">{{scoreTitle}}</p>
           </div>
         </div>
 
@@ -541,14 +543,41 @@
       :visible.sync="jundgeallergy"
       :close-on-click-modal="false"
     >
-
+<div class="item-allergy">
+  <el-table  :span-method="objectSpanMethod"
+    :data="tableData"
+    border
+    style="width: 100%; margin-top: 20px">
+    <el-table-column
+      prop="className"
+      label="班级"
+      width="180">
+    </el-table-column>
+    <el-table-column
+      prop="studentName"
+      label="姓名">
+    </el-table-column>
+    <el-table-column
+      prop="dishName"
+      label="菜品">
+    </el-table-column>
+    <el-table-column
+      prop="foodName"
+      label="食材">
+    </el-table-column>
+    <el-table-column
+      prop="symptom"
+      label="过敏症状">
+    </el-table-column>
+  </el-table>
+</div>
 
       <div slot="footer" class="dialog-footer">
-        <el-button @click="jundgeallergy=false">取 消</el-button>
-        <el-button @click="jundgeallergy=true" type="primary">确 定</el-button>
+        <el-button @click="jundgeallergy=false" type="primary">确 定</el-button>
       </div>
     </el-dialog>
   </div>
+  </basic-container>
 </template>
 
 <script>
@@ -590,6 +619,7 @@ document.oncontextmenu = function(){return false};
 
     const data = [];
     return {
+      tableData: [],
       jundgeallergy:false,//过敏
       foodRadio:'1',
       isUse:undefined,
@@ -631,6 +661,7 @@ document.oncontextmenu = function(){return false};
       dishSharePub:'',
       id:'',
       score:'0',
+      scoreTitle:'',
       intake:{},
       nutrition:[],
       power:[],
@@ -727,47 +758,78 @@ document.oncontextmenu = function(){return false};
         {
           name:"能量",
           code:"101",
-          value:'0'
+          value:'0',
+          bz:"80%-120%",
+          min:80,
+          max:120,
         },
         {
           name:"蛋白质",
           code:"102",
-          value:'0'
+          value:'0',
+          bz:"80%-150%",
+          min:80,
+          max:150,
         },
         {
           name:"钙",
           code:"201",
-          value:'0'
+          value:'0',
+          bz:"80%-160%",
+          min:80,
+          max:160,
         },{
           name:"纳",
           code:"204",
-          value:'0'
+          value:'0',
+          bz:"80%-135%",
+          min:80,
+          max:135,
         },{
           name:"铁",
           code:"301",
-          value:'0'
+          value:'0',
+          bz:"80%-160%",
+          min:80,
+          max:160,
+
         },{
           name:"锌",
           code:"303",
-          value:'0'
+          value:'0',
+          bz:"80%-160%",
+          min:80,
+          max:160,
         }
         ,{
           name:"维生素A",
           code:"401",
-          value:'0'
+          value:'0',
+          bz:"80%-180%",
+          min:80,
+          max:180,
         },{
           name:"维生素B1",
           code:"405",
-          value:'0'
+          value:'0',
+          bz:"80%-250%",
+          min:80,
+          max:250,
         },{
           name:"维生素B2",
           code:"406",
-          value:'0'
+          value:'0',
+          bz:"80%-250%",
+          min:80,
+          max:250,
         }
         ,{
           name:"维生素C",
           code:"415",
-          value:'0'
+          value:'0',
+          bz:"80%-250%",
+          min:80,
+          max:250,
         },
       ],
       foodMutuals:[],
@@ -823,6 +885,20 @@ document.oncontextmenu = function(){return false};
     };
   },
   beforeMount() {},
+  watch:{
+    score(val){
+      debugger
+      if(parseFloat(val)==85){
+        this.scoreTitle="合格"
+      }
+      if(parseFloat(val)>85){
+        this.scoreTitle="真棒"
+      }
+      if(parseFloat(val)<85){
+        this.scoreTitle="加油"
+      }
+    }
+  },
   methods: {
     mealsTypeById(){
       var that=this;
@@ -910,20 +986,16 @@ document.oncontextmenu = function(){return false};
             }
           }
           arr.sort()
-       //   debugger
           let foodCatalog= []
           for(let i=0;i<arr.length;i++){
             foodCatalog.push(that.getmealTypeDataValue(arr[i]))
           }
           that.$set(that.WeekInfo,"foodCatalog",foodCatalog)
-
           that.AppendFoodType();
           let recipeCycles=res.data.data.recipeCycles;
           setTimeout(function () {
             that.insertDishesData("datas",recipeCycles,that);
           }, 1000);
-
-
         }})
     },
     insertDishesData(datas,recipeCycles,that){
@@ -937,7 +1009,20 @@ document.oncontextmenu = function(){return false};
                 let food={};
                 let recipevals=recipeConncts[k].recipevals;  let children=[];
                 for(let j=0;j<recipevals.length;j++){//食材
-                  children.push({id:recipevals[j].foodId,name:recipevals[j].foodName,count:recipevals[j].val})
+                  let nutrientIds=[];
+                  let foodNutritionList=recipevals[j].foodNutritionList;
+                  foodNutritionList.forEach(_=>{
+                      this.nutritionValue.forEach(n=>{
+                        if(n.code==_.nutrientId+""){
+                          nutrientIds.push({id:_.nutrientId,name:n.name, value:_.value})//数值>0即可，此时的value不准确  因为要/100*食部
+                        }
+                  })})
+                  children.push({
+                    id:recipevals[j].foodId,
+                    name:recipevals[j].foodName,
+                    count:recipevals[j].val,
+                    nutrientIds:nutrientIds
+                  })
                 }
                 food.id=recipeConncts[k].dishId;
                 food.name=recipeConncts[k].dishName;
@@ -949,11 +1034,8 @@ document.oncontextmenu = function(){return false};
           }
           that.$set(__,"foods",foods);
         })
-
       })
-      if(datas!="showDatas"){
-        this.$refs.child.getFoodScore();
-      }
+      that.$refs.child.refreshData();
     },
     mealDetail(id,that){//根据id查询菜品详情
       detail(id).then(res=>{
@@ -995,6 +1077,7 @@ document.oncontextmenu = function(){return false};
       })
     },
     //详情数据绑定前端
+
     dishesData(datas,recipeCycles,that){
       that[datas].forEach(_=>{
         _.weeks.forEach(__=>{
@@ -1003,8 +1086,8 @@ document.oncontextmenu = function(){return false};
           for(let i=0;i<recipeCycles.length;i++){
 
             if(recipeCycles[i].mealsType+""==that.getmealTypeData(_.name)&&recipeCycles[i].week+""==__.name.slice(4)){
+              __.image=recipeCycles[i].pic
               let recipeConncts=recipeCycles[i].recipeConncts;
-
               for(let k=0;k<recipeConncts.length;k++){//菜品
                 let food={};
                 let recipevals=recipeConncts[k].recipevals;  let children=[];
@@ -1022,18 +1105,32 @@ document.oncontextmenu = function(){return false};
           }
           that.$set(__,"foods",foods);
         })
-
       })
-      if(datas!="showDatas"){
-        this.$refs.child2.getFoodScoreSmart();
-      }
-
+      that.$refs.child.refreshData();
     },
     parentFn(score,intake,nutrition,power,protein,meal){
       this.score=score;
       if(score!=0){
         this.intake=intake;
         this.nutrition=nutrition
+        this.nutrition.forEach(_=>{
+          if(parseFloat(_.dris)<_.min){
+            _["red"]=true
+            _["orange"]=false
+            _["green"]=false
+          }
+          if(parseFloat(_.dris)>_.max){
+            _["orange"]=true
+            _["red"]=false
+            _["green"]=false
+          }
+          if(parseFloat(_.dris)>=_.min&&parseFloat(_.dris)<=_.max){
+            _["green"]=true
+            _["orange"]=false
+            _["red"]=false
+          }
+        })
+        console.log("this.nutrition",this.nutrition)
         this.power=power
         this.protein=protein
         this.meal=meal
@@ -1363,7 +1460,7 @@ document.oncontextmenu = function(){return false};
         recipeCycles:recipeCycles
       }
       jundgeAllergy(row).then(res=>{
-
+        this.tableData=res.data.data.foods
       })
 
     },
@@ -1395,7 +1492,7 @@ document.oncontextmenu = function(){return false};
       let that=this;
       //食材相克
       jundgeFood(row).then(result=>{
-        debugger
+        // debugger
         let foodMutuals=that.foodMutuals;
         let msg=""
           if(result.data.data.foodMutuals.length>0){
@@ -1436,63 +1533,80 @@ document.oncontextmenu = function(){return false};
      })
     },
     startTrim(){
-      let that=this;
-      this.smartDatas.forEach(week=>{
-      week.weeks.forEach(_=>{
-          _.foods.forEach(__=>{
-            __.children.forEach(___=>{
-              let flag=false;
-              ___.nutrientIds.forEach(n=>{
-                if(n.id==that.node.nowCode){
-                  if(n.value!="0"){
-                    flag=true;
-                  }
-                }
-              })
-              if(flag){
-                let add=(((parseFloat(that.node.exceptValue)-parseFloat(that.node.nowValue))/parseFloat(that.node.nowValue)))
-                if(add>0){
-                  this.$set(___,"up",(add*parseFloat(100)).toFixed(2));delete ___["down"]
+      if(this.node.exceptValue) {
+        let that = this;
 
-                }else  if(add<0){
-                  this.$set(___,"down",Math.abs((add*parseFloat(100)).toFixed(2)));delete ___["up"]
+        this.smartDatas.forEach(week => {
+          week.weeks.forEach(_ => {
+            _.foods.forEach(__ => {
+              __.children.forEach(___ => {
+                let flag = false;
+                ___.nutrientIds.forEach(n => {
+                  if (n.id == that.node.nowCode) {
+                    if (n.value != "0") {
+                      flag = true;
+                    }
+                  }
+                })
+                if (flag) {
+                  let add = (((parseFloat(that.node.exceptValue) - parseFloat(that.node.nowValue)) / parseFloat(that.node.nowValue)))
+                  if (add > 0) {
+                    this.$set(___, "up", (add * parseFloat(100)).toFixed(2));
+                    delete ___["down"]
+
+                  } else if (add < 0) {
+                    this.$set(___, "down", Math.abs((add * parseFloat(100)).toFixed(2)));
+                    delete ___["up"]
+                  }
+                  else {
+                    delete ___["down"]
+                    delete ___["up"]
+                  }
+                  let count = (parseFloat(___.count) + parseFloat(___.count) * add)
+                  this.$set(___, "count", count.toFixed(2));
                 }
                 else{
-                    delete __["down"]
-                    delete __["up"]
+                  debugger
+                  Vue.delete(___,'down');
+                  Vue.delete(___,'up');
+                  // delete ___["down"]
+                  // delete ___["up"]
+                  // this.$set(___, "count", ___.count);
                 }
-                let count=( parseFloat(___.count)+parseFloat(___.count)*add)
-                this.$set(___,"count",count.toFixed(2));
+              })
+            })
+          })
+        })
+        console.log(this.smartDatas)
+        this.smartDatas.forEach(item => {
+          this.$set(item, "flag", true);
+          item.weeks.forEach(_ => {
+            _.foods.forEach(__ => {
+              let count = 0;
+              __.children.forEach(___ => {
+                count += parseFloat(___.count ? ___.count : 0)
+              })
+              if (parseFloat(__.count) > parseFloat(count)) {//下降
+                this.$set(__, "down", Math.abs(((parseFloat(count) - parseFloat(__.count)) / parseFloat(__.count) * 100).toFixed(2)));
+                delete __["up"]
               }
+              else if (parseFloat(__.count) < parseFloat(count)) {//上升
+                this.$set(__, "up", (((parseFloat(count) - parseFloat(__.count)) / parseFloat(__.count) * 100).toFixed(2)));
+                delete __["down"]
+              } else {
+                delete __["down"]
+                delete __["up"]
+              }
+              this.$set(__, "count", count);
             })
           })
         })
-
-      })
-     // debugger
-
-      this.smartDatas.forEach(item=>{
-        this.$set(item,"flag",true);
-        item.weeks.forEach(_=>{
-          _.foods.forEach(__=>{
-            let count=0;
-            __.children.forEach(___=>{
-              count+= parseFloat(___.count?___.count:0)
-            })
-            if(parseFloat(__.count)>parseFloat(count)){//下降
-              this.$set(__,"down",Math.abs(((parseFloat(count)-parseFloat(__.count))/parseFloat(__.count)*100).toFixed(2))); delete __["up"]
-            }
-            else if(parseFloat(__.count)<parseFloat(count)){//上升
-              this.$set(__,"up",(((parseFloat(count)-parseFloat(__.count))/parseFloat(__.count)*100).toFixed(2))); delete __["down"]
-            }else{
-              delete __["down"]
-              delete __["up"]
-            }
-            this.$set(__,"count",count);
-          })
-        })
-      })
-
+      }else{
+        this.$message({
+          message: "期望值不可为空",
+          type: "info",
+        });
+      }
     },
     application(){
       this.smartDatas.forEach(week=>{
@@ -1512,6 +1626,8 @@ document.oncontextmenu = function(){return false};
       localStorage.setItem("smartDatas",JSON.stringify(this.smartDatas))
       this.datas= JSON.parse(localStorage.getItem("smartDatas"))
       this.pointscan = false;
+      //.
+      this.$refs.child.refreshData();
     },
     resetMeals(){
   //  debugger
@@ -1527,7 +1643,7 @@ document.oncontextmenu = function(){return false};
         })
       })
     },
-
+   //智能配平
     wrapscan() {
       this.ncodeChange();
       localStorage.setItem("mealsDatas",JSON.stringify(this.datas))
@@ -1576,7 +1692,8 @@ document.oncontextmenu = function(){return false};
                 value:___.count,
                 year:this.year,
                 month:__.week.date,
-                childrens:children
+                childrens:children,
+                pic:__.image
               })
             }
 
@@ -1593,7 +1710,8 @@ document.oncontextmenu = function(){return false};
         recipeCategory:1,
         startTime:this.startTime,
         endTime:this.endTime,
-        isBoard:this.WeekInfo.shareTell?1:0
+        isBoard:this.WeekInfo.shareTell?1:0,
+        score:this.score
       }
       if(row.recipeName&&row.recipeCycles.length>0&&row.startTime&&!flag) {
         if (this.id) {
@@ -2001,7 +2119,15 @@ document.oncontextmenu = function(){return false};
   overflow-y: scroll;
 }
 </style>
+
+
 <style scoped>
+
+  .item-allergy{
+    min-height: 100px;
+    max-height: 250px;
+    overflow:scroll;
+  }
 .meals .el-row {
   padding: 5px;
 }
@@ -2046,7 +2172,7 @@ document.oncontextmenu = function(){return false};
 .meals .foodWeekListHis {
   padding: 0 0 0 10px;
   overflow-y: scroll;
-  height: 450px;
+  height: 280px;
 }
 .meals .foodWeekListHis li {
   list-style: none;
@@ -2070,8 +2196,8 @@ document.oncontextmenu = function(){return false};
   height: 102px;
   /* background-color: red; */
   position: absolute;
-  top: 70px;
-  right: 50px;
+  top: 90px;
+  right: 30px;
 }
 .scores3{
   width: 100px;

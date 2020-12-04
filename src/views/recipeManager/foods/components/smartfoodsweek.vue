@@ -1457,7 +1457,7 @@
     },
   };
 </script>
-<style scoped>
+<style>
   .table-week th {
     background: #f8fbfc !important;
   }
@@ -1486,7 +1486,7 @@
     padding: 0 10px !important;
   }
   .drapInActive .el-table th {
-    background-color: red !important;
+    background-color: #dcdfe6 !important;
   }
   .colNoneBorder
   {

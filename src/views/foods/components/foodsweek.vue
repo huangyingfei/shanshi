@@ -26,7 +26,7 @@
       <el-table-column align="center" width="100" fixed class-name="col-date3 colNoneBorder" >
         <template slot="header"> 菜品/食物 </template>
         <template slot-scope="scope">
-          <div v-bind:data="scope.row.name" class="foodType">{{ scope.row.name }}</div>
+          <div v-bind:data="scope.row.name" class="meals-foodType">{{ scope.row.name }}</div>
         </template>
       </el-table-column>
       <!-- 周一   -->
@@ -121,25 +121,14 @@
                   >
                     <el-upload
                       :multiple="false"
-                      :show-file-list="true"
-                      :action="upload_url"
-                      :on-change="
-                        onUploadImage(
-                          scope.row.id,
-                          scope.row.weeks.find((p) => p.name == 'week1').id,
-                          $event
-                        )
-                      "
-                    >
-                      <!--<img-->
-                        <!--v-show="-->
-                          <!--scope.row.weeks.find((p) => p.name == 'week1').image-->
-                        <!--"-->
-                        <!--:src="-->
-                          <!--scope.row.weeks.find((p) => p.name == 'week1').image-->
-                        <!--"-->
-                        <!--style="width: 100%; height: 100%"-->
-                      <!--/>-->
+                      :show-file-list="false"
+                      :action="dialog_choice.upload_url"
+                      :headers="token"
+                      :on-success="(res,file)=>{handleAvatarSuccess(scope.row.id,
+                          scope.row.weeks.find((p) => p.name == 'week1').id,res,file)}">
+                      <img
+                        v-show="scope.row.weeks.find((p) => p.name == 'week1').image" :src="scope.row.weeks.find((p) => p.name == 'week1').image"
+                        style="width: 100%; height: 100%"/>
                       <img
                         v-show="
                           !scope.row.weeks.find((p) => p.name == 'week1').image
@@ -254,28 +243,30 @@
               <el-table-column label="图片" align="center">
                 <template slot-scope="scope1">
                   <div
-                    v-if="
+                    v-show="
                       scope1.$index === 0 &&
                       scope.row.weeks.find((p) => p.name == 'week2')
                     "
                     style="width: 100px; height: 100px; margin: 0 auto"
                   >
-                    <img
-                      v-if="
-                        scope.row.weeks.find((p) => p.name == 'week2').image
-                      "
-                      :src="
-                        scope.row.weeks.find((p) => p.name == 'week2').image
-                      "
-                      style="width: 100%; height: 100%"
-                    />
-                    <img
-                      v-if="
-                        !scope.row.weeks.find((p) => p.name == 'week2').image
-                      "
-                      :src="empty_image"
-                      style="width: 100%; height: 100%"
-                    />
+                    <el-upload
+                      :multiple="false"
+                      :show-file-list="false"
+                      :action="dialog_choice.upload_url"
+                      :headers="token"
+                      :on-success="(res,file)=>{handleAvatarSuccess(scope.row.id,
+                          scope.row.weeks.find((p) => p.name == 'week2').id,res,file)}">
+                      <img
+                        v-show="scope.row.weeks.find((p) => p.name == 'week2').image" :src="scope.row.weeks.find((p) => p.name == 'week2').image"
+                        style="width: 100%; height: 100%"/>
+                      <img
+                        v-show="
+                          !scope.row.weeks.find((p) => p.name == 'week2').image
+                        "
+                        :src="empty_image"
+                        style="width: 100%; height: 100%"
+                      />
+                    </el-upload>
                   </div>
                 </template>
               </el-table-column>
@@ -382,28 +373,30 @@
               <el-table-column label="图片" align="center">
                 <template slot-scope="scope1">
                   <div
-                    v-if="
+                    v-show="
                       scope1.$index === 0 &&
                       scope.row.weeks.find((p) => p.name == 'week3')
                     "
                     style="width: 100px; height: 100px; margin: 0 auto"
                   >
-                    <img
-                      v-if="
-                        scope.row.weeks.find((p) => p.name == 'week3').image
-                      "
-                      :src="
-                        scope.row.weeks.find((p) => p.name == 'week3').image
-                      "
-                      style="width: 100%; height: 100%"
-                    />
-                    <img
-                      v-if="
-                        !scope.row.weeks.find((p) => p.name == 'week3').image
-                      "
-                      :src="empty_image"
-                      style="width: 100%; height: 100%"
-                    />
+                    <el-upload
+                      :multiple="false"
+                      :show-file-list="false"
+                      :action="dialog_choice.upload_url"
+                      :headers="token"
+                      :on-success="(res,file)=>{handleAvatarSuccess(scope.row.id,
+                          scope.row.weeks.find((p) => p.name == 'week3').id,res,file)}">
+                      <img
+                        v-show="scope.row.weeks.find((p) => p.name == 'week3').image" :src="scope.row.weeks.find((p) => p.name == 'week3').image"
+                        style="width: 100%; height: 100%"/>
+                      <img
+                        v-show="
+                          !scope.row.weeks.find((p) => p.name == 'week3').image
+                        "
+                        :src="empty_image"
+                        style="width: 100%; height: 100%"
+                      />
+                    </el-upload>
                   </div>
                 </template>
               </el-table-column>
@@ -510,28 +503,30 @@
               <el-table-column label="图片" align="center">
                 <template slot-scope="scope1">
                   <div
-                    v-if="
+                    v-show="
                       scope1.$index === 0 &&
                       scope.row.weeks.find((p) => p.name == 'week4')
                     "
                     style="width: 100px; height: 100px; margin: 0 auto"
                   >
-                    <img
-                      v-if="
-                        scope.row.weeks.find((p) => p.name == 'week4').image
-                      "
-                      :src="
-                        scope.row.weeks.find((p) => p.name == 'week4').image
-                      "
-                      style="width: 100%; height: 100%"
-                    />
-                    <img
-                      v-if="
-                        !scope.row.weeks.find((p) => p.name == 'week4').image
-                      "
-                      :src="empty_image"
-                      style="width: 100%; height: 100%"
-                    />
+                    <el-upload
+                      :multiple="false"
+                      :show-file-list="false"
+                      :action="dialog_choice.upload_url"
+                      :headers="token"
+                      :on-success="(res,file)=>{handleAvatarSuccess(scope.row.id,
+                          scope.row.weeks.find((p) => p.name == 'week4').id,res,file)}">
+                      <img
+                        v-show="scope.row.weeks.find((p) => p.name == 'week4').image" :src="scope.row.weeks.find((p) => p.name == 'week4').image"
+                        style="width: 100%; height: 100%"/>
+                      <img
+                        v-show="
+                          !scope.row.weeks.find((p) => p.name == 'week4').image
+                        "
+                        :src="empty_image"
+                        style="width: 100%; height: 100%"
+                      />
+                    </el-upload>
                   </div>
                 </template>
               </el-table-column>
@@ -638,28 +633,30 @@
               <el-table-column label="图片" align="center">
                 <template slot-scope="scope1">
                   <div
-                    v-if="
+                    v-show="
                       scope1.$index === 0 &&
                       scope.row.weeks.find((p) => p.name == 'week5')
                     "
                     style="width: 100px; height: 100px; margin: 0 auto"
                   >
-                    <img
-                      v-if="
-                        scope.row.weeks.find((p) => p.name == 'week5').image
-                      "
-                      :src="
-                        scope.row.weeks.find((p) => p.name == 'week5').image
-                      "
-                      style="width: 100%; height: 100%"
-                    />
-                    <img
-                      v-if="
-                        !scope.row.weeks.find((p) => p.name == 'week5').image
-                      "
-                      :src="empty_image"
-                      style="width: 100%; height: 100%"
-                    />
+                    <el-upload
+                      :multiple="false"
+                      :show-file-list="false"
+                      :action="dialog_choice.upload_url"
+                      :headers="token"
+                      :on-success="(res,file)=>{handleAvatarSuccess(scope.row.id,
+                          scope.row.weeks.find((p) => p.name == 'week5').id,res,file)}">
+                      <img
+                        v-show="scope.row.weeks.find((p) => p.name == 'week5').image" :src="scope.row.weeks.find((p) => p.name == 'week5').image"
+                        style="width: 100%; height: 100%"/>
+                      <img
+                        v-show="
+                          !scope.row.weeks.find((p) => p.name == 'week5').image
+                        "
+                        :src="empty_image"
+                        style="width: 100%; height: 100%"
+                      />
+                    </el-upload>
                   </div>
                 </template>
               </el-table-column>
@@ -766,28 +763,30 @@
               <el-table-column label="图片" align="center">
                 <template slot-scope="scope1">
                   <div
-                    v-if="
+                    v-show="
                       scope1.$index === 0 &&
                       scope.row.weeks.find((p) => p.name == 'week6')
                     "
                     style="width: 100px; height: 100px; margin: 0 auto"
                   >
-                    <img
-                      v-if="
-                        scope.row.weeks.find((p) => p.name == 'week6').image
-                      "
-                      :src="
-                        scope.row.weeks.find((p) => p.name == 'week6').image
-                      "
-                      style="width: 100%; height: 100%"
-                    />
-                    <img
-                      v-if="
-                        !scope.row.weeks.find((p) => p.name == 'week6').image
-                      "
-                      :src="empty_image"
-                      style="width: 100%; height: 100%"
-                    />
+                    <el-upload
+                      :multiple="false"
+                      :show-file-list="false"
+                      :action="dialog_choice.upload_url"
+                      :headers="token"
+                      :on-success="(res,file)=>{handleAvatarSuccess(scope.row.id,
+                          scope.row.weeks.find((p) => p.name == 'week6').id,res,file)}">
+                      <img
+                        v-show="scope.row.weeks.find((p) => p.name == 'week6').image" :src="scope.row.weeks.find((p) => p.name == 'week6').image"
+                        style="width: 100%; height: 100%"/>
+                      <img
+                        v-show="
+                          !scope.row.weeks.find((p) => p.name == 'week6').image
+                        "
+                        :src="empty_image"
+                        style="width: 100%; height: 100%"
+                      />
+                    </el-upload>
                   </div>
                 </template>
               </el-table-column>
@@ -894,28 +893,30 @@
               <el-table-column label="图片" align="center">
                 <template slot-scope="scope1">
                   <div
-                    v-if="
+                    v-show="
                       scope1.$index === 0 &&
                       scope.row.weeks.find((p) => p.name == 'week7')
                     "
                     style="width: 100px; height: 100px; margin: 0 auto"
                   >
-                    <img
-                      v-if="
-                        scope.row.weeks.find((p) => p.name == 'week7').image
-                      "
-                      :src="
-                        scope.row.weeks.find((p) => p.name == 'week7').image
-                      "
-                      style="width: 100%; height: 100%"
-                    />
-                    <img
-                      v-if="
-                        !scope.row.weeks.find((p) => p.name == 'week7').image
-                      "
-                      :src="empty_image"
-                      style="width: 100%; height: 100%"
-                    />
+                    <el-upload
+                      :multiple="false"
+                      :show-file-list="false"
+                      :action="dialog_choice.upload_url"
+                      :headers="token"
+                      :on-success="(res,file)=>{handleAvatarSuccess(scope.row.id,
+                          scope.row.weeks.find((p) => p.name == 'week7').id,res,file)}">
+                      <img
+                        v-show="scope.row.weeks.find((p) => p.name == 'week7').image" :src="scope.row.weeks.find((p) => p.name == 'week7').image"
+                        style="width: 100%; height: 100%"/>
+                      <img
+                        v-show="
+                          !scope.row.weeks.find((p) => p.name == 'week7').image
+                        "
+                        :src="empty_image"
+                        style="width: 100%; height: 100%"
+                      />
+                    </el-upload>
                   </div>
                 </template>
               </el-table-column>
@@ -1024,48 +1025,92 @@ export default {
       ],
       nutritionValue:[
         {
-            name:"能量",
-            code:"101"
-         },
+          name:"能量",
+          code:"101",
+          value:'0',
+          bz:"80%-120%",
+          min:80,
+          max:120,
+        },
         {
           name:"蛋白质",
-          code:"102"
+          code:"102",
+          value:'0',
+          bz:"80%-150%",
+          min:80,
+          max:150,
         },
         {
           name:"钙",
-          code:"201"
+          code:"201",
+          value:'0',
+          bz:"80%-160%",
+          min:80,
+          max:160,
         },{
           name:"纳",
-          code:"204"
+          code:"204",
+          value:'0',
+          bz:"80%-135%",
+          min:80,
+          max:135,
         },{
           name:"铁",
-          code:"301"
+          code:"301",
+          value:'0',
+          bz:"80%-160%",
+          min:80,
+          max:160,
+
         },{
+          name:"锌",
+          code:"303",
+          value:'0',
+          bz:"80%-160%",
+          min:80,
+          max:160,
+        }
+        ,{
           name:"维生素A",
-          code:"401"
+          code:"401",
+          value:'0',
+          bz:"80%-180%",
+          min:80,
+          max:180,
         },{
           name:"维生素B1",
-          code:"405"
+          code:"405",
+          value:'0',
+          bz:"80%-250%",
+          min:80,
+          max:250,
         },{
           name:"维生素B2",
-          code:"406"
+          code:"406",
+          value:'0',
+          bz:"80%-250%",
+          min:80,
+          max:250,
         }
         ,{
           name:"维生素C",
-          code:"415"
+          code:"415",
+          value:'0',
+          bz:"80%-250%",
+          min:80,
+          max:250,
         },
-
-
-
-
       ],
+      token:{
+        "Blade-Auth":""
+      },
       powerValue:[{name:"脂肪占总能量",code:"103"},{name:"蛋白占总能量",code:"102"},{name:"碳水化合物占总能量",code:"104"}],
       empty_image: "/img/tianjia.png",
       dialog_choice: {
         opened: false, // 是否显示
         data_id: "", // 主数据ID
         week_id: "", // 周几数据ID
-        upload_url: "", // 上传地址
+        upload_url: "/api/blade-resource/oss/endpoint/put-file", // 上传地址
       },
       mealTypeData:[
         {
@@ -1120,15 +1165,20 @@ export default {
   // 组件第一次加载
   mounted() {
     this.init();
+    this.getToken()//获取token
   },
 
   methods: {
+    getToken() {
+      let str = JSON.parse(localStorage.getItem("saber-token"));
+      this.token["Blade-Auth"] = `bearer ${str.content}`;
+    },
     //同步修改高度
     resizeExpendHeight() {
       debugger
       setTimeout(() => {
         //真实高度列表
-      var foodTypeList = document.querySelectorAll(".colNoneBorder.is-hidden .foodType");
+      var foodTypeList = document.querySelectorAll(".colNoneBorder.is-hidden .meals-foodType");
       for (var i = 0; i < foodTypeList.length; i++) {
         var pnode = foodTypeList[i].parentNode.parentNode.parentNode;
         if(pnode.className.indexOf("is-leaf")<0)
@@ -1146,7 +1196,7 @@ export default {
         }
 
       }
-      },2000);
+      },20);
 
     },
     oncontextmenuFood(e, data_id, week_id, food_id) {
@@ -1230,7 +1280,6 @@ export default {
           e.classList.remove("drapInActive");
         }
       });
-    //  this.resizeExpendHeight();
     },
     //获取分数
     getFoodScore(){
@@ -1260,7 +1309,6 @@ export default {
             }
           })
           index++;
-
         })
       })
       if(mealTypes.length>0){
@@ -1286,23 +1334,33 @@ export default {
               let intake = {};
               let data = [];
               intake.mealSelect = "推荐范围(" + resData.recipeCalDTOList.gl.mealSelect + "%)"
+
               that.intakeValue.forEach(_ => {
                 data.push({
                   name: _.name,
                   range: resData.recipeCalDTOList.gl.rang_min + "-" + resData.recipeCalDTOList[_.code].rang_max + "(" + resData.recipeCalDTOList[_.code].recomRangMin + "-" + resData.recipeCalDTOList[_.code].recomRangMax + ")",
-                  jl: resData.recipeCalDTOList[_.code].jl,
+                  jl: parseFloat(resData.recipeCalDTOList[_.code].jl).toFixed(2),
                   grade: resData.recipeCalDTOList[_.code].grade,
-                  point: resData.recipeCalDTOList[_.code].point
+                  point: resData.recipeCalDTOList[_.code].point,
+                  avg: resData.recipeCalDTOList[_.code].avg
                 })
               })
               intake.data = data;
+              intake.avg = "食谱净量(平均年龄"+data[0].avg+")"
               let nutrition = [];
+              debugger
               that.nutritionValue.forEach(_ => {
-                if(resData.nutritionCalDTOList[_.code].dris==0){
-                  nutrition.push({code:_.code,name:_.name,realIntake:resData.nutritionCalDTOList[_.code].realIntake,dris:(resData.nutritionCalDTOList[_.code].realIntake).toFixed(2),realPropor:resData.nutritionCalDTOList[_.code].realPropor,reqPropor:resData.nutritionCalDTOList[_.code].min+"-"+resData.nutritionCalDTOList[_.code].max,grade:resData.nutritionCalDTOList[_.code].grade,point:resData.nutritionCalDTOList[_.code].point})
-                }else{
-                  nutrition.push({code:_.code,name:_.name,realIntake:resData.nutritionCalDTOList[_.code].realIntake,dris:(resData.nutritionCalDTOList[_.code].realIntake/resData.nutritionCalDTOList[_.code].dris).toFixed(2),realPropor:resData.nutritionCalDTOList[_.code].realPropor,reqPropor:resData.nutritionCalDTOList[_.code].min+"-"+resData.nutritionCalDTOList[_.code].max,grade:resData.nutritionCalDTOList[_.code].grade,point:resData.nutritionCalDTOList[_.code].point})
-                }
+                  nutrition.push({code:_.code,
+                    name:_.name,
+                    bz:_.bz,
+                    min:_.min,
+                    max:_.max,
+                    realIntake:resData.nutritionCalDTOList[_.code].realIntake,
+                    dris:resData.nutritionCalDTOList[_.code].realPropor,
+                    dris2:resData.nutritionCalDTOList[_.code].dris,
+                    realPropor:resData.nutritionCalDTOList[_.code].realPropor,
+                    reqPropor:resData.nutritionCalDTOList[_.code].min+"-"+resData.nutritionCalDTOList[_.code].max,
+                    grade:resData.nutritionCalDTOList[_.code].grade,point:resData.nutritionCalDTOList[_.code].point})
               })
               //  debugger
 
@@ -1324,11 +1382,14 @@ export default {
                 sum += parseFloat(_.real)
               })
               protein.forEach(_ => {
-                _["realSum"] = sum
+                _["realSum"] = parseFloat(sum).toFixed(2)
                 _["req"] = ">=" + _.min
               })
               let meal = [];
               meal = resData.mealTypeCalDTOList
+              meal.forEach(_=>{
+                _["real"]=parseFloat(_["real"]).toFixed(2)
+              })
               that.$emit('childfn', Math.floor(that.getData(res.data.data) * 100) / 100, intake, nutrition, power, protein, meal);
             }
           }else{
@@ -1420,6 +1481,7 @@ export default {
 
     // 处理数据
     refreshData() {
+      debugger
       // 计算食物数量 主要用于合并单元格
       this.datas.forEach((item) => {
         item.weeks.forEach((week) => {
@@ -1431,17 +1493,14 @@ export default {
             }
           });
           if (week.foods != undefined) {
-
             week.foods.forEach((food) => {
-              debugger
+          //    debugger
               food.spans = count;
               food.children.forEach((c) => {
                 c.spans = count;
               });
             });
           }
-
-          console.log("week.foods",week.foods);
         });
       });
     },
@@ -1459,7 +1518,12 @@ export default {
     // 合并单元格
     onTableSpanMethod({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 2) {
-        return [row.spans, 1];
+   //     debugger
+        if(row.spans){
+          return [row.spans, 1];
+        }else{
+          return [1,1]
+        }
       }
     },
 
@@ -1501,8 +1565,7 @@ export default {
 
     // 移除
     onRemove(data_id, week_id, food_id,week_name) {
-
-     debugger
+     // debugger
       var foods;
       this.datas.forEach((data) => {
         if (data.id === data_id) {
@@ -1545,7 +1608,21 @@ export default {
         });
       }
     },
-
+    //图片上传成功
+    handleAvatarSuccess(data_id, week_id,res, file) {
+      // debugger
+      if (res && res.success) {
+        this.datas.forEach((data) => {
+          if (data.id === data_id) {
+            data.weeks.forEach((week) => {
+              if (week.id === week_id) {
+                week.image =res.data.link;
+              }
+            });
+          }
+        });
+      }
+    },
     /////////  methods end ///////////
   },
 };
@@ -1579,7 +1656,7 @@ export default {
   padding: 0 10px !important;
 }
 .drapInActive .el-table th {
-  background-color: red !important;
+  background-color: #dcdfe6 !important;
 }
 .colNoneBorder
 {

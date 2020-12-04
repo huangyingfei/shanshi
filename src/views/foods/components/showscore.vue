@@ -20,7 +20,7 @@
       </el-table-column>
       <el-table-column
         prop="jl"
-        label="食谱净量(平均年龄4.05)"
+        :label="intake.avg"
         width="180">
       </el-table-column>
       <el-table-column
@@ -42,7 +42,7 @@
         width="100">
       </el-table-column>
       <el-table-column
-        prop="dris"
+        prop="dris2"
         label="DRIs"
         width="100">
       </el-table-column>
@@ -52,11 +52,11 @@
       </el-table-column>
       <el-table-column
         prop="reqPropor"
-        label="要求比例">
+        label="要求比例(%)">
       </el-table-column>
       <el-table-column
         prop="realPropor"
-        label="实际比例">
+        label="实际比例(%)">
       </el-table-column>
       <el-table-column
         prop="grade"

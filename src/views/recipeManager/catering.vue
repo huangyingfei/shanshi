@@ -1,5 +1,5 @@
 <template>
-
+  <basic-container>
   <div class="meals">
     <div
       ref="layershipu"
@@ -97,13 +97,15 @@
               style="width: 300px"
             ></el-input>
           </el-form-item>
-          人群年龄
+          <el-form-item label="人群年龄">
+
           <el-input-number size="small" v-model="WeekInfo.startAge" controls-position="right" :min="1" :max="100"></el-input-number>
           -
           <el-input-number size="small" v-model="WeekInfo.endAge" controls-position="right"  :min="1" :max="100"></el-input-number>
           <el-button style="margin-left: 10px" size="medium"  @click="dishClear"
           >清空</el-button
           >
+          </el-form-item>
 
         </el-form>
       </el-col>
@@ -317,6 +319,7 @@
     </el-row>
 
   </div>
+  </basic-container>
 </template>
 
 <script>
@@ -647,8 +650,6 @@
             setTimeout(function () {
               that.insertDishesData("datas",recipeCycles,that);
             }, 1000);
-
-
           }})
       },
       //菜品数据导入
@@ -675,11 +676,8 @@
             }
             that.$set(__,"foods",foods);
           })
-
         })
-        if(datas!="showDatas"){
-          this.$refs.child.getFoodScore();
-        }
+        that.$refs.child.refreshData();
       },
       personMealhandleNodeClick(id,that){
         detail(id).then(res=>{
@@ -723,6 +721,7 @@
             for(let i=0;i<recipeCycles.length;i++){
 
               if(recipeCycles[i].mealsType+""==that.getmealTypeData(_.name)&&recipeCycles[i].week+""==__.name.slice(4)){
+                __.image=recipeCycles[i].pic
                 let recipeConncts=recipeCycles[i].recipeConncts;
 
                 for(let k=0;k<recipeConncts.length;k++){//菜品
@@ -744,10 +743,7 @@
           })
 
         })
-        if(datas!="showDatas"){
-          this.$refs.child.getFoodScore();
-        }
-
+        that.$refs.child.refreshData();
       },
       parentFn(score,intake,nutrition,power,protein,meal){
        // console.log(intake)
@@ -1019,6 +1015,10 @@
             that.drogNode = JSON.parse(JSON.stringify(node.data));
             ev.dataTransfer.setData("Text", JSON.stringify(node.data));
             that.drogNodeStats = true;
+            setTimeout(() => {
+              that.$refs.child.refreshData();
+              // that.$refs.child.resizeExpendHeight();
+            }, 1000);
           })
 
         }
@@ -1077,10 +1077,10 @@
                   value:___.count,
                   year:this.year,
                   month:__.week.date,
-                  childrens:children
+                  childrens:children,
+                  pic:__.image
                 })
               }
-
             })
           })
         })
@@ -1489,9 +1489,8 @@
 </script>
 
 <style scoped>
-  .meals{
-    height: auto;
-  }
+
+
   .meals .el-row {
     padding: 5px;
   }
@@ -1530,10 +1529,10 @@
     border-bottom-left-radius: 0px;
     margin-bottom: 1px;
   }
- .foodWeekListHis {
+  .meals .foodWeekListHis {
     padding: 0 0 0 10px;
    overflow-y: scroll;
-   height: 350px;
+   height: 280px;
   }
   .meals .foodWeekListHis li {
     list-style: none;
@@ -1717,7 +1716,7 @@
   margin-left: 5px;
   margin-top: 15px;
   overflow-y: scroll;
-  height: 350px;
+  height: 260px;
 }
 
 </style>

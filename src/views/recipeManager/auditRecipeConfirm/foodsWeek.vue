@@ -83,16 +83,30 @@
               <el-table-column label="图片" align="center">
                 <template slot-scope="scope1">
                   <div
-                    v-if="
+                    v-show="
                       scope1.$index === 0 &&
                       scope.row.weeks.find((p) => p.name == 'week1')
                     "
                     style="width: 100px; height: 100px; margin: 0 auto"
                   >
-                    <el-image 
-                      style="width: 100px; height: 100px"
-                      :src="scope1.row.url" >
-                    </el-image>
+                    <el-upload
+                      :multiple="false"
+                      :show-file-list="false"
+                      :action="dialog_choice.upload_url"
+                      :headers="token"
+                      :on-success="(res,file)=>{handleAvatarSuccess(scope.row.id,
+                          scope.row.weeks.find((p) => p.name == 'week1').id,res,file)}">
+                      <img
+                        v-show="scope.row.weeks.find((p) => p.name == 'week1').image" :src="scope.row.weeks.find((p) => p.name == 'week1').image"
+                        style="width: 100%; height: 100%"/>
+                      <img
+                        v-show="
+                          !scope.row.weeks.find((p) => p.name == 'week1').image
+                        "
+                        :src="empty_image"
+                        style="width: 100%; height: 100%"
+                      />
+                    </el-upload>
                   </div>
                 </template>
               </el-table-column>
@@ -183,11 +197,11 @@
                       scope.row.weeks.find((p) => p.name == 'week2')
                     "
                     style="width: 100px; height: 100px; margin: 0 auto">
-                    <el-image 
+                    <el-image
                       style="width: 100px; height: 100px"
                       :src="scope1.row.url" >
                     </el-image>
-                  
+
                   </div>
                 </template>
               </el-table-column>
@@ -850,7 +864,7 @@ export default {
         opened: false, // 是否显示
         data_id: "", // 主数据ID
         week_id: "", // 周几数据ID
-        upload_url: "", // 上传地址
+        upload_url: "/api/blade-resource/oss/endpoint/put-file", // 上传地址
       },
       mealTypeData:[
         {
@@ -1027,7 +1041,7 @@ export default {
             }
           })
           index++;
-    
+
         })
       })
       if(mealTypes.length>0){
@@ -1063,12 +1077,12 @@ export default {
               nutrition.push({code:_.code,name:_.name,dris:resData.nutritionCalDTOList[_.code].dris,realIntake:resData.nutritionCalDTOList[_.code].realIntake,realPropor:resData.nutritionCalDTOList[_.code].realPropor,reqPropor:resData.nutritionCalDTOList[_.code].min+"-"+resData.nutritionCalDTOList[_.code].max,grade:resData.nutritionCalDTOList[_.code].grade,point:resData.nutritionCalDTOList[_.code].point})
             })
           //  debugger
-    
+
             let power=[];
             that.powerValue.forEach(_=>{
               power.push({name:_.name,req:resData.powerCalDTOList[_.code].min+"-"+resData.powerCalDTOList[_.code].min,real:resData.powerCalDTOList[_.code].real,grade:resData.powerCalDTOList[_.code].grade,point:resData.powerCalDTOList[_.code].point})
             })
-    
+
             let protein=[];
             protein=resData.proteinCalDTOList;
             let sum=0;
@@ -1087,7 +1101,7 @@ export default {
       }else{
         that.$emit('childfn', 0);
       }
-    
+
     },
 
     //处理数据
@@ -1201,7 +1215,12 @@ export default {
     // 合并单元格
     onTableSpanMethod({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 2) {
-        return [row.spans, 1];
+        //     debugger
+        if(row.spans){
+          return [row.spans, 1];
+        }else{
+          return [1,1]
+        }
       }
     },
 
@@ -1275,12 +1294,27 @@ export default {
         });
       }
     },
+    //图片上传成功
+    handleAvatarSuccess(data_id, week_id,res, file) {
+      // debugger
+      if (res && res.success) {
+        this.datas.forEach((data) => {
+          if (data.id === data_id) {
+            data.weeks.forEach((week) => {
+              if (week.id === week_id) {
+                week.image =res.data.link;
+              }
+            });
+          }
+        });
+      }
+    },
 
     /////////  methods end ///////////
   },
 };
 </script>
-<style scoped>
+<style>
 .foods-table-week th {
   background: #f8fbfc !important;
 }
@@ -1309,7 +1343,7 @@ export default {
   padding: 0 10px !important;
 }
 .drapInActive .el-table th {
-  background-color: red !important;
+  background-color: #dcdfe6 !important;
 }
 
 </style>

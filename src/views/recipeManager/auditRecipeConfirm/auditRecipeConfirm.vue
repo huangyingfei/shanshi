@@ -782,12 +782,29 @@
       if(datas!="showDatas"){
         this.$refs.child.getFoodScore();
       }
-
+      that.$refs.child.refreshData();
     },
     parentFn(score,intake,nutrition,power,protein,meal){
       this.score=score;
       this.intake=intake;
       this.nutrition=nutrition
+      this.nutrition.forEach(_=>{
+        if(parseFloat(_.dris)<_.min){
+          _["red"]=true
+          _["orange"]=false
+          _["green"]=false
+        }
+        if(parseFloat(_.dris)>_.max){
+          _["orange"]=true
+          _["red"]=false
+          _["green"]=false
+        }
+        if(parseFloat(_.dris)>=_.min&&parseFloat(_.dris)<=_.max){
+          _["green"]=true
+          _["orange"]=false
+          _["red"]=false
+        }
+      })
       this.power=power
       this.protein=protein
       this.meal=meal
@@ -1600,7 +1617,7 @@
 .meals .el-row {
   padding: 5px;
 }
-.meals .el-drawer__open .el-drawer.rtl{
+.el-drawer__open .el-drawer.rtl{
   width: 50%!important;
   overflow-y: scroll;
 }
