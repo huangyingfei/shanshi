@@ -1617,7 +1617,7 @@
 .meals .el-row {
   padding: 5px;
 }
-.meals .el-drawer__open .el-drawer.rtl{
+.el-drawer__open .el-drawer.rtl{
   width: 50%!important;
   overflow-y: scroll;
 }

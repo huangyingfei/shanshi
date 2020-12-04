@@ -1489,9 +1489,8 @@
 </script>
 
 <style scoped>
-  .meals{
-    height: auto;
-  }
+
+
   .meals .el-row {
     padding: 5px;
   }
@@ -1530,10 +1529,10 @@
     border-bottom-left-radius: 0px;
     margin-bottom: 1px;
   }
- .foodWeekListHis {
+  .meals .foodWeekListHis {
     padding: 0 0 0 10px;
    overflow-y: scroll;
-   height: 350px;
+   height: 280px;
   }
   .meals .foodWeekListHis li {
     list-style: none;
@@ -1717,7 +1716,7 @@
   margin-left: 5px;
   margin-top: 15px;
   overflow-y: scroll;
-  height: 350px;
+  height: 260px;
 }
 
 </style>

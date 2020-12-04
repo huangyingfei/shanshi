@@ -440,7 +440,7 @@
           </div>
         <div class="scores2">
           <img class="picture" src="/img/fenshu.png" alt="" />
-          <p class="vertical">真棒</p>
+          <p class="vertical">{{scoreTitle}}</p>
         </div>
       </div>
 
@@ -528,7 +528,7 @@
           </div>
           <div class="scores2">
             <img class="picture" src="/img/fenshu.png" alt="" />
-            <p class="vertical">真棒</p>
+            <p class="vertical">{{scoreTitle}}</p>
           </div>
         </div>
 
@@ -661,6 +661,7 @@ document.oncontextmenu = function(){return false};
       dishSharePub:'',
       id:'',
       score:'0',
+      scoreTitle:'',
       intake:{},
       nutrition:[],
       power:[],
@@ -884,6 +885,20 @@ document.oncontextmenu = function(){return false};
     };
   },
   beforeMount() {},
+  watch:{
+    score(val){
+      debugger
+      if(parseFloat(val)==85){
+        this.scoreTitle="合格"
+      }
+      if(parseFloat(val)>85){
+        this.scoreTitle="真棒"
+      }
+      if(parseFloat(val)<85){
+        this.scoreTitle="加油"
+      }
+    }
+  },
   methods: {
     mealsTypeById(){
       var that=this;
@@ -958,7 +973,6 @@ document.oncontextmenu = function(){return false};
    },
     inserMeal(id,that){
       detail(id).then(res=>{
-        debugger
         if(res.data.success){
           let mealsType=[];
           let data=res.data.data;
@@ -996,7 +1010,6 @@ document.oncontextmenu = function(){return false};
                 let recipevals=recipeConncts[k].recipevals;  let children=[];
                 for(let j=0;j<recipevals.length;j++){//食材
                   let nutrientIds=[];
-                  debugger
                   let foodNutritionList=recipevals[j].foodNutritionList;
                   foodNutritionList.forEach(_=>{
                       this.nutritionValue.forEach(n=>{
@@ -2159,7 +2172,7 @@ document.oncontextmenu = function(){return false};
 .meals .foodWeekListHis {
   padding: 0 0 0 10px;
   overflow-y: scroll;
-  height: 450px;
+  height: 280px;
 }
 .meals .foodWeekListHis li {
   list-style: none;

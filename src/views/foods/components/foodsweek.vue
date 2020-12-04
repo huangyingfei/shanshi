@@ -1334,35 +1334,33 @@ export default {
               let intake = {};
               let data = [];
               intake.mealSelect = "推荐范围(" + resData.recipeCalDTOList.gl.mealSelect + "%)"
+
               that.intakeValue.forEach(_ => {
                 data.push({
                   name: _.name,
                   range: resData.recipeCalDTOList.gl.rang_min + "-" + resData.recipeCalDTOList[_.code].rang_max + "(" + resData.recipeCalDTOList[_.code].recomRangMin + "-" + resData.recipeCalDTOList[_.code].recomRangMax + ")",
                   jl: parseFloat(resData.recipeCalDTOList[_.code].jl).toFixed(2),
                   grade: resData.recipeCalDTOList[_.code].grade,
-                  point: resData.recipeCalDTOList[_.code].point
+                  point: resData.recipeCalDTOList[_.code].point,
+                  avg: resData.recipeCalDTOList[_.code].avg
                 })
               })
               intake.data = data;
+              intake.avg = "食谱净量(平均年龄"+data[0].avg+")"
               let nutrition = [];
               debugger
               that.nutritionValue.forEach(_ => {
-                if(resData.nutritionCalDTOList[_.code].dris==0){
-
                   nutrition.push({code:_.code,
                     name:_.name,
                     bz:_.bz,
                     min:_.min,
                     max:_.max,
                     realIntake:resData.nutritionCalDTOList[_.code].realIntake,
-                    dris:(resData.nutritionCalDTOList[_.code].realIntake).toFixed(2),
+                    dris:resData.nutritionCalDTOList[_.code].realPropor,
+                    dris2:resData.nutritionCalDTOList[_.code].dris,
                     realPropor:resData.nutritionCalDTOList[_.code].realPropor,
                     reqPropor:resData.nutritionCalDTOList[_.code].min+"-"+resData.nutritionCalDTOList[_.code].max,
                     grade:resData.nutritionCalDTOList[_.code].grade,point:resData.nutritionCalDTOList[_.code].point})
-                }else{
-                  nutrition.push({code:_.code,  min:_.min,
-                    max:_.max, bz:_.bz,name:_.name,realIntake:resData.nutritionCalDTOList[_.code].realIntake,dris:(resData.nutritionCalDTOList[_.code].realIntake/resData.nutritionCalDTOList[_.code].dris).toFixed(2),realPropor:resData.nutritionCalDTOList[_.code].realPropor,reqPropor:resData.nutritionCalDTOList[_.code].min+"-"+resData.nutritionCalDTOList[_.code].max,grade:resData.nutritionCalDTOList[_.code].grade,point:resData.nutritionCalDTOList[_.code].point})
-                }
               })
               //  debugger
 
