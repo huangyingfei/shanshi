@@ -866,6 +866,7 @@ export default {
       this.valuepark = [];
       this.officeonce = [];
       this.productImgs = [];
+      this.hideUploadEdit = this.productImgs.length >= 1;
       this.mailto.forEach(item => {
         console.log(item);
         item.children.forEach(item1 => {

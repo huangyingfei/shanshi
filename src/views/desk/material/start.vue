@@ -688,6 +688,7 @@ export default {
       this.active = [];
       this.valuepark = [];
       this.productImgs = [];
+      this.hideUploadEdit = this.productImgs.length >= 1;
       // this.valuepark.length = 0;
       this.ruleForm.desc = "";
       this.ruleForm.delivery = false;

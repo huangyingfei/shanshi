@@ -306,6 +306,9 @@
 
                 <el-form-item label="图片" style="width: 350px">
                   <el-upload
+                    :class="{ hide: hideUploadEdit }"
+                    :limit="1"
+                    accept=".jpeg,.jpg,.gif,.png"
                     action="api/blade-resource/oss/endpoint/put-file"
                     list-type="picture-card"
                     :file-list="productImgs"
@@ -769,7 +772,10 @@
 
                 <el-form-item label="图片" style="width: 350px">
                   <el-upload
+                    :class="{ hide: hideUploadEdit }"
+                    :limit="1"
                     :disabled="true"
+                    accept=".jpeg,.jpg,.gif,.png"
                     action="api/blade-resource/oss/endpoint/put-file"
                     list-type="picture-card"
                     :file-list="productImgs"
@@ -1040,6 +1046,7 @@ export default {
       imgLimit: 1, //文件个数
       productImgs: [],
       dialogVisible: false,
+      hideUploadEdit: false, // 是否隐藏上传按钮
       headerObj: {
         "Blade-Auth": ""
       }, //上传图片请求头
@@ -1354,6 +1361,7 @@ export default {
             };
           }
           this.productImgs = picture;
+          this.hideUploadEdit = this.productImgs.length >= 1;
           this.ruleForm.region = this.handler.function; //特点
           this.ruleForm.desc = this.handler.remark; //做法
           this.ruleForm.delivery1 = this.handler.isUse == 1 ? false : true; //常用
@@ -1597,6 +1605,7 @@ export default {
             };
           }
           this.productImgs = picture;
+          this.hideUploadEdit = this.productImgs.length >= 1;
           this.dialogImageUrl = this.handler.pic;
           this.ruleForm.delivery1 = this.handler.isUse == 1 ? false : true; //常用
           this.ruleForm.delivery = this.handler.isPub == 1 ? false : true; //公开
@@ -1852,17 +1861,17 @@ export default {
         });
     },
     //移除图片
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
+    handleRemove(file, productImgs) {
+      // console.log(file, fileList);
+      this.dialogImageUrl = "";
+      this.hideUploadEdit = productImgs.length >= 1;
     },
     handleChangePic(file, productImgs) {
-      console.log(file);
-      console.log(productImgs);
-      if (productImgs.length > 1) {
-        productImgs.splice(0, 1);
-        // this.productImgs = [productImgs[productImgs.length - 1].raw];
-        // console.log(1);
-      }
+      this.hideUploadEdit = productImgs.length >= 1;
+      // if (productImgs.length > 1) {
+      //   productImgs.splice(0, 1);
+
+      // }
     },
     //预览图片
     handlePictureCardPreview(file) {
@@ -1910,13 +1919,13 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 .avue-view {
   padding: 0 5px !important;
 }
 .toolbar {
   width: 100%;
-  height: 100%;
+
   background-color: #fff;
   position: relative;
   top: 0px;
@@ -2018,5 +2027,8 @@ export default {
   width: 100%;
   height: 300px;
   overflow-y: auto;
+}
+/deep/ .hide .el-upload--picture-card {
+  display: none;
 }
 </style>

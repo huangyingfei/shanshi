@@ -8,11 +8,19 @@
       label-width="110px"
       class="demo-ruleForm"
     >
-      <el-form-item label="标准名称" prop="name" style="width:700px;">
+      <el-form-item
+        label="标准名称"
+        prop="name"
+        style="width:700px;  margin-top: 10px;"
+      >
         <el-input v-model="ruleForm.name" style="width:500px;"></el-input>
       </el-form-item>
 
-      <el-form-item label="是否默认标准" prop="region">
+      <el-form-item
+        label="是否默认标准"
+        prop="region"
+        style="  margin-top: 10px;"
+      >
         <el-select v-model="ruleForm.region" placeholder="请选择">
           <el-option label="是" value="1"></el-option>
           <el-option label="否" value="0"></el-option>
@@ -28,6 +36,34 @@
         :key="i"
       >
         <div class="Protein">
+          <div class="accto" v-if="item.sexNum == 2">
+            <div class="titles">人群</div>
+            <div class="glyph">
+              <div class="startup">男性</div>
+              <div class="chart">上限</div>
+              <div class="Item">下限</div>
+            </div>
+            <div class="unset">
+              <div class="startup">女性</div>
+              <div class="chart">上限</div>
+              <div class="Item">下限</div>
+            </div>
+            <div class="rotate">
+              <div class="chart">上限系数</div>
+              <div class="Item">下限系数</div>
+            </div>
+          </div>
+          <div class="actor" v-if="item.sexNum == 1">
+            <div class="effects">人群</div>
+            <div class="kendo">
+              <div class="chart">上限</div>
+              <div class="Item">下限</div>
+            </div>
+            <div class="directory">
+              <div class="chart">上限系数</div>
+              <div class="Item">下限系数</div>
+            </div>
+          </div>
           <el-tabs v-model="activeName2" type="card">
             <el-tab-pane
               :name="button.name"
@@ -100,38 +136,11 @@
               </ul>
             </el-tab-pane>
           </el-tabs>
-          <div class="accto" v-if="item.sexNum == 2">
-            <div class="titles">人群</div>
-            <div class="glyph">
-              <div class="startup">男性</div>
-              <div class="chart">上限</div>
-              <div class="Item">下限</div>
-            </div>
-            <div class="unset">
-              <div class="startup">女性</div>
-              <div class="chart">上限</div>
-              <div class="Item">下限</div>
-            </div>
-            <div class="rotate">
-              <div class="chart">上限系数</div>
-              <div class="Item">下限系数</div>
-            </div>
-          </div>
-          <div class="actor" v-if="item.sexNum == 1">
-            <div class="effects">人群</div>
-            <div class="kendo">
-              <div class="chart">上限</div>
-              <div class="Item">下限</div>
-            </div>
-            <div class="directory">
-              <div class="chart">上限系数</div>
-              <div class="Item">下限系数</div>
-            </div>
-          </div>
-          <ul v-if="item.nutritionVos.length == 0">
+
+          <ul v-if="item.nutritionVos.length == 0" class="electric">
             <li v-for="(nvo, index) in item.nutritionCoeffientVos" :key="index">
               <div class="nialing">{{ nvo.name }}</div>
-              <div v-if="item.sexNum == 2" style="display: inline-block;">
+              <div v-if="item.sexNum == 2" style="display: inline-block; ">
                 <el-input
                   v-model="nvo.manMax"
                   placeholder="请输入内容"
@@ -191,8 +200,12 @@
       </el-tab-pane>
     </el-tabs>
     <div class="Aconfirm">
-      <el-button type="primary" @click="Determines('ruleForm')">保存</el-button>
-      <el-button type="success" @click="Atom">編輯保存</el-button>
+      <el-button type="primary" v-if="window" @click="Determines('ruleForm')"
+        >保存</el-button
+      >
+      <el-button type="success" v-else @click="Atom('ruleForm')"
+        >編輯保存</el-button
+      >
     </div>
   </div>
 </template>
@@ -220,13 +233,16 @@ export default {
       },
       newProtein: [], //标签页，
       newclicked: [],
-      metadata: ""
+      metadata: "",
+      borderid: ""
     };
   },
   beforeMount() {},
   mounted() {
     console.log(this.$route.query.userid);
     this.borderid = this.$route.query.userid.id;
+    console.log(this.borderid);
+
     // this.editor=this.$route.query.userid;
     // console.log(this.editor);
     // this.ruleForm.name=this.editor.name;
@@ -252,7 +268,7 @@ export default {
     handleClick(tab, event) {},
 
     confirm() {
-      if (this.ruleForm.name == "") {
+      if (this.$route.query.userid == undefined) {
         this.window = true; //更新
       } else {
         this.window = false;
@@ -278,55 +294,66 @@ export default {
         });
     },
     //編輯保存
-    Atom() {
-      this.newProtein.name = this.ruleForm.name;
-      this.newProtein.isDef = this.ruleForm.region;
+    Atom(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.newProtein.name = this.ruleForm.name;
+          this.newProtein.isDef = this.ruleForm.region;
 
-      this.$axios
-        .post(`api/blade-food/nutritionsetting/updateNutAndCoef`, {
-          isDef: this.ruleForm.region == "是" ? 1 : 0,
-          name: this.ruleForm.name,
-          id: this.borderid,
-          nutritionVos: this.newProtein.nutritionVos
-        })
-        .then(res => {
-          console.log(res);
+          this.$axios
+            .post(`api/blade-food/nutritionsetting/updateNutAndCoef`, {
+              isDef: this.ruleForm.region == "是" ? 1 : 0,
+              name: this.ruleForm.name,
+              id: this.borderid,
+              nutritionVos: this.newProtein.nutritionVos
+            })
+            .then(res => {
+              console.log(res);
+              this.$message({
+                message: "編輯成功",
+                type: "success"
+              });
+            })
+            .catch(() => {
+              this.$message.error("編輯失败");
+            });
+        } else {
           this.$message({
-            message: "編輯成功",
-            type: "success"
+            message: "信息未填全",
+            type: "warning"
           });
-        })
-        .catch(() => {
-          this.$message.error("編輯失败");
-        });
+          return false;
+        }
+      });
     },
     //提交
     Determines(formName) {
-      console.log(123);
-      console.log(formName);
-      // this.$refs[formName].validate(valid => {
-      //   if (valid) {
-      //     alert("submit!");
-      //   } else {
-      //     return false;
-      //   }
-      // });
-      this.$axios
-        .post(`api/blade-food/nutritionsetting/saveNutAndCoef`, {
-          isDef: this.ruleForm.region,
-          name: this.ruleForm.name,
-          nutritionVos: this.newProtein.nutritionVos
-        })
-        .then(res => {
-          console.log(res);
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.$axios
+            .post(`api/blade-food/nutritionsetting/saveNutAndCoef`, {
+              isDef: this.ruleForm.region,
+              name: this.ruleForm.name,
+              nutritionVos: this.newProtein.nutritionVos
+            })
+            .then(res => {
+              console.log(res);
+              this.$message({
+                message: "保存成功",
+                type: "success"
+              });
+            })
+            .catch(() => {
+              this.$message.error("保存失败");
+            });
+        } else {
           this.$message({
-            message: "保存成功",
-            type: "success"
+            message: "信息未填全",
+            type: "warning"
           });
-        })
-        .catch(() => {
-          this.$message.error("保存失败");
-        });
+          return false;
+        }
+      });
     }
   }
 };
@@ -338,7 +365,7 @@ export default {
 }
 .Additiona {
   width: 100%;
-  height: 100%;
+
   background-color: #fff;
 }
 .current {
@@ -439,7 +466,7 @@ export default {
 .module {
   width: 100%;
   height: 40px;
-  background-color: red;
+
   color: #b4bbc5;
   text-align: center;
   line-height: 40px;
@@ -455,8 +482,15 @@ export default {
 .Aconfirm {
   width: 100%;
   margin-top: 20px;
+  position: fixed;
+  background-color: #fff;
+  bottom: 5px;
   text-align: center;
-  margin-bottom: 50px;
+}
+.Protein {
+  width: 100%;
+  margin-bottom: 80px;
+  background-color: #fff;
 }
 .nstant {
   width: 100%;
@@ -489,10 +523,13 @@ export default {
 .accto {
   width: 1100px;
   height: 70px;
-
+  position: relative;
+  top: 5px;
   margin-left: 50px;
+
   color: #b4bbc5;
   font-size: 14px;
+  z-index: 999;
 }
 .titles {
   width: 80px;
@@ -555,7 +592,8 @@ export default {
 .actor {
   width: 742px;
   height: 50px;
-
+  position: relative;
+  top: 5px;
   margin-left: 50px;
   color: #b4bbc5;
   font-size: 14px;

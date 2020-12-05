@@ -76,7 +76,7 @@
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="createTime"
+          prop="recipeDay"
           label="食谱周期"
           align="center"
         ></el-table-column>
@@ -113,6 +113,19 @@
           </template>
         </el-table-column>
       </el-table>
+      <!-- 分页 -->
+      <div class="pagingClass">
+        <el-pagination
+          :page-sizes="m_page.sizes"
+          :page-size="m_page.size"
+          :current-page="m_page.number"
+          @size-change="m_handleSizeChange"
+          @current-change="m_handlePageChange"
+          layout="total,sizes,prev, pager, next"
+          background
+          :total="m_page.totalElements"
+        ></el-pagination>
+      </div>
       <el-dialog
         title="食材"
         append-to-body
@@ -132,7 +145,7 @@
           <el-col :span="8">创建人：{{ dialogListData.createName }}</el-col>
           <el-col :span="8">创建时间：{{ dialogListData.createTime }}</el-col>
         </el-row>
-        <toolbar :routerData="transmitData" ref="toolbar"></toolbar>
+        <toolbar ref="toolbar"></toolbar>
       </el-dialog>
     </div>
   </div>
@@ -160,6 +173,13 @@ export default {
         submit: "", //提交人
         getDate: "" //提交日期
       },
+      m_page: {
+        sizes: [10, 20, 40, 50, 100], //每页最大显示数
+        size: 10,
+        totalElements: 0,
+        totalPages: 3,
+        number: 1
+      },
       recipeTableData: [], //弹窗
       dialogListData: {
         recipeName: "",
@@ -173,7 +193,7 @@ export default {
       dirname: [
         //审核状态
         {
-          value: "0",
+          value: "",
           label: "全部"
         },
         {
@@ -185,14 +205,15 @@ export default {
           label: "审核不通过"
         },
         {
-          value: "3",
-          label: "待审批"
+          value: "0",
+          label: "待审核"
         },
         {
-          value: "4",
+          value: "3",
           label: "已取消"
         }
-      ]
+      ],
+      timezone: ""
     };
   },
   beforeMount() {
@@ -209,7 +230,7 @@ export default {
       this.dialogListData = row;
       let term = row.id;
       this.dateTime = true;
-      
+
       this.$refs.toolbar.overview(term);
     },
     //清空
@@ -218,20 +239,33 @@ export default {
       this.wupload.block = ""; //审核状态
       this.wupload.submit = ""; //提交人
       this.wupload.getDate = ""; //选择日期
+      this.timezone = "";
+      this.getforms();
     },
     //搜索
     searchStr() {
       // this.dateTime = true;
+      if (this.wupload.getDate) {
+        this.timezone = this.wupload.getDate;
+      } else {
+        this.timezone = "";
+      }
+      this.getforms();
     },
     //获取表格数据
     getforms() {
+      // &status=${this.wupload.block}
       this.loadFlag = true;
       this.$axios
-        .get(`api/blade-food/recipe/openRecipeList?size=10&current=1`, {})
+        .get(
+          `api/blade-food/recipe/openRecipeList?size=${this.m_page.size}&current=${this.m_page.number}&recipeName=${this.wupload.input}&status=${this.wupload.block}&orgName=${this.wupload.submit}$createTimeStr=${this.timezone}`,
+          {}
+        )
         .then(res => {
           // console.log(res);
           this.loadFlag = false;
           this.modeforms = res.data.data.records;
+          this.m_page.totalElements = res.data.data.total;
           console.log(this.modeforms);
         });
     }
@@ -263,5 +297,13 @@ export default {
 .bootstrap {
   width: 100%;
   height: 100%;
+}
+.pagingClass {
+  text-align: right;
+  /* margin: 20px 0; */
+  background-color: #fff;
+  margin-top: 0px;
+  margin-right: 0px;
+  margin-bottom: 60px;
 }
 </style>

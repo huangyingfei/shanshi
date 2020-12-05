@@ -3,8 +3,8 @@
     <!-- <div>食材不宜同食</div> -->
     <!-- 搜索 -->
     <div class="update">
-      名称:
-      <el-input v-model="input" placeholder="请输入内容"></el-input>
+      <!-- 名称:
+      <el-input v-model="input" placeholder="请输入内容"></el-input> -->
       <span class="exact">食材名称:</span>
 
       <el-input v-model="temps" placeholder="请输入内容"></el-input>
@@ -49,12 +49,12 @@
       >
         <el-table-column label="序号" type="index" width="50" align="center">
         </el-table-column>
-        <el-table-column
+        <!-- <el-table-column
           prop="name"
           label="名称"
           width="160"
           align="center"
-        ></el-table-column>
+        ></el-table-column> -->
         <el-table-column
           prop="foodName"
           label="食材一"
@@ -75,8 +75,8 @@
         ></el-table-column>
         <el-table-column label="是否有效" width="120" align="center">
           <template slot-scope="scope">
-            <p class="stop" v-if="scope.row.isActive == 0">是</p>
-            <p style="color:#409eff" v-else-if="scope.row.isActive == 1">
+            <p class="stop" v-if="scope.row.isActive == 1">是</p>
+            <p style="color:#409eff" v-else-if="scope.row.isActive == 0">
               否
             </p>
           </template>
@@ -133,9 +133,9 @@
         label-width="100px"
         class="demo-ruleForm"
       >
-        <el-form-item label="名称" prop="name">
+        <!-- <el-form-item label="名称" prop="name">
           <el-input v-model="ruleForm.name"></el-input>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="食材一" prop="adding">
           <el-input
             readonly
@@ -154,10 +154,12 @@
           <el-input type="textarea" v-model="ruleForm.desc"></el-input>
         </el-form-item>
         <el-form-item label="是否有效">
-          <el-radio-group v-model="ruleForm.resource">
+          <el-radio v-model="radio" label="1">是</el-radio>
+          <el-radio v-model="radio" label="0">否</el-radio>
+          <!-- <el-radio-group v-model="ruleForm.resource">
             <el-radio label="是"></el-radio>
             <el-radio label="否"></el-radio>
-          </el-radio-group>
+          </el-radio-group> -->
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -266,8 +268,9 @@ export default {
         desc: "",
         resource: ""
       },
+      radio: "1", //是否有效
       rules: {
-        name: [{ required: true, message: "请输入名称", trigger: "blur" }],
+        // name: [{ required: true, message: "请输入名称", trigger: "blur" }],
         adding: [{ required: true, message: "请选择食材", trigger: "change" }],
         adding1: [{ required: true, message: "请选择食材", trigger: "change" }]
       },
@@ -359,7 +362,9 @@ export default {
       this.ruleForm.adding = row.foodName;
       this.ruleForm.adding1 = row.foodName1;
       this.ruleForm.desc = row.reason;
-      this.ruleForm.resource = row.isActive == 0 ? "是" : "否";
+      // this.ruleForm.resource = row.isActive == 0 ? "是" : "否";
+      this.radio = row.isActive + "";
+      // console.log(this.radio);
 
       this.support = row.foodId; //食材一ID
       this.editor = row.foodId1; //食材二ID
@@ -378,7 +383,8 @@ export default {
               foodId: this.support, //食材1
               foodId1: this.editor, //食材2
               reason: this.ruleForm.desc, //不宜同事原因
-              isActive: this.ruleForm.resource == "是" ? 0 : 1 //是否
+              // isActive: this.ruleForm.resource == "是" ? 0 : 1 //是否
+              isActive: this.radio
             })
             .then(res => {
               console.log(res);
@@ -412,7 +418,8 @@ export default {
               foodId: this.support, //食材1
               foodId1: this.editor, //食材2
               reason: this.ruleForm.desc, //不宜同事原因
-              isActive: this.ruleForm.resource == "是" ? 0 : 1 //是否
+              // isActive: this.ruleForm.resource == "是" ? 0 : 1 //是否
+              isActive: this.radio
             })
             .then(res => {
               console.log(res);
@@ -441,6 +448,7 @@ export default {
       this.dataindex1 = index1;
       // console.log(this.dataindex1);
       // console.log(123123);
+      this.treeDrawing();
       this.addEffect = true;
     },
     addShard(index1) {
@@ -450,7 +458,8 @@ export default {
       this.ruleForm.adding = "";
       this.ruleForm.adding1 = "";
       this.ruleForm.desc = "";
-      this.ruleForm.resource = "";
+      this.radio = "1";
+      // this.ruleForm.resource = "";
       this.dateTime = true;
     },
 

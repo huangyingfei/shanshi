@@ -1,72 +1,70 @@
 <template>
-  <div>
-    <div class="nutrition">
-      <div class>
-        <el-button
-          icon="el-icon-circle-plus-outline"
-          type="primary"
-          size="medium"
-          @click="added(1)"
-          style="  margin: 30px;"
-          >新增</el-button
-        >
-      </div>
-      <div class="facts">
-        <el-table
-          :data="retorne"
-          border
-          v-loading="loadFlag"
-          :element-loading-text="page_data.loadTxt"
-          style="width: 100%;"
-          empty-text="没有数据~"
-        >
-          <!-- <el-table-column prop="date" label="序号" width="160" align="center"></el-table-column> -->
-          <el-table-column
-            prop="name"
-            label="标准名称"
-            align="center"
-          ></el-table-column>
-          <el-table-column prop="isDef" label="是否默认标准" align="center">
-            <template slot-scope="props">{{
-              props.row.isDef == 1 ? "是" : "否"
-            }}</template>
-          </el-table-column>
+  <div class="nutrition">
+    <div class>
+      <el-button
+        icon="el-icon-circle-plus-outline"
+        type="primary"
+        size="medium"
+        @click="added(1)"
+        style="  margin: 30px;"
+        >新增</el-button
+      >
+    </div>
+    <div class="facts">
+      <el-table
+        :data="retorne"
+        border
+        v-loading="loadFlag"
+        :element-loading-text="page_data.loadTxt"
+        style="width: 100%;"
+        empty-text="没有数据~"
+      >
+        <!-- <el-table-column prop="date" label="序号" width="160" align="center"></el-table-column> -->
+        <el-table-column
+          prop="name"
+          label="标准名称"
+          align="center"
+        ></el-table-column>
+        <el-table-column prop="isDef" label="是否默认标准" align="center">
+          <template slot-scope="props">{{
+            props.row.isDef == 1 ? "是" : "否"
+          }}</template>
+        </el-table-column>
 
-          <!--操作格-->
-          <el-table-column label="操作" align="center">
-            <template slot-scope="scope">
-              <el-button
-                type="text"
-                size="small"
-                icon="el-icon-edit"
-                style=" margin-left: 20px;"
-                @click="Editor(scope.row)"
-                >编辑</el-button
-              >
-              <el-button
-                type="text"
-                size="small"
-                icon="el-icon-delete"
-                style=" margin-left: 20px;"
-                @click="DeleteUser(scope.row)"
-                >删除</el-button
-              >
-            </template>
-          </el-table-column>
-        </el-table>
-        <!-- 分页 -->
-        <div class="pagingClass">
-          <el-pagination
-            :page-sizes="m_page.sizes"
-            :page-size="m_page.size"
-            :current-page="m_page.number"
-            @size-change="m_handleSizeChange"
-            @current-change="m_handlePageChange"
-            layout="total,sizes,prev, pager, next"
-            background
-            :total="m_page.totalElements"
-          ></el-pagination>
-        </div>
+        <!--操作格-->
+        <el-table-column label="操作" align="center">
+          <template slot-scope="scope">
+            <el-button
+              type="text"
+              size="small"
+              icon="el-icon-edit"
+              style=" margin-left: 20px;"
+              @click="Editor(scope.row)"
+              >编辑</el-button
+            >
+            <el-button
+              type="text"
+              size="small"
+              icon="el-icon-delete"
+              style=" margin-left: 20px;"
+              @click="DeleteUser(scope.row)"
+              >删除</el-button
+            >
+          </template>
+        </el-table-column>
+      </el-table>
+      <!-- 分页 -->
+      <div class="pagingClass">
+        <el-pagination
+          :page-sizes="m_page.sizes"
+          :page-size="m_page.size"
+          :current-page="m_page.number"
+          @size-change="m_handleSizeChange"
+          @current-change="m_handlePageChange"
+          layout="total,sizes,prev, pager, next"
+          background
+          :total="m_page.totalElements"
+        ></el-pagination>
       </div>
     </div>
   </div>
@@ -174,17 +172,10 @@ export default {
 };
 </script>
 <style scoped>
-.avue-view {
-  padding: 0 5px !important;
-}
 .nutrition {
   width: 100%;
-  height: 100%;
+
   font-size: 14px;
-  position: relative;
-  top: 0px;
-  left: 0px;
-  bottom: 9px;
   background-color: #fff;
 }
 .pagingClass {
