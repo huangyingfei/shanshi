@@ -1161,7 +1161,6 @@ export default {
             intake.data=data;
             intake.avg = "食谱净量(平均年龄"+data[0].avg+")"
             let nutrition = [];
-            debugger
             that.nutritionValue.forEach(_ => {
               nutrition.push({code:_.code,
                 name:_.name,

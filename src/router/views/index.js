@@ -171,7 +171,7 @@ export default [
     component: Layout,
     children: [
       {
-        path: "auditRecipeConfirm",
+        path: "auditRecipeConfirm/auditRecipeConfirm",
         name: "确认审核",
         component: () =>
           import(/* webpackChunkName: "views" */  "@/views/recipeManager/auditRecipeConfirm/auditRecipeConfirm")
