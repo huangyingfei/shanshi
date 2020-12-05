@@ -172,6 +172,7 @@
 <script>
   import {getList, getDetail, add, update, remove,changeInfo} from "@/api/food/recipe";
   import {mapGetters} from "vuex";
+  import { formateDate} from "@/api/tool/date";
 
   export default {
     data() {
@@ -343,12 +344,13 @@
             {
               label: "创建时间",
               prop: "createTime",
-              type:'datetime',
+              type:'date',
               width: 140,
               // span: 24,
               minRows: 6,
               search: true,
               searchRange:true,
+              display: false,
             },
           ]
         },
@@ -610,10 +612,15 @@
       },
       onLoad(page, params = {}) {
         this.loading = true;
-        params=
-          {
-            searchType:0
-          }
+
+        params.searchType=0
+        if(params.createTime){
+          params.createTimeStr=formateDate(params.createTime[0], "yyyy-MM-dd HH:mm:ss")
+          params.createTimeStrEnd=formateDate(params.createTime[1], "yyyy-MM-dd HH:mm:ss")
+          delete params.createTime
+        }
+         console.log(params);          
+
         getList(page.currentPage, page.pageSize, Object.assign(params, this.query)).then(res => {
           const data = res.data.data;
           this.page.total = data.total;
