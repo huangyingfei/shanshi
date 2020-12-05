@@ -168,9 +168,329 @@
       <el-dialog
         style="margin-top: 10px!important;"
         title="审核食材"
-        width="90%"
+        width=" 80%"
         append-to-body
         :visible.sync="seekeys"
+        :close-on-click-modal="false"
+      >
+        <div class="levelName">
+          <div class="update1">
+            <div class="seecr">
+              <span style="color: #cccccc">创建机构：</span>
+              {{ this.dsquery.establish }}
+            </div>
+            <div class="seecr1">
+              <span style="color: #cccccc">提交人：</span>
+              {{ this.dsquery.submit }}
+            </div>
+            <div class="seecr1">
+              <span style="color: #cccccc">联系电话：</span>
+              {{ this.dsquery.phone }}
+            </div>
+            <div class="seecr">
+              <span style="color: #cccccc">提交时间：</span>
+              {{ this.dsquery.time }}
+            </div>
+            <div class="hash">
+              <span style="color: #cccccc">审核状态：</span>
+              <span class="stop" v-if="this.dsquery.examineto == 0"
+                >待审核</span
+              >
+              <span v-else-if="this.dsquery.examineto == 3">无需审核</span>
+              <span v-else-if="this.dsquery.examineto == 1">审核通过</span>
+              <span v-else-if="this.dsquery.examineto == 2">审核不通过</span>
+            </div>
+          </div>
+          <div class="stored">
+            <div class="mationtxt">食材主要信息</div>
+            <div class="unsigned">
+              <el-form
+                :model="ruleForm"
+                :rules="rules"
+                :inline="true"
+                ref="ruleForm"
+                label-width="100px"
+                class="demo-ruleForm"
+              >
+                <el-form-item label="食材名" prop="name" style="width: 350px">
+                  <el-input v-model="ruleForm.name"></el-input>
+                </el-form-item>
+                <el-form-item label="食物别名1" style="width: 350px">
+                  <el-input v-model="ruleForm.move"></el-input>
+                </el-form-item>
+                <el-form-item label="食物别名2" style="width: 350px">
+                  <el-input v-model="ruleForm.move1"></el-input>
+                </el-form-item>
+
+                <el-form-item
+                  label="食材真名"
+                  prop="buffer"
+                  style="width: 350px"
+                >
+                  <el-input v-model="ruleForm.buffer"></el-input>
+                </el-form-item>
+
+                <el-form-item
+                  label="食材分类"
+                  prop="autosave"
+                  style="width: 350px"
+                >
+                  <el-select
+                    disabled
+                    style="width: 185px"
+                    v-model="ruleForm.fooddata"
+                    placeholder="请选择"
+                  >
+                    <el-option
+                      v-for="item in foodPos"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    >
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+
+                <el-form-item label="食物分类1" style="width: 350px">
+                  <el-input
+                    v-model="ruleForm.foods"
+                    placeholder="请输入食材"
+                  ></el-input>
+                </el-form-item>
+
+                <el-form-item label="食物分类2" style="width: 350px">
+                  <el-input
+                    v-model="ruleForm.dogfood"
+                    placeholder="请输入食材"
+                  ></el-input>
+                </el-form-item>
+
+                <el-form-item
+                  label="食部(%)"
+                  prop="besaved"
+                  style="width: 350px"
+                >
+                  <el-input
+                    type="number"
+                    v-model="ruleForm.besaved"
+                    placeholder="请输入食部"
+                  ></el-input>
+                </el-form-item>
+
+                <el-form-item
+                  label="重量（g）"
+                  prop="timers"
+                  style="width: 350px"
+                >
+                  <el-input
+                    type="number"
+                    v-model="ruleForm.timers"
+                    placeholder="请输入重量"
+                  ></el-input>
+                </el-form-item>
+
+                <el-form-item label="水分(%)" style="width: 350px">
+                  <el-input
+                    type="number"
+                    v-model="ruleForm.content"
+                    placeholder="请输入水分"
+                  ></el-input>
+                </el-form-item>
+
+                <el-form-item label="色系" style="width: 605px">
+                  <el-radio-group v-model="ruleForm.resource">
+                    <el-radio label="1">绿</el-radio>
+                    <el-radio label="2">红</el-radio>
+                    <el-radio label="3">黄</el-radio>
+                    <el-radio label="4">紫</el-radio>
+                    <el-radio label="5">白</el-radio>
+                    <el-radio label="6">黑</el-radio>
+                  </el-radio-group>
+                </el-form-item>
+
+                <el-form-item label="所属季节" style="width: 350px">
+                  <el-select
+                    style="width: 185px"
+                    v-model="active"
+                    multiple
+                    placeholder="请选择季节"
+                  >
+                    <el-option
+                      v-for="item in season"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    >
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="所属区域" style="width: 350px">
+                  <el-cascader
+                    style="width: 185px"
+                    v-model="valuepark"
+                    placeholder="请选择省市区"
+                    :options="options"
+                    :props="{ multiple: true, checkStrictly: true }"
+                    @change="handleChange"
+                  ></el-cascader>
+                </el-form-item>
+
+                <el-form-item label="功用">
+                  <el-input
+                    style="width: 185px"
+                    type="textarea"
+                    v-model="ruleForm.desc"
+                    placeholder="请输入"
+                  ></el-input>
+                </el-form-item>
+
+                <el-form-item label="图片" style="width: 500px">
+                  <el-upload
+                    :class="{ hide: hideUploadEdit }"
+                    accept=".jpeg,.jpg,.gif,.png"
+                    action="api/blade-resource/oss/endpoint/put-file"
+                    list-type="picture-card"
+                    :file-list="productImgs"
+                    :on-change="handleChangePic"
+                    :on-preview="handlePictureCardPreview"
+                    :before-upload="beforeAvatarUpload"
+                    :on-success="handleAvatarSuccess"
+                    :on-remove="handleRemove"
+                    :headers="headerObj"
+                  >
+                    <!-- <img v-if="dialogImageUrl" :src="dialogImageUrl" class="avatar" /> -->
+                    <i class="el-icon-plus"></i>
+                  </el-upload>
+                  <span style="color: #e0e0e0; font-size: 11px"
+                    >上传图片不能超过2M 只能是JPG PNG格式</span
+                  >
+                  <el-dialog append-to-body :visible.sync="dialogVisible">
+                    <img width="100%" :src="dialogImageUrl" alt />
+                  </el-dialog>
+                </el-form-item>
+
+                <el-switch
+                  :disabled="true"
+                  style="width: 200px"
+                  v-model="ruleForm.delivery"
+                  active-text="公开"
+                  inactive-text="不公开"
+                >
+                </el-switch>
+                <!-- <el-form-item label="公开" style=" width:200px ">
+            <el-switch v-model="ruleForm.delivery"></el-switch>
+          </el-form-item> -->
+
+                <!-- <el-form-item label="常用" style="   ">
+            <el-switch v-model="ruleForm.delivery1"></el-switch>
+          </el-form-item> -->
+                <el-switch
+                  v-model="ruleForm.delivery1"
+                  active-text="常用"
+                  inactive-text="不常用"
+                >
+                </el-switch>
+              </el-form>
+            </div>
+            <!-- 营养素标题 -->
+            <div class="worm1">
+              营养素含量（这里为100克食部食品中的营养素含量）
+            </div>
+            <div class="saveas">
+              <el-table
+                :data="mailto"
+                style="width: 60%; margin-bottom: 20px"
+                max-height="400"
+                row-key="id"
+                :default-expand-all="true"
+                :tree-props="{
+                  children: 'children',
+                  hasChildren: 'hasChildren'
+                }"
+              >
+                <el-table-column
+                  prop="title"
+                  label="营养素"
+                  align="center"
+                  width="200"
+                ></el-table-column>
+                <el-table-column
+                  prop="unit"
+                  label="单位"
+                  width="180"
+                  align="center"
+                ></el-table-column>
+
+                <el-table-column label="含量" align="center">
+                  <template slot-scope="scope">
+                    <el-input
+                      v-model="scope.row.result"
+                      type="number"
+                      v-if="scope.row.level != 1 ? true : false"
+                      placeholder="请输入内容"
+                    ></el-input>
+                  </template>
+                  <!-- v-if="scope.row.dients" -->
+                </el-table-column>
+              </el-table>
+            </div>
+            <!-- 公共库所分类 -->
+            <div class="worm1">公共库所属分类</div>
+            <el-form
+              :model="ruleForm"
+              :rules="rules"
+              ref="ruleForm"
+              label-width="100px"
+              class="demo-ruleForm"
+            >
+              <el-form-item label="公共库分类">
+                <el-select v-model="menu" placeholder="请选择">
+                  <el-option
+                    v-for="item in fication"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-form>
+          </div>
+        </div>
+        <div slot="footer" class="dialog-footer" style="text-align: center">
+          <el-button type="primary" @click="seekeys = false">取 消</el-button>
+          <el-button type="primary" @click="restore(examine)"> 拒 绝</el-button>
+          <el-button type="primary" @click="Disagree('ruleForm')"
+            >同 意</el-button
+          >
+        </div>
+      </el-dialog>
+      <el-dialog
+        title="拒绝理由"
+        width="30%"
+        append-to-body
+        :visible.sync="increase"
+        :close-on-click-modal="false"
+      >
+        <el-input
+          type="textarea"
+          placeholder="请输入内容"
+          v-model="examine.desc1"
+          maxlength="30"
+          show-word-limit
+        >
+        </el-input>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="increase = false">取 消</el-button>
+          <el-button @click="palette" type="primary">确 定</el-button>
+        </div>
+      </el-dialog>
+      <!-- 查看弹框 -->
+      <el-dialog
+        title="查看"
+        width=" 80%"
+        append-to-body
+        :visible.sync="loadnew"
         :close-on-click-modal="false"
       >
         <div class="levelName">
@@ -370,6 +690,9 @@
 
                 <el-form-item label="图片" style="width: 500px">
                   <el-upload
+                    :class="{ hide: hideUploadEdit }"
+                    :disabled="true"
+                    :limit="1"
                     action="api/blade-resource/oss/endpoint/put-file"
                     list-type="picture-card"
                     :file-list="productImgs"
@@ -422,6 +745,7 @@
             <div class="saveas">
               <el-table
                 :data="mailto"
+                max-height="400"
                 style="width: 60%; margin-bottom: 20px"
                 row-key="id"
                 :default-expand-all="true"
@@ -446,115 +770,20 @@
                 <el-table-column label="含量" align="center">
                   <template slot-scope="scope">
                     <el-input
+                      :disabled="true"
                       v-model="scope.row.result"
                       type="number"
                       v-if="scope.row.level != 1 ? true : false"
                       placeholder="请输入内容"
                     ></el-input>
                   </template>
-                  <!-- v-if="scope.row.dients" -->
                 </el-table-column>
               </el-table>
             </div>
-            <!-- 公共库所分类 -->
-            <div v-if="this.according == 1" class="worm1">公共库所属分类</div>
-            <el-form
-              :model="ruleForm"
-              :rules="rules"
-              ref="ruleForm"
-              label-width="100px"
-              class="demo-ruleForm"
-            >
-              <el-form-item v-if="this.according == 1" label="公共库分类">
-                <el-select
-                  v-if="this.according == 1"
-                  v-model="menu"
-                  placeholder="请选择"
-                >
-                  <el-option
-                    v-for="item in fication"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  >
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-form>
-            <!-- <div class="worm1" v-if="this.according == 1">拒绝原因</div>
-      <el-form
-        :model="examine"
-        ref="examine"
-        :rules="rules"
-        label-width="100px"
-        class="demo-ruleForm"
-      >
-        <el-form-item
-          v-if="this.according == 1"
-          label="拒绝原因"
-          style=" width:200px "
-          prop="desc1"
-        >
-          <el-input
-            style=" width: 450px;  "
-            type="textarea"
-            v-model="examine.desc1"
-          ></el-input>
-        </el-form-item>
-      </el-form> -->
-            <!-- <div class="worm1">记录</div> -->
-            <!-- <el-timeline>
-              <el-timeline-item timestamp="2018/4/12" placement="top">
-          <el-card>
-            <h4>刚好让你更好机构</h4>
-            <p>王小虎 提交于 2018/4/12 20:46</p>
-          </el-card>
-        </el-timeline-item>
-
-        <el-timeline-item timestamp="2018/4/3" placement="top">
-          <el-card>
-            <h4>刚好让你更好机构</h4>
-            <p>王小虎 提交于 2018/4/12 20:46</p>
-          </el-card>
-        </el-timeline-item>
-            </el-timeline> -->
           </div>
         </div>
         <div slot="footer" class="dialog-footer" style="text-align: center">
-          <el-button type="primary" @click="seekeys = false">取 消</el-button>
-          <el-button
-            type="primary"
-            @click="restore(examine)"
-            v-if="this.according == 1"
-          >
-            拒 绝</el-button
-          >
-          <el-button
-            type="primary"
-            @click="Disagree('ruleForm')"
-            v-if="this.according == 1"
-            >同 意</el-button
-          >
-        </div>
-      </el-dialog>
-      <el-dialog
-        title="拒绝理由"
-        width="30%"
-        append-to-body
-        :visible.sync="increase"
-        :close-on-click-modal="false"
-      >
-        <el-input
-          type="textarea"
-          placeholder="请输入内容"
-          v-model="examine.desc1"
-          maxlength="30"
-          show-word-limit
-        >
-        </el-input>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="increase = false">取 消</el-button>
-          <el-button @click="palette" type="primary">确 定</el-button>
+          <el-button type="primary" @click="loadnew = false">取 消</el-button>
         </div>
       </el-dialog>
     </div>
@@ -578,6 +807,7 @@ export default {
       imgLimit: 1, //文件个数
       productImgs: [],
       dialogVisible: false,
+      hideUploadEdit: false, // 是否隐藏上传按钮
       headerObj: {
         "Blade-Auth": ""
       }, //上传图片请求头
@@ -596,6 +826,7 @@ export default {
         number: 1
       },
       seekeys: false, //审核弹框
+      loadnew: false, //查看弹框
       value1: "", //日期
       input: "",
       input1: "",
@@ -778,7 +1009,7 @@ export default {
       this.examine.desc1 = "";
       // this.valuepark.length = 0;
       this.active = [];
-      this.seekeys = true;
+      this.loadnew = true;
       let design = `?id=${row.id}`;
       this.$axios
         .get(`api/blade-food/food/detail` + design, {
@@ -832,6 +1063,7 @@ export default {
             };
           }
           this.productImgs = picture;
+          this.hideUploadEdit = this.productImgs.length >= 1;
           this.ruleForm.desc = this.subquery.function; //功用
 
           this.ruleForm.delivery = this.subquery.isPub == 0 ? true : false; //公开
@@ -1149,6 +1381,7 @@ export default {
             };
           }
           this.productImgs = picture;
+          this.hideUploadEdit = this.productImgs.length >= 1;
           this.dialogImageUrl = this.subquery.pic;
           this.ruleForm.delivery = this.subquery.isPub == 0 ? true : false; //公开
           // console.log(this.ruleForm.delivery);
@@ -1274,18 +1507,19 @@ export default {
     },
 
     //移除图片
-    handleRemove(file, fileList) {
+    handleRemove(file, productImgs) {
       console.log(file, fileList);
       this.dialogImageUrl = "";
+      this.hideUploadEdit = productImgs.length >= 1;
     },
     handleChangePic(file, productImgs) {
-      console.log(file);
-      console.log(productImgs);
-      if (productImgs.length > 1) {
-        productImgs.splice(0, 1);
-        // this.productImgs = [productImgs[productImgs.length - 1].raw];
-        // console.log(1);
-      }
+      // console.log(file);
+      // console.log(productImgs);
+      this.hideUploadEdit = productImgs.length >= 1;
+      // if (productImgs.length > 1) {
+      //   productImgs.splice(0, 1);
+
+      // }
     },
     //预览图片
     handlePictureCardPreview(file) {
@@ -1326,7 +1560,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .avue-view {
   padding: 0 5px !important;
 }
@@ -1339,7 +1573,7 @@ export default {
   box-sizing: border-box;
 } */
 .levelName {
-  height: 100%;
+  width: 1115px;
   height: 380px;
   overflow-y: auto;
   overflow-x: hidden;
@@ -1399,6 +1633,7 @@ export default {
   width: 300px;
   height: 30px;
   line-height: 30px;
+  margin-left: 19px;
   color: #419df7;
 }
 .stored {
@@ -1443,9 +1678,13 @@ export default {
   margin-right: 0px;
   margin-bottom: 60px;
 }
+
+/deep/ .hide .el-upload--picture-card {
+  display: none;
+}
 .saveas {
   height: 400px;
   /* background-color: red; */
-  overflow-y: auto;
+  /* overflow-y: auto; */
 }
 </style>

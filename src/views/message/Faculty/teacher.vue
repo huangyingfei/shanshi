@@ -162,15 +162,6 @@
               >
 
 
-              <el-popover
-                placement="right"
-                width="300"
-                trigger="click">
-                <nutrient-with-color :nutrition="nutrition"  :WeekTtitle="WeekInfo.WeekTtitle" :titleFlag="true"></nutrient-with-color>
-                <el-button  slot="reference" style="margin-left: 10px" size="medium"
-                >营养素</el-button
-                >
-              </el-popover>
 
 
               <el-button style="margin-left: 10px" size="medium"

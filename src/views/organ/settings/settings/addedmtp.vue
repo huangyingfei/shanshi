@@ -1,6 +1,6 @@
 <template>
  <basic-container>
-  
+
     <el-form
       :model="ruleForm"
       :rules="rules"
@@ -12,7 +12,16 @@
       <el-form-item disabled label="标准名称" prop="name" style="width:700px;">
         <el-input v-model="ruleForm.name" disabled style="width:500px;"></el-input>
       </el-form-item>
-   
+
+      <el-select v-model="nsValue" placeholder="请选择" style="margin-right: 20px">
+        <el-option
+          v-for="item in  nsOptions"
+          :key="item.id"
+          :label="item.name"
+          :value="item.id">
+        </el-option>
+      </el-select>
+      <el-button type="primary" @click="upNId">确 认</el-button>
     </el-form>
     <!-- 标签页 -->
     <div class="el-contain">
@@ -40,7 +49,7 @@
         <td>上限</td>
         <td></td>
         <td>下限</td>
-       
+
         <td>上限系数</td>
         <td></td>
         <td>下限系数</td>
@@ -92,14 +101,19 @@
 </template>
 
 <script>
+  import {
+    getNutritionList,upNId
+  } from "@/api/system/organ";
 export default {
   data() {
     return {
       activeName: "", //标签页
       ruleForm: {
         name: "",
-      
+
       },
+      nsValue:'',
+      nsOptions:[],
       rules: {
         name: [{ required: true, message: "请输入标准名称", trigger: "blur" }],
         region: [
@@ -114,13 +128,35 @@ export default {
   },
   beforeMount() {},
   mounted() {
-
+    getNutritionList().then((res) => {
+      this.nsOptions=res.data.data;
+    });
   },
   created() {
     this.onLoad();
 
   },
   methods: {
+    upNId(){
+      if(!this.nsValue){
+        this.$message({
+          type: "info",
+          message: "不可为空!",
+        });
+      }else{
+        upNId(this.nsValue).then(res=>{
+          if(res.data.success){
+            this.$message({
+              type: "success",
+              message: "操作成功!",
+            });
+          }
+          this.onLoad();
+        })
+      }
+
+
+    },
     onLoad() {
       //样式渲染
       this.$axios
@@ -132,8 +168,8 @@ export default {
         .then((res) => {
           this.newProtein = res.data.data;
           this.ruleForm.name=this.newProtein.name;
-          
-      
+
+
           this.nutritionVos = this.newProtein.nutritionVos;
           this.fathNutritionVos=this.nutritionVos[0];
           this.tableData=this.nutritionVos[0].nutritionCoeffientVos;
