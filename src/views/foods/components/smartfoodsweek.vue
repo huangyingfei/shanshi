@@ -62,15 +62,21 @@
                       v-if="!scope1.row.children"
                       type="text"
                       size="mini"
+                      @change="foodChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week1').id
+                          )"
                       placeholder="请输入内容"
                     ></el-input>
                     <el-input
                       style="flex: 1"
                       v-model="scope1.row.count"
                       v-if="scope1.row.children"
-                      disabled
                       type="text"
                       size="mini"
+                      @change="dishChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week1').id)"
                       placeholder="请输入内容"
                     ></el-input>
                     <span class="arrow-up"  v-if="scope1.row.up"><img src="/img/arrowup.png" width="20px" height="20px"/>
@@ -210,16 +216,23 @@
                       v-if="!scope1.row.children"
                       type="text"
                       size="mini"
-                      placeholder="请输入内容"
+                      placeholder="请输入内容" @change="foodChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week2').id
+                          )"
+
                     ></el-input>
                     <el-input
                       style="flex: 1"
                       v-model="scope1.row.count"
                       v-if="scope1.row.children"
-                      disabled
                       type="text"
                       size="mini"
                       placeholder="请输入内容"
+                      @change="dishChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week2').id
+                          )"
                     ></el-input>
                     <span class="arrow-up"  v-if="scope1.row.up"><img src="/img/arrowup.png" width="20px" height="20px"/>
                       <span>{{scope1.row.up}}%</span>
@@ -348,15 +361,22 @@
                       type="text"
                       size="mini"
                       placeholder="请输入内容"
+                      @change="foodChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week3').id
+                          )"
                     ></el-input>
                     <el-input
                       style="flex: 1"
                       v-model="scope1.row.count"
                       v-if="scope1.row.children"
-                      disabled
                       type="text"
                       size="mini"
                       placeholder="请输入内容"
+                      @change="dishChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week3').id
+                          )"
                     ></el-input>
                     <span class="arrow-up"  v-if="scope1.row.up"><img src="/img/arrowup.png" width="20px" height="20px"/>
                       <span>{{scope1.row.up}}%</span>
@@ -482,15 +502,22 @@
                       v-if="!scope1.row.children"
                       type="text"
                       size="mini"
+                      @change="foodChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week4').id
+                          )"
                       placeholder="请输入内容"
                     ></el-input>
                     <el-input
                       style="flex: 1"
                       v-model="scope1.row.count"
                       v-if="scope1.row.children"
-                      disabled
                       type="text"
                       size="mini"
+                      @change="dishChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week4').id
+                          )"
                       placeholder="请输入内容"
                     ></el-input>
                     <span class="arrow-up"  v-if="scope1.row.up"><img src="/img/arrowup.png" width="20px" height="20px"/>
@@ -617,15 +644,22 @@
                       v-if="!scope1.row.children"
                       type="text"
                       size="mini"
+                      @change="foodChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week5').id
+                          )"
                       placeholder="请输入内容"
                     ></el-input>
                     <el-input
                       style="flex: 1"
                       v-model="scope1.row.count"
                       v-if="scope1.row.children"
-                      disabled
                       type="text"
                       size="mini"
+                      @change="dishChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week5').id
+                          )"
                       placeholder="请输入内容"
                     ></el-input>
                     <span class="arrow-up"  v-if="scope1.row.up"><img src="/img/arrowup.png" width="20px" height="20px"/>
@@ -753,14 +787,21 @@
                       type="text"
                       size="mini"
                       placeholder="请输入内容"
+                      @change="foodChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week6').id
+                          )"
                     ></el-input>
                     <el-input
                       style="flex: 1"
                       v-model="scope1.row.count"
                       v-if="scope1.row.children"
-                      disabled
                       type="text"
                       size="mini"
+                      @change="dishChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week6').id
+                          )"
                       placeholder="请输入内容"
                     ></el-input>
                     <span class="arrow-up"  v-if="scope1.row.up"><img src="/img/arrowup.png" width="20px" height="20px"/>
@@ -888,15 +929,22 @@
                       type="text"
                       size="mini"
                       placeholder="请输入内容"
+                      @change="foodChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week7').id
+                          )"
                     ></el-input>
                     <el-input
                       style="flex: 1"
                       v-model="scope1.row.count"
                       v-if="scope1.row.children"
-                      disabled
                       type="text"
                       size="mini"
                       placeholder="请输入内容"
+                      @change="dishChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week7').id
+                          )"
                     ></el-input>
                     <span class="arrow-up"  v-if="scope1.row.up"><img src="/img/arrowup.png" width="20px" height="20px"/>
                       <span>{{scope1.row.up}}%</span>
@@ -1005,7 +1053,7 @@
         default: 800,
       },
       crowd:'',
-
+      peipScore:'',
       dragnode: {},
       nutritionValue:[
       ],
@@ -1086,35 +1134,36 @@
             name:"晚点",
             value:"6"
           }
-        ]
+        ],
+        peippcScore:'0',
       };
     },
     // 计算属性computed,计算的是Name依赖的值,它不能计算在data中已经定义过的变量。
     computed: {},
     // 当属性的值发生变化时，就会调用对应属性的方法，方法里面的形参对应的是属性的新值和旧值
     watch: {
-      'smartDatas':{
-        handler(data){
-          data.forEach(item=>{
-            if(!item.flag){
-              item.weeks.forEach(_=>{
-                _.foods.forEach(__=>{
-                  let count=0;
-                  __.children.forEach(___=>{
-                    count+= parseFloat(___.count?___.count:0)
-                  })
-                  this.$set(__,"count",count);
-                })
-              })
-            }
-          })
-          this.smartDatas.forEach(item=> {
-            this.$set(item, "flag", false);
-          })
-          this.getFoodScoreSmart();
-        },
-        deep:true,
-      }
+      // 'smartDatas':{
+      //   handler(data){
+      //     data.forEach(item=>{
+      //       if(!item.flag){
+      //         item.weeks.forEach(_=>{
+      //           _.foods.forEach(__=>{
+      //             let count=0;
+      //             __.children.forEach(___=>{
+      //               count+= parseFloat(___.count?___.count:0)
+      //             })
+      //             this.$set(__,"count",count);
+      //           })
+      //         })
+      //       }
+      //     })
+      //     this.smartDatas.forEach(item=> {
+      //       this.$set(item, "flag", false);
+      //     })
+      //     this.getFoodScoreSmart();
+      //   },
+      //   deep:true,
+      // }
     },
     // 组件第一次加载
     mounted() {
@@ -1141,13 +1190,9 @@
                   tpnode.style.height=pnode.offsetHeight+"px";
                 }
               }
-
             }
-
-
           }
         },50);
-
       },
       oncontextmenuFood(e, data_id, week_id, food_id) {
         if (e.button === 2) {
@@ -1175,7 +1220,6 @@
           }
         });
       },
-
       expandchange(a, b) {
         this.resizeExpendHeight();
       },
@@ -1291,16 +1335,18 @@
               intake.data=data;
               let nutrition=[];
             debugger
-              that.nutritionValue.forEach(_=>{
-                if(resData.nutritionCalDTOList[_.code].dris==0){
-                  nutrition.push({ bz:_.bz,
-                    min:_.min,
-                    max:_.max,code:_.code,name:_.name,realIntake:resData.nutritionCalDTOList[_.code].realIntake,dris:(resData.nutritionCalDTOList[_.code].realIntake).toFixed(2),realPropor:resData.nutritionCalDTOList[_.code].realPropor,reqPropor:resData.nutritionCalDTOList[_.code].min+"-"+resData.nutritionCalDTOList[_.code].max,grade:resData.nutritionCalDTOList[_.code].grade,point:resData.nutritionCalDTOList[_.code].point})
-                }else{
-                  nutrition.push({ bz:_.bz,
-                    min:_.min,
-                    max:_.max,code:_.code,name:_.name,realIntake:resData.nutritionCalDTOList[_.code].realIntake,dris:(resData.nutritionCalDTOList[_.code].realIntake/resData.nutritionCalDTOList[_.code].dris).toFixed(2),realPropor:resData.nutritionCalDTOList[_.code].realPropor,reqPropor:resData.nutritionCalDTOList[_.code].min+"-"+resData.nutritionCalDTOList[_.code].max,grade:resData.nutritionCalDTOList[_.code].grade,point:resData.nutritionCalDTOList[_.code].point})
-                }
+              that.nutritionValue.forEach(_ => {
+                nutrition.push({code:_.code,
+                  name:_.name,
+                  bz:_.bz,
+                  min:_.min,
+                  max:_.max,
+                  realIntake:resData.nutritionCalDTOList[_.code].realIntake,
+                  dris:resData.nutritionCalDTOList[_.code].realPropor,
+                  dris2:resData.nutritionCalDTOList[_.code].dris,
+                  realPropor:resData.nutritionCalDTOList[_.code].realPropor,
+                  reqPropor:resData.nutritionCalDTOList[_.code].min+"-"+resData.nutritionCalDTOList[_.code].max,
+                  grade:resData.nutritionCalDTOList[_.code].grade,point:resData.nutritionCalDTOList[_.code].point})
               })
               console.log(nutrition)
 
@@ -1320,11 +1366,12 @@
               })
               let meal=[];
               meal=resData.mealTypeCalDTOList
-              that.$emit('childfn', Math.floor(that.getData(res.data.data) * 100) / 100,intake,nutrition,power,protein,meal);
+              that.peippcScore=that.peipScore;
+              that.$emit('childfn', Math.floor(that.getData(res.data.data) * 100) / 100,"smartDatas",that.peippcScore,intake,nutrition,power,protein,meal,);
             }
           })
         }else{
-          that.$emit('childfn', 0);
+          that.$emit('childfn', 0,"smartDatas",that.peippcScore);
         }
 
       },
@@ -1479,6 +1526,48 @@
         });
       },
 
+      //食材数量改变
+      foodChange(data_id, week_id){
+        this.smartDatas.forEach((data) => {
+          if (data.id === data_id) {
+            data.weeks.forEach((week) => {
+              if (week.id === week_id) {
+                week.foods.forEach(food=>{
+                  let count = 0;
+                  food.children.forEach(___ => {
+                    count += parseFloat(___.count ? ___.count : 0)
+                  })
+                  this.$set(food, "count", count);
+                })
+              }
+            });
+          }
+        });
+        this.getFoodScoreSmart();
+      },
+//菜品数量改变
+      dishChange(data_id, week_id){
+        this.smartDatas.forEach((data) => {
+          if (data.id === data_id) {
+            data.weeks.forEach((week) => {
+              if (week.id === week_id) {
+                week.foods.forEach(food=>{
+                  let count = 0;
+                  food.children.forEach(___ => {
+                    count += parseFloat(___.count ? ___.count : 0)
+                  })
+                  if(parseFloat(count)!=parseFloat(food.count)){
+                    food.children.forEach(___ => {
+                      this.$set(___,"count",((parseFloat(food.count)/parseFloat(count))*___.count).toFixed(2))
+                    })
+                  }
+                })
+              }
+            });
+          }
+        });
+        this.getFoodScoreSmart();
+      },
       // // 移除
       // onRemove(data_id, week_id, food_id) {
       //   this.datas.forEach((data) => {

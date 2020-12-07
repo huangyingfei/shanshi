@@ -429,7 +429,7 @@
         WeekInfo: {
           startAge:undefined,
           endAge:undefined,
-          shareTell:false,
+          isRecommend:false,
           isUse:false,
           isPub:false,
           weekType: "5", //周期类型
@@ -703,7 +703,7 @@
             that.WeekInfo.Weekdetails=data.recipeName;
             that.WeekInfo.startAge=data.startAge;
             that.WeekInfo.endAge=data.endAge;
-            that.WeekInfo.shareTell=data.isBoard=="1"?true:false
+            that.WeekInfo.isRecommend=data.isRecommend=="1"?true:false
             that.WeekInfo.isUse=data.isUse==1?true:false;
             that.WeekInfo.isPub=data.isPub==0?true:false
             setTimeout(function () {
@@ -1095,7 +1095,7 @@
           recipeCategory:1,
           startTime:this.startTime,
           endTime:this.endTime,
-          isBoard:this.WeekInfo.shareTell?1:0
+          isRecommend:this.WeekInfo.isRecommend?1:0
         }
         if(row.recipeName&&row.recipeCycles.length>0&&row.startTime&&!flag&&this.WeekInfo.startAge&&this.WeekInfo.endAge) {
           if (this.id) {

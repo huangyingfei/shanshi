@@ -33,7 +33,6 @@
       };
     },
     mounted(){
-      debugger
     },
     created() {
       this.onLoad();

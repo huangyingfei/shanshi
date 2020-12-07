@@ -24,6 +24,7 @@
         :datas="showDatas"
         days="5"
         :title="title"
+
       >
       </showfoods-week>
     </div>
@@ -135,27 +136,9 @@
 
 
           </el-form-item>
+
           <el-form-item>
-            <el-popover
-              placement="right"
-              width="300"
-              trigger="click">
-              <div v-show="foodMutuals.length>0"  v-for="(item,index) in foodMutuals" > <p>{{index+1}}、{{item.msg}}</p></div>
-              <div v-show="foodMutuals.length==0" > <p>无相克食材</p></div>
-              <el-button  slot="reference" style="margin-left: 10px" size="medium"
-              >不宜同食</el-button>
-            </el-popover>
 
-            <el-button style="margin-left: 10px" size="medium"  @click="allergy()"
-            >过敏</el-button>
-
-
-
-            <el-button style="margin-left: 10px" size="medium"  @click="dishClear"
-            >清空</el-button
-            >
-          </el-form-item>
-          <el-form-item>
 
 
             <el-switch
@@ -183,24 +166,43 @@
               @click="wrapscan"
               style="margin-left: 10px"
               size="medium"
-              type="success"
+              type="primary"
               >智能配平</el-button
             >
             <el-button
               @click="buttonend"
               style="margin-left: 10px"
               size="medium"
-              type="success"
+              type="primary"
             >保存食谱</el-button
             >
-            <el-button style="margin-left: 10px" size="medium"
-              >自动设置油盐糖</el-button
+            <!--<el-button style="margin-left: 10px" size="medium"-->
+              <!--&gt;自动设置油盐糖</el-button-->
+            <!--&gt;-->
+
+            <!--<el-button style="margin-left: 10px" size="medium"-->
+              <!--&gt;自动清除油盐糖</el-button-->
+            <!--&gt;-->
+            <el-button style="margin-left: 10px" size="medium"  @click="dishClear"
+            >清空</el-button
             >
 
-            <el-button style="margin-left: 10px" size="medium"
-              >自动清除油盐糖</el-button
-            >
+            <el-button style="margin-left: 10px" size="medium"  @click="allergy()"
+            >过敏</el-button>
 
+
+            <el-popover
+              placement="right"
+              width="300"
+              trigger="click">
+              <div v-if="foodMutuals.length==0" > <p>无相克食材</p></div>
+              <div v-if="foodMutuals.length>0"  v-for="(item,index) in foodMutuals" > <p>{{index+1}}、{{item.msg}}</p></div>
+              <el-button  slot="reference" style="margin-left: 10px" size="medium"  v-if="foodMutuals.length==0"
+              > 不宜同食</el-button>
+              <!--<button  slot="reference" > 不宜同食</button>-->
+              <el-button  slot="reference" style="margin-left: 10px" size="medium"  v-if="foodMutuals.length>0"
+              > 不宜同食</el-button>
+            </el-popover>
 
             <el-popover
               placement="right"
@@ -208,14 +210,17 @@
               trigger="click">
               <nutrient-with-color :nutrition="nutrition"  :WeekTtitle="WeekInfo.WeekTtitle" :titleFlag="true"></nutrient-with-color>
               <el-button  slot="reference" style="margin-left: 10px" size="medium"
-              >营养素</el-button
+              ><img src="/img/baobiao.png" width="10px" /> 营养素</el-button
               >
             </el-popover>
 
 
             <el-button style="margin-left: 10px" size="medium"
-              >带量食谱</el-button
+            ><img src="/img/baobiao.png" width="10px" /> 带量食谱</el-button
             >
+
+
+
           </el-form-item>
         </el-form>
       </el-col>
@@ -422,6 +427,7 @@
             :headers="headers"
             :datas="datas"
             days="5"
+            :score="score"
             :crowd="WeekInfo.crowd"
             :dragnode="drogNode"
              ref="child"
@@ -433,17 +439,38 @@
 
     </el-row>
     <div class="scores" @click="tfractio">
-      <div class="scores1">
+      <div v-if="parseFloat(score)>=85" class="scores1">
         <div class="scores3">
         <p class="gnus">{{score}}</p>
         <p class="scorefor">分</p>
           </div>
         <div class="scores2">
-          <img class="picture" src="/img/fenshu.png" alt="" />
-          <p class="vertical">{{scoreTitle}}</p>
+          <div class="scores2-item"><img class="picture" src="/img/fenshu.png" alt="" />
+          <p class="vertical">{{scoreTitle}}</p></div>
+         <p v-show="parseFloat(scxjSc)!=0&&parseFloat(scxjSc)<0" class="scores2-item2">
+           <img src="/img/arrowdown.png" width="20px" height="20px"/><span style="height: 20px;line-height: 20px;margin-top: 0px">{{scxjSc}}</span>
+         </p>
+          <p v-show="parseFloat(scxjSc)!=0&&parseFloat(scxjSc)>0" class="scores2-item2">
+            <img src="/img/arrowup.png" width="20px" height="20px"/><span style="height: 20px;line-height: 20px;margin-top: 0px">{{scxjSc}}</span>
+          </p>
         </div>
       </div>
-
+      <div v-if="parseFloat(score)<85"  class="scores1-1">
+        <div class="scores3">
+          <p class="gnus">{{score}}</p>
+          <p class="scorefor">分</p>
+        </div>
+        <div class="scores2">
+          <div class="scores2-item"><img class="picture" src="/img/fenshu2.png" alt="" />
+            <p class="vertical" style="color: #d94d00;">{{scoreTitle}}</p></div>
+          <p v-show="parseFloat(scxjSc)!=0&&parseFloat(scxjSc)<0"   class="scores2-item2">
+            <img src="/img/arrowdown.png" width="20px" height="20px"/><span style="height: 20px;line-height: 20px;margin-top: 0px">{{scxjSc}}</span>
+          </p>
+          <p v-show="parseFloat(scxjSc)!=0&&parseFloat(scxjSc)>0" class="scores2-item2">
+            <img src="/img/arrowup.png" width="20px" height="20px"/><span style="height: 20px;line-height: 20px;margin-top: 0px">{{scxjSc}}</span>
+          </p>
+        </div>
+      </div>
     </div>
     <!-- 分数弹框 -->
     <el-drawer
@@ -517,18 +544,51 @@
                        :crowd="WeekInfo.crowd"
                        :dragnode="drogNode"
                             :nutritionValue="nutritionValue"
+                            :peipScore="peipScore"
                        ref="child2" > </smartfoods-week>
       </div>
 
       <div class="scores">
-        <div class="scores1">
+        <!--<div class="scores1">-->
+          <!--<div class="scores3">-->
+            <!--<p class="gnus">{{peipScore}}</p>-->
+            <!--<p class="scorefor">分</p>-->
+          <!--</div>-->
+          <!--<div class="scores2">-->
+            <!--<img class="picture" src="/img/fenshu.png" alt="" />-->
+            <!--<p class="vertical">{{scoreTitle}}</p>-->
+          <!--</div>-->
+        <!--</div>-->
+        <div v-if="parseFloat(peipScore)>=85" class="scores1">
           <div class="scores3">
-            <p class="gnus">{{score}}</p>
+            <p class="gnus">{{peipScore}}</p>
             <p class="scorefor">分</p>
           </div>
           <div class="scores2">
-            <img class="picture" src="/img/fenshu.png" alt="" />
-            <p class="vertical">{{scoreTitle}}</p>
+            <div class="scores2-item"><img class="picture" src="/img/fenshu.png" alt="" />
+              <p class="vertical">{{scoreTitle}}</p></div>
+            <p v-show="parseFloat(ppscxjSc)!=0&&parseFloat(ppscxjSc)<0" class="scores2-item2">
+              <img src="/img/arrowdown.png" width="20px" height="20px"/><span style="height: 20px;line-height: 20px;margin-top: 0px">{{ppscxjSc}}</span>
+            </p>
+            <p v-show="parseFloat(ppscxjSc)!=0&&parseFloat(ppscxjSc)>0" class="scores2-item2">
+              <img src="/img/arrowup.png" width="20px" height="20px"/><span style="height: 20px;line-height: 20px;margin-top: 0px">{{ppscxjSc}}</span>
+            </p>
+          </div>
+        </div>
+        <div v-if="parseFloat(peipScore)<85"  class="scores1-1">
+          <div class="scores3">
+            <p class="gnus">{{peipScore}}</p>
+            <p class="scorefor">分</p>
+          </div>
+          <div class="scores2">
+            <div class="scores2-item"><img class="picture" src="/img/fenshu2.png" alt="" />
+              <p class="vertical" style="color: #d94d00;">{{scoreTitle}}</p></div>
+            <p v-show="parseFloat(ppscxjSc)!=0&&parseFloat(ppscxjSc)<0"   class="scores2-item2">
+              <img src="/img/arrowdown.png" width="20px" height="20px"/><span style="height: 20px;line-height: 20px;margin-top: 0px">{{ppscxjSc}}</span>
+            </p>
+            <p v-show="parseFloat(ppscxjSc)!=0&&parseFloat(ppscxjSc)>0" class="scores2-item2">
+              <img src="/img/arrowup.png" width="20px" height="20px"/><span style="height: 20px;line-height: 20px;margin-top: 0px">{{ppscxjSc}}</span>
+            </p>
           </div>
         </div>
 
@@ -609,14 +669,12 @@
     document.body.ondrop = function (event) {
       event.preventDefault();
       event.stopPropagation();
-
     };
 document.oncontextmenu = function(){return false};
 
 
   },
   data() {
-
     const data = [];
     return {
       tableData: [],
@@ -627,7 +685,6 @@ document.oncontextmenu = function(){return false};
       seasonl:undefined,
       belongRegionOption:[],
       seasonlOptions:[
-
         {
           label:'春',
           value:'1'
@@ -661,7 +718,12 @@ document.oncontextmenu = function(){return false};
       dishSharePub:'',
       id:'',
       score:'0',
-      scoreTitle:'',
+      pcScore:'0',//配餐保存的分数
+      peipScore:'0',//配平分数
+      peippcScore:'0',//配平保存的分数
+      scoreTitle:'加油',
+      scxjSc:'0',//配餐上升下降分数
+      ppscxjSc:'0',//配平上升下降分数
       intake:{},
       nutrition:[],
       power:[],
@@ -836,7 +898,7 @@ document.oncontextmenu = function(){return false};
       node:{
         nowCode:'101',
         nowValue:'',
-        exceptValue:'',
+        exceptValue:undefined,
       },
       mealListLeft:[
         // {name:"周一食谱",id:"1"},
@@ -885,9 +947,9 @@ document.oncontextmenu = function(){return false};
     };
   },
   beforeMount() {},
+
   watch:{
     score(val){
-      debugger
       if(parseFloat(val)==85){
         this.scoreTitle="合格"
       }
@@ -897,7 +959,12 @@ document.oncontextmenu = function(){return false};
       if(parseFloat(val)<85){
         this.scoreTitle="加油"
       }
-    }
+      // debugger
+
+    },
+    // pcScore(val){
+    //   this.scxjSc=(parseFloat(this.score)-parseFloat(this.pcScore)).toFixed(2)
+    // }
   },
   methods: {
     mealsTypeById(){
@@ -1108,8 +1175,18 @@ document.oncontextmenu = function(){return false};
       })
       that.$refs.child.refreshData();
     },
-    parentFn(score,intake,nutrition,power,protein,meal){
-      this.score=score;
+    parentFn(score,type,pscore,intake,nutrition,power,protein,meal){
+      if(type=="smartDatas"){
+        this.peipScore=score;
+        this.peippcScore=pscore
+        debugger
+        this.ppscxjSc=(parseFloat(this.peipScore)-parseFloat(this.peippcScore)).toFixed(2)
+      }
+      if(type=="datas"){
+        debugger
+        this.score=score;this.pcScore=pscore
+        this.scxjSc=(parseFloat(this.score)-parseFloat(this.pcScore)).toFixed(2)
+      }
       if(score!=0){
         this.intake=intake;
         this.nutrition=nutrition
@@ -1376,6 +1453,7 @@ document.oncontextmenu = function(){return false};
     drop(ev) {},
     //菜谱拖动
     foodmenueDragStart(node, ev) {
+
         var that=this;
       ev.srcElement.addEventListener("drag",function(e){
         that.MoveFoodLayer(e);
@@ -1390,11 +1468,13 @@ document.oncontextmenu = function(){return false};
           if (data.dishMxVos) {
             let children = [];
             this.nutritionValue.forEach(_=>{_.value='0'})
+            let dishCount=0;
             data.dishMxVos.forEach(_ => {
               let item = {};
               item["id"] = _.foodId;
               item["name"] = _.name;
               item["count"] = _.value
+              dishCount+=_.value;
               let nutrientIds=[];
               _.foodNutritions.forEach(__=>{
                 this.nutritionValue.forEach(n=>{
@@ -1419,7 +1499,7 @@ document.oncontextmenu = function(){return false};
               node: {
                 id: data.id,
                 name: data.dishName,
-                // count: dishCount,
+                count: dishCount,
                 children: children,
                 dishNutrient:this.nutritionValue
               }
@@ -1531,6 +1611,7 @@ document.oncontextmenu = function(){return false};
          that.$set(that.node,"nowValue",_.dris)
        }
      })
+      this.node.exceptValue=undefined;
     },
     startTrim(){
       if(this.node.exceptValue) {
@@ -1601,6 +1682,8 @@ document.oncontextmenu = function(){return false};
             })
           })
         })
+
+        this.$refs.child2.getFoodScoreSmart();
       }else{
         this.$message({
           message: "期望值不可为空",
@@ -1626,12 +1709,21 @@ document.oncontextmenu = function(){return false};
       localStorage.setItem("smartDatas",JSON.stringify(this.smartDatas))
       this.datas= JSON.parse(localStorage.getItem("smartDatas"))
       this.pointscan = false;
-      //.
+      console.log(this.score)
+      let that=this;
+      setTimeout(function () {
+        that.$refs.child.getFoodScore();
+      },200)
+
       this.$refs.child.refreshData();
     },
     resetMeals(){
   //  debugger
         this.smartDatas=JSON.parse(localStorage.getItem("mealsDatas"))
+      let that=this;
+      setTimeout(function () {
+        that.$refs.child2.getFoodScoreSmart();
+      },200)
     },
     //清空菜品
     dishClear(){
@@ -1649,6 +1741,8 @@ document.oncontextmenu = function(){return false};
       localStorage.setItem("mealsDatas",JSON.stringify(this.datas))
       this.smartDatas=JSON.parse(localStorage.getItem("mealsDatas"))
       this.pointscan = true;
+      this.peipScore=this.score
+      this.ppscxjSc='0'
     },
     getmealTypeData(name){
       return  this.mealTypeData.filter(_=>{
@@ -2202,6 +2296,15 @@ document.oncontextmenu = function(){return false};
 .scores3{
   width: 100px;
 }
+  .scores1-1 {
+    width: 216px;
+    height: 102px;
+    /* background-color: yellow; */
+    background-image: url("/img/yuan1.png");
+    background-size: 100% 100%;
+    display: flex;
+    justify-content:space-between;
+  }
 .scores1 {
   width: 216px;
   height: 102px;
@@ -2211,12 +2314,20 @@ document.oncontextmenu = function(){return false};
   display: flex;
   justify-content:space-between;
 }
+.scores2-item{
+  display: flex;
+  flex-direction:row;
+}
+.scores2-item2{
+  margin-top: -20px;
+  padding-left: 20px;
+}
  .scores2 {
   width: 120px;
   height: 65px;
-  margin-top: 15px;
+  margin-top: 10px;
   display: flex;
-  margin-left: -5px;
+   flex-direction:column;
   /* background-color: blue; */
   background-size: 100% 100%;
 }
@@ -2229,7 +2340,7 @@ document.oncontextmenu = function(){return false};
   width: 30px;
   height: 30px;
   margin-top: 20px;
-  margin-left: 20px;
+  margin-left: 10px;
 }
 .vertical {
   font-size: 20px;
@@ -2356,4 +2467,5 @@ document.oncontextmenu = function(){return false};
 /*.crow-item{*/
   /*width:100px;*/
 /*}*/
+
 </style>

@@ -2,7 +2,7 @@
   <basic-container class="addstudenttallergy">
     <avue-form :option="option" v-model="form" @submit="submit" @error="error">
     </avue-form>
-    <el-dialog
+    <el-dialog class="item-tallergy"
       title="添加食材信息"
       append-to-body
       :visible.sync="dialog"
@@ -302,7 +302,7 @@
   };
 </script>
 <style>
-  .el-dialog__body{
+ .item-tallergy  .el-dialog__body{
     height: 400px;
     overflow-y: scroll;
   }
