@@ -267,6 +267,7 @@
             <el-table
               :data="officeonce"
               border
+              show-summary
               v-loading="loadFlag1"
               style="width: 70%"
               :summary-method="getSummaries"
@@ -610,7 +611,7 @@ export default {
                 address: item.baseTypeName,
                 stats: item.value,
                 spring: item.nutritionNlValue,
-                malloc: item.nutritionNlValue
+                malloc: item.foodCal.toFixed(2)
                 // malloc: item.nutritionNlValue
               };
             });

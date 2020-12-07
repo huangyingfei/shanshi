@@ -309,6 +309,9 @@
 
                   <el-form-item label="图片" style="width:350px">
                     <el-upload
+                      :class="{ hide: hideUploadEdit }"
+                      accept=".jpeg,.jpg,.gif,.png"
+                      :limit="1"
                       action="api/blade-resource/oss/endpoint/put-file"
                       list-type="picture-card"
                       :file-list="productImgs"
@@ -350,7 +353,7 @@
                   style="width: 100%; margin-bottom: 20px"
                   row-key="id"
                   :border="false"
-                  :default-expand-all="false"
+                  :default-expand-all="true"
                   :tree-props="{
                     children: 'children',
                     hasChildren: 'hasChildren'
@@ -676,6 +679,7 @@ export default {
       imgLimit: 1, //文件个数
       productImgs: [],
       dialogVisible: false,
+      hideUploadEdit: false, // 是否隐藏上传按钮
       headerObj: {
         "Blade-Auth": ""
       }, //上传图片请求头
@@ -850,6 +854,7 @@ export default {
       this.active = [];
       this.valuepark = [];
       this.productImgs = [];
+      this.hideUploadEdit = this.productImgs.length >= 1;
       // this.valuepark.length = 0;
       this.ruleForm.desc = "";
       this.ruleForm.delivery = false;
@@ -1116,6 +1121,7 @@ export default {
               };
             }
             this.productImgs = picture;
+            this.hideUploadEdit = this.productImgs.length >= 1;
             this.ruleForm.delivery = this.inquired.isPub == 1 ? false : true; //公开
             // console.log(this.ruleForm.delivery);
             this.ruleForm.delivery1 = this.inquired.isUse == 1 ? false : true; //常用
@@ -1577,8 +1583,9 @@ export default {
         });
     },
     //移除图片
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
+    handleRemove(file, productImgs) {
+      // console.log(file, fileList);
+      this.hideUploadEdit = productImgs.length >= 1;
     },
     //预览图片
     handlePictureCardPreview(file) {
@@ -1593,13 +1600,11 @@ export default {
       console.log(files, fileList);
     },
     handleChangePic(file, productImgs) {
-      console.log(file);
-      console.log(productImgs);
-      if (productImgs.length > 1) {
-        productImgs.splice(0, 1);
-        // this.productImgs = [productImgs[productImgs.length - 1].raw];
-        // console.log(1);
-      }
+      this.hideUploadEdit = productImgs.length >= 1;
+      // if (productImgs.length > 1) {
+      //   productImgs.splice(0, 1);
+
+      // }
     },
     // 上传成功
     handleAvatarSuccess(res, file) {
@@ -1626,7 +1631,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 /* .avue-view {
   padding: 0 5px !important;
 } */
@@ -1739,8 +1744,9 @@ export default {
 }
 .saveas {
   width: 95%;
-  height: 400px;
-  margin-left: 40px;
+  height: 500px;
+  // margin-left: 40px;
+  margin-bottom: 50px;
   /* background-color: red; */
 }
 .base {
@@ -1749,7 +1755,7 @@ export default {
   position: fixed;
   bottom: 0px;
   left: 60%;
-  float: left;
+
   background-color: #fff;
   /* margin-bottom: 50px; */
   /* margin-top: 30px; */
@@ -1761,5 +1767,8 @@ export default {
   height: 100%;
 
   background-color: #fff;
+}
+/deep/ .hide .el-upload--picture-card {
+  display: none;
 }
 </style>

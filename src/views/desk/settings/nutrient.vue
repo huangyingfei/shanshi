@@ -16,7 +16,7 @@
         border
         v-loading="loadFlag"
         :element-loading-text="page_data.loadTxt"
-        style="width: 100%;margin-bottom: 40px;"
+        style="width: 100%;"
         empty-text="没有数据~"
       >
         <!-- <el-table-column prop="date" label="序号" width="160" align="center"></el-table-column> -->
@@ -27,7 +27,7 @@
         ></el-table-column>
         <el-table-column prop="isDef" label="是否默认标准" align="center">
           <template slot-scope="props">{{
-            props.row.isDef !== 1 ? "是" : "否"
+            props.row.isDef == 1 ? "是" : "否"
           }}</template>
         </el-table-column>
 
@@ -174,13 +174,16 @@ export default {
 <style scoped>
 .nutrition {
   width: 100%;
-  height: 1200px;
+
+  font-size: 14px;
   background-color: #fff;
 }
 .pagingClass {
   text-align: right;
   /* margin: 20px 0; */
-  margin-top: 20px;
-  margin-right: 40px;
+  background-color: #fff;
+  margin-bottom: 50px;
+  margin-top: 0px;
+  margin-right: 0px;
 }
 </style>

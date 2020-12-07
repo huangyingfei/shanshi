@@ -133,7 +133,7 @@ export default {
 	methods: {
 		seecol(row,doType){
 			this.$router.push({
-				path: "/recipeManager/auditRecipeConfirm",
+				path: "/recipeManager/auditRecipeConfirm/auditRecipeConfirm",
 				query: {
 					userid: row.id,
 					tenantId: row.tenantId,

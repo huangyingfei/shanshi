@@ -299,6 +299,9 @@
                 </el-form-item>
                 <el-form-item label="图片" style="width: 350px">
                   <el-upload
+                    :class="{ hide: hideUploadEdit }"
+                    accept=".jpeg,.jpg,.gif,.png"
+                    :limit="1"
                     action="api/blade-resource/oss/endpoint/put-file"
                     list-type="picture-card"
                     :file-list="productImgs"
@@ -922,6 +925,7 @@ export default {
       imgLimit: 1, //文件个数
       productImgs: [],
       dialogVisible: false,
+      hideUploadEdit: false, // 是否隐藏上传按钮
       headerObj: {
         "Blade-Auth": ""
       }, //上传图片请求头
@@ -1108,6 +1112,7 @@ export default {
       this.valuepark = [];
       this.officeonce = [];
       this.productImgs = [];
+      this.hideUploadEdit = this.productImgs.length >= 1;
       // console.log(this.editable);
       // this.$router.go(0);
       this.mailto.forEach(item => {
@@ -1216,7 +1221,7 @@ export default {
           });
       } else {
         this.$message({
-          message: "该分类不能删除",
+          message: "请先清空该分类下的菜品再删除分类",
           type: "warning"
         });
       }
@@ -1425,6 +1430,7 @@ export default {
               };
             }
             this.productImgs = picture;
+            this.hideUploadEdit = this.productImgs.length >= 1;
             this.ruleForm.delivery1 = this.handler.isUse == 1 ? false : true; //常用
             this.ruleForm.delivery = this.handler.isPub == 1 ? false : true; //公开
             // this.toBack = this.handler.dishMxVos;
@@ -1442,7 +1448,7 @@ export default {
                   address: item.baseTypeName,
                   stats: item.value,
                   spring: item.nutritionNlValue,
-                  malloc: item.nutritionNlValue,
+                  malloc: item.foodCal.toFixed(2),
                   fruits: item.foodEat
                 };
               });
@@ -1665,8 +1671,9 @@ export default {
         }
         const values = data.map(item => Number(item[column.property]));
         if (
-          !values.every(value => isNaN(value)) &&
-          column.property == "malloc"
+          (!values.every(value => isNaN(value)) &&
+            column.property == "malloc") ||
+          column.property == "stats"
         ) {
           sums[index] = values.reduce((prev, curr) => {
             const value = Number(curr);
@@ -2132,8 +2139,9 @@ export default {
         });
     },
     //移除图片
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
+    handleRemove(file, productImgs) {
+      // console.log(file, fileList);
+      this.hideUploadEdit = productImgs.length >= 1;
     },
     //预览图片
     handlePictureCardPreview(file) {
@@ -2143,13 +2151,11 @@ export default {
       this.dialogVisible = true;
     },
     handleChangePic(file, productImgs) {
-      console.log(file);
-      console.log(productImgs);
-      if (productImgs.length > 1) {
-        productImgs.splice(0, 1);
-        // this.productImgs = [productImgs[productImgs.length - 1].raw];
-        // console.log(1);
-      }
+      this.hideUploadEdit = productImgs.length >= 1;
+      // if (productImgs.length > 1) {
+      //   productImgs.splice(0, 1);
+
+      // }
     },
     handleExceed(files, fileList) {
       //图片上传超过数量限制
@@ -2181,7 +2187,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .typeList {
   width: 100%;
   height: 100%;
@@ -2306,5 +2312,8 @@ export default {
   /* margin-top: 20px; */
   text-align: center;
   line-height: 50px;
+}
+/deep/ .hide .el-upload--picture-card {
+  display: none;
 }
 </style>

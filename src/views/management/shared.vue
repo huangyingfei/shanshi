@@ -258,20 +258,35 @@
             </el-form-item>
             <el-form-item label="图片" style="width: 350px;">
               <el-upload
-                action="https://jsonplaceholder.typicode.com/posts/"
-                list-type="picture-card"
+                :disabled="true"
+                :class="{ hide: hideUploadEdit }"
+                accept=".jpeg,.jpg,.gif,.png"
+                :headers="headerObj"
+                action="api/blade-resource/oss/endpoint/put-file"
                 :on-preview="handlePictureCardPreview"
+                list-type="picture-card"
+                :limit="1"
+                :file-list="productImgs"
+                :on-change="handleChangePic"
+                :before-upload="beforeAvatarUpload"
+                :on-success="handleAvatarSuccess"
                 :on-remove="handleRemove"
               >
                 <i class="el-icon-plus"></i>
               </el-upload>
-              <el-dialog :visible.sync="dialogVisible">
+              <span style="color: #e0e0e0; font-size: 11px"
+                >上传图片不能超过2M 只能是JPG PNG格式</span
+              >
+              <el-dialog append-to-body :visible.sync="dialogVisible">
                 <img width="100%" :src="dialogImageUrl" alt />
               </el-dialog>
             </el-form-item>
 
             <el-form-item label="常用" style="   ">
-              <el-switch v-model="ruleFormUsers.delivery1"></el-switch>
+              <el-switch
+                :disabled="true"
+                v-model="ruleFormUsers.delivery1"
+              ></el-switch>
             </el-form-item>
           </el-form>
         </div>
@@ -320,7 +335,7 @@
           </el-table>
         </div>
       </div>
-      <div slot="footer" class="dialog-footer">
+      <div slot="footer" class="dialog-footer" style="  text-align: center;">
         <div class="cancellation">
           <el-button @click="seekeys = false">取 消</el-button>
         </div>
@@ -342,6 +357,11 @@ export default {
       page_data: {
         loadTxt: "请求列表中"
       },
+      dialogImageUrl: "", //图片
+      imgLimit: 1, //文件个数
+      productImgs: [],
+      dialogVisible: false,
+      hideUploadEdit: false, // 是否隐藏上传按钮
       tmquery: [], //表格
       mailto: [], //营养素含量
       active: [], //季节
@@ -431,6 +451,7 @@ export default {
   },
 
   methods: {
+    //查看
     seecol(row) {
       this.flour = row.id;
 
@@ -468,6 +489,16 @@ export default {
         .get(`api/blade-food/food/detail?id=${this.flour}`, {})
         .then(res => {
           this.inquired = res.data.data;
+          let picture = [];
+          if (this.inquired.pic) {
+            picture[0] = {
+              url: this.inquired.pic
+            };
+          }
+          this.productImgs = picture;
+          this.hideUploadEdit = this.productImgs.length >= 1;
+
+          this.dialogImageUrl = this.inquired.pic;
           let units = this.inquired.nutritions;
           units.forEach(item => {
             // console.log(item);
@@ -607,11 +638,64 @@ export default {
           // this.$set(this.national, arr)
           this.options = arr;
         });
+    },
+    //移除图片
+    handleRemove(file, productImgs) {
+      this.dialogImageUrl = "";
+      this.hideUploadEdit = productImgs.length >= 1;
+    },
+    //预览图片
+    handlePictureCardPreview(file) {
+      console.log(file.url);
+
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
+    handleExceed(files, fileList) {
+      //图片上传超过数量限制
+      this.$message.error("上传图片不能超过1张!");
+      console.log(files, fileList);
+    },
+    // 上传成功
+    handleAvatarSuccess(res, file) {
+      console.log(res);
+      this.dialogImageUrl = URL.createObjectURL(file.raw);
+      this.dialogImageUrl = res.data.link;
+      // this.imageUrl = URL.createObjectURL(file.raw);
+      // this.imageUrl = res.data.link;
+      console.log(this.dialogImageUrl);
+    },
+    handleChangePic(file, productImgs) {
+      // console.log(file);
+      // console.log(productImgs);
+      this.hideUploadEdit = productImgs.length >= 1;
+      console.log(this.hideUploadEdit);
+      // if (productImgs.length > 1) {
+      //   productImgs.splice(0, 1);
+
+      // }
+    },
+    beforeAvatarUpload(file) {
+      // const isJPG = file.type === "image/jpeg";
+
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      // if (!isJPG) {
+      //   this.$message.error("上传图片只能是 JPG 格式!");
+      // }
+      if (!isLt2M) {
+        this.$message.error("上传图片大小不能超过 2MB!");
+      }
+      // return isJPG && isLt2M;
+      return isLt2M;
+    },
+    handleAvatarSuccess(res, file) {
+      this.imageUrl = URL.createObjectURL(file.raw);
     }
   }
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
 /* .avue-view {
   padding: 0 5px !important;
 } */
@@ -649,5 +733,8 @@ export default {
   margin-top: 0px;
   margin-right: 0px;
   margin-bottom: 60px;
+}
+/deep/ .hide .el-upload--picture-card {
+  display: none;
 }
 </style>

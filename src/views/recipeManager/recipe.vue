@@ -46,7 +46,7 @@
           type="text"
           icon="el-icon-delete"
           size="small"
-          @click="changeInfo(scope.row.id,1)"
+          @click="rowDel(scope.row)"
         >删除
         </el-button>
         <el-button
@@ -125,21 +125,19 @@
             :data="recipeTableData"
             border
             style="width: 100% "
-            class="recipeTableWeekData"
-            >
+            class="recipeTableWeekData">
             <el-table-column
-              type="index"
-              :index="indexMethod">
+              prop="mealsType"
+              label=""
+              width="100px">
             </el-table-column>
             <el-table-column
               prop="week1"
-              label="周一"
-              width="180">
+              label="周一">
             </el-table-column>
             <el-table-column
               prop="week2"
-              label="周二"
-              width="180">
+              label="周二">
             </el-table-column>
             <el-table-column
               prop="week3"
@@ -147,21 +145,21 @@
             </el-table-column>
             <el-table-column
               prop="week4"
-              label="周四"
-              width="180">
+              label="周四">
             </el-table-column>
             <el-table-column
               prop="week5"
-              label="周五"
-              width="180">
+              label="周五">
             </el-table-column>
             <el-table-column
               prop="week6"
-              label="周六">
+              label="周六"
+              v-if="dialogListData.recipeDay =='6'||dialogListData.recipeDay =='7'">
             </el-table-column>
             <el-table-column
               prop="week7"
-              label="周日" >
+              label="周日"
+              v-if='dialogListData.recipeDay =="7"'>
             </el-table-column>
           </el-table>
         </el-col>
@@ -174,6 +172,7 @@
 <script>
   import {getList, getDetail, add, update, remove,changeInfo} from "@/api/food/recipe";
   import {mapGetters} from "vuex";
+  import { formateDate} from "@/api/tool/date";
 
   export default {
     data() {
@@ -242,6 +241,9 @@
               search: true,
               dicData: [
                 {
+                  label: "全部",
+                },
+                {
                   label: "已收藏",
                   value: 1
                 },
@@ -249,6 +251,61 @@
                   label: "未收藏",
                   value: 0
                 }
+                
+              ],
+              rules: [
+                {
+                  required: true,
+                  message: "请选择",
+                  trigger: "blur"
+                }
+              ]
+            },
+            {
+              label: "公开",
+              prop: "isPub",
+              type: "select",
+              search: true,
+              dicData: [
+                {
+                  label: "全部",
+                },
+                {
+                  label: "已公开",
+                  value: 0
+                },
+                {
+                  label: "未公开",
+                  value: 1
+                }
+                
+              ],
+              rules: [
+                {
+                  required: true,
+                  message: "请选择",
+                  trigger: "blur"
+                }
+              ]
+            },
+            {
+              label: "推荐",
+              prop: "isRecommend",
+              type: "select",
+              search: true,
+              dicData: [
+                {
+                  label: "全部",
+                },
+                {
+                  label: "已推荐",
+                  value: 1
+                },
+                {
+                  label: "未推荐",
+                  value: 0
+                }
+                
               ],
               rules: [
                 {
@@ -287,12 +344,13 @@
             {
               label: "创建时间",
               prop: "createTime",
-              type:'datetime',
+              type:'date',
               width: 140,
               // span: 24,
               minRows: 6,
               search: true,
               searchRange:true,
+              display: false,
             },
           ]
         },
@@ -355,8 +413,7 @@
             mealsType3:[],
             mealsType4:[],
             mealsType5:[],
-            mealsType6:[],
-            
+            mealsType6:[], 
           }
           for(let i in recipeCycles){
             let mealsTypeNum = recipeCycles[i].mealsType
@@ -383,8 +440,17 @@
                 break;
             }
           }
+          var mealsTypeObj ={
+            mealsType1:"早餐",
+            mealsType2:"早点",
+            mealsType3:"午餐",
+            mealsType4:"午点",
+            mealsType5:"晚餐",
+            mealsType6:"晚点",             
+          }
           for (let key in recipeTableData) {
             var weekData = {
+              mealsType:mealsTypeObj[key],
               week1:'',
               week2:'',
               week3:'',
@@ -393,14 +459,17 @@
               week6:'',
               week7:'',
             }
-            for (let index = 0; index < recipeTableData[key].length; index++) {
-              var weekNum = "week" +recipeTableData[key][index].week;
 
-              // weekData[weekNum].push(recipeTableData[key][index].recipeConncts[0].dishName)
-              weekData[weekNum] += recipeTableData[key][index].recipeConncts[0].dishName+"\n"
+            if(recipeTableData[key].length>0){
+              for (let index = 0; index < recipeTableData[key].length; index++) {
+                var weekNum = "week" +recipeTableData[key][index].week;
+
+                // weekData[weekNum].push(recipeTableData[key][index].recipeConncts[0].dishName)
+                weekData[weekNum] += recipeTableData[key][index].recipeConncts[0].dishName+"\n"
+              }
+              console.log(weekData);
+              recipeTableData1.push(weekData);
             }
-            console.log(weekData);
-            recipeTableData1.push(weekData)
           }
           this.recipeTableData = recipeTableData1
           this.dialogVisible = true
@@ -543,10 +612,15 @@
       },
       onLoad(page, params = {}) {
         this.loading = true;
-        params=
-          {
-            searchType:0
-          }
+
+        params.searchType=0
+        if(params.createTime){
+          params.createTimeStr=formateDate(params.createTime[0], "yyyy-MM-dd HH:mm:ss")
+          params.createTimeStrEnd=formateDate(params.createTime[1], "yyyy-MM-dd HH:mm:ss")
+          delete params.createTime
+        }
+         console.log(params);          
+
         getList(page.currentPage, page.pageSize, Object.assign(params, this.query)).then(res => {
           const data = res.data.data;
           this.page.total = data.total;

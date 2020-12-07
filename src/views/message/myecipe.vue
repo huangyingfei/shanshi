@@ -108,7 +108,7 @@
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="createTime"
+          prop="recipeDay"
           label="食谱周期"
           align="center"
         ></el-table-column>
@@ -213,7 +213,7 @@ export default {
       },
       m_page: {
         sizes: [10, 20, 40, 50, 100], //每页最大显示数
-        size: 20,
+        size: 10,
         totalElements: 0,
         totalPages: 3,
         number: 1
@@ -284,7 +284,7 @@ export default {
     },
     //删除删除
     remove(row) {
-      this.$confirm("确认删除该食材?", "提示", {
+      this.$confirm("确认删除该食谱？", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
@@ -401,7 +401,7 @@ export default {
       this.loadFlag = true;
       this.$axios
         .get(
-          `api/blade-food/recipe/page?size=${this.m_page.size}&current=${this.m_page.number}&ascs=id&searchType=0&recipeName=${this.wupload.input}&isUse=${this.empty}&isPub=${this.callback}&isBoard=${this.blicity}&createTimeStr=${this.timezone}`,
+          `api/blade-food/recipe/page?size=${this.m_page.size}&current=${this.m_page.number}&ascs=id&searchType=2&recipeName=${this.wupload.input}&isUse=${this.empty}&isPub=${this.callback}&isBoard=${this.blicity}&createTimeStr=${this.timezone}`,
           {}
         )
         .then(res => {
@@ -449,5 +449,13 @@ export default {
   width: 100%;
   margin-top: 30px;
   margin-bottom: 50px;
+}
+.pagingClass {
+  text-align: right;
+  /* margin: 20px 0; */
+  background-color: #fff;
+  margin-top: 0px;
+  margin-right: 0px;
+  margin-bottom: 60px;
 }
 </style>

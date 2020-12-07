@@ -177,7 +177,7 @@
       <!-- 审核食材 查看 -->
       <el-dialog
         style="margin-top: 10px!important;"
-        width="90%"
+        width="80%"
         title="审核菜品"
         append-to-body
         :visible.sync="seekeys"
@@ -306,6 +306,9 @@
 
                 <el-form-item label="图片" style="width: 350px">
                   <el-upload
+                    :class="{ hide: hideUploadEdit }"
+                    :limit="1"
+                    accept=".jpeg,.jpg,.gif,.png"
                     action="api/blade-resource/oss/endpoint/put-file"
                     list-type="picture-card"
                     :file-list="productImgs"
@@ -507,7 +510,8 @@
                 style="width: 60%;margin-bottom: 20px;"
                 row-key="id"
                 border
-                :default-expand-all="false"
+                max-height="400"
+                :default-expand-all="true"
                 :tree-props="{
                   children: 'children',
                   hasChildren: 'hasChildren'
@@ -638,6 +642,384 @@
           <el-button @click="palette" type="primary">确 定</el-button>
         </div>
       </el-dialog>
+      <el-dialog
+        title="查看"
+        width="80%"
+        append-to-body
+        :visible.sync="dumpdbtostream"
+        :close-on-click-modal="false"
+      >
+        <div class="tmp_rcheck">
+          <div class="update1">
+            <div class="seecr">
+              <span style="color:#cccccc;">创建机构：</span>
+              {{ this.dsquery.establish }}
+            </div>
+            <div class="seecr1">
+              <span style="color:#cccccc;">提交人：</span>
+              {{ this.dsquery.submit }}
+            </div>
+            <div class="seecr1">
+              <span style="color:#cccccc;">联系电话：</span>
+              {{ this.dsquery.phone }}
+            </div>
+            <div class="seecr">
+              <span style="color:#cccccc;">提交时间：</span>
+              {{ this.dsquery.time }}
+            </div>
+            <div class="hash">
+              <span style="color:#cccccc;">审核状态：</span>
+              <span class="stop" v-if="this.dsquery.examineto == 0"
+                >待审核</span
+              >
+              <span v-else-if="this.dsquery.examineto == 3">无需审核</span>
+              <span v-else-if="this.dsquery.examineto == 1">审核通过</span>
+              <span v-else-if="this.dsquery.examineto == 2">审核不通过</span>
+            </div>
+          </div>
+          <div class="stored">
+            <div class="mationtxt">菜品主要信息</div>
+            <div class="unsigned">
+              <el-form
+                :model="ruleForm"
+                :rules="rules"
+                :inline="true"
+                ref="ruleForm"
+                label-width="100px"
+                class="demo-ruleForm"
+              >
+                <el-form-item
+                  label="菜品名"
+                  prop="name"
+                  style=" width: 350px;   "
+                >
+                  <el-input
+                    :disabled="true"
+                    show-word-limit
+                    maxlength="10"
+                    v-model="ruleForm.name"
+                  ></el-input>
+                </el-form-item>
+
+                <el-form-item
+                  label="菜品分类"
+                  prop="fooddata"
+                  style=" width: 350px;   "
+                >
+                  <el-select
+                    disabled
+                    v-model="ruleForm.fooddata"
+                    placeholder="请选择"
+                  >
+                    <el-option
+                      v-for="item in foodPos"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    >
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+
+                <el-form-item label="所属区域" style=" width: 350px;  ">
+                  <el-cascader
+                    :disabled="true"
+                    v-model="valuepark"
+                    placeholder="请选择省市区"
+                    :options="options"
+                    :props="{ multiple: true, checkStrictly: true }"
+                    @change="handleChange"
+                  ></el-cascader>
+                </el-form-item>
+
+                <el-form-item label="所属季节" style="  width: 350px;  ">
+                  <el-select
+                    :disabled="true"
+                    v-model="active"
+                    multiple
+                    placeholder="请选择季节"
+                  >
+                    <el-option
+                      v-for="item in season"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    >
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+
+                <el-form-item label="特点" style="width: 350px">
+                  <el-input
+                    :disabled="true"
+                    type="textarea"
+                    style="width: 200px"
+                    maxlength="30"
+                    show-word-limit
+                    v-model="ruleForm.region"
+                  ></el-input>
+                </el-form-item>
+                <el-form-item label="做法" style="width: 350px">
+                  <el-input
+                    :disabled="true"
+                    type="textarea"
+                    maxlength="30"
+                    show-word-limit
+                    style="width: 200px"
+                    v-model="ruleForm.desc"
+                  ></el-input>
+                </el-form-item>
+
+                <el-form-item label="图片" style="width: 350px">
+                  <el-upload
+                    :class="{ hide: hideUploadEdit }"
+                    :limit="1"
+                    :disabled="true"
+                    accept=".jpeg,.jpg,.gif,.png"
+                    action="api/blade-resource/oss/endpoint/put-file"
+                    list-type="picture-card"
+                    :file-list="productImgs"
+                    :on-change="handleChangePic"
+                    :on-preview="handlePictureCardPreview"
+                    :before-upload="beforeAvatarUpload"
+                    :on-success="handleAvatarSuccess"
+                    :on-remove="handleRemove"
+                    :headers="headerObj"
+                  >
+                    <!-- <img v-if="dialogImageUrl" :src="dialogImageUrl" class="avatar" /> -->
+                    <i class="el-icon-plus"></i>
+                  </el-upload>
+                  <span style="color:#e0e0e0;  font-size: 11px;"
+                    >上传图片不能超过2M 只能是JPG PNG格式</span
+                  >
+                  <el-dialog append-to-body :visible.sync="dialogVisible">
+                    <img width="100%" :src="dialogImageUrl" alt />
+                  </el-dialog>
+                </el-form-item>
+
+                <el-form-item label="公开" style=" width:150px ">
+                  <el-switch
+                    :disabled="true"
+                    v-model="ruleForm.delivery"
+                  ></el-switch>
+                </el-form-item>
+
+                <el-form-item label="常用" style="   ">
+                  <el-switch
+                    :disabled="true"
+                    v-model="ruleForm.delivery1"
+                  ></el-switch>
+                </el-form-item>
+              </el-form>
+            </div>
+            <!-- 菜品所含食材信息 -->
+            <div class="mationtxt">菜品所含食材信息</div>
+            <div>
+              <el-button
+                style="margin-left: 10px;"
+                type="primary"
+                :disabled="true"
+                @click="addLine"
+                >添加</el-button
+              >
+              <el-table
+                :data="officeonce"
+                border
+                v-loading="loadFlag1"
+                show-summary
+                style="width: 60%"
+                :summary-method="getSummaries"
+              >
+                <el-table-column
+                  v-if="show"
+                  prop="id"
+                  label="序号"
+                  width="100"
+                  align="center"
+                >
+                </el-table-column>
+                <el-table-column
+                  v-if="show"
+                  prop="frame"
+                  label="分类ID "
+                  width="100"
+                  align="center"
+                >
+                </el-table-column>
+                <el-table-column label="食品名称" width="190" align="center">
+                  <template slot-scope="scope">
+                    <el-input
+                      style="width: 90px"
+                      v-model="scope.row.name"
+                      :disabled="true"
+                    >
+                    </el-input>
+                    <el-button
+                      :disabled="true"
+                      type="primary"
+                      size="small"
+                      style="   margin-left: 10px;"
+                      @click="columnEvent(scope.row, scope.$index)"
+                      plain
+                      >选择</el-button
+                    >
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  prop="address"
+                  label="食品分类"
+                  width="120"
+                  align="center"
+                ></el-table-column>
+                <el-table-column
+                  prop="stats"
+                  label="用量(g)"
+                  width="120"
+                  align="center"
+                >
+                  <template slot-scope="scope">
+                    <el-input
+                      :disabled="true"
+                      style="width: 90px"
+                      @blur="graph"
+                      @input="hello(scope.row, scope.$index)"
+                      v-model="scope.row.stats"
+                      clearable
+                    >
+                    </el-input>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  prop="spring"
+                  label="能量(参考值)"
+                  width="120"
+                  align="center"
+                ></el-table-column>
+                <el-table-column
+                  prop="malloc"
+                  label="能量(每百克)"
+                  width="120"
+                  align="center"
+                >
+                  <template slot-scope="scope">
+                    <!-- {{scope.row.malloc}} -->
+                    <!-- <span v-if="!scope.row.stats">{{ scope.row.malloc }}</span>
+              <span v-else>{{
+                (scope.row.stats / 100) * scope.row.malloc
+              }}</span> -->
+                    <el-input
+                      :disabled="true"
+                      style="width: 90px"
+                      v-model="scope.row.malloc"
+                      clearable
+                    >
+                    </el-input>
+                  </template>
+                  <el-table-column
+                    v-if="show"
+                    prop="fruits"
+                    label="foodEat11"
+                    width="120"
+                    align="center"
+                  >
+                  </el-table-column>
+                </el-table-column>
+                <!--操作格-->
+                <el-table-column label="操作" align="center">
+                  <template slot-scope="scope">
+                    <!-- <el-button type="text" size="small" style="margin-left: 10px"
+                  >查看</el-button
+                > -->
+                    <el-button
+                      :disabled="true"
+                      type="text"
+                      size="small"
+                      style="margin-left: 10px"
+                      @click="handleDelete(scope.$index, scope.row)"
+                      >删除</el-button
+                    >
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
+            <!-- 树形结构 -->
+            <el-dialog
+              title="添加菜品"
+              append-to-body
+              :visible.sync="dateTime"
+              :close-on-click-modal="false"
+            >
+              <el-input placeholder="输入关键字进行过滤" v-model="filterText1">
+              </el-input>
+              <div class="block">
+                <div class="rolling">
+                  <p></p>
+                  <el-tree
+                    :data="data1"
+                    node-key="id"
+                    :default-expand-all="false"
+                    @node-click="handleNodeClick"
+                    :filter-node-method="filterNode1"
+                    ref="tree"
+                  ></el-tree>
+                </div>
+              </div>
+
+              <div slot="footer" class="dialog-footer">
+                <el-button @click="dateTime = false">取 消</el-button>
+                <el-button @click="setlist" type="primary">确 定</el-button>
+              </div>
+            </el-dialog>
+            <!-- 营养素标题 -->
+            <div class="worm1">
+              营养素含量（这里为100克食部食品中的营养素含量）
+            </div>
+            <div class="saveas">
+              <el-table
+                :data="mailto"
+                max-height="400"
+                style="width: 60%;margin-bottom: 20px;"
+                row-key="id"
+                border
+                :default-expand-all="true"
+                :tree-props="{
+                  children: 'children',
+                  hasChildren: 'hasChildren'
+                }"
+              >
+                <el-table-column
+                  prop="title"
+                  label="营养素"
+                  align="center"
+                  width="200"
+                ></el-table-column>
+                <el-table-column
+                  prop="unit"
+                  label="单位"
+                  width="180"
+                  align="center"
+                ></el-table-column>
+
+                <el-table-column label="含量" align="center">
+                  <template slot-scope="scope">
+                    <el-input
+                      :disabled="true"
+                      v-model="scope.row.result"
+                      type="text"
+                      v-if="scope.row.level != 1 ? true : false"
+                      placeholder="请输入内容"
+                    ></el-input>
+                  </template>
+                  <!-- v-if="scope.row.dients" -->
+                </el-table-column>
+              </el-table>
+            </div>
+          </div>
+        </div>
+        <div slot="footer" class="dialog-footer" style="text-align: center">
+          <el-button @click="dumpdbtostream = false">取 消</el-button>
+        </div>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -649,6 +1031,7 @@ export default {
     return {
       increase: false, //拒绝理由弹框
       dateTime: false, //弹出框
+      dumpdbtostream: false, //查看弹出框
       stone: "", //id
       tmquery: [],
       filterText1: "",
@@ -663,6 +1046,7 @@ export default {
       imgLimit: 1, //文件个数
       productImgs: [],
       dialogVisible: false,
+      hideUploadEdit: false, // 是否隐藏上传按钮
       headerObj: {
         "Blade-Auth": ""
       }, //上传图片请求头
@@ -929,7 +1313,7 @@ export default {
     //查看
     seecol(row, index) {
       console.log(row);
-      this.seekeys = true;
+      this.dumpdbtostream = true;
       this.active = [];
       this.valuepark = [];
       this.nbottoms = index;
@@ -940,7 +1324,6 @@ export default {
       this.dsquery.phone = row.mobile;
       this.dsquery.time = row.createTime;
       this.dsquery.examineto = row.status;
-      this.seekeys = true;
       let design = `?id=${row.id}`;
       this.$axios
         .get(`api/blade-food/dish/dishDetail` + design, {
@@ -978,6 +1361,7 @@ export default {
             };
           }
           this.productImgs = picture;
+          this.hideUploadEdit = this.productImgs.length >= 1;
           this.ruleForm.region = this.handler.function; //特点
           this.ruleForm.desc = this.handler.remark; //做法
           this.ruleForm.delivery1 = this.handler.isUse == 1 ? false : true; //常用
@@ -996,7 +1380,8 @@ export default {
                 address: item.baseTypeName,
                 stats: item.value,
                 spring: item.nutritionNlValue,
-                malloc: item.nutritionNlValue
+                malloc: item.foodCal.toFixed(2),
+                fruits: item.foodEat
               };
             });
             this.officeonce = arr;
@@ -1220,6 +1605,7 @@ export default {
             };
           }
           this.productImgs = picture;
+          this.hideUploadEdit = this.productImgs.length >= 1;
           this.dialogImageUrl = this.handler.pic;
           this.ruleForm.delivery1 = this.handler.isUse == 1 ? false : true; //常用
           this.ruleForm.delivery = this.handler.isPub == 1 ? false : true; //公开
@@ -1237,7 +1623,7 @@ export default {
                 address: item.baseTypeName,
                 stats: item.value,
                 spring: item.nutritionNlValue,
-                malloc: item.nutritionNlValue,
+                malloc: item.foodCal.toFixed(2),
                 fruits: item.foodEat
               };
             });
@@ -1322,14 +1708,15 @@ export default {
       const { columns, data } = param;
       const sums = [];
       columns.forEach((column, index) => {
-        // if (index === 0) {
-        //   sums[index] = '总价';
-        //   return;
-        // }
+        if (index === 0) {
+          sums[index] = "能量合计";
+          return;
+        }
         const values = data.map(item => Number(item[column.property]));
         if (
-          !values.every(value => isNaN(value)) &&
-          column.property == "malloc"
+          (!values.every(value => isNaN(value)) &&
+            column.property == "malloc") ||
+          column.property == "stats"
         ) {
           sums[index] = values.reduce((prev, curr) => {
             const value = Number(curr);
@@ -1474,17 +1861,17 @@ export default {
         });
     },
     //移除图片
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
+    handleRemove(file, productImgs) {
+      // console.log(file, fileList);
+      this.dialogImageUrl = "";
+      this.hideUploadEdit = productImgs.length >= 1;
     },
     handleChangePic(file, productImgs) {
-      console.log(file);
-      console.log(productImgs);
-      if (productImgs.length > 1) {
-        productImgs.splice(0, 1);
-        // this.productImgs = [productImgs[productImgs.length - 1].raw];
-        // console.log(1);
-      }
+      this.hideUploadEdit = productImgs.length >= 1;
+      // if (productImgs.length > 1) {
+      //   productImgs.splice(0, 1);
+
+      // }
     },
     //预览图片
     handlePictureCardPreview(file) {
@@ -1532,13 +1919,13 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 .avue-view {
   padding: 0 5px !important;
 }
 .toolbar {
   width: 100%;
-  height: 100%;
+
   background-color: #fff;
   position: relative;
   top: 0px;
@@ -1570,7 +1957,7 @@ export default {
   /* background-color: red; */
 }
 .tmp_rcheck {
-  height: 100%;
+  width: 1100px;
   height: 400px;
   overflow-y: auto;
   overflow-x: hidden;
@@ -1604,7 +1991,7 @@ export default {
   margin-top: 20px;
 }
 .mationtxt {
-  width: 95%;
+  width: 100%;
   height: 30px;
   line-height: 30px;
   padding-left: 20px;
@@ -1640,5 +2027,8 @@ export default {
   width: 100%;
   height: 300px;
   overflow-y: auto;
+}
+/deep/ .hide .el-upload--picture-card {
+  display: none;
 }
 </style>
