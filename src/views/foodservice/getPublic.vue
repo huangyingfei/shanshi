@@ -612,14 +612,14 @@
                   <span class="custom-tree-node" slot-scope="{ node, data }">
                     <span>{{ node.label }}</span>
                     <span>
-                      <el-button
+                      <!-- <el-button
                         type="text"
                         size="mini"
                         v-if="data.view == 1"
                         @click="() => prepare(data)"
                       >
                         查看
-                      </el-button>
+                      </el-button> -->
                     </span>
                   </span>
                 </el-tree>
@@ -696,7 +696,7 @@
                 <el-form-item label="图片" style="width: 350px">
                   <img
                     v-if="this.rectangle != ''"
-                    style="width:200px;height:200px"
+                    style="width:150px;height:150px"
                     :src="this.rectangle"
                     alt=""
                   />
@@ -735,7 +735,7 @@
                   align="center"
                 >
                 </el-table-column>
-                <el-table-column label="食品名称" width="190" align="center">
+                <el-table-column label="食品名称" align="center">
                   <template slot-scope="scope">
                     <el-input
                       style="width: 90px"
@@ -756,14 +756,12 @@
                 <el-table-column
                   prop="address"
                   label="食品分类"
-                  width="120"
                   align="center"
                 ></el-table-column>
                 <el-table-column
                   disabled
                   prop="stats"
                   label="用量(g)"
-                  width="120"
                   align="center"
                 >
                   <template slot-scope="scope">
@@ -780,13 +778,11 @@
                 <el-table-column
                   prop="spring"
                   label="能量(每百克)"
-                  width="120"
                   align="center"
                 ></el-table-column>
                 <el-table-column
                   prop="malloc"
                   label="能量(kcal)"
-                  width="120"
                   align="center"
                 >
                   <template slot-scope="scope">
@@ -1512,7 +1508,7 @@ export default {
                   address: item.baseTypeName,
                   stats: item.value,
                   spring: item.nutritionNlValue,
-                  malloc: item.nutritionNlValue
+                  malloc: item.foodCal.toFixed(2)
                   // malloc: item.nutritionNlValue
                 };
               });

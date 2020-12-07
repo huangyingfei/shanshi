@@ -83,7 +83,7 @@
             placeholder="请选择"
           >
             <el-option
-              v-for="item in prompt"
+              v-for="item in vposition"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -244,11 +244,14 @@
             </el-form-item>
             <el-form-item style="width: 355px" label="图片">
               <el-upload
+                :class="{ hide: hideUploadEdit }"
+                accept=".jpeg,.jpg,.gif,.png"
                 action="api/blade-resource/oss/endpoint/put-file"
                 list-type="picture-card"
-                :limit="imgLimit"
+                :limit="1"
                 :file-list="productImgs"
                 :on-exceed="handleExceed"
+                :on-change="handleChangePic"
                 :on-preview="handlePictureCardPreview"
                 :before-upload="beforeAvatarUpload"
                 :on-success="handleAvatarSuccess"
@@ -323,19 +326,14 @@
               </el-select>
             </el-form-item>
             <el-form-item label="所在年级/班级" style="width: 355px">
-              <el-select
+              <el-cascader
                 style="width: 250px"
-                v-model="ruleForm.getClass"
-                placeholder="请选择"
-              >
-                <el-option
-                  v-for="item in loadClass"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                >
-                </el-option>
-              </el-select>
+                clearable
+                v-model="stringClass"
+                :options="loadClass"
+                :props="{ checkStrictly: true }"
+                @change="handleChange"
+              ></el-cascader>
             </el-form-item>
             <el-form-item label="工号" style="width: 355px">
               <el-input
@@ -475,12 +473,14 @@
             icon="el-icon-search"
             size="medium"
             type="primary"
+            @click="searchType"
             >搜索</el-button
           >
           <el-button
             style="margin-left: 20px"
             icon="el-icon-delete"
             size="medium"
+            @click="emptyset"
             >清空</el-button
           >
           <el-button
@@ -622,6 +622,7 @@ export default {
       obtained: false, //子部门弹框
       dialogImageUrl: "", //图片
       imgLimit: 1, //文件个数
+      hideUploadEdit: false, // 是否隐藏上传按钮
       productImgs: [],
       dialogVisible: false,
       headerObj: {
@@ -645,7 +646,7 @@ export default {
         phones: "", //手机号码
         national: "", //民族
         position: "", //职务
-        getClass: "", //班级
+
         thejob: "", //工号
         inductions: "", //入职日期
         workin: "", //参加工作日期
@@ -658,6 +659,7 @@ export default {
         desc: "",
         resource: ""
       },
+      stringClass: [],
       rules: {
         name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
         phones: [
@@ -693,14 +695,6 @@ export default {
       ],
       loadClass: [
         //
-        {
-          value: "1",
-          label: "中班"
-        },
-        {
-          value: "2",
-          label: "小班"
-        }
       ],
       vposition: [
         //职务
@@ -1016,23 +1010,23 @@ export default {
       callback: "", //职务搜索
       mState: [
         {
-          value: "1",
+          value: "",
           label: "全部"
         },
         {
-          value: "2",
+          value: "1",
           label: "在职"
         },
         {
-          value: "3",
+          value: "2",
           label: "离职"
         },
         {
-          value: "4",
+          value: "3",
           label: "停职"
         },
         {
-          value: "5",
+          value: "4",
           label: "退休"
         }
       ],
@@ -1052,7 +1046,8 @@ export default {
       edits: "", //ID
       view: "",
       departments: "", //添加部门
-      support: "" //添加子部门
+      support: "", //添加子部门
+      sqlClass: []
     };
   },
   beforeMount() {
@@ -1061,6 +1056,10 @@ export default {
     this.Takeone();
   },
   methods: {
+    handleChange(value) {
+      console.log(value);
+    },
+
     //初始数据获取token
     Takeone() {
       let str = JSON.parse(localStorage.getItem("saber-token"));
@@ -1090,6 +1089,17 @@ export default {
       // console.log(this.ruleForm.emails); //邮箱
       // console.log(this.ruleForm.ddeparture); //当前状态
       // console.log(this.ruleForm.nextstate); //状态更新日期
+      console.log(this.stringClass);
+      if (this.stringClass.length == 2) {
+        // this.sqlClass = this.stringClass[1];
+        // console.log(this.sqlClass);
+        this.sqlClass.push(this.stringClass[1]);
+      }
+      if (this.stringClass.length == 3) {
+        // this.sqlClass = this.stringClass[2];
+        // console.log(this.sqlClass);
+        this.sqlClass.push(this.stringClass[2]);
+      }
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.$axios
@@ -1102,7 +1112,9 @@ export default {
               birthDate: this.ruleForm.value1, //出生日期
               mobile: this.ruleForm.phones, //手机号码
               nation: this.ruleForm.national, //民族
+
               post: this.ruleForm.position, //职务
+              // managerClass: this.sqlClass, //班级
               jobNumber: this.ruleForm.thejob, //工号
               entryTime: this.ruleForm.inductions, //入职日期
               workTime: this.ruleForm.workin, //参加工作日期
@@ -1114,7 +1126,6 @@ export default {
             })
             .then(res => {
               // console.log(res);
-
               this.dateTime = false;
               this.$message({
                 message: "添加成功",
@@ -1252,12 +1263,21 @@ export default {
         };
       }
       this.productImgs = picture;
+      this.hideUploadEdit = this.productImgs.length >= 1;
+      this.dialogImageUrl = row.pic;
       this.ruleForm.marriages = row.marriage + ""; //婚姻状况
       this.ruleForm.value1 = row.birthDate; //出生日期
       this.ruleForm.phones = row.mobile; //手机号码
       this.ruleForm.national = row.nation; //民族
       this.ruleForm.position = row.post; //职务
       //所在班级
+      if (row.createBy) {
+        this.stringClass.push(row.createBy);
+        console.log(this.stringClass);
+      } else {
+        this.stringClass = "";
+      }
+
       this.ruleForm.thejob = row.jobNumber; //工号
       this.ruleForm.inductions = row.entryTime; //入职日期
       this.ruleForm.workin = row.workTime; //参加工作日期
@@ -1295,7 +1315,40 @@ export default {
     },
     //添加员工弹框
     addition(index1) {
+      // console.log(this.ruleForm.name); //姓名
+      // console.log(this.ruleForm.radio); //性别
+      // console.log(this.ruleForm.marriages); //婚姻状况
+      // console.log(this.ruleForm.value1); //出生日期
+      // console.log(this.ruleForm.phones); //手机号码
+      // console.log(this.ruleForm.national); //民族
+      // console.log(this.ruleForm.position); //职务
+      // console.log(this.ruleForm.getClass); //班级
+      // console.log(this.ruleForm.thejob); //工号
+      // console.log(this.ruleForm.inductions); //入职日期
+      // console.log(this.ruleForm.workin); //参加工作日期
+      // console.log(this.ruleForm.process); //工龄
+      // console.log(this.ruleForm.update); //证件号码
+      // console.log(this.ruleForm.worker); //工作单位
+      // console.log(this.ruleForm.emails); //邮箱
+      // console.log(this.ruleForm.ddeparture); //当前状态
+      // console.log(this.ruleForm.nextstate); //状态更新日期
       // console.log(index1);
+      this.ruleForm.name = "";
+      this.ruleForm.radio = "";
+      this.ruleForm.marriages = "";
+      this.ruleForm.value1 = "";
+      this.ruleForm.phones = "";
+      this.ruleForm.national = "";
+      this.ruleForm.position = "";
+      this.ruleForm.thejob = "";
+      this.ruleForm.inductions = "";
+      this.ruleForm.workin = "";
+      this.ruleForm.process = "";
+      this.ruleForm.update = "";
+      this.ruleForm.worker = "";
+      this.ruleForm.emails = "";
+      this.ruleForm.ddeparture = "";
+      this.ruleForm.nextstate = "";
       console.log(this.view);
       this.under = index1;
       this.dateTime = true;
@@ -1363,26 +1416,30 @@ export default {
     },
     //添加子部门
     atomic() {
-      this.$axios
-        .post(`api/blade-food/teacherdept/submit`, {
-          parentId: this.adds, //上级ID
-          deptName: this.acetone.name, //部门名称
-          level: this.acetone.sorting //部门排序
-        })
-        .then(res => {
-          this.getStorage();
-          this.obtained = false;
-          this.acetone.name = "";
-          this.acetone.storage = "";
-          console.log(res);
-          this.$message({
-            message: "添加成功",
-            type: "success"
+      if (this.acetone.name != "") {
+        this.$axios
+          .post(`api/blade-food/teacherdept/submit`, {
+            parentId: this.adds, //上级ID
+            deptName: this.acetone.name, //部门名称
+            level: this.acetone.sorting //部门排序
+          })
+          .then(res => {
+            this.getStorage();
+            this.obtained = false;
+            this.acetone.name = "";
+            this.acetone.storage = "";
+            console.log(res);
+            this.$message({
+              message: "添加成功",
+              type: "success"
+            });
+          })
+          .catch(() => {
+            this.$message.error("添加失败");
           });
-        })
-        .catch(() => {
-          this.$message.error("添加失败");
-        });
+      } else {
+        this.$message.error("子部门不能为空");
+      }
     },
     //编辑部门
     selection() {
@@ -1462,6 +1519,37 @@ export default {
           });
         });
     },
+    emptyset() {
+      this.callback = "";
+    },
+    //搜索
+    searchType() {
+      console.log(this.callback);
+      console.log(this.driver);
+      // this.stutas
+      // handleNodeClick(data){
+      //  this.view = data.id;
+      // }
+      this.$axios
+        .get(
+          `api/blade-food/teacher/list?deptId=${this.view}&post=${this.callback}&stutas=${this.driver}`,
+          {}
+        )
+        .then(res => {
+          // console.log(res);
+          // this.store = res.data.data.records;
+          // console.log(this.store);
+          this.$message({
+            message: "查询成功",
+            type: "success"
+          });
+          this.loadFlag1 = false;
+          this.tableData = res.data.data.records;
+        })
+        .catch(() => {
+          this.$message.error("查询失败");
+        });
+    },
     //查看
     handleNodeClick(data) {
       this.view = data.id;
@@ -1512,39 +1600,72 @@ export default {
     //获取所属班级
     getToolkit() {
       this.$axios.get(`api/blade-food/class/tree`, {}).then(res => {
-        console.log(res);
+        // console.log(res);
         this.bufs = res.data.data;
+        console.log(this.bufs);
         let fwork = [];
-        this.bufs.forEach((item, index) => {
-          console.log(item);
-          fwork[index] = {
-            id: item.id,
-            label: item.label
-          };
-          // item.children.forEach(item1 => {
-          //   // console.log(item1);
-          //   if (item1.children) {
-          //     item1.children.forEach((item2, index2) => {
-          //       // console.log(item2);
-          //       fwork[index2] = {
-          //         id: item2.id,
-          //         label: item2.classType
-          //       };
-          //       fwork[index2].children = [];
-          //       if (item2.children) {
-          //         item2.children.forEach((item3, index3) => {
-          //           // console.log(item3);
-          //           fwork[index2].children[index3] = {
-          //             id: item3.id,
-          //             label: item3.classType
-          //           };
-          //         });
-          //       }
-          //     });
-          //   }
-          // });
+        this.bufs.forEach(item => {
+          item.children.forEach((item1, index1) => {
+            // console.log(item1);
+            fwork[index1] = {
+              value: item1.id,
+              label: item1.label
+            };
+            fwork[index1].children = [];
+            item1.children.forEach((item2, index2) => {
+              fwork[index1].children[index2] = {
+                value: item2.id,
+                label: item2.label
+              };
+              fwork[index1].children[index2].children = [];
+              if (item2.children) {
+                item2.children.forEach((item3, index3) => {
+                  // console.log(item3),
+                  fwork[index1].children[index2].children[index3] = {
+                    value: item3.id,
+                    label: item3.label
+                  };
+                });
+              }
+            });
+          });
         });
-        console.log(fwork);
+        this.loadClass = fwork;
+        console.log(this.loadClass);
+        // this.bufs.forEach((item, index) => {
+        //   console.log(item);
+        //   fwork[index] = {
+        //     id: item.id,
+        //     label: item.label
+        //   };
+        //   fwork[index].children = [];
+        //   item.children.forEach((item1, index1) => {
+        //     fwork[index].children[index1] = {
+        //       value: item1.id,
+        //       label: item1.label
+        //     };
+        //     fwork[index].children[index1].children = [];
+        //     item1.children.forEach((item2, index2) => {
+        //       fwork[index].children[index1].children[index2] = {
+        //         value: item2.id,
+        //         label: item2.label
+        //       };
+        //       fwork[index].children[index1].children[index2].children = [];
+        //       if (item2.children) {
+        //         item2.children.forEach((item3, index3) => {
+        //           fwork[index].children[index1].children[index2].children[
+        //             index3
+        //           ] = {
+        //             value: item3.id,
+        //             label: item3.label
+        //           };
+        //         });
+        //       }
+        //     });
+        //   });
+        // });
+        // this.loadClass = fwork;
+        // console.log(this.loadClass);
       });
     },
     //获取部门树形结构
@@ -1577,13 +1698,16 @@ export default {
             });
           }
         });
-        console.log(auto);
+
         this.data = auto;
+        console.log(auto);
       });
     },
     //移除图片
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
+    handleRemove(file, productImgs) {
+      // console.log(file, fileList);
+      this.dialogImageUrl = "";
+      this.hideUploadEdit = productImgs.length >= 1;
     },
     //预览图片
     handlePictureCardPreview(file) {
@@ -1591,6 +1715,9 @@ export default {
 
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
+    },
+    handleChangePic(file, productImgs) {
+      this.hideUploadEdit = productImgs.length >= 1;
     },
     handleExceed(files, fileList) {
       //图片上传超过数量限制
@@ -1622,9 +1749,9 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .avue-view {
-  padding: 0 5px !important;
+  padding: 0 0px !important;
 }
 .management {
   width: 100%;
@@ -1671,5 +1798,9 @@ export default {
 }
 .address {
   margin-top: 50px;
+}
+
+/deep/ .hide .el-upload--picture-card {
+  display: none;
 }
 </style>
