@@ -21,7 +21,11 @@
         prop="region"
         style="  margin-top: 10px;"
       >
-        <el-select v-model="ruleForm.region" placeholder="请选择">
+        <el-select
+          :disabled="this.network == 1"
+          v-model="ruleForm.region"
+          placeholder="请选择"
+        >
           <el-option label="是" value="1"></el-option>
           <el-option label="否" value="0"></el-option>
         </el-select>
@@ -234,7 +238,8 @@ export default {
       newProtein: [], //标签页，
       newclicked: [],
       metadata: "",
-      borderid: ""
+      borderid: "",
+      network: ""
     };
   },
   beforeMount() {},
@@ -270,8 +275,10 @@ export default {
     confirm() {
       if (this.$route.query.userid == undefined) {
         this.window = true; //更新
+        this.network = "";
       } else {
         this.window = false;
+        this.network = 1;
       }
       //样式渲染
       this.$axios
@@ -284,7 +291,7 @@ export default {
           if (this.$route.query.userid) {
             this.ruleForm.name = this.$route.query.userid.name;
             this.ruleForm.region =
-              this.$route.query.userid.isDef !== 1 ? "是" : "否";
+              this.$route.query.userid.isDef == 1 ? "是" : "否";
             this.newProtein = this.$route.query.userid;
           } else {
             this.newProtein = res.data.data;

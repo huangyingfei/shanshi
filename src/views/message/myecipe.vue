@@ -47,8 +47,9 @@
       >
     </div>
     <div class="prepall">
-      <span style=" margin-right: 10px;margin-left: 25px;">收藏食谱</span>
+      <span style=" margin-right: 10px;margin-left: 25px;">收藏食谱:</span>
       <el-select
+        style="width:200px;"
         @change="collection"
         v-model="empty"
         placeholder="请选择收藏食谱"
@@ -61,8 +62,9 @@
         >
         </el-option>
       </el-select>
-      <span style="margin-left: 25px; margin-right: 15px;">分享食谱</span>
+      <span style="margin-left: 25px; margin-right: 10px;">分享食谱:</span>
       <el-select
+        style="width:200px;"
         @change="geospatial"
         v-model="callback"
         placeholder="请选择分享食谱"
@@ -75,8 +77,14 @@
         >
         </el-option>
       </el-select>
-      <span style="margin-left: 25px; margin-right: 15px;">公示食谱</span>
-      <el-select @change="titlesearch" v-model="blicity" placeholder="请选择">
+      <span style="margin-left: 25px; margin-right: 15px;">公示食谱:</span>
+
+      <el-select
+        style="width:200px;"
+        @change="titlesearch"
+        v-model="blicity"
+        placeholder="请选择"
+      >
         <el-option
           v-for="item in publicity"
           :key="item.value"
@@ -245,7 +253,7 @@ export default {
         },
         {
           value: "0",
-          label: "分享到平台食谱"
+          label: "分享到平台"
         }
       ],
       publicity: [
@@ -255,11 +263,11 @@ export default {
         },
         {
           value: "1",
-          label: "已公示食谱"
+          label: "已公示"
         },
         {
           value: "0",
-          label: "未公示食谱"
+          label: "未公示"
         }
       ],
       blicity: "",

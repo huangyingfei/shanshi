@@ -69,11 +69,25 @@
       </div>
       <div class="consults">
         <div class="header">
-          <span style="margin-right: 10px">关键字:</span>
+          <!-- <span style="margin-right: 10px">关键字:</span>
           <el-input
             v-model="input"
             placeholder="请输入内容"
             style="width: 200px"
+            size="small"
+          ></el-input> -->
+          <span style="margin-right: 10px">工号:</span>
+          <el-input
+            v-model="workers"
+            placeholder="请输入内容"
+            style="width: 100px"
+            size="small"
+          ></el-input>
+          <span style="margin-left: 10px;margin-right: 10px">姓名:</span>
+          <el-input
+            v-model="username"
+            placeholder="请输入内容"
+            style="width: 100px"
             size="small"
           ></el-input>
           <span style="margin-right: 10px; margin-left: 15px">职务:</span>
@@ -222,137 +236,141 @@
           :visible.sync="dateTime"
           :close-on-click-modal="false"
         >
-          <el-form
-            :model="ruleForm"
-            :rules="rules"
-            ref="ruleForm"
-            :inline="true"
-            label-width="105px"
-            class="demo-ruleForm"
-          >
-            <el-form-item label="姓名" style="width: 355px" prop="name">
-              <el-input style="width: 250px" v-model="ruleForm.name"></el-input>
-            </el-form-item>
-            <el-form-item label="性别" style="width: 355px">
-              <el-radio
-                style="margin-left: 30px"
-                v-model="ruleForm.radio"
-                label="1"
-                >男</el-radio
-              >
-              <el-radio v-model="ruleForm.radio" label="2">女</el-radio>
-            </el-form-item>
-            <el-form-item style="width: 355px" label="图片">
-              <el-upload
-                :class="{ hide: hideUploadEdit }"
-                accept=".jpeg,.jpg,.gif,.png"
-                action="api/blade-resource/oss/endpoint/put-file"
-                list-type="picture-card"
-                :limit="1"
-                :file-list="productImgs"
-                :on-exceed="handleExceed"
-                :on-change="handleChangePic"
-                :on-preview="handlePictureCardPreview"
-                :before-upload="beforeAvatarUpload"
-                :on-success="handleAvatarSuccess"
-                :on-remove="handleRemove"
-                :headers="headerObj"
-              >
-                <!-- <img v-if="dialogImageUrl" :src="dialogImageUrl" class="avatar" /> -->
-                <i class="el-icon-plus"></i>
-              </el-upload>
-              <span style="color:#e0e0e0;  font-size: 11px;"
-                >上传图片不能超过2M 只能是JPG PNG格式</span
-              >
-              <el-dialog append-to-body :visible.sync="dialogVisible">
-                <img width="100%" :src="dialogImageUrl" alt />
-              </el-dialog>
-            </el-form-item>
-            <el-form-item style="width: 355px" label="婚姻状况">
-              <el-radio
-                style="margin-left: 30px"
-                v-model="ruleForm.marriages"
-                label="0"
-                >已婚</el-radio
-              >
-              <el-radio v-model="ruleForm.marriages" label="1">未婚</el-radio>
-            </el-form-item>
-            <el-form-item label="出生日期" style="width: 355px" prop="value1">
-              <el-date-picker
-                v-model="ruleForm.value1"
-                style="width: 250px"
-                format="yyyy 年 MM 月 dd 日 HH 时 mm 分 ss 秒 "
-                value-format="yyyy-MM-dd HH:mm:ss"
-                type="datetime"
-                placeholder="选择日期时间"
-              >
-              </el-date-picker>
-            </el-form-item>
-            <el-form-item label="手机号码" style="width: 355px" prop="phones">
-              <el-input
-                style="width: 250px"
-                v-model="ruleForm.phones"
-              ></el-input>
-            </el-form-item>
-            <el-form-item label="民族" style="width: 355px">
-              <el-select
-                style="width: 250px"
-                v-model="ruleForm.national"
-                placeholder="请选择"
-              >
-                <el-option
-                  v-for="item in college"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                >
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="职务" style="width: 355px" prop="position">
-              <el-select
-                clearable
-                style="width: 250px"
-                v-model="ruleForm.position"
-                placeholder="请选择"
-              >
-                <el-option
-                  v-for="item in vposition"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                >
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="所在年级/班级" style="width: 355px">
-              <el-cascader
-                style="width: 250px"
-                clearable
-                v-model="stringClass"
-                :options="loadClass"
-                :props="{ checkStrictly: true }"
-                @change="handleChange"
-              ></el-cascader>
-            </el-form-item>
-            <el-form-item label="工号" style="width: 355px">
-              <el-input
-                style="width: 250px"
-                v-model="ruleForm.thejob"
-              ></el-input>
-            </el-form-item>
-            <el-form-item style="width: 355px">
-              <span style="font-size: 12px"
-                >若为年级组长、保教主任、老师、保育员时需选择
-                所在年级/班级</span
-              >
-            </el-form-item>
-            <el-form-item
-              label="入职日期"
-              style="width: 355px"
-              prop="inductions"
+          <div class="onlymsgid">
+            <el-form
+              :model="ruleForm"
+              :rules="rules"
+              ref="ruleForm"
+              :inline="true"
+              label-width="105px"
+              class="demo-ruleForm"
             >
-              <!-- <el-date-picker
+              <el-form-item label="姓名" style="width: 355px" prop="name">
+                <el-input
+                  style="width: 250px"
+                  v-model="ruleForm.name"
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="性别" style="width: 355px">
+                <el-radio
+                  style="margin-left: 30px"
+                  v-model="ruleForm.radio"
+                  label="1"
+                  >男</el-radio
+                >
+                <el-radio v-model="ruleForm.radio" label="2">女</el-radio>
+              </el-form-item>
+              <el-form-item style="width: 355px" label="图片">
+                <el-upload
+                  :class="{ hide: hideUploadEdit }"
+                  accept=".jpeg,.jpg,.gif,.png"
+                  action="api/blade-resource/oss/endpoint/put-file"
+                  list-type="picture-card"
+                  :limit="1"
+                  :file-list="productImgs"
+                  :on-exceed="handleExceed"
+                  :on-change="handleChangePic"
+                  :on-preview="handlePictureCardPreview"
+                  :before-upload="beforeAvatarUpload"
+                  :on-success="handleAvatarSuccess"
+                  :on-remove="handleRemove"
+                  :headers="headerObj"
+                >
+                  <!-- <img v-if="dialogImageUrl" :src="dialogImageUrl" class="avatar" /> -->
+                  <i class="el-icon-plus"></i>
+                </el-upload>
+                <span style="color:#e0e0e0;  font-size: 11px;"
+                  >上传图片不能超过2M 只能是JPG PNG格式</span
+                >
+                <el-dialog append-to-body :visible.sync="dialogVisible">
+                  <img width="100%" :src="dialogImageUrl" alt />
+                </el-dialog>
+              </el-form-item>
+              <el-form-item style="width: 355px" label="婚姻状况">
+                <el-radio
+                  style="margin-left: 30px"
+                  v-model="ruleForm.marriages"
+                  label="0"
+                  >已婚</el-radio
+                >
+                <el-radio v-model="ruleForm.marriages" label="1">未婚</el-radio>
+              </el-form-item>
+              <el-form-item label="出生日期" style="width: 355px" prop="value1">
+                <el-date-picker
+                  v-model="ruleForm.value1"
+                  style="width: 250px"
+                  format="yyyy 年 MM 月 dd 日 "
+                  value-format="yyyy-MM-dd HH:mm:ss"
+                  type="datetime"
+                  placeholder="选择日期时间"
+                >
+                </el-date-picker>
+              </el-form-item>
+              <el-form-item label="手机号码" style="width: 355px" prop="phones">
+                <el-input
+                  style="width: 250px"
+                  v-model="ruleForm.phones"
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="民族" style="width: 355px">
+                <el-select
+                  style="width: 250px"
+                  v-model="ruleForm.national"
+                  placeholder="请选择"
+                >
+                  <el-option
+                    v-for="item in college"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="职务" style="width: 355px" prop="position">
+                <el-select
+                  clearable
+                  style="width: 250px"
+                  v-model="ruleForm.position"
+                  placeholder="请选择"
+                >
+                  <el-option
+                    v-for="item in vposition"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="所在年级/班级" style="width: 355px">
+                <el-cascader
+                  style="width: 250px"
+                  clearable
+                  v-model="stringClass"
+                  :options="loadClass"
+                  :props="{ checkStrictly: true }"
+                  @change="handleChange"
+                ></el-cascader>
+              </el-form-item>
+              <el-form-item label="工号" style="width: 355px">
+                <el-input
+                  style="width: 250px"
+                  v-model="ruleForm.thejob"
+                ></el-input>
+              </el-form-item>
+              <el-form-item style="width: 355px">
+                <span style="font-size: 12px"
+                  >若为年级组长、保教主任、老师、保育员时需选择
+                  所在年级/班级</span
+                >
+              </el-form-item>
+              <el-form-item
+                label="入职日期"
+                style="width: 355px"
+                prop="inductions"
+              >
+                <!-- <el-date-picker
               style="width: 250px"
               v-model="ruleForm.inductions"
               format="yyyy 年 MM 月 dd 日"
@@ -360,19 +378,19 @@
               placeholder="选择日期"
             >
             </el-date-picker> -->
-              <el-date-picker
-                v-model="ruleForm.inductions"
-                style="width: 250px"
-                format="yyyy 年 MM 月 dd 日 HH 时 mm 分 ss 秒 "
-                value-format="yyyy-MM-dd HH:mm:ss"
-                type="datetime"
-                placeholder="选择日期时间"
-              >
-              </el-date-picker>
-            </el-form-item>
-            <el-form-item label="参加工作日期" style="width: 355px">
-              <!--  -->
-              <!-- <el-date-picker
+                <el-date-picker
+                  v-model="ruleForm.inductions"
+                  style="width: 250px"
+                  format="yyyy 年 MM 月 dd 日"
+                  value-format="yyyy-MM-dd HH:mm:ss"
+                  type="datetime"
+                  placeholder="选择日期时间"
+                >
+                </el-date-picker>
+              </el-form-item>
+              <el-form-item label="参加工作日期" style="width: 355px">
+                <!--  -->
+                <!-- <el-date-picker
               style="width: 250px"
               @change="stop()"
               v-model="ruleForm.workin"
@@ -381,58 +399,59 @@
               placeholder="选择日期"
             >
             </el-date-picker> -->
-              <el-date-picker
-                v-model="ruleForm.workin"
-                style="width: 250px"
-                @change="stop()"
-                format="yyyy 年 MM 月 dd 日 HH 时 mm 分 ss 秒 "
-                value-format="yyyy-MM-dd HH:mm:ss"
-                type="datetime"
-                placeholder="选择日期时间"
-              >
-              </el-date-picker>
-            </el-form-item>
-            <el-form-item label="工龄" style="width: 355px">
-              <el-input
-                style="width: 250px"
-                v-model="ruleForm.process"
-              ></el-input>
-            </el-form-item>
-            <el-form-item label="证件号码" style="width: 355px">
-              <el-input
-                style="width: 250px"
-                v-model="ruleForm.update"
-              ></el-input>
-            </el-form-item>
-            <el-form-item label="工作单位" style="width: 355px">
-              <el-input
-                style="width: 250px"
-                v-model="ruleForm.worker"
-              ></el-input>
-            </el-form-item>
-            <el-form-item label="邮箱" style="width: 355px">
-              <el-input
-                style="width: 250px"
-                v-model="ruleForm.emails"
-              ></el-input>
-            </el-form-item>
-            <el-form-item label="当前状态" style="width: 355px">
-              <el-select
-                style="width: 250px"
-                v-model="ruleForm.ddeparture"
-                placeholder="请选择"
-              >
-                <el-option
-                  v-for="item in emailslist"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
+                <el-date-picker
+                  v-model="ruleForm.workin"
+                  style="width: 250px"
+                  @change="stop()"
+                  format="yyyy 年 MM 月 dd 日 "
+                  value-format="yyyy-MM-dd HH:mm:ss"
+                  type="datetime"
+                  placeholder="选择日期时间"
                 >
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="状态更新日期" style="width: 355px">
-              <!-- <el-date-picker
+                </el-date-picker>
+              </el-form-item>
+              <el-form-item label="工龄" style="width: 355px">
+                <el-input
+                  :disabled="true"
+                  style="width: 250px"
+                  v-model="ruleForm.process"
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="证件号码" style="width: 355px">
+                <el-input
+                  style="width: 250px"
+                  v-model="ruleForm.update"
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="工作单位" style="width: 355px">
+                <el-input
+                  style="width: 250px"
+                  v-model="ruleForm.worker"
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="邮箱" style="width: 355px">
+                <el-input
+                  style="width: 250px"
+                  v-model="ruleForm.emails"
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="当前状态" style="width: 355px">
+                <el-select
+                  style="width: 250px"
+                  v-model="ruleForm.ddeparture"
+                  placeholder="请选择"
+                >
+                  <el-option
+                    v-for="item in emailslist"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="状态更新日期" style="width: 355px">
+                <!-- <el-date-picker
               style="width: 250px"
               v-model="ruleForm.nextstate"
               format="yyyy 年 MM 月 dd 日"
@@ -440,17 +459,17 @@
               placeholder="选择日期"
             >
             </el-date-picker> -->
-              <el-date-picker
-                v-model="ruleForm.nextstate"
-                format="yyyy 年 MM 月 dd 日 HH 时 mm 分 ss 秒 "
-                value-format="yyyy-MM-dd HH:mm:ss"
-                type="datetime"
-                placeholder="选择日期时间"
-              >
-              </el-date-picker>
-            </el-form-item>
-          </el-form>
-
+                <el-date-picker
+                  v-model="ruleForm.nextstate"
+                  format="yyyy 年 MM 月 dd 日 "
+                  value-format="yyyy-MM-dd HH:mm:ss"
+                  type="datetime"
+                  placeholder="选择日期时间"
+                >
+                </el-date-picker>
+              </el-form-item>
+            </el-form>
+          </div>
           <div slot="footer" class="dialog-footer">
             <el-button @click="dateTime = false">取 消</el-button>
             <!-- <el-button @click="resetForm('ruleForm')">重置</el-button> -->
@@ -473,6 +492,7 @@
             icon="el-icon-search"
             size="medium"
             type="primary"
+            :disabled="this.nbottoms == 1"
             @click="searchType"
             >搜索</el-button
           >
@@ -480,6 +500,7 @@
             style="margin-left: 20px"
             icon="el-icon-delete"
             size="medium"
+            :disabled="this.nbottoms == 1"
             @click="emptyset"
             >清空</el-button
           >
@@ -487,6 +508,7 @@
             style="margin-left: 20px"
             size="medium"
             type="primary"
+            :disabled="this.nbottoms == 1"
             icon="el-icon-plus"
             @click="addition(1)"
             >添加员工</el-button
@@ -1042,12 +1064,17 @@ export default {
         }
       ],
       working: "",
+      workers: "", //工号搜索
+      username: "", //姓名搜索
       under: "", //添加员工下标
       edits: "", //ID
       view: "",
+      nbottoms: 1,
       departments: "", //添加部门
       support: "", //添加子部门
-      sqlClass: []
+      sqlClass: [],
+      empty: "", //升序
+      ordered: "" //降序
     };
   },
   beforeMount() {
@@ -1520,25 +1547,41 @@ export default {
         });
     },
     emptyset() {
+      this.workers = "";
+      this.username = "";
       this.callback = "";
+      this.driver = "";
+      this.working = "";
+      this.searchType();
     },
     //搜索
     searchType() {
+      console.log(this.workers);
       console.log(this.callback);
       console.log(this.driver);
+      console.log(this.working);
+      let ascen = "job_number";
+      if (this.working == 1) {
+        this.empty = ascen;
+        console.log(this.empty);
+      } else {
+        this.empty = "";
+      }
+      if (this.working == 2) {
+        this.ordered = ascen;
+      } else {
+        this.ordered = "";
+      }
       // this.stutas
       // handleNodeClick(data){
       //  this.view = data.id;
       // }
       this.$axios
         .get(
-          `api/blade-food/teacher/list?deptId=${this.view}&post=${this.callback}&stutas=${this.driver}`,
+          `api/blade-food/teacher/list?deptId=${this.view}&jobNumber=${this.workers}&name=${this.username}&post=${this.callback}&stutas=${this.driver}&descs=${this.empty}&ascs=${this.ordered}`,
           {}
         )
         .then(res => {
-          // console.log(res);
-          // this.store = res.data.data.records;
-          // console.log(this.store);
           this.$message({
             message: "查询成功",
             type: "success"
@@ -1553,6 +1596,7 @@ export default {
     //查看
     handleNodeClick(data) {
       this.view = data.id;
+      this.nbottoms = 2;
       console.log(this.view);
       this.loadFlag1 = true;
       this.$axios
@@ -1759,6 +1803,11 @@ export default {
   background-color: #fff;
   display: flex;
   /* margin-bottom: 40px; */
+}
+.onlymsgid {
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 400px;
 }
 .onchange {
   width: 24%;
