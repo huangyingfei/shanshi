@@ -1053,6 +1053,8 @@
         default: 800,
       },
       crowd:'',
+      types:'',
+      foodCatalog:'',
       peipScore:'',
       dragnode: {},
       nutritionValue:[
@@ -1171,6 +1173,14 @@
     },
 
     methods: {
+      // 根据名称获取mealtype
+      getmealTypeData(name){
+        return  this.mealTypeData.filter(_=>{
+          if(_.name==name){
+            return _.value
+          }
+        })[0].value
+      },
       //同步修改高度
       resizeExpendHeight() {
         setTimeout(() => {
@@ -1322,6 +1332,11 @@
         }
         foods["recipeVals"]=recipeVals
         foods["days"]=days;
+        let types='';
+        for(let i=0;i<this.foodCatalog.length;i++){
+          types+= that.getmealTypeData(this.foodCatalog[i])+","
+        }
+        foods["types"]=types;
         if(foods.recipeVals.length>0){
           calRecipe(foods).then(res=>{
             if(res.data.success){
@@ -1352,7 +1367,7 @@
 
               let power=[];
               that.powerValue.forEach(_=>{
-                power.push({name:_.name,req:resData.powerCalDTOList[_.code].min+"-"+resData.powerCalDTOList[_.code].min,real:resData.powerCalDTOList[_.code].real,grade:resData.powerCalDTOList[_.code].grade,point:resData.powerCalDTOList[_.code].point})
+                power.push({name:_.name,req:resData.powerCalDTOList[_.code].min+"-"+resData.powerCalDTOList[_.code].max,real:resData.powerCalDTOList[_.code].real,grade:resData.powerCalDTOList[_.code].grade,point:resData.powerCalDTOList[_.code].point})
               })
               let protein=[];
               protein=resData.proteinCalDTOList;
@@ -1363,6 +1378,11 @@
               protein.forEach(_=>{
                 _["realSum"]=sum
                 _["req"]=">="+_.min
+                if(parseFloat( _.min)<=parseFloat(sum)){
+                  _["grade"]="ok"
+                }else{
+                  _["grade"]="不足"
+                }
               })
               let meal=[];
               meal=resData.mealTypeCalDTOList

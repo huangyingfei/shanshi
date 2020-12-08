@@ -150,13 +150,15 @@ export default {
         tree: true,
         border: true,
         index: true,
+        indexLabel:'序号',
         selection: false,
         viewBtn: true,
         menuWidth: 200,
         addBtn:false,
         delBtn:false,
         editBtn:false,
-        dialogWidth: 900,
+        dialogHeight:500,
+        dialogWidth:900,
         dialogClickModal: false,
         column: [
           {

@@ -1,7 +1,7 @@
 <template>
-  <div style="padding-left:25px;dheight: 1080px;width: 100%">
+  <div style="padding-left:25px;height: 1080px;width: 80%">
     <!-- table-week start   -->
-    <el-table class="table-week" style="width:100%" :data="datas" border fit>
+    <el-table class="table-week" style="width:100%" :data="smartDatas" border fit>
       <el-table-column align="center" width="100" fixed class-name="col-date3 colNoneBorder" >
         <template slot="header"> 菜品/食物 </template>
         <template slot-scope="scope">
@@ -12,7 +12,7 @@
       <el-table-column
         v-if="headers.find((p) => p.name == 'week1')"
         align="center"
-        width="250"
+        width="280"
       >
         <template slot="header">
           <div class="">
@@ -51,6 +51,7 @@
                 prop="name"
                 header-align="center"
                 align="left"
+                width="120"
               ></el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
                 <template slot-scope="scope1">
@@ -61,74 +62,86 @@
                       v-if="!scope1.row.children"
                       type="text"
                       size="mini"
+                      @change="foodChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week1').id
+                          )"
                       placeholder="请输入内容"
                     ></el-input>
                     <el-input
                       style="flex: 1"
                       v-model="scope1.row.count"
                       v-if="scope1.row.children"
-                      disabled
                       type="text"
                       size="mini"
+                      @change="dishChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week1').id)"
                       placeholder="请输入内容"
                     ></el-input>
-                    <div style="width: 35px; text-algin: center">
-                      <!--<el-link-->
-                        <!--v-if="scope1.row.children"-->
-                        <!--type="primary"-->
-                        <!--@click="-->
-                          <!--onRemove(-->
-                            <!--scope.row.id,-->
-                            <!--scope.row.weeks.find((p) => p.name == 'week1').id,-->
-                            <!--scope1.row.id-->
-                          <!--)-->
-                        <!--"-->
-                      <!--&gt;移除</el-link-->
-                      <!--&gt;-->
-                    </div>
+                    <span class="arrow-up"  v-if="scope1.row.up"><img src="/img/arrowup.png" width="20px" height="20px"/>
+                      <span>{{scope1.row.up}}%</span>
+                    </span>
+                    <span class="arrow-down" v-if="scope1.row.down"><img src="/img/arrowdown.png" width="20px" height="20px"/>
+                      <span>{{scope1.row.down}}%</span>
+                    </span>
+                    <!--<div style="width: 35px; text-algin: center">-->
+                    <!--&lt;!&ndash;<el-link&ndash;&gt;-->
+                    <!--&lt;!&ndash;v-if="scope1.row.children"&ndash;&gt;-->
+                    <!--&lt;!&ndash;type="primary"&ndash;&gt;-->
+                    <!--&lt;!&ndash;@click="&ndash;&gt;-->
+                    <!--&lt;!&ndash;onRemove(&ndash;&gt;-->
+                    <!--&lt;!&ndash;scope.row.id,&ndash;&gt;-->
+                    <!--&lt;!&ndash;scope.row.weeks.find((p) => p.name == 'week1').id,&ndash;&gt;-->
+                    <!--&lt;!&ndash;scope1.row.id&ndash;&gt;-->
+                    <!--&lt;!&ndash;)&ndash;&gt;-->
+                    <!--&lt;!&ndash;"&ndash;&gt;-->
+                    <!--&lt;!&ndash;&gt;移除</el-link&ndash;&gt;-->
+                    <!--&lt;!&ndash;&gt;&ndash;&gt;-->
+                    <!--</div>-->
                   </div>
                 </template>
               </el-table-column>
               <!--<el-table-column label="图片" align="center">-->
-                <!--<template slot-scope="scope1">-->
-                  <!--<div-->
-                    <!--v-if="-->
-                      <!--scope1.$index === 0 &&-->
-                      <!--scope.row.weeks.find((p) => p.name == 'week1')-->
-                    <!--"-->
-                    <!--style="width: 100px; height: 100px; margin: 0 auto"-->
-                  <!--&gt;-->
-                    <!--<el-upload-->
-                      <!--:multiple="false"-->
-                      <!--:show-file-list="false"-->
-                      <!--:action="upload_url"-->
-                      <!--:on-change="-->
-                        <!--onUploadImage(-->
-                          <!--scope.row.id,-->
-                          <!--scope.row.weeks.find((p) => p.name == 'week1').id,-->
-                          <!--$event-->
-                        <!--)-->
-                      <!--"-->
-                    <!--&gt;-->
-                      <!--<img-->
-                        <!--v-if="-->
-                          <!--scope.row.weeks.find((p) => p.name == 'week1').image-->
-                        <!--"-->
-                        <!--:src="-->
-                          <!--scope.row.weeks.find((p) => p.name == 'week1').image-->
-                        <!--"-->
-                        <!--style="width: 100%; height: 100%"-->
-                      <!--/>-->
-                      <!--<img-->
-                        <!--v-if="-->
-                          <!--!scope.row.weeks.find((p) => p.name == 'week1').image-->
-                        <!--"-->
-                        <!--:src="empty_image"-->
-                        <!--style="width: 100%; height: 100%"-->
-                      <!--/>-->
-                    <!--</el-upload>-->
-                  <!--</div>-->
-                <!--</template>-->
+              <!--<template slot-scope="scope1">-->
+              <!--<div-->
+              <!--v-if="-->
+              <!--scope1.$index === 0 &&-->
+              <!--scope.row.weeks.find((p) => p.name == 'week1')-->
+              <!--"-->
+              <!--style="width: 100px; height: 100px; margin: 0 auto"-->
+              <!--&gt;-->
+              <!--<el-upload-->
+              <!--:multiple="false"-->
+              <!--:show-file-list="false"-->
+              <!--:action="upload_url"-->
+              <!--:on-change="-->
+              <!--onUploadImage(-->
+              <!--scope.row.id,-->
+              <!--scope.row.weeks.find((p) => p.name == 'week1').id,-->
+              <!--$event-->
+              <!--)-->
+              <!--"-->
+              <!--&gt;-->
+              <!--<img-->
+              <!--v-if="-->
+              <!--scope.row.weeks.find((p) => p.name == 'week1').image-->
+              <!--"-->
+              <!--:src="-->
+              <!--scope.row.weeks.find((p) => p.name == 'week1').image-->
+              <!--"-->
+              <!--style="width: 100%; height: 100%"-->
+              <!--/>-->
+              <!--<img-->
+              <!--v-if="-->
+              <!--!scope.row.weeks.find((p) => p.name == 'week1').image-->
+              <!--"-->
+              <!--:src="empty_image"-->
+              <!--style="width: 100%; height: 100%"-->
+              <!--/>-->
+              <!--</el-upload>-->
+              <!--</div>-->
+              <!--</template>-->
               <!--</el-table-column>-->
             </el-table>
             <!-- table end -->
@@ -153,7 +166,7 @@
       <el-table-column
         v-if="headers.find((p) => p.name == 'week2')"
         align="center"
-        width="250"
+        width="280"
       >
         <template slot="header">
           <div class="">
@@ -162,11 +175,11 @@
             }})
           </div>
           <!--<div class="">-->
-            <!--<el-checkbox-->
-              <!--label="设置为假期"-->
-              <!--:checked="headers.find((p) => p.name == 'week2').is_vacation"-->
-              <!--@change="onCheck('week2', $event)"-->
-            <!--&gt;</el-checkbox>-->
+          <!--<el-checkbox-->
+          <!--label="设置为假期"-->
+          <!--:checked="headers.find((p) => p.name == 'week2').is_vacation"-->
+          <!--@change="onCheck('week2', $event)"-->
+          <!--&gt;</el-checkbox>-->
           <!--</div>-->
         </template>
         <template slot-scope="scope">
@@ -180,7 +193,7 @@
             <!-- table start -->
             <el-table
               class="table-foods"
-              style="width: 100%"
+              style="width: 120%"
               :data="scope.row.weeks.find((p) => p.name == 'week2').foods"
               row-key="id"
               @expand-change="expandchange"
@@ -192,6 +205,7 @@
                 prop="name"
                 header-align="center"
                 align="left"
+                width="120"
               ></el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
                 <template slot-scope="scope1">
@@ -202,61 +216,76 @@
                       v-if="!scope1.row.children"
                       type="text"
                       size="mini"
-                      placeholder="请输入内容"
+                      placeholder="请输入内容" @change="foodChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week2').id
+                          )"
+
                     ></el-input>
                     <el-input
                       style="flex: 1"
                       v-model="scope1.row.count"
                       v-if="scope1.row.children"
-                      disabled
                       type="text"
                       size="mini"
                       placeholder="请输入内容"
+                      @change="dishChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week2').id
+                          )"
                     ></el-input>
+                    <span class="arrow-up"  v-if="scope1.row.up"><img src="/img/arrowup.png" width="20px" height="20px"/>
+                      <span>{{scope1.row.up}}%</span>
+                    </span>
+                    <span class="arrow-down" v-if="scope1.row.down"><img src="/img/arrowdown.png" width="20px" height="20px"/>
+                      <span>{{scope1.row.down}}%</span>
+                    </span>
+                    <!--<span><img src="/img/arrowup.png" width="20px" height="20px"/>-->
+                    <!--12%</span>-->
                     <!--<div style="width: 35px; text-algin: center">-->
-                      <!--<el-link-->
-                        <!--v-if="scope1.row.children"-->
-                        <!--type="primary"-->
-                        <!--@click="-->
-                          <!--onRemove(-->
-                            <!--scope.row.id,-->
-                            <!--scope.row.weeks.find((p) => p.name == 'week2').id,-->
-                            <!--scope1.row.id-->
-                          <!--)-->
-                        <!--"-->
-                      <!--&gt;移除</el-link-->
-                      <!--&gt;-->
+                    <!--<el-link-->
+                    <!--v-if="scope1.row.children"-->
+                    <!--type="primary"-->
+                    <!--@click="-->
+                    <!--onRemove(-->
+                    <!--scope.row.id,-->
+                    <!--scope.row.weeks.find((p) => p.name == 'week2').id,-->
+                    <!--scope1.row.id-->
+                    <!--)-->
+                    <!--"-->
+                    <!--&gt;移除</el-link-->
+                    <!--&gt;-->
                     <!--</div>-->
                   </div>
                 </template>
               </el-table-column>
               <!--<el-table-column label="图片" align="center">-->
-                <!--<template slot-scope="scope1">-->
-                  <!--<div-->
-                    <!--v-if="-->
-                      <!--scope1.$index === 0 &&-->
-                      <!--scope.row.weeks.find((p) => p.name == 'week2')-->
-                    <!--"-->
-                    <!--style="width: 100px; height: 100px; margin: 0 auto"-->
-                  <!--&gt;-->
-                    <!--<img-->
-                      <!--v-if="-->
-                        <!--scope.row.weeks.find((p) => p.name == 'week2').image-->
-                      <!--"-->
-                      <!--:src="-->
-                        <!--scope.row.weeks.find((p) => p.name == 'week2').image-->
-                      <!--"-->
-                      <!--style="width: 100%; height: 100%"-->
-                    <!--/>-->
-                    <!--<img-->
-                      <!--v-if="-->
-                        <!--!scope.row.weeks.find((p) => p.name == 'week2').image-->
-                      <!--"-->
-                      <!--:src="empty_image"-->
-                      <!--style="width: 100%; height: 100%"-->
-                    <!--/>-->
-                  <!--</div>-->
-                <!--</template>-->
+              <!--<template slot-scope="scope1">-->
+              <!--<div-->
+              <!--v-if="-->
+              <!--scope1.$index === 0 &&-->
+              <!--scope.row.weeks.find((p) => p.name == 'week2')-->
+              <!--"-->
+              <!--style="width: 100px; height: 100px; margin: 0 auto"-->
+              <!--&gt;-->
+              <!--<img-->
+              <!--v-if="-->
+              <!--scope.row.weeks.find((p) => p.name == 'week2').image-->
+              <!--"-->
+              <!--:src="-->
+              <!--scope.row.weeks.find((p) => p.name == 'week2').image-->
+              <!--"-->
+              <!--style="width: 100%; height: 100%"-->
+              <!--/>-->
+              <!--<img-->
+              <!--v-if="-->
+              <!--!scope.row.weeks.find((p) => p.name == 'week2').image-->
+              <!--"-->
+              <!--:src="empty_image"-->
+              <!--style="width: 100%; height: 100%"-->
+              <!--/>-->
+              <!--</div>-->
+              <!--</template>-->
               <!--</el-table-column>-->
             </el-table>
             <!-- table end -->
@@ -281,7 +310,7 @@
       <el-table-column
         v-if="headers.find((p) => p.name == 'week3')"
         align="center"
-        width="250"
+        width="280"
       >
         <template slot="header">
           <div class="">
@@ -290,11 +319,11 @@
             }})
           </div>
           <!--<div class="">-->
-            <!--<el-checkbox-->
-              <!--label="设置为假期"-->
-              <!--:checked="headers.find((p) => p.name == 'week3').is_vacation"-->
-              <!--@change="onCheck('week3', $event)"-->
-            <!--&gt;</el-checkbox>-->
+          <!--<el-checkbox-->
+          <!--label="设置为假期"-->
+          <!--:checked="headers.find((p) => p.name == 'week3').is_vacation"-->
+          <!--@change="onCheck('week3', $event)"-->
+          <!--&gt;</el-checkbox>-->
           <!--</div>-->
         </template>
         <template slot-scope="scope">
@@ -320,6 +349,7 @@
                 prop="name"
                 header-align="center"
                 align="left"
+                width="120"
               ></el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
                 <template slot-scope="scope1">
@@ -331,60 +361,73 @@
                       type="text"
                       size="mini"
                       placeholder="请输入内容"
+                      @change="foodChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week3').id
+                          )"
                     ></el-input>
                     <el-input
                       style="flex: 1"
                       v-model="scope1.row.count"
                       v-if="scope1.row.children"
-                      disabled
                       type="text"
                       size="mini"
                       placeholder="请输入内容"
+                      @change="dishChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week3').id
+                          )"
                     ></el-input>
+                    <span class="arrow-up"  v-if="scope1.row.up"><img src="/img/arrowup.png" width="20px" height="20px"/>
+                      <span>{{scope1.row.up}}%</span>
+                    </span>
+                    <span class="arrow-down" v-if="scope1.row.down"><img src="/img/arrowdown.png" width="20px" height="20px"/>
+                      <span>{{scope1.row.down}}%</span>
+                    </span>
                     <!--<div style="width: 35px; text-algin: center">-->
-                      <!--<el-link-->
-                        <!--v-if="scope1.row.children"-->
-                        <!--type="primary"-->
-                        <!--@click="-->
-                          <!--onRemove(-->
-                            <!--scope.row.id,-->
-                            <!--scope.row.weeks.find((p) => p.name == 'week3').id,-->
-                            <!--scope1.row.id-->
-                          <!--)-->
-                        <!--"-->
-                      <!--&gt;移除</el-link-->
-                      <!--&gt;-->
+                    <!--<el-link-->
+                    <!--v-if="scope1.row.children"-->
+                    <!--type="primary"-->
+                    <!--@click="-->
+                    <!--onRemove(-->
+                    <!--scope.row.id,-->
+                    <!--scope.row.weeks.find((p) => p.name == 'week3').id,-->
+                    <!--scope1.row.id-->
+                    <!--)-->
+                    <!--"-->
+                    <!--&gt;移除</el-link-->
+                    <!--&gt;-->
                     <!--</div>-->
                   </div>
                 </template>
               </el-table-column>
               <!--<el-table-column label="图片" align="center">-->
-                <!--<template slot-scope="scope1">-->
-                  <!--<div-->
-                    <!--v-if="-->
-                      <!--scope1.$index === 0 &&-->
-                      <!--scope.row.weeks.find((p) => p.name == 'week3')-->
-                    <!--"-->
-                    <!--style="width: 100px; height: 100px; margin: 0 auto"-->
-                  <!--&gt;-->
-                    <!--<img-->
-                      <!--v-if="-->
-                        <!--scope.row.weeks.find((p) => p.name == 'week3').image-->
-                      <!--"-->
-                      <!--:src="-->
-                        <!--scope.row.weeks.find((p) => p.name == 'week3').image-->
-                      <!--"-->
-                      <!--style="width: 100%; height: 100%"-->
-                    <!--/>-->
-                    <!--<img-->
-                      <!--v-if="-->
-                        <!--!scope.row.weeks.find((p) => p.name == 'week3').image-->
-                      <!--"-->
-                      <!--:src="empty_image"-->
-                      <!--style="width: 100%; height: 100%"-->
-                    <!--/>-->
-                  <!--</div>-->
-                <!--</template>-->
+              <!--<template slot-scope="scope1">-->
+              <!--<div-->
+              <!--v-if="-->
+              <!--scope1.$index === 0 &&-->
+              <!--scope.row.weeks.find((p) => p.name == 'week3')-->
+              <!--"-->
+              <!--style="width: 100px; height: 100px; margin: 0 auto"-->
+              <!--&gt;-->
+              <!--<img-->
+              <!--v-if="-->
+              <!--scope.row.weeks.find((p) => p.name == 'week3').image-->
+              <!--"-->
+              <!--:src="-->
+              <!--scope.row.weeks.find((p) => p.name == 'week3').image-->
+              <!--"-->
+              <!--style="width: 100%; height: 100%"-->
+              <!--/>-->
+              <!--<img-->
+              <!--v-if="-->
+              <!--!scope.row.weeks.find((p) => p.name == 'week3').image-->
+              <!--"-->
+              <!--:src="empty_image"-->
+              <!--style="width: 100%; height: 100%"-->
+              <!--/>-->
+              <!--</div>-->
+              <!--</template>-->
               <!--</el-table-column>-->
             </el-table>
             <!-- table end -->
@@ -409,7 +452,7 @@
       <el-table-column
         v-if="headers.find((p) => p.name == 'week4')"
         align="center"
-        width="250"
+        width="280"
       >
         <template slot="header">
           <div class="">
@@ -418,11 +461,11 @@
             }})
           </div>
           <!--<div class="">-->
-            <!--<el-checkbox-->
-              <!--label="设置为假期"-->
-              <!--:checked="headers.find((p) => p.name == 'week4').is_vacation"-->
-              <!--@change="onCheck('week4', $event)"-->
-            <!--&gt;</el-checkbox>-->
+          <!--<el-checkbox-->
+          <!--label="设置为假期"-->
+          <!--:checked="headers.find((p) => p.name == 'week4').is_vacation"-->
+          <!--@change="onCheck('week4', $event)"-->
+          <!--&gt;</el-checkbox>-->
           <!--</div>-->
         </template>
         <template slot-scope="scope">
@@ -448,6 +491,7 @@
                 prop="name"
                 header-align="center"
                 align="left"
+                width="120"
               ></el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
                 <template slot-scope="scope1">
@@ -458,61 +502,74 @@
                       v-if="!scope1.row.children"
                       type="text"
                       size="mini"
+                      @change="foodChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week4').id
+                          )"
                       placeholder="请输入内容"
                     ></el-input>
                     <el-input
                       style="flex: 1"
                       v-model="scope1.row.count"
                       v-if="scope1.row.children"
-                      disabled
                       type="text"
                       size="mini"
+                      @change="dishChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week4').id
+                          )"
                       placeholder="请输入内容"
                     ></el-input>
+                    <span class="arrow-up"  v-if="scope1.row.up"><img src="/img/arrowup.png" width="20px" height="20px"/>
+                      <span>{{scope1.row.up}}%</span>
+                    </span>
+                    <span class="arrow-down" v-if="scope1.row.down"><img src="/img/arrowdown.png" width="20px" height="20px"/>
+                      <span>{{scope1.row.down}}%</span>
+                    </span>
                     <!--<div style="width: 35px; text-algin: center">-->
-                      <!--<el-link-->
-                        <!--v-if="scope1.row.children"-->
-                        <!--type="primary"-->
-                        <!--@click="-->
-                          <!--onRemove(-->
-                            <!--scope.row.id,-->
-                            <!--scope.row.weeks.find((p) => p.name == 'week4').id,-->
-                            <!--scope1.row.id-->
-                          <!--)-->
-                        <!--"-->
-                      <!--&gt;移除</el-link-->
-                      <!--&gt;-->
+                    <!--<el-link-->
+                    <!--v-if="scope1.row.children"-->
+                    <!--type="primary"-->
+                    <!--@click="-->
+                    <!--onRemove(-->
+                    <!--scope.row.id,-->
+                    <!--scope.row.weeks.find((p) => p.name == 'week4').id,-->
+                    <!--scope1.row.id-->
+                    <!--)-->
+                    <!--"-->
+                    <!--&gt;移除</el-link-->
+                    <!--&gt;-->
                     <!--</div>-->
                   </div>
                 </template>
               </el-table-column>
               <!--<el-table-column label="图片" align="center">-->
-                <!--<template slot-scope="scope1">-->
-                  <!--<div-->
-                    <!--v-if="-->
-                      <!--scope1.$index === 0 &&-->
-                      <!--scope.row.weeks.find((p) => p.name == 'week4')-->
-                    <!--"-->
-                    <!--style="width: 100px; height: 100px; margin: 0 auto"-->
-                  <!--&gt;-->
-                    <!--<img-->
-                      <!--v-if="-->
-                        <!--scope.row.weeks.find((p) => p.name == 'week4').image-->
-                      <!--"-->
-                      <!--:src="-->
-                        <!--scope.row.weeks.find((p) => p.name == 'week4').image-->
-                      <!--"-->
-                      <!--style="width: 100%; height: 100%"-->
-                    <!--/>-->
-                    <!--<img-->
-                      <!--v-if="-->
-                        <!--!scope.row.weeks.find((p) => p.name == 'week4').image-->
-                      <!--"-->
-                      <!--:src="empty_image"-->
-                      <!--style="width: 100%; height: 100%"-->
-                    <!--/>-->
-                  <!--</div>-->
-                <!--</template>-->
+              <!--<template slot-scope="scope1">-->
+              <!--<div-->
+              <!--v-if="-->
+              <!--scope1.$index === 0 &&-->
+              <!--scope.row.weeks.find((p) => p.name == 'week4')-->
+              <!--"-->
+              <!--style="width: 100px; height: 100px; margin: 0 auto"-->
+              <!--&gt;-->
+              <!--<img-->
+              <!--v-if="-->
+              <!--scope.row.weeks.find((p) => p.name == 'week4').image-->
+              <!--"-->
+              <!--:src="-->
+              <!--scope.row.weeks.find((p) => p.name == 'week4').image-->
+              <!--"-->
+              <!--style="width: 100%; height: 100%"-->
+              <!--/>-->
+              <!--<img-->
+              <!--v-if="-->
+              <!--!scope.row.weeks.find((p) => p.name == 'week4').image-->
+              <!--"-->
+              <!--:src="empty_image"-->
+              <!--style="width: 100%; height: 100%"-->
+              <!--/>-->
+              <!--</div>-->
+              <!--</template>-->
               <!--</el-table-column>-->
             </el-table>
             <!-- table end -->
@@ -537,7 +594,7 @@
       <el-table-column
         v-if="headers.find((p) => p.name == 'week5')"
         align="center"
-        width="250"
+        width="280"
       >
         <template slot="header">
           <div class="">
@@ -546,11 +603,11 @@
             }})
           </div>
           <!--<div class="">-->
-            <!--<el-checkbox-->
-              <!--label="设置为假期"-->
-              <!--:checked="headers.find((p) => p.name == 'week5').is_vacation"-->
-              <!--@change="onCheck('week5', $event)"-->
-            <!--&gt;</el-checkbox>-->
+          <!--<el-checkbox-->
+          <!--label="设置为假期"-->
+          <!--:checked="headers.find((p) => p.name == 'week5').is_vacation"-->
+          <!--@change="onCheck('week5', $event)"-->
+          <!--&gt;</el-checkbox>-->
           <!--</div>-->
         </template>
         <template slot-scope="scope">
@@ -576,6 +633,7 @@
                 prop="name"
                 header-align="center"
                 align="left"
+                width="120"
               ></el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
                 <template slot-scope="scope1">
@@ -586,61 +644,74 @@
                       v-if="!scope1.row.children"
                       type="text"
                       size="mini"
+                      @change="foodChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week5').id
+                          )"
                       placeholder="请输入内容"
                     ></el-input>
                     <el-input
                       style="flex: 1"
                       v-model="scope1.row.count"
                       v-if="scope1.row.children"
-                      disabled
                       type="text"
                       size="mini"
+                      @change="dishChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week5').id
+                          )"
                       placeholder="请输入内容"
                     ></el-input>
+                    <span class="arrow-up"  v-if="scope1.row.up"><img src="/img/arrowup.png" width="20px" height="20px"/>
+                      <span>{{scope1.row.up}}%</span>
+                    </span>
+                    <span class="arrow-down" v-if="scope1.row.down"><img src="/img/arrowdown.png" width="20px" height="20px"/>
+                      <span>{{scope1.row.down}}%</span>
+                    </span>
                     <!--<div style="width: 35px; text-algin: center">-->
-                      <!--<el-link-->
-                        <!--v-if="scope1.row.children"-->
-                        <!--type="primary"-->
-                        <!--@click="-->
-                          <!--onRemove(-->
-                            <!--scope.row.id,-->
-                            <!--scope.row.weeks.find((p) => p.name == 'week5').id,-->
-                            <!--scope1.row.id-->
-                          <!--)-->
-                        <!--"-->
-                      <!--&gt;移除</el-link-->
-                      <!--&gt;-->
+                    <!--<el-link-->
+                    <!--v-if="scope1.row.children"-->
+                    <!--type="primary"-->
+                    <!--@click="-->
+                    <!--onRemove(-->
+                    <!--scope.row.id,-->
+                    <!--scope.row.weeks.find((p) => p.name == 'week5').id,-->
+                    <!--scope1.row.id-->
+                    <!--)-->
+                    <!--"-->
+                    <!--&gt;移除</el-link-->
+                    <!--&gt;-->
                     <!--</div>-->
                   </div>
                 </template>
               </el-table-column>
               <!--<el-table-column label="图片" align="center">-->
-                <!--<template slot-scope="scope1">-->
-                  <!--<div-->
-                    <!--v-if="-->
-                      <!--scope1.$index === 0 &&-->
-                      <!--scope.row.weeks.find((p) => p.name == 'week5')-->
-                    <!--"-->
-                    <!--style="width: 100px; height: 100px; margin: 0 auto"-->
-                  <!--&gt;-->
-                    <!--<img-->
-                      <!--v-if="-->
-                        <!--scope.row.weeks.find((p) => p.name == 'week5').image-->
-                      <!--"-->
-                      <!--:src="-->
-                        <!--scope.row.weeks.find((p) => p.name == 'week5').image-->
-                      <!--"-->
-                      <!--style="width: 100%; height: 100%"-->
-                    <!--/>-->
-                    <!--<img-->
-                      <!--v-if="-->
-                        <!--!scope.row.weeks.find((p) => p.name == 'week5').image-->
-                      <!--"-->
-                      <!--:src="empty_image"-->
-                      <!--style="width: 100%; height: 100%"-->
-                    <!--/>-->
-                  <!--</div>-->
-                <!--</template>-->
+              <!--<template slot-scope="scope1">-->
+              <!--<div-->
+              <!--v-if="-->
+              <!--scope1.$index === 0 &&-->
+              <!--scope.row.weeks.find((p) => p.name == 'week5')-->
+              <!--"-->
+              <!--style="width: 100px; height: 100px; margin: 0 auto"-->
+              <!--&gt;-->
+              <!--<img-->
+              <!--v-if="-->
+              <!--scope.row.weeks.find((p) => p.name == 'week5').image-->
+              <!--"-->
+              <!--:src="-->
+              <!--scope.row.weeks.find((p) => p.name == 'week5').image-->
+              <!--"-->
+              <!--style="width: 100%; height: 100%"-->
+              <!--/>-->
+              <!--<img-->
+              <!--v-if="-->
+              <!--!scope.row.weeks.find((p) => p.name == 'week5').image-->
+              <!--"-->
+              <!--:src="empty_image"-->
+              <!--style="width: 100%; height: 100%"-->
+              <!--/>-->
+              <!--</div>-->
+              <!--</template>-->
               <!--</el-table-column>-->
             </el-table>
             <!-- table end -->
@@ -665,7 +736,7 @@
       <el-table-column
         v-if="headers.find((p) => p.name == 'week6')"
         align="center"
-        width="250"
+        width="280"
       >
         <template slot="header">
           <div class="">
@@ -674,11 +745,11 @@
             }})
           </div>
           <!--<div class="">-->
-            <!--<el-checkbox-->
-              <!--label="设置为假期"-->
-              <!--:checked="headers.find((p) => p.name == 'week6').is_vacation"-->
-              <!--@change="onCheck('week6', $event)"-->
-            <!--&gt;</el-checkbox>-->
+          <!--<el-checkbox-->
+          <!--label="设置为假期"-->
+          <!--:checked="headers.find((p) => p.name == 'week6').is_vacation"-->
+          <!--@change="onCheck('week6', $event)"-->
+          <!--&gt;</el-checkbox>-->
           <!--</div>-->
         </template>
         <template slot-scope="scope">
@@ -704,6 +775,7 @@
                 prop="name"
                 header-align="center"
                 align="left"
+                width="120"
               ></el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
                 <template slot-scope="scope1">
@@ -715,60 +787,73 @@
                       type="text"
                       size="mini"
                       placeholder="请输入内容"
+                      @change="foodChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week6').id
+                          )"
                     ></el-input>
                     <el-input
                       style="flex: 1"
                       v-model="scope1.row.count"
                       v-if="scope1.row.children"
-                      disabled
                       type="text"
                       size="mini"
+                      @change="dishChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week6').id
+                          )"
                       placeholder="请输入内容"
                     ></el-input>
+                    <span class="arrow-up"  v-if="scope1.row.up"><img src="/img/arrowup.png" width="20px" height="20px"/>
+                      <span>{{scope1.row.up}}%</span>
+                    </span>
+                    <span class="arrow-down" v-if="scope1.row.down"><img src="/img/arrowdown.png" width="20px" height="20px"/>
+                      <span>{{scope1.row.down}}%</span>
+                    </span>
                     <!--<div style="width: 35px; text-algin: center">-->
-                      <!--<el-link-->
-                        <!--v-if="scope1.row.children"-->
-                        <!--type="primary"-->
-                        <!--@click="-->
-                          <!--onRemove(-->
-                            <!--scope.row.id,-->
-                            <!--scope.row.weeks.find((p) => p.name == 'week6').id,-->
-                            <!--scope1.row.id-->
-                          <!--)-->
-                        <!--"-->
-                      <!--&gt;移除</el-link-->
-                      <!--&gt;-->
+                    <!--<el-link-->
+                    <!--v-if="scope1.row.children"-->
+                    <!--type="primary"-->
+                    <!--@click="-->
+                    <!--onRemove(-->
+                    <!--scope.row.id,-->
+                    <!--scope.row.weeks.find((p) => p.name == 'week6').id,-->
+                    <!--scope1.row.id-->
+                    <!--)-->
+                    <!--"-->
+                    <!--&gt;移除</el-link-->
+                    <!--&gt;-->
                     <!--</div>-->
                   </div>
                 </template>
               </el-table-column>
               <!--<el-table-column label="图片" align="center">-->
-                <!--<template slot-scope="scope1">-->
-                  <!--<div-->
-                    <!--v-if="-->
-                      <!--scope1.$index === 0 &&-->
-                      <!--scope.row.weeks.find((p) => p.name == 'week6')-->
-                    <!--"-->
-                    <!--style="width: 100px; height: 100px; margin: 0 auto"-->
-                  <!--&gt;-->
-                    <!--<img-->
-                      <!--v-if="-->
-                        <!--scope.row.weeks.find((p) => p.name == 'week6').image-->
-                      <!--"-->
-                      <!--:src="-->
-                        <!--scope.row.weeks.find((p) => p.name == 'week6').image-->
-                      <!--"-->
-                      <!--style="width: 100%; height: 100%"-->
-                    <!--/>-->
-                    <!--<img-->
-                      <!--v-if="-->
-                        <!--!scope.row.weeks.find((p) => p.name == 'week6').image-->
-                      <!--"-->
-                      <!--:src="empty_image"-->
-                      <!--style="width: 100%; height: 100%"-->
-                    <!--/>-->
-                  <!--</div>-->
-                <!--</template>-->
+              <!--<template slot-scope="scope1">-->
+              <!--<div-->
+              <!--v-if="-->
+              <!--scope1.$index === 0 &&-->
+              <!--scope.row.weeks.find((p) => p.name == 'week6')-->
+              <!--"-->
+              <!--style="width: 100px; height: 100px; margin: 0 auto"-->
+              <!--&gt;-->
+              <!--<img-->
+              <!--v-if="-->
+              <!--scope.row.weeks.find((p) => p.name == 'week6').image-->
+              <!--"-->
+              <!--:src="-->
+              <!--scope.row.weeks.find((p) => p.name == 'week6').image-->
+              <!--"-->
+              <!--style="width: 100%; height: 100%"-->
+              <!--/>-->
+              <!--<img-->
+              <!--v-if="-->
+              <!--!scope.row.weeks.find((p) => p.name == 'week6').image-->
+              <!--"-->
+              <!--:src="empty_image"-->
+              <!--style="width: 100%; height: 100%"-->
+              <!--/>-->
+              <!--</div>-->
+              <!--</template>-->
               <!--</el-table-column>-->
             </el-table>
             <!-- table end -->
@@ -793,7 +878,7 @@
       <el-table-column
         v-if="headers.find((p) => p.name == 'week7')"
         align="center"
-        width="250"
+        width="280"
       >
         <template slot="header">
           <div class="">
@@ -802,11 +887,11 @@
             }})
           </div>
           <!--<div class="">-->
-            <!--<el-checkbox-->
-              <!--label="设置为假期"-->
-              <!--:checked="headers.find((p) => p.name == 'week7').is_vacation"-->
-              <!--@change="onCheck('week7', $event)"-->
-            <!--&gt;</el-checkbox>-->
+          <!--<el-checkbox-->
+          <!--label="设置为假期"-->
+          <!--:checked="headers.find((p) => p.name == 'week7').is_vacation"-->
+          <!--@change="onCheck('week7', $event)"-->
+          <!--&gt;</el-checkbox>-->
           <!--</div>-->
         </template>
         <template slot-scope="scope">
@@ -832,6 +917,7 @@
                 prop="name"
                 header-align="center"
                 align="left"
+                width="120"
               ></el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
                 <template slot-scope="scope1">
@@ -843,60 +929,73 @@
                       type="text"
                       size="mini"
                       placeholder="请输入内容"
+                      @change="foodChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week7').id
+                          )"
                     ></el-input>
                     <el-input
                       style="flex: 1"
                       v-model="scope1.row.count"
                       v-if="scope1.row.children"
-                      disabled
                       type="text"
                       size="mini"
                       placeholder="请输入内容"
+                      @change="dishChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week7').id
+                          )"
                     ></el-input>
+                    <span class="arrow-up"  v-if="scope1.row.up"><img src="/img/arrowup.png" width="20px" height="20px"/>
+                      <span>{{scope1.row.up}}%</span>
+                    </span>
+                    <span class="arrow-down" v-if="scope1.row.down"><img src="/img/arrowdown.png" width="20px" height="20px"/>
+                      <span>{{scope1.row.down}}%</span>
+                    </span>
                     <!--<div style="width: 35px; text-algin: center">-->
-                      <!--<el-link-->
-                        <!--v-if="scope1.row.children"-->
-                        <!--type="primary"-->
-                        <!--@click="-->
-                          <!--onRemove(-->
-                            <!--scope.row.id,-->
-                            <!--scope.row.weeks.find((p) => p.name == 'week7').id,-->
-                            <!--scope1.row.id-->
-                          <!--)-->
-                        <!--"-->
-                      <!--&gt;移除</el-link-->
-                      <!--&gt;-->
+                    <!--<el-link-->
+                    <!--v-if="scope1.row.children"-->
+                    <!--type="primary"-->
+                    <!--@click="-->
+                    <!--onRemove(-->
+                    <!--scope.row.id,-->
+                    <!--scope.row.weeks.find((p) => p.name == 'week7').id,-->
+                    <!--scope1.row.id-->
+                    <!--)-->
+                    <!--"-->
+                    <!--&gt;移除</el-link-->
+                    <!--&gt;-->
                     <!--</div>-->
                   </div>
                 </template>
               </el-table-column>
               <!--<el-table-column label="图片" align="center">-->
-                <!--<template slot-scope="scope1">-->
-                  <!--<div-->
-                    <!--v-if="-->
-                      <!--scope1.$index === 0 &&-->
-                      <!--scope.row.weeks.find((p) => p.name == 'week7')-->
-                    <!--"-->
-                    <!--style="width: 100px; height: 100px; margin: 0 auto"-->
-                  <!--&gt;-->
-                    <!--<img-->
-                      <!--v-if="-->
-                        <!--scope.row.weeks.find((p) => p.name == 'week7').image-->
-                      <!--"-->
-                      <!--:src="-->
-                        <!--scope.row.weeks.find((p) => p.name == 'week7').image-->
-                      <!--"-->
-                      <!--style="width: 100%; height: 100%"-->
-                    <!--/>-->
-                    <!--<img-->
-                      <!--v-if="-->
-                        <!--!scope.row.weeks.find((p) => p.name == 'week7').image-->
-                      <!--"-->
-                      <!--:src="empty_image"-->
-                      <!--style="width: 100%; height: 100%"-->
-                    <!--/>-->
-                  <!--</div>-->
-                <!--</template>-->
+              <!--<template slot-scope="scope1">-->
+              <!--<div-->
+              <!--v-if="-->
+              <!--scope1.$index === 0 &&-->
+              <!--scope.row.weeks.find((p) => p.name == 'week7')-->
+              <!--"-->
+              <!--style="width: 100px; height: 100px; margin: 0 auto"-->
+              <!--&gt;-->
+              <!--<img-->
+              <!--v-if="-->
+              <!--scope.row.weeks.find((p) => p.name == 'week7').image-->
+              <!--"-->
+              <!--:src="-->
+              <!--scope.row.weeks.find((p) => p.name == 'week7').image-->
+              <!--"-->
+              <!--style="width: 100%; height: 100%"-->
+              <!--/>-->
+              <!--<img-->
+              <!--v-if="-->
+              <!--!scope.row.weeks.find((p) => p.name == 'week7').image-->
+              <!--"-->
+              <!--:src="empty_image"-->
+              <!--style="width: 100%; height: 100%"-->
+              <!--/>-->
+              <!--</div>-->
+              <!--</template>-->
               <!--</el-table-column>-->
             </el-table>
             <!-- table end -->
@@ -921,12 +1020,12 @@
     <!-- table-week end   -->
     <!-- foods choice start-->
     <!--<el-dialog-->
-      <!--:title="'选择食谱 / 菜品'"-->
-      <!--append-to-body-->
-      <!--:visible.sync="dialog_choice.opened"-->
-      <!--width="600px"-->
+    <!--:title="'选择食谱 / 菜品'"-->
+    <!--append-to-body-->
+    <!--:visible.sync="dialog_choice.opened"-->
+    <!--width="600px"-->
     <!--&gt;-->
-      <!--<foods-choice v-if="dialog_choice.opened" @change="onChoiceChange" />-->
+    <!--<foods-choice v-if="dialog_choice.opened" @change="onChoiceChange" />-->
     <!--</el-dialog>-->
     <!-- foods choice end -->
   </div>
@@ -943,7 +1042,7 @@
       // 表格头部
       headers: [],
       // 表格数据
-      datas: [],
+      smartDatas: [],
       // 5天制 6天制 7天制
       days: {
         type: Number,
@@ -954,7 +1053,10 @@
         default: 800,
       },
       crowd:'',
-
+      foodCatalog:'',
+      startAge:undefined,
+      endAge:undefined,
+      peipScore:'',
       dragnode: {},
       nutritionValue:[
       ],
@@ -1035,31 +1137,36 @@
             name:"晚点",
             value:"6"
           }
-        ]
+        ],
+        peippcScore:'0',
       };
     },
     // 计算属性computed,计算的是Name依赖的值,它不能计算在data中已经定义过的变量。
     computed: {},
     // 当属性的值发生变化时，就会调用对应属性的方法，方法里面的形参对应的是属性的新值和旧值
     watch: {
-      'datas':{
-        handler(data){
-          data.forEach(item=>{
-            item.weeks.forEach(_=>{
-              _.foods.forEach(__=>{
-                let count=0;
-                __.children.forEach(___=>{
-                  count+= parseInt(___.count?___.count:0)
-                })
-                this.$set(__,"count",count);
-              })
-            })
-          })
-          this.getFoodScore();
-
-        },
-        deep:true,
-      }
+      // 'smartDatas':{
+      //   handler(data){
+      //     data.forEach(item=>{
+      //       if(!item.flag){
+      //         item.weeks.forEach(_=>{
+      //           _.foods.forEach(__=>{
+      //             let count=0;
+      //             __.children.forEach(___=>{
+      //               count+= parseFloat(___.count?___.count:0)
+      //             })
+      //             this.$set(__,"count",count);
+      //           })
+      //         })
+      //       }
+      //     })
+      //     this.smartDatas.forEach(item=> {
+      //       this.$set(item, "flag", false);
+      //     })
+      //     this.getFoodScoreSmart();
+      //   },
+      //   deep:true,
+      // }
     },
     // 组件第一次加载
     mounted() {
@@ -1086,13 +1193,9 @@
                   tpnode.style.height=pnode.offsetHeight+"px";
                 }
               }
-
             }
-
-
           }
         },50);
-
       },
       oncontextmenuFood(e, data_id, week_id, food_id) {
         if (e.button === 2) {
@@ -1105,7 +1208,7 @@
         }
       },
       GetCurentNode(data_id, week_id, food_id) {
-        this.datas.forEach((data) => {
+        this.smartDatas.forEach((data) => {
           if (data.id === data_id) {
             data.weeks.forEach((week) => {
               if (week.id === week_id) {
@@ -1120,7 +1223,6 @@
           }
         });
       },
-
       expandchange(a, b) {
         this.resizeExpendHeight();
       },
@@ -1179,92 +1281,133 @@
       //   // this.getFoodScore();
       // },
       //获取分数
-      getFoodScore(){
+      getFoodScoreSmart(){
         this.dragnode.node={};
         let day=[0,0,0,0,0,0,0]
         let days=0;
         let foods={}
         let mealTypes=[]
-        foods["peopleId"]=this.crowd;
-        let recipeVals=[];
-        var that=this;
-        this.datas.forEach(_=>{
-          let index=0
-          _.weeks.forEach(__=>{
-            __.foods.forEach(___=>{
-              if( ___.children){
-                day[index]+=1;
-                mealTypes.push(that.getmealTypeData(_.name));
-                ___.children.forEach(____=>{
-                  recipeVals.push({
-                    foodId:____.id,
-                    val:___.count?___.count:0,
-                    mealType:that.getmealTypeData(_.name),
-                    week:__.name.slice(4)
+        if(this.startAge&&this.endAge) {
+          foods["startAge"] = this.startAge;
+          foods["endAge"] = this.endAge;
+          let recipeVals = [];
+          var that = this;
+          this.smartDatas.forEach(_ => {
+            let index = 0
+            _.weeks.forEach(__ => {
+              __.foods.forEach(___ => {
+                if (___.children) {
+                  day[index] += 1;
+                  mealTypes.push(that.getmealTypeData(_.name));
+                  ___.children.forEach(____ => {
+                    recipeVals.push({
+                      foodId: ____.id,
+                      val: ____.count ? ____.count : 0,
+                      mealType: that.getmealTypeData(_.name),
+                      week: __.name.slice(4)
+                    })
                   })
-
+                }
+              })
+              index++;
+            })
+          })
+          if (mealTypes.length > 0) {
+            let obj = Array.from(new Set(mealTypes))
+            let resultObj = "";
+            for (let i = 0; i < obj.length; i++) {
+              resultObj += obj[i] + ","
+            }
+            foods["mealTypes"] = resultObj.substring(0, resultObj.length - 1)
+          }
+          for (let i = 0; i < day.length; i++) {
+            if (day[i] > 0) {
+              days++;
+            }
+          }
+          foods["recipeVals"] = recipeVals
+          foods["days"] = days;
+          let types='';
+          for(let i=0;i<this.foodCatalog.length;i++){
+            types+= that.getmealTypeData(this.foodCatalog[i])+","
+          }
+          foods["types"]=types;
+          if (foods.recipeVals.length > 0) {
+            calRecipe(foods).then(res => {
+              if (res.data.success) {
+                let resData = res.data.data;
+                let intake = {};
+                let data = [];
+                intake.mealSelect = "推荐范围(" + resData.recipeCalDTOList.gl.mealSelect + "%)"
+                that.intakeValue.forEach(_ => {
+                  data.push({
+                    name: _.name,
+                    range: resData.recipeCalDTOList.gl.rang_min + "-" + resData.recipeCalDTOList[_.code].rang_max + "(" + resData.recipeCalDTOList[_.code].recomRangMin + "-" + resData.recipeCalDTOList[_.code].recomRangMax + ")",
+                    jl: resData.recipeCalDTOList[_.code].jl,
+                    grade: resData.recipeCalDTOList[_.code].grade,
+                    point: resData.recipeCalDTOList[_.code].point
+                  })
                 })
+                intake.data = data;
+                let nutrition = [];
+                debugger
+                that.nutritionValue.forEach(_ => {
+                  nutrition.push({
+                    code: _.code,
+                    name: _.name,
+                    bz: _.bz,
+                    min: _.min,
+                    max: _.max,
+                    realIntake: resData.nutritionCalDTOList[_.code].realIntake,
+                    dris: resData.nutritionCalDTOList[_.code].realPropor,
+                    dris2: resData.nutritionCalDTOList[_.code].dris,
+                    realPropor: resData.nutritionCalDTOList[_.code].realPropor,
+                    reqPropor: resData.nutritionCalDTOList[_.code].min + "-" + resData.nutritionCalDTOList[_.code].max,
+                    grade: resData.nutritionCalDTOList[_.code].grade, point: resData.nutritionCalDTOList[_.code].point
+                  })
+                })
+                console.log(nutrition)
+
+                let power = [];
+                that.powerValue.forEach(_ => {
+                  power.push({
+                    name: _.name,
+                    req: resData.powerCalDTOList[_.code].min + "-" + resData.powerCalDTOList[_.code].max,
+                    real: resData.powerCalDTOList[_.code].real,
+                    grade: resData.powerCalDTOList[_.code].grade,
+                    point: resData.powerCalDTOList[_.code].point
+                  })
+                })
+                let protein = [];
+                protein = resData.proteinCalDTOList;
+                let sum = 0;
+                resData.proteinCalDTOList.forEach(_ => {
+                  sum += parseFloat(_.real)
+                })
+                protein.forEach(_ => {
+                  _["realSum"] = sum
+                  _["req"] = ">=" + _.min
+                  if(parseFloat( _.min)<=parseFloat(sum)){
+                    _["grade"]="ok"
+                  }else{
+                    _["grade"]="不足"
+                  }
+                })
+                let meal = [];
+                meal = resData.mealTypeCalDTOList
+                that.peippcScore = that.peipScore;
+                that.$emit('childfn', Math.floor(that.getData(res.data.data) * 100) / 100, "smartDatas", that.peippcScore, intake, nutrition, power, protein, meal,);
               }
             })
-            index++;
-
-          })
-        })
-        if(mealTypes.length>0){
-          let obj=Array.from(new Set(mealTypes))
-          let resultObj="";
-          for(let i=0;i<obj.length;i++){
-            resultObj+=obj[i]+","
+          } else {
+            that.$emit('childfn', 0, "smartDatas", that.peippcScore, [], [], [], [], []);
           }
-          foods["mealTypes"]=resultObj.substring(0,resultObj.length-1)
-        }
-        for(let i=0;i<day.length;i++){
-          if(day[i]>0){
-            days++;
-          }
-        }
-        foods["recipeVals"]=recipeVals
-        foods["days"]=days;
-        if(foods.recipeVals.length>0){
-          calRecipe(foods).then(res=>{
-            if(res.data.success){
-              let resData=res.data.data;
-              let intake={};
-              let  data=[];
-              intake.mealSelect="推荐范围("+resData.recipeCalDTOList.gl.mealSelect+"%)"
-              that.intakeValue.forEach(_=>{
-                data.push({name:_.name,range:resData.recipeCalDTOList.gl.rang_min+"-"+resData.recipeCalDTOList[_.code].rang_max+"("+resData.recipeCalDTOList[_.code].recomRangMin+"-"+resData.recipeCalDTOList[_.code].recomRangMax+")",jl:resData.recipeCalDTOList[_.code].jl,grade:resData.recipeCalDTOList[_.code].grade,point:resData.recipeCalDTOList[_.code].point})
-              })
-              intake.data=data;
-              let nutrition=[];
-              debugger
-              that.nutritionValue.forEach(_=>{
-                nutrition.push({code:_.code,name:_.name,dris:resData.nutritionCalDTOList[_.code].dris,realIntake:resData.nutritionCalDTOList[_.code].realIntake,realPropor:resData.nutritionCalDTOList[_.code].realPropor,reqPropor:resData.nutritionCalDTOList[_.code].min+"-"+resData.nutritionCalDTOList[_.code].max,grade:resData.nutritionCalDTOList[_.code].grade,point:resData.nutritionCalDTOList[_.code].point})
-              })
-
-              let power=[];
-              that.powerValue.forEach(_=>{
-                power.push({name:_.name,req:resData.powerCalDTOList[_.code].min+"-"+resData.powerCalDTOList[_.code].min,real:resData.powerCalDTOList[_.code].real,grade:resData.powerCalDTOList[_.code].grade,point:resData.powerCalDTOList[_.code].point})
-              })
-              let protein=[];
-              protein=resData.proteinCalDTOList;
-              let sum=0;
-              resData.proteinCalDTOList.forEach(_=>{
-                sum+=parseFloat(_.real)
-              })
-              protein.forEach(_=>{
-                _["realSum"]=sum
-                _["req"]=">="+_.min
-              })
-              let meal=[];
-              meal=resData.mealTypeCalDTOList
-              that.$emit('childfn', Math.floor(that.getData(res.data.data) * 100) / 100,intake,nutrition,power,protein,meal);
-            }
-          })
         }else{
-          that.$emit('childfn', 0);
+          that.$message({
+            message: "食材营养素数据不全",
+            type: "info"
+          });
         }
-
       },
 
       //处理数据
@@ -1317,7 +1460,7 @@
       //新增菜谱
       appendDragFood(res, id, wk) {
         if (!res.id) return;
-        this.datas.forEach((data) => {
+        this.smartDatas.forEach((data) => {
           if (data.id === id) {
             data.weeks.forEach((week) => {
               if (week.name === wk) {
@@ -1343,7 +1486,7 @@
       // 处理数据
       refreshData() {
         // 计算食物数量 主要用于合并单元格
-        this.datas.forEach((item) => {
+        this.smartDatas.forEach((item) => {
           item.weeks.forEach((week) => {
             var count = 0;
             week.foods.forEach((food) => {
@@ -1393,7 +1536,7 @@
       // 选择菜谱结果
       onChoiceChange(res) {
         // console.log(res);
-        this.datas.forEach((data) => {
+        this.smartDatas.forEach((data) => {
           if (data.id === this.dialog_choice.data_id) {
             data.weeks.forEach((week) => {
               if (week.id === this.dialog_choice.week_id) {
@@ -1403,7 +1546,6 @@
                     message: "已经存在，请重新选择",
                     type: "error",
                   });
-
                   return;
                 } else {
                   week.foods.push(res);
@@ -1418,6 +1560,48 @@
         });
       },
 
+      //食材数量改变
+      foodChange(data_id, week_id){
+        this.smartDatas.forEach((data) => {
+          if (data.id === data_id) {
+            data.weeks.forEach((week) => {
+              if (week.id === week_id) {
+                week.foods.forEach(food=>{
+                  let count = 0;
+                  food.children.forEach(___ => {
+                    count += parseFloat(___.count ? ___.count : 0)
+                  })
+                  this.$set(food, "count", count);
+                })
+              }
+            });
+          }
+        });
+        this.getFoodScoreSmart();
+      },
+//菜品数量改变
+      dishChange(data_id, week_id){
+        this.smartDatas.forEach((data) => {
+          if (data.id === data_id) {
+            data.weeks.forEach((week) => {
+              if (week.id === week_id) {
+                week.foods.forEach(food=>{
+                  let count = 0;
+                  food.children.forEach(___ => {
+                    count += parseFloat(___.count ? ___.count : 0)
+                  })
+                  if(parseFloat(count)!=parseFloat(food.count)){
+                    food.children.forEach(___ => {
+                      this.$set(___,"count",((parseFloat(food.count)/parseFloat(count))*___.count).toFixed(2))
+                    })
+                  }
+                })
+              }
+            });
+          }
+        });
+        this.getFoodScoreSmart();
+      },
       // // 移除
       // onRemove(data_id, week_id, food_id) {
       //   this.datas.forEach((data) => {
@@ -1487,6 +1671,12 @@
   }
   .drapInActive .el-table th {
     background-color: #dcdfe6 !important;
+  }
+  .arrow-up ,.arrow-down{
+    font-size: 8px;
+  }
+  .arrow-up img ,.arrow-down img{
+    margin-right: -6px;
   }
   .colNoneBorder
   {

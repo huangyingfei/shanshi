@@ -26,7 +26,7 @@
       <el-table-column align="center" width="100" fixed class-name="col-date3 colNoneBorder" >
         <template slot="header"> 菜品/食物 </template>
         <template slot-scope="scope">
-          <div v-bind:data="scope.row.name" class="foodType">{{ scope.row.name }}</div>
+          <div v-bind:data="scope.row.name" class="meals-foodType">{{ scope.row.name }}</div>
         </template>
       </el-table-column>
       <!-- 周一   -->
@@ -68,7 +68,7 @@
               :span-method="onTableSpanMethod"
             >
               <el-table-column
-                label="食品/食材"
+                label="菜品/食材"
                 prop="name"
                 header-align="center"
                 align="left"
@@ -76,6 +76,7 @@
               <el-table-column label="用量(g)" prop="count" align="center">
                 <template slot-scope="scope1">
                   <div style="display: flex">
+                    <!--//食材-->
                     <el-input
                       style="flex: 1"
                       v-model="scope1.row.count"
@@ -83,15 +84,21 @@
                       type="text"
                       size="mini"
                       placeholder="请输入内容"
+                      @change="foodChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week1').id
+                          )"
                     ></el-input>
                     <el-input
                       style="flex: 1"
                       v-model="scope1.row.count"
                       v-if="scope1.row.children"
-                      disabled
                       type="text"
                       size="mini"
                       placeholder="请输入内容"
+                      @change="dishChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week1').id)"
                     ></el-input>
                     <div style="width: 35px; text-algin: center">
                       <el-link
@@ -101,7 +108,7 @@
                           onRemove(
                             scope.row.id,
                             scope.row.weeks.find((p) => p.name == 'week1').id,
-                            scope1.row.id
+                            scope1.row.id,'week1'
                           )
                         "
                         >移除</el-link
@@ -110,7 +117,7 @@
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column label="图片" align="center">
+              <el-table-column label="图片"  align="center">
                 <template slot-scope="scope1">
                   <div
                     v-show="
@@ -198,7 +205,7 @@
               :span-method="onTableSpanMethod"
             >
               <el-table-column
-                label="食品/食材"
+                label="菜品/食材"
                 prop="name"
                 header-align="center"
                 align="left"
@@ -212,15 +219,21 @@
                       v-if="!scope1.row.children"
                       type="text"
                       size="mini"
+                      @change="foodChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week2').id
+                          )"
                       placeholder="请输入内容"
                     ></el-input>
                     <el-input
                       style="flex: 1"
                       v-model="scope1.row.count"
                       v-if="scope1.row.children"
-                      disabled
                       type="text"
                       size="mini"
+                      @change="dishChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week2').id)"
                       placeholder="请输入内容"
                     ></el-input>
                     <div style="width: 35px; text-algin: center">
@@ -231,7 +244,7 @@
                           onRemove(
                             scope.row.id,
                             scope.row.weeks.find((p) => p.name == 'week2').id,
-                            scope1.row.id
+                            scope1.row.id,'week2'
                           )
                         "
                         >移除</el-link
@@ -328,7 +341,7 @@
               :span-method="onTableSpanMethod"
             >
               <el-table-column
-                label="食品/食材"
+                label="菜品/食材"
                 prop="name"
                 header-align="center"
                 align="left"
@@ -342,15 +355,21 @@
                       v-if="!scope1.row.children"
                       type="text"
                       size="mini"
+                      @change="foodChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week3').id
+                          )"
                       placeholder="请输入内容"
                     ></el-input>
                     <el-input
                       style="flex: 1"
                       v-model="scope1.row.count"
                       v-if="scope1.row.children"
-                      disabled
                       type="text"
                       size="mini"
+                      @change="dishChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week3').id)"
                       placeholder="请输入内容"
                     ></el-input>
                     <div style="width: 35px; text-algin: center">
@@ -361,7 +380,7 @@
                           onRemove(
                             scope.row.id,
                             scope.row.weeks.find((p) => p.name == 'week3').id,
-                            scope1.row.id
+                            scope1.row.id,'week3'
                           )
                         "
                         >移除</el-link
@@ -458,7 +477,7 @@
               :span-method="onTableSpanMethod"
             >
               <el-table-column
-                label="食品/食材"
+                label="菜品/食材"
                 prop="name"
                 header-align="center"
                 align="left"
@@ -472,15 +491,21 @@
                       v-if="!scope1.row.children"
                       type="text"
                       size="mini"
+                      @change="foodChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week4').id
+                          )"
                       placeholder="请输入内容"
                     ></el-input>
                     <el-input
                       style="flex: 1"
                       v-model="scope1.row.count"
                       v-if="scope1.row.children"
-                      disabled
                       type="text"
                       size="mini"
+                      @change="dishChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week4').id)"
                       placeholder="请输入内容"
                     ></el-input>
                     <div style="width: 35px; text-algin: center">
@@ -491,7 +516,7 @@
                           onRemove(
                             scope.row.id,
                             scope.row.weeks.find((p) => p.name == 'week4').id,
-                            scope1.row.id
+                            scope1.row.id,'week4'
                           )
                         "
                         >移除</el-link
@@ -588,7 +613,7 @@
               :span-method="onTableSpanMethod"
             >
               <el-table-column
-                label="食品/食材"
+                label="菜品/食材"
                 prop="name"
                 header-align="center"
                 align="left"
@@ -602,15 +627,21 @@
                       v-if="!scope1.row.children"
                       type="text"
                       size="mini"
+                      @change="foodChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week5').id
+                          )"
                       placeholder="请输入内容"
                     ></el-input>
                     <el-input
                       style="flex: 1"
                       v-model="scope1.row.count"
                       v-if="scope1.row.children"
-                      disabled
                       type="text"
                       size="mini"
+                      @change="dishChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week5').id)"
                       placeholder="请输入内容"
                     ></el-input>
                     <div style="width: 35px; text-algin: center">
@@ -621,7 +652,7 @@
                           onRemove(
                             scope.row.id,
                             scope.row.weeks.find((p) => p.name == 'week5').id,
-                            scope1.row.id
+                            scope1.row.id,'week5'
                           )
                         "
                         >移除</el-link
@@ -718,7 +749,7 @@
               :span-method="onTableSpanMethod"
             >
               <el-table-column
-                label="食品/食材"
+                label="菜品/食材"
                 prop="name"
                 header-align="center"
                 align="left"
@@ -732,15 +763,21 @@
                       v-if="!scope1.row.children"
                       type="text"
                       size="mini"
+                      @change="foodChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week6').id
+                          )"
                       placeholder="请输入内容"
                     ></el-input>
                     <el-input
                       style="flex: 1"
                       v-model="scope1.row.count"
                       v-if="scope1.row.children"
-                      disabled
                       type="text"
                       size="mini"
+                      @change="dishChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week6').id)"
                       placeholder="请输入内容"
                     ></el-input>
                     <div style="width: 35px; text-algin: center">
@@ -751,7 +788,7 @@
                           onRemove(
                             scope.row.id,
                             scope.row.weeks.find((p) => p.name == 'week6').id,
-                            scope1.row.id
+                            scope1.row.id,'week6'
                           )
                         "
                         >移除</el-link
@@ -761,7 +798,6 @@
                 </template>
               </el-table-column>
               <el-table-column label="图片" align="center">
-
                 <template slot-scope="scope1">
                   <div
                     v-show="
@@ -849,7 +885,7 @@
               :span-method="onTableSpanMethod"
             >
               <el-table-column
-                label="食品/食材"
+                label="菜品/食材"
                 prop="name"
                 header-align="center"
                 align="left"
@@ -863,15 +899,21 @@
                       v-if="!scope1.row.children"
                       type="text"
                       size="mini"
+                      @change="foodChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week7').id
+                          )"
                       placeholder="请输入内容"
                     ></el-input>
                     <el-input
                       style="flex: 1"
                       v-model="scope1.row.count"
                       v-if="scope1.row.children"
-                      disabled
                       type="text"
                       size="mini"
+                      @change="dishChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week7').id)"
                       placeholder="请输入内容"
                     ></el-input>
                     <div style="width: 35px; text-algin: center">
@@ -882,7 +924,7 @@
                           onRemove(
                             scope.row.id,
                             scope.row.weeks.find((p) => p.name == 'week7').id,
-                            scope1.row.id
+                            scope1.row.id,'week7'
                           )
                         "
                         >移除</el-link
@@ -956,7 +998,7 @@
 </template>
 <script>
   import foodsChoice from "@/views/foods/components/foodschoice";
-  // import {calRecipe} from "@/api/system/meals"
+  import {calRecipe} from "@/api/system/meals"
 export default {
   name: "foodsWeek",
   components: {
@@ -977,8 +1019,12 @@ export default {
       default: 800,
     },
     crowd:'',
-
+    foodCatalog:'',
+    startAge:undefined,
+    endAge:undefined,
+    score:'',
     dragnode: {},
+    foodMutuals:[]
   },
   data() {
     return {
@@ -1025,40 +1071,81 @@ export default {
       ],
       nutritionValue:[
         {
-            name:"能量",
-            code:"101"
-         },
+          name:"能量",
+          code:"101",
+          value:'0',
+          bz:"80%-120%",
+          min:80,
+          max:120,
+        },
         {
           name:"蛋白质",
-          code:"102"
+          code:"102",
+          value:'0',
+          bz:"80%-150%",
+          min:80,
+          max:150,
         },
         {
           name:"钙",
-          code:"201"
+          code:"201",
+          value:'0',
+          bz:"80%-160%",
+          min:80,
+          max:160,
         },{
           name:"纳",
-          code:"204"
+          code:"204",
+          value:'0',
+          bz:"80%-135%",
+          min:80,
+          max:135,
         },{
           name:"铁",
-          code:"301"
+          code:"301",
+          value:'0',
+          bz:"80%-160%",
+          min:80,
+          max:160,
+
         },{
+          name:"锌",
+          code:"303",
+          value:'0',
+          bz:"80%-160%",
+          min:80,
+          max:160,
+        }
+        ,{
           name:"维生素A",
-          code:"401"
+          code:"401",
+          value:'0',
+          bz:"80%-180%",
+          min:80,
+          max:180,
         },{
           name:"维生素B1",
-          code:"405"
+          code:"405",
+          value:'0',
+          bz:"80%-250%",
+          min:80,
+          max:250,
         },{
           name:"维生素B2",
-          code:"406"
+          code:"406",
+          value:'0',
+          bz:"80%-250%",
+          min:80,
+          max:250,
         }
         ,{
           name:"维生素C",
-          code:"415"
+          code:"415",
+          value:'0',
+          bz:"80%-250%",
+          min:80,
+          max:250,
         },
-
-
-
-
       ],
       token:{
         "Blade-Auth":""
@@ -1096,31 +1183,16 @@ export default {
           name:"晚点",
           value:"6"
         }
-      ]
+      ],
+      flag:true,
+      pcScore:'0',
+
     };
   },
   // 计算属性computed,计算的是Name依赖的值,它不能计算在data中已经定义过的变量。
   computed: {},
   // 当属性的值发生变化时，就会调用对应属性的方法，方法里面的形参对应的是属性的新值和旧值
   watch: {
-    'datas':{
-      handler(data){
-
-        data.forEach(item=>{
-          item.weeks.forEach(_=>{
-            _.foods.forEach(__=>{
-              let count=0;
-              __.children.forEach(___=>{
-                count+= parseInt(___.count?___.count:0)
-              })
-              this.$set(__,"count",count);
-            })
-          })
-        })
-        // this.getFoodScore();
-      },
-      deep:true,
-    }
   },
   // 组件第一次加载
   mounted() {
@@ -1137,7 +1209,7 @@ export default {
     resizeExpendHeight() {
       setTimeout(() => {
         //真实高度列表
-      var foodTypeList = document.querySelectorAll(".colNoneBorder.is-hidden .foodType");
+      var foodTypeList = document.querySelectorAll(".colNoneBorder.is-hidden .meals-foodType");
       for (var i = 0; i < foodTypeList.length; i++) {
         var pnode = foodTypeList[i].parentNode.parentNode.parentNode;
         if(pnode.className.indexOf("is-leaf")<0)
@@ -1153,8 +1225,9 @@ export default {
               }
             }
         }
+
       }
-      },50);
+      },20);
 
     },
     oncontextmenuFood(e, data_id, week_id, food_id) {
@@ -1175,7 +1248,6 @@ export default {
               var idx = week.foods.find((p) => p.id === food_id);
               if (idx > -1) {
                 week.foods.splice(idx, 1);
-
                 return;
               }
             }
@@ -1229,157 +1301,214 @@ export default {
     //拖放结束
     drop(ev, id, week) {
       ev.preventDefault();
+      //debugger
       var node = JSON.parse(JSON.stringify(this.dragnode.node));
       this.appendDragFood(node, id, week);
-
+      this.$emit('jundgeFood',node,id,week);
       ev.path.forEach((e) => {
         var cname = e.className;
         if (cname && cname.indexOf("drapIn") >= 0) {
           e.classList.remove("drapInActive");
         }
       });
-      this.resizeExpendHeight();
-      // this.getFoodScore();
+      this.getFoodScore();
     },
-    // //获取分数
-    // getFoodScore(){
-    //   this.dragnode.node={};
-    //   let day=[0,0,0,0,0,0,0]
-    //   let days=0;
-    //   let foods={}
-    //   let mealTypes=[]
-    //   foods["peopleId"]=this.crowd;
-    //   let recipeVals=[];
-    //   var that=this;
-    //   this.datas.forEach(_=>{
-    //     let index=0
-    //     _.weeks.forEach(__=>{
-    //       __.foods.forEach(___=>{
-    //         if( ___.children){
-    //           day[index]+=1;
-    //           mealTypes.push(that.getmealTypeData(_.name));
-    //           ___.children.forEach(____=>{
-    //                recipeVals.push({
-    //                  foodId:____.id,
-    //                  val:____.count?____.count:0,
-    //                  mealType:that.getmealTypeData(_.name),
-    //                  week:__.name.slice(4)
-    //                })
-    //           })
-    //         }
-    //       })
-    //       index++;
-    //
-    //     })
-    //   })
-    //   if(mealTypes.length>0){
-    //     let obj=Array.from(new Set(mealTypes))
-    //     let resultObj="";
-    //     for(let i=0;i<obj.length;i++){
-    //       resultObj+=obj[i]+","
-    //     }
-    //     foods["mealTypes"]=resultObj.substring(0,resultObj.length-1)
-    //   }
-    //   for(let i=0;i<day.length;i++){
-    //     if(day[i]>0){
-    //       days++;
-    //     }
-    //   }
-    //   foods["recipeVals"]=recipeVals
-    //   foods["days"]=days;
-    //   if(foods.recipeVals.length>0){
-    //     calRecipe(foods).then(res=>{
-    //       if(res.data.success){
-    //         let resData=res.data.data;
-    //         let intake={};
-    //         let  data=[];
-    //         intake.mealSelect="推荐范围("+resData.recipeCalDTOList.gl.mealSelect+"%)"
-    //         that.intakeValue.forEach(_=>{
-    //           data.push({name:_.name,range:resData.recipeCalDTOList.gl.rang_min+"-"+resData.recipeCalDTOList[_.code].rang_max+"("+resData.recipeCalDTOList[_.code].recomRangMin+"-"+resData.recipeCalDTOList[_.code].recomRangMax+")",jl:resData.recipeCalDTOList[_.code].jl,grade:resData.recipeCalDTOList[_.code].grade,point:resData.recipeCalDTOList[_.code].point})
-    //         })
-    //         intake.data=data;
-    //         let nutrition=[];
-    //         that.nutritionValue.forEach(_=>{
-    //           nutrition.push({code:_.code,name:_.name,dris:resData.nutritionCalDTOList[_.code].dris,realIntake:resData.nutritionCalDTOList[_.code].realIntake,realPropor:resData.nutritionCalDTOList[_.code].realPropor,reqPropor:resData.nutritionCalDTOList[_.code].min+"-"+resData.nutritionCalDTOList[_.code].max,grade:resData.nutritionCalDTOList[_.code].grade,point:resData.nutritionCalDTOList[_.code].point})
-    //         })
-    //       //  debugger
-    //
-    //         let power=[];
-    //         that.powerValue.forEach(_=>{
-    //           power.push({name:_.name,req:resData.powerCalDTOList[_.code].min+"-"+resData.powerCalDTOList[_.code].min,real:resData.powerCalDTOList[_.code].real,grade:resData.powerCalDTOList[_.code].grade,point:resData.powerCalDTOList[_.code].point})
-    //         })
-    //
-    //         let protein=[];
-    //         protein=resData.proteinCalDTOList;
-    //         let sum=0;
-    //         resData.proteinCalDTOList.forEach(_=>{
-    //           sum+=parseFloat(_.real)
-    //         })
-    //         protein.forEach(_=>{
-    //           _["realSum"]=sum
-    //           _["req"]=">="+_.min
-    //         })
-    //         let meal=[];
-    //         meal=resData.mealTypeCalDTOList
-    //         that.$emit('childfn', Math.floor(that.getData(res.data.data) * 100) / 100,intake,nutrition,power,protein,meal);
-    //       }
-    //     })
-    //   }else{
-    //     that.$emit('childfn', 0);
-    //   }
-    //
-    // },
+    //获取分数
+    getFoodScore(){
+      this.dragnode.node={};
+      let day=[0,0,0,0,0,0,0]
+      let days=0;
+      let foods={}
+      let mealTypes=[]
+      if(this.startAge&&this.endAge) {
+        foods["startAge"] = this.startAge;
+        foods["endAge"] = this.endAge;
+        let recipeVals = [];
+        var that = this;
+        this.datas.forEach(_ => {
+          let index = 0
+          _.weeks.forEach(__ => {
+            __.foods.forEach(___ => {
+              if (___.children) {
+                day[index] += 1;
+                mealTypes.push(that.getmealTypeData(_.name));
+                ___.children.forEach(____ => {
+                  recipeVals.push({
+                    foodId: ____.id,
+                    val: ____.count ? ____.count : 0,
+                    mealType: that.getmealTypeData(_.name),
+                    week: __.name.slice(4)
+                  })
+                })
+              }
+            })
+            index++;
+          })
+        })
+        if (mealTypes.length > 0) {
+          let obj = Array.from(new Set(mealTypes))
+          let resultObj = "";
+          for (let i = 0; i < obj.length; i++) {
+            resultObj += obj[i] + ","
+          }
+          foods["mealTypes"] = resultObj.substring(0, resultObj.length - 1)
+        }
+        for (let i = 0; i < day.length; i++) {
+          if (day[i] > 0) {
+            days++;
+          }
+        }
+        foods["recipeVals"] = recipeVals
+        foods["days"] = days;
+        let types='';
+        for(let i=0;i<this.foodCatalog.length;i++){
+          types+= that.getmealTypeData(this.foodCatalog[i])+","
+        }
+        foods["types"]=types;
+        if (foods.recipeVals.length > 0) {
+          calRecipe(foods).then(res => {
+            if (res.data.success) {
+              let resData = res.data.data;
+              if (resData.nutritionCalDTOList) {
+                let intake = {};
+                let data = [];
+                intake.mealSelect = "推荐范围(" + resData.recipeCalDTOList.gl.mealSelect + "%)"
 
-    // //处理数据
-    // getData(data){
-    //   let lastScore=100;
-    //   if(data.mealTypeCalDTOList&&data.mealTypeCalDTOList.length){
-    //     for(let i=0;i<data.mealTypeCalDTOList.length;i++){
-    //       lastScore= parseFloat(lastScore)-parseFloat(data.mealTypeCalDTOList[i].point);
-    //     }
-    //   }
-    //   if(data.nutritionCalDTOList){
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["101"].point);
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["102"].point);
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["201"].point);
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["204"].point);
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["301"].point);
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["303"].point);
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["401"].point);
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["405"].point);
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["406"].point);
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["415"].point);
-    //   }
-    //   if(data.powerCalDTOList){
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.powerCalDTOList["102"].point);
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.powerCalDTOList["103"].point);
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.powerCalDTOList["104"].point);
-    //   }
-    //   if(data.recipeCalDTOList){
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["dd"].point);
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["gl"].point);
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["jg"].point);
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["rzp"].point);
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["sc"].point);
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["sg"].point);
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["sl"].point);
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["sy"].point);
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["syy"].point);
-    //     lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["xql:scp:dl"].point);
-    //   }
-    //   var real=0;
-    //   if(data.proteinCalDTOList&&data.proteinCalDTOList.length){
-    //     for(let i=0;i<data.proteinCalDTOList.length;i++){
-    //       real+=parseFloat(data.proteinCalDTOList[i].real);
-    //     }
-    //     var point =10/parseFloat(data.proteinCalDTOList[0].min)*(parseFloat(data.proteinCalDTOList[0].min)-real>0?parseFloat(data.proteinCalDTOList[0].min-real):parseFloat(real-data.proteinCalDTOList[0].min));
-    //     lastScore=lastScore-(point<10?point:10);
-    //   }
-    //   return lastScore;
-    // },
+                that.intakeValue.forEach(_ => {
+                  data.push({
+                    name: _.name,
+                    range: resData.recipeCalDTOList.gl.rang_min + "-" + resData.recipeCalDTOList[_.code].rang_max + "(" + resData.recipeCalDTOList[_.code].recomRangMin + "-" + resData.recipeCalDTOList[_.code].recomRangMax + ")",
+                    jl: parseFloat(resData.recipeCalDTOList[_.code].jl).toFixed(2),
+                    grade: resData.recipeCalDTOList[_.code].grade,
+                    point: resData.recipeCalDTOList[_.code].point,
+                    avg: resData.recipeCalDTOList[_.code].avg
+                  })
+                })
+                intake.data = data;
+                intake.avg = "食谱净量(平均年龄" + data[0].avg + ")"
+                let nutrition = [];
+                //   debugger
+                that.nutritionValue.forEach(_ => {
+                  nutrition.push({
+                    code: _.code,
+                    name: _.name,
+                    bz: _.bz,
+                    min: _.min,
+                    max: _.max,
+                    realIntake: resData.nutritionCalDTOList[_.code].realIntake,
+                    dris: resData.nutritionCalDTOList[_.code].realPropor,
+                    dris2: resData.nutritionCalDTOList[_.code].dris,
+                    realPropor: resData.nutritionCalDTOList[_.code].realPropor,
+                    reqPropor: resData.nutritionCalDTOList[_.code].min + "-" + resData.nutritionCalDTOList[_.code].max,
+                    grade: resData.nutritionCalDTOList[_.code].grade, point: resData.nutritionCalDTOList[_.code].point
+                  })
+                })
+                //  debugger
+
+                let power = [];
+                that.powerValue.forEach(_ => {
+                  power.push({
+                    name: _.name,
+                    req: resData.powerCalDTOList[_.code].min + "-" + resData.powerCalDTOList[_.code].max,
+                    real: resData.powerCalDTOList[_.code].real,
+                    grade: resData.powerCalDTOList[_.code].grade,
+                    point: resData.powerCalDTOList[_.code].point
+                  })
+                })
+
+                let protein = [];
+                protein = resData.proteinCalDTOList;
+                let sum = 0;
+                resData.proteinCalDTOList.forEach(_ => {
+                  sum += parseFloat(_.real)
+                })
+                protein.forEach(_ => {
+                  _["realSum"] = parseFloat(sum).toFixed(2)
+                  _["req"] = ">=" + _.min
+                  if(parseFloat( _.min)<=parseFloat(sum)){
+                    _["grade"]="ok"
+                  }else{
+                    _["grade"]="不足"
+                  }
+                })
+                let meal = [];
+                meal = resData.mealTypeCalDTOList
+                meal.forEach(_ => {
+                  _["real"] = parseFloat(_["real"]).toFixed(2)
+                })
+                debugger
+                that.pcScore = that.score;
+                that.$emit('childfn', Math.floor(that.getData(res.data.data) * 100) / 100, "datas", this.pcScore, intake, nutrition, power, protein, meal);
+              }
+            } else {
+              that.$message({
+                message: "食材营养素数据不全",
+                type: "info"
+              });
+            }
+          })
+        } else {
+          this.pcScore = this.score;
+          that.$emit('childfn', 0, "datas", this.pcScore, [], [], [], [], []);
+        }
+      }else{
+        this.$message({
+          type: "info",
+          message: "请输入年龄!"
+        });
+      }
+    },
+
+    //处理数据
+    getData(data){
+      let lastScore=100;
+      if(data.mealTypeCalDTOList&&data.mealTypeCalDTOList.length){
+        for(let i=0;i<data.mealTypeCalDTOList.length;i++){
+          lastScore= parseFloat(lastScore)-parseFloat(data.mealTypeCalDTOList[i].point);
+        }
+      }
+      if(data.nutritionCalDTOList){
+        lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["101"].point);
+        lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["102"].point);
+        lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["201"].point);
+        lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["204"].point);
+        lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["301"].point);
+        lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["303"].point);
+        lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["401"].point);
+        lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["405"].point);
+        lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["406"].point);
+        lastScore= parseFloat(lastScore)-parseFloat(data.nutritionCalDTOList["415"].point);
+      }
+      if(data.powerCalDTOList){
+        lastScore= parseFloat(lastScore)-parseFloat(data.powerCalDTOList["102"].point);
+        lastScore= parseFloat(lastScore)-parseFloat(data.powerCalDTOList["103"].point);
+        lastScore= parseFloat(lastScore)-parseFloat(data.powerCalDTOList["104"].point);
+      }
+      if(data.recipeCalDTOList){
+        lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["dd"].point);
+        lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["gl"].point);
+        lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["jg"].point);
+        lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["rzp"].point);
+        lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["sc"].point);
+        lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["sg"].point);
+        lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["sl"].point);
+        lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["sy"].point);
+        lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["syy"].point);
+        lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["xql:scp:dl"].point);
+      }
+      var real=0;
+      if(data.proteinCalDTOList&&data.proteinCalDTOList.length){
+        for(let i=0;i<data.proteinCalDTOList.length;i++){
+          real+=parseFloat(data.proteinCalDTOList[i].real);
+        }
+        var point =10/parseFloat(data.proteinCalDTOList[0].min)*(parseFloat(data.proteinCalDTOList[0].min)-real>0?parseFloat(data.proteinCalDTOList[0].min-real):parseFloat(real-data.proteinCalDTOList[0].min));
+        lastScore=lastScore-(point<10?point:10);
+      }
+      return lastScore;
+    },
     //新增菜谱
     appendDragFood(res, id, wk) {
-      if (!res.id) return;
+      if (!res.id) {;return};
       this.datas.forEach((data) => {
         if (data.id === id) {
           data.weeks.forEach((week) => {
@@ -1398,6 +1527,7 @@ export default {
           });
         }
       });
+
     },
     init() {
       this.refreshData();
@@ -1408,7 +1538,7 @@ export default {
       // 计算食物数量 主要用于合并单元格
       this.datas.forEach((item) => {
         item.weeks.forEach((week) => {
-          var count = 0;
+          var count = 1;
           week.foods.forEach((food) => {
             count = count + 1;
             if (food.children) {
@@ -1417,15 +1547,13 @@ export default {
           });
           if (week.foods != undefined) {
             week.foods.forEach((food) => {
-              console.log(food)
-              console.log('food')
+          //    debugger
               food.spans = count;
               food.children.forEach((c) => {
                 c.spans = count;
               });
             });
           }
-          // console.log(week.foods);
         });
       });
     },
@@ -1443,7 +1571,7 @@ export default {
     // 合并单元格
     onTableSpanMethod({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 2) {
-        debugger
+   //     debugger
         if(row.spans){
           return [row.spans, 1];
         }else{
@@ -1487,23 +1615,76 @@ export default {
         }
       });
     },
-
+//食材数量改变
+    foodChange(data_id, week_id){
+      this.datas.forEach((data) => {
+        if (data.id === data_id) {
+          data.weeks.forEach((week) => {
+            if (week.id === week_id) {
+              week.foods.forEach(food=>{
+                  let count = 0;
+                  food.children.forEach(___ => {
+                    count += parseFloat(___.count ? ___.count : 0)
+                  })
+                  this.$set(food, "count", count);
+              })
+            }
+          });
+        }
+      });
+      this.getFoodScore();
+    },
+//菜品数量改变
+    dishChange(data_id, week_id){
+      this.datas.forEach((data) => {
+        if (data.id === data_id) {
+          data.weeks.forEach((week) => {
+            if (week.id === week_id) {
+              week.foods.forEach(food=>{
+                let count = 0;
+                food.children.forEach(___ => {
+                  count += parseFloat(___.count ? ___.count : 0)
+                })
+                if(parseFloat(count)!=parseFloat(food.count)){
+                  food.children.forEach(___ => {
+                     this.$set(___,"count",((parseFloat(food.count)/parseFloat(count))*___.count).toFixed(2))
+                  })
+                }
+              })
+            }
+          });
+        }
+      });
+      this.getFoodScore();
+    },
     // 移除
-    onRemove(data_id, week_id, food_id) {
+    onRemove(data_id, week_id, food_id,week_name) {
+     // debugger
+      var foods;
       this.datas.forEach((data) => {
         if (data.id === data_id) {
           data.weeks.forEach((week) => {
             if (week.id === week_id) {
               var idx = week.foods.findIndex((p) => p.id === food_id);
+              foods=week.foods.filter((p) => p.id === food_id)[0];
               if (idx > -1) {
                 week.foods.splice(idx, 1);
-
-                return;
               }
             }
           });
         }
       });
+      console.log(foods)
+      for(let i=0;i<this.foodMutuals.length;i++){
+        for(let j=0;j<foods.children.length;j++){
+          if(this.foodMutuals[i]["data_id"]==data_id&&week_name==this.foodMutuals[i]["week_id"]){
+            if(this.foodMutuals[i]["foodId"]==foods.children[j].id||this.foodMutuals[i]["foodId1"]==foods.children[j].id){
+              this.foodMutuals.splice(i,1)
+            }
+          }
+        }
+      }
+      this.getFoodScore();
     },
 
     // 上传图片

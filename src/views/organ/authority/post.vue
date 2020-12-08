@@ -23,7 +23,7 @@
                    size="small"
                    icon="el-icon-delete"
                    plain
-                  
+
                    @click="handleDelete">删 除
         </el-button>
       </template>
@@ -60,6 +60,7 @@
           searchMenuSpan: 6,
           border: true,
           index: true,
+          indexLabel:'序号',
           viewBtn: true,
           selection: true,
           dialogClickModal: false,

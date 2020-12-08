@@ -238,12 +238,16 @@ export default {
         searchMenuSpan: 6,
         border: true,
         index: true,
+        indexLabel:'序号',
         selection: true,
         viewBtn: true,
         //dialogType: 'drawer',
         dialogClickModal: false,
         delBtn: false,
         editBtn: false,
+        dialogHeight:500,
+        dialogWidth:900,
+
         column: [
           {
             label: "登录账号",

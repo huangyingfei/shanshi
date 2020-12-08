@@ -127,7 +127,7 @@
               v-model="WeekInfo.foodCatalog"
               @change="AppendFoodType"
             >
-              <el-checkbox label="早餐" checked name="早餐"></el-checkbox>
+              <el-checkbox label="早餐" name="早餐"></el-checkbox>
               <el-checkbox label="早点" name="早点"></el-checkbox>
               <el-checkbox label="午餐" name="午餐"></el-checkbox>
               <el-checkbox label="午点" name="午点"></el-checkbox>
@@ -427,6 +427,7 @@
             :crowd="WeekInfo.crowd"
             :dragnode="drogNode"
              ref="child"
+            :foodCatalog="WeekInfo.foodCatalog"
             :foodMutuals="foodMutuals"
           >
           </foods-week>
@@ -541,6 +542,7 @@
                        :dragnode="drogNode"
                             :nutritionValue="nutritionValue"
                             :peipScore="peipScore"
+                            :foodCatalog="WeekInfo.foodCatalog"
                        ref="child2" > </smartfoods-week>
       </div>
 
@@ -713,6 +715,7 @@ document.oncontextmenu = function(){return false};
       dishSharePri:'',
       dishSharePub:'',
       id:'',
+
       score:'0',
       pcScore:'0',//配餐保存的分数
       peipScore:'0',//配平分数
@@ -749,6 +752,7 @@ document.oncontextmenu = function(){return false};
           ],
         },
       ],
+      types:'',//餐点
       WeekInfo: {
         shareTell:false,
         collection:false,
@@ -1123,6 +1127,7 @@ document.oncontextmenu = function(){return false};
           that.$set(__,"foods",foods);
         })
       })
+      that.$refs.child.getFoodScore();
       that.$refs.child.refreshData();
     },
     mealDetail(id,that){//根据id查询菜品详情
@@ -1766,6 +1771,7 @@ document.oncontextmenu = function(){return false};
       this.ppscxjSc='0'
     },
     getmealTypeData(name){
+       debugger
       return  this.mealTypeData.filter(_=>{
         if(_.name==name){
           return _.value

@@ -1,7 +1,7 @@
 <template>
   <div>
 		<basic-container>
-			<avue-crud  :data= "data" 
+			<avue-crud  :data= "data"
 									:option= "option"
 									:page.sync= "page"
 									:table-loading= "loading"
@@ -53,6 +53,7 @@ export default {
 			},
 			option:{
 				index: true,
+        indexLabel:'序号',
 				align: 'center',
 				addBtn: false,
 				editBtn: false,
@@ -85,7 +86,7 @@ export default {
 						label:'联系电话',
 						prop:'mobile',
 						search:true,
-					},										
+					},
 					{
 						label: "提交时间",
 						prop: "createTime",
@@ -123,7 +124,7 @@ export default {
 							{
 								label: "无需审核",
 								value: 3
-							},							
+							},
 						],
 					},
 				]
@@ -182,7 +183,7 @@ export default {
 				this.page.total = data.total;
 				this.data = data.records;
 				this.loading = false;
-			});			
+			});
 		}
 	},
 }

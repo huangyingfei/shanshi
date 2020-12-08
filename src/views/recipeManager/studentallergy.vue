@@ -93,6 +93,7 @@ export default {
         searchMenuSpan: 6,
         border: true,
         index: true,
+        indexLabel:'序号',
         viewBtn: false,
         addBtn:false,
         editBtn:false,

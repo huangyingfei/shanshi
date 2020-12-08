@@ -69,11 +69,11 @@
             <!--}})-->
           </div>
           <!--<div class="">-->
-            <!--<el-checkbox-->
-              <!--label="设置为假期"-->
-              <!--:checked="headers.find((p) => p.name == 'week3').is_vacation"-->
-              <!--@change="onCheck('week3', $event)"-->
-            <!--&gt;</el-checkbox>-->
+          <!--<el-checkbox-->
+          <!--label="设置为假期"-->
+          <!--:checked="headers.find((p) => p.name == 'week3').is_vacation"-->
+          <!--@change="onCheck('week3', $event)"-->
+          <!--&gt;</el-checkbox>-->
           <!--</div>-->
         </template>
         <template slot-scope="scope">
@@ -468,6 +468,7 @@
   }
   .drapInActive .el-table th {
     background-color: #dcdfe6 !important;
+
   }
   .colNoneBorder
   {

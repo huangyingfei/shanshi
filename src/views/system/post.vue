@@ -60,6 +60,7 @@
           searchMenuSpan: 6,
           border: true,
           index: true,
+          indexLabel:'序号',
           viewBtn: true,
           selection: true,
           dialogClickModal: false,

@@ -194,12 +194,14 @@ export default {
         tree: true,
         border: true,
         index: true,
+        indexLabel:'序号',
         selection: true,
         viewBtn: true,
         // menuWidth: 400,
         delBtn:false,
         menuWidth: 350,
-        dialogWidth: 900,
+        dialogHeight:500,
+        dialogWidth:900,
         dialogClickModal: false,
         column: [
            {

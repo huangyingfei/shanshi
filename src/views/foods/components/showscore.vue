@@ -97,7 +97,10 @@
     <h4>  四、蛋白质来源分布</h4>
     <el-table
       :data="protein"
-      style="width: 100%">
+      style="width: 100%"
+      border
+      :span-method="objectSpanMethod"
+    >
       <el-table-column
         prop="typeCode"
         label="优质蛋白质"
@@ -173,6 +176,21 @@
     data(){
       return {
 
+      }
+    },
+    methods:{
+      objectSpanMethod({ row, column, rowIndex, columnIndex }){
+
+        if(columnIndex==1||columnIndex==3||columnIndex==4||columnIndex==5){
+          if(rowIndex==0) {
+            return [2, 1]
+          }
+        }
+        if(columnIndex==1||columnIndex==3||columnIndex==4||columnIndex==5){
+          if(rowIndex==1){
+            return [0,0]
+          }
+        }
       }
     }
   }

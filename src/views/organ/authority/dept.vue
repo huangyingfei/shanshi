@@ -81,6 +81,7 @@
           tree: true,
           border: true,
           index: true,
+          indexLabel:'序号',
           selection: true,
           viewBtn: true,
           menuWidth: 300,

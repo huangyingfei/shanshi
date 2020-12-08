@@ -13,7 +13,7 @@
               >
                 <span class="custom-tree-node" slot-scope="{ node, data }">
                 <span>{{ node.label }}</span>
-                  <span>
+                  <span v-if="data.isDefault!=1">
                     <img
                       src="/img/bg/delete.png"
                       @click="remove(data.id)"
@@ -265,38 +265,42 @@
     },
     methods: {
       nodeClick(data){
-        let that=this;
-        this.$set(that.specialForm,"people",[])
-        detailByPeopleId(data.id).then(res=>{
-          that.specialForm=res.data.data;
-          let ids=res.data.data.ids;
-          debugger
-          let people=[];
-          ids.forEach(_=>{
-            people.push(_.studentId+"")
-          })
-          that.$set(that.morenData[0],"mealNum",!res.data.data.breakfast?undefined:res.data.data.breakfast)
-          that.$set(that.morenData[1],"mealNum",!res.data.data.breakfastSnack?undefined:res.data.data.breakfastSnack)
-          that.$set(that.morenData[2],"mealNum",!res.data.data.lunch?undefined:res.data.data.lunch)
-          that.$set(that.morenData[3],"mealNum",!res.data.data.lunchSnack?undefined:res.data.data.lunchSnack)
-          that.$set(that.morenData[4],"mealNum",!res.data.data.dinner?undefined:res.data.data.dinner)
-          that.$set(that.morenData[5],"mealNum",!res.data.data.dinnerSnack?undefined:res.data.data.dinnerSnack)
-          if(res.data.data.defaultMeal){
-            let defaultMeal =res.data.data.defaultMeal.split(",");
-            that.morenData.forEach(_=>{
-              that.$set(_,"mealCheck",false)
-              })
-            for(let i=0;i<defaultMeal.length;i++){
+        debugger
+        if(data.peopleName!="人群列表"){
+          let that=this;
+          this.$set(that.specialForm,"people",[])
+          detailByPeopleId(data.id).then(res=>{
+            that.specialForm=res.data.data;
+            let ids=res.data.data.ids;
+            debugger
+            let people=[];
+            ids.forEach(_=>{
+              people.push(_.studentId+"")
+            })
+            that.$set(that.morenData[0],"mealNum",!res.data.data.breakfast?undefined:res.data.data.breakfast)
+            that.$set(that.morenData[1],"mealNum",!res.data.data.breakfastSnack?undefined:res.data.data.breakfastSnack)
+            that.$set(that.morenData[2],"mealNum",!res.data.data.lunch?undefined:res.data.data.lunch)
+            that.$set(that.morenData[3],"mealNum",!res.data.data.lunchSnack?undefined:res.data.data.lunchSnack)
+            that.$set(that.morenData[4],"mealNum",!res.data.data.dinner?undefined:res.data.data.dinner)
+            that.$set(that.morenData[5],"mealNum",!res.data.data.dinnerSnack?undefined:res.data.data.dinnerSnack)
+            if(res.data.data.defaultMeal){
+              let defaultMeal =res.data.data.defaultMeal.split(",");
               that.morenData.forEach(_=>{
-                if(_.dicData[0].value==defaultMeal[i]){
-                  that.$set(_,"mealCheck",true)
-                }
+                that.$set(_,"mealCheck",false)
               })
+              for(let i=0;i<defaultMeal.length;i++){
+                that.morenData.forEach(_=>{
+                  if(_.dicData[0].value==defaultMeal[i]){
+                    that.$set(_,"mealCheck",true)
+                  }
+                })
+              }
             }
-          }
 
-          that.$set(that.specialForm,"people",people)
-        })
+            that.$set(that.specialForm,"people",people)
+          })
+        }
+
       },
       empty(){
         this.morenData.forEach(_=>{
@@ -387,13 +391,16 @@
                 this.empty();
               }
               done()
-
             }else{
-              this.$message({
-                type: "error",
-                message: "提交失败!",
-              });
+              debugger
+
+              // this.$message({
+              //   type: "error",
+              //   message: "提交失败!",
+              // });
             }
+        }).catch(e=>{
+          done()
         })
       },
       remove(id) {
@@ -427,6 +434,7 @@
               peopleName:"人群列表",
               children:res.data.data
             }]
+          console.log(this.treeData)
         });
 
         getClassStudent().then(res=>{

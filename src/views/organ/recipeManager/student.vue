@@ -366,6 +366,7 @@
           searchMenuSpan: 6,
           border: true,
           index: true,
+          indexLabel:'序号',
           selection: true,
           menuWidth: 300,
           // viewBtn: true,

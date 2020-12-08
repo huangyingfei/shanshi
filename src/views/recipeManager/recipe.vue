@@ -166,7 +166,7 @@
       </el-row>
     </el-dialog>
   </basic-container>
-  
+
 </template>
 
 <script>
@@ -205,6 +205,7 @@
           searchMenuSpan: 6,
           border: true,
           index: true,
+          indexLabel:'序号',
           editBtn: false,
           delBtn: false,
           selection: true,
@@ -251,7 +252,7 @@
                   label: "未收藏",
                   value: 0
                 }
-                
+
               ],
               rules: [
                 {
@@ -278,7 +279,7 @@
                   label: "未公开",
                   value: 1
                 }
-                
+
               ],
               rules: [
                 {
@@ -305,7 +306,7 @@
                   label: "未推荐",
                   value: 0
                 }
-                
+
               ],
               rules: [
                 {
@@ -413,29 +414,29 @@
             mealsType3:[],
             mealsType4:[],
             mealsType5:[],
-            mealsType6:[], 
+            mealsType6:[],
           }
           for(let i in recipeCycles){
             let mealsTypeNum = recipeCycles[i].mealsType
             switch (mealsTypeNum) {
               case 1:
-                recipeTableData.mealsType1.push(recipeCycles[i])    
+                recipeTableData.mealsType1.push(recipeCycles[i])
                 break;
               case 2:
-                recipeTableData.mealsType2.push(recipeCycles[i]) 
+                recipeTableData.mealsType2.push(recipeCycles[i])
                 break;
               case 3:
-                recipeTableData.mealsType3.push(recipeCycles[i]) 
+                recipeTableData.mealsType3.push(recipeCycles[i])
                 break;
               case 4:
-                recipeTableData.mealsType4.push(recipeCycles[i]) 
+                recipeTableData.mealsType4.push(recipeCycles[i])
                 break;
               case 5:
-                recipeTableData.mealsType5.push(recipeCycles[i]) 
+                recipeTableData.mealsType5.push(recipeCycles[i])
                 break;
               case 6:
-                recipeTableData.mealsType6.push(recipeCycles[i]) 
-                break;             
+                recipeTableData.mealsType6.push(recipeCycles[i])
+                break;
               default:
                 break;
             }
@@ -446,7 +447,7 @@
             mealsType3:"午餐",
             mealsType4:"午点",
             mealsType5:"晚餐",
-            mealsType6:"晚点",             
+            mealsType6:"晚点",
           }
           for (let key in recipeTableData) {
             var weekData = {
@@ -619,7 +620,7 @@
           params.createTimeStrEnd=formateDate(params.createTime[1], "yyyy-MM-dd HH:mm:ss")
           delete params.createTime
         }
-         console.log(params);          
+         console.log(params);
 
         getList(page.currentPage, page.pageSize, Object.assign(params, this.query)).then(res => {
           const data = res.data.data;
@@ -635,6 +636,6 @@
 
 <style>
 .recipeTableWeekData .cell {
-  white-space: pre-line!important; 
+  white-space: pre-line!important;
 }
 </style>

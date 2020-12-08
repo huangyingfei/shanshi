@@ -86,6 +86,7 @@ export default {
         tree: true,
         border: true,
         index: true,
+        indexLabel:'序号',
         selection: false,
         viewBtn: false,
         dialogWidth: 900,
