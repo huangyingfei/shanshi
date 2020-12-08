@@ -824,5 +824,5 @@ export default {
 .box .el-scrollbar__wrap {
   overflow: scroll;
 }
-  
+
 </style>
