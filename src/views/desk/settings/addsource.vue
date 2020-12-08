@@ -14,8 +14,8 @@
 
       <el-form-item label="是否默认标准" prop="region">
         <el-select v-model="footer.region" placeholder="请选择">
-          <el-option label="是" value="0"></el-option>
-          <el-option label="否" value="1"></el-option>
+          <el-option label="是" value="1"></el-option>
+          <el-option label="否" value="0"></el-option>
         </el-select>
       </el-form-item>
     </el-form>
@@ -92,7 +92,7 @@ export default {
     console.log(this.editID);
     this.footer.name = this.buffer.name;
     // props.row.isDef!==0?'是':'否'
-    this.footer.region = this.buffer.isDef !== 1 ? "是" : "否";
+    this.footer.region = this.buffer.isDef == 1 ? "是" : "否";
     // this.reset=this.buffer.powerNutritions;
     // let arr1 = this.buffer.powerNutritions;
     // arr1.forEach(item => {
@@ -132,7 +132,7 @@ export default {
           },
           id: this.editID,
           name: this.footer.name,
-          isDef: this.footer.region == "是" ? 0 : 1,
+          isDef: this.footer.region == "是" ? 1 : 0,
           powerNutritions: arr
         })
         .then(res => {

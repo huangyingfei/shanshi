@@ -9,7 +9,7 @@
         placeholder="请输入内容"
       ></el-input>
       <span style="margin-right: 10px;margin-left: 25px;">选择日期:</span>
-      <el-date-picker
+      <!-- <el-date-picker
         size="small"
         v-model="wupload.getDate"
         type="date"
@@ -17,7 +17,17 @@
         style="width:200px;"
         format="yyyy 年 MM 月 dd 日"
         value-format="yyyy-MM-dd"
-      ></el-date-picker>
+      ></el-date-picker> -->
+      <el-date-picker
+        v-model="wupload.getDate"
+        format="yyyy 年 MM 月 dd 日"
+        value-format="yyyy-MM-dd"
+        type="daterange"
+        range-separator="至"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期"
+      >
+      </el-date-picker>
       <!-- <span style="margin-right: 10px;margin-left: 25px;">人群名称:</span>
       <el-select v-model="wupload.block" placeholder="请选择">
         <el-option
@@ -131,7 +141,11 @@
           label="平均年龄"
           align="center"
         ></el-table-column>
-
+        <el-table-column
+          prop="score"
+          label="评分"
+          align="center"
+        ></el-table-column>
         <el-table-column
           prop="proportion"
           label="男女比例"
@@ -151,6 +165,9 @@
         ></el-table-column>
         <el-table-column label="操作" width="200" align="center">
           <template slot-scope="scope">
+            <el-button type="text" size="small" @click="protocol(scope.row)"
+              >查看</el-button
+            >
             <el-button type="text" size="small" @click="seecol(scope.row)"
               >编辑</el-button
             >
@@ -203,14 +220,29 @@
         ></el-pagination>
       </div>
     </div>
+    <el-dialog
+      title="查看"
+      append-to-body
+      width="80%"
+      :visible.sync="dateTime"
+      :close-on-click-modal="false"
+    >
+      <toolbar ref="toolb"></toolbar>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import toolbar from "../PublicLicense/sharing";
+
 export default {
+  components: {
+    toolbar
+  },
   data() {
     return {
       loadFlag: false, //加载flag
+      dateTime: false, //弹框
       page_data: {
         loadTxt: "请求列表中"
       },
@@ -276,13 +308,23 @@ export default {
       modeforms: [], //表格数据
       keydown: [],
       radio: 3,
-      timezone: ""
+      timezone: "",
+      timezone1: ""
     };
   },
   beforeMount() {
     this.generator();
   },
   methods: {
+    //查看
+    protocol(row) {
+      console.log(row);
+      this.dateTime = true;
+      let term = row.id;
+      this.$nextTick(() => {
+        this.$refs.toolb.overview(term);
+      });
+    },
     //编辑
     seecol(row) {
       this.$router.push({
@@ -373,8 +415,17 @@ export default {
     searchStr() {
       // console.log(this.wupload.input);
       // console.log(this.wupload.input);
+      // if (this.wupload.getDate) {
+      //   this.timezone = this.wupload.getDate;
+      // } else {
+      //   this.timezone = "";
+      // }
+      console.log(this.wupload.getDate);
       if (this.wupload.getDate) {
-        this.timezone = this.wupload.getDate;
+        this.timezone = this.wupload.getDate[0];
+        console.log(this.timezone);
+        this.timezone1 = this.wupload.getDate[1];
+        console.log(this.timezone1);
       } else {
         this.timezone = "";
       }
@@ -399,6 +450,7 @@ export default {
     notEmpty() {
       this.wupload.input = "";
       this.wupload.getDate = "";
+      this.timezone1 = "";
       // this.wupload.block = "";
       this.timezone = "";
       this.generator();
@@ -409,7 +461,8 @@ export default {
       this.loadFlag = true;
       this.$axios
         .get(
-          `api/blade-food/recipe/page?size=${this.m_page.size}&current=${this.m_page.number}&ascs=id&searchType=2&recipeName=${this.wupload.input}&isUse=${this.empty}&isPub=${this.callback}&isBoard=${this.blicity}&createTimeStr=${this.timezone}`,
+          `api/blade-food/recipe/page?size=${this.m_page.size}&current=${this.m_page.number}&ascs=id&searchType=2&recipeName=${this.wupload.input}&isUse=${this.empty}&isPub=${this.callback}&isBoard=${this.blicity}&createTimeStr=${this.timezone}&createTimeStrEnd=
+${this.timezone1}`,
           {}
         )
         .then(res => {

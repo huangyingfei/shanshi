@@ -38,7 +38,7 @@
           align="center"
         >
           <template slot-scope="props">{{
-            props.row.isDef !== 1 ? "是" : "否"
+            props.row.isDef == 1 ? "是" : "否"
           }}</template>
         </el-table-column>
 
