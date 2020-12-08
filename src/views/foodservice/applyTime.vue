@@ -231,7 +231,7 @@
               <el-form-item label="图片" style="width: 350px">
                 <img
                   v-if="this.rectangle != ''"
-                  style="width:200px;height:200px"
+                  style="width:150px;height:150px"
                   :src="this.rectangle"
                   alt=""
                 />
@@ -559,6 +559,38 @@ export default {
           });
         });
     },
+    getSummaries(param) {
+      const { columns, data } = param;
+      const sums = [];
+      columns.forEach((column, index) => {
+        if (index === 0) {
+          sums[index] = "能量合计";
+          return;
+        }
+        const values = data.map(item => Number(item[column.property]));
+        if (
+          (!values.every(value => isNaN(value)) &&
+            column.property == "malloc") ||
+          column.property == "stats"
+        ) {
+          sums[index] = values.reduce((prev, curr) => {
+            const value = Number(curr);
+            if (!isNaN(value)) {
+              return prev + curr;
+            } else {
+              return prev;
+            }
+          }, 0);
+          sums[index] += "";
+          this.sumss = sums[index];
+          // if (this.mailto[0].children[0].id == "101") {
+          //   this.mailto[0].children[0].result = this.sumss;
+          // }
+          // console.log(this.sumss);
+        }
+      });
+      return sums;
+    },
     seecol(row) {
       this.valuepark = [];
       this.officeonce = [];
@@ -747,7 +779,7 @@ export default {
   left: 0px;
   background-color: #fff;
   border-radius: 5px;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1); */
 }
 .header {
   width: 100%;

@@ -58,22 +58,19 @@
         <el-table-column
           prop="foodName"
           label="食材一"
-          width="160"
           align="center"
         ></el-table-column>
         <el-table-column
           prop="foodName1"
           label="食材二"
-          width="160"
           align="center"
         ></el-table-column>
         <el-table-column
           prop="reason"
           label="不宜同食原因"
-          width="180"
           align="center"
         ></el-table-column>
-        <el-table-column label="是否有效" width="120" align="center">
+        <el-table-column label="是否有效" align="center">
           <template slot-scope="scope">
             <p class="stop" v-if="scope.row.isActive == 1">是</p>
             <p style="color:#409eff" v-else-if="scope.row.isActive == 0">

@@ -718,7 +718,7 @@ export default {
 }
 .rights {
   overflow-x: hidden;
-  height: 100%;
+
   height: 400px;
   overflow-y: auto;
   /* background-color: red; */

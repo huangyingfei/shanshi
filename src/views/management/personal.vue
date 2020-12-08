@@ -234,6 +234,7 @@
                     style="width: 350px"
                   >
                     <el-input
+                      @change="research"
                       type="number"
                       v-model="ruleForm.besaved"
                       placeholder="请输入"
@@ -254,6 +255,7 @@
 
                   <el-form-item label="水分(%)" style="width: 350px">
                     <el-input
+                      @change="ofmoisture"
                       type="number"
                       placeholder="请输入水分"
                       v-model="ruleForm.content"
@@ -831,6 +833,27 @@ export default {
     this.publicDomain(); //公共食材库
   },
   methods: {
+    ofmoisture() {
+      if (this.ruleForm.content > 100) {
+        // alert("123213");
+        this.ruleForm.content = "";
+        this.$message.error("水分不能大于100");
+      } else {
+        // console.log(this.ruleForm.besaved);
+        return;
+      }
+    },
+    research() {
+      // console.log(123);
+      if (this.ruleForm.besaved > 100) {
+        // alert("123213");
+        this.ruleForm.besaved = "";
+        this.$message.error("食部不能大于100");
+      } else {
+        // console.log(this.ruleForm.besaved);
+        return;
+      }
+    },
     //初始数据获取token
     Takeone() {
       let str = JSON.parse(localStorage.getItem("saber-token"));

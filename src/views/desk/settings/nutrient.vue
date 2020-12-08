@@ -43,6 +43,7 @@
               >编辑</el-button
             >
             <el-button
+              v-if="scope.row.isDef == 0"
               type="text"
               size="small"
               icon="el-icon-delete"

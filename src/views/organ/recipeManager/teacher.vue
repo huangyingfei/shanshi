@@ -69,11 +69,25 @@
       </div>
       <div class="consults">
         <div class="header">
-          <span style="margin-right: 10px">关键字:</span>
+          <!-- <span style="margin-right: 10px">关键字:</span>
           <el-input
             v-model="input"
             placeholder="请输入内容"
             style="width: 200px"
+            size="small"
+          ></el-input> -->
+          <span style="margin-right: 10px">工号:</span>
+          <el-input
+            v-model="workers"
+            placeholder="请输入内容"
+            style="width: 100px"
+            size="small"
+          ></el-input>
+          <span style="margin-left: 10px;margin-right: 10px">姓名:</span>
+          <el-input
+            v-model="username"
+            placeholder="请输入内容"
+            style="width: 100px"
             size="small"
           ></el-input>
           <span style="margin-right: 10px; margin-left: 15px">职务:</span>
@@ -83,7 +97,7 @@
             placeholder="请选择"
           >
             <el-option
-              v-for="item in prompt"
+              v-for="item in vposition"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -222,139 +236,141 @@
           :visible.sync="dateTime"
           :close-on-click-modal="false"
         >
-          <el-form
-            :model="ruleForm"
-            :rules="rules"
-            ref="ruleForm"
-            :inline="true"
-            label-width="105px"
-            class="demo-ruleForm"
-          >
-            <el-form-item label="姓名" style="width: 355px" prop="name">
-              <el-input style="width: 250px" v-model="ruleForm.name"></el-input>
-            </el-form-item>
-            <el-form-item label="性别" style="width: 355px">
-              <el-radio
-                style="margin-left: 30px"
-                v-model="ruleForm.radio"
-                label="1"
-                >男</el-radio
-              >
-              <el-radio v-model="ruleForm.radio" label="2">女</el-radio>
-            </el-form-item>
-            <el-form-item style="width: 355px" label="图片">
-              <el-upload
-                action="api/blade-resource/oss/endpoint/put-file"
-                list-type="picture-card"
-                :limit="imgLimit"
-                :file-list="productImgs"
-                :on-exceed="handleExceed"
-                :on-preview="handlePictureCardPreview"
-                :before-upload="beforeAvatarUpload"
-                :on-success="handleAvatarSuccess"
-                :on-remove="handleRemove"
-                :headers="headerObj"
-              >
-                <!-- <img v-if="dialogImageUrl" :src="dialogImageUrl" class="avatar" /> -->
-                <i class="el-icon-plus"></i>
-              </el-upload>
-              <span style="color:#e0e0e0;  font-size: 11px;"
-                >上传图片不能超过2M 只能是JPG PNG格式</span
-              >
-              <el-dialog append-to-body :visible.sync="dialogVisible">
-                <img width="100%" :src="dialogImageUrl" alt />
-              </el-dialog>
-            </el-form-item>
-            <el-form-item style="width: 355px" label="婚姻状况">
-              <el-radio
-                style="margin-left: 30px"
-                v-model="ruleForm.marriages"
-                label="0"
-                >已婚</el-radio
-              >
-              <el-radio v-model="ruleForm.marriages" label="1">未婚</el-radio>
-            </el-form-item>
-            <el-form-item label="出生日期" style="width: 355px" prop="value1">
-              <el-date-picker
-                v-model="ruleForm.value1"
-                style="width: 250px"
-                format="yyyy 年 MM 月 dd 日 HH 时 mm 分 ss 秒 "
-                value-format="yyyy-MM-dd HH:mm:ss"
-                type="datetime"
-                placeholder="选择日期时间"
-              >
-              </el-date-picker>
-            </el-form-item>
-            <el-form-item label="手机号码" style="width: 355px" prop="phones">
-              <el-input
-                style="width: 250px"
-                v-model="ruleForm.phones"
-              ></el-input>
-            </el-form-item>
-            <el-form-item label="民族" style="width: 355px">
-              <el-select
-                style="width: 250px"
-                v-model="ruleForm.national"
-                placeholder="请选择"
-              >
-                <el-option
-                  v-for="item in college"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                >
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="职务" style="width: 355px" prop="position">
-              <el-select
-                clearable
-                style="width: 250px"
-                v-model="ruleForm.position"
-                placeholder="请选择"
-              >
-                <el-option
-                  v-for="item in vposition"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                >
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="所在年级/班级" style="width: 355px">
-              <el-select
-                style="width: 250px"
-                v-model="ruleForm.getClass"
-                placeholder="请选择"
-              >
-                <el-option
-                  v-for="item in loadClass"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                >
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="工号" style="width: 355px">
-              <el-input
-                style="width: 250px"
-                v-model="ruleForm.thejob"
-              ></el-input>
-            </el-form-item>
-            <el-form-item style="width: 355px">
-              <span style="font-size: 12px"
-                >若为年级组长、保教主任、老师、保育员时需选择
-                所在年级/班级</span
-              >
-            </el-form-item>
-            <el-form-item
-              label="入职日期"
-              style="width: 355px"
-              prop="inductions"
+          <div class="onlymsgid">
+            <el-form
+              :model="ruleForm"
+              :rules="rules"
+              ref="ruleForm"
+              :inline="true"
+              label-width="105px"
+              class="demo-ruleForm"
             >
-              <!-- <el-date-picker
+              <el-form-item label="姓名" style="width: 355px" prop="name">
+                <el-input
+                  style="width: 250px"
+                  v-model="ruleForm.name"
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="性别" style="width: 355px">
+                <el-radio
+                  style="margin-left: 30px"
+                  v-model="ruleForm.radio"
+                  label="1"
+                  >男</el-radio
+                >
+                <el-radio v-model="ruleForm.radio" label="2">女</el-radio>
+              </el-form-item>
+              <el-form-item style="width: 355px" label="图片">
+                <el-upload
+                  :class="{ hide: hideUploadEdit }"
+                  accept=".jpeg,.jpg,.gif,.png"
+                  action="api/blade-resource/oss/endpoint/put-file"
+                  list-type="picture-card"
+                  :limit="1"
+                  :file-list="productImgs"
+                  :on-exceed="handleExceed"
+                  :on-change="handleChangePic"
+                  :on-preview="handlePictureCardPreview"
+                  :before-upload="beforeAvatarUpload"
+                  :on-success="handleAvatarSuccess"
+                  :on-remove="handleRemove"
+                  :headers="headerObj"
+                >
+                  <!-- <img v-if="dialogImageUrl" :src="dialogImageUrl" class="avatar" /> -->
+                  <i class="el-icon-plus"></i>
+                </el-upload>
+                <span style="color:#e0e0e0;  font-size: 11px;"
+                  >上传图片不能超过2M 只能是JPG PNG格式</span
+                >
+                <el-dialog append-to-body :visible.sync="dialogVisible">
+                  <img width="100%" :src="dialogImageUrl" alt />
+                </el-dialog>
+              </el-form-item>
+              <el-form-item style="width: 355px" label="婚姻状况">
+                <el-radio
+                  style="margin-left: 30px"
+                  v-model="ruleForm.marriages"
+                  label="0"
+                  >已婚</el-radio
+                >
+                <el-radio v-model="ruleForm.marriages" label="1">未婚</el-radio>
+              </el-form-item>
+              <el-form-item label="出生日期" style="width: 355px" prop="value1">
+                <el-date-picker
+                  v-model="ruleForm.value1"
+                  style="width: 250px"
+                  format="yyyy 年 MM 月 dd 日 "
+                  value-format="yyyy-MM-dd HH:mm:ss"
+                  type="datetime"
+                  placeholder="选择日期时间"
+                >
+                </el-date-picker>
+              </el-form-item>
+              <el-form-item label="手机号码" style="width: 355px" prop="phones">
+                <el-input
+                  style="width: 250px"
+                  v-model="ruleForm.phones"
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="民族" style="width: 355px">
+                <el-select
+                  style="width: 250px"
+                  v-model="ruleForm.national"
+                  placeholder="请选择"
+                >
+                  <el-option
+                    v-for="item in college"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="职务" style="width: 355px" prop="position">
+                <el-select
+                  clearable
+                  style="width: 250px"
+                  v-model="ruleForm.position"
+                  placeholder="请选择"
+                >
+                  <el-option
+                    v-for="item in vposition"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="所在年级/班级" style="width: 355px">
+                <el-cascader
+                  style="width: 250px"
+                  clearable
+                  v-model="stringClass"
+                  :options="loadClass"
+                  :props="{ checkStrictly: true }"
+                  @change="handleChange"
+                ></el-cascader>
+              </el-form-item>
+              <el-form-item label="工号" style="width: 355px">
+                <el-input
+                  style="width: 250px"
+                  v-model="ruleForm.thejob"
+                ></el-input>
+              </el-form-item>
+              <el-form-item style="width: 355px">
+                <span style="font-size: 12px"
+                  >若为年级组长、保教主任、老师、保育员时需选择
+                  所在年级/班级</span
+                >
+              </el-form-item>
+              <el-form-item
+                label="入职日期"
+                style="width: 355px"
+                prop="inductions"
+              >
+                <!-- <el-date-picker
               style="width: 250px"
               v-model="ruleForm.inductions"
               format="yyyy 年 MM 月 dd 日"
@@ -362,19 +378,19 @@
               placeholder="选择日期"
             >
             </el-date-picker> -->
-              <el-date-picker
-                v-model="ruleForm.inductions"
-                style="width: 250px"
-                format="yyyy 年 MM 月 dd 日 HH 时 mm 分 ss 秒 "
-                value-format="yyyy-MM-dd HH:mm:ss"
-                type="datetime"
-                placeholder="选择日期时间"
-              >
-              </el-date-picker>
-            </el-form-item>
-            <el-form-item label="参加工作日期" style="width: 355px">
-              <!--  -->
-              <!-- <el-date-picker
+                <el-date-picker
+                  v-model="ruleForm.inductions"
+                  style="width: 250px"
+                  format="yyyy 年 MM 月 dd 日"
+                  value-format="yyyy-MM-dd HH:mm:ss"
+                  type="datetime"
+                  placeholder="选择日期时间"
+                >
+                </el-date-picker>
+              </el-form-item>
+              <el-form-item label="参加工作日期" style="width: 355px">
+                <!--  -->
+                <!-- <el-date-picker
               style="width: 250px"
               @change="stop()"
               v-model="ruleForm.workin"
@@ -383,58 +399,59 @@
               placeholder="选择日期"
             >
             </el-date-picker> -->
-              <el-date-picker
-                v-model="ruleForm.workin"
-                style="width: 250px"
-                @change="stop()"
-                format="yyyy 年 MM 月 dd 日 HH 时 mm 分 ss 秒 "
-                value-format="yyyy-MM-dd HH:mm:ss"
-                type="datetime"
-                placeholder="选择日期时间"
-              >
-              </el-date-picker>
-            </el-form-item>
-            <el-form-item label="工龄" style="width: 355px">
-              <el-input
-                style="width: 250px"
-                v-model="ruleForm.process"
-              ></el-input>
-            </el-form-item>
-            <el-form-item label="证件号码" style="width: 355px">
-              <el-input
-                style="width: 250px"
-                v-model="ruleForm.update"
-              ></el-input>
-            </el-form-item>
-            <el-form-item label="工作单位" style="width: 355px">
-              <el-input
-                style="width: 250px"
-                v-model="ruleForm.worker"
-              ></el-input>
-            </el-form-item>
-            <el-form-item label="邮箱" style="width: 355px">
-              <el-input
-                style="width: 250px"
-                v-model="ruleForm.emails"
-              ></el-input>
-            </el-form-item>
-            <el-form-item label="当前状态" style="width: 355px">
-              <el-select
-                style="width: 250px"
-                v-model="ruleForm.ddeparture"
-                placeholder="请选择"
-              >
-                <el-option
-                  v-for="item in emailslist"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
+                <el-date-picker
+                  v-model="ruleForm.workin"
+                  style="width: 250px"
+                  @change="stop()"
+                  format="yyyy 年 MM 月 dd 日 "
+                  value-format="yyyy-MM-dd HH:mm:ss"
+                  type="datetime"
+                  placeholder="选择日期时间"
                 >
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="状态更新日期" style="width: 355px">
-              <!-- <el-date-picker
+                </el-date-picker>
+              </el-form-item>
+              <el-form-item label="工龄" style="width: 355px">
+                <el-input
+                  :disabled="true"
+                  style="width: 250px"
+                  v-model="ruleForm.process"
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="证件号码" style="width: 355px">
+                <el-input
+                  style="width: 250px"
+                  v-model="ruleForm.update"
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="工作单位" style="width: 355px">
+                <el-input
+                  style="width: 250px"
+                  v-model="ruleForm.worker"
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="邮箱" style="width: 355px">
+                <el-input
+                  style="width: 250px"
+                  v-model="ruleForm.emails"
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="当前状态" style="width: 355px">
+                <el-select
+                  style="width: 250px"
+                  v-model="ruleForm.ddeparture"
+                  placeholder="请选择"
+                >
+                  <el-option
+                    v-for="item in emailslist"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="状态更新日期" style="width: 355px">
+                <!-- <el-date-picker
               style="width: 250px"
               v-model="ruleForm.nextstate"
               format="yyyy 年 MM 月 dd 日"
@@ -442,17 +459,17 @@
               placeholder="选择日期"
             >
             </el-date-picker> -->
-              <el-date-picker
-                v-model="ruleForm.nextstate"
-                format="yyyy 年 MM 月 dd 日 HH 时 mm 分 ss 秒 "
-                value-format="yyyy-MM-dd HH:mm:ss"
-                type="datetime"
-                placeholder="选择日期时间"
-              >
-              </el-date-picker>
-            </el-form-item>
-          </el-form>
-
+                <el-date-picker
+                  v-model="ruleForm.nextstate"
+                  format="yyyy 年 MM 月 dd 日 "
+                  value-format="yyyy-MM-dd HH:mm:ss"
+                  type="datetime"
+                  placeholder="选择日期时间"
+                >
+                </el-date-picker>
+              </el-form-item>
+            </el-form>
+          </div>
           <div slot="footer" class="dialog-footer">
             <el-button @click="dateTime = false">取 消</el-button>
             <!-- <el-button @click="resetForm('ruleForm')">重置</el-button> -->
@@ -475,18 +492,23 @@
             icon="el-icon-search"
             size="medium"
             type="primary"
+            :disabled="this.nbottoms == 1"
+            @click="searchType"
             >搜索</el-button
           >
           <el-button
             style="margin-left: 20px"
             icon="el-icon-delete"
             size="medium"
+            :disabled="this.nbottoms == 1"
+            @click="emptyset"
             >清空</el-button
           >
           <el-button
             style="margin-left: 20px"
             size="medium"
             type="primary"
+            :disabled="this.nbottoms == 1"
             icon="el-icon-plus"
             @click="addition(1)"
             >添加员工</el-button
@@ -622,6 +644,7 @@ export default {
       obtained: false, //子部门弹框
       dialogImageUrl: "", //图片
       imgLimit: 1, //文件个数
+      hideUploadEdit: false, // 是否隐藏上传按钮
       productImgs: [],
       dialogVisible: false,
       headerObj: {
@@ -645,7 +668,7 @@ export default {
         phones: "", //手机号码
         national: "", //民族
         position: "", //职务
-        getClass: "", //班级
+
         thejob: "", //工号
         inductions: "", //入职日期
         workin: "", //参加工作日期
@@ -658,6 +681,7 @@ export default {
         desc: "",
         resource: ""
       },
+      stringClass: [],
       rules: {
         name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
         phones: [
@@ -693,14 +717,6 @@ export default {
       ],
       loadClass: [
         //
-        {
-          value: "1",
-          label: "中班"
-        },
-        {
-          value: "2",
-          label: "小班"
-        }
       ],
       vposition: [
         //职务
@@ -1016,23 +1032,23 @@ export default {
       callback: "", //职务搜索
       mState: [
         {
-          value: "1",
+          value: "",
           label: "全部"
         },
         {
-          value: "2",
+          value: "1",
           label: "在职"
         },
         {
-          value: "3",
+          value: "2",
           label: "离职"
         },
         {
-          value: "4",
+          value: "3",
           label: "停职"
         },
         {
-          value: "5",
+          value: "4",
           label: "退休"
         }
       ],
@@ -1048,11 +1064,17 @@ export default {
         }
       ],
       working: "",
+      workers: "", //工号搜索
+      username: "", //姓名搜索
       under: "", //添加员工下标
       edits: "", //ID
       view: "",
+      nbottoms: 1,
       departments: "", //添加部门
-      support: "" //添加子部门
+      support: "", //添加子部门
+      sqlClass: [],
+      empty: "", //升序
+      ordered: "" //降序
     };
   },
   beforeMount() {
@@ -1061,6 +1083,10 @@ export default {
     this.Takeone();
   },
   methods: {
+    handleChange(value) {
+      console.log(value);
+    },
+
     //初始数据获取token
     Takeone() {
       let str = JSON.parse(localStorage.getItem("saber-token"));
@@ -1090,6 +1116,17 @@ export default {
       // console.log(this.ruleForm.emails); //邮箱
       // console.log(this.ruleForm.ddeparture); //当前状态
       // console.log(this.ruleForm.nextstate); //状态更新日期
+      console.log(this.stringClass);
+      if (this.stringClass.length == 2) {
+        // this.sqlClass = this.stringClass[1];
+        // console.log(this.sqlClass);
+        this.sqlClass.push(this.stringClass[1]);
+      }
+      if (this.stringClass.length == 3) {
+        // this.sqlClass = this.stringClass[2];
+        // console.log(this.sqlClass);
+        this.sqlClass.push(this.stringClass[2]);
+      }
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.$axios
@@ -1102,7 +1139,9 @@ export default {
               birthDate: this.ruleForm.value1, //出生日期
               mobile: this.ruleForm.phones, //手机号码
               nation: this.ruleForm.national, //民族
+
               post: this.ruleForm.position, //职务
+              // managerClass: this.sqlClass, //班级
               jobNumber: this.ruleForm.thejob, //工号
               entryTime: this.ruleForm.inductions, //入职日期
               workTime: this.ruleForm.workin, //参加工作日期
@@ -1114,7 +1153,6 @@ export default {
             })
             .then(res => {
               // console.log(res);
-
               this.dateTime = false;
               this.$message({
                 message: "添加成功",
@@ -1252,12 +1290,21 @@ export default {
         };
       }
       this.productImgs = picture;
+      this.hideUploadEdit = this.productImgs.length >= 1;
+      this.dialogImageUrl = row.pic;
       this.ruleForm.marriages = row.marriage + ""; //婚姻状况
       this.ruleForm.value1 = row.birthDate; //出生日期
       this.ruleForm.phones = row.mobile; //手机号码
       this.ruleForm.national = row.nation; //民族
       this.ruleForm.position = row.post; //职务
       //所在班级
+      if (row.createBy) {
+        this.stringClass.push(row.createBy);
+        console.log(this.stringClass);
+      } else {
+        this.stringClass = "";
+      }
+
       this.ruleForm.thejob = row.jobNumber; //工号
       this.ruleForm.inductions = row.entryTime; //入职日期
       this.ruleForm.workin = row.workTime; //参加工作日期
@@ -1295,7 +1342,40 @@ export default {
     },
     //添加员工弹框
     addition(index1) {
+      // console.log(this.ruleForm.name); //姓名
+      // console.log(this.ruleForm.radio); //性别
+      // console.log(this.ruleForm.marriages); //婚姻状况
+      // console.log(this.ruleForm.value1); //出生日期
+      // console.log(this.ruleForm.phones); //手机号码
+      // console.log(this.ruleForm.national); //民族
+      // console.log(this.ruleForm.position); //职务
+      // console.log(this.ruleForm.getClass); //班级
+      // console.log(this.ruleForm.thejob); //工号
+      // console.log(this.ruleForm.inductions); //入职日期
+      // console.log(this.ruleForm.workin); //参加工作日期
+      // console.log(this.ruleForm.process); //工龄
+      // console.log(this.ruleForm.update); //证件号码
+      // console.log(this.ruleForm.worker); //工作单位
+      // console.log(this.ruleForm.emails); //邮箱
+      // console.log(this.ruleForm.ddeparture); //当前状态
+      // console.log(this.ruleForm.nextstate); //状态更新日期
       // console.log(index1);
+      this.ruleForm.name = "";
+      this.ruleForm.radio = "";
+      this.ruleForm.marriages = "";
+      this.ruleForm.value1 = "";
+      this.ruleForm.phones = "";
+      this.ruleForm.national = "";
+      this.ruleForm.position = "";
+      this.ruleForm.thejob = "";
+      this.ruleForm.inductions = "";
+      this.ruleForm.workin = "";
+      this.ruleForm.process = "";
+      this.ruleForm.update = "";
+      this.ruleForm.worker = "";
+      this.ruleForm.emails = "";
+      this.ruleForm.ddeparture = "";
+      this.ruleForm.nextstate = "";
       console.log(this.view);
       this.under = index1;
       this.dateTime = true;
@@ -1363,26 +1443,30 @@ export default {
     },
     //添加子部门
     atomic() {
-      this.$axios
-        .post(`api/blade-food/teacherdept/submit`, {
-          parentId: this.adds, //上级ID
-          deptName: this.acetone.name, //部门名称
-          level: this.acetone.sorting //部门排序
-        })
-        .then(res => {
-          this.getStorage();
-          this.obtained = false;
-          this.acetone.name = "";
-          this.acetone.storage = "";
-          console.log(res);
-          this.$message({
-            message: "添加成功",
-            type: "success"
+      if (this.acetone.name != "") {
+        this.$axios
+          .post(`api/blade-food/teacherdept/submit`, {
+            parentId: this.adds, //上级ID
+            deptName: this.acetone.name, //部门名称
+            level: this.acetone.sorting //部门排序
+          })
+          .then(res => {
+            this.getStorage();
+            this.obtained = false;
+            this.acetone.name = "";
+            this.acetone.storage = "";
+            console.log(res);
+            this.$message({
+              message: "添加成功",
+              type: "success"
+            });
+          })
+          .catch(() => {
+            this.$message.error("添加失败");
           });
-        })
-        .catch(() => {
-          this.$message.error("添加失败");
-        });
+      } else {
+        this.$message.error("子部门不能为空");
+      }
     },
     //编辑部门
     selection() {
@@ -1462,9 +1546,57 @@ export default {
           });
         });
     },
+    emptyset() {
+      this.workers = "";
+      this.username = "";
+      this.callback = "";
+      this.driver = "";
+      this.working = "";
+      this.searchType();
+    },
+    //搜索
+    searchType() {
+      console.log(this.workers);
+      console.log(this.callback);
+      console.log(this.driver);
+      console.log(this.working);
+      let ascen = "job_number";
+      if (this.working == 1) {
+        this.empty = ascen;
+        console.log(this.empty);
+      } else {
+        this.empty = "";
+      }
+      if (this.working == 2) {
+        this.ordered = ascen;
+      } else {
+        this.ordered = "";
+      }
+      // this.stutas
+      // handleNodeClick(data){
+      //  this.view = data.id;
+      // }
+      this.$axios
+        .get(
+          `api/blade-food/teacher/list?deptId=${this.view}&jobNumber=${this.workers}&name=${this.username}&post=${this.callback}&stutas=${this.driver}&descs=${this.empty}&ascs=${this.ordered}`,
+          {}
+        )
+        .then(res => {
+          this.$message({
+            message: "查询成功",
+            type: "success"
+          });
+          this.loadFlag1 = false;
+          this.tableData = res.data.data.records;
+        })
+        .catch(() => {
+          this.$message.error("查询失败");
+        });
+    },
     //查看
     handleNodeClick(data) {
       this.view = data.id;
+      this.nbottoms = 2;
       console.log(this.view);
       this.loadFlag1 = true;
       this.$axios
@@ -1512,39 +1644,72 @@ export default {
     //获取所属班级
     getToolkit() {
       this.$axios.get(`api/blade-food/class/tree`, {}).then(res => {
-        console.log(res);
+        // console.log(res);
         this.bufs = res.data.data;
+        console.log(this.bufs);
         let fwork = [];
-        this.bufs.forEach((item, index) => {
-          console.log(item);
-          fwork[index] = {
-            id: item.id,
-            label: item.label
-          };
-          // item.children.forEach(item1 => {
-          //   // console.log(item1);
-          //   if (item1.children) {
-          //     item1.children.forEach((item2, index2) => {
-          //       // console.log(item2);
-          //       fwork[index2] = {
-          //         id: item2.id,
-          //         label: item2.classType
-          //       };
-          //       fwork[index2].children = [];
-          //       if (item2.children) {
-          //         item2.children.forEach((item3, index3) => {
-          //           // console.log(item3);
-          //           fwork[index2].children[index3] = {
-          //             id: item3.id,
-          //             label: item3.classType
-          //           };
-          //         });
-          //       }
-          //     });
-          //   }
-          // });
+        this.bufs.forEach(item => {
+          item.children.forEach((item1, index1) => {
+            // console.log(item1);
+            fwork[index1] = {
+              value: item1.id,
+              label: item1.label
+            };
+            fwork[index1].children = [];
+            item1.children.forEach((item2, index2) => {
+              fwork[index1].children[index2] = {
+                value: item2.id,
+                label: item2.label
+              };
+              fwork[index1].children[index2].children = [];
+              if (item2.children) {
+                item2.children.forEach((item3, index3) => {
+                  // console.log(item3),
+                  fwork[index1].children[index2].children[index3] = {
+                    value: item3.id,
+                    label: item3.label
+                  };
+                });
+              }
+            });
+          });
         });
-        console.log(fwork);
+        this.loadClass = fwork;
+        console.log(this.loadClass);
+        // this.bufs.forEach((item, index) => {
+        //   console.log(item);
+        //   fwork[index] = {
+        //     id: item.id,
+        //     label: item.label
+        //   };
+        //   fwork[index].children = [];
+        //   item.children.forEach((item1, index1) => {
+        //     fwork[index].children[index1] = {
+        //       value: item1.id,
+        //       label: item1.label
+        //     };
+        //     fwork[index].children[index1].children = [];
+        //     item1.children.forEach((item2, index2) => {
+        //       fwork[index].children[index1].children[index2] = {
+        //         value: item2.id,
+        //         label: item2.label
+        //       };
+        //       fwork[index].children[index1].children[index2].children = [];
+        //       if (item2.children) {
+        //         item2.children.forEach((item3, index3) => {
+        //           fwork[index].children[index1].children[index2].children[
+        //             index3
+        //           ] = {
+        //             value: item3.id,
+        //             label: item3.label
+        //           };
+        //         });
+        //       }
+        //     });
+        //   });
+        // });
+        // this.loadClass = fwork;
+        // console.log(this.loadClass);
       });
     },
     //获取部门树形结构
@@ -1577,13 +1742,16 @@ export default {
             });
           }
         });
-        console.log(auto);
+
         this.data = auto;
+        console.log(auto);
       });
     },
     //移除图片
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
+    handleRemove(file, productImgs) {
+      // console.log(file, fileList);
+      this.dialogImageUrl = "";
+      this.hideUploadEdit = productImgs.length >= 1;
     },
     //预览图片
     handlePictureCardPreview(file) {
@@ -1591,6 +1759,9 @@ export default {
 
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
+    },
+    handleChangePic(file, productImgs) {
+      this.hideUploadEdit = productImgs.length >= 1;
     },
     handleExceed(files, fileList) {
       //图片上传超过数量限制
@@ -1622,9 +1793,9 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .avue-view {
-  padding: 0 5px !important;
+  padding: 0 0px !important;
 }
 .management {
   width: 100%;
@@ -1632,6 +1803,11 @@ export default {
   background-color: #fff;
   display: flex;
   /* margin-bottom: 40px; */
+}
+.onlymsgid {
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 400px;
 }
 .onchange {
   width: 24%;
@@ -1671,5 +1847,9 @@ export default {
 }
 .address {
   margin-top: 50px;
+}
+
+/deep/ .hide .el-upload--picture-card {
+  display: none;
 }
 </style>
