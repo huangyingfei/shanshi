@@ -65,6 +65,7 @@
                 v-model="WeekInfo.weekType"
                 slot="prepend" value-key="请选择周期"
                 placeholder="周长设置"
+                @change="selectWeekType"
               >
                 <el-option label="5天一周" value="5"></el-option>
                 <el-option label="6天一周" value="6"></el-option>
@@ -80,7 +81,7 @@
               @focus="FixWeek"
               placeholder="选择时间"
               name="WeekSelect"
-              @change="SelectWeek"
+              @change="SelectWeek1"
               style="
                 width: 230px;
                 opacity: 0;
@@ -200,7 +201,7 @@
               <el-button  slot="reference" style="margin-left: 10px" size="medium"  v-if="foodMutuals.length==0"
               > 不宜同食</el-button>
               <!--<button  slot="reference" > 不宜同食</button>-->
-              <el-button  slot="reference" style="margin-left: 10px" size="medium"  v-if="foodMutuals.length>0"
+              <el-button  slot="reference" style="margin-left: 10px" size="medium"  v-if="foodMutuals.length>0"   type="primary"
               > 不宜同食</el-button>
             </el-popover>
 
@@ -213,14 +214,9 @@
               ><img src="/img/baobiao.png" width="10px" /> 营养素</el-button
               >
             </el-popover>
-
-
             <el-button style="margin-left: 10px" size="medium"
             ><img src="/img/baobiao.png" width="10px" /> 带量食谱</el-button
             >
-
-
-
           </el-form-item>
         </el-form>
       </el-col>
@@ -438,10 +434,10 @@
       </el-col>
 
     </el-row>
-    <div class="scores" @click="tfractio">
+    <div  id="df" class="scores" >
       <div v-if="parseFloat(score)>=85" class="scores1">
         <div class="scores3">
-        <p class="gnus">{{score}}</p>
+        <p class="gnus" @click="tfractio">{{score}}</p>
         <p class="scorefor">分</p>
           </div>
         <div class="scores2">
@@ -457,7 +453,7 @@
       </div>
       <div v-if="parseFloat(score)<85"  class="scores1-1">
         <div class="scores3">
-          <p class="gnus">{{score}}</p>
+          <p class="gnus" @click="tfractio">{{score}}</p>
           <p class="scorefor">分</p>
         </div>
         <div class="scores2">
@@ -548,7 +544,7 @@
                        ref="child2" > </smartfoods-week>
       </div>
 
-      <div class="scores">
+      <div  class="scores">
         <!--<div class="scores1">-->
           <!--<div class="scores3">-->
             <!--<p class="gnus">{{peipScore}}</p>-->
@@ -661,7 +657,7 @@
   },
   mounted(){
     this.initData()
-
+    this.dragFunc("df");
   },
   created() {
     //this.init();
@@ -967,6 +963,26 @@ document.oncontextmenu = function(){return false};
     // }
   },
   methods: {
+     dragFunc(id) {
+    var Drag = document.getElementById(id);
+    Drag.onmousedown = function(event) {
+      var ev = event || window.event;
+      event.stopPropagation();
+      var disX = ev.clientX - Drag.offsetLeft;
+      var disY = ev.clientY - Drag.offsetTop;
+      document.onmousemove = function(event) {
+        var ev = event || window.event;
+        Drag.style.left = ev.clientX - disX + "px";
+        Drag.style.top = ev.clientY - disY + "px";
+        Drag.style.cursor = "move";
+      };
+    };
+    Drag.onmouseup = function() {
+      document.onmousemove = null;
+      this.style.cursor = "default";
+    };
+  },
+
     mealsTypeById(){
       var that=this;
       detailByPeopleId(this.WeekInfo.crowd).then(res=>{
@@ -991,6 +1007,11 @@ document.oncontextmenu = function(){return false};
         }
         that.WeekInfo.foodCatalog=foodCatalog;
         that.AppendFoodType();
+        that.WeekInfo.weekValue=new Date()
+        that.FixWeek();
+        that.ShowWeekSelect();
+        that.SelectWeek(new Date())
+        that.$refs.refweekSelect.hidePicker();
       })
     },
     recipeNameShareSearchPub(recipeSelectPub,isUse){
@@ -1187,7 +1208,7 @@ document.oncontextmenu = function(){return false};
         this.score=score;this.pcScore=pscore
         this.scxjSc=(parseFloat(this.score)-parseFloat(this.pcScore)).toFixed(2)
       }
-      if(score!=0){
+
         this.intake=intake;
         this.nutrition=nutrition
         this.nutrition.forEach(_=>{
@@ -1212,7 +1233,7 @@ document.oncontextmenu = function(){return false};
         this.protein=protein
         this.meal=meal
         this.ncodeChange();
-    }
+
     },
     initMealData(){
       //公开
@@ -2074,6 +2095,28 @@ document.oncontextmenu = function(){return false};
 
       return cday;
     },
+    selectWeekType(){
+      let that=this;
+      this.$confirm("重新选择周期会清空已有菜品", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(()=>{
+        let weekType=that.WeekInfo.weekType;
+        that.$refs.refweekSelect.showPicker();
+        that.SelectWeek(this.startTime)
+        that.$refs.refweekSelect.hidePicker();
+      })
+    },
+    SelectWeek1(d){
+      this.$confirm("重新选择周期会清空已有菜品", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(()=>{
+        this.SelectWeek(d)
+      })
+    },
     //选择周
     SelectWeek(d,name,recipeCycles) {
 
@@ -2082,11 +2125,8 @@ document.oncontextmenu = function(){return false};
       }
       var that = this;
       setTimeout(function (v) {
-
         var year = d.getFullYear();
         that.year=year;
-
-
         var begin_year;
         var end_year;
         begin_year = year;
@@ -2292,6 +2332,7 @@ document.oncontextmenu = function(){return false};
   position: absolute;
   top: 90px;
   right: 30px;
+  z-index: 999;
 }
 .scores3{
   width: 100px;

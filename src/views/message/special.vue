@@ -165,7 +165,7 @@
               span:24,
               multiple:true,
               change:(data)=>{
-                // debugger
+                debugger
                 let people=data.value;
                 if(people.length>0){
                   for(let i=0;i<people.length;i++ ){
@@ -266,16 +266,15 @@
     methods: {
       nodeClick(data){
         let that=this;
+        this.$set(that.specialForm,"people",[])
         detailByPeopleId(data.id).then(res=>{
           that.specialForm=res.data.data;
           let ids=res.data.data.ids;
-          let people=[];
-          that.$set(that.specialForm,"people",undefined)
-          ids.forEach(_=>{
-            people.push(_.studentId)
-          })
           debugger
-          that.$set(that.specialForm,"people",people)
+          let people=[];
+          ids.forEach(_=>{
+            people.push(_.studentId+"")
+          })
           that.$set(that.morenData[0],"mealNum",!res.data.data.breakfast?undefined:res.data.data.breakfast)
           that.$set(that.morenData[1],"mealNum",!res.data.data.breakfastSnack?undefined:res.data.data.breakfastSnack)
           that.$set(that.morenData[2],"mealNum",!res.data.data.lunch?undefined:res.data.data.lunch)
@@ -295,6 +294,8 @@
               })
             }
           }
+
+          that.$set(that.specialForm,"people",people)
         })
       },
       empty(){
@@ -341,6 +342,7 @@
 
       submit(form, done){
         let people=this.specialForm.people;
+        debugger
         for(let i=0;i<people.length;i++ ){
           this.findObject(this.option.column,"people").dicData.forEach(_=>{
             if(_.id==people[i]){

@@ -104,8 +104,8 @@
                 @change="AppendFoodType"
               >
                 <el-checkbox label="早餐" checked name="早餐"></el-checkbox>
-                <el-checkbox label="早点" name="早点"></el-checkbox>
-                <el-checkbox label="午餐" name="午餐"></el-checkbox>
+                <el-checkbox label="早点" checked name="早点"></el-checkbox>
+                <el-checkbox label="午餐" checked name="午餐"></el-checkbox>
                 <el-checkbox label="午点" name="午点"></el-checkbox>
                 <el-checkbox label="晚餐" name="晚餐"></el-checkbox>
                 <el-checkbox label="晚点" name="晚点"></el-checkbox>
@@ -150,17 +150,19 @@
                 @click="buttonend"
                 style="margin-left: 10px"
                 size="medium"
-                type="success"
+                type="primary"
               >保存食谱</el-button
               >
-              <el-button style="margin-left: 10px" size="medium"
-              >自动设置油盐糖</el-button
-              >
+              <!--<el-button style="margin-left: 10px" size="medium"-->
+              <!--&gt;自动设置油盐糖</el-button-->
+              <!--&gt;-->
 
-              <el-button style="margin-left: 10px" size="medium"
-              >自动清除油盐糖</el-button
+              <!--<el-button style="margin-left: 10px" size="medium"-->
+              <!--&gt;自动清除油盐糖</el-button-->
+              <!--&gt;-->
+              <el-button style="margin-left: 10px" size="medium"  @click="dishClear"
+              >清空</el-button
               >
-
 
 
 
@@ -1192,11 +1194,13 @@
             if (data.dishMxVos) {
               let children = [];
               this.nutritionValue.forEach(_=>{_.value='0'})
+              let dishCount=0;
               data.dishMxVos.forEach(_ => {
                 let item = {};
                 item["id"] = _.foodId;
                 item["name"] = _.name;
                 item["count"] = _.value
+                dishCount+=_.value;
                 let nutrientIds=[];
                 _.foodNutritions.forEach(__=>{
                   this.nutritionValue.forEach(n=>{
@@ -1221,7 +1225,7 @@
                 node: {
                   id: data.id,
                   name: data.dishName,
-                  // count: dishCount,
+                  count: dishCount,
                   children: children,
                   dishNutrient:this.nutritionValue
                 }

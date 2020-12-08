@@ -7,6 +7,7 @@
         @click="open(item)"
         :key="item[labelKey]"
         :class="{'is-active':vaildAvtive(item)}"
+
       >
         <i :class="item[iconKey]"></i>
         <span slot="title" :alt="item[pathKey]">{{generateTitle(item)}}</span>
@@ -15,6 +16,7 @@
         v-else-if="!validatenull(item[childrenKey])&&vaildRoles(item)"
         :index="item[pathKey]"
         :key="item[labelKey]"
+        background-color="#fff" text-color="#000000"
       >
         <template slot="title">
           <img :src="'/img/menuLogo/'+item[iconKey]" style="margin-right: 5px;" v-if="item[iconKey]!='none'"/>
@@ -30,7 +32,7 @@
             :key="child[labelKey]"
           >
             <!--<i :class="child[iconKey]"></i>-->
-            <span slot="title">{{generateTitle(child)}}</span>
+            <span slot="title" style="color: #000000">{{generateTitle(child)}}</span>
           </el-menu-item>
           <sidebar-item
             v-else

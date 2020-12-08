@@ -83,14 +83,21 @@
                       type="text"
                       size="mini"
                       placeholder="请输入内容"
+                      @change="foodChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week1').id
+                          )"
                     ></el-input>
                     <el-input
                       style="flex: 1"
                       v-model="scope1.row.count"
                       v-if="scope1.row.children"
-                      disabled
                       type="text"
                       size="mini"
+                      @change="dishChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week1').id
+                          )"
                       placeholder="请输入内容"
                     ></el-input>
                     <div style="width: 35px; text-algin: center">
@@ -212,15 +219,22 @@
                       v-if="!scope1.row.children"
                       type="text"
                       size="mini"
+                      @change="foodChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week2').id
+                          )"
                       placeholder="请输入内容"
                     ></el-input>
                     <el-input
                       style="flex: 1"
                       v-model="scope1.row.count"
                       v-if="scope1.row.children"
-                      disabled
                       type="text"
                       size="mini"
+                      @change="dishChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week2').id
+                          )"
                       placeholder="请输入内容"
                     ></el-input>
                     <div style="width: 35px; text-algin: center">
@@ -342,15 +356,22 @@
                       v-if="!scope1.row.children"
                       type="text"
                       size="mini"
+                      @change="foodChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week3').id
+                          )"
                       placeholder="请输入内容"
                     ></el-input>
                     <el-input
                       style="flex: 1"
                       v-model="scope1.row.count"
                       v-if="scope1.row.children"
-                      disabled
                       type="text"
                       size="mini"
+                      @change="dishChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week3').id
+                          )"
                       placeholder="请输入内容"
                     ></el-input>
                     <div style="width: 35px; text-algin: center">
@@ -472,15 +493,22 @@
                       v-if="!scope1.row.children"
                       type="text"
                       size="mini"
+                      @change="foodChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week4').id
+                          )"
                       placeholder="请输入内容"
                     ></el-input>
                     <el-input
                       style="flex: 1"
                       v-model="scope1.row.count"
                       v-if="scope1.row.children"
-                      disabled
                       type="text"
-                      size="mini"
+                      size="mini" @change="dishChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week4').id
+                          )"
+
                       placeholder="请输入内容"
                     ></el-input>
                     <div style="width: 35px; text-algin: center">
@@ -602,16 +630,23 @@
                       v-if="!scope1.row.children"
                       type="text"
                       size="mini"
+                      @change="foodChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week5').id
+                          )"
                       placeholder="请输入内容"
                     ></el-input>
                     <el-input
                       style="flex: 1"
                       v-model="scope1.row.count"
                       v-if="scope1.row.children"
-                      disabled
                       type="text"
                       size="mini"
                       placeholder="请输入内容"
+                      @change="foodChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week5').id
+                          )"
                     ></el-input>
                     <div style="width: 35px; text-algin: center">
                       <el-link
@@ -731,16 +766,22 @@
                       v-model="scope1.row.count"
                       v-if="!scope1.row.children"
                       type="text"
-                      size="mini"
+                      size="mini" @change="foodChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week6').id
+                          )"
                       placeholder="请输入内容"
                     ></el-input>
                     <el-input
                       style="flex: 1"
                       v-model="scope1.row.count"
                       v-if="scope1.row.children"
-                      disabled
                       type="text"
                       size="mini"
+                      @change="foodChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week6').id
+                          )"
                       placeholder="请输入内容"
                     ></el-input>
                     <div style="width: 35px; text-algin: center">
@@ -862,15 +903,22 @@
                       v-if="!scope1.row.children"
                       type="text"
                       size="mini"
+                      @change="foodChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week7').id
+                          )"
                       placeholder="请输入内容"
                     ></el-input>
                     <el-input
                       style="flex: 1"
                       v-model="scope1.row.count"
                       v-if="scope1.row.children"
-                      disabled
                       type="text"
                       size="mini"
+                      @change="foodChange(
+                            scope.row.id,
+                            scope.row.weeks.find((p) => p.name == 'week7').id
+                          )"
                       placeholder="请输入内容"
                     ></el-input>
                     <div style="width: 35px; text-algin: center">
@@ -1143,24 +1191,24 @@
     // 计算属性computed,计算的是Name依赖的值,它不能计算在data中已经定义过的变量。
     computed: {},
     // 当属性的值发生变化时，就会调用对应属性的方法，方法里面的形参对应的是属性的新值和旧值
-    watch: {
-      'datas':{
-        handler(data){
-          data.forEach(item=>{
-            item.weeks.forEach(_=>{
-              _.foods.forEach(__=>{
-                let count=0;
-                __.children.forEach(___=>{
-                  count+= parseFloat(___.count?___.count:0)
-                })
-                this.$set(__,"count",count);
-              })
-            })
-          })
-        },
-        deep:true,
-      }
-    },
+    // watch: {
+    //   'datas':{
+    //     handler(data){
+    //       data.forEach(item=>{
+    //         item.weeks.forEach(_=>{
+    //           _.foods.forEach(__=>{
+    //             let count=0;
+    //             __.children.forEach(___=>{
+    //               count+= parseFloat(___.count?___.count:0)
+    //             })
+    //             this.$set(__,"count",count);
+    //           })
+    //         })
+    //       })
+    //     },
+    //     deep:true,
+    //   }
+    // },
     // 组件第一次加载
     mounted() {
       this.init();
@@ -1563,7 +1611,48 @@
           }
         });
       },
-
+//食材数量改变
+      foodChange(data_id, week_id){
+        this.datas.forEach((data) => {
+          if (data.id === data_id) {
+            data.weeks.forEach((week) => {
+              if (week.id === week_id) {
+                week.foods.forEach(food=>{
+                  let count = 0;
+                  food.children.forEach(___ => {
+                    count += parseFloat(___.count ? ___.count : 0)
+                  })
+                  this.$set(food, "count", count);
+                })
+              }
+            });
+          }
+        });
+        // this.getFoodScore();
+      },
+//菜品数量改变
+      dishChange(data_id, week_id){
+        this.datas.forEach((data) => {
+          if (data.id === data_id) {
+            data.weeks.forEach((week) => {
+              if (week.id === week_id) {
+                week.foods.forEach(food=>{
+                  let count = 0;
+                  food.children.forEach(___ => {
+                    count += parseFloat(___.count ? ___.count : 0)
+                  })
+                  if(parseFloat(count)!=parseFloat(food.count)){
+                    food.children.forEach(___ => {
+                      this.$set(___,"count",((parseFloat(food.count)/parseFloat(count))*___.count).toFixed(2))
+                    })
+                  }
+                })
+              }
+            });
+          }
+        });
+        // this.getFoodScore();
+      },
       // 移除
       onRemove(data_id, week_id, food_id,week_name) {
         // debugger

@@ -1371,9 +1371,8 @@
             }
           })
         }else{
-          that.$emit('childfn', 0,"smartDatas",that.peippcScore);
+          that.$emit('childfn', 0,"smartDatas",that.peippcScore,[],[],[],[],[]);
         }
-
       },
 
       //处理数据

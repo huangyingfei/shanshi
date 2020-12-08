@@ -9,7 +9,7 @@
                :default-openeds="opened"
                :default-active="nowTagValue"
                mode="vertical"
-               :show-timeout="200"
+               :show-timeout="200" background-color="#fff" text-color="#000000"
                :collapse="keyCollapse">
         <sidebar-item :menu="menu"
                       :screen="screen"

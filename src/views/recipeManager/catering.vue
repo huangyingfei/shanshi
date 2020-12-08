@@ -97,14 +97,12 @@
               style="width: 300px"
             ></el-input>
           </el-form-item>
-          <el-form-item label="人群年龄">
+          <el-form-item label="手工输入人群平均年龄">
 
-          <el-input-number size="small" v-model="WeekInfo.startAge" controls-position="right" :min="1" :max="100"></el-input-number>
+          <el-input-number size="small" style="width: 110px" v-model="WeekInfo.startAge" controls-position="right" :min="1" :max="100"></el-input-number>
           -
-          <el-input-number size="small" v-model="WeekInfo.endAge" controls-position="right"  :min="1" :max="100"></el-input-number>
-          <el-button style="margin-left: 10px" size="medium"  @click="dishClear"
-          >清空</el-button
-          >
+          <el-input-number size="small"   style="width: 110px" v-model="WeekInfo.endAge" controls-position="right"  :min="1" :max="100"></el-input-number>
+
           </el-form-item>
 
         </el-form>
@@ -165,14 +163,9 @@
             >保存食谱</el-button
             >
 
-            <el-button style="margin-left: 10px" size="medium"
-            >自动设置油盐糖</el-button
+            <el-button style="margin-left: 10px" size="medium"  @click="dishClear"
+            >清空</el-button
             >
-
-            <el-button style="margin-left: 10px" size="medium"
-            >自动清除油盐糖</el-button
-            >
-
 
             <el-popover
               placement="right"

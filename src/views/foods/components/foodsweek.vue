@@ -68,7 +68,7 @@
               :span-method="onTableSpanMethod"
             >
               <el-table-column
-                label="食品/食材"
+                label="菜品/食材"
                 prop="name"
                 header-align="center"
                 align="left"
@@ -205,7 +205,7 @@
               :span-method="onTableSpanMethod"
             >
               <el-table-column
-                label="食品/食材"
+                label="菜品/食材"
                 prop="name"
                 header-align="center"
                 align="left"
@@ -341,7 +341,7 @@
               :span-method="onTableSpanMethod"
             >
               <el-table-column
-                label="食品/食材"
+                label="菜品/食材"
                 prop="name"
                 header-align="center"
                 align="left"
@@ -477,7 +477,7 @@
               :span-method="onTableSpanMethod"
             >
               <el-table-column
-                label="食品/食材"
+                label="菜品/食材"
                 prop="name"
                 header-align="center"
                 align="left"
@@ -613,7 +613,7 @@
               :span-method="onTableSpanMethod"
             >
               <el-table-column
-                label="食品/食材"
+                label="菜品/食材"
                 prop="name"
                 header-align="center"
                 align="left"
@@ -749,7 +749,7 @@
               :span-method="onTableSpanMethod"
             >
               <el-table-column
-                label="食品/食材"
+                label="菜品/食材"
                 prop="name"
                 header-align="center"
                 align="left"
@@ -885,7 +885,7 @@
               :span-method="onTableSpanMethod"
             >
               <el-table-column
-                label="食品/食材"
+                label="菜品/食材"
                 prop="name"
                 header-align="center"
                 align="left"
@@ -1432,7 +1432,7 @@ export default {
         })
       }else{
         this.pcScore=this.score;
-        that.$emit('childfn', 0,"datas",this.pcScore);
+        that.$emit('childfn', 0,"datas",this.pcScore,[],[],[],[],[]);
       }
 
     },
