@@ -23,21 +23,30 @@
           <!-- 食谱表格开始 -->
           <el-row>
             <el-col :span="24">
-              <el-table size = "small" :data="dtos">
-                <el-table-column label="" align="mealType">
-
+              <el-table size = "small" :data="dtos" :span-method="dtosSpanMethod" class="dtosTable">
+                <el-table-column label="" prop="mealType" align="center">
                 </el-table-column>
                 <el-table-column label="星期一(Mon)" align="center">
                   <el-table-column
-                    prop="monRecipeName"
                     label="食谱"  min-width="50">
+                    <template slot-scope="scope">
+                      <el-row v-for="item in scope.row.monRecipeName" :key="item">
+                        <el-col :span="24">{{item}}&nbsp;</el-col>
+                      </el-row>
+                    </template>
                   </el-table-column>
                   <el-table-column
-                    prop="mondayRecipeWeight"
-                    label="带量/人(克)" min-width="60">
+                    label="带量/人(克)" min-width="60" >
                     <template slot-scope="scope">
-                      <span style="text-align:left">{{ scope.row.monFoodName }}</span>
-                      <span style="text-align:right">{{ scope.row.monValue }}</span>
+                      <el-row v-for="(item, index) in scope.row.monFoodName" :key="item">
+                        <div v-if="scope.row.mealType[0] ==='日人均总带量'">
+                          <el-col :span="24">{{scope.row.monValue[index]}}&nbsp;</el-col>
+                        </div>
+                        <div v-else>
+                          <el-col :span="12" style="text-align:left;">{{item}}&nbsp;</el-col>
+                          <el-col :span="12" style="text-align:right;">&nbsp;{{scope.row.monValue[index]}}</el-col>
+                        </div>
+                      </el-row>
                     </template>
                   </el-table-column>
                 </el-table-column>
@@ -45,12 +54,24 @@
                   <el-table-column
                     prop="tuesdayRecipe"
                     label="食谱" min-width="50">
+                    <template slot-scope="scope">
+                      <el-row v-for="item in scope.row.tueRecipeName" :key="item">
+                        <el-col :span="24">{{item}}&nbsp;</el-col>
+                      </el-row>
+                    </template>
                   </el-table-column>
                   <el-table-column
                     label="带量/人(克)" min-width="60">
                     <template slot-scope="scope">
-                      <span style="text-align:left">{{ scope.row.tueFoodName }}</span>
-                      <span style="text-align:right">{{ scope.row.tueValue }}</span>
+                      <el-row v-for="(item, index) in scope.row.tueFoodName" :key="item">
+                        <div v-if="scope.row.mealType[0] ==='日人均总带量'">
+                          <el-col :span="24">{{scope.row.tueValue[index]}}&nbsp;</el-col>
+                        </div>
+                        <div v-else>
+                          <el-col :span="12" style="text-align:left;">{{item}}&nbsp;</el-col>
+                          <el-col :span="12" style="text-align:right;">&nbsp;{{scope.row.tueValue[index]}}</el-col>
+                        </div>
+                      </el-row>
                     </template>
                   </el-table-column>
                 </el-table-column>
@@ -58,12 +79,24 @@
                   <el-table-column
                     prop="wednesdayRecipe"
                     label="食谱" min-width="50">
+                    <template slot-scope="scope">
+                      <el-row v-for="item in scope.row.wedRecipeName" :key="item">
+                        <el-col :span="24">{{item}}&nbsp;</el-col>
+                      </el-row>
+                    </template>
                   </el-table-column>
                   <el-table-column
                     label="带量/人(克)" min-width="60">
                     <template slot-scope="scope">
-                      <span style="text-align:left">{{ scope.row.wedFoodName }}</span>
-                      <span style="text-align:right">{{ scope.row.wedValue }}</span>
+                      <el-row v-for="(item, index) in scope.row.wedFoodName" :key="item">
+                        <div v-if="scope.row.mealType[0] ==='日人均总带量'">
+                          <el-col :span="12">{{scope.row.wedValue[index]}}</el-col>
+                        </div>
+                        <div v-else>
+                          <el-col :span="12" style="text-align:left;">{{item}}</el-col>
+                          <el-col :span="12" style="text-align:right;">{{scope.row.wedValue[index]}}</el-col>
+                        </div>
+                      </el-row>
                     </template>
                   </el-table-column>
                 </el-table-column>
@@ -71,12 +104,24 @@
                   <el-table-column
                     prop="thursdayRecipe"
                     label="食谱" min-width="50">
+                    <template slot-scope="scope">
+                      <el-row v-for="item in scope.row.thuRecipeName" :key="item">
+                        <el-col :span="24">{{item}}&nbsp;</el-col>
+                      </el-row>
+                    </template>
                   </el-table-column>
                   <el-table-column
                     label="带量/人(克)" min-width="60">
                     <template slot-scope="scope">
-                      <span style="text-align:left">{{ scope.row.thuFoodName }}</span>
-                      <span style="text-align:right">{{ scope.row.thuValue }}</span>
+                      <el-row v-for="(item, index) in scope.row.thuFoodName" :key="item">
+                        <div v-if="scope.row.mealType[0] ==='日人均总带量'">
+                          <el-col :span="24">{{scope.row.thuValue[index]}}&nbsp;</el-col>
+                        </div>
+                        <div v-else>
+                          <el-col :span="12" style="text-align:left;">{{item}}&nbsp;</el-col>
+                          <el-col :span="12" style="text-align:right;">&nbsp;{{scope.row.thuValue[index]}}</el-col>
+                        </div>
+                      </el-row>
                     </template>
                   </el-table-column>
                 </el-table-column>
@@ -84,38 +129,74 @@
                   <el-table-column
                     prop="fridayRecipe"
                     label="食谱" min-width="50">
+                    <template slot-scope="scope">
+                      <el-row v-for="item in scope.row.friRecipeName" :key="item">
+                        <el-col :span="24">{{item}}&nbsp;</el-col>
+                      </el-row>
+                    </template>
                   </el-table-column>
                   <el-table-column
                     label="带量/人(克)" min-width="60">
                     <template slot-scope="scope">
-                      <span style="text-align:left">{{ scope.row.friFoodName }}</span>
-                      <span style="text-align:right">{{ scope.row.friValue }}</span>
+                      <el-row v-for="(item, index) in scope.row.friFoodName" :key="item">
+                        <div v-if="scope.row.mealType[0] ==='日人均总带量'">
+                          <el-col :span="12">{{scope.row.friValue[index]}}</el-col>
+                        </div>
+                        <div v-else>
+                          <el-col :span="12" style="text-align:left;">{{item}}</el-col>
+                          <el-col :span="12" style="text-align:right;">{{scope.row.friValue[index]}}</el-col>
+                        </div>
+                      </el-row>
                     </template>
                   </el-table-column>
                 </el-table-column>
-                <el-table-column label="星期六(Sat)" align="center">
+                <el-table-column label="星期六(Sat)" align="center" v-if="weekType ==='6'||weekType ==='7'">
                   <el-table-column
                     prop="saturdayRecipe"
                     label="食谱" min-width="50">
+                    <template slot-scope="scope">
+                      <el-row v-for="item in scope.row.satRecipeName" :key="item">
+                        <el-col :span="24">{{item}}&nbsp;</el-col>
+                      </el-row>
+                    </template>
                   </el-table-column>
                   <el-table-column
                     label="带量/人(克)" min-width="60">
                     <template slot-scope="scope">
-                      <span style="text-align:left">{{ scope.row.satFoodName }}</span>
-                      <span style="text-align:right">{{ scope.row.satValue }}</span>
+                      <el-row v-for="(item, index) in scope.row.satFoodName" :key="item">
+                        <div v-if="scope.row.mealType[0] ==='日人均总带量'">
+                          <el-col :span="12">{{scope.row.satValue[index]}}</el-col>
+                        </div>
+                        <div v-else>
+                          <el-col :span="12" style="text-align:left;">{{item}}</el-col>
+                          <el-col :span="12" style="text-align:right;">{{scope.row.satValue[index]}}</el-col>
+                        </div>
+                      </el-row>
                     </template>
                   </el-table-column>
                 </el-table-column>
-                <el-table-column label="星期日(Sun)" align="center">
+                <el-table-column label="星期日(Sun)" align="center" v-if="weekType ==='7'">
                   <el-table-column
                     prop="sundayRecipe"
                     label="食谱" min-width="50">
+                    <template slot-scope="scope">
+                      <el-row v-for="item in scope.row.sunRecipeName" :key="item">
+                        <el-col :span="24">{{item}}&nbsp;</el-col>
+                      </el-row>
+                    </template>
                   </el-table-column>
                   <el-table-column
                     label="带量/人(克)" min-width="60">
                     <template slot-scope="scope">
-                      <span style="text-align:left">{{ scope.row.sunFoodName }}</span>
-                      <span style="text-align:right">{{ scope.row.sunValue }}</span>
+                      <el-row v-for="(item, index) in scope.row.sunFoodName" :key="item">
+                        <div v-if="scope.row.mealType[0] ==='日人均总带量'">
+                          <el-col :span="12">{{scope.row.sunValue[index]}}</el-col>
+                        </div>
+                        <div v-else>
+                          <el-col :span="12" style="text-align:left;">{{item}}</el-col>
+                          <el-col :span="12" style="text-align:right;">{{scope.row.sunValue[index]}}</el-col>
+                        </div>
+                      </el-row>
                     </template>
                   </el-table-column>
                 </el-table-column>
@@ -135,7 +216,7 @@
           <!-- 平均每人进食量表格开始 -->
           <el-row>
             <el-col :span="24">
-              <el-table size = "small" :data="foodAvgPeopleExcelDto">
+              <el-table size = "small" :data="foodAvgPeopleExcelDto" border :header-cell-style="headerRowStyle"> 
                 <el-table-column label="食物类别" prop="foodName" min-width="43">
                 </el-table-column>
                 <el-table-column label="谷物及制品" prop="gl" min-width="43">
@@ -190,7 +271,7 @@
           <!-- 营养素摄入量表格开始 -->
           <el-row>
             <el-col :span="24">
-              <el-table size = "small" :data="foodNutritionExcleDtoList">
+              <el-table size = "small" :data="foodNutritionExcleDtoList" border :header-cell-style="headerRowStyle">
                 <el-table-column label="平均每人每日" prop="target" min-width="42">
                 </el-table-column>
                 <el-table-column label="能量(千卡)" align="center" min-width="40" prop="cal">            
@@ -410,7 +491,7 @@
             <el-button @click="nutritionDialogVisible=false">取消</el-button>
           </el-col>
           <el-col :span="4">
-            <el-button>导出Excel</el-button>
+            <el-button @click="exportRrecipeInfo">导出Excel</el-button>
           </el-col>
           <el-col :span="4">
             <el-button type="primary" v-print="printObj">打印</el-button>
@@ -421,52 +502,140 @@
   </div>
 </template>
 
+
 <script>
+import axios from '@/router/axios';
+
 export default {
+  props:["weekType"],
   data() {
     return {
       nutritionDialogVisible: false,
       recipeWidth:"20",
-      calSourceExcelDTOList:[],//平均每人进食量表格
+      calSourceExcelDTOList:[],//配餐能量结构表格
       foodNutritionExcleDtoList:[],//营养素摄入量
       powerSourceExcelDtoList:[],//能量来源分布
       proteinrSourceExcelDtoList:[],//蛋白质来源分布
-      calSourceExcelDTOList:[],//配餐能量结构表格
+      foodAvgPeopleExcelDto:[],//平均每人进食量表格
       dtos:[],//食谱表格
+      foods:{},
       printObj: {
         id: "printMe",
         popTitle: 'good print',
       }
     };
   },
-  created(){
-    let boxCollection= document.getElementsByClassName("print-page");
-    console.log('created')
-    console.log(boxCollection)
-  },
-  beforeMount(){
-    let boxCollection= document.getElementsByClassName("print-page");
-    console.log('beforeMount')
-    console.log(boxCollection)
-  },
-  mounted(){
-    let boxCollection= document.getElementById("printMe");
-    console.log('mounted')
-    console.log(boxCollection)
-  },
-
   methods:{
-    cateringEnergyHead({row,colunm, rowIndex,columnIndex}){
-      if(rowIndex===1 ){
-        return {display: 'none'}
-      }
+    dtosSpanMethod({ row, column, rowIndex, columnIndex }){
 
+      if(rowIndex == 0 && columnIndex == 1){
+        console.log(row);
+        console.log(column);
+      }
     },
-    openNutritionDialog(){
-      console.log(this);
-      let getMenuText = this.$refs;
-      console.log(getMenuText)
+    //导出带量食谱报表
+    exportRrecipeInfo(){
+      axios({
+        method: 'post',
+        url: '/api/blade-food/recipe/export-recipeInfo',
+        data:this.foods,
+        responseType: 'blob',
+      }).then(res => {
+        console.log('res')
+        console.log(res)
+        const {data, headers} = res
+        const fileName = headers['content-disposition'].replace(/\w+;filename=(.*)/, '$1')
+        // 此处当返回json文件时需要先对data进行JSON.stringify处理，其他类型文件不用做处理
+        //const blob = new Blob([JSON.stringify(data)], ...)
+        const blob = new Blob([data], {type: 'application/octet-stream'})
+        let dom = document.createElement('a')
+        let url = window.URL.createObjectURL(blob)
+        dom.href = url
+        dom.setAttribute('download', decodeURI(fileName))
+        dom.style.display = 'none'
+        document.body.appendChild(dom)
+        dom.click()
+        dom.parentNode.removeChild(dom)
+        window.URL.revokeObjectURL(url)
+      });
+    },
+    headerRowStyle({row,colunm, rowIndex,columnIndex}){
+      return{
+        background: '#f5f7fa'
+      }
+    },
+    //配餐能量结构表表头样式合并
+    // cateringEnergyHead({row,colunm, rowIndex,columnIndex}){
+    //   if(rowIndex===1 ){
+    //     return {display: 'none'}
+    //   }
+    // },
+    getNutritionDataList(data){
+      console.log(data)
+      axios({
+        method: 'post',
+        url: '/api/blade-food/recipe/getRecipeQuantity',
+        data: data
+      }).then( res => {
+        // console.log('res')
+        // console.log(res)
+        this.foodAvgPeopleExcelDto = new Array(res.data.data.foodAvgPeopleExcelDto);//平均每人进食量表格
+        this.foodNutritionExcleDtoList = res.data.data.foodNutritionExcleDtoList;//营养素摄入量
+        this.powerSourceExcelDtoList = res.data.data.powerSourceExcelDtoList;//能量来源分布
+        this.proteinrSourceExcelDtoList = res.data.data.proteinrSourceExcelDtoList;//蛋白质来源分布
+        this.calSourceExcelDTOList = res.data.data.calSourceExcelDTOList;//配餐能量结构表格
+        var dtos = res.data.data.dtos;//食谱表格
+        let mealTypeArray = []
+        let mealTypeDataArray = []
+        var FoodWeekArray = ['mealType','monRecipeName','satRecipeName','wedRecipeName','thuRecipeName','friRecipeName','tueRecipeName','sunRecipeName']
+        dtos.forEach(element => {
+          debugger
+          let indexMealType = mealTypeArray.indexOf(element.mealType);//在餐点类型数组中是否存在当前值
+          if(indexMealType === -1){//不存在
+            mealTypeArray.push(element.mealType);//更新数据至餐点类型数组尾部
+            let mealTypeDataObj = {}
+            for (let key in element) {//当前餐点行数据初始化赋值
+              var arr =[]
+              if (element.hasOwnProperty(key)) {
+                arr.push(element[key] == null?'':element[key]);
+                mealTypeDataObj[key] = arr
+              }
+            }
+            mealTypeDataArray.push(mealTypeDataObj);
+            console.log(mealTypeDataArray);
+            console.log("不存在");
+          }else{
+            for (let k in element) {
+              if (element.hasOwnProperty(k)) {
+                var val = element[k] == null?' ':element[k];
+                if(FoodWeekArray.indexOf(k) === -1){//是否是食谱列的值
+                  mealTypeDataArray[indexMealType][k].push(val)//非食谱列的值直接更新
+
+                }else if(FoodWeekArray.indexOf(k) === 0){//餐点类型列不做处理
+
+                }else{//当前为食谱类型列
+                  console.log('mealTypeDataArray[indexMealType][k]');
+                  console.log(k);
+                  console.log(val);
+                  if(mealTypeDataArray[indexMealType][k].indexOf(val) === -1){
+                    mealTypeDataArray[indexMealType][k].push(val)//不存在当前菜品直接更新
+                  }else{
+                    mealTypeDataArray[indexMealType][k].push(' ');//已存在往数组存入‘’
+                  };
+                  
+                } 
+              }
+            }
+          }
+        });
+        console.log(mealTypeDataArray)
+        this.dtos = mealTypeDataArray;//食谱表格
+      });
+    },
+    openNutritionDialog(foods){
       this.nutritionDialogVisible = true
+      this.foods = foods;
+      this.getNutritionDataList(foods);
     },
     doPrintHtml(){    
       let newstr = document.getElementById("printMe").innerHTML;
@@ -500,5 +669,11 @@ export default {
   background-color:rgb(255, 255, 255); 
   z-index:9999;
   }
+.dtosTable .el-col {
+  margin-bottom: 0px;
+  text-overflow:ellipsis;
+  overflow: hidden;
+  white-space:nowrap;   
+}
 
 </style>
