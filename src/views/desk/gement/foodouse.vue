@@ -235,6 +235,8 @@
 
             <el-form-item label="特点" style="width: 345px">
               <el-input
+                maxlength="30"
+                show-word-limit
                 type="textarea"
                 style="width: 200px"
                 v-model="ruleForm.region"
@@ -242,6 +244,8 @@
             </el-form-item>
             <el-form-item label="做法" style="width: 345px">
               <el-input
+                maxlength="30"
+                show-word-limit
                 type="textarea"
                 style="width: 200px"
                 v-model="ruleForm.desc"
@@ -282,7 +286,7 @@
           </el-form>
           <!-- 菜品所含食材信息 -->
           <div class="mationtxt">菜品所含食材信息</div>
-          <div>
+          <div class="statistics">
             <el-button
               style="margin-left: 10px;"
               type="primary"
@@ -414,7 +418,7 @@
             <el-table
               :data="mailto"
               max-height="400"
-              style="width: 99%; margin-bottom: 20px"
+              style="width: 100%; margin-bottom: 20px"
               row-key="id"
               v-loading="loadFlag"
               :default-expand-all="true"
@@ -981,7 +985,7 @@ export default {
       const sums = [];
       columns.forEach((column, index) => {
         if (index === 0) {
-          sums[index] = "能量合计";
+          sums[index] = "用量/能量合计";
           return;
         }
         const values = data.map(item => Number(item[column.property]));
@@ -1889,6 +1893,9 @@ export default {
   font-size: 14px;
   padding-right: 8px;
 }
+.statistics {
+  width: 100%;
+}
 .mationtxt {
   width: 100%;
   height: 30px;
@@ -1898,7 +1905,7 @@ export default {
   font-weight: bold;
 }
 .mationinput {
-  width: 750px;
+  width: 754px;
   /* height: 700px; */
   /* display: flex; */
   /* overflow-y: auto; */
@@ -1906,16 +1913,16 @@ export default {
   margin-bottom: 20px;
 }
 .saveas {
-  width: 95%;
+  width: 100%;
   /* height: 500px; */
-  margin-left: 40px;
+  margin-left: 0px;
   margin-bottom: 50px;
   /* background-color: red; */
 }
 .gmsave {
   /* float: left; */
   text-align: center;
-  width: 100%;
+  width: 20%;
   background-color: #fff;
   /* width: 100%; */
   /* height: 50px;
@@ -1923,7 +1930,7 @@ export default {
   /* margin-bottom: 40px; */
   /* background-color: #fff; */
   position: fixed;
-  /* left: 0; */
+  left: 50%;
   /* right: 30%; */
   bottom: 10px;
   z-index: 999;

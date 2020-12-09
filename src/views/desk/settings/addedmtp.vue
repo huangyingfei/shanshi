@@ -32,7 +32,7 @@
       </el-form-item>
     </el-form>
     <!-- 标签页 -->
-    <el-tabs v-model="activeName" @tab-click="handleClick">
+    <el-tabs v-loading="loadFlag" v-model="activeName" @tab-click="handleClick">
       <el-tab-pane
         :label="item.name"
         :name="item.name"
@@ -221,6 +221,7 @@ export default {
   name: "Additiona",
   data() {
     return {
+      loadFlag: false, //加载flag
       radio2: "上海",
       activeName: "", //标签页
       activeName2: "", //标签页
@@ -273,6 +274,7 @@ export default {
     handleClick(tab, event) {},
 
     confirm() {
+      this.loadFlag = true;
       if (this.$route.query.userid == undefined) {
         this.window = true; //更新
         this.network = "";
@@ -288,6 +290,7 @@ export default {
           }
         })
         .then(res => {
+          this.loadFlag = false;
           if (this.$route.query.userid) {
             this.ruleForm.name = this.$route.query.userid.name;
             this.ruleForm.region =

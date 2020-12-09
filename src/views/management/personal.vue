@@ -1,106 +1,106 @@
 <template>
   <div class="months">
-    <div class="version">
-      <el-tabs v-model="activeName" @tab-click="handleClick">
-        <!-- 个人食材库 -->
-        <el-tab-pane label="个人食材库" name="first">
-          <div class="cation">
-            <!-- 左边 -->
-            <div class="personal">
-              <el-input
-                style="width:270px; margin-left: 9px;"
-                placeholder="输入关键字进行查询"
-                v-model="filterText"
-              >
-              </el-input>
-              <div class="import">
-                <!-- <el-button type="primary" plain size="mini">导入</el-button>
+    <el-tabs v-model="activeName" @tab-click="handleClick">
+      <!-- 个人食材库 -->
+      <el-tab-pane label="个人食材库" name="first">
+        <div class="cation">
+          <!-- 左边 -->
+          <div class="personal">
+            <el-input
+              @blur="graph"
+              style="width:270px; margin-left: 9px;"
+              placeholder="输入关键字进行查询"
+              v-model="filterText"
+            >
+            </el-input>
+            <div class="import">
+              <!-- <el-button type="primary" plain size="mini">导入</el-button>
                 <el-button type="primary" plain size="mini">导出</el-button>
                 <el-button type="primary" plain size="mini">加分类</el-button> -->
-                <el-button @click="addition(1)" type="primary" size="mini"
-                  >加食材</el-button
+              <el-button @click="addition(1)" type="primary" size="mini"
+                >加食材</el-button
+              >
+            </div>
+            <div class="whole">
+              <div class="export">
+                <!-- 全部(326) -->
+                <el-button
+                  size="mini"
+                  :type="2 == display ? 'primary' : 'default'"
+                  @click="buttonClick(2)"
+                  >全部</el-button
                 >
               </div>
-              <div class="whole">
-                <div class="export">
-                  <!-- 全部(326) -->
-                  <el-button
-                    size="mini"
-                    :type="2 == display ? 'primary' : 'default'"
-                    @click="buttonClick(2)"
-                    >全部</el-button
-                  >
-                </div>
-                <div class="toLine"></div>
-                <div class="export1">
-                  <el-button
-                    size="mini"
-                    :type="1 == display ? 'primary' : 'default'"
-                    @click="buttonClick(0)"
-                    >分享平台</el-button
-                  >
-                </div>
+              <div class="toLine"></div>
+              <div class="export1">
+                <el-button
+                  size="mini"
+                  :type="1 == display ? 'primary' : 'default'"
+                  @click="buttonClick(0)"
+                  >分享平台</el-button
+                >
               </div>
-              <!-- 全国查找 -->
-              <div class="country">
-                <div class="country1">
-                  <el-cascader
-                    clearable
-                    v-model="valuepark2"
-                    :options="options"
-                    @change="gProvinces"
-                  ></el-cascader>
-                </div>
-                <div class="country2">
-                  <template>
-                    <el-select
-                      @change="disallow()"
-                      v-model="before1"
-                      placeholder="请选择"
-                    >
-                      <el-option
-                        v-for="item in before"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
-                      ></el-option>
-                    </el-select>
-                  </template>
-                </div>
-                <div class="country2">
-                  <template>
-                    <el-select
-                      @change="commonly()"
-                      v-model="really1"
-                      placeholder="请选择"
-                    >
-                      <el-option
-                        v-for="item in really"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
-                      ></el-option>
-                    </el-select>
-                  </template>
-                </div>
+            </div>
+            <!-- 全国查找 -->
+            <div class="country">
+              <div class="country1">
+                <el-cascader
+                  clearable
+                  v-model="valuepark2"
+                  :options="options"
+                  @change="gProvinces"
+                ></el-cascader>
               </div>
-              <!-- 树形组件 -->
-              <div class="monly">
-                <div class="block">
-                  <p></p>
-                  <el-tree
-                    :data="data"
-                    v-loading="loadFlag"
-                    node-key="id"
-                    :default-expand-all="false"
-                    @node-click="handleNodeClick"
-                    :filter-node-method="filterNode"
-                    ref="tree"
+              <div class="country2">
+                <template>
+                  <el-select
+                    @change="disallow()"
+                    v-model="before1"
+                    placeholder="请选择"
                   >
-                    <span class="custom-tree-node" slot-scope="{ node, data }">
-                      <span>{{ node.label }}</span>
-                      <span>
-                        <!-- <el-button
+                    <el-option
+                      v-for="item in before"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    ></el-option>
+                  </el-select>
+                </template>
+              </div>
+              <div class="country2">
+                <template>
+                  <el-select
+                    @change="commonly()"
+                    v-model="really1"
+                    placeholder="请选择"
+                  >
+                    <el-option
+                      v-for="item in really"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    ></el-option>
+                  </el-select>
+                </template>
+              </div>
+            </div>
+            <!-- 树形组件 -->
+            <div class="monly">
+              <div class="block">
+                <p></p>
+                <el-tree
+                  :data="data"
+                  v-loading="loadFlag"
+                  node-key="id"
+                  :default-expand-all="false"
+                  @node-click="handleNodeClick"
+                  :filter-node-method="filterNode"
+                  ref="tree"
+                >
+                  <span class="custom-tree-node" slot-scope="{ node, data }">
+                    <span>{{ node.label }}</span>
+                    <span>
+                      <!-- <el-button
                           v-if="data.view == 1"
                           type="text"
                           size="mini"
@@ -108,24 +108,24 @@
                         >
                           查看
                         </el-button> -->
-                        <el-button
-                          type="text"
-                          v-if="data.isUse == 1"
-                          size="mini"
-                          @click.stop="() => append(data)"
-                        >
-                          设置常用
-                        </el-button>
-                        <el-button
-                          type="text"
-                          v-if="data.isUse == 0"
-                          size="mini"
-                          @click.stop="() => insert(data)"
-                        >
-                          取消常用
-                        </el-button>
+                      <el-button
+                        type="text"
+                        v-if="data.isUse == 1"
+                        size="mini"
+                        @click.stop="() => append(data)"
+                      >
+                        设置常用
+                      </el-button>
+                      <el-button
+                        type="text"
+                        v-if="data.isUse == 0"
+                        size="mini"
+                        @click.stop="() => insert(data)"
+                      >
+                        取消常用
+                      </el-button>
 
-                        <!-- <el-button
+                      <!-- <el-button
                           v-if="!data.isPub"
                           type="text"
                           size="mini"
@@ -141,343 +141,344 @@
                         >
                           公开
                         </el-button> -->
-                        <el-button
-                          v-if="data.delete == 1"
-                          type="text"
-                          size="mini"
-                          @click.stop="() => remove(node, data)"
-                        >
-                          删除
-                        </el-button>
-                      </span>
+                      <el-button
+                        v-if="data.delete == 1"
+                        type="text"
+                        size="mini"
+                        @click.stop="() => remove(node, data)"
+                      >
+                        删除
+                      </el-button>
                     </span>
-                  </el-tree>
-                </div>
-              </div>
-            </div>
-            <!-- 右边 -->
-            <div class="rights">
-              <div class="mationtxt">食材主要信息</div>
-              <div class="mationinput">
-                <el-form
-                  :model="ruleForm"
-                  :rules="rules"
-                  :inline="true"
-                  ref="ruleForm"
-                  label-width="100px"
-                  class="demo-ruleForm"
-                >
-                  <el-form-item label="食材名" prop="name" style="width: 350px">
-                    <el-input style="300px" v-model="ruleForm.name"></el-input>
-                  </el-form-item>
-                  <el-form-item label="食物别名1" style="width: 350px">
-                    <el-input
-                      style="300px"
-                      v-model="ruleForm.foodFood"
-                    ></el-input>
-                  </el-form-item>
-                  <el-form-item label="食物别名2" style="width: 350px">
-                    <el-input
-                      style="300px"
-                      v-model="ruleForm.ovenFood"
-                    ></el-input>
-                  </el-form-item>
-
-                  <el-form-item
-                    label="食材真名"
-                    prop="buffer"
-                    style="width: 350px"
-                  >
-                    <el-input
-                      style="300px"
-                      v-model="ruleForm.buffer"
-                    ></el-input>
-                  </el-form-item>
-
-                  <el-form-item
-                    label="食材分类"
-                    prop="fooddata"
-                    style="width: 350px"
-                  >
-                    <el-select
-                      style=" width: 185px; "
-                      v-model="ruleForm.fooddata"
-                      placeholder="请选择"
-                    >
-                      <el-option
-                        v-for="item in foodPos"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
-                      >
-                      </el-option>
-                    </el-select>
-                  </el-form-item>
-
-                  <el-form-item label="食物分类1" style="width: 350px">
-                    <el-input
-                      v-model="ruleForm.foods"
-                      placeholder="请输入食物分类"
-                    ></el-input>
-                  </el-form-item>
-
-                  <el-form-item label="食物分类2" style="width: 350px">
-                    <el-input
-                      v-model="ruleForm.dogfood"
-                      placeholder="请输入食物分类"
-                    ></el-input>
-                  </el-form-item>
-
-                  <el-form-item
-                    label="食部(%)"
-                    prop="besaved"
-                    style="width: 350px"
-                  >
-                    <el-input
-                      @change="research"
-                      type="number"
-                      v-model="ruleForm.besaved"
-                      placeholder="请输入"
-                    ></el-input>
-                  </el-form-item>
-
-                  <el-form-item
-                    label="重量（g）"
-                    prop="timers"
-                    style="width: 350px"
-                  >
-                    <el-input
-                      type="number"
-                      v-model="ruleForm.timers"
-                      placeholder="请输入"
-                    ></el-input>
-                  </el-form-item>
-
-                  <el-form-item label="水分(%)" style="width: 350px">
-                    <el-input
-                      @change="ofmoisture"
-                      type="number"
-                      placeholder="请输入水分"
-                      v-model="ruleForm.content"
-                    ></el-input>
-                  </el-form-item>
-
-                  <el-form-item label="色系" style="width: 700px;   ">
-                    <el-radio-group v-model="ruleForm.resource">
-                      <el-radio label="1">绿</el-radio>
-                      <el-radio label="2">红</el-radio>
-                      <el-radio label="3">黄</el-radio>
-                      <el-radio label="4">紫</el-radio>
-                      <el-radio label="5">白</el-radio>
-                      <el-radio label="6">黑</el-radio>
-                    </el-radio-group>
-                  </el-form-item>
-
-                  <el-form-item label="所属区域" style="width: 350px">
-                    <el-cascader
-                      style=" width: 185px; "
-                      v-model="valuepark"
-                      placeholder="请选择省市区"
-                      :options="options"
-                      :props="{ multiple: true, checkStrictly: true }"
-                      @change="handleChange"
-                    ></el-cascader>
-                  </el-form-item>
-                  <el-form-item label="所属季节" style="width: 350px">
-                    <el-select
-                      style=" width: 185px; "
-                      v-model="active"
-                      multiple
-                      placeholder="请选择季节"
-                    >
-                      <el-option
-                        v-for="item in context"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
-                      >
-                      </el-option>
-                    </el-select>
-                  </el-form-item>
-
-                  <el-form-item label="功用" style="width:350px">
-                    <el-input
-                      style=" width: 185px;  "
-                      type="textarea"
-                      v-model="ruleForm.desc"
-                      placeholder="请输入"
-                    ></el-input>
-                  </el-form-item>
-
-                  <el-form-item label="图片" style="width:350px">
-                    <el-upload
-                      :class="{ hide: hideUploadEdit }"
-                      accept=".jpeg,.jpg,.gif,.png"
-                      :limit="1"
-                      action="api/blade-resource/oss/endpoint/put-file"
-                      list-type="picture-card"
-                      :file-list="productImgs"
-                      :on-change="handleChangePic"
-                      :on-preview="handlePictureCardPreview"
-                      :before-upload="beforeAvatarUpload"
-                      :on-success="handleAvatarSuccess"
-                      :on-remove="handleRemove"
-                      :headers="headerObj"
-                    >
-                      <!-- <img v-if="dialogImageUrl" :src="dialogImageUrl" class="avatar" /> -->
-                      <i class="el-icon-plus"></i>
-                    </el-upload>
-                    <span style="color:#e0e0e0;  font-size: 11px;"
-                      >上传图片不能超过2M 只能是JPG PNG格式</span
-                    >
-                    <el-dialog append-to-body :visible.sync="dialogVisible">
-                      <img width="100%" :src="dialogImageUrl" alt />
-                    </el-dialog>
-                  </el-form-item>
-
-                  <el-form-item label="分享平台" style="  ">
-                    <el-switch v-model="ruleForm.delivery"></el-switch>
-                  </el-form-item>
-
-                  <el-form-item label="常用" style="   ">
-                    <el-switch v-model="ruleForm.delivery1"></el-switch>
-                  </el-form-item>
-                </el-form>
-              </div>
-              <!-- 营养素标题 -->
-              <div class="worm">
-                营养素含量（这里为100克食部食品中的营养素含量）
-              </div>
-              <div class="saveas">
-                <el-table
-                  :data="mailto"
-                  max-height="400"
-                  style="width: 100%; margin-bottom: 20px"
-                  row-key="id"
-                  :border="false"
-                  :default-expand-all="true"
-                  :tree-props="{
-                    children: 'children',
-                    hasChildren: 'hasChildren'
-                  }"
-                >
-                  <el-table-column
-                    prop="title"
-                    label="营养素"
-                    align="center"
-                    width="200"
-                  ></el-table-column>
-                  <el-table-column
-                    prop="unit"
-                    label="单位"
-                    width="180"
-                    align="center"
-                  ></el-table-column>
-
-                  <el-table-column label="含量" align="center">
-                    <template slot-scope="scope">
-                      <el-input
-                        v-model="scope.row.result"
-                        type="number"
-                        v-if="scope.row.level != 1 ? true : false"
-                        placeholder="请输入内容"
-                      ></el-input>
-                    </template>
-                    <!-- v-if="scope.row.dients" -->
-                  </el-table-column>
-                </el-table>
+                  </span>
+                </el-tree>
               </div>
             </div>
           </div>
-          <div class="base">
-            <el-button
-              :disabled="this.edients == 0"
-              v-if="this.gavatorta == 1"
-              type="primary"
-              @click="saved('ruleForm')"
-              >编辑保存</el-button
-            >
-            <el-button
-              v-if="this.gavatorta == 0"
-              type="primary"
-              @click="iptables('ruleForm')"
-              >保存并新增</el-button
-            >
-            <!-- <el-button @click="resetForm('ruleForm')">重置</el-button> -->
-          </div>
-        </el-tab-pane>
-        <!-- 公共食材库 -->
-        <el-tab-pane label="公共食材库" name="second">
-          <div class="cation">
-            <!-- 左边 -->
-            <!-- 全国查找 -->
-
-            <div class="personal">
-              <!-- <el-input
-                style="width:290px; margin-left: 9px;"
-                placeholder="输入关键字进行查询"
-                v-model="filterText1"
+          <!-- 右边 -->
+          <div class="rights">
+            <div class="mationtxt">食材主要信息</div>
+            <div class="mationinput">
+              <el-form
+                :model="ruleForm"
+                :rules="rules"
+                :inline="true"
+                ref="ruleForm"
+                label-width="100px"
+                class="demo-ruleForm"
               >
-              </el-input> -->
-              <div class="country">
-                <div class="country1">
-                  <el-cascader
+                <el-form-item label="食材名" prop="name" style="width: 350px">
+                  <el-input style="300px" v-model="ruleForm.name"></el-input>
+                </el-form-item>
+                <el-form-item label="食物别名1" style="width: 350px">
+                  <el-input
+                    style="300px"
+                    v-model="ruleForm.foodFood"
+                  ></el-input>
+                </el-form-item>
+                <el-form-item label="食物别名2" style="width: 350px">
+                  <el-input
+                    style="300px"
+                    v-model="ruleForm.ovenFood"
+                  ></el-input>
+                </el-form-item>
+
+                <el-form-item
+                  label="食材真名"
+                  prop="buffer"
+                  style="width: 350px"
+                >
+                  <el-input style="300px" v-model="ruleForm.buffer"></el-input>
+                </el-form-item>
+
+                <el-form-item
+                  label="食材分类"
+                  prop="fooddata"
+                  style="width: 350px"
+                >
+                  <el-select
                     clearable
-                    v-model="valuepark2"
-                    :options="options"
-                    @change="gProvinces"
-                  ></el-cascader>
-                </div>
-                <div class="country2">
-                  <template>
-                    <el-select
-                      @change="disallow()"
-                      v-model="before1"
-                      placeholder="请选择"
-                    >
-                      <el-option
-                        v-for="item in before"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
-                      ></el-option>
-                    </el-select>
-                  </template>
-                </div>
-                <div class="country2">
-                  <template>
-                    <el-select
-                      @change="commonly()"
-                      v-model="really1"
-                      placeholder="请选择"
-                    >
-                      <el-option
-                        v-for="item in really"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
-                      ></el-option>
-                    </el-select>
-                  </template>
-                </div>
-              </div>
-              <!-- 树形结构 -->
-              <div class="monly">
-                <div class="block">
-                  <p></p>
-                  <el-tree
-                    :data="data1"
-                    node-key="id"
-                    v-loading="loadFlag1"
-                    :default-expand-all="false"
-                    @node-click="handleNodeClick1"
-                    :filter-node-method="filterNode1"
-                    ref="tree"
+                    style=" width: 185px; "
+                    v-model="ruleForm.fooddata"
+                    placeholder="请选择"
                   >
-                    <span class="custom-tree-node" slot-scope="{ node, data }">
-                      <span>{{ node.label }}</span>
-                      <span>
-                        <!-- <el-button
+                    <el-option
+                      v-for="item in foodPos"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    >
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+
+                <el-form-item label="食物分类1" style="width: 350px">
+                  <el-input
+                    v-model="ruleForm.foods"
+                    placeholder="请输入食物分类"
+                  ></el-input>
+                </el-form-item>
+
+                <el-form-item label="食物分类2" style="width: 350px">
+                  <el-input
+                    v-model="ruleForm.dogfood"
+                    placeholder="请输入食物分类"
+                  ></el-input>
+                </el-form-item>
+
+                <el-form-item
+                  label="食部(%)"
+                  prop="besaved"
+                  style="width: 350px"
+                >
+                  <el-input
+                    @change="research"
+                    type="number"
+                    v-model="ruleForm.besaved"
+                    placeholder="请输入"
+                  ></el-input>
+                </el-form-item>
+
+                <el-form-item
+                  label="重量（g）"
+                  prop="timers"
+                  style="width: 350px"
+                >
+                  <el-input
+                    type="number"
+                    v-model="ruleForm.timers"
+                    placeholder="请输入"
+                  ></el-input>
+                </el-form-item>
+
+                <el-form-item label="水分(%)" style="width: 350px">
+                  <el-input
+                    @change="ofmoisture"
+                    type="number"
+                    placeholder="请输入水分"
+                    v-model="ruleForm.content"
+                  ></el-input>
+                </el-form-item>
+
+                <el-form-item label="色系" style="width: 700px;   ">
+                  <el-radio-group v-model="ruleForm.resource">
+                    <el-radio label="1">绿</el-radio>
+                    <el-radio label="2">红</el-radio>
+                    <el-radio label="3">黄</el-radio>
+                    <el-radio label="4">紫</el-radio>
+                    <el-radio label="5">白</el-radio>
+                    <el-radio label="6">黑</el-radio>
+                  </el-radio-group>
+                </el-form-item>
+
+                <el-form-item label="所属区域" style="width: 350px">
+                  <el-cascader
+                    style=" width: 185px; "
+                    v-model="valuepark"
+                    placeholder="请选择省市区"
+                    :options="options"
+                    :props="{ multiple: true, checkStrictly: true }"
+                    @change="handleChange"
+                  ></el-cascader>
+                </el-form-item>
+                <el-form-item label="所属季节" style="width: 350px">
+                  <el-select
+                    style=" width: 185px; "
+                    v-model="active"
+                    multiple
+                    placeholder="请选择季节"
+                  >
+                    <el-option
+                      v-for="item in context"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    >
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+
+                <el-form-item label="功用" style="width:350px">
+                  <el-input
+                    maxlength="30"
+                    show-word-limit
+                    style=" width: 185px;  "
+                    type="textarea"
+                    v-model="ruleForm.desc"
+                    placeholder="请输入"
+                  ></el-input>
+                </el-form-item>
+
+                <el-form-item label="图片" style="width:350px">
+                  <el-upload
+                    :class="{ hide: hideUploadEdit }"
+                    accept=".jpeg,.jpg,.gif,.png"
+                    :limit="1"
+                    action="api/blade-resource/oss/endpoint/put-file"
+                    list-type="picture-card"
+                    :file-list="productImgs"
+                    :on-change="handleChangePic"
+                    :on-preview="handlePictureCardPreview"
+                    :before-upload="beforeAvatarUpload"
+                    :on-success="handleAvatarSuccess"
+                    :on-remove="handleRemove"
+                    :headers="headerObj"
+                  >
+                    <!-- <img v-if="dialogImageUrl" :src="dialogImageUrl" class="avatar" /> -->
+                    <i class="el-icon-plus"></i>
+                  </el-upload>
+                  <span style="color:#e0e0e0;  font-size: 11px;"
+                    >上传图片不能超过2M 只能是JPG PNG格式</span
+                  >
+                  <el-dialog append-to-body :visible.sync="dialogVisible">
+                    <img width="100%" :src="dialogImageUrl" alt />
+                  </el-dialog>
+                </el-form-item>
+
+                <el-form-item label="分享平台" style="  ">
+                  <el-switch v-model="ruleForm.delivery"></el-switch>
+                </el-form-item>
+
+                <el-form-item label="常用" style="   ">
+                  <el-switch v-model="ruleForm.delivery1"></el-switch>
+                </el-form-item>
+              </el-form>
+            </div>
+            <!-- 营养素标题 -->
+            <div class="worm">
+              营养素含量（这里为100克食部食品中的营养素含量）
+            </div>
+            <div class="saveas">
+              <el-table
+                :data="mailto"
+                max-height="400"
+                style="width: 100%; margin-bottom: 20px"
+                row-key="id"
+                :border="false"
+                :default-expand-all="true"
+                :tree-props="{
+                  children: 'children',
+                  hasChildren: 'hasChildren'
+                }"
+              >
+                <el-table-column
+                  prop="title"
+                  label="营养素"
+                  align="center"
+                  width="200"
+                ></el-table-column>
+                <el-table-column
+                  prop="unit"
+                  label="单位"
+                  width="180"
+                  align="center"
+                ></el-table-column>
+
+                <el-table-column label="含量" align="center">
+                  <template slot-scope="scope">
+                    <el-input
+                      v-model="scope.row.result"
+                      type="number"
+                      v-if="scope.row.level != 1 ? true : false"
+                      placeholder="请输入内容"
+                    ></el-input>
+                  </template>
+                  <!-- v-if="scope.row.dients" -->
+                </el-table-column>
+              </el-table>
+            </div>
+          </div>
+        </div>
+        <div class="base">
+          <el-button
+            :disabled="this.edients == 0"
+            v-if="this.gavatorta == 1"
+            type="primary"
+            @click="saved('ruleForm')"
+            >编辑保存</el-button
+          >
+          <el-button
+            v-if="this.gavatorta == 0"
+            type="primary"
+            @click="iptables('ruleForm')"
+            >保存并新增</el-button
+          >
+          <!-- <el-button @click="resetForm('ruleForm')">重置</el-button> -->
+        </div>
+      </el-tab-pane>
+      <!-- 公共食材库 -->
+      <el-tab-pane label="公共食材库" name="second">
+        <div class="cation">
+          <!-- 左边 -->
+          <!-- 全国查找 -->
+
+          <div class="personal">
+            <el-input
+              @blur="saquery"
+              style="width:290px; margin-left: 9px;"
+              placeholder="输入关键字进行查询"
+              v-model="filterText1"
+            >
+            </el-input>
+            <div class="country">
+              <div class="country1">
+                <el-cascader
+                  clearable
+                  v-model="valuepark2"
+                  :options="options"
+                  @change="gProvinces"
+                ></el-cascader>
+              </div>
+              <div class="country2">
+                <template>
+                  <el-select
+                    @change="disallow()"
+                    v-model="before1"
+                    placeholder="请选择"
+                  >
+                    <el-option
+                      v-for="item in before"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    ></el-option>
+                  </el-select>
+                </template>
+              </div>
+              <div class="country2">
+                <template>
+                  <el-select
+                    @change="commonly()"
+                    v-model="really1"
+                    placeholder="请选择"
+                  >
+                    <el-option
+                      v-for="item in really"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    ></el-option>
+                  </el-select>
+                </template>
+              </div>
+            </div>
+            <!-- 树形结构 -->
+            <div class="monly">
+              <div class="block">
+                <p></p>
+                <el-tree
+                  :data="data1"
+                  node-key="id"
+                  v-loading="loadFlag1"
+                  :default-expand-all="false"
+                  @node-click="handleNodeClick1"
+                  :filter-node-method="filterNode1"
+                  ref="tree"
+                >
+                  <span class="custom-tree-node" slot-scope="{ node, data }">
+                    <span>{{ node.label }}</span>
+                    <span>
+                      <!-- <el-button
                           type="text"
                           size="mini"
                           v-if="data.view == 1"
@@ -485,114 +486,114 @@
                         >
                           查看
                         </el-button> -->
-                      </span>
                     </span>
-                  </el-tree>
-                </div>
+                  </span>
+                </el-tree>
               </div>
-              <!-- 结束 -->
             </div>
-            <!-- 右边 -->
-            <div class="rights">
-              <div class="mationtxt">食材主要信息</div>
-              <div class="mationinput">
-                <el-form
-                  :model="ruleFormUsers"
-                  :inline="true"
-                  ref="ruleFormUsers"
-                  label-width="100px"
-                  class="demo-ruleForm"
-                >
-                  <el-form-item label="食材名" style=" width: 350px;   ">
-                    <span>{{ ruleFormUsers.name }}</span>
-                  </el-form-item>
-                  <el-form-item label="食物别名" style=" width: 350px;  ">
-                    <span>{{ ruleFormUsers.foodFood }}</span>
-                  </el-form-item>
-                  <el-form-item label="食物别名2" style=" width: 350px;  ">
-                    <span>{{ ruleFormUsers.ovenFood }}</span>
-                  </el-form-item>
-                  <el-form-item label="食材真名" style=" width: 350px;   ">
-                    <span>{{ ruleFormUsers.buffer }}</span>
-                  </el-form-item>
+            <!-- 结束 -->
+          </div>
+          <!-- 右边 -->
+          <div class="rights">
+            <div class="mationtxt">食材主要信息</div>
+            <div class="mationinput">
+              <el-form
+                :model="ruleFormUsers"
+                :inline="true"
+                ref="ruleFormUsers"
+                label-width="100px"
+                class="demo-ruleForm"
+              >
+                <el-form-item label="食材名" style=" width: 350px;   ">
+                  <span>{{ ruleFormUsers.name }}</span>
+                </el-form-item>
+                <el-form-item label="食物别名" style=" width: 350px;  ">
+                  <span>{{ ruleFormUsers.foodFood }}</span>
+                </el-form-item>
+                <el-form-item label="食物别名2" style=" width: 350px;  ">
+                  <span>{{ ruleFormUsers.ovenFood }}</span>
+                </el-form-item>
+                <el-form-item label="食材真名" style=" width: 350px;   ">
+                  <span>{{ ruleFormUsers.buffer }}</span>
+                </el-form-item>
 
-                  <el-form-item label="食材分类" style=" width: 350px;   ">
-                    <el-select
-                      disabled
-                      v-model="ruleFormUsers.fooddata"
-                      placeholder="请选择"
+                <el-form-item label="食材分类" style=" width: 350px;   ">
+                  <el-select
+                    disabled
+                    v-model="ruleFormUsers.fooddata"
+                    placeholder="请选择"
+                  >
+                    <el-option
+                      v-for="item in foodPos"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
                     >
-                      <el-option
-                        v-for="item in foodPos"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
-                      >
-                      </el-option>
-                    </el-select>
-                  </el-form-item>
-                  <el-form-item label="食物分类1" style=" width: 350px;  ">
-                    <span>{{ ruleFormUsers.foods }}</span>
-                  </el-form-item>
-                  <el-form-item label="食物分类2" style=" width: 350px;   ">
-                    <span>{{ ruleFormUsers.dogfood }}</span>
-                  </el-form-item>
-                  <el-form-item label="食部(%)" style=" width: 350px;  ">
-                    <span>{{ ruleFormUsers.besaved }}</span>
-                  </el-form-item>
-                  <el-form-item label="重量（g）" style=" width: 350px; ">
-                    <span>{{ ruleFormUsers.timers }}</span>
-                  </el-form-item>
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="食物分类1" style=" width: 350px;  ">
+                  <span>{{ ruleFormUsers.foods }}</span>
+                </el-form-item>
+                <el-form-item label="食物分类2" style=" width: 350px;   ">
+                  <span>{{ ruleFormUsers.dogfood }}</span>
+                </el-form-item>
+                <el-form-item label="食部(%)" style=" width: 350px;  ">
+                  <span>{{ ruleFormUsers.besaved }}</span>
+                </el-form-item>
+                <el-form-item label="重量（g）" style=" width: 350px; ">
+                  <span>{{ ruleFormUsers.timers }}</span>
+                </el-form-item>
 
-                  <el-form-item label="水分(%)" style=" width: 350px;   ">
-                    <span>{{ ruleFormUsers.content }}</span>
-                  </el-form-item>
-                  <el-form-item label="色系" style="  ">
-                    <el-radio-group v-model="ruleFormUsers.resource">
-                      <el-radio disabled label="1">绿</el-radio>
-                      <el-radio disabled label="2">红</el-radio>
-                      <el-radio disabled label="3">黄</el-radio>
-                      <el-radio disabled label="4">紫</el-radio>
-                      <el-radio disabled label="5">白</el-radio>
-                      <el-radio disabled label="6">黑</el-radio>
-                    </el-radio-group>
-                  </el-form-item>
-                  <el-form-item label="所属区域" style="  width: 350px;  ">
-                    <el-cascader
-                      v-model="valuepark1"
-                      placeholder="请选择省市区"
-                      :options="options"
-                      :props="{ multiple: true, checkStrictly: true }"
-                      @change="handleChange"
-                    ></el-cascader>
-                  </el-form-item>
-                  <el-form-item label="所属季节" style=" width: 350px;  ">
-                    <el-select
-                      disabled
-                      v-model="active1"
-                      multiple
-                      placeholder="请选择季节"
+                <el-form-item label="水分(%)" style=" width: 350px;   ">
+                  <span>{{ ruleFormUsers.content }}</span>
+                </el-form-item>
+                <el-form-item label="色系" style="  ">
+                  <el-radio-group v-model="ruleFormUsers.resource">
+                    <el-radio disabled label="1">绿</el-radio>
+                    <el-radio disabled label="2">红</el-radio>
+                    <el-radio disabled label="3">黄</el-radio>
+                    <el-radio disabled label="4">紫</el-radio>
+                    <el-radio disabled label="5">白</el-radio>
+                    <el-radio disabled label="6">黑</el-radio>
+                  </el-radio-group>
+                </el-form-item>
+                <el-form-item label="所属区域" style="  width: 350px;  ">
+                  <el-cascader
+                    v-model="valuepark1"
+                    placeholder="请选择省市区"
+                    :options="options"
+                    :props="{ multiple: true, checkStrictly: true }"
+                    @change="handleChange"
+                  ></el-cascader>
+                </el-form-item>
+                <el-form-item label="所属季节" style=" width: 350px;  ">
+                  <el-select
+                    disabled
+                    v-model="active1"
+                    multiple
+                    placeholder="请选择季节"
+                  >
+                    <el-option
+                      v-for="item in before"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
                     >
-                      <el-option
-                        v-for="item in before"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
-                      >
-                      </el-option>
-                    </el-select>
-                  </el-form-item>
-                  <el-form-item label="功用" style="width:350px">
-                    <span>{{ ruleFormUsers.desc }}</span>
-                  </el-form-item>
-                  <el-form-item label="图片" style="width:350px">
-                    <img
-                      v-if="this.rectangle != ''"
-                      style="width:200px;height:200px"
-                      :src="this.rectangle"
-                      alt=""
-                    />
-                    <!-- <el-upload
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="功用" style="width:350px">
+                  <span>{{ ruleFormUsers.desc }}</span>
+                </el-form-item>
+                <el-form-item label="图片" style="width:350px">
+                  <img
+                    v-if="this.rectangle != ''"
+                    style="width:200px;height:200px"
+                    :src="this.rectangle"
+                    alt=""
+                  />
+                  <!-- <el-upload
                       action="https://jsonplaceholder.typicode.com/posts/"
                       list-type="picture-card"
                       :on-preview="handlePictureCardPreview"
@@ -603,64 +604,63 @@
                     <el-dialog :visible.sync="dialogVisible">
                       <img width="100%" :src="dialogImageUrl" alt />
                     </el-dialog> -->
-                  </el-form-item>
+                </el-form-item>
 
-                  <el-form-item label="常用" style="">
-                    <el-switch v-model="ruleFormUsers.delivery1"></el-switch>
-                  </el-form-item>
-                </el-form>
-              </div>
-              <!-- 营养素标题 -->
-              <div class="worm">
-                营养素含量（这里为100克食部食品中的营养素含量）
-              </div>
-              <div class="saveas">
-                <el-table
-                  :data="typeTree"
-                  max-height="400"
-                  style="width: 100%; margin-bottom: 20px"
-                  row-key="id"
-                  :border="false"
-                  :default-expand-all="false"
-                  :tree-props="{
-                    children: 'children',
-                    hasChildren: 'hasChildren'
-                  }"
-                >
-                  <el-table-column
-                    prop="title"
-                    label="营养素"
-                    align="center"
-                    width="200"
-                  ></el-table-column>
-                  <el-table-column
-                    prop="unit"
-                    label="单位"
-                    width="180"
-                    align="center"
-                  ></el-table-column>
+                <el-form-item label="常用" style="">
+                  <el-switch v-model="ruleFormUsers.delivery1"></el-switch>
+                </el-form-item>
+              </el-form>
+            </div>
+            <!-- 营养素标题 -->
+            <div class="worm">
+              营养素含量（这里为100克食部食品中的营养素含量）
+            </div>
+            <div class="saveas">
+              <el-table
+                :data="typeTree"
+                max-height="400"
+                style="width: 100%; margin-bottom: 20px"
+                row-key="id"
+                :border="false"
+                :default-expand-all="false"
+                :tree-props="{
+                  children: 'children',
+                  hasChildren: 'hasChildren'
+                }"
+              >
+                <el-table-column
+                  prop="title"
+                  label="营养素"
+                  align="center"
+                  width="200"
+                ></el-table-column>
+                <el-table-column
+                  prop="unit"
+                  label="单位"
+                  width="180"
+                  align="center"
+                ></el-table-column>
 
-                  <el-table-column label="含量" align="center">
-                    <template slot-scope="scope">
-                      <el-input
-                        disabled
-                        v-model="scope.row.result"
-                        type="text"
-                        v-if="scope.row.level != 1 ? true : false"
-                        placeholder="请输入内容"
-                      ></el-input>
-                    </template>
-                    <!-- v-if="scope.row.dients" -->
-                  </el-table-column>
-                </el-table>
-              </div>
+                <el-table-column label="含量" align="center">
+                  <template slot-scope="scope">
+                    <el-input
+                      disabled
+                      v-model="scope.row.result"
+                      type="text"
+                      v-if="scope.row.level != 1 ? true : false"
+                      placeholder="请输入内容"
+                    ></el-input>
+                  </template>
+                  <!-- v-if="scope.row.dients" -->
+                </el-table-column>
+              </el-table>
             </div>
           </div>
-          <!-- 按钮 -->
-          <div class="base"></div>
-        </el-tab-pane>
-      </el-tabs>
-    </div>
+        </div>
+        <!-- 按钮 -->
+        <div class="base"></div>
+      </el-tab-pane>
+    </el-tabs>
   </div>
 </template>
 
@@ -814,11 +814,10 @@ export default {
     };
   },
   watch: {
-    filterText(val) {
-      console.log(val);
-      // console.log(this.$refs.tree);
-      this.$refs.tree.filter(val);
-    }
+    // filterText(val) {
+    //   console.log(val);
+    //   this.$refs.tree.filter(val);
+    // }
     // filterText1(val) {
     //   this.$refs.tree.filter(val);
     // }
@@ -913,12 +912,12 @@ export default {
       }
       this.treeDrawing();
     },
-    filterNode(value, data) {
-      console.log(data);
-      if (!value) return true;
+    // filterNode(value, data) {
+    //   console.log(data);
+    //   if (!value) return true;
 
-      return data.label.indexOf(value) !== -1;
-    }, //树形结构搜索
+    //   return data.label.indexOf(value) !== -1;
+    // }, //树形结构搜索
     // filterNode1(value, data1) {
     //   // console.log(data1);
     //   if (!value) return true;
@@ -1444,12 +1443,16 @@ export default {
           });
         });
     },
+    saquery() {
+      console.log(this.filterText1);
+      this.publicDomain();
+    },
     //公共食材渲染
     publicDomain() {
       this.loadFlag1 = true;
       this.$axios
         .get(
-          `api/blade-food/basetype/getFoodByBaseId?isPrivate=1&typeTemp=${this.waterfall}&regionId=${this.fallen}&season=${this.before1}&isUse=${this.really1}`,
+          `api/blade-food/basetype/getFoodByBaseId?isPrivate=1&typeTemp=${this.waterfall}&regionId=${this.fallen}&season=${this.before1}&isUse=${this.really1}&foodName=${this.filterText1}`,
           {}
         )
         .then(res => {
@@ -1480,12 +1483,16 @@ export default {
           this.data1 = trees;
         });
     },
+    graph() {
+      // console.log(this.filterText);
+      this.treeDrawing();
+    },
     //树形渲染
     treeDrawing() {
       this.loadFlag = true;
       this.$axios
         .get(
-          `api/blade-food/basetype/getFoodByBaseId?isPrivate=0&typeTemp=${this.waterfall}&regionId=${this.fallen}&season=${this.before1}&isUse=${this.really1}`,
+          `api/blade-food/basetype/getFoodByBaseId?isPrivate=0&typeTemp=${this.waterfall}&regionId=${this.fallen}&season=${this.before1}&isUse=${this.really1}&foodName=${this.filterText}`,
           {}
         )
         .then(res => {
@@ -1665,24 +1672,24 @@ export default {
 }
 .cation {
   width: 100%;
-  height: 1200px;
+  height: 100%;
   background-color: #fff;
   display: flex;
 }
 .personal {
-  width: 28%;
-  height: 1000px;
+  width: 350px;
+  height: 100%;
   /* background-color: yellow; */
   border-right: 1px solid #e0e0e0;
 }
 .rights {
   width: 70%;
-  height: 1200px;
+  height: 100%;
   /* background-color: red; */
   margin-left: 10px;
 }
 .monly {
-  width: 300px;
+  width: 350px;
   height: 100%;
   margin-top: 10px;
 }

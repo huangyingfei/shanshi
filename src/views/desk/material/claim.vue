@@ -538,13 +538,13 @@ export default {
 } */
 .unsaved {
   width: 100%;
-  /* height: 100%; */
+  height: 100%;
   background-color: #fff;
   font-size: 14px;
-  /* position: relative;
+  position: relative;
   top: 0px;
   left: 0px;
-  bottom: 9px; */
+  bottom: 9px;
 }
 
 .crumbs {

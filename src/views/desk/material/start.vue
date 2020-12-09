@@ -321,6 +321,8 @@
 
             <el-form-item label="功用" style="width: 350px">
               <el-input
+                maxlength="30"
+                show-word-limit
                 style="width: 185px"
                 type="textarea"
                 v-model="ruleForm.desc"
@@ -381,7 +383,7 @@
             <el-table
               max-height="400"
               :data="mailto"
-              style="width: 95%; margin-bottom: 20px"
+              style="width: 100%%; margin-bottom: 20px"
               row-key="id"
               :default-expand-all="true"
               :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
@@ -1474,7 +1476,7 @@ export default {
   font-weight: bold;
 }
 .saveas {
-  width: 95%;
+  width: 100%;
   height: 500px;
   // margin-left: 40px;
   margin-bottom: 50px;

@@ -8,11 +8,19 @@
       label-width="110px"
       class="demo-ruleForm"
     >
-      <el-form-item label="标准名称" prop="name" style="width:700px;">
+      <el-form-item
+        label="标准名称"
+        prop="name"
+        style="width:700px;margin-top: 20px;"
+      >
         <el-input v-model="footer.name" style="width:500px;"></el-input>
       </el-form-item>
 
-      <el-form-item label="是否默认标准" prop="region">
+      <el-form-item
+        label="是否默认标准"
+        prop="region"
+        style="margin-top: 20px;"
+      >
         <el-select v-model="footer.region" placeholder="请选择">
           <el-option label="是" value="1"></el-option>
           <el-option label="否" value="0"></el-option>

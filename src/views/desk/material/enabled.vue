@@ -167,7 +167,7 @@
     <el-dialog
       style="margin-top: 10px!important;"
       title="审核食材"
-      width=" 80%"
+      width="1150px"
       append-to-body
       :visible.sync="seekeys"
       :close-on-click-modal="false"
@@ -326,6 +326,8 @@
 
               <el-form-item label="功用">
                 <el-input
+                  maxlength="30"
+                  show-word-limit
                   style="width: 185px"
                   type="textarea"
                   v-model="ruleForm.desc"
@@ -477,7 +479,7 @@
     <!-- 查看弹框 -->
     <el-dialog
       title="查看"
-      width=" 80%"
+      width="1150px"
       append-to-body
       :visible.sync="loadnew"
       :close-on-click-modal="false"
@@ -1291,6 +1293,7 @@ export default {
     //审核
     Directory(row, index) {
       console.log(index);
+      this.menu = "";
       this.according = index;
       this.examine.desc1 = "";
       this.active = [];
@@ -1335,7 +1338,7 @@ export default {
               this.active.push(item);
             });
           } else {
-            this.active = "";
+            this.active = [];
           }
           //省市
           if (this.subquery.provinces) {
@@ -1612,6 +1615,7 @@ export default {
   width: 300px;
   height: 30px;
   line-height: 30px;
+  float: left;
   margin-left: 19px;
   color: #419df7;
 }
@@ -1663,6 +1667,7 @@ export default {
 }
 .saveas {
   height: 400px;
+  margin-bottom: 20px;
   /* background-color: red; */
   /* overflow-y: auto; */
 }

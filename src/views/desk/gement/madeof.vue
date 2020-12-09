@@ -1,23 +1,22 @@
 <template>
-  <div>
-    <div class="toolbar">
-      <!-- 搜索 -->
+  <div class="toolbar">
+    <!-- 搜索 -->
 
-      <div class="custom">
-        <span style=" margin-right: 10px;">菜品名称:</span>
-        <el-input
-          v-model="input"
-          placeholder="请输入内容"
-          style="width:190px"
-        ></el-input>
-        <span style="margin: 0 10px;">创建机构:</span>
-        <el-input
-          v-model="noinst"
-          placeholder="请输入内容"
-          style="width:190px"
-        ></el-input>
-        <span style="margin: 0 10px;">提交日期:</span>
-        <!-- <el-date-picker
+    <div class="custom">
+      <span style=" margin-right: 10px;">菜品名称:</span>
+      <el-input
+        v-model="input"
+        placeholder="请输入内容"
+        style="width:190px"
+      ></el-input>
+      <span style="margin: 0 10px;">创建机构:</span>
+      <el-input
+        v-model="noinst"
+        placeholder="请输入内容"
+        style="width:190px"
+      ></el-input>
+      <span style="margin: 0 10px;">提交日期:</span>
+      <!-- <el-date-picker
         v-model="value1"
         format="yyyy 年 MM 月 dd 日"
         value-format="yyyy-MM-dd"
@@ -28,545 +27,540 @@
       >
       </el-date-picker> -->
 
-        <el-date-picker
-          format="yyyy 年 MM 月 dd 日"
-          value-format="yyyy-MM-dd"
-          v-model="value1"
-          type="date"
-          placeholder="选择日期"
+      <el-date-picker
+        format="yyyy 年 MM 月 dd 日"
+        value-format="yyyy-MM-dd"
+        v-model="value1"
+        type="date"
+        placeholder="选择日期"
+        style="width:190px"
+      ></el-date-picker>
+
+      <div class="tostring">
+        <span style="margin-right: 24px;">提交人:</span>
+        <el-input
+          v-model="editor"
+          placeholder="请输入内容"
           style="width:190px"
-        ></el-date-picker>
-
-        <div class="tostring">
-          <span style="margin-right: 24px;">提交人:</span>
-          <el-input
-            v-model="editor"
-            placeholder="请输入内容"
-            style="width:190px"
-          ></el-input>
-          <span style="margin-right: 10px;margin-left: 10px; ">联系电话:</span>
-          <el-input
-            v-model="phoneId"
-            placeholder="请输入内容"
-            style="width:190px"
-          ></el-input>
-          <span style="margin: 0 10px;">审核状态:</span>
-          <el-select v-model="mState1" placeholder="请选择">
-            <el-option
-              v-for="item in mState"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-          <el-button
-            @click="searchStr"
-            size="medium"
-            icon="el-icon-search"
-            type="primary"
-            style=" margin-left: 20px; "
-            >搜索</el-button
-          >
-          <el-button
-            @click="notEmpty"
-            size="medium"
-            style=" margin-left: 20px; "
-            >清空</el-button
-          >
-        </div>
-      </div>
-      <!-- 审核表格 -->
-      <div class="navbar">
-        <el-table
-          :data="tmquery"
-          border
-          style="width: 100%;height:100%"
-          v-loading="loadFlag"
-          empty-text="没有数据~"
+        ></el-input>
+        <span style="margin-right: 10px;margin-left: 10px; ">联系电话:</span>
+        <el-input
+          v-model="phoneId"
+          placeholder="请输入内容"
+          style="width:190px"
+        ></el-input>
+        <span style="margin: 0 10px;">审核状态:</span>
+        <el-select v-model="mState1" placeholder="请选择">
+          <el-option
+            v-for="item in mState"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+        <el-button
+          @click="searchStr"
+          size="medium"
+          icon="el-icon-search"
+          type="primary"
+          style=" margin-left: 20px; "
+          >搜索</el-button
         >
-          <el-table-column
-            type="index"
-            label="序号"
-            width="50"
-            align="center"
-          ></el-table-column>
-          <el-table-column
-            prop="dishName"
-            label="菜品名称"
-            width="100"
-            align="center"
-          ></el-table-column>
-          <el-table-column
-            prop="dishTypeName"
-            label="分类"
-            width="100"
-            align="center"
-          ></el-table-column>
-          <el-table-column
-            prop="orgName"
-            label="创建机构"
-            width="180"
-            align="center"
-          ></el-table-column>
-          <el-table-column
-            prop="createName"
-            label="提交人"
-            width="90"
-            align="center"
-          ></el-table-column>
-          <el-table-column
-            prop="mobile"
-            label="联系电话"
-            width="140"
-            align="center"
-          ></el-table-column>
-          <el-table-column
-            prop="createTime"
-            label="提交时间"
-            width="170"
-            align="center"
-          ></el-table-column>
-          <el-table-column label="审核状态" width="110" align="center">
-            <template slot-scope="scope">
-              <el-tag type="danger" v-if="scope.row.status == 0">待审核</el-tag>
-              <el-tag v-else-if="scope.row.status == 3">无需审核</el-tag>
-              <el-tag type="success" v-else-if="scope.row.status == 1"
-                >审核通过</el-tag
-              >
-              <el-tag type="warning" v-else-if="scope.row.status == 2"
-                >审核不通过</el-tag
-              >
-            </template>
-          </el-table-column>
-          <!--操作格-->
-          <el-table-column label="操作" align="center">
-            <template slot-scope="scope">
-              <el-button
-                v-if="scope.row.status !== 0"
-                type="text"
-                icon="el-icon-view"
-                size="small"
-                @click="seecol(scope.row, 1)"
-                >查看</el-button
-              >
-              <el-button
-                type="text"
-                icon="el-icon-user-solid"
-                v-if="scope.row.status == 0"
-                size="small"
-                @click="Directory(scope.row, 2)"
-                >审核</el-button
-              >
-            </template>
-          </el-table-column>
-        </el-table>
-        <!-- 分页 -->
-        <div class="pagingClass">
-          <el-pagination
-            :page-sizes="m_page.sizes"
-            :page-size="m_page.size"
-            :current-page="m_page.number"
-            @size-change="m_handleSizeChange"
-            @current-change="m_handlePageChange"
-            layout="total,sizes,prev, pager, next"
-            background
-            :total="m_page.totalElements"
-          ></el-pagination>
-        </div>
+        <el-button @click="notEmpty" size="medium" style=" margin-left: 20px; "
+          >清空</el-button
+        >
       </div>
-      <!-- 审核食材 查看 -->
-      <el-dialog
-        style="margin-top: 10px!important;"
-        width="80%"
-        title="审核菜品"
-        append-to-body
-        :visible.sync="seekeys"
-        :close-on-click-modal="false"
+    </div>
+    <!-- 审核表格 -->
+    <div class="navbar">
+      <el-table
+        :data="tmquery"
+        border
+        style="width: 100%;height:100%"
+        v-loading="loadFlag"
+        empty-text="没有数据~"
       >
-        <div class="tmp_rcheck">
-          <div class="update1">
-            <div class="seecr">
-              <span style="color:#cccccc;">创建机构：</span>
-              {{ this.dsquery.establish }}
-            </div>
-            <div class="seecr1">
-              <span style="color:#cccccc;">提交人：</span>
-              {{ this.dsquery.submit }}
-            </div>
-            <div class="seecr1">
-              <span style="color:#cccccc;">联系电话：</span>
-              {{ this.dsquery.phone }}
-            </div>
-            <div class="seecr">
-              <span style="color:#cccccc;">提交时间：</span>
-              {{ this.dsquery.time }}
-            </div>
-            <div class="hash">
-              <span style="color:#cccccc;">审核状态：</span>
-              <span class="stop" v-if="this.dsquery.examineto == 0"
-                >待审核</span
-              >
-              <span v-else-if="this.dsquery.examineto == 3">无需审核</span>
-              <span v-else-if="this.dsquery.examineto == 1">审核通过</span>
-              <span v-else-if="this.dsquery.examineto == 2">审核不通过</span>
-            </div>
+        <el-table-column
+          type="index"
+          label="序号"
+          width="50"
+          align="center"
+        ></el-table-column>
+        <el-table-column
+          prop="dishName"
+          label="菜品名称"
+          width="100"
+          align="center"
+        ></el-table-column>
+        <el-table-column
+          prop="dishTypeName"
+          label="分类"
+          width="100"
+          align="center"
+        ></el-table-column>
+        <el-table-column
+          prop="orgName"
+          label="创建机构"
+          width="180"
+          align="center"
+        ></el-table-column>
+        <el-table-column
+          prop="createName"
+          label="提交人"
+          width="90"
+          align="center"
+        ></el-table-column>
+        <el-table-column
+          prop="mobile"
+          label="联系电话"
+          width="140"
+          align="center"
+        ></el-table-column>
+        <el-table-column
+          prop="createTime"
+          label="提交时间"
+          width="170"
+          align="center"
+        ></el-table-column>
+        <el-table-column label="审核状态" width="110" align="center">
+          <template slot-scope="scope">
+            <el-tag type="danger" v-if="scope.row.status == 0">待审核</el-tag>
+            <el-tag v-else-if="scope.row.status == 3">无需审核</el-tag>
+            <el-tag type="success" v-else-if="scope.row.status == 1"
+              >审核通过</el-tag
+            >
+            <el-tag type="warning" v-else-if="scope.row.status == 2"
+              >审核不通过</el-tag
+            >
+          </template>
+        </el-table-column>
+        <!--操作格-->
+        <el-table-column label="操作" align="center">
+          <template slot-scope="scope">
+            <el-button
+              v-if="scope.row.status !== 0"
+              type="text"
+              icon="el-icon-view"
+              size="small"
+              @click="seecol(scope.row, 1)"
+              >查看</el-button
+            >
+            <el-button
+              type="text"
+              icon="el-icon-user-solid"
+              v-if="scope.row.status == 0"
+              size="small"
+              @click="Directory(scope.row, 2)"
+              >审核</el-button
+            >
+          </template>
+        </el-table-column>
+      </el-table>
+      <!-- 分页 -->
+      <div class="pagingClass">
+        <el-pagination
+          :page-sizes="m_page.sizes"
+          :page-size="m_page.size"
+          :current-page="m_page.number"
+          @size-change="m_handleSizeChange"
+          @current-change="m_handlePageChange"
+          layout="total,sizes,prev, pager, next"
+          background
+          :total="m_page.totalElements"
+        ></el-pagination>
+      </div>
+    </div>
+    <!-- 审核食材 查看 -->
+    <el-dialog
+      style="margin-top: 10px!important;"
+      width="1120px"
+      title="审核菜品"
+      append-to-body
+      :visible.sync="seekeys"
+      :close-on-click-modal="false"
+    >
+      <div class="tmp_rcheck">
+        <div class="update1">
+          <div class="seecr">
+            <span style="color:#cccccc;">创建机构：</span>
+            {{ this.dsquery.establish }}
           </div>
-          <div class="stored">
-            <div class="mationtxt">菜品主要信息</div>
-            <div class="unsigned">
-              <el-form
-                :model="ruleForm"
-                :rules="rules"
-                :inline="true"
-                ref="ruleForm"
-                label-width="100px"
-                class="demo-ruleForm"
+          <div class="seecr1">
+            <span style="color:#cccccc;">提交人：</span>
+            {{ this.dsquery.submit }}
+          </div>
+          <div class="seecr1">
+            <span style="color:#cccccc;">联系电话：</span>
+            {{ this.dsquery.phone }}
+          </div>
+          <div class="seecr">
+            <span style="color:#cccccc;">提交时间：</span>
+            {{ this.dsquery.time }}
+          </div>
+          <div class="hash">
+            <span style="color:#cccccc;">审核状态：</span>
+            <span class="stop" v-if="this.dsquery.examineto == 0">待审核</span>
+            <span v-else-if="this.dsquery.examineto == 3">无需审核</span>
+            <span v-else-if="this.dsquery.examineto == 1">审核通过</span>
+            <span v-else-if="this.dsquery.examineto == 2">审核不通过</span>
+          </div>
+        </div>
+        <div class="stored">
+          <div class="mationtxt">菜品主要信息</div>
+          <div class="unsigned">
+            <el-form
+              :model="ruleForm"
+              :rules="rules"
+              :inline="true"
+              ref="ruleForm"
+              label-width="100px"
+              class="demo-ruleForm"
+            >
+              <el-form-item
+                label="菜品名"
+                prop="name"
+                style=" width: 350px;   "
               >
-                <el-form-item
-                  label="菜品名"
-                  prop="name"
-                  style=" width: 350px;   "
+                <el-input
+                  :disabled="this.nbottoms == 1"
+                  show-word-limit
+                  maxlength="10"
+                  v-model="ruleForm.name"
+                ></el-input>
+              </el-form-item>
+
+              <el-form-item
+                label="菜品分类"
+                prop="fooddata"
+                style=" width: 350px;   "
+              >
+                <el-select
+                  disabled
+                  v-model="ruleForm.fooddata"
+                  placeholder="请选择"
                 >
-                  <el-input
-                    :disabled="this.nbottoms == 1"
-                    show-word-limit
-                    maxlength="10"
-                    v-model="ruleForm.name"
-                  ></el-input>
-                </el-form-item>
+                  <el-option
+                    v-for="item in foodPos"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
 
-                <el-form-item
-                  label="菜品分类"
-                  prop="fooddata"
-                  style=" width: 350px;   "
+              <el-form-item label="所属区域" style=" width: 350px;  ">
+                <el-cascader
+                  :disabled="this.nbottoms == 1"
+                  v-model="valuepark"
+                  placeholder="请选择省市区"
+                  :options="options"
+                  :props="{ multiple: true, checkStrictly: true }"
+                  @change="handleChange"
+                ></el-cascader>
+              </el-form-item>
+
+              <el-form-item label="所属季节" style="  width: 350px;  ">
+                <el-select
+                  :disabled="this.nbottoms == 1"
+                  v-model="active"
+                  multiple
+                  placeholder="请选择季节"
                 >
-                  <el-select
-                    disabled
-                    v-model="ruleForm.fooddata"
-                    placeholder="请选择"
+                  <el-option
+                    v-for="item in season"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
                   >
-                    <el-option
-                      v-for="item in foodPos"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                    >
-                    </el-option>
-                  </el-select>
-                </el-form-item>
+                  </el-option>
+                </el-select>
+              </el-form-item>
 
-                <el-form-item label="所属区域" style=" width: 350px;  ">
-                  <el-cascader
-                    :disabled="this.nbottoms == 1"
-                    v-model="valuepark"
-                    placeholder="请选择省市区"
-                    :options="options"
-                    :props="{ multiple: true, checkStrictly: true }"
-                    @change="handleChange"
-                  ></el-cascader>
-                </el-form-item>
+              <el-form-item label="特点" style="width: 350px">
+                <el-input
+                  :disabled="this.nbottoms == 1"
+                  type="textarea"
+                  style="width: 200px"
+                  maxlength="30"
+                  show-word-limit
+                  v-model="ruleForm.region"
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="做法" style="width: 350px">
+                <el-input
+                  :disabled="this.nbottoms == 1"
+                  type="textarea"
+                  maxlength="30"
+                  show-word-limit
+                  style="width: 200px"
+                  v-model="ruleForm.desc"
+                ></el-input>
+              </el-form-item>
 
-                <el-form-item label="所属季节" style="  width: 350px;  ">
-                  <el-select
-                    :disabled="this.nbottoms == 1"
-                    v-model="active"
-                    multiple
-                    placeholder="请选择季节"
-                  >
-                    <el-option
-                      v-for="item in season"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                    >
-                    </el-option>
-                  </el-select>
-                </el-form-item>
+              <el-form-item label="图片" style="width: 350px">
+                <el-upload
+                  :class="{ hide: hideUploadEdit }"
+                  :limit="1"
+                  accept=".jpeg,.jpg,.gif,.png"
+                  action="api/blade-resource/oss/endpoint/put-file"
+                  list-type="picture-card"
+                  :file-list="productImgs"
+                  :on-change="handleChangePic"
+                  :on-preview="handlePictureCardPreview"
+                  :before-upload="beforeAvatarUpload"
+                  :on-success="handleAvatarSuccess"
+                  :on-remove="handleRemove"
+                  :headers="headerObj"
+                >
+                  <!-- <img v-if="dialogImageUrl" :src="dialogImageUrl" class="avatar" /> -->
+                  <i class="el-icon-plus"></i>
+                </el-upload>
+                <span style="color:#e0e0e0;  font-size: 11px;"
+                  >上传图片不能超过2M 只能是JPG PNG格式</span
+                >
+                <el-dialog append-to-body :visible.sync="dialogVisible">
+                  <img width="100%" :src="dialogImageUrl" alt />
+                </el-dialog>
+              </el-form-item>
 
-                <el-form-item label="特点" style="width: 350px">
+              <el-form-item label="公开" style=" width:150px ">
+                <el-switch
+                  :disabled="true"
+                  v-model="ruleForm.delivery"
+                ></el-switch>
+              </el-form-item>
+
+              <el-form-item label="常用" style="   ">
+                <el-switch
+                  :disabled="this.nbottoms == 1"
+                  v-model="ruleForm.delivery1"
+                ></el-switch>
+              </el-form-item>
+            </el-form>
+          </div>
+          <!-- 菜品所含食材信息 -->
+          <div class="mationtxt">菜品所含食材信息</div>
+          <div>
+            <el-button
+              style="margin-left: 10px;"
+              type="primary"
+              :disabled="this.nbottoms == 1"
+              @click="addLine"
+              >添加</el-button
+            >
+            <el-table
+              :data="officeonce"
+              border
+              v-loading="loadFlag1"
+              show-summary
+              style="width: 70%"
+              :summary-method="getSummaries"
+            >
+              <el-table-column
+                v-if="show"
+                prop="id"
+                label="序号"
+                width="100"
+                align="center"
+              >
+              </el-table-column>
+              <el-table-column
+                v-if="show"
+                prop="frame"
+                label="分类ID "
+                width="100"
+                align="center"
+              >
+              </el-table-column>
+              <el-table-column label="食品名称" width="190" align="center">
+                <template slot-scope="scope">
                   <el-input
-                    :disabled="this.nbottoms == 1"
-                    type="textarea"
-                    style="width: 200px"
-                    maxlength="30"
-                    show-word-limit
-                    v-model="ruleForm.region"
-                  ></el-input>
-                </el-form-item>
-                <el-form-item label="做法" style="width: 350px">
-                  <el-input
-                    :disabled="this.nbottoms == 1"
-                    type="textarea"
-                    maxlength="30"
-                    show-word-limit
-                    style="width: 200px"
-                    v-model="ruleForm.desc"
-                  ></el-input>
-                </el-form-item>
-
-                <el-form-item label="图片" style="width: 350px">
-                  <el-upload
-                    :class="{ hide: hideUploadEdit }"
-                    :limit="1"
-                    accept=".jpeg,.jpg,.gif,.png"
-                    action="api/blade-resource/oss/endpoint/put-file"
-                    list-type="picture-card"
-                    :file-list="productImgs"
-                    :on-change="handleChangePic"
-                    :on-preview="handlePictureCardPreview"
-                    :before-upload="beforeAvatarUpload"
-                    :on-success="handleAvatarSuccess"
-                    :on-remove="handleRemove"
-                    :headers="headerObj"
-                  >
-                    <!-- <img v-if="dialogImageUrl" :src="dialogImageUrl" class="avatar" /> -->
-                    <i class="el-icon-plus"></i>
-                  </el-upload>
-                  <span style="color:#e0e0e0;  font-size: 11px;"
-                    >上传图片不能超过2M 只能是JPG PNG格式</span
-                  >
-                  <el-dialog append-to-body :visible.sync="dialogVisible">
-                    <img width="100%" :src="dialogImageUrl" alt />
-                  </el-dialog>
-                </el-form-item>
-
-                <el-form-item label="公开" style=" width:150px ">
-                  <el-switch
+                    style="width: 90px"
+                    v-model="scope.row.name"
                     :disabled="true"
-                    v-model="ruleForm.delivery"
-                  ></el-switch>
-                </el-form-item>
-
-                <el-form-item label="常用" style="   ">
-                  <el-switch
-                    :disabled="this.nbottoms == 1"
-                    v-model="ruleForm.delivery1"
-                  ></el-switch>
-                </el-form-item>
-              </el-form>
-            </div>
-            <!-- 菜品所含食材信息 -->
-            <div class="mationtxt">菜品所含食材信息</div>
-            <div>
-              <el-button
-                style="margin-left: 10px;"
-                type="primary"
-                :disabled="this.nbottoms == 1"
-                @click="addLine"
-                >添加</el-button
+                  >
+                  </el-input>
+                  <el-button
+                    type="primary"
+                    size="small"
+                    style="   margin-left: 10px;"
+                    @click="columnEvent(scope.row, scope.$index)"
+                    plain
+                    >选择</el-button
+                  >
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="address"
+                label="食品分类"
+                width="120"
+                align="center"
+              ></el-table-column>
+              <el-table-column
+                prop="stats"
+                label="用量(g)"
+                width="120"
+                align="center"
               >
-              <el-table
-                :data="officeonce"
-                border
-                v-loading="loadFlag1"
-                show-summary
-                style="width: 60%"
-                :summary-method="getSummaries"
+                <template slot-scope="scope">
+                  <el-input
+                    style="width: 90px"
+                    @blur="graph"
+                    @input="hello(scope.row, scope.$index)"
+                    v-model="scope.row.stats"
+                    clearable
+                  >
+                  </el-input>
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="spring"
+                label="能量(参考值)"
+                width="120"
+                align="center"
+              ></el-table-column>
+              <el-table-column
+                prop="malloc"
+                label="能量(每百克)"
+                width="120"
+                align="center"
               >
-                <el-table-column
-                  v-if="show"
-                  prop="id"
-                  label="序号"
-                  width="100"
-                  align="center"
-                >
-                </el-table-column>
-                <el-table-column
-                  v-if="show"
-                  prop="frame"
-                  label="分类ID "
-                  width="100"
-                  align="center"
-                >
-                </el-table-column>
-                <el-table-column label="食品名称" width="190" align="center">
-                  <template slot-scope="scope">
-                    <el-input
-                      style="width: 90px"
-                      v-model="scope.row.name"
-                      :disabled="true"
-                    >
-                    </el-input>
-                    <el-button
-                      type="primary"
-                      size="small"
-                      style="   margin-left: 10px;"
-                      @click="columnEvent(scope.row, scope.$index)"
-                      plain
-                      >选择</el-button
-                    >
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  prop="address"
-                  label="食品分类"
-                  width="120"
-                  align="center"
-                ></el-table-column>
-                <el-table-column
-                  prop="stats"
-                  label="用量(g)"
-                  width="120"
-                  align="center"
-                >
-                  <template slot-scope="scope">
-                    <el-input
-                      style="width: 90px"
-                      @blur="graph"
-                      @input="hello(scope.row, scope.$index)"
-                      v-model="scope.row.stats"
-                      clearable
-                    >
-                    </el-input>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  prop="spring"
-                  label="能量(参考值)"
-                  width="120"
-                  align="center"
-                ></el-table-column>
-                <el-table-column
-                  prop="malloc"
-                  label="能量(每百克)"
-                  width="120"
-                  align="center"
-                >
-                  <template slot-scope="scope">
-                    <!-- {{scope.row.malloc}} -->
-                    <!-- <span v-if="!scope.row.stats">{{ scope.row.malloc }}</span>
+                <template slot-scope="scope">
+                  <!-- {{scope.row.malloc}} -->
+                  <!-- <span v-if="!scope.row.stats">{{ scope.row.malloc }}</span>
               <span v-else>{{
                 (scope.row.stats / 100) * scope.row.malloc
               }}</span> -->
-                    <el-input
-                      :disabled="true"
-                      style="width: 90px"
-                      v-model="scope.row.malloc"
-                      clearable
-                    >
-                    </el-input>
-                  </template>
-                  <el-table-column
-                    v-if="show"
-                    prop="fruits"
-                    label="foodEat11"
-                    width="120"
-                    align="center"
+                  <el-input
+                    :disabled="true"
+                    style="width: 90px"
+                    v-model="scope.row.malloc"
+                    clearable
                   >
-                  </el-table-column>
+                  </el-input>
+                </template>
+                <el-table-column
+                  v-if="show"
+                  prop="fruits"
+                  label="foodEat11"
+                  width="120"
+                  align="center"
+                >
                 </el-table-column>
-                <!--操作格-->
-                <el-table-column label="操作" align="center">
-                  <template slot-scope="scope">
-                    <!-- <el-button type="text" size="small" style="margin-left: 10px"
+              </el-table-column>
+              <!--操作格-->
+              <el-table-column label="操作" align="center">
+                <template slot-scope="scope">
+                  <!-- <el-button type="text" size="small" style="margin-left: 10px"
                   >查看</el-button
                 > -->
-                    <el-button
-                      type="text"
-                      size="small"
-                      style="margin-left: 10px"
-                      @click="handleDelete(scope.$index, scope.row)"
-                      >删除</el-button
-                    >
-                  </template>
-                </el-table-column>
-              </el-table>
-            </div>
-            <!-- 树形结构 -->
-            <el-dialog
-              title="添加菜品"
-              append-to-body
-              :visible.sync="dateTime"
-              :close-on-click-modal="false"
-            >
-              <el-input placeholder="输入关键字进行过滤" v-model="filterText1">
-              </el-input>
-              <div class="block">
-                <div class="rolling">
-                  <p></p>
-                  <el-tree
-                    :data="data1"
-                    node-key="id"
-                    :default-expand-all="false"
-                    @node-click="handleNodeClick"
-                    :filter-node-method="filterNode1"
-                    ref="tree"
-                  ></el-tree>
-                </div>
+                  <el-button
+                    type="text"
+                    size="small"
+                    style="margin-left: 10px"
+                    @click="handleDelete(scope.$index, scope.row)"
+                    >删除</el-button
+                  >
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+          <!-- 树形结构 -->
+          <el-dialog
+            title="添加菜品"
+            append-to-body
+            :visible.sync="dateTime"
+            :close-on-click-modal="false"
+          >
+            <el-input placeholder="输入关键字进行过滤" v-model="filterText1">
+            </el-input>
+            <div class="block">
+              <div class="rolling">
+                <p></p>
+                <el-tree
+                  :data="data1"
+                  node-key="id"
+                  :default-expand-all="false"
+                  @node-click="handleNodeClick"
+                  :filter-node-method="filterNode1"
+                  ref="tree"
+                ></el-tree>
               </div>
-
-              <div slot="footer" class="dialog-footer">
-                <el-button @click="dateTime = false">取 消</el-button>
-                <el-button @click="setlist" type="primary">确 定</el-button>
-              </div>
-            </el-dialog>
-            <!-- 营养素标题 -->
-            <div class="worm1">
-              营养素含量（这里为100克食部食品中的营养素含量）
             </div>
-            <div class="saveas">
-              <el-table
-                :data="mailto"
-                style="width: 60%;margin-bottom: 20px;"
-                row-key="id"
-                border
-                max-height="400"
-                :default-expand-all="true"
-                :tree-props="{
-                  children: 'children',
-                  hasChildren: 'hasChildren'
-                }"
-              >
-                <el-table-column
-                  prop="title"
-                  label="营养素"
-                  align="center"
-                  width="200"
-                ></el-table-column>
-                <el-table-column
-                  prop="unit"
-                  label="单位"
-                  width="180"
-                  align="center"
-                ></el-table-column>
 
-                <el-table-column label="含量" align="center">
-                  <template slot-scope="scope">
-                    <el-input
-                      :disabled="true"
-                      v-model="scope.row.result"
-                      type="text"
-                      v-if="scope.row.level != 1 ? true : false"
-                      placeholder="请输入内容"
-                    ></el-input>
-                  </template>
-                  <!-- v-if="scope.row.dients" -->
-                </el-table-column>
-              </el-table>
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="dateTime = false">取 消</el-button>
+              <el-button @click="setlist" type="primary">确 定</el-button>
             </div>
-            <!-- 公共库所分类 -->
-            <div v-if="this.nbottoms == 2" class="worm1">公共库所属分类</div>
-
-            <span style="  margin-left: 20px;  margin-right: 15px;"
-              >公共库分类</span
+          </el-dialog>
+          <!-- 营养素标题 -->
+          <div class="worm1">
+            营养素含量（这里为100克食部食品中的营养素含量）
+          </div>
+          <div class="saveas">
+            <el-table
+              :data="mailto"
+              style="width: 70%;margin-bottom: 20px;"
+              row-key="id"
+              border
+              max-height="400"
+              :default-expand-all="true"
+              :tree-props="{
+                children: 'children',
+                hasChildren: 'hasChildren'
+              }"
             >
-            <el-select
-              clearable
-              v-if="this.nbottoms == 2"
-              v-model="nominated.menu"
-              placeholder="请选择"
-            >
-              <el-option
-                v-for="item in source"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              >
-              </el-option>
-            </el-select>
+              <el-table-column
+                prop="title"
+                label="营养素"
+                align="center"
+                width="200"
+              ></el-table-column>
+              <el-table-column
+                prop="unit"
+                label="单位"
+                width="180"
+                align="center"
+              ></el-table-column>
 
-            <!-- <div v-if="this.nbottoms == 2" class="worm1">拒绝原因</div> -->
-            <!-- <el-form
+              <el-table-column label="含量" align="center">
+                <template slot-scope="scope">
+                  <el-input
+                    :disabled="true"
+                    v-model="scope.row.result"
+                    type="text"
+                    v-if="scope.row.level != 1 ? true : false"
+                    placeholder="请输入内容"
+                  ></el-input>
+                </template>
+                <!-- v-if="scope.row.dients" -->
+              </el-table-column>
+            </el-table>
+          </div>
+          <!-- 公共库所分类 -->
+          <div v-if="this.nbottoms == 2" class="worm1">公共库所属分类</div>
+
+          <span style="  margin-left: 20px;  margin-right: 15px;"
+            >公共库分类</span
+          >
+          <el-select
+            clearable
+            v-if="this.nbottoms == 2"
+            v-model="nominated.menu"
+            placeholder="请选择"
+          >
+            <el-option
+              v-for="item in source"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+
+          <!-- <div v-if="this.nbottoms == 2" class="worm1">拒绝原因</div> -->
+          <!-- <el-form
           :model="examine"
           ref="examine"
           :rules="rules"
@@ -587,9 +581,9 @@
             ></el-input>
           </el-form-item>
         </el-form> -->
-            <!-- <div class="worm1">记录</div> -->
-            <el-timeline>
-              <!-- <el-timeline-item timestamp="2018/4/12" placement="top">
+          <!-- <div class="worm1">记录</div> -->
+          <el-timeline>
+            <!-- <el-timeline-item timestamp="2018/4/12" placement="top">
             <el-card>
               <h4>刚好让你更好机构</h4>
               <p>王小虎 提交于 2018/4/12 20:46</p>
@@ -602,425 +596,418 @@
               <p>王小虎 提交于 2018/4/12 20:46</p>
             </el-card>
           </el-timeline-item> -->
-            </el-timeline>
-          </div>
+          </el-timeline>
         </div>
-        <div slot="footer" class="dialog-footer" style=" text-align: center;">
-          <el-button @click="seekeys = false">取 消</el-button>
-          <el-button
-            type="primary"
-            @click="restore()"
-            v-if="this.nbottoms == 2"
-          >
-            拒 绝</el-button
-          >
-          <el-button
-            @click="Disagree('ruleForm')"
-            type="primary"
-            v-if="this.nbottoms == 2"
-            >同 意</el-button
-          >
-        </div>
-      </el-dialog>
-      <el-dialog
-        title="拒绝理由"
-        width="30%"
-        append-to-body
-        :visible.sync="increase"
-        :close-on-click-modal="false"
-      >
-        <el-input
-          type="textarea"
-          placeholder="请输入内容"
-          v-model="examine.desc1"
-          maxlength="30"
-          show-word-limit
+      </div>
+      <div slot="footer" class="dialog-footer" style=" text-align: center;">
+        <el-button @click="seekeys = false">取 消</el-button>
+        <el-button type="primary" @click="restore()" v-if="this.nbottoms == 2">
+          拒 绝</el-button
         >
-        </el-input>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="increase = false">取 消</el-button>
-          <el-button @click="palette" type="primary">确 定</el-button>
-        </div>
-      </el-dialog>
-      <el-dialog
-        title="查看"
-        width="80%"
-        append-to-body
-        :visible.sync="dumpdbtostream"
-        :close-on-click-modal="false"
+        <el-button
+          @click="Disagree('ruleForm')"
+          type="primary"
+          v-if="this.nbottoms == 2"
+          >同 意</el-button
+        >
+      </div>
+    </el-dialog>
+    <el-dialog
+      title="拒绝理由"
+      width="30%"
+      append-to-body
+      :visible.sync="increase"
+      :close-on-click-modal="false"
+    >
+      <el-input
+        type="textarea"
+        placeholder="请输入内容"
+        v-model="examine.desc1"
+        maxlength="30"
+        show-word-limit
       >
-        <div class="tmp_rcheck">
-          <div class="update1">
-            <div class="seecr">
-              <span style="color:#cccccc;">创建机构：</span>
-              {{ this.dsquery.establish }}
-            </div>
-            <div class="seecr1">
-              <span style="color:#cccccc;">提交人：</span>
-              {{ this.dsquery.submit }}
-            </div>
-            <div class="seecr1">
-              <span style="color:#cccccc;">联系电话：</span>
-              {{ this.dsquery.phone }}
-            </div>
-            <div class="seecr">
-              <span style="color:#cccccc;">提交时间：</span>
-              {{ this.dsquery.time }}
-            </div>
-            <div class="hash">
-              <span style="color:#cccccc;">审核状态：</span>
-              <span class="stop" v-if="this.dsquery.examineto == 0"
-                >待审核</span
-              >
-              <span v-else-if="this.dsquery.examineto == 3">无需审核</span>
-              <span v-else-if="this.dsquery.examineto == 1">审核通过</span>
-              <span v-else-if="this.dsquery.examineto == 2">审核不通过</span>
-            </div>
+      </el-input>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="increase = false">取 消</el-button>
+        <el-button @click="palette" type="primary">确 定</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog
+      title="查看"
+      width="1120px"
+      append-to-body
+      :visible.sync="dumpdbtostream"
+      :close-on-click-modal="false"
+    >
+      <div class="tmp_rcheck">
+        <div class="update1">
+          <div class="seecr">
+            <span style="color:#cccccc;">创建机构：</span>
+            {{ this.dsquery.establish }}
           </div>
-          <div class="stored">
-            <div class="mationtxt">菜品主要信息</div>
-            <div class="unsigned">
-              <el-form
-                :model="ruleForm"
-                :rules="rules"
-                :inline="true"
-                ref="ruleForm"
-                label-width="100px"
-                class="demo-ruleForm"
+          <div class="seecr1">
+            <span style="color:#cccccc;">提交人：</span>
+            {{ this.dsquery.submit }}
+          </div>
+          <div class="seecr1">
+            <span style="color:#cccccc;">联系电话：</span>
+            {{ this.dsquery.phone }}
+          </div>
+          <div class="seecr">
+            <span style="color:#cccccc;">提交时间：</span>
+            {{ this.dsquery.time }}
+          </div>
+          <div class="hash">
+            <span style="color:#cccccc;">审核状态：</span>
+            <span class="stop" v-if="this.dsquery.examineto == 0">待审核</span>
+            <span v-else-if="this.dsquery.examineto == 3">无需审核</span>
+            <span v-else-if="this.dsquery.examineto == 1">审核通过</span>
+            <span v-else-if="this.dsquery.examineto == 2">审核不通过</span>
+          </div>
+        </div>
+        <div class="stored">
+          <div class="mationtxt">菜品主要信息</div>
+          <div class="unsigned">
+            <el-form
+              :model="ruleForm"
+              :rules="rules"
+              :inline="true"
+              ref="ruleForm"
+              label-width="100px"
+              class="demo-ruleForm"
+            >
+              <el-form-item
+                label="菜品名"
+                prop="name"
+                style=" width: 350px;   "
               >
-                <el-form-item
-                  label="菜品名"
-                  prop="name"
-                  style=" width: 350px;   "
+                <el-input
+                  :disabled="true"
+                  show-word-limit
+                  maxlength="10"
+                  v-model="ruleForm.name"
+                ></el-input>
+              </el-form-item>
+
+              <el-form-item
+                label="菜品分类"
+                prop="fooddata"
+                style=" width: 350px;   "
+              >
+                <el-select
+                  disabled
+                  v-model="ruleForm.fooddata"
+                  placeholder="请选择"
                 >
+                  <el-option
+                    v-for="item in foodPos"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+
+              <el-form-item label="所属区域" style=" width: 350px;  ">
+                <el-cascader
+                  :disabled="true"
+                  v-model="valuepark"
+                  placeholder="请选择省市区"
+                  :options="options"
+                  :props="{ multiple: true, checkStrictly: true }"
+                  @change="handleChange"
+                ></el-cascader>
+              </el-form-item>
+
+              <el-form-item label="所属季节" style="  width: 350px;  ">
+                <el-select
+                  :disabled="true"
+                  v-model="active"
+                  multiple
+                  placeholder="请选择季节"
+                >
+                  <el-option
+                    v-for="item in season"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+
+              <el-form-item label="特点" style="width: 350px">
+                <el-input
+                  :disabled="true"
+                  type="textarea"
+                  style="width: 200px"
+                  maxlength="30"
+                  show-word-limit
+                  v-model="ruleForm.region"
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="做法" style="width: 350px">
+                <el-input
+                  :disabled="true"
+                  type="textarea"
+                  maxlength="30"
+                  show-word-limit
+                  style="width: 200px"
+                  v-model="ruleForm.desc"
+                ></el-input>
+              </el-form-item>
+
+              <el-form-item label="图片" style="width: 350px">
+                <el-upload
+                  :class="{ hide: hideUploadEdit }"
+                  :limit="1"
+                  :disabled="true"
+                  accept=".jpeg,.jpg,.gif,.png"
+                  action="api/blade-resource/oss/endpoint/put-file"
+                  list-type="picture-card"
+                  :file-list="productImgs"
+                  :on-change="handleChangePic"
+                  :on-preview="handlePictureCardPreview"
+                  :before-upload="beforeAvatarUpload"
+                  :on-success="handleAvatarSuccess"
+                  :on-remove="handleRemove"
+                  :headers="headerObj"
+                >
+                  <!-- <img v-if="dialogImageUrl" :src="dialogImageUrl" class="avatar" /> -->
+                  <i class="el-icon-plus"></i>
+                </el-upload>
+                <span style="color:#e0e0e0;  font-size: 11px;"
+                  >上传图片不能超过2M 只能是JPG PNG格式</span
+                >
+                <el-dialog append-to-body :visible.sync="dialogVisible">
+                  <img width="100%" :src="dialogImageUrl" alt />
+                </el-dialog>
+              </el-form-item>
+
+              <el-form-item label="公开" style=" width:150px ">
+                <el-switch
+                  :disabled="true"
+                  v-model="ruleForm.delivery"
+                ></el-switch>
+              </el-form-item>
+
+              <el-form-item label="常用" style="   ">
+                <el-switch
+                  :disabled="true"
+                  v-model="ruleForm.delivery1"
+                ></el-switch>
+              </el-form-item>
+            </el-form>
+          </div>
+          <!-- 菜品所含食材信息 -->
+          <div class="mationtxt">菜品所含食材信息</div>
+          <div>
+            <el-button
+              style="margin-left: 10px;"
+              type="primary"
+              :disabled="true"
+              @click="addLine"
+              >添加</el-button
+            >
+            <el-table
+              :data="officeonce"
+              border
+              v-loading="loadFlag1"
+              show-summary
+              style="width: 70%"
+              :summary-method="getSummaries"
+            >
+              <el-table-column
+                v-if="show"
+                prop="id"
+                label="序号"
+                width="100"
+                align="center"
+              >
+              </el-table-column>
+              <el-table-column
+                v-if="show"
+                prop="frame"
+                label="分类ID "
+                width="100"
+                align="center"
+              >
+              </el-table-column>
+              <el-table-column label="食品名称" width="190" align="center">
+                <template slot-scope="scope">
+                  <el-input
+                    style="width: 90px"
+                    v-model="scope.row.name"
+                    :disabled="true"
+                  >
+                  </el-input>
+                  <el-button
+                    :disabled="true"
+                    type="primary"
+                    size="small"
+                    style="   margin-left: 10px;"
+                    @click="columnEvent(scope.row, scope.$index)"
+                    plain
+                    >选择</el-button
+                  >
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="address"
+                label="食品分类"
+                width="120"
+                align="center"
+              ></el-table-column>
+              <el-table-column
+                prop="stats"
+                label="用量(g)"
+                width="120"
+                align="center"
+              >
+                <template slot-scope="scope">
                   <el-input
                     :disabled="true"
-                    show-word-limit
-                    maxlength="10"
-                    v-model="ruleForm.name"
-                  ></el-input>
-                </el-form-item>
-
-                <el-form-item
-                  label="菜品分类"
-                  prop="fooddata"
-                  style=" width: 350px;   "
-                >
-                  <el-select
-                    disabled
-                    v-model="ruleForm.fooddata"
-                    placeholder="请选择"
+                    style="width: 90px"
+                    @blur="graph"
+                    @input="hello(scope.row, scope.$index)"
+                    v-model="scope.row.stats"
+                    clearable
                   >
-                    <el-option
-                      v-for="item in foodPos"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                    >
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-
-                <el-form-item label="所属区域" style=" width: 350px;  ">
-                  <el-cascader
-                    :disabled="true"
-                    v-model="valuepark"
-                    placeholder="请选择省市区"
-                    :options="options"
-                    :props="{ multiple: true, checkStrictly: true }"
-                    @change="handleChange"
-                  ></el-cascader>
-                </el-form-item>
-
-                <el-form-item label="所属季节" style="  width: 350px;  ">
-                  <el-select
-                    :disabled="true"
-                    v-model="active"
-                    multiple
-                    placeholder="请选择季节"
-                  >
-                    <el-option
-                      v-for="item in season"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                    >
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-
-                <el-form-item label="特点" style="width: 350px">
-                  <el-input
-                    :disabled="true"
-                    type="textarea"
-                    style="width: 200px"
-                    maxlength="30"
-                    show-word-limit
-                    v-model="ruleForm.region"
-                  ></el-input>
-                </el-form-item>
-                <el-form-item label="做法" style="width: 350px">
-                  <el-input
-                    :disabled="true"
-                    type="textarea"
-                    maxlength="30"
-                    show-word-limit
-                    style="width: 200px"
-                    v-model="ruleForm.desc"
-                  ></el-input>
-                </el-form-item>
-
-                <el-form-item label="图片" style="width: 350px">
-                  <el-upload
-                    :class="{ hide: hideUploadEdit }"
-                    :limit="1"
-                    :disabled="true"
-                    accept=".jpeg,.jpg,.gif,.png"
-                    action="api/blade-resource/oss/endpoint/put-file"
-                    list-type="picture-card"
-                    :file-list="productImgs"
-                    :on-change="handleChangePic"
-                    :on-preview="handlePictureCardPreview"
-                    :before-upload="beforeAvatarUpload"
-                    :on-success="handleAvatarSuccess"
-                    :on-remove="handleRemove"
-                    :headers="headerObj"
-                  >
-                    <!-- <img v-if="dialogImageUrl" :src="dialogImageUrl" class="avatar" /> -->
-                    <i class="el-icon-plus"></i>
-                  </el-upload>
-                  <span style="color:#e0e0e0;  font-size: 11px;"
-                    >上传图片不能超过2M 只能是JPG PNG格式</span
-                  >
-                  <el-dialog append-to-body :visible.sync="dialogVisible">
-                    <img width="100%" :src="dialogImageUrl" alt />
-                  </el-dialog>
-                </el-form-item>
-
-                <el-form-item label="公开" style=" width:150px ">
-                  <el-switch
-                    :disabled="true"
-                    v-model="ruleForm.delivery"
-                  ></el-switch>
-                </el-form-item>
-
-                <el-form-item label="常用" style="   ">
-                  <el-switch
-                    :disabled="true"
-                    v-model="ruleForm.delivery1"
-                  ></el-switch>
-                </el-form-item>
-              </el-form>
-            </div>
-            <!-- 菜品所含食材信息 -->
-            <div class="mationtxt">菜品所含食材信息</div>
-            <div>
-              <el-button
-                style="margin-left: 10px;"
-                type="primary"
-                :disabled="true"
-                @click="addLine"
-                >添加</el-button
+                  </el-input>
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="spring"
+                label="能量(参考值)"
+                width="120"
+                align="center"
+              ></el-table-column>
+              <el-table-column
+                prop="malloc"
+                label="能量(每百克)"
+                width="120"
+                align="center"
               >
-              <el-table
-                :data="officeonce"
-                border
-                v-loading="loadFlag1"
-                show-summary
-                style="width: 60%"
-                :summary-method="getSummaries"
-              >
-                <el-table-column
-                  v-if="show"
-                  prop="id"
-                  label="序号"
-                  width="100"
-                  align="center"
-                >
-                </el-table-column>
-                <el-table-column
-                  v-if="show"
-                  prop="frame"
-                  label="分类ID "
-                  width="100"
-                  align="center"
-                >
-                </el-table-column>
-                <el-table-column label="食品名称" width="190" align="center">
-                  <template slot-scope="scope">
-                    <el-input
-                      style="width: 90px"
-                      v-model="scope.row.name"
-                      :disabled="true"
-                    >
-                    </el-input>
-                    <el-button
-                      :disabled="true"
-                      type="primary"
-                      size="small"
-                      style="   margin-left: 10px;"
-                      @click="columnEvent(scope.row, scope.$index)"
-                      plain
-                      >选择</el-button
-                    >
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  prop="address"
-                  label="食品分类"
-                  width="120"
-                  align="center"
-                ></el-table-column>
-                <el-table-column
-                  prop="stats"
-                  label="用量(g)"
-                  width="120"
-                  align="center"
-                >
-                  <template slot-scope="scope">
-                    <el-input
-                      :disabled="true"
-                      style="width: 90px"
-                      @blur="graph"
-                      @input="hello(scope.row, scope.$index)"
-                      v-model="scope.row.stats"
-                      clearable
-                    >
-                    </el-input>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  prop="spring"
-                  label="能量(参考值)"
-                  width="120"
-                  align="center"
-                ></el-table-column>
-                <el-table-column
-                  prop="malloc"
-                  label="能量(每百克)"
-                  width="120"
-                  align="center"
-                >
-                  <template slot-scope="scope">
-                    <!-- {{scope.row.malloc}} -->
-                    <!-- <span v-if="!scope.row.stats">{{ scope.row.malloc }}</span>
+                <template slot-scope="scope">
+                  <!-- {{scope.row.malloc}} -->
+                  <!-- <span v-if="!scope.row.stats">{{ scope.row.malloc }}</span>
               <span v-else>{{
                 (scope.row.stats / 100) * scope.row.malloc
               }}</span> -->
-                    <el-input
-                      :disabled="true"
-                      style="width: 90px"
-                      v-model="scope.row.malloc"
-                      clearable
-                    >
-                    </el-input>
-                  </template>
-                  <el-table-column
-                    v-if="show"
-                    prop="fruits"
-                    label="foodEat11"
-                    width="120"
-                    align="center"
+                  <el-input
+                    :disabled="true"
+                    style="width: 90px"
+                    v-model="scope.row.malloc"
+                    clearable
                   >
-                  </el-table-column>
+                  </el-input>
+                </template>
+                <el-table-column
+                  v-if="show"
+                  prop="fruits"
+                  label="foodEat11"
+                  width="120"
+                  align="center"
+                >
                 </el-table-column>
-                <!--操作格-->
-                <el-table-column label="操作" align="center">
-                  <template slot-scope="scope">
-                    <!-- <el-button type="text" size="small" style="margin-left: 10px"
+              </el-table-column>
+              <!--操作格-->
+              <el-table-column label="操作" align="center">
+                <template slot-scope="scope">
+                  <!-- <el-button type="text" size="small" style="margin-left: 10px"
                   >查看</el-button
                 > -->
-                    <el-button
-                      :disabled="true"
-                      type="text"
-                      size="small"
-                      style="margin-left: 10px"
-                      @click="handleDelete(scope.$index, scope.row)"
-                      >删除</el-button
-                    >
-                  </template>
-                </el-table-column>
-              </el-table>
+                  <el-button
+                    :disabled="true"
+                    type="text"
+                    size="small"
+                    style="margin-left: 10px"
+                    @click="handleDelete(scope.$index, scope.row)"
+                    >删除</el-button
+                  >
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+          <!-- 树形结构 -->
+          <el-dialog
+            title="添加菜品"
+            append-to-body
+            :visible.sync="dateTime"
+            :close-on-click-modal="false"
+          >
+            <el-input placeholder="输入关键字进行过滤" v-model="filterText1">
+            </el-input>
+            <div class="block">
+              <div class="rolling">
+                <p></p>
+                <el-tree
+                  :data="data1"
+                  node-key="id"
+                  :default-expand-all="false"
+                  @node-click="handleNodeClick"
+                  :filter-node-method="filterNode1"
+                  ref="tree"
+                ></el-tree>
+              </div>
             </div>
-            <!-- 树形结构 -->
-            <el-dialog
-              title="添加菜品"
-              append-to-body
-              :visible.sync="dateTime"
-              :close-on-click-modal="false"
+
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="dateTime = false">取 消</el-button>
+              <el-button @click="setlist" type="primary">确 定</el-button>
+            </div>
+          </el-dialog>
+          <!-- 营养素标题 -->
+          <div class="worm1">
+            营养素含量（这里为100克食部食品中的营养素含量）
+          </div>
+          <div class="saveas">
+            <el-table
+              :data="mailto"
+              max-height="400"
+              style="width: 70%;margin-bottom: 20px;"
+              row-key="id"
+              border
+              :default-expand-all="true"
+              :tree-props="{
+                children: 'children',
+                hasChildren: 'hasChildren'
+              }"
             >
-              <el-input placeholder="输入关键字进行过滤" v-model="filterText1">
-              </el-input>
-              <div class="block">
-                <div class="rolling">
-                  <p></p>
-                  <el-tree
-                    :data="data1"
-                    node-key="id"
-                    :default-expand-all="false"
-                    @node-click="handleNodeClick"
-                    :filter-node-method="filterNode1"
-                    ref="tree"
-                  ></el-tree>
-                </div>
-              </div>
+              <el-table-column
+                prop="title"
+                label="营养素"
+                align="center"
+                width="200"
+              ></el-table-column>
+              <el-table-column
+                prop="unit"
+                label="单位"
+                width="180"
+                align="center"
+              ></el-table-column>
 
-              <div slot="footer" class="dialog-footer">
-                <el-button @click="dateTime = false">取 消</el-button>
-                <el-button @click="setlist" type="primary">确 定</el-button>
-              </div>
-            </el-dialog>
-            <!-- 营养素标题 -->
-            <div class="worm1">
-              营养素含量（这里为100克食部食品中的营养素含量）
-            </div>
-            <div class="saveas">
-              <el-table
-                :data="mailto"
-                max-height="400"
-                style="width: 60%;margin-bottom: 20px;"
-                row-key="id"
-                border
-                :default-expand-all="true"
-                :tree-props="{
-                  children: 'children',
-                  hasChildren: 'hasChildren'
-                }"
-              >
-                <el-table-column
-                  prop="title"
-                  label="营养素"
-                  align="center"
-                  width="200"
-                ></el-table-column>
-                <el-table-column
-                  prop="unit"
-                  label="单位"
-                  width="180"
-                  align="center"
-                ></el-table-column>
-
-                <el-table-column label="含量" align="center">
-                  <template slot-scope="scope">
-                    <el-input
-                      :disabled="true"
-                      v-model="scope.row.result"
-                      type="text"
-                      v-if="scope.row.level != 1 ? true : false"
-                      placeholder="请输入内容"
-                    ></el-input>
-                  </template>
-                  <!-- v-if="scope.row.dients" -->
-                </el-table-column>
-              </el-table>
-            </div>
+              <el-table-column label="含量" align="center">
+                <template slot-scope="scope">
+                  <el-input
+                    :disabled="true"
+                    v-model="scope.row.result"
+                    type="text"
+                    v-if="scope.row.level != 1 ? true : false"
+                    placeholder="请输入内容"
+                  ></el-input>
+                </template>
+                <!-- v-if="scope.row.dients" -->
+              </el-table-column>
+            </el-table>
           </div>
         </div>
-        <div slot="footer" class="dialog-footer" style="text-align: center">
-          <el-button @click="dumpdbtostream = false">取 消</el-button>
-        </div>
-      </el-dialog>
-    </div>
+      </div>
+      <div slot="footer" class="dialog-footer" style="text-align: center">
+        <el-button @click="dumpdbtostream = false">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -1584,7 +1571,7 @@ export default {
               this.active.push(item);
             });
           } else {
-            this.active = "";
+            this.active = [];
           }
           if (this.handler.provinces) {
             let bar = [];
@@ -1593,7 +1580,7 @@ export default {
             });
             this.valuepark = bar;
           } else {
-            this.handler.provinces = "";
+            this.handler.provinces = [];
           }
 
           this.ruleForm.region = this.handler.function; //特点
@@ -1920,9 +1907,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.avue-view {
-  padding: 0 5px !important;
-}
+// .avue-view {
+//   padding: 0 5px !important;
+// }
 .toolbar {
   width: 100%;
 
