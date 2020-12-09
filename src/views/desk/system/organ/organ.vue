@@ -200,7 +200,8 @@ export default {
         // menuWidth: 400,
         delBtn:false,
         menuWidth: 350,
-        dialogHeight:500,
+        dialogHeight:400,
+        columnBtn:false,
         dialogWidth:900,
         dialogClickModal: false,
         column: [

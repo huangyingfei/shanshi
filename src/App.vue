@@ -50,4 +50,17 @@ export default {
   margin-top: 20px;
   margin-right: 40px;
 }
+.avue-crud__dialog  .el-dialog{
+  position: fixed;
+  left:50%;
+  margin-left:-450px ;
+}
+.avue-crud__dialog .el-form>.el-row> .avue-form__menu{
+  position: fixed;
+  top:580px;
+  background-color: #FFFFFF;
+  width: 900px;
+  margin-left: -10px;
+  border-radius: 2px;
+}
 </style>

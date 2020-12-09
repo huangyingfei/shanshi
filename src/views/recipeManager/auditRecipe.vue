@@ -60,6 +60,7 @@ export default {
 				delBtn: false,
 				menuAlign: 'center',
 				searchMenuSpan:8,
+        columnBtn:false,
 				height: "auto",
 				border:true,
 				column:[

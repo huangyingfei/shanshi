@@ -234,6 +234,7 @@ export default {
         height: "auto",
         calcHeight: 80,
         tip: false,
+        columnBtn:false,
         searchShow: true,
         searchMenuSpan: 6,
         border: true,
@@ -245,7 +246,7 @@ export default {
         dialogClickModal: false,
         delBtn: false,
         editBtn: false,
-        dialogHeight:500,
+        dialogHeight:400,
         dialogWidth:900,
         column: [
           {

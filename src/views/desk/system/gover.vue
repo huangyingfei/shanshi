@@ -153,6 +153,7 @@ export default {
         align: "center",
         menuAlign: "center",
         tip: false,
+        columnBtn:false,
         simplePage: true,
         searchShow: true,
         searchMenuSpan: 6,
@@ -163,7 +164,7 @@ export default {
         selection: true,
         viewBtn: true,
         menuWidth: 300,
-        dialogHeight:500,
+        dialogHeight:400,
         dialogWidth:900,
 
         dialogClickModal: false,

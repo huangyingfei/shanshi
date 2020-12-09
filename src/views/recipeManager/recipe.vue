@@ -210,6 +210,7 @@
           delBtn: false,
           selection: true,
           menuWidth:450,
+          columnBtn:false,
           dialogHeight: '600',
           dialogWidth: '80%',
           dialogClickModal: false,

@@ -241,11 +241,12 @@ export default {
         indexLabel:'序号',
         selection: true,
         viewBtn: true,
+        columnBtn:false,
         //dialogType: 'drawer',
         dialogClickModal: false,
         delBtn: false,
         editBtn: false,
-        dialogHeight:500,
+        dialogHeight:400,
         dialogWidth:900,
 
         column: [
@@ -824,6 +825,7 @@ export default {
 .box .el-scrollbar__wrap {
   overflow: scroll;
 }
+
 
 
 </style>

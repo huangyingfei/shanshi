@@ -148,6 +148,7 @@ export default {
         searchShow: true,
         searchMenuSpan: 6,
         tree: true,
+        columnBtn:false,
         border: true,
         index: true,
         indexLabel:'序号',
@@ -157,7 +158,7 @@ export default {
         addBtn:false,
         delBtn:false,
         editBtn:false,
-        dialogHeight:500,
+        dialogHeight:400,
         dialogWidth:900,
         dialogClickModal: false,
         column: [

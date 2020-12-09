@@ -1106,9 +1106,11 @@ document.oncontextmenu = function(){return false};
   methods: {
     selectAge(){
       if(!this.WeekInfo.startAge){
-
+        this.pcScore=this.score;
+        this.parentFn(0, "datas", this.pcScore, [], [], [], [], []);
       }else if(!this.WeekInfo.endAge){
-
+        this.pcScore=this.score;
+        this.parentFn(0, "datas", this.pcScore, [], [], [], [], []);
       }else{
         let that =this;
         setTimeout(function () {
