@@ -69,7 +69,6 @@
                 <el-option label="7天一周" value="7"></el-option>
               </el-select>
             </el-input>
-
             <el-date-picker
               v-model="WeekInfo.weekValue"
               type="week"
@@ -350,7 +349,7 @@
       <show-score :intake="intake"   :nutrition="nutrition" :power="power"  :meal="meal" :protein="protein"  :startTime="startTimeStr"   :endTime="endTimeStr" :score="score"></show-score>
     </el-drawer>
     <!-- 分数弹框 结束-->
-    <nutrition :weekType="WeekInfo.weekType" ref="nutritionChild"/>
+    <nutrition :WeekInfo="WeekInfo" ref="nutritionChild"/>
   </div>
 </template>
 

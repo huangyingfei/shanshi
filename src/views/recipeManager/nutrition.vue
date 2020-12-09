@@ -17,14 +17,14 @@
 
           <el-row>
             <el-col :span="24" style="text-align:right">
-              <span>2020-08-31~2020-09-04</span>
+              <span>{{dateRange}}</span>
             </el-col>
           </el-row>
           <!-- 食谱表格开始 -->
           <el-row>
             <el-col :span="24">
               <el-table size = "small" :data="dtos" :span-method="dtosSpanMethod" class="dtosTable">
-                <el-table-column label="" prop="mealType" align="center">
+                <el-table-column label="" prop="mealType" align="center" min-width="50">
                 </el-table-column>
                 <el-table-column label="星期一(Mon)" align="center">
                   <el-table-column
@@ -150,7 +150,7 @@
                     </template>
                   </el-table-column>
                 </el-table-column>
-                <el-table-column label="星期六(Sat)" align="center" v-if="weekType ==='6'||weekType ==='7'">
+                <el-table-column label="星期六(Sat)" align="center" v-if="satShow">
                   <el-table-column
                     prop="saturdayRecipe"
                     label="食谱" min-width="50">
@@ -175,7 +175,7 @@
                     </template>
                   </el-table-column>
                 </el-table-column>
-                <el-table-column label="星期日(Sun)" align="center" v-if="weekType ==='7'">
+                <el-table-column label="星期日(Sun)" align="center" v-if="sunShow">
                   <el-table-column
                     prop="sundayRecipe"
                     label="食谱" min-width="50">
@@ -210,7 +210,7 @@
               <span>一.平均每人进食量</span>
             </el-col>
             <el-col :span="12" style="text-align:right">
-              <span>2020-08-31~2020-09-04</span>
+              <span>{{dateRange}}</span>
             </el-col>
           </el-row>
           <!-- 平均每人进食量表格开始 -->
@@ -272,7 +272,7 @@
           <el-row>
             <el-col :span="24">
               <el-table size = "small" :data="foodNutritionExcleDtoList" border :header-cell-style="headerRowStyle">
-                <el-table-column label="平均每人每日" prop="target" min-width="42">
+                <el-table-column label="" prop="target" min-width="42">
                 </el-table-column>
                 <el-table-column label="能量(千卡)" align="center" min-width="40" prop="cal">            
                 </el-table-column>
@@ -459,7 +459,7 @@
                     label="占比%" min-width="60">
                   </el-table-column>
                 </el-table-column>
-                <el-table-column label="星期六(Sat)" align="center">
+                <el-table-column label="星期六(Sat)" align="center" v-if="satShow">
                   <el-table-column
                     prop="sat"
                     label="能量" min-width="50">
@@ -469,7 +469,7 @@
                     label="占比%" min-width="60">
                   </el-table-column>
                 </el-table-column>
-                <el-table-column label="星期日(Sun)" align="center">
+                <el-table-column label="星期日(Sun)" align="center" v-if="sunShow">
                   <el-table-column
                     prop="sun"
                     label="能量" min-width="50">
@@ -505,9 +505,10 @@
 
 <script>
 import axios from '@/router/axios';
+import { formateDate} from "@/api/tool/date";
 
 export default {
-  props:["weekType"],
+  props:["WeekInfo"],
   data() {
     return {
       nutritionDialogVisible: false,
@@ -524,6 +525,23 @@ export default {
         popTitle: 'good print',
       }
     };
+  },
+  computed: {
+    satShow: function () {
+      return  this.WeekInfo.weekType ==='6'||this.WeekInfo.weekType ==='7'
+    },
+    sunShow: function () {
+      return  this.WeekInfo.weekType ==='7'      
+    },
+    dateRange: function () {
+      
+      let dayNum = parseInt(this.WeekInfo.weekType, 10);
+      var startDate = formateDate(new Date(this.WeekInfo.weekValue), "yyyy-MM-dd")
+      var endDateMillisec = new Date(this.WeekInfo.weekValue).getTime()+1000*60*60*24*dayNum;
+      var endDate = new Date(endDateMillisec)
+      endDate = formateDate(endDate, "yyyy-MM-dd");
+      return startDate + '~' + endDate
+    }
   },
   methods:{
     dtosSpanMethod({ row, column, rowIndex, columnIndex }){
@@ -589,7 +607,6 @@ export default {
         let mealTypeDataArray = []
         var FoodWeekArray = ['mealType','monRecipeName','satRecipeName','wedRecipeName','thuRecipeName','friRecipeName','tueRecipeName','sunRecipeName']
         dtos.forEach(element => {
-          debugger
           let indexMealType = mealTypeArray.indexOf(element.mealType);//在餐点类型数组中是否存在当前值
           if(indexMealType === -1){//不存在
             mealTypeArray.push(element.mealType);//更新数据至餐点类型数组尾部
@@ -602,8 +619,6 @@ export default {
               }
             }
             mealTypeDataArray.push(mealTypeDataObj);
-            console.log(mealTypeDataArray);
-            console.log("不存在");
           }else{
             for (let k in element) {
               if (element.hasOwnProperty(k)) {
@@ -614,9 +629,6 @@ export default {
                 }else if(FoodWeekArray.indexOf(k) === 0){//餐点类型列不做处理
 
                 }else{//当前为食谱类型列
-                  console.log('mealTypeDataArray[indexMealType][k]');
-                  console.log(k);
-                  console.log(val);
                   if(mealTypeDataArray[indexMealType][k].indexOf(val) === -1){
                     mealTypeDataArray[indexMealType][k].push(val)//不存在当前菜品直接更新
                   }else{
@@ -628,7 +640,6 @@ export default {
             }
           }
         });
-        console.log(mealTypeDataArray)
         this.dtos = mealTypeDataArray;//食谱表格
       });
     },
@@ -655,7 +666,7 @@ export default {
 }
 
 .print-page{
-  width: 310mm;
+  width: 350mm;
   margin: 0 auto;
   margin-bottom: 14mm;
   border-bottom: 0;
