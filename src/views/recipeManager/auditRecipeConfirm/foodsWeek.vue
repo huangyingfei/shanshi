@@ -901,6 +901,7 @@ export default {
     this.init();
   },
 
+
   methods: {
     //同步修改高度
     resizeExpendHeight() {
@@ -951,7 +952,7 @@ export default {
                 return;
               }
             }
-          });getmealTypeData
+          });
         }
       });
     },
@@ -1041,9 +1042,8 @@ export default {
             }
           })
           index++;
-
         })
-      })
+      });
       if(mealTypes.length>0){
         let obj=Array.from(new Set(mealTypes))
         let resultObj="";
