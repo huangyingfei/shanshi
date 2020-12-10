@@ -4,6 +4,8 @@
       <!-- 左边 -->
       <div class="cation">
         <el-input
+          clearable
+          @change="graph"
           style="width: 290px; margin-left: 11px; margin-top: 20px"
           placeholder="输入关键字进行查询"
           v-model="filterText"
@@ -197,17 +199,42 @@
             class="demo-ruleForm"
           >
             <el-form-item label="食材名" prop="name" style="width: 350px">
-              <el-input style="300px" v-model="ruleForm.name"></el-input>
+              <el-input
+                maxlength="8"
+                show-word-limit
+                style="300px"
+                v-model="ruleForm.name"
+              ></el-input>
             </el-form-item>
-            <el-form-item label="食物别名1" style="width: 350px">
-              <el-input style="300px" v-model="ruleForm.foodFood"></el-input>
+            <el-form-item
+              maxlength="8"
+              show-word-limit
+              label="食物别名1"
+              style="width: 350px"
+            >
+              <el-input
+                maxlength="8"
+                show-word-limit
+                style="300px"
+                v-model="ruleForm.foodFood"
+              ></el-input>
             </el-form-item>
             <el-form-item label="食物别名2" style="width: 350px">
-              <el-input style="300px" v-model="ruleForm.ovenFood"></el-input>
+              <el-input
+                maxlength="8"
+                show-word-limit
+                style="300px"
+                v-model="ruleForm.ovenFood"
+              ></el-input>
             </el-form-item>
 
             <el-form-item label="食材真名" prop="buffer" style="width: 350px">
-              <el-input style="300px" v-model="ruleForm.buffer"></el-input>
+              <el-input
+                maxlength="8"
+                show-word-limit
+                style="300px"
+                v-model="ruleForm.buffer"
+              ></el-input>
             </el-form-item>
 
             <el-form-item label="食材分类" prop="fooddata" style="width: 350px">
@@ -243,6 +270,8 @@
 
             <el-form-item label="分类别称1" style="width: 350px">
               <el-input
+                maxlength="8"
+                show-word-limit
                 v-model="ruleForm.foods"
                 placeholder="请输入食物分类"
               ></el-input>
@@ -250,6 +279,8 @@
 
             <el-form-item label="分类别称2" style="width: 350px">
               <el-input
+                maxlength="8"
+                show-word-limit
                 v-model="ruleForm.dogfood"
                 placeholder="请输入食物分类"
               ></el-input>
@@ -321,6 +352,8 @@
 
             <el-form-item label="功用" style="width: 350px">
               <el-input
+                maxlength="30"
+                show-word-limit
                 style="width: 185px"
                 type="textarea"
                 v-model="ruleForm.desc"
@@ -381,7 +414,7 @@
             <el-table
               max-height="400"
               :data="mailto"
-              style="width: 95%; margin-bottom: 20px"
+              style="width: 100%%; margin-bottom: 20px"
               row-key="id"
               :default-expand-all="true"
               :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
@@ -591,10 +624,10 @@ export default {
   },
   created() {},
   watch: {
-    filterText(val) {
-      console.log(this.$refs.tree);
-      this.$refs.tree.filter(val);
-    }
+    // filterText(val) {
+    //   console.log(this.$refs.tree);
+    //   this.$refs.tree.filter(val);
+    // }
   },
   methods: {
     ofmoisture() {
@@ -630,11 +663,11 @@ export default {
       this.display = flat;
       this.Addraudit();
     },
-    filterNode(value, data) {
-      if (!value) return true;
+    // filterNode(value, data) {
+    //   if (!value) return true;
 
-      return data.label.indexOf(value) !== -1;
-    },
+    //   return data.label.indexOf(value) !== -1;
+    // },
     //省市区查询
     gProvinces() {
       // console.log(this.valuepark1[1]);
@@ -859,12 +892,15 @@ export default {
     stored() {
       console.log(123);
     },
+    graph() {
+      this.Addraudit();
+    },
     //树形渲染数
     Addraudit() {
       this.loadFlag = true;
       this.$axios
         .get(
-          `api/blade-food/basetype/getFoodByBaseId?isPrivate=1&typeTemp=${this.waterfall}&season=${this.before1}&isUse=${this.really1}&regionId=${this.fallen}`,
+          `api/blade-food/basetype/getFoodByBaseId?isPrivate=1&typeTemp=${this.waterfall}&season=${this.before1}&isUse=${this.really1}&regionId=${this.fallen}&foodName=${this.filterText}`,
           {}
         )
         .then(res => {
@@ -1474,7 +1510,7 @@ export default {
   font-weight: bold;
 }
 .saveas {
-  width: 95%;
+  width: 100%;
   height: 500px;
   // margin-left: 40px;
   margin-bottom: 50px;

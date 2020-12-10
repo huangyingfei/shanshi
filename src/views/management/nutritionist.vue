@@ -148,7 +148,12 @@
           ></el-input>
         </el-form-item>
         <el-form-item label="不宜同食原因">
-          <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+          <el-input
+            type="textarea"
+            maxlength="30"
+            show-word-limit
+            v-model="ruleForm.desc"
+          ></el-input>
         </el-form-item>
         <el-form-item label="是否有效">
           <el-radio v-model="radio" label="1">是</el-radio>
@@ -185,28 +190,17 @@
           <el-tab-pane label="个人食材库" name="first">
             <div class="block">
               <p></p>
-              <el-tree
-                :data="data"
-                v-loading="loadFlag"
-                node-key="id"
-                :default-expand-all="false"
-                :expand-on-click-node="false"
-                @node-click="handleNodeClick"
-              >
-                <!-- <span class="custom-tree-node" slot-scope="{ node, data }">
-                      <span>{{ node.label }}</span>
-                      <span>
-                        <el-button
-                          type="text"
-                          size="mini"
-                          @click="() => prepare(data)"
-                        >
-                          查看
-                        </el-button>   
-                     
-                      </span>
-                    </span> -->
-              </el-tree>
+              <div class="rolling">
+                <el-tree
+                  :data="data"
+                  v-loading="loadFlag"
+                  node-key="id"
+                  :default-expand-all="false"
+                  :expand-on-click-node="false"
+                  @node-click="handleNodeClick"
+                >
+                </el-tree>
+              </div>
             </div>
           </el-tab-pane>
           <el-tab-pane label="公共食材库" name="second">
@@ -593,5 +587,10 @@ export default {
   margin-top: 20px;
   margin-right: 40px;
   margin-bottom: 60px;
+}
+.rolling {
+  width: 100%;
+  height: 300px;
+  overflow-y: auto;
 }
 </style>

@@ -235,6 +235,8 @@
 
             <el-form-item label="特点" style="width: 345px">
               <el-input
+                maxlength="30"
+                show-word-limit
                 type="textarea"
                 style="width: 200px"
                 v-model="ruleForm.region"
@@ -242,6 +244,8 @@
             </el-form-item>
             <el-form-item label="做法" style="width: 345px">
               <el-input
+                maxlength="30"
+                show-word-limit
                 type="textarea"
                 style="width: 200px"
                 v-model="ruleForm.desc"
@@ -282,7 +286,7 @@
           </el-form>
           <!-- 菜品所含食材信息 -->
           <div class="mationtxt">菜品所含食材信息</div>
-          <div>
+          <div class="statistics">
             <el-button
               style="margin-left: 10px;"
               type="primary"
@@ -349,6 +353,7 @@
                     type="number"
                     style="width: 100px"
                     @blur="graph"
+                    @change="dosage"
                     @input="hello(scope.row, scope.$index)"
                     v-model="scope.row.stats"
                   >
@@ -414,7 +419,7 @@
             <el-table
               :data="mailto"
               max-height="400"
-              style="width: 99%; margin-bottom: 20px"
+              style="width: 100%; margin-bottom: 20px"
               row-key="id"
               v-loading="loadFlag"
               :default-expand-all="true"
@@ -505,6 +510,7 @@
             <el-tree
               :data="data1"
               node-key="id"
+              v-loading="loadFlag3"
               :default-expand-all="false"
               @node-click="handleNodeClick"
               :filter-node-method="filterNode1"
@@ -554,6 +560,7 @@ export default {
       loadFlag: false, //加载flag
       loadFlag1: false, //加载
       loadFlag2: false,
+      loadFlag3: false,
       dateTime: false, //弹出框
       input: "", //搜索
       mailto: [],
@@ -821,6 +828,7 @@ export default {
     },
     //菜品所含信息树形渲染数
     Addraudit() {
+      this.loadFlag3 = true;
       this.$axios
         .get(`api/blade-food/basetype/getFoodByBaseId?isPrivate=1`, {
           headers: {
@@ -828,6 +836,7 @@ export default {
           }
         })
         .then(res => {
+          this.loadFlag3 = false;
           // console.log(res);
           this.fication = res.data.data;
           //   console.log(this.fication);
@@ -981,7 +990,7 @@ export default {
       const sums = [];
       columns.forEach((column, index) => {
         if (index === 0) {
-          sums[index] = "能量合计";
+          sums[index] = "用量/能量合计";
           return;
         }
         const values = data.map(item => Number(item[column.property]));
@@ -991,15 +1000,20 @@ export default {
           column.property == "stats"
         ) {
           sums[index] = values.reduce((prev, curr) => {
-            const value = Number(curr);
+            // const value = Number(curr);
+            const value = curr.toFixed(2);
+
             if (!isNaN(value)) {
               return prev + curr;
             } else {
               return prev;
             }
           }, 0);
-          sums[index] += "";
-          this.sumss = sums[index];
+          if (index == 2 || index == 4) {
+            sums[index] = sums[index].toFixed(2);
+          } else {
+            sums[index] += "";
+          }
           // if (this.mailto[0].children[0].id == "101") {
           //   this.mailto[0].children[0].result = this.sumss;
           // }
@@ -1011,6 +1025,9 @@ export default {
 
     showImg() {
       this.showSearch = !this.showSearch;
+    },
+    dosage() {
+      console.log(123123123);
     },
     hello(row, i) {
       // row.malloc = (row.stats / 100) * row.malloc;
@@ -1170,6 +1187,7 @@ export default {
             this.officeonce[
               this.csListIndex
             ].address = this.inquired.foodTypeName;
+            this.officeonce[this.csListIndex].stats = this.inquired.weight;
             this.officeonce[this.csListIndex].fruits = this.inquired.foodEat;
             // this.officeonce[this.csListIndex].name = this.inquired.foodName;
             //   console.log(this.getInput);
@@ -1402,14 +1420,17 @@ export default {
     },
     //表格弹出框
     columnEvent(row, index) {
+      this.filterText1 = "";
       this.dateTime = true;
       this.csListIndex = index;
+      this.Addraudit();
       //   for (let k in row) {
       //     this.csList[k] = row[k];
       //   }
     },
     setlist() {
       this.dateTime = false;
+      this.graph();
     },
 
     //省市区
@@ -1889,6 +1910,9 @@ export default {
   font-size: 14px;
   padding-right: 8px;
 }
+.statistics {
+  width: 100%;
+}
 .mationtxt {
   width: 100%;
   height: 30px;
@@ -1898,7 +1922,7 @@ export default {
   font-weight: bold;
 }
 .mationinput {
-  width: 750px;
+  width: 754px;
   /* height: 700px; */
   /* display: flex; */
   /* overflow-y: auto; */
@@ -1906,16 +1930,16 @@ export default {
   margin-bottom: 20px;
 }
 .saveas {
-  width: 95%;
+  width: 100%;
   /* height: 500px; */
-  margin-left: 40px;
+  margin-left: 0px;
   margin-bottom: 50px;
   /* background-color: red; */
 }
 .gmsave {
   /* float: left; */
   text-align: center;
-  width: 100%;
+  width: 20%;
   background-color: #fff;
   /* width: 100%; */
   /* height: 50px;
@@ -1923,7 +1947,7 @@ export default {
   /* margin-bottom: 40px; */
   /* background-color: #fff; */
   position: fixed;
-  /* left: 0; */
+  left: 50%;
   /* right: 30%; */
   bottom: 10px;
   z-index: 999;

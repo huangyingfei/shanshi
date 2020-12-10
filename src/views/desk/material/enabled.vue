@@ -167,7 +167,7 @@
     <el-dialog
       style="margin-top: 10px!important;"
       title="审核食材"
-      width=" 80%"
+      width="1150px"
       append-to-body
       :visible.sync="seekeys"
       :close-on-click-modal="false"
@@ -210,17 +210,33 @@
               class="demo-ruleForm"
             >
               <el-form-item label="食材名" prop="name" style="width: 350px">
-                <el-input v-model="ruleForm.name"></el-input>
+                <el-input
+                  maxlength="8"
+                  show-word-limit
+                  v-model="ruleForm.name"
+                ></el-input>
               </el-form-item>
               <el-form-item label="食物别名1" style="width: 350px">
-                <el-input v-model="ruleForm.move"></el-input>
+                <el-input
+                  maxlength="8"
+                  show-word-limit
+                  v-model="ruleForm.move"
+                ></el-input>
               </el-form-item>
               <el-form-item label="食物别名2" style="width: 350px">
-                <el-input v-model="ruleForm.move1"></el-input>
+                <el-input
+                  maxlength="8"
+                  show-word-limit
+                  v-model="ruleForm.move1"
+                ></el-input>
               </el-form-item>
 
               <el-form-item label="食材真名" prop="buffer" style="width: 350px">
-                <el-input v-model="ruleForm.buffer"></el-input>
+                <el-input
+                  maxlength="8"
+                  show-word-limit
+                  v-model="ruleForm.buffer"
+                ></el-input>
               </el-form-item>
 
               <el-form-item
@@ -246,6 +262,8 @@
 
               <el-form-item label="食物分类1" style="width: 350px">
                 <el-input
+                  maxlength="8"
+                  show-word-limit
                   v-model="ruleForm.foods"
                   placeholder="请输入食材"
                 ></el-input>
@@ -253,6 +271,8 @@
 
               <el-form-item label="食物分类2" style="width: 350px">
                 <el-input
+                  maxlength="8"
+                  show-word-limit
                   v-model="ruleForm.dogfood"
                   placeholder="请输入食材"
                 ></el-input>
@@ -260,6 +280,7 @@
 
               <el-form-item label="食部(%)" prop="besaved" style="width: 350px">
                 <el-input
+                  @change="research"
                   type="number"
                   v-model="ruleForm.besaved"
                   placeholder="请输入食部"
@@ -280,6 +301,7 @@
 
               <el-form-item label="水分(%)" style="width: 350px">
                 <el-input
+                  @change="ofmoisture"
                   type="number"
                   v-model="ruleForm.content"
                   placeholder="请输入水分"
@@ -326,6 +348,8 @@
 
               <el-form-item label="功用">
                 <el-input
+                  maxlength="30"
+                  show-word-limit
                   style="width: 185px"
                   type="textarea"
                   v-model="ruleForm.desc"
@@ -477,7 +501,7 @@
     <!-- 查看弹框 -->
     <el-dialog
       title="查看"
-      width=" 80%"
+      width="1150px"
       append-to-body
       :visible.sync="loadnew"
       :close-on-click-modal="false"
@@ -922,6 +946,27 @@ export default {
     this.Takeone();
   },
   methods: {
+    ofmoisture() {
+      if (this.ruleForm.content > 100) {
+        // alert("123213");
+        this.ruleForm.content = "";
+        this.$message.error("水分不能大于100");
+      } else {
+        // console.log(this.ruleForm.besaved);
+        return;
+      }
+    },
+    research() {
+      // console.log(123);
+      if (this.ruleForm.besaved > 100) {
+        // alert("123213");
+        this.ruleForm.besaved = "";
+        this.$message.error("食部不能大于100");
+      } else {
+        // console.log(this.ruleForm.besaved);
+        return;
+      }
+    },
     notEmpty() {
       // console.log(12321);
       this.input = "";
@@ -1291,6 +1336,7 @@ export default {
     //审核
     Directory(row, index) {
       console.log(index);
+      this.menu = "";
       this.according = index;
       this.examine.desc1 = "";
       this.active = [];
@@ -1335,7 +1381,7 @@ export default {
               this.active.push(item);
             });
           } else {
-            this.active = "";
+            this.active = [];
           }
           //省市
           if (this.subquery.provinces) {
@@ -1612,6 +1658,7 @@ export default {
   width: 300px;
   height: 30px;
   line-height: 30px;
+  float: left;
   margin-left: 19px;
   color: #419df7;
 }
@@ -1663,6 +1710,7 @@ export default {
 }
 .saveas {
   height: 400px;
+  margin-bottom: 20px;
   /* background-color: red; */
   /* overflow-y: auto; */
 }
