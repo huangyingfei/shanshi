@@ -185,6 +185,14 @@
       append-to-body
       :visible.sync="addEffect"
     >
+      <el-input
+        clearable
+        @change="treeDrawing"
+        style="width: 290px; margin-left: 11px; margin-top: 20px"
+        placeholder="输入关键字进行查询"
+        v-model="filterText"
+      >
+      </el-input>
       <div>
         <el-tabs v-model="activeName" @tab-click="handleClick">
           <el-tab-pane label="个人食材库" name="first">
@@ -196,7 +204,6 @@
                   v-loading="loadFlag"
                   node-key="id"
                   :default-expand-all="false"
-                  :expand-on-click-node="false"
                   @node-click="handleNodeClick"
                 >
                 </el-tree>
@@ -206,15 +213,15 @@
           <el-tab-pane label="公共食材库" name="second">
             <div class="block">
               <p></p>
-              <el-tree
-                :data="data"
-                node-key="id"
-                v-loading="loadFlag"
-                :default-expand-all="false"
-                :expand-on-click-node="false"
-                @node-click="handleNodeClick"
-              >
-                <!-- <span class="custom-tree-node" slot-scope="{ node, data }">
+              <div class="rolling">
+                <el-tree
+                  :data="data"
+                  node-key="id"
+                  v-loading="loadFlag"
+                  :default-expand-all="false"
+                  @node-click="handleNodeClick"
+                >
+                  <!-- <span class="custom-tree-node" slot-scope="{ node, data }">
                   <span>{{ node.label }}</span>
                   <span>
                     <el-button
@@ -226,7 +233,8 @@
                     </el-button>
                   </span>
                 </span> -->
-              </el-tree>
+                </el-tree>
+              </div>
             </div>
           </el-tab-pane>
         </el-tabs>
@@ -246,6 +254,7 @@ export default {
     const data = [];
     return {
       data: JSON.parse(JSON.stringify(data)), //树形结构
+      filterText: "",
       activeName: "first",
       loadFlag: false, //加载flag
       loadFlag1: false, //加载flag
@@ -465,12 +474,16 @@ export default {
     //点击查看详情
     handleNodeClick(data) {
       // console.log(data);
-      if (this.dataindex1 == 1) {
-        this.ruleForm.adding = data.label;
-        this.support = data.id;
+      if (data.view == 0) {
+        return;
       } else {
-        this.ruleForm.adding1 = data.label;
-        this.editor = data.id;
+        if (this.dataindex1 == 1) {
+          this.ruleForm.adding = data.label;
+          this.support = data.id;
+        } else {
+          this.ruleForm.adding1 = data.label;
+          this.editor = data.id;
+        }
       }
 
       // this.flour=data.id;
@@ -502,7 +515,7 @@ export default {
       this.loadFlag = true;
       this.$axios
         .get(
-          `api/blade-food/basetype/getFoodByBaseId?isPrivate=${this.lower}`,
+          `api/blade-food/basetype/getFoodByBaseId?isPrivate=${this.lower}&foodName=${this.filterText}`,
           {}
         )
         .then(res => {
@@ -515,7 +528,8 @@ export default {
           this.prtree.forEach((item, index) => {
             trees[index] = {
               id: item.id,
-              label: item.typeName
+              label: item.typeName,
+              view: 0
             };
             trees[index].children = [];
             item.foods.forEach((item1, index1) => {
@@ -523,7 +537,8 @@ export default {
                 id: item1.id,
                 label: item1.foodName,
                 isPub: item1.isPub,
-                isUse: item1.isUse
+                isUse: item1.isUse,
+                view: 1
               };
             });
           });
