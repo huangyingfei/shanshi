@@ -152,7 +152,12 @@
           ></el-input>
         </el-form-item>
         <el-form-item label="不宜同食原因">
-          <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+          <el-input
+            maxlength="30"
+            show-word-limit
+            type="textarea"
+            v-model="ruleForm.desc"
+          ></el-input>
         </el-form-item>
         <el-form-item label="是否有效">
           <el-radio v-model="radio" label="1">是</el-radio>

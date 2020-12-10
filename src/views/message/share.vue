@@ -230,8 +230,9 @@ export default {
       this.dialogListData = row;
       let term = row.id;
       this.dateTime = true;
-
-      this.$refs.toolbar.overview(term);
+      this.$nextTick(() => {
+        this.$refs.toolbar.overview(term);
+      });
     },
     //清空
     notEmpty() {

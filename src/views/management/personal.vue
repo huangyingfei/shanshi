@@ -8,6 +8,7 @@
           <div class="personal">
             <el-input
               @blur="graph"
+              clearable
               style="width:270px; margin-left: 9px;"
               placeholder="输入关键字进行查询"
               v-model="filterText"
@@ -17,7 +18,7 @@
               <!-- <el-button type="primary" plain size="mini">导入</el-button>
                 <el-button type="primary" plain size="mini">导出</el-button>
                 <el-button type="primary" plain size="mini">加分类</el-button> -->
-              <el-button @click="addition(1)" type="primary" size="mini"
+              <el-button @click="addition(0)" type="primary" size="mini"
                 >加食材</el-button
               >
             </div>
@@ -168,16 +169,25 @@
                 class="demo-ruleForm"
               >
                 <el-form-item label="食材名" prop="name" style="width: 350px">
-                  <el-input style="300px" v-model="ruleForm.name"></el-input>
+                  <el-input
+                    maxlength="10"
+                    show-word-limit
+                    style="300px"
+                    v-model="ruleForm.name"
+                  ></el-input>
                 </el-form-item>
                 <el-form-item label="食物别名1" style="width: 350px">
                   <el-input
+                    maxlength="10"
+                    show-word-limit
                     style="300px"
                     v-model="ruleForm.foodFood"
                   ></el-input>
                 </el-form-item>
                 <el-form-item label="食物别名2" style="width: 350px">
                   <el-input
+                    maxlength="10"
+                    show-word-limit
                     style="300px"
                     v-model="ruleForm.ovenFood"
                   ></el-input>
@@ -188,7 +198,12 @@
                   prop="buffer"
                   style="width: 350px"
                 >
-                  <el-input style="300px" v-model="ruleForm.buffer"></el-input>
+                  <el-input
+                    maxlength="10"
+                    show-word-limit
+                    style="300px"
+                    v-model="ruleForm.buffer"
+                  ></el-input>
                 </el-form-item>
 
                 <el-form-item
@@ -214,6 +229,8 @@
 
                 <el-form-item label="食物分类1" style="width: 350px">
                   <el-input
+                    maxlength="10"
+                    show-word-limit
                     v-model="ruleForm.foods"
                     placeholder="请输入食物分类"
                   ></el-input>
@@ -221,6 +238,8 @@
 
                 <el-form-item label="食物分类2" style="width: 350px">
                   <el-input
+                    maxlength="10"
+                    show-word-limit
                     v-model="ruleForm.dogfood"
                     placeholder="请输入食物分类"
                   ></el-input>

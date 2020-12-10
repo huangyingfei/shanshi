@@ -1,7 +1,7 @@
 <template>
   <div class="unsaved">
     <div class="header">
-      <span style=" margin-right: 10px;">关键字:</span>
+      <span style=" margin-right: 10px;">食谱名称:</span>
       <el-input
         style="width:200px;"
         size="small"
@@ -10,22 +10,15 @@
       ></el-input>
       <span style="margin-right: 10px;margin-left: 15px;">提交日期:</span>
       <el-date-picker
-        size="small"
         v-model="keyword.getDate"
-        type="date"
-        placeholder="选择日期"
-        style="width:200px"
-      ></el-date-picker>
-      <span style="margin-right: 10px;margin-left: 15px;">所属区域:</span>
-      <el-select v-model="keyword.value" placeholder="请选择">
-        <el-option
-          size="mini"
-          v-for="item in dirname"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        ></el-option>
-      </el-select>
+        format="yyyy 年 MM 月 dd 日"
+        value-format="yyyy-MM-dd"
+        type="daterange"
+        range-separator="至"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期"
+      >
+      </el-date-picker>
       <span style="margin-right: 10px;margin-left: 15px;">机构类型:</span>
       <el-select v-model="keyword.block" placeholder="请选择">
         <el-option
@@ -38,9 +31,32 @@
       </el-select>
     </div>
     <div class="key_end">
-      <el-radio v-model="keyword.radio" label="1">全部</el-radio>
-      <el-radio v-model="keyword.radio" label="2">已收藏食谱</el-radio>
-      <el-radio v-model="keyword.radio" label="3">推荐食谱</el-radio>
+      <span style=" margin-right: 10px;margin-left:0px;">收藏食谱:</span>
+      <el-select
+        style="width:200px;"
+        @change="collection"
+        v-model="empty"
+        placeholder="请选择收藏食谱"
+      >
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        >
+        </el-option>
+      </el-select>
+      <span style="margin-left: 15px; margin-right: 15px;">公示食谱:</span>
+
+      <el-select style="width:200px;" v-model="blicity" placeholder="请选择">
+        <el-option
+          v-for="item in publicity"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        >
+        </el-option>
+      </el-select>
       <el-button
         @click="searchterm"
         size="small"
@@ -66,10 +82,7 @@
       :visible.sync="dateTime"
       :close-on-click-modal="false"
     >
-      <div>
-        <!-- <foods-week :headers="headers" :datas="datas" days="5"> </foods-week> -->
-        123213213
-      </div>
+      <toolbar ref="toolb"></toolbar>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dateTime = false">取 消</el-button>
         <el-button @click="setlist('ruleForm')" type="primary">确 定</el-button>
@@ -96,7 +109,7 @@
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="createTime"
+          prop="recipeDay"
           label="食谱周期"
           align="center"
         ></el-table-column>
@@ -106,17 +119,20 @@
           align="center"
         ></el-table-column>
 
-        <el-table-column
-          prop="createTime"
-          label="机构类型"
-          align="center"
-        ></el-table-column>
+        <el-table-column label="机构类型" align="center">
+          <template slot-scope="scope">
+            <el-tag v-if="scope.row.orgType == 1">学校</el-tag>
+            <el-tag v-else-if="scope.row.orgType == 2">医院</el-tag>
+            <el-tag v-else-if="scope.row.orgType == 3">餐饮</el-tag>
+            <el-tag v-else-if="scope.row.orgType == 4">其他</el-tag>
+          </template>
+        </el-table-column>
 
-        <el-table-column
-          prop="createTime"
+        <!-- <el-table-column
+          prop=""
           label="分享来源"
           align="center"
-        ></el-table-column>
+        ></el-table-column> -->
 
         <el-table-column
           prop="orgName"
@@ -173,7 +189,11 @@
 </template>
 
 <script>
+import toolbar from "../PublicLicense/sharing";
 export default {
+  components: {
+    toolbar
+  },
   data() {
     return {
       keyword: {
@@ -193,6 +213,7 @@ export default {
       },
 
       modeforms: [], //表格数据
+      loadFlag: false,
       page_data: {
         loadTxt: "请求列表中"
       },
@@ -205,22 +226,58 @@ export default {
       ],
       keydown: [
         {
-          value: "0",
+          value: "",
+          label: "全部"
+        },
+        {
+          value: "1",
+          label: "学校"
+        },
+        {
+          value: "2",
+          label: "医院"
+        },
+        {
+          value: "3",
+          label: "餐饮"
+        },
+        {
+          value: "4",
+          label: "其他"
+        }
+      ],
+      options: [
+        {
+          value: "",
           label: "全部"
         },
         {
           value: "0",
-          label: "学校"
+          label: "不收藏"
         },
         {
-          value: "0",
-          label: "医院"
-        },
-        {
-          value: "0",
-          label: "餐饮"
+          value: "1",
+          label: "收藏"
         }
-      ]
+      ],
+      publicity: [
+        {
+          value: "",
+          label: "全部"
+        },
+        {
+          value: "1",
+          label: "推荐"
+        },
+        {
+          value: "0",
+          label: "不推荐"
+        }
+      ],
+      blicity: "", //是否推荐
+      empty: "",
+      timezone: "",
+      timezone1: ""
     };
   },
   // mounted() {
@@ -258,14 +315,15 @@ export default {
           this.generator();
         });
     },
+
     //获取表格
     generator() {
       this.loadFlag = true;
+      let urlParams = `?size=${this.m_page.size}&current=${this.m_page.number}&recipeName=${this.keyword.input}&createTimeStr=${this.timezone}&createTimeStrEnd=
+${this.timezone1}&orgType=${this.keyword.block}&isUse=${this.empty}&isRecommend=${this.blicity}`;
+
       this.$axios
-        .get(
-          `api/blade-food/recipe/shareRecipeList?size=${this.m_page.size}&current=${this.m_page.number}`,
-          {}
-        )
+        .get(`api/blade-food/recipe/shareRecipeList` + urlParams)
         .then(res => {
           this.loadFlag = false;
           console.log(res);
@@ -273,19 +331,38 @@ export default {
           this.m_page.totalElements = res.data.data.total;
         });
     },
+    //搜索
     searchterm() {
+      if (this.keyword.getDate) {
+        this.timezone = this.keyword.getDate[0];
+        console.log(this.timezone);
+        this.timezone1 = this.keyword.getDate[1];
+        console.log(this.timezone1);
+      } else {
+        this.timezone = "";
+        this.timezone1 = "";
+      }
       this.generator();
       console.log(this.keyword.input); //关键字
     },
     emptyset() {
       this.keyword.input = "";
-      this.keyword.getDate = "";
+      // this.keyword.getDate = "";
+      this.timezone1 = "";
+      this.timezone = "";
       this.keyword.value = "";
       this.keyword.block = "";
       this.keyword.radio = "";
+      this.empty = "";
+      this.generator();
     },
-    seecol() {
+    seecol(row) {
+      console.log(row);
       this.dateTime = true;
+      let term = row.id;
+      this.$nextTick(() => {
+        this.$refs.toolb.overview(term);
+      });
     },
     //页码
     m_handlePageChange(currPage) {
@@ -303,7 +380,7 @@ export default {
 <style scoped>
 .unsaved {
   width: 100%;
-  height: 700px;
+  height: 100%;
   background-color: #fff;
 }
 
@@ -322,5 +399,13 @@ export default {
 .inform {
   width: 100%;
   margin-top: 30px;
+}
+.pagingClass {
+  text-align: right;
+  /* margin: 20px 0; */
+  background-color: #fff;
+  margin-top: 0px;
+  margin-right: 0px;
+  margin-bottom: 60px;
 }
 </style>

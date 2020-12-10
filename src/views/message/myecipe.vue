@@ -428,6 +428,7 @@ export default {
         console.log(this.timezone1);
       } else {
         this.timezone = "";
+        this.timezone1 = "";
       }
       this.generator();
     },

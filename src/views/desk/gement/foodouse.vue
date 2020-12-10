@@ -353,6 +353,7 @@
                     type="number"
                     style="width: 100px"
                     @blur="graph"
+                    @change="dosage"
                     @input="hello(scope.row, scope.$index)"
                     v-model="scope.row.stats"
                   >
@@ -509,6 +510,7 @@
             <el-tree
               :data="data1"
               node-key="id"
+              v-loading="loadFlag3"
               :default-expand-all="false"
               @node-click="handleNodeClick"
               :filter-node-method="filterNode1"
@@ -558,6 +560,7 @@ export default {
       loadFlag: false, //加载flag
       loadFlag1: false, //加载
       loadFlag2: false,
+      loadFlag3: false,
       dateTime: false, //弹出框
       input: "", //搜索
       mailto: [],
@@ -825,6 +828,7 @@ export default {
     },
     //菜品所含信息树形渲染数
     Addraudit() {
+      this.loadFlag3 = true;
       this.$axios
         .get(`api/blade-food/basetype/getFoodByBaseId?isPrivate=1`, {
           headers: {
@@ -832,6 +836,7 @@ export default {
           }
         })
         .then(res => {
+          this.loadFlag3 = false;
           // console.log(res);
           this.fication = res.data.data;
           //   console.log(this.fication);
@@ -996,7 +1001,7 @@ export default {
         ) {
           sums[index] = values.reduce((prev, curr) => {
             // const value = Number(curr);
-               const value =curr.toFixed(2);
+            const value = curr.toFixed(2);
 
             if (!isNaN(value)) {
               return prev + curr;
@@ -1004,12 +1009,10 @@ export default {
               return prev;
             }
           }, 0);
-          if(index==2||index==4){
-
-         
+          if (index == 2 || index == 4) {
             sums[index] = sums[index].toFixed(2);
-          }else{
-               sums[index] += "";
+          } else {
+            sums[index] += "";
           }
           // if (this.mailto[0].children[0].id == "101") {
           //   this.mailto[0].children[0].result = this.sumss;
@@ -1022,6 +1025,9 @@ export default {
 
     showImg() {
       this.showSearch = !this.showSearch;
+    },
+    dosage() {
+      console.log(123123123);
     },
     hello(row, i) {
       // row.malloc = (row.stats / 100) * row.malloc;
@@ -1181,6 +1187,7 @@ export default {
             this.officeonce[
               this.csListIndex
             ].address = this.inquired.foodTypeName;
+            this.officeonce[this.csListIndex].stats = this.inquired.weight;
             this.officeonce[this.csListIndex].fruits = this.inquired.foodEat;
             // this.officeonce[this.csListIndex].name = this.inquired.foodName;
             //   console.log(this.getInput);
@@ -1413,14 +1420,17 @@ export default {
     },
     //表格弹出框
     columnEvent(row, index) {
+      this.filterText1 = "";
       this.dateTime = true;
       this.csListIndex = index;
+      this.Addraudit();
       //   for (let k in row) {
       //     this.csList[k] = row[k];
       //   }
     },
     setlist() {
       this.dateTime = false;
+      this.graph();
     },
 
     //省市区
