@@ -381,12 +381,16 @@
               prop: "educationalCircles",
               search: true,
               display: false,
+              minlength:0,
+              maxlength:4
             },
             {
               label: "姓名",
               prop: "name",
               search: true,
               display: false,
+              minlength:0,
+              maxlength:10
             },
             {
               label: "班级名称",

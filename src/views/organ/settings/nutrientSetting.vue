@@ -15,11 +15,11 @@
         <span class="custom-tree-node" slot-scope="{ node, data }">
           <span>{{ node.label }}</span>
           <span>
-            <el-checkbox
-              :checked="data.checked"
-              @change="changeValue(node, data)"
-              v-if="data.level == 1"
-            ></el-checkbox>
+            <!--<el-checkbox-->
+              <!--:checked="data.checked"-->
+              <!--@change="changeValue(node, data)"-->
+              <!--v-if="data.level == 1"-->
+            <!--&gt;</el-checkbox>-->
             <el-checkbox
               :checked="data.checked"
               @change="changeValue(node, data)"

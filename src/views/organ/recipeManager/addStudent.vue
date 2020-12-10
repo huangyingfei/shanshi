@@ -99,6 +99,8 @@ export default {
             label: "档案号",
             prop: "fileNumber",
             span: 8,
+            minlength:0,
+            maxlength:16
           },
           {
             label: "姓名",
@@ -110,6 +112,8 @@ export default {
                 trigger: "blur",
               },
             ],
+            minlength:0,
+            maxlength:10,
             span: 8,
           },
           {
@@ -237,6 +241,8 @@ export default {
             label: "现住址",
             prop: "address",
             span: 8,
+            minlength:0,
+            maxlength:255
           },
           {
             label: "户口类型",
@@ -258,6 +264,8 @@ export default {
             label: "身份证号码",
             prop: "cardNo",
             span: 8,
+            minlength:0,
+            maxlength:18
           },
           {
             label: "身份证类型",
@@ -270,6 +278,8 @@ export default {
             label: "户口地址",
             prop: "accountAddress",
             span: 16,
+            minlength:0,
+            maxlength:255
           },
           {
             label: "是否过敏",
@@ -285,6 +295,8 @@ export default {
             label: "疾病史",
             prop: "diseaseHistory",
             span: 16,
+            minlength:0,
+            maxlength:255
           },
           {
             label: "接种证所在省",
@@ -302,12 +314,16 @@ export default {
             label: "家庭电话",
             prop: "mobile",
             span: 8,
+            minlength:0,
+            maxlength:16
           },
 
           {
             label: "联系电话",
             prop: "tel",
             span: 8,
+            minlength:0,
+            maxlength:16
           },
 
           {
@@ -359,6 +375,8 @@ export default {
             label: "离校原因",
             prop: "reason",
             span: 8,
+            minlength:0,
+            maxlength:255
           },
 
           {
@@ -372,12 +390,16 @@ export default {
             label: "姓名",
             prop: "fatherName",
             span: 8,
+            minlength:0,
+            maxlength:10
           },
 
           {
             label: "手机号",
             prop: "fatherTel",
             span: 8,
+            minlength:0,
+            maxlength:11
           },
           {
             label: "民族",
@@ -404,6 +426,8 @@ export default {
             label: "身份证号码",
             prop: "fatherCardNo",
             span: 8,
+            minlength:0,
+            maxlength:18
           },
           {
             label: "户口所在地",
@@ -433,6 +457,8 @@ export default {
             label: "工作单位",
             prop: "fatherWorkunit",
             span: 8,
+            minlength:0,
+            maxlength:255
           },
           {
             label: "学历",
@@ -452,12 +478,16 @@ export default {
             label: "姓名",
             prop: "momName",
             span: 8,
+            minlength:0,
+            maxlength:10
           },
 
           {
             label: "手机号",
             prop: "momTel",
             span: 8,
+            minlength:0,
+            maxlength:11
           },
           {
             label: "民族",
@@ -484,6 +514,8 @@ export default {
             label: "身份证号码",
             prop: "momCardNo",
             span: 8,
+            minlength:0,
+            maxlength:18
           },
           {
             label: "户口所在地",
@@ -513,6 +545,8 @@ export default {
             label: "工作单位",
             prop: "momWorkunit",
             span: 8,
+            minlength:0,
+            maxlength:255
           },
           {
             label: "学历",
@@ -532,6 +566,8 @@ export default {
             label: "姓名",
             prop: "oneName",
             span: 8,
+            minlength:0,
+            maxlength:10
           },
           {
             label: "与孩子关系",
@@ -577,6 +613,8 @@ export default {
             label: "身份证号码",
             prop: "oneCardNo",
             span: 8,
+            minlength:0,
+            maxlength:18
           },
           {
             label: "民族",
@@ -596,6 +634,8 @@ export default {
             label: "联系地址",
             prop: "oneAddress",
             span: 8,
+            minlength:0,
+            maxlength:255
           },
           {
             label: "学历",
@@ -608,27 +648,38 @@ export default {
             label: "工作单位",
             prop: "oneWorkunit",
             span: 8,
+            minlength:0,
+            maxlength:255
           },
           {
             label: "职务",
             prop: "oneJob",
             span: 8,
+            minlength:0,
+            maxlength:16
           },
 
           {
             label: "联系电话",
             prop: "oneMobile",
             span: 8,
+            minlength:0,
+            maxlength:16
           },
           {
             label: "手机号",
             prop: "oneTel",
             span: 8,
+            minlength:0,
+            maxlength:11
           },
           {
             label: "电子信箱",
             prop: "oneEmail",
             span: 8,
+            minlength:0,
+            maxlength:35
+
           },
           {
             label: "法定监护人",
@@ -652,6 +703,8 @@ export default {
             label: "姓名",
             prop: "twoname",
             span: 8,
+            minlength:0,
+            maxlength:10
           },
           {
             label: "与孩子关系",
@@ -694,6 +747,8 @@ export default {
             label: "身份证号码",
             prop: "twoCardNo",
             span: 8,
+            minlength:0,
+            maxlength:18
           },
           {
             label: "民族",
@@ -712,6 +767,8 @@ export default {
             label: "联系地址",
             prop: "twoAddress",
             span: 8,
+            minlength:0,
+            maxlength:255
           },
           {
             label: "学历",
@@ -724,27 +781,37 @@ export default {
             label: "工作单位",
             prop: "twoWorkunit",
             span: 8,
+            minlength:0,
+            maxlength:255
           },
           {
             label: "职务",
             prop: "twoJob",
             span: 8,
+            minlength:0,
+            maxlength:16
           },
 
           {
             label: "联系电话",
             prop: "twoMobile",
             span: 8,
+            minlength:0,
+            maxlength:16
           },
           {
             label: "手机号",
             prop: "twoTel",
             span: 8,
+            minlength:0,
+            maxlength:11
           },
           {
             label: "电子信箱",
             prop: "twoEmail",
             span: 8,
+            minlength:0,
+            maxlength:35
           },
           {
             label: "法定监护人",
@@ -767,16 +834,22 @@ export default {
             label: "户籍管理",
             prop: "domicleControl",
             span: 8,
+            minlength:0,
+            maxlength:16
           },
           {
             label: "出生地",
             prop: "birthPlace",
             span: 8,
+            minlength:0,
+            maxlength:16
           },
           {
             label: "籍贯",
             prop: "nativePlace",
             span: 8,
+            minlength:0,
+            maxlength:16
           },
           {
             label: "港澳台侨胞",
@@ -947,11 +1020,15 @@ export default {
             label: "其他联系人",
             prop: "otherPeople",
             span: 8,
+            minlength:0,
+            maxlength:16
           },
           {
             label: "其他人电话",
             prop: "otherMobile",
             span: 8,
+            minlength:0,
+            maxlength:16
           },
           {
             label: "是否寄宿生",
@@ -973,6 +1050,8 @@ export default {
             label: "备注",
             prop: "remark",
             span: 16,
+            minlength:0,
+            maxlength:255
           },
         ],
       },
@@ -982,22 +1061,31 @@ export default {
     validateChildNo(rule, value, callback) {
       if (value === ""||value=="undefined"||!value) {
         callback(new Error("请输入幼儿号"));
+        this.$set(this.form,"childNo",undefined)
       } else if (this.form.classId === "") {
-        callback(new Error("请选择班级"));
+        callback(new Error("请先选择班级"));
+        this.$set(this.form,"childNo",undefined)
       } else {
-        let student = {};
-        student["classId"] = this.form.classId;
-        student["childNo"] = value;
-        student["id"] = this.form.id;
-        let flag = true;
-        getChildNo(student).then((res) => {
-          if (res.data.data) {
-            callback();
-          } else {
-            flag = false;
-            callback(new Error("幼儿号重复"));
-          }
-        });
+        debugger
+        if(value<=999999999999999){
+          let student = {};
+          student["classId"] = this.form.classId;
+          student["childNo"] = value;
+          student["id"] = this.form.id;
+          let flag = true;
+          getChildNo(student).then((res) => {
+            if (res.data.data) {
+              callback();
+            } else {
+              flag = false;
+              this.$set(this.form,"childNo",undefined)
+              callback(new Error("幼儿号重复"));
+            }
+          });
+        }else{
+          this.$set(this.form,"childNo",undefined)
+          callback(new Error("幼儿号需要在15位数以内"));
+        }
       }
     },
     submit(form, done) {

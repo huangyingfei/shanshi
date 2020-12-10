@@ -100,12 +100,16 @@ export default {
             prop: "educationalCircles",
             search: true,
             display: false,
+            minlength:0,
+            maxlength:4
           },
           {
             label: "姓名",
             prop: "name",
             search: true,
             display: false,
+            minlength:0,
+            maxlength:5
           },
           {
             label: "性别",

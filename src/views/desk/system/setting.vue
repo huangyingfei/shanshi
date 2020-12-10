@@ -32,6 +32,8 @@
                   trigger: "blur",
                 },
               ],
+              minlength:0,
+              maxlength:32
             },
             {
               label: '首页logo',

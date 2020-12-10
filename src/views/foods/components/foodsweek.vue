@@ -124,8 +124,9 @@
                       scope1.$index === 0 &&
                       scope.row.weeks.find((p) => p.name == 'week1')
                     "
-                    style="width: 100px; height: 100px; margin: 0 auto"
+                    style="width: 100px; height: 102px; margin: 0 auto"
                   >
+                    <!--<avue-upload listType="picture-img"    class="avue-upload-item"   :canvasOption="canvasOption" v-model="image" :propsHttp="propsHttp"   action="/api/blade-resource/oss/endpoint/put-file"></avue-upload>-->
                     <el-upload
                       :multiple="false"
                       :show-file-list="false"
@@ -1027,6 +1028,11 @@ export default {
   },
   data() {
     return {
+
+      propsHttp: {
+        res: "data",
+        url: "link",
+      },
       intakeValue:[
         {
           name:"谷类",
@@ -1749,4 +1755,13 @@ export default {
 {
   /* border-bottom: 1px solid transparent !important; */
 }
+  .avue-upload-item .avue-upload__icon{
+    width: 100px;
+    height: 100px;
+    line-height: 100px!important;
+  }
+  .avue-upload-item{
+    width: 100px;
+    height: 100px;
+  }
 </style>

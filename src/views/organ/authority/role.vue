@@ -1,4 +1,6 @@
 <template>
+  <el-row>
+    <el-col :span="24">
   <basic-container>
     <avue-crud :option="option"
                :table-loading="loading"
@@ -78,6 +80,8 @@
       </span>
     </el-dialog>
   </basic-container>
+    </el-col>
+  </el-row>
 </template>
 
 <script>
@@ -105,18 +109,16 @@
         query: {},
         loading: true,
         page: {
-          pageSize: 8,
+          pageSize: 10,
           currentPage: 1,
           total: 0,
-          pageSizes:[8,16,24,32,40,48]
         },
         option: {
           height: "auto",
+          calcHeight: 80,
           tip: false,
-          simplePage: true,
           searchShow: true,
           searchMenuSpan: 6,
-          tree: true,
           border: true,
           index: true,
           indexLabel:'序号',
@@ -156,7 +158,9 @@
                   message: "请输入角色名称",
                   trigger: "blur"
                 }
-              ]
+              ],
+              minlength:0,
+              maxlength:16
             },
             // {
             //   label: "租户名称",
@@ -191,7 +195,9 @@
                   message: "请输入角色别名",
                   trigger: "blur"
                 }
-              ]
+              ],
+              minlength:0,
+              maxlength:16
             },
             // {
             //   label: "上级角色",
@@ -429,3 +435,19 @@
     }
   };
 </script>
+
+
+<style>
+  .box {
+    height: 800px;
+  }
+
+  .el-scrollbar {
+    height: 100%;
+  }
+
+  .box .el-scrollbar__wrap {
+    overflow: scroll;
+  }
+
+</style>

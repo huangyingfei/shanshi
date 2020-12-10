@@ -142,6 +142,8 @@
                   trigger: "blur",
                 },
               ],
+              minlength:0,
+              maxlength:16,
               span:24
             },
             {
@@ -254,6 +256,8 @@
               type:"textarea",
               prop: 'remark',
               span:24,
+              minlength:0,
+              maxlength:255
             },
 
             ]

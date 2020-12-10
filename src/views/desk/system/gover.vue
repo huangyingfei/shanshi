@@ -10,6 +10,7 @@
       :before-open="beforeOpen"
       :before-close="beforeClose"
       @row-del="rowDel"
+      :page.sync="page"
       @row-update="rowUpdate"
       @row-save="rowSave"
       @search-change="searchChange"
@@ -46,6 +47,8 @@
             ></avue-cascader>
 
             <avue-input
+              minlength="0"
+              maxlength="255"
               v-model="regionDetail"
               placeholder="详细地址"
               type="textarea"
@@ -79,6 +82,7 @@
           type="text"
           icon="el-icon-circle-plus-outline"
           size="small"
+
           v-show="scope.row.status==1"
           @click.stop="handleStart(scope.row, scope.index)"
           >启用
@@ -100,7 +104,8 @@ import {
   tenantDetail,
   tenantEnable
 } from "@/api/system/gover";
-
+import {checkInfo
+} from "@/api/system/user";
 import { mapGetters } from "vuex";
 
 export default {
@@ -154,7 +159,7 @@ export default {
         menuAlign: "center",
         tip: false,
         columnBtn:false,
-        simplePage: true,
+        calcHeight: 30,
         searchShow: true,
         searchMenuSpan: 6,
         tree: true,
@@ -173,12 +178,15 @@ export default {
             label: "单位ID",
             prop: "tenantId",
             display: false,
+
           },
           {
             label: "单位名称",
             prop: "tenantName",
             search: true,
             display: false,
+            minlength:0,
+            maxlength:16
           },
 
           {
@@ -186,30 +194,30 @@ export default {
             prop: "account",
             search: true,
             display: false,
+            minlength:0,
+            maxlength:16
           },
-          {
-            label: "单位地址",
-            prop: "tenantAddress",
-            search: true,
-            display: false,
-          },
-
           {
             label: "联系人",
             prop: "linkman",
             search: true,
             display: false,
+            minlength:0,
+            maxlength:16
           },
           {
             label: "联系电话",
             prop: "contactNumber",
             search: true,
             display: false,
+            minlength:0,
+            maxlength:16
           },
            {
                 label: "职位",
                 prop: "linkmanJob",
                 display: false,
+
              },
           {
             label: "状态",
@@ -243,8 +251,19 @@ export default {
                 rules: [
                   {
                     required: true,
-                    message: "请输入用户账号",
-                    trigger: "blur",
+                    validator: this.validateAccount,
+                  },
+                ],
+                minlength:0,
+                maxlength:16
+              },
+              {
+                label: "手机号",
+                prop: "phone",
+                rules: [
+                  {
+                    required: true,
+                    validator: this.validatePhone,
                   },
                 ],
               },
@@ -254,7 +273,9 @@ export default {
                 type: 'password',
                 editDisplay: false,
                 viewDisplay: false,
-                rules: [{required: true, validator: validatePass, trigger: 'blur'}]
+                rules: [{required: true, validator: validatePass, trigger: 'blur'}],
+                minlength:0,
+                maxlength:16
               },
               {
                 label: "确认密码",
@@ -262,7 +283,9 @@ export default {
                 type: 'password',
                 editDisplay: false,
                 viewDisplay: false,
-                rules: [{required: true, validator: validatePass2, trigger: 'blur'}]
+                rules: [{required: true, validator: validatePass2, trigger: 'blur'}],
+                minlength:0,
+                maxlength:16
               },
 
               {
@@ -275,6 +298,8 @@ export default {
                     trigger: "blur",
                   },
                 ],
+                minlength:0,
+                maxlength:16
               },
 
               {
@@ -287,7 +312,10 @@ export default {
                     trigger: "blur",
                   },
                 ],
+                minlength:0,
+                maxlength:16
               },
+
               {
                 label: "联系电话",
                 prop: "contactNumber",
@@ -298,6 +326,8 @@ export default {
                     trigger: "blur",
                   },
                 ],
+                minlength:0,
+                maxlength:16
               },
                {
                 label: "政府属性",
@@ -340,6 +370,8 @@ export default {
                     trigger: "blur",
                   },
                 ],
+                minlength:0,
+                maxlength:16
               },
                 {
                 label: "单位地址",
@@ -354,7 +386,9 @@ export default {
               {
                 label: "备注",
                 prop: "remark",
-                type:"textarea"
+                type:"textarea",
+                minlength:0,
+                maxlength:255
               },
               {
                 label: "机构logo",
@@ -406,6 +440,8 @@ export default {
               {
                 label: "网站标题",
                 prop: "webTitle",
+                minlength:0,
+                maxlength:32
               },
               {
                 label: "首页logo",
@@ -453,6 +489,45 @@ export default {
     },
   },
   methods: {
+    validateAccount(rule, value, callback){
+      if (value === ""||value=="undefined"||!value) {
+        callback(new Error("请输入登录账号"));
+      }else {
+        let user = {};
+        debugger
+        user["account"] = this.form.account;
+        user["id"] = this.form.userId;
+        checkInfo(user).then((res) => {
+          if (res.data.msg) {
+            callback(new Error(res.data.msg));
+          } else {
+            callback();
+          }
+        });
+      }
+    },
+    validatePhone(rule, value, callback){
+      if (value === ""||value=="undefined"||!value) {
+        callback(new Error("请输入手机号"));
+      }else {
+
+        if(!(/^1[3456789]\d{9}$/.test(this.form.phone))){
+          callback(new Error("手机号格式错误"));
+        }else{
+          let user = {};
+          user["phone"] = this.form.phone;
+          user["id"] = this.form.userId;
+          checkInfo(user).then((res) => {
+            if (res.data.msg) {
+              callback(new Error(res.data.msg));
+            } else {
+              callback();
+            }
+          });
+        }
+
+      }
+    },
     initData() {
        grantTree()
           .then(res => {
@@ -469,6 +544,7 @@ export default {
       }
       var param = {
         account: row.account,
+        phone:row.phone,
         accountType: row.accountType,
         password: row.password,
         tenantName: row.tenantName,
@@ -513,6 +589,7 @@ export default {
         id:row.id,
         tenantId:this.$refs.crud.value.tenantId,
         account: row.account,
+        phone:row.phone,
         accountType: row.accountType,
         password: row.password,
         tenantName: row.tenantName,
@@ -598,9 +675,9 @@ export default {
 
           })
             // // // debugger
-            if(type=="edit"){
-               this.findObject(this.option.group, "account").readonly=true;
-            }
+            // if(type=="edit"){
+            //    this.findObject(this.option.group, "account").readonly=true;
+            // }
       }
       done();
     },
@@ -608,7 +685,7 @@ export default {
       this.region = []; //省市区
       this.regionDetail = ""; //详细地址
       this.goverAreasForm=[];
-      this.findObject(this.option.group, "account").readonly=false;
+      // this.findObject(this.option.group, "account").readonly=false;
     },
      beforeClose(done) {
        // debugger

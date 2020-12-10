@@ -90,6 +90,7 @@ export default {
         calcHeight: 30,
         tip: false,
         searchShow: true,
+        columnBtn:false,
         searchMenuSpan: 6,
         border: true,
         index: true,

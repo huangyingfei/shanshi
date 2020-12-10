@@ -123,15 +123,14 @@
         query: {},
         loading: true,
         page: {
-          pageSize: 8,
+          pageSize: 10,
           currentPage: 1,
           total: 0,
-          pageSizes:[8,16,24,32,40,48]
         },
         option: {
           height: "auto",
           tip: false,
-          simplePage: true,
+          calcHeight: 30,
           searchShow: true,
           searchMenuSpan: 6,
           tree: true,
@@ -139,6 +138,7 @@
           index: true,
           indexLabel:'序号',
           selection: true,
+
           viewBtn: true,
           columnBtn:false,
           dialogWidth: 900,
@@ -174,7 +174,9 @@
                   message: "请输入角色名称",
                   trigger: "blur"
                 }
-              ]
+              ],
+              minlength:0,
+              maxlength:16
             },
             // {
             //   label: "租户名称",
@@ -209,7 +211,9 @@
                   message: "请输入角色别名",
                   trigger: "blur"
                 }
-              ]
+              ],
+              minlength:0,
+              maxlength:16
             },
             // {
             //   label: "上级角色",

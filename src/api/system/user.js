@@ -96,3 +96,11 @@ export const grant = (userIds, roleIds) => {
     }
   })
 }
+
+export const checkInfo = (param) => {
+  return request({
+    url: '/api/blade-user/checkInfo',
+    method: 'post',
+    data:param
+  })
+}

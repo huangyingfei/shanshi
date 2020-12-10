@@ -156,7 +156,7 @@ import {
   update,
   add,
   grant,
-  resetPassword,
+  resetPassword,checkInfo
 } from "@/api/system/user";
 import { getRoleTree } from "@/api/system/role";
 import { mapGetters } from "vuex";
@@ -255,6 +255,8 @@ export default {
             prop: "account",
             search: true,
             display: false,
+            minlength:0,
+            maxlength:16
           },
           // {
           //   label: "所属租户",
@@ -267,6 +269,8 @@ export default {
             prop: "realName",
             search: true,
             display: false,
+            minlength:0,
+            maxlength:10
           },
 
           {
@@ -274,6 +278,8 @@ export default {
             prop: "name",
             display: false,
             search: true,
+            minlength:0,
+            maxlength:16
           },
           {
             label: "所属角色",
@@ -293,11 +299,15 @@ export default {
             prop: "phone",
             display: false,
             search: true,
+            minlength:0,
+            maxlength:11
           },
           {
             label: "电子邮箱",
             prop: "email",
             display: false,
+            minlength:0,
+            maxlength:35
           },
           {
             label: "用户性别",
@@ -327,10 +337,11 @@ export default {
                 rules: [
                   {
                     required: true,
-                    message: "请输入登录账号",
-                    trigger: "blur",
+                    validator: this.validateAccount,
                   },
                 ],
+                minlength:0,
+                maxlength:16
               },
               // {
               //   label: "所属租户",
@@ -363,6 +374,8 @@ export default {
                 rules: [
                   { required: true, validator: validatePass, trigger: "blur" },
                 ],
+                minlength:0,
+                maxlength:16
               },
               {
                 label: "确认密码",
@@ -374,6 +387,8 @@ export default {
                 rules: [
                   { required: true, validator: validatePass2, trigger: "blur" },
                 ],
+                minlength:0,
+                maxlength:16
               },
               {
                 label: "用户姓名",
@@ -386,8 +401,8 @@ export default {
                   },
                   {
                     min: 2,
-                    max: 5,
-                    message: "姓名长度在2到5个字符",
+                    max: 10,
+                    message: "姓名长度在2到10个字符",
                   },
                 ],
               },
@@ -402,18 +417,28 @@ export default {
                     trigger: "blur",
                   },
                 ],
+                minlength:0,
+                maxlength:16
               },
 
               {
                 label: "手机号码",
                 prop: "phone",
                 overHidden: true,
+                rules: [
+                  {
+                    required: true,
+                    validator: this.validatePhone,
+                  },
+                ],
               },
               {
                 label: "电子邮箱",
                 prop: "email",
                 hide: true,
                 overHidden: true,
+                minlength:0,
+                maxlength:35
               },
               {
                 label: "用户性别",
@@ -447,17 +472,23 @@ export default {
                 label: "部门",
                 prop: "deptName",
                 hide: true,
+                minlength:0,
+                maxlength:16
               },
               {
                 label: "岗位",
                 prop: "postName",
                 hide: true,
+                minlength:0,
+                maxlength:16
               },
               {
                 label: "备注",
                 prop: "remark",
                 hide: true,
                 type: "textarea",
+                minlength:0,
+                maxlength:255
               },
               {
                 label: "账号状态",
@@ -577,6 +608,44 @@ export default {
   },
   mounted() {},
   methods: {
+    validateAccount(rule, value, callback){
+      if (value === ""||value=="undefined"||!value) {
+        callback(new Error("请输入登录账号"));
+      }else {
+        let user = {};
+        user["account"] = this.form.account;
+        user["id"] = this.form.id;
+        checkInfo(user).then((res) => {
+          if (res.data.msg) {
+            callback(new Error(res.data.msg));
+          } else {
+            callback();
+          }
+        });
+      }
+    },
+    validatePhone(rule, value, callback){
+      if (value === ""||value=="undefined"||!value) {
+        callback(new Error("请输入手机号"));
+      }else {
+
+        if(!(/^1[3456789]\d{9}$/.test(this.form.phone))){
+          callback(new Error("手机号格式错误"));
+        }else{
+          let user = {};
+          user["phone"] = this.form.phone;
+          user["id"] = this.form.id;
+          checkInfo(user).then((res) => {
+            if (res.data.msg) {
+              callback(new Error(res.data.msg));
+            } else {
+              callback();
+            }
+          });
+        }
+
+      }
+    },
     initData() {
       // getRoleTree(tenantId).then((res) => {
       //   const column = this.findObject(this.option.group, "roleId");

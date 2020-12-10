@@ -142,6 +142,7 @@ export default {
       option: {
         height: "auto",
         align: "center",
+        calcHeight: 30,
         menuAlign: "center",
         tip: false,
         simplePage: true,

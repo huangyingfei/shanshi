@@ -1320,7 +1320,7 @@ export default {
       let days=0;
       let foods={}
       let mealTypes=[]
-      if(this.startAge&&this.endAge) {
+      if(this.startAge) {
         foods["startAge"] = this.startAge;
         foods["endAge"] = this.endAge;
         let recipeVals = [];

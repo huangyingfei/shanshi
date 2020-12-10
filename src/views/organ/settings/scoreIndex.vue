@@ -1,4 +1,6 @@
 <template>
+  <el-row>
+    <el-col :span="24">
   <basic-container class="scoreindex">
     <avue-crud
       :option="option"
@@ -6,6 +8,7 @@
       :data="data"
       ref="crud"
       v-model="form"
+      :page.sync="page"
       :permission="permissionList"
       :before-open="beforeOpen"
       @row-del="rowDel"
@@ -33,6 +36,8 @@
       </template>
     </avue-crud>
   </basic-container>
+    </el-col>
+  </el-row>
 </template>
 
 <script>
@@ -54,10 +59,12 @@ export default {
         total: 0,
       },
       option: {
+        height: "auto",
+        calcHeight: 80,
         tip: false,
-        simplePage: true,
         searchShow: true,
         searchMenuSpan: 6,
+        columnBtn:false,
         tree: true,
         border: true,
         index: true,
@@ -80,6 +87,8 @@ export default {
                 trigger: "blur",
               },
             ],
+            minlength:0,
+            maxlength:16
           },
           {
             label: "名称",
@@ -94,6 +103,8 @@ export default {
                 trigger: "blur",
               },
             ],
+            minlength:0,
+            maxlength:16
           },
         ],
       },

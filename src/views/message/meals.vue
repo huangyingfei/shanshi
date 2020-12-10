@@ -214,8 +214,8 @@
               ><img src="/img/baobiao.png" width="10px" /> 营养素</el-button
               >
             </el-popover>
-            <el-button style="margin-left: 10px" size="medium"
-            ><img src="/img/baobiao.png" width="10px" /> 带量食谱</el-button
+            <el-button style="margin-left: 10px" size="medium"  @click="openNutritionDialog"
+            ><img src="/img/baobiao.png" width="10px"   /> 带量食谱</el-button
             >
           </el-form-item>
         </el-form>
@@ -479,6 +479,7 @@
       <show-score :intake="intake"   :nutrition="nutrition" :power="power"  :meal="meal" :protein="protein"  :startTime="startTimeStr"   :endTime="endTimeStr" :score="score"></show-score>
     </el-drawer>
     <!-- 分数弹框 结束-->
+    <nutrition :WeekInfo="WeekInfo" ref="nutritionChild"/>
     <!-- 智能配平弹框 -->
     <el-dialog
       title="食谱配平"
@@ -639,6 +640,7 @@
 </template>
 
 <script>
+  import nutrition from "@/views/recipeManager/nutrition.vue";
   import foodsWeek from "@/views/foods/components/foodsweek";
   import showfoodsWeek from "@/views/foods/components/showfoodsweek";
   import {getList} from "@/api/system/special"
@@ -655,7 +657,8 @@
     nutrient,
     nutrientWithColor,
     showScore,
-    smartfoodsWeek
+    smartfoodsWeek,
+    nutrition,
   },
   mounted(){
     this.initData()
@@ -967,7 +970,70 @@ document.oncontextmenu = function(){return false};
     // }
   },
   methods: {
-     dragFunc(id) {
+    //打开带量食谱弹出框
+    openNutritionDialog(){
+      this.WeekInfo.crowd
+      var foods = this.getNutritionData()
+      this.$refs.nutritionChild.openNutritionDialog(foods)
+    },
+    //获取带量食谱数据
+    getNutritionData(){
+      let day=[0,0,0,0,0,0,0]
+      let days=0;
+      let foods={}
+      let weekNum = {
+        week1: 1,
+        week2: 2,
+        week3: 3,
+        week4: 4,
+        week5: 5,
+        week6: 6,
+        week7: 7,
+      }
+
+      foods.peopleId = this.WeekInfo.crowd;
+      foods.recipeDay = this.WeekInfo.weekType
+      foods.connctVos = [];
+      function sum(arr) {
+        var len = arr.length;
+        if(len == 0){
+          return 0;
+        } else if (len == 1){
+          return arr[0];
+        } else {
+          return arr[0] + sum(arr.slice(1));
+        }
+      }
+
+      this.datas.forEach(_=>{
+
+        _.weeks.forEach(__=>{
+
+          __.foods.forEach(___=>{
+
+            let mealTypes={}
+            mealTypes.dishName = ___.name//菜品名称
+            mealTypes.week = weekNum[__.name].toString()//星期几
+            mealTypes.mealType = this.getmealTypeData(_.name)//餐点类型
+            mealTypes.recipevals = []//食材信息
+            day[weekNum[__.name]] = 1
+            ___.children.forEach(____=>{
+              let foodsObj = {}
+              foodsObj.foodName = ____.name//食材名称
+              foodsObj.foodId = ____.id//食材ID
+              foodsObj.val = ____.count//餐点类型
+              foodsObj.mealType = this.getmealTypeData(_.name)//餐点类型
+              foodsObj.week = weekNum[__.name]//星期几
+              mealTypes.recipevals.push(foodsObj)
+            })
+            foods.connctVos.push(mealTypes);
+          })
+        })
+      });
+      foods.days = sum(day);
+      return foods;
+    },
+    dragFunc(id) {
     var Drag = document.getElementById(id);
     Drag.onmousedown = function(event) {
       var ev = event || window.event;

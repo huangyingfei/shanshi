@@ -160,7 +160,9 @@
                 required: true,
                 message: "请输入过敏症状",
                 trigger: "blur"
-              }]
+              }],
+              minlength:0,
+              maxlength:255
             },
             {
               label: "备注",
@@ -171,7 +173,9 @@
                 required: false,
                 message: "请输入备注",
                 trigger: "blur"
-              }]
+              }],
+              minlength:0,
+              maxlength:255
             }
           ]
         },

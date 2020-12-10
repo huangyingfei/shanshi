@@ -37,6 +37,8 @@
               v-model="regionDetail"
               placeholder="详细地址"
               type="textarea"
+              minlength="0"
+              maxlength="255"
               span="12"
             ></avue-input>
           </el-col>
@@ -113,7 +115,8 @@ import {
   tenantEnable,
   tenantDetail
 } from "@/api/system/organ";
-
+import {checkInfo
+} from "@/api/system/user";
 import { formateDate,getInervalHour ,getDate} from "@/api/tool/date";
 import { mapGetters } from "vuex";
 
@@ -185,6 +188,7 @@ export default {
       },
       option: {
         height: "auto",
+        calcHeight: 30,
         align: "center",
         menuAlign: "center",
         tip: false,
@@ -216,6 +220,8 @@ export default {
             prop: "tenantName",
             search: true,
             display: false,
+            minlength:0,
+            maxlength:16
           },
 
           {
@@ -223,6 +229,8 @@ export default {
             prop: "account",
             search: true,
             display: false,
+            minlength:0,
+            maxlength:16
           },
 
           {
@@ -251,24 +259,27 @@ export default {
               },
             ],
           },
-          {
-            label: "机构地址",
-            prop: "tenantAddress",
-            search: true,
-            display: false,
-          },
+          // {
+          //   label: "机构地址",
+          //   prop: "tenantAddress",
+          //   display: false,
+          // },
 
           {
             label: "联系人",
             prop: "linkman",
             search: true,
             display: false,
+            minlength:0,
+            maxlength:16
           },
           {
             label: "联系电话",
             prop: "contactNumber",
             search: true,
             display: false,
+            minlength:0,
+            maxlength:16
           },
           {
             label: "营养标准",
@@ -323,8 +334,19 @@ export default {
                 rules: [
                   {
                     required: true,
-                    message: "请输入机构名称",
-                    trigger: "blur",
+                    validator: this.validateAccount,
+                  },
+                ],
+                minlength:0,
+                maxlength:16
+              },
+              {
+                label: "手机号",
+                prop: "phone",
+                rules: [
+                  {
+                    required: true,
+                    validator: this.validatePhone,
                   },
                 ],
               },
@@ -334,7 +356,9 @@ export default {
                 type: 'password',
                 editDisplay: false,
                 viewDisplay: false,
-                rules: [{required: true, validator: validatePass, trigger: 'blur'}]
+                rules: [{required: true, validator: validatePass, trigger: 'blur'}],
+                minlength:0,
+                maxlength:16
               },
               {
                 label: "确认密码",
@@ -342,7 +366,9 @@ export default {
                 type: 'password',
                 editDisplay: false,
                 viewDisplay: false,
-                rules: [{required: true, validator: validatePass2, trigger: 'blur'}]
+                rules: [{required: true, validator: validatePass2, trigger: 'blur'}],
+                minlength:0,
+                maxlength:16
               },
               {
                 label: "账号类型",
@@ -404,6 +430,8 @@ export default {
                     trigger: "blur",
                   },
                 ],
+                minlength:0,
+                maxlength:16
               },
               {
                 label: "上级机构",
@@ -443,6 +471,8 @@ export default {
                     trigger: "blur",
                   },
                 ],
+                minlength:0,
+                maxlength:16
               },
               {
                 label: "联系电话",
@@ -454,6 +484,8 @@ export default {
                     trigger: "blur",
                   },
                 ],
+                minlength:0,
+                maxlength:16
               },
               {
                 label: "职位",
@@ -465,10 +497,14 @@ export default {
                     trigger: "blur",
                   },
                 ],
+                minlength:0,
+                maxlength:16
               },
               {
                 label: "备注",
                 prop: "remark",
+                minlength:0,
+                maxlength:255
               },
               {
                 label: "机构logo",
@@ -575,6 +611,9 @@ export default {
               {
                 label: "网站标题",
                 prop: "webTitle",
+                minlength:0,
+                maxlength:16
+
               },
               {
                 label: "首页logo",
@@ -622,6 +661,45 @@ export default {
     },
   },
   methods: {
+    validateAccount(rule, value, callback){
+      if (value === ""||value=="undefined"||!value) {
+        callback(new Error("请输入登录账号"));
+      }else {
+        let user = {};
+        debugger
+        user["account"] = this.form.account;
+        user["id"] = this.form.userId;
+        checkInfo(user).then((res) => {
+          if (res.data.msg) {
+            callback(new Error(res.data.msg));
+          } else {
+            callback();
+          }
+        });
+      }
+    },
+    validatePhone(rule, value, callback){
+      if (value === ""||value=="undefined"||!value) {
+        callback(new Error("请输入手机号"));
+      }else {
+
+        if(!(/^1[3456789]\d{9}$/.test(this.form.phone))){
+          callback(new Error("手机号格式错误"));
+        }else{
+          let user = {};
+          user["phone"] = this.form.phone;
+          user["id"] = this.form.userId;
+          checkInfo(user).then((res) => {
+            if (res.data.msg) {
+              callback(new Error(res.data.msg));
+            } else {
+              callback();
+            }
+          });
+        }
+
+      }
+    },
     initData() {
       var params={};
       this.query["tenantType"] = 2;
@@ -711,6 +789,7 @@ export default {
       var param = {
         account: row.account,
         accountType: row.accountSchoolType[0],
+        phone: row.phone,
         password: row.password,
         tenantName: row.tenantName,
          proviceCode:this.region.length==0?null:this.region[0],
@@ -755,11 +834,12 @@ export default {
         this.ableFlag=true;
         var param = {
         id:row.id,
+        phone: row.phone,
         account: row.account,
         accountType: row.accountSchoolType[0],
         password: row.password,
         tenantName: row.tenantName,
-       proviceCode:this.region.length==0?null:this.region[0],
+        proviceCode:this.region.length==0?null:this.region[0],
         cityCode:this.region.length==0?null:this.region[1],
         areaCode: this.region.length==0?null:this.region[2],
         tenantAddress: this.regionDetail,
@@ -855,9 +935,9 @@ export default {
             this.form = data;
           })
             // debugger
-            if(type=="edit"){
-               this.findObject(this.option.group, "account").readonly=true;
-            }
+            // if(type=="edit"){
+            //    this.findObject(this.option.group, "account").readonly=true;
+            // }
 
       }
       done();
@@ -866,7 +946,7 @@ export default {
       this.ableFlag=false;
       this.region = []; //省市区
       this.regionDetail = ""; //详细地址
-      this.findObject(this.option.group, "account").readonly=false;
+      // this.findObject(this.option.group, "account").readonly=false;
     },
       beforeClose(done) {
         this.clear();
