@@ -200,20 +200,20 @@
           >
             <el-form-item label="食材名" prop="name" style="width: 350px">
               <el-input
-                maxlength="8"
+                maxlength="10"
                 show-word-limit
                 style="300px"
                 v-model="ruleForm.name"
               ></el-input>
             </el-form-item>
             <el-form-item
-              maxlength="8"
+              maxlength="10"
               show-word-limit
               label="食物别名1"
               style="width: 350px"
             >
               <el-input
-                maxlength="8"
+                maxlength="10"
                 show-word-limit
                 style="300px"
                 v-model="ruleForm.foodFood"
@@ -221,7 +221,7 @@
             </el-form-item>
             <el-form-item label="食物别名2" style="width: 350px">
               <el-input
-                maxlength="8"
+                maxlength="10"
                 show-word-limit
                 style="300px"
                 v-model="ruleForm.ovenFood"
@@ -230,7 +230,7 @@
 
             <el-form-item label="食材真名" prop="buffer" style="width: 350px">
               <el-input
-                maxlength="8"
+                maxlength="10"
                 show-word-limit
                 style="300px"
                 v-model="ruleForm.buffer"
@@ -270,7 +270,7 @@
 
             <el-form-item label="分类别称1" style="width: 350px">
               <el-input
-                maxlength="8"
+                maxlength="10"
                 show-word-limit
                 v-model="ruleForm.foods"
                 placeholder="请输入食物分类"
@@ -279,7 +279,7 @@
 
             <el-form-item label="分类别称2" style="width: 350px">
               <el-input
-                maxlength="8"
+                maxlength="10"
                 show-word-limit
                 v-model="ruleForm.dogfood"
                 placeholder="请输入食物分类"

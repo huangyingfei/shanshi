@@ -4,6 +4,14 @@
       <el-tab-pane label="个人食材库" name="third"></el-tab-pane>
       <el-tab-pane label="公共食材库" name="fourth"></el-tab-pane>
       <div class="block">
+        <el-input
+          clearable
+          @change="Addraudit"
+          style="width:290px; margin-left: 9px;"
+          placeholder="输入关键字进行查询"
+          v-model="filterText"
+        >
+        </el-input>
         <div class="rolling">
           <p></p>
           <el-tree
@@ -24,6 +32,7 @@
 export default {
   data() {
     return {
+      filterText: "",
       angelfood: "third",
       loadFlag2: false,
       more: "0"
@@ -66,11 +75,14 @@ export default {
     Addraudit() {
       this.loadFlag2 = true;
       this.$axios
-        .get(`api/blade-food/basetype/getFoodByBaseId?isPrivate=${this.more}`, {
-          headers: {
-            "Content-Type": "application/json"
+        .get(
+          `api/blade-food/basetype/getFoodByBaseId?isPrivate=${this.more}&foodName=${this.filterText}`,
+          {
+            headers: {
+              "Content-Type": "application/json"
+            }
           }
-        })
+        )
         .then(res => {
           this.loadFlag2 = false;
           // console.log(res);

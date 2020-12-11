@@ -6,13 +6,14 @@
           <!-- 左边 -->
           <div class="coffee">
             <el-input
+              @change="obtains"
               style="
                 width: 250px;
                 height: 35px;
                 margin-left: 10px;
               "
               placeholder="输入关键字进行查询"
-              v-model="filterText"
+              v-model="filterText2"
             ></el-input>
             <div class="import">
               <!-- <el-button type="primary" plain size="mini">导入</el-button>
@@ -237,6 +238,8 @@
               >
                 <el-form-item label="菜品名字" prop="name" style="width: 350px">
                   <el-input
+                    maxlength="10"
+                    show-word-limit
                     style="width: 200px"
                     v-model="ruleForm.name"
                   ></el-input>
@@ -285,6 +288,8 @@
 
                 <el-form-item label="特点" style="width: 350px">
                   <el-input
+                    maxlength="30"
+                    show-word-limit
                     type="textarea"
                     style="width: 200px"
                     v-model="ruleForm.region"
@@ -292,6 +297,8 @@
                 </el-form-item>
                 <el-form-item label="做法" style="width: 350px">
                   <el-input
+                    maxlength="30"
+                    show-word-limit
                     type="textarea"
                     style="width: 200px"
                     v-model="ruleForm.desc"
@@ -808,7 +815,7 @@
             <div class="mationtxt">菜品营养素信息</div>
             <div class="saveas">
               <el-table
-                :data="mailto"
+                :data="mailto1"
                 style="width: 100%; margin-bottom: 20px"
                 row-key="id"
                 border
@@ -890,7 +897,7 @@
       <addition @child-event="perent"></addition>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dateTime = false">取 消</el-button>
-        <el-button @click="dateTime = false" type="primary">确 定</el-button>
+        <el-button @click="setlist" type="primary">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -912,7 +919,6 @@ export default {
       increasered: {
         name: ""
       },
-      filterText: "",
       filterText2: "",
       data: JSON.parse(JSON.stringify(data)), //树形结构
       activeName: "first",
@@ -955,7 +961,8 @@ export default {
       valuepark: [], //所属区域
       valuepark1: [],
       options: [], //所属区域
-      mailto: [], //营养素含量
+      mailto: [], //营养素含量]
+      mailto1: [], //营养素含量
       dateTime: false, //弹出框
       officeonce: [
         //菜品所含信息
@@ -1054,6 +1061,7 @@ export default {
   },
   beforeMount() {
     this.Protocol(); //营养素含量
+    this.Protocol1(); //营养素含量
     this.muito(); //分类
     this.Provinces(); //省市区
     this.Addraudit(); //树形结构渲染
@@ -1063,17 +1071,17 @@ export default {
   },
   watch: {
     // (scope.row.stats / 100) * scope.row.malloc
-    filterText(val) {
-      // console.log(this.$refs.tree);
-      this.$refs.tree.filter(val);
-    }
+    // filterText(val) {
+    //   // console.log(this.$refs.tree);
+    //   this.$refs.tree.filter(val);
+    // }
   },
   methods: {
-    filterNode(value, data) {
-      if (!value) return true;
+    // filterNode(value, data) {
+    //   if (!value) return true;
 
-      return data.label.indexOf(value) !== -1;
-    },
+    //   return data.label.indexOf(value) !== -1;
+    // },
 
     perent(data) {
       console.log(data);
@@ -1091,7 +1099,9 @@ export default {
         this.officeonce[this.csListIndex].frame = this.inquired.foodType;
         this.officeonce[this.csListIndex].name = this.inquired.foodName;
         this.officeonce[this.csListIndex].address = this.inquired.foodTypeName;
+        this.officeonce[this.csListIndex].stats = this.inquired.weight;
         this.officeonce[this.csListIndex].fruits = this.inquired.foodEat;
+
         // this.officeonce[this.csListIndex].name = this.inquired.foodName;
         //   console.log(this.getInput);
         this.temp.length = 0;
@@ -1388,7 +1398,7 @@ export default {
       }
     },
     handleNodeClick(data) {
-      console.log(data);
+      // console.log(data);
       if (data.view == 0) {
         return;
       } else {
@@ -1525,7 +1535,7 @@ export default {
                 };
               });
               this.personal = arr;
-              this.graph();
+              this.histogram();
               // this.addLine();
               // console.log(this.officeonce);
             }
@@ -1663,11 +1673,17 @@ export default {
     },
     //表格弹出框
     columnEvent(row, index) {
+      this.filterText1 = "";
       this.dateTime = true;
       this.csListIndex = index;
+      this.Addraudit();
       //   for (let k in row) {
       //     this.csList[k] = row[k];
       //   }
+    },
+    setlist() {
+      this.dateTime = false;
+      this.graph();
     },
     getSummaries(param) {
       const { columns, data } = param;
@@ -1693,10 +1709,6 @@ export default {
           }, 0);
           sums[index] += "";
           this.sumss = sums[index];
-          // if (this.mailto[0].children[0].id == "101") {
-          //   this.mailto[0].children[0].result = this.sumss;
-          // }
-          // console.log(this.sumss);
         }
       });
       return sums;
@@ -1718,44 +1730,39 @@ export default {
       }
     },
 
-    //点击查看详情
-    // handleNodeClick(data) {
-    //   console.log(data);
-    //   this.flour = data.id;
-    //   this.$axios
-    //     .get(`api/blade-food/food/detail?id=${this.flour}`, {
-    //       headers: {
-    //         "Content-Type": "application/json"
-    //       }
-    //     })
-    //     .then(res => {
-    //       //   console.log(res);
-
-    //       this.inquired = res.data.data;
-    //       console.log(this.inquired);
-    //       this.inquired.nutritions.forEach((item, index) => {
-    //         // console.log(item);
-    //         if (item.nutrientId == 101) {
-    //           this.officeonce[this.csListIndex].malloc = item.value;
-    //           this.officeonce[this.csListIndex].spring = item.value;
-    //         }
-    //       });
-    //       //   this.getInput.cs = this.inquired.foodName; //食材名
-    //       this.officeonce[this.csListIndex].id = this.inquired.id;
-    //       this.officeonce[this.csListIndex].frame = this.inquired.foodType;
-    //       this.officeonce[this.csListIndex].name = this.inquired.foodName;
-    //       this.officeonce[
-    //         this.csListIndex
-    //       ].address = this.inquired.foodTypeName;
-    //       // this.officeonce[this.csListIndex].name = this.inquired.foodName;
-    //       //   console.log(this.getInput);
-    //       this.temp.length = 0;
-    //       this.officeonce.forEach((item, i) => {
-    //         this.temp[i] = Number(item.malloc);
-    //       });
-    //       console.log(this.temp);
-    //     });
-    // },
+    histogram() {
+      let next = [];
+      this.personal.forEach(item => {
+        // console.log(item);
+        next.push({
+          foodId: item.id,
+          val: item.stats
+        });
+      });
+      console.log(next);
+      this.$axios
+        .post(`api/blade-food/dish/calNutriByFoodIds`, {
+          recipeVals: next
+        })
+        .then(res => {
+          // console.log(res);
+          this.atomic1 = res.data.data;
+          // console.log(this.atomic);
+          // let touch=[];
+          this.atomic1.forEach(item => {
+            // console.log(item);
+            for (let item1 of this.mailto1) {
+              // console.log(item1);
+              for (let arr of item1.children) {
+                // console.log(arr);
+                if (arr.id == item.nutrientId) {
+                  arr.result = item.total;
+                }
+              }
+            }
+          });
+        });
+    },
     //失去焦点事件
     graph() {
       // console.log(this.officeonce);
@@ -1967,7 +1974,7 @@ export default {
             this.waterfall
           }&season=${this.before1}&isUse=${this.really1}&regionId=${
             this.fallen
-          }`
+          }&foodName=${this.filterText2}`
         )
         .then(res => {
           //   console.log(res);
@@ -2082,7 +2089,21 @@ export default {
         })
         .then(res => {
           // console.log(res);
+
           this.mailto = res.data.data;
+        });
+    },
+    Protocol1() {
+      this.$axios
+        .get(`api/blade-food/nutrition/tree`, {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+        .then(res => {
+          // console.log(res);
+
+          this.mailto1 = res.data.data;
         });
     },
     //省市区

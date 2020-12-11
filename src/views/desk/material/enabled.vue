@@ -788,6 +788,21 @@
             </el-table>
           </div>
         </div>
+        <div class="worm1">记录</div>
+        <el-timeline>
+          <el-timeline-item :timestamp="this.record.aduitTime" placement="top">
+            <el-card>
+              <h4>{{ this.record.tenant_name }}</h4>
+              <p>{{ this.record.aduit_name }}</p>
+              <p style="  font-size: 9px; color: #cccc;">
+                {{ this.record.aduitTime }}
+              </p>
+              <p>
+                拒绝理由：<span>{{ this.record.refuseReason }}</span>
+              </p>
+            </el-card>
+          </el-timeline-item>
+        </el-timeline>
       </div>
       <div slot="footer" class="dialog-footer" style="text-align: center">
         <el-button type="primary" @click="loadnew = false">取 消</el-button>
@@ -928,7 +943,13 @@ export default {
       ],
 
       options1: [],
-
+      record: {
+        tenant_name: "", //机构
+        aduit_name: "", //姓名
+        aduitTime: "", //时间
+        refuseReason: "", //拒绝理由
+        type: "" //状态
+      }, //记录
       value: "", //审核状态
       tableData1: [],
       flour: "", //ID
@@ -1097,6 +1118,8 @@ export default {
           // console.log(this.ruleForm.delivery);
           this.ruleForm.delivery1 = this.subquery.isUse == 0 ? true : false; //常用
           // this.ruleForm.
+          this.record = this.subquery.audits[1]; //记录
+          console.log(this.record);
           let units = this.subquery.nutritions;
           units.forEach(item => {
             // console.log(item);
@@ -1241,6 +1264,7 @@ export default {
           })
           .then(res => {
             this.examine.desc1 = "";
+            this.increase = false;
             console.log(res);
             this.auditing();
             this.seekeys = false;

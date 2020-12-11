@@ -579,6 +579,7 @@
                 </el-form-item>
                 <el-form-item label="所属区域" style="  width: 350px;  ">
                   <el-cascader
+                    disabled
                     v-model="valuepark1"
                     placeholder="请选择省市区"
                     :options="options"
