@@ -1912,7 +1912,7 @@ document.oncontextmenu = function(){return false};
               this.initMealData();
               this.$router.$avueRouter.closeTag();
               this.$router.push({
-                path: "./recipes"
+                path: "./myecipe"
               });
             }
           })
