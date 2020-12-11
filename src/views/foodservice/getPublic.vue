@@ -712,7 +712,7 @@
               <!-- <el-button @click="addLine">添加行数</el-button>
             <el-button @click="save">保存</el-button> -->
               <el-table
-                :data="officeonce"
+                :data="personal"
                 border
                 v-loading="loadFlag1"
                 show-summary
@@ -959,6 +959,18 @@ export default {
       dateTime: false, //弹出框
       officeonce: [
         //菜品所含信息
+        {
+          id: "",
+          frame: "", //分类ID
+          name: "", //食品名称
+          address: "", //食品分类
+          stats: "", //用量
+          spring: "", //能量
+          malloc: "", //能量kcal
+          fruits: ""
+        }
+      ],
+      personal: [
         {
           id: "",
           frame: "", //分类ID
@@ -1512,7 +1524,7 @@ export default {
                   // malloc: item.nutritionNlValue
                 };
               });
-              this.officeonce = arr;
+              this.personal = arr;
               this.graph();
               // this.addLine();
               // console.log(this.officeonce);
