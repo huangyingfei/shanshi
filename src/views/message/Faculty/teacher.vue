@@ -64,6 +64,7 @@
                   v-model="WeekInfo.weekType"
                   slot="prepend" value-key="请选择周期"
                   placeholder="周长设置"
+                  @change="selectWeekType"
                 >
                   <el-option label="5天一周" value="5"></el-option>
                   <el-option label="6天一周" value="6"></el-option>
@@ -79,7 +80,7 @@
                 @focus="FixWeek"
                 placeholder="选择时间"
                 name="WeekSelect"
-                @change="SelectWeek"
+                @change="SelectWeek1"
                 style="
                 width: 230px;
                 opacity: 0;
@@ -163,8 +164,6 @@
               <el-button style="margin-left: 10px" size="medium"  @click="dishClear"
               >清空</el-button
               >
-
-
 
               <el-button style="margin-left: 10px" size="medium"
               >带量食谱</el-button
@@ -562,7 +561,52 @@
           },
         ],
         ncode:'101',
+        thisData:[
+          {
+            label:"1",
+            child:[
+              {
+                label:"1-1",
+                child:[
+                  {
+                    label:"1-1-1",
+                    child:[
+                      {
+                        label:"1-1-1-1",
+                      },
+                      {
+                        label:"1-1-1-2",
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                label:"2-1",
+                child:[
+                  {
+                    label:"2-1-1",
+                    child:[
+                      {
+                        label:"2-1-1-1",
+                      },
+                      {
+                        label:"2-1-1-2",
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+,
+          {
+            label:"2",
+            child:[
 
+            ]
+          }
+        ],
         nutritionValue:[
           {
             name:"能量",
@@ -709,6 +753,19 @@
       }
     },
     methods: {
+      selectWeekType(){
+        let that=this;
+        this.$confirm("重新选择周期会清空已有菜品", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(()=>{
+          let weekType=that.WeekInfo.weekType;
+          that.$refs.refweekSelect.showPicker();
+          that.SelectWeek(this.startTime)
+          that.$refs.refweekSelect.hidePicker();
+        })
+      },
       // mealsTypeById(){
       //   var that=this;
       //   detailByPeopleId(this.WeekInfo.crowd).then(res=>{
@@ -1052,6 +1109,13 @@
           })
           this.belongRegionOption=res.data.data
         })
+
+        that.AppendFoodType();
+        that.WeekInfo.weekValue=new Date()
+        that.FixWeek();
+        that.ShowWeekSelect();
+        that.SelectWeek(new Date())
+        that.$refs.refweekSelect.hidePicker();
       },
 
       GetAbsoluteLocation(element)
@@ -1342,6 +1406,7 @@
         //  debugger
         this.smartDatas=JSON.parse(localStorage.getItem("mealsDatas"))
       },
+
       //清空菜品
       dishClear(){
         console.log(this.datas)
@@ -1681,6 +1746,15 @@
         }
 
         return cday;
+      },
+      SelectWeek1(d){
+        this.$confirm("重新选择周期会清空已有菜品", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(()=>{
+          this.SelectWeek(d)
+        })
       },
       //选择周
       SelectWeek(d,name,recipeCycles) {

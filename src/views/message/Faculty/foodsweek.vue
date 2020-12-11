@@ -119,31 +119,22 @@
               </el-table-column>
               <el-table-column label="图片"  align="center">
                 <template slot-scope="scope1">
-                  <div
-                    v-show="
-                      scope1.$index === 0 &&
-                      scope.row.weeks.find((p) => p.name == 'week1')
-                    "
-                    style="width: 100px; height: 100px; margin: 0 auto"
-                  >
-                    <el-upload
-                      :multiple="false"
-                      :show-file-list="false"
-                      :action="dialog_choice.upload_url"
-                      :headers="token"
-                      :on-success="(res,file)=>{handleAvatarSuccess(scope.row.id,
-                          scope.row.weeks.find((p) => p.name == 'week1').id,res,file)}">
-                      <img
-                        v-show="scope.row.weeks.find((p) => p.name == 'week1').image" :src="scope.row.weeks.find((p) => p.name == 'week1').image"
-                        style="width: 100%; height: 100%"/>
-                      <img
-                        v-show="
-                          !scope.row.weeks.find((p) => p.name == 'week1').image
-                        "
-                        :src="empty_image"
-                        style="width: 100%; height: 100%"
-                      />
+                  <div v-show="scope1.$index === 0 &&scope.row.weeks.find((p) => p.name == 'week1')"  style="width: 100px; height: 102px; margin: 0 auto">
+                    <el-upload action="/api/blade-resource/oss/endpoint/put-file"
+                               :on-success="(res,file)=>{handleAvatarSuccess(scope.row.id,scope.row.weeks.find((p) => p.name == 'week1').id,res,file)}"
+                               class="avue-upload-item"
+                               :headers="token"  :auto-upload="true"
+                               accept=".jpeg,.jpg,.gif,.png"
+                               :file-list="(scope.row.weeks.find((p) => p.name == 'week1').image==''||scope.row.weeks.find((p) => p.name == 'week1').image==undefined)?[]:[{url:scope.row.weeks.find((p) => p.name == 'week1').image}]"
+                               :limit="1"
+                               :on-preview="(file)=>{handlePictureCardPreview(scope.row.id,scope.row.weeks.find((p) => p.name == 'week1').id,file)}"
+                               :on-remove="(file)=>{handleAvatarRemove(scope.row.id,scope.row.weeks.find((p) => p.name == 'week1').id,file)}"
+                               list-type="picture-card" >
+                      <i  class="el-icon-plus"></i>
                     </el-upload>
+                    <el-dialog  append-to-body   :visible.sync="scope.row.weeks.find((p) => p.name == 'week1').dialogVisible" >
+                      <img width="500px" height="500px" :src="scope.row.weeks.find((p) => p.name == 'week1').image" alt="">
+                    </el-dialog>
                   </div>
                 </template>
               </el-table-column>
@@ -256,31 +247,22 @@
               </el-table-column>
               <el-table-column label="图片" align="center">
                 <template slot-scope="scope1">
-                  <div
-                    v-show="
-                      scope1.$index === 0 &&
-                      scope.row.weeks.find((p) => p.name == 'week2')
-                    "
-                    style="width: 100px; height: 100px; margin: 0 auto"
-                  >
-                    <el-upload
-                      :multiple="false"
-                      :show-file-list="false"
-                      :action="dialog_choice.upload_url"
-                      :headers="token"
-                      :on-success="(res,file)=>{handleAvatarSuccess(scope.row.id,
-                          scope.row.weeks.find((p) => p.name == 'week2').id,res,file)}">
-                      <img
-                        v-show="scope.row.weeks.find((p) => p.name == 'week2').image" :src="scope.row.weeks.find((p) => p.name == 'week2').image"
-                        style="width: 100%; height: 100%"/>
-                      <img
-                        v-show="
-                          !scope.row.weeks.find((p) => p.name == 'week2').image
-                        "
-                        :src="empty_image"
-                        style="width: 100%; height: 100%"
-                      />
+                  <div v-show="scope1.$index === 0 &&scope.row.weeks.find((p) => p.name == 'week2')"  style="width: 100px; height: 102px; margin: 0 auto">
+                    <el-upload action="/api/blade-resource/oss/endpoint/put-file"
+                               :on-success="(res,file)=>{handleAvatarSuccess(scope.row.id,scope.row.weeks.find((p) => p.name == 'week2').id,res,file)}"
+                               class="avue-upload-item"
+                               :headers="token"  :auto-upload="true"
+                               accept=".jpeg,.jpg,.gif,.png"
+                               :file-list="(scope.row.weeks.find((p) => p.name == 'week2').image==''||scope.row.weeks.find((p) => p.name == 'week2').image==undefined)?[]:[{url:scope.row.weeks.find((p) => p.name == 'week2').image}]"
+                               :limit="1"
+                               :on-preview="(file)=>{handlePictureCardPreview(scope.row.id,scope.row.weeks.find((p) => p.name == 'week2').id,file)}"
+                               :on-remove="(file)=>{handleAvatarRemove(scope.row.id,scope.row.weeks.find((p) => p.name == 'week2').id,file)}"
+                               list-type="picture-card" >
+                      <i  class="el-icon-plus"></i>
                     </el-upload>
+                    <el-dialog  append-to-body   :visible.sync="scope.row.weeks.find((p) => p.name == 'week2').dialogVisible" >
+                      <img width="500px" height="500px" :src="scope.row.weeks.find((p) => p.name == 'week2').image" alt="">
+                    </el-dialog>
                   </div>
                 </template>
               </el-table-column>
@@ -393,31 +375,22 @@
               </el-table-column>
               <el-table-column label="图片" align="center">
                 <template slot-scope="scope1">
-                  <div
-                    v-show="
-                      scope1.$index === 0 &&
-                      scope.row.weeks.find((p) => p.name == 'week3')
-                    "
-                    style="width: 100px; height: 100px; margin: 0 auto"
-                  >
-                    <el-upload
-                      :multiple="false"
-                      :show-file-list="false"
-                      :action="dialog_choice.upload_url"
-                      :headers="token"
-                      :on-success="(res,file)=>{handleAvatarSuccess(scope.row.id,
-                          scope.row.weeks.find((p) => p.name == 'week3').id,res,file)}">
-                      <img
-                        v-show="scope.row.weeks.find((p) => p.name == 'week3').image" :src="scope.row.weeks.find((p) => p.name == 'week3').image"
-                        style="width: 100%; height: 100%"/>
-                      <img
-                        v-show="
-                          !scope.row.weeks.find((p) => p.name == 'week3').image
-                        "
-                        :src="empty_image"
-                        style="width: 100%; height: 100%"
-                      />
+                  <div v-show="scope1.$index === 0 &&scope.row.weeks.find((p) => p.name == 'week3')"  style="width: 100px; height: 102px; margin: 0 auto">
+                    <el-upload action="/api/blade-resource/oss/endpoint/put-file"
+                               :on-success="(res,file)=>{handleAvatarSuccess(scope.row.id,scope.row.weeks.find((p) => p.name == 'week3').id,res,file)}"
+                               class="avue-upload-item"
+                               :headers="token"  :auto-upload="true"
+                               accept=".jpeg,.jpg,.gif,.png"
+                               :file-list="(scope.row.weeks.find((p) => p.name == 'week3').image==''||scope.row.weeks.find((p) => p.name == 'week3').image==undefined)?[]:[{url:scope.row.weeks.find((p) => p.name == 'week3').image}]"
+                               :limit="1"
+                               :on-preview="(file)=>{handlePictureCardPreview(scope.row.id,scope.row.weeks.find((p) => p.name == 'week3').id,file)}"
+                               :on-remove="(file)=>{handleAvatarRemove(scope.row.id,scope.row.weeks.find((p) => p.name == 'week3').id,file)}"
+                               list-type="picture-card" >
+                      <i  class="el-icon-plus"></i>
                     </el-upload>
+                    <el-dialog  append-to-body   :visible.sync="scope.row.weeks.find((p) => p.name == 'week3').dialogVisible" >
+                      <img width="500px" height="500px" :src="scope.row.weeks.find((p) => p.name == 'week3').image" alt="">
+                    </el-dialog>
                   </div>
                 </template>
               </el-table-column>
@@ -530,31 +503,22 @@
               </el-table-column>
               <el-table-column label="图片" align="center">
                 <template slot-scope="scope1">
-                  <div
-                    v-show="
-                      scope1.$index === 0 &&
-                      scope.row.weeks.find((p) => p.name == 'week4')
-                    "
-                    style="width: 100px; height: 100px; margin: 0 auto"
-                  >
-                    <el-upload
-                      :multiple="false"
-                      :show-file-list="false"
-                      :action="dialog_choice.upload_url"
-                      :headers="token"
-                      :on-success="(res,file)=>{handleAvatarSuccess(scope.row.id,
-                          scope.row.weeks.find((p) => p.name == 'week4').id,res,file)}">
-                      <img
-                        v-show="scope.row.weeks.find((p) => p.name == 'week4').image" :src="scope.row.weeks.find((p) => p.name == 'week4').image"
-                        style="width: 100%; height: 100%"/>
-                      <img
-                        v-show="
-                          !scope.row.weeks.find((p) => p.name == 'week4').image
-                        "
-                        :src="empty_image"
-                        style="width: 100%; height: 100%"
-                      />
+                  <div v-show="scope1.$index === 0 &&scope.row.weeks.find((p) => p.name == 'week4')"  style="width: 100px; height: 102px; margin: 0 auto">
+                    <el-upload action="/api/blade-resource/oss/endpoint/put-file"
+                               :on-success="(res,file)=>{handleAvatarSuccess(scope.row.id,scope.row.weeks.find((p) => p.name == 'week4').id,res,file)}"
+                               class="avue-upload-item"
+                               :headers="token"  :auto-upload="true"
+                               accept=".jpeg,.jpg,.gif,.png"
+                               :file-list="(scope.row.weeks.find((p) => p.name == 'week4').image==''||scope.row.weeks.find((p) => p.name == 'week4').image==undefined)?[]:[{url:scope.row.weeks.find((p) => p.name == 'week4').image}]"
+                               :limit="1"
+                               :on-preview="(file)=>{handlePictureCardPreview(scope.row.id,scope.row.weeks.find((p) => p.name == 'week4').id,file)}"
+                               :on-remove="(file)=>{handleAvatarRemove(scope.row.id,scope.row.weeks.find((p) => p.name == 'week4').id,file)}"
+                               list-type="picture-card" >
+                      <i  class="el-icon-plus"></i>
                     </el-upload>
+                    <el-dialog  append-to-body   :visible.sync="scope.row.weeks.find((p) => p.name == 'week4').dialogVisible" >
+                      <img width="500px" height="500px" :src="scope.row.weeks.find((p) => p.name == 'week4').image" alt="">
+                    </el-dialog>
                   </div>
                 </template>
               </el-table-column>
@@ -667,31 +631,22 @@
               </el-table-column>
               <el-table-column label="图片" align="center">
                 <template slot-scope="scope1">
-                  <div
-                    v-show="
-                      scope1.$index === 0 &&
-                      scope.row.weeks.find((p) => p.name == 'week5')
-                    "
-                    style="width: 100px; height: 100px; margin: 0 auto"
-                  >
-                    <el-upload
-                      :multiple="false"
-                      :show-file-list="false"
-                      :action="dialog_choice.upload_url"
-                      :headers="token"
-                      :on-success="(res,file)=>{handleAvatarSuccess(scope.row.id,
-                          scope.row.weeks.find((p) => p.name == 'week5').id,res,file)}">
-                      <img
-                        v-show="scope.row.weeks.find((p) => p.name == 'week5').image" :src="scope.row.weeks.find((p) => p.name == 'week5').image"
-                        style="width: 100%; height: 100%"/>
-                      <img
-                        v-show="
-                          !scope.row.weeks.find((p) => p.name == 'week5').image
-                        "
-                        :src="empty_image"
-                        style="width: 100%; height: 100%"
-                      />
+                  <div v-show="scope1.$index === 0 &&scope.row.weeks.find((p) => p.name == 'week5')"  style="width: 100px; height: 102px; margin: 0 auto">
+                    <el-upload action="/api/blade-resource/oss/endpoint/put-file"
+                               :on-success="(res,file)=>{handleAvatarSuccess(scope.row.id,scope.row.weeks.find((p) => p.name == 'week5').id,res,file)}"
+                               class="avue-upload-item"
+                               :headers="token"  :auto-upload="true"
+                               accept=".jpeg,.jpg,.gif,.png"
+                               :file-list="(scope.row.weeks.find((p) => p.name == 'week5').image==''||scope.row.weeks.find((p) => p.name == 'week5').image==undefined)?[]:[{url:scope.row.weeks.find((p) => p.name == 'week5').image}]"
+                               :limit="1"
+                               :on-preview="(file)=>{handlePictureCardPreview(scope.row.id,scope.row.weeks.find((p) => p.name == 'week5').id,file)}"
+                               :on-remove="(file)=>{handleAvatarRemove(scope.row.id,scope.row.weeks.find((p) => p.name == 'week5').id,file)}"
+                               list-type="picture-card" >
+                      <i  class="el-icon-plus"></i>
                     </el-upload>
+                    <el-dialog  append-to-body   :visible.sync="scope.row.weeks.find((p) => p.name == 'week5').dialogVisible" >
+                      <img width="500px" height="500px" :src="scope.row.weeks.find((p) => p.name == 'week5').image" alt="">
+                    </el-dialog>
                   </div>
                 </template>
               </el-table-column>
@@ -803,31 +758,22 @@
               </el-table-column>
               <el-table-column label="图片" align="center">
                 <template slot-scope="scope1">
-                  <div
-                    v-show="
-                      scope1.$index === 0 &&
-                      scope.row.weeks.find((p) => p.name == 'week6')
-                    "
-                    style="width: 100px; height: 100px; margin: 0 auto"
-                  >
-                    <el-upload
-                      :multiple="false"
-                      :show-file-list="false"
-                      :action="dialog_choice.upload_url"
-                      :headers="token"
-                      :on-success="(res,file)=>{handleAvatarSuccess(scope.row.id,
-                          scope.row.weeks.find((p) => p.name == 'week6').id,res,file)}">
-                      <img
-                        v-show="scope.row.weeks.find((p) => p.name == 'week6').image" :src="scope.row.weeks.find((p) => p.name == 'week6').image"
-                        style="width: 100%; height: 100%"/>
-                      <img
-                        v-show="
-                          !scope.row.weeks.find((p) => p.name == 'week6').image
-                        "
-                        :src="empty_image"
-                        style="width: 100%; height: 100%"
-                      />
+                  <div v-show="scope1.$index === 0 &&scope.row.weeks.find((p) => p.name == 'week6')"  style="width: 100px; height: 102px; margin: 0 auto">
+                    <el-upload action="/api/blade-resource/oss/endpoint/put-file"
+                               :on-success="(res,file)=>{handleAvatarSuccess(scope.row.id,scope.row.weeks.find((p) => p.name == 'week6').id,res,file)}"
+                               class="avue-upload-item"
+                               :headers="token"  :auto-upload="true"
+                               accept=".jpeg,.jpg,.gif,.png"
+                               :file-list="(scope.row.weeks.find((p) => p.name == 'week6').image==''||scope.row.weeks.find((p) => p.name == 'week6').image==undefined)?[]:[{url:scope.row.weeks.find((p) => p.name == 'week6').image}]"
+                               :limit="1"
+                               :on-preview="(file)=>{handlePictureCardPreview(scope.row.id,scope.row.weeks.find((p) => p.name == 'week6').id,file)}"
+                               :on-remove="(file)=>{handleAvatarRemove(scope.row.id,scope.row.weeks.find((p) => p.name == 'week6').id,file)}"
+                               list-type="picture-card" >
+                      <i  class="el-icon-plus"></i>
                     </el-upload>
+                    <el-dialog  append-to-body   :visible.sync="scope.row.weeks.find((p) => p.name == 'week6').dialogVisible" >
+                      <img width="500px" height="500px" :src="scope.row.weeks.find((p) => p.name == 'week6').image" alt="">
+                    </el-dialog>
                   </div>
                 </template>
               </el-table-column>
@@ -940,31 +886,22 @@
               </el-table-column>
               <el-table-column label="图片" align="center">
                 <template slot-scope="scope1">
-                  <div
-                    v-show="
-                      scope1.$index === 0 &&
-                      scope.row.weeks.find((p) => p.name == 'week7')
-                    "
-                    style="width: 100px; height: 100px; margin: 0 auto"
-                  >
-                    <el-upload
-                      :multiple="false"
-                      :show-file-list="false"
-                      :action="dialog_choice.upload_url"
-                      :headers="token"
-                      :on-success="(res,file)=>{handleAvatarSuccess(scope.row.id,
-                          scope.row.weeks.find((p) => p.name == 'week7').id,res,file)}">
-                      <img
-                        v-show="scope.row.weeks.find((p) => p.name == 'week7').image" :src="scope.row.weeks.find((p) => p.name == 'week7').image"
-                        style="width: 100%; height: 100%"/>
-                      <img
-                        v-show="
-                          !scope.row.weeks.find((p) => p.name == 'week7').image
-                        "
-                        :src="empty_image"
-                        style="width: 100%; height: 100%"
-                      />
+                  <div v-show="scope1.$index === 0 &&scope.row.weeks.find((p) => p.name == 'week7')"  style="width: 100px; height: 102px; margin: 0 auto">
+                    <el-upload action="/api/blade-resource/oss/endpoint/put-file"
+                               :on-success="(res,file)=>{handleAvatarSuccess(scope.row.id,scope.row.weeks.find((p) => p.name == 'week7').id,res,file)}"
+                               class="avue-upload-item"
+                               :headers="token"  :auto-upload="true"
+                               accept=".jpeg,.jpg,.gif,.png"
+                               :file-list="(scope.row.weeks.find((p) => p.name == 'week7').image==''||scope.row.weeks.find((p) => p.name == 'week7').image==undefined)?[]:[{url:scope.row.weeks.find((p) => p.name == 'week7').image}]"
+                               :limit="1"
+                               :on-preview="(file)=>{handlePictureCardPreview(scope.row.id,scope.row.weeks.find((p) => p.name == 'week7').id,file)}"
+                               :on-remove="(file)=>{handleAvatarRemove(scope.row.id,scope.row.weeks.find((p) => p.name == 'week7').id,file)}"
+                               list-type="picture-card" >
+                      <i  class="el-icon-plus"></i>
                     </el-upload>
+                    <el-dialog  append-to-body   :visible.sync="scope.row.weeks.find((p) => p.name == 'week7').dialogVisible" >
+                      <img width="500px" height="500px" :src="scope.row.weeks.find((p) => p.name == 'week7').image" alt="">
+                    </el-dialog>
                   </div>
                 </template>
               </el-table-column>
@@ -1700,7 +1637,7 @@
       },
       //图片上传成功
       handleAvatarSuccess(data_id, week_id,res, file) {
-        // debugger
+        debugger
         if (res && res.success) {
           this.datas.forEach((data) => {
             if (data.id === data_id) {
@@ -1713,6 +1650,31 @@
           });
         }
       },
+      handleAvatarRemove(data_id, week_id,file){
+        debugger
+        this.datas.forEach((data) => {
+          if (data.id === data_id) {
+            data.weeks.forEach((week) => {
+              if (week.id === week_id) {
+                this.$set(week,"image",undefined)
+                this.$set(week,"dialogVisible",false)
+              }
+            });
+          }
+        });
+      },
+      handlePictureCardPreview(data_id, week_id,file){
+        debugger
+        this.datas.forEach((data) => {
+          if (data.id === data_id) {
+            data.weeks.forEach((week) => {
+              if (week.id === week_id) {
+                this.$set(week,"dialogVisible",true)
+              }
+            });
+          }
+        });
+      }
       /////////  methods end ///////////
     },
   };
@@ -1747,6 +1709,18 @@
   }
   .drapInActive .el-table th {
     background-color: #dcdfe6 !important;
+  }
+  .table-week  .avue-upload-item .el-upload--picture-card ,.el-upload-list--picture-card .el-upload-list__item{
+    width: 100px!important;
+    height: 100px!important;
+    line-height: 100px!important;
+  }
+  .table-week .avue-upload-item{
+    width: 100px;
+    height: 100px;
+  }
+  .table-week .el-upload-list--picture-card .el-upload-list__item-status-label{
+    width: 0px!important;
   }
   .colNoneBorder
   {
