@@ -211,21 +211,21 @@
             >
               <el-form-item label="食材名" prop="name" style="width: 350px">
                 <el-input
-                  maxlength="8"
+              maxlength="10"
                   show-word-limit
                   v-model="ruleForm.name"
                 ></el-input>
               </el-form-item>
               <el-form-item label="食物别名1" style="width: 350px">
                 <el-input
-                  maxlength="8"
+                maxlength="10"
                   show-word-limit
                   v-model="ruleForm.move"
                 ></el-input>
               </el-form-item>
               <el-form-item label="食物别名2" style="width: 350px">
                 <el-input
-                  maxlength="8"
+               maxlength="10"
                   show-word-limit
                   v-model="ruleForm.move1"
                 ></el-input>
@@ -233,7 +233,7 @@
 
               <el-form-item label="食材真名" prop="buffer" style="width: 350px">
                 <el-input
-                  maxlength="8"
+                   maxlength="10"
                   show-word-limit
                   v-model="ruleForm.buffer"
                 ></el-input>
@@ -262,7 +262,7 @@
 
               <el-form-item label="食物分类1" style="width: 350px">
                 <el-input
-                  maxlength="8"
+               maxlength="10"
                   show-word-limit
                   v-model="ruleForm.foods"
                   placeholder="请输入食材"
@@ -271,7 +271,7 @@
 
               <el-form-item label="食物分类2" style="width: 350px">
                 <el-input
-                  maxlength="8"
+              maxlength="10"
                   show-word-limit
                   v-model="ruleForm.dogfood"
                   placeholder="请输入食材"
@@ -1098,12 +1098,16 @@ export default {
           } else {
             this.active = "";
           }
-
-          let bar = [];
+          if( this.subquery.provinces){
+                let bar = [];
           this.subquery.provinces.split(",").forEach((item, i) => {
             bar.push([item, this.subquery.belongRegion.split(",")[i]]);
           });
           this.valuepark = bar;
+          }else{
+             this.valuepark = [];
+          }
+        
           let picture = []; //图片
           if (this.subquery.pic) {
             picture[0] = {
