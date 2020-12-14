@@ -17,6 +17,7 @@
               placeholder="请选择"
             >
               <el-option
+                clearable
                 v-for="item in options"
                 :key="item.value"
                 :label="item.label"
@@ -31,6 +32,7 @@
               >小学</el-checkbox
             >
             <el-select
+              clearable
               style="width:100px;margin-left:10px"
               v-model="value1"
               placeholder="请选择"
@@ -44,6 +46,29 @@
               </el-option>
             </el-select>
             <span class="context">个年级</span>
+          </div>
+        </div>
+      </el-col>
+      <el-col :span="24">
+        <div class="loadClass">
+          <span>选择班级数量</span>
+          <div class="include">
+            <span>小班</span>
+            <el-select
+              clearable
+              style="width:100px;margin-left:10px"
+              v-model="value1"
+              placeholder="请选择"
+            >
+              <el-option
+                v-for="item in options1"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+            <span class="context">个班级</span>
           </div>
         </div>
       </el-col>
@@ -121,7 +146,12 @@ export default {
 }
 .helper {
   width: 300px;
-  height: 300px;
+  height: 200px;
+  margin-left: 30px;
+  font-size: 14px;
+}
+.loadClass {
+  width: 300px;
   margin-left: 30px;
   font-size: 14px;
 }

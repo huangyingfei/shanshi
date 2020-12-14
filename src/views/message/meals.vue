@@ -1271,11 +1271,11 @@ document.oncontextmenu = function(){return false};
       if(type=="smartDatas"){
         this.peipScore=score;
         this.peippcScore=pscore
-        debugger
+        // debugger
         this.ppscxjSc=(parseFloat(this.peipScore)-parseFloat(this.peippcScore)).toFixed(2)
       }
       if(type=="datas"){
-        debugger
+        // debugger
         this.score=score;this.pcScore=pscore
         this.scxjSc=(parseFloat(this.score)-parseFloat(this.pcScore)).toFixed(2)
       }
@@ -1739,7 +1739,7 @@ document.oncontextmenu = function(){return false};
                   this.$set(___, "count", count.toFixed(2));
                 }
                 else{
-                  debugger
+                  // debugger
                   Vue.delete(___,'down');
                   Vue.delete(___,'up');
                   // delete ___["down"]
@@ -1837,7 +1837,7 @@ document.oncontextmenu = function(){return false};
       this.ppscxjSc='0'
     },
     getmealTypeData(name){
-       debugger
+      //  debugger
       return  this.mealTypeData.filter(_=>{
         if(_.name==name){
           return _.value
