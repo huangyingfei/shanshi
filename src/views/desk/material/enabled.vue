@@ -211,21 +211,21 @@
             >
               <el-form-item label="食材名" prop="name" style="width: 350px">
                 <el-input
-              maxlength="10"
+                  maxlength="10"
                   show-word-limit
                   v-model="ruleForm.name"
                 ></el-input>
               </el-form-item>
               <el-form-item label="食物别名1" style="width: 350px">
                 <el-input
-                maxlength="10"
+                  maxlength="10"
                   show-word-limit
                   v-model="ruleForm.move"
                 ></el-input>
               </el-form-item>
               <el-form-item label="食物别名2" style="width: 350px">
                 <el-input
-               maxlength="10"
+                  maxlength="10"
                   show-word-limit
                   v-model="ruleForm.move1"
                 ></el-input>
@@ -233,7 +233,7 @@
 
               <el-form-item label="食材真名" prop="buffer" style="width: 350px">
                 <el-input
-                   maxlength="10"
+                  maxlength="10"
                   show-word-limit
                   v-model="ruleForm.buffer"
                 ></el-input>
@@ -262,7 +262,7 @@
 
               <el-form-item label="食物分类1" style="width: 350px">
                 <el-input
-               maxlength="10"
+                  maxlength="10"
                   show-word-limit
                   v-model="ruleForm.foods"
                   placeholder="请输入食材"
@@ -271,7 +271,7 @@
 
               <el-form-item label="食物分类2" style="width: 350px">
                 <el-input
-              maxlength="10"
+                  maxlength="10"
                   show-word-limit
                   v-model="ruleForm.dogfood"
                   placeholder="请输入食材"
@@ -792,8 +792,8 @@
         <el-timeline>
           <el-timeline-item :timestamp="this.record.aduitTime" placement="top">
             <el-card>
-              <h4>{{ this.record.tenant_name }}</h4>
-              <p>{{ this.record.aduit_name }}</p>
+              <!-- <h4>{{ this.record.tenant_name }}</h4>
+              <p>{{ this.record.aduit_name }}</p> -->
               <p style="  font-size: 9px; color: #cccc;">
                 {{ this.record.aduitTime }}
               </p>
@@ -1098,16 +1098,16 @@ export default {
           } else {
             this.active = "";
           }
-          if( this.subquery.provinces){
-                let bar = [];
-          this.subquery.provinces.split(",").forEach((item, i) => {
-            bar.push([item, this.subquery.belongRegion.split(",")[i]]);
-          });
-          this.valuepark = bar;
-          }else{
-             this.valuepark = [];
+          if (this.subquery.provinces) {
+            let bar = [];
+            this.subquery.provinces.split(",").forEach((item, i) => {
+              bar.push([item, this.subquery.belongRegion.split(",")[i]]);
+            });
+            this.valuepark = bar;
+          } else {
+            this.valuepark = [];
           }
-        
+
           let picture = []; //图片
           if (this.subquery.pic) {
             picture[0] = {

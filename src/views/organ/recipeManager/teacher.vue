@@ -8,8 +8,20 @@
           <el-button @click="added(1)" size="small" type="primary"
             >添加部门</el-button
           >
+          <el-button @click="drawer = true" size="small" type="primary"
+            >测试测试</el-button
+          >
           <!-- <el-button size="small" type="primary">部门排序</el-button> -->
         </div>
+        <el-drawer
+          title="新建学段"
+          :visible.sync="drawer"
+          :direction="direction"
+          :modal-append-to-body="false"
+        >
+          <student></student>
+        </el-drawer>
+
         <div class="block">
           <p></p>
           <el-tree
@@ -632,10 +644,15 @@
 </template>
 
 <script>
+import student from "./getIsUsers";
 export default {
+  components: {
+    student
+  },
   data() {
     const data = [];
     return {
+      drawer: false,
       data: JSON.parse(JSON.stringify(data)),
       loadFlag: false, //加载flag
       loadFlag1: false, //加载flag
