@@ -190,6 +190,8 @@
     >
       <div class="block">
         <el-input
+            clearable
+           @change="treeDrawing"
           style="width:290px; margin-left: 9px;margin-top: 10px;"
           placeholder="输入关键字进行查询"
           v-model="filterText"
@@ -298,10 +300,10 @@ export default {
   },
   computed() {},
   watch: {
-    filterText(val) {
-      console.log(this.$refs.tree);
-      this.$refs.tree.filter(val);
-    }
+    // filterText(val) {
+    //   console.log(this.$refs.tree);
+    //   this.$refs.tree.filter(val);
+    // }
   },
   mounted() {
     this.$nextTick(() => {
@@ -318,18 +320,23 @@ export default {
       this.value = "";
       this.generator(); //获取表格数据
     },
-    filterNode(value, data) {
-      if (!value) return true;
+    // filterNode(value, data) {
+    //   if (!value) return true;
 
-      return data.label.indexOf(value) !== -1;
-    },
+    //   return data.label.indexOf(value) !== -1;
+    // },
     handleNodeClick(data) {
-      if (this.dataindex1 == 1) {
-        this.ruleForm.adding = data.label;
-        this.support = data.id;
-      } else {
-        this.ruleForm.adding1 = data.label;
-        this.editor = data.id;
+      if(data.view==0){
+        return
+      }else{
+
+        if (this.dataindex1 == 1) {
+          this.ruleForm.adding = data.label;
+          this.support = data.id;
+        } else {
+          this.ruleForm.adding1 = data.label;
+          this.editor = data.id;
+        }
       }
     },
     //添加相克食物
@@ -504,7 +511,7 @@ export default {
       this.loadFlag = true;
       this.$axios
         .get(
-          `api/blade-food/basetype/getFoodByBaseId?isPrivate=${this.lower}`,
+          `api/blade-food/basetype/getFoodByBaseId?isPrivate=${this.lower}&foodName=${this.filterText}`,
           {}
         )
         .then(res => {
@@ -517,12 +524,14 @@ export default {
           this.prtree.forEach((item, index) => {
             trees[index] = {
               id: item.id,
-              label: item.typeName
+              label: item.typeName,
+              view:0,
             };
             trees[index].children = [];
             item.foods.forEach((item1, index1) => {
               trees[index].children[index1] = {
                 id: item1.id,
+                view:1,
                 label: item1.foodName,
                 isPub: item1.isPub,
                 isUse: item1.isUse

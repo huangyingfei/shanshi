@@ -193,7 +193,8 @@
             class="demo-ruleForm"
           >
             <el-form-item label="菜品名字" prop="name" style="width: 345px">
-              <el-input style="width: 200px" v-model="ruleForm.name"></el-input>
+              <el-input    maxlength="10"
+                  show-word-limit style="width: 200px" v-model="ruleForm.name"></el-input>
             </el-form-item>
             <el-form-item label="菜品分类" prop="fooddata" style="width: 345px">
               <el-select
@@ -502,7 +503,10 @@
         :visible.sync="dateTime"
         :close-on-click-modal="false"
       >
-        <el-input placeholder="输入关键字进行过滤" v-model="filterText1">
+        <el-input 
+        clearable
+             style="width: 290px; margin-left: 11px; margin-top: 20px"
+         @change="Addraudit" placeholder="输入关键字进行查询" v-model="filterText1">
         </el-input>
         <div class="block">
           <div class="rolling">
@@ -711,12 +715,12 @@ export default {
   watch: {
     // (scope.row.stats / 100) * scope.row.malloc
     filterText(val) {
-      // console.log(this.$refs.tree);
+     
       this.$refs.tree.filter(val);
     },
-    filterText1(val) {
-      this.$refs.tree.filter(val);
-    }
+    // filterText1(val) {
+    //   this.$refs.tree.filter(val);
+    // }
   },
   beforeMount() {
     this.Protocol(); //营养素含量
@@ -747,12 +751,12 @@ export default {
 
       return data.label.indexOf(value) !== -1;
     },
-    filterNode1(value, data1) {
-      // console.log(data1);
-      if (!value) return true;
+    // filterNode1(value, data1) {
+    //   // console.log(data1);
+    //   if (!value) return true;
 
-      return data1.label.indexOf(value) !== -1;
-    },
+    //   return data1.label.indexOf(value) !== -1;
+    // },
     //全部常用查询
     commonly() {
       console.log(this.really1);
@@ -830,7 +834,7 @@ export default {
     Addraudit() {
       this.loadFlag3 = true;
       this.$axios
-        .get(`api/blade-food/basetype/getFoodByBaseId?isPrivate=1`, {
+        .get(`api/blade-food/basetype/getFoodByBaseId?isPrivate=1&foodName=${this.filterText1}`, {
           headers: {
             "Content-Type": "application/json"
           }

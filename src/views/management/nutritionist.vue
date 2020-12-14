@@ -135,6 +135,7 @@
         </el-form-item> -->
         <el-form-item label="食材一" prop="adding">
           <el-input
+            clearable
             readonly
             v-on:click.native="obtain(1)"
             v-model="ruleForm.adding"
@@ -142,6 +143,7 @@
         </el-form-item>
         <el-form-item label="食材二" prop="adding1">
           <el-input
+            clearable
             readonly
             v-on:click.native="obtain(2)"
             v-model="ruleForm.adding1"
@@ -562,7 +564,11 @@ export default {
   /* margin-left: 10px; */
   background-color: #fff;
   font-size: 14px;
-  margin-top: -20px;
+
+  position: relative;
+  top: 0px;
+  left: 0px;
+  bottom: 9px;
 }
 .update {
   width: 100%;
