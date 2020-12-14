@@ -16,6 +16,15 @@
             style="width: 500px"
           ></el-input>
         </el-form-item>
+        <el-select v-model="nsValue" placeholder="请选择" style="margin-right: 20px">
+          <el-option
+            v-for="item in  nsOptions"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id">
+          </el-option>
+        </el-select>
+        <el-button type="primary" @click="upPId">确 认</el-button>
       </el-form>
       <div class="names">能量来源要求比例设置（单位为%）</div>
       <div class="sales">
@@ -29,7 +38,11 @@
 </template>
 
 <script>
+  import {
+    getPowerSettingList,upPId
+  } from "@/api/system/organ";
 export default {
+
   data() {
     return {
       reset: [],
@@ -41,6 +54,8 @@ export default {
       footer: {
         name: "",
       },
+      nsValue:'',
+      nsOptions:[],
       rules: {
         name: [{ required: true, message: "请输入标准名称", trigger: "blur" }],
         region: [
@@ -51,8 +66,29 @@ export default {
   },
   mounted() {
     this.proportion();
+    getPowerSettingList().then((res) => {
+      this.nsOptions=res.data.data;
+    });
   },
   methods: {
+    upPId() {
+      if (!this.nsValue) {
+        this.$message({
+          type: "info",
+          message: "不可为空!",
+        });
+      } else {
+        upPId(this.nsValue).then(res => {
+          if (res.data.success) {
+            this.$message({
+              type: "success",
+              message: "操作成功!",
+            });
+          }
+          this.proportion();
+        })
+      }
+    },
     proportion() {
       this.$axios
         .post(`api/blade-food/nutrition/PowNut`, {

@@ -17,15 +17,28 @@
           <codeLogin v-else-if="activeName === 'code'"></codeLogin>
           <thirdLogin v-else-if="activeName === 'third'"></thirdLogin>
           <div class="login-menu">
-            <a href="#" @click.stop="activeName = 'user'">{{
-              $t("login.userLogin")
-            }}</a>
-            <!--<a href="#" @click.stop="activeName='code'">{{ $t('login.phoneLogin') }}</a>-->
-            <!-- <a href="#" @click.stop="activeName='third'">{{ $t('login.thirdLogin') }}</a> -->
+            <!--<a href="#" @click.stop="activeName = 'user'">{{-->
+              <!--$t("login.userLogin")-->
+            <!--}}</a>-->
+            <a href="#" @click.stop="dialogVisible=true;">{{ $t('login.phoneLogin') }}</a>
+             <!--<a href="#" @click.stop="activeName='third'">{{ $t('login.thirdLogin') }}</a> -->
           </div>
         </div>
       </div>
     </div>
+    <el-dialog
+      title="找回密码"
+      :visible.sync="dialogVisible"
+      width="30%"   :close-on-click-modal="false"
+      :before-close="cancel">
+      <codeLogin ref="codeLogin"></codeLogin>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="cancel">取 消</el-button>
+    <el-button type="primary" @click="subCodeLogin" >确 定</el-button>
+      </span>
+    </el-dialog>
+
+
   </div>
 </template>
 <script>
@@ -50,6 +63,7 @@ export default {
   },
   data() {
     return {
+      dialogVisible:false,
       time: "",
       activeName: "user",
       socialForm: {
@@ -75,6 +89,15 @@ export default {
   },
   props: [],
   methods: {
+    cancel(){
+      this.dialogVisible = false;
+      this.$refs.codeLogin.empty();
+    },
+    subCodeLogin(){
+      let that=this;
+      debugger
+      this.$refs.codeLogin.subCodeLogin();
+    },
     getTime() {
       setInterval(() => {
         this.time = dateFormat(new Date());

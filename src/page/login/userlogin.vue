@@ -46,30 +46,30 @@
         <i slot="prefix" class="icon-mima" />
       </el-input>
     </el-form-item>
-    <!--<el-form-item v-if="this.website.captchaMode" prop="code">-->
-      <!--<el-row :span="24">-->
-        <!--<el-col :span="16">-->
-          <!--<el-input-->
-            <!--size="small"-->
-            <!--@keyup.enter.native="handleLogin"-->
-            <!--v-model="loginForm.code"-->
-            <!--auto-complete="off"-->
-            <!--:placeholder="$t('login.code')"-->
-          <!--&gt;-->
-            <!--<i slot="prefix" class="icon-yanzhengma" />-->
-          <!--</el-input>-->
-        <!--</el-col>-->
-        <!--<el-col :span="8">-->
-          <!--<div class="login-code">-->
-            <!--<img-->
-              <!--:src="loginForm.image"-->
-              <!--class="login-code-img"-->
-              <!--@click="refreshCode"-->
-            <!--/>-->
-          <!--</div>-->
-        <!--</el-col>-->
-      <!--</el-row>-->
-    <!--</el-form-item>-->
+    <el-form-item v-if="this.website.captchaMode" prop="code">
+      <el-row :span="24">
+        <el-col :span="16">
+          <el-input
+            size="small"
+            @keyup.enter.native="handleLogin"
+            v-model="loginForm.code"
+            auto-complete="off"
+            :placeholder="$t('login.code')"
+          >
+            <i slot="prefix" class="icon-yanzhengma" />
+          </el-input>
+        </el-col>
+        <el-col :span="8">
+          <div class="login-code">
+            <img
+              :src="loginForm.image"
+              class="login-code-img"
+              @click="refreshCode"
+            />
+          </div>
+        </el-col>
+      </el-row>
+    </el-form-item>
     <el-form-item>
       <el-button
         type="primary"
@@ -93,6 +93,7 @@ export default {
   data() {
     return {
       tenantMode: this.website.tenantMode,
+      count:0,
       loginForm: {
         //租户ID
         tenantId: "",
@@ -129,7 +130,9 @@ export default {
     this.getTenant();
     this.refreshCode();
   },
-  mounted() {},
+  mounted() {
+    this.website.captchaMode=false;
+  },
   computed: {
     ...mapGetters(["tagWel"])
   },
@@ -155,6 +158,8 @@ export default {
             text: "登录中,请稍后。。。",
             spinner: "el-icon-loading"
           });
+          debugger
+          let that=this;
           this.$store
             .dispatch("LoginByUsername", this.loginForm)
             .then(() => {
@@ -162,6 +167,10 @@ export default {
               loading.close();
             })
             .catch(() => {
+              that.count++;
+              if(that.count>=3){
+                that.website.captchaMode=true;
+              }
               loading.close();
               this.refreshCode();
             });

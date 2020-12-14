@@ -1,6 +1,7 @@
 import request from '@/router/axios';
 import website from "@/config/website";
 
+debugger
 export const loginByUsername = (tenantId, username, password, type, key, code) => request({
   url: '/api/blade-auth/oauth/token',
   method: 'post',
@@ -91,3 +92,6 @@ export const clearCache = () => request({
   url: '/api/blade-auth/oauth/clear-cache',
   method: 'get'
 });
+
+
+

@@ -106,6 +106,13 @@ export const upNId = (nutrientId) => {
   })
 }
 
+export const upPId = (powerId) => {
+  return request({
+    url: '/api/blade-system/tenant/upPId',
+    method: 'get',
+    params:{powerId}
+  })
+}
 
 
 
