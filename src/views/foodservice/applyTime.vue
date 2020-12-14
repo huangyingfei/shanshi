@@ -392,6 +392,24 @@
               </el-table-column>
             </el-table>
           </div>
+          <div class="worm1">记录</div>
+          <el-timeline>
+            <el-timeline-item
+              :timestamp="this.record.aduitTime"
+              placement="top"
+            >
+              <el-card>
+                <!-- <h4>{{ this.record.tenant_name }}</h4>
+              <p>{{ this.record.aduit_name }}</p> -->
+                <p style="  font-size: 9px; color: #cccc;">
+                  {{ this.record.aduitTime }}
+                </p>
+                <p>
+                  拒绝理由：<span>{{ this.record.refuseReason }}</span>
+                </p>
+              </el-card>
+            </el-timeline-item>
+          </el-timeline>
         </div>
         <div slot="footer" class="dialog-footer">
           <div class="cancellation">
@@ -497,7 +515,14 @@ export default {
           malloc: "" //能量kcal
         }
       ],
-      timezone: "" //提交时间
+      timezone: "", //提交时间
+      record: {
+        tenant_name: "", //机构
+        aduit_name: "", //姓名
+        aduitTime: "", //时间
+        refuseReason: "", //拒绝理由
+        type: "" //状态
+      } //记录
     };
   },
   beforeMount() {
@@ -615,6 +640,7 @@ export default {
           }
           this.ruleForm1.region = this.handler.function; //特点
           this.ruleForm1.desc = this.handler.remark; //做法
+          this.record = this.handler.dishAudits[1]; //记录
           if (this.handler.provinces) {
             let bar = [];
             this.handler.provinces.split(",").forEach((item, i) => {

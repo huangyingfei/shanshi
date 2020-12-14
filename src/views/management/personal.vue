@@ -227,7 +227,7 @@
                   </el-select>
                 </el-form-item>
 
-                <el-form-item label="食物分类1" style="width: 350px">
+                <el-form-item label="分类别称1" style="width: 350px">
                   <el-input
                     maxlength="10"
                     show-word-limit
@@ -236,7 +236,7 @@
                   ></el-input>
                 </el-form-item>
 
-                <el-form-item label="食物分类2" style="width: 350px">
+                <el-form-item label="分类别称2" style="width: 350px">
                   <el-input
                     maxlength="10"
                     show-word-limit

@@ -1003,12 +1003,12 @@
             </el-table>
           </div>
         </div>
-          <div class="worm1">记录</div>
+        <div class="worm1">记录</div>
         <el-timeline>
-          <!-- <el-timeline-item :timestamp="this.record.aduitTime" placement="top">
+          <el-timeline-item :timestamp="this.record.aduitTime" placement="top">
             <el-card>
-              <h4>{{ this.record.tenant_name }}</h4>
-              <p>{{ this.record.aduit_name }}</p>
+              <!-- <h4>{{ this.record.tenant_name }}</h4>
+              <p>{{ this.record.aduit_name }}</p> -->
               <p style="  font-size: 9px; color: #cccc;">
                 {{ this.record.aduitTime }}
               </p>
@@ -1016,7 +1016,7 @@
                 拒绝理由：<span>{{ this.record.refuseReason }}</span>
               </p>
             </el-card>
-          </el-timeline-item> -->
+          </el-timeline-item>
         </el-timeline>
       </div>
       <div slot="footer" class="dialog-footer" style="text-align: center">
@@ -1172,14 +1172,14 @@ export default {
       nbottoms: "",
       timezone: "", //搜索时间
       timezone1: "",
-      classification: "" ,//分类ID
-       record: {
+      classification: "", //分类ID
+      record: {
         tenant_name: "", //机构
         aduit_name: "", //姓名
         aduitTime: "", //时间
         refuseReason: "", //拒绝理由
         type: "" //状态
-      }, //记录
+      } //记录
     };
   },
   watch: {
@@ -1462,6 +1462,7 @@ export default {
     //拒绝
     restore() {
       this.increase = true;
+      this.examine.desc1 = "";
       // if (examine.desc1 == "") {
       //   this.$message({
       //     message: "拒绝理由未填",
