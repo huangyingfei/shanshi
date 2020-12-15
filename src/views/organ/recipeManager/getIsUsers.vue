@@ -50,7 +50,7 @@
         </div>
       </el-col>
       <el-col :span="24">
-        <div class="loadClass">
+        <div v-if="this.checked == true" class="loadClass">
           <span>选择班级数量</span>
           <div class="include">
             <span>小班</span>
@@ -98,7 +98,7 @@ export default {
         },
         {
           value: "4",
-          label: "5"
+          label: "4"
         },
         {
           value: "5",
@@ -121,7 +121,7 @@ export default {
         },
         {
           value: "4",
-          label: "5"
+          label: "4"
         },
         {
           value: "5",
