@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 0px; height: 1080px">
+  <div style="padding: 0px; height: 1080px" class="foodsweek">
     <div
       ref="contextmenuFood"
       id="contextmenuFood"
@@ -1710,16 +1710,16 @@
   .drapInActive .el-table th {
     background-color: #dcdfe6 !important;
   }
-  .table-week  .avue-upload-item .el-upload--picture-card ,.el-upload-list--picture-card .el-upload-list__item{
+ .foodsweek .table-week  .avue-upload-item .el-upload--picture-card ,.foodsweek .el-upload-list--picture-card .el-upload-list__item{
     width: 100px!important;
     height: 100px!important;
     line-height: 100px!important;
   }
-  .table-week .avue-upload-item{
+  .foodsweek .table-week .avue-upload-item{
     width: 100px;
     height: 100px;
   }
-  .table-week .el-upload-list--picture-card .el-upload-list__item-status-label{
+ .foodsweek .table-week .el-upload-list--picture-card .el-upload-list__item-status-label{
     width: 0px!important;
   }
   .colNoneBorder

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="student-contain">
     <el-row>
       <el-col :span="5">
         <div class="box"   id="boxTree">
@@ -241,6 +241,86 @@
         <el-button type="primary" @click="submitClass()">确 定</el-button>
       </span>
     </el-dialog>
+
+
+
+    <el-drawer
+      title="新建学段"
+      :visible.sync="xueduanVisible"
+      :modal-append-to-body="false"
+    >
+      <div class="_1OGXkpwTB-08ZVOTYhQESl">学段信息</div>
+      <el-form
+               status-icon
+               :rules="xueduanRules"
+               ref="xueduanForm"
+               :model="xueduanForm"
+               label-width="0">
+        <el-form-item prop="xueduanCk"  class="item-ck" label="学段:">
+          <div >
+        <el-checkbox-group v-model="xueduanForm.xueduanCk" @change="ckChange">
+          <div  v-for="(claStuItem,index) in claStu" :key="index"><el-checkbox  :label="claStuItem.className"  :name="claStuItem.className"></el-checkbox>
+            <span>
+            <el-select :disabled="claStuItem.disFlag" v-model="claStuItem.disValue" placeholder="请选择">
+            <el-option
+              v-for="item in claStuItem.disOption"
+              :key="item.value"
+              :label="item.value"
+              :value="item.value">
+            </el-option>
+          </el-select>
+          </span><span class="el-checkbox__label"> 个年级</span></div>
+
+        </el-checkbox-group>
+          </div>
+        </el-form-item>
+        <el-form-item    class="item-ck"   label="选择班级数量:">
+          <div class="item-title"><b>智能升班：</b>每个新学年开始，各年级将自动升班。如：明年9月，「一年级1班」自动更名「二年级1班」，「小班1班」自动更名「中班1班」</div>
+          <div class="item-class"  v-if="!claStu.find((p)=>p.className=='幼儿园').disFlag">
+              <div class="item-class-title">幼儿园</div>
+              <div class="item-class-content"><span>小班：</span>
+                <el-select v-model="xueduanForm.classOptionsValue" placeholder="请选择">
+                  <el-option
+                    v-for="item in xdInfo.classOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
+                个班级
+              </div>
+              <div class="item-class-content"> <span>中班：</span>
+                <el-select v-model="xueduanForm.classOptionsValue" placeholder="请选择">
+                  <el-option
+                    v-for="item in xdInfo.classOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
+                个班级
+              </div>
+              <div class="item-class-content"><span>大班：</span>
+                <el-select v-model="xueduanForm.classOptionsValue" placeholder="请选择">
+                  <el-option
+                    v-for="item in xdInfo.classOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
+                个班级
+              </div>
+
+          </div>
+        </el-form-item>
+        <div class="item-footer">
+          <el-button type="primary" @click="subCodeXd" >确 定</el-button>
+          <el-button @click="cancel">取 消</el-button>
+
+        </div>
+      </el-form>
+    </el-drawer>
   </div>
 </template>
 
@@ -263,6 +343,227 @@
   export default {
     data() {
       return {
+        yey:["小小班","小班","中班","大班","学前班"],
+        xueduanRules:{
+          xueduanCk:[{required:true,trigger:"blur",message:"请至少选择一个学段"}]
+        },
+        xueduanForm:{
+          xueduanCk:[],
+          classOptionsValue:1
+        },
+        claStu:[
+          {
+            disFlag:true,
+            disValue:3,
+            className:"幼儿园",
+            grade:[],
+            disOption:[
+              {
+                value:3
+              },
+              {
+                value:4
+              },{
+                value:5
+              },
+            ]
+          },
+          {
+            disFlag:true,
+            disValue:6,
+            className:"小学",
+            grade:[],
+            disOption:[
+              {
+                value:1
+              },
+              {
+                value:2
+              },{
+                value:3
+              },{
+                value:4
+              },{
+                value:5
+              },{
+                value:6
+              },{
+                value:7
+              },{
+                value:8
+              },{
+                value:9
+              },{
+                value:10
+              },
+            ]
+          },
+          {
+            disFlag:true,
+            disValue:3,
+            className:"初中",
+            grade:[],
+            disOption:[
+              {
+                value:1
+              },
+              {
+                value:2
+              },{
+                value:3
+              },{
+                value:4
+              },{
+                value:5
+              },{
+                value:6
+              },{
+                value:7
+              },{
+                value:8
+              },{
+                value:9
+              },{
+                value:10
+              },
+            ]
+          },
+          {
+            disFlag:true,
+            disValue:3,
+            className:"高中",
+            grade:[],
+            disOption:[
+              {
+                value:1
+              },
+              {
+                value:2
+              },{
+                value:3
+              },{
+                value:4
+              },{
+                value:5
+              },{
+                value:6
+              },{
+                value:7
+              },{
+                value:8
+              },{
+                value:9
+              },{
+                value:10
+              },
+            ]
+          }
+        ],
+        xdInfo:{
+          classOptions:[{
+            value:1,
+          },{
+            value:2,
+          },{
+            value:3,
+          },{
+            value:4,
+          },{
+            value:5,
+          },{
+            value:6,
+          },{
+            value:7,
+          },{
+            value:8,
+          },{
+            value:9,
+          },{
+            value:10,
+          },{
+            value:11,
+          },{
+            value:12,
+          },{
+            value:13,
+          },{
+            value:14,
+          },{
+            value:15,
+          },{
+            value:16,
+          },{
+            value:17,
+          },{
+            value:18,
+          },{
+            value:19,
+          },{
+            value:20,
+          },{
+            value:21,
+          },{
+            value:22,
+          },{
+            value:23,
+          },{
+            value:24,
+          },{
+            value:25,
+          },{
+            value:26,
+          },{
+            value:27,
+          },{
+            value:28,
+          },{
+            value:29,
+          },{
+            value:30,
+          },{
+            value:31,
+          },{
+            value:32,
+          },{
+            value:33,
+          },{
+            value:34,
+          },{
+            value:35,
+          },{
+            value:36,
+          },{
+            value:37,
+          },{
+            value:38,
+          },{
+            value:39,
+          },{
+            value:40,
+          },{
+            value:41,
+          },{
+            value:42,
+          },{
+            value:43,
+          },{
+            value:44,
+          },{
+            value:45,
+          },{
+            value:46,
+          },{
+            value:47,
+          },{
+            value:48,
+          },{
+            value:49,
+          },{
+            value:50,
+          }]
+        },
+        xueduanVisible:false,
+
         leaveData:{},
         leaveOption:{
           column:[
@@ -543,6 +844,18 @@
       document.getElementById('boxTree').style.height=(document.body.clientHeight-113)+"px";
     },
     methods: {
+      ckChange(){
+        this.claStu.forEach(_=>{_.disFlag=true})
+        for(let i=0;i<this.xueduanForm.xueduanCk.length;i++){
+          this.claStu.find(p=>p.className==this.xueduanForm.xueduanCk[i]).disFlag=false;
+        }
+      },
+      subCodeXd(){
+        this.$refs.xueduanForm.validate(function (valid ) {
+          if (valid) {
+
+          }
+      })},
       allowDrag(draggingNode) {
         return draggingNode.data.classType == 3;
       },
@@ -623,7 +936,8 @@
         return data.label.indexOf(value) !== -1;
       },
       addClass(node, data) {
-        this.outerVisible = true;
+        debugger
+        // this.outerVisible = true;
         let classs = this.classes.filter((_) => {
           return _.type == data.type;
         })[0];
@@ -634,15 +948,16 @@
           this.tclass.classAlias = classs.alias;
           this.tclass.classEdu = classs.edu;
         }
-        // debugger;
-        this.tclass.classType = classs.type;
-        this.tclass.classPName = classs.pName;
-        this.tclass.classTitle = classs.title;
-        this.tclass.className = classs.name;
-        console.log(this.tclass);
-        this.pidOptions = [{ value: data.pId, label: data.pName }];
-        this.addValue.pidValue = data.pId;
-        console.log(this.pidOptions);
+        if(classs.type==1){
+          this.xueduanVisible=true;
+        }
+        // // debugger;
+        // this.tclass.classType = classs.type;
+        // this.tclass.classPName = classs.pName;
+        // this.tclass.classTitle = classs.title;
+        // this.tclass.className = classs.name;
+        // this.pidOptions = [{ value: data.pId, label: data.pName }];
+        // this.addValue.pidValue = data.pId;
       },
       cancel() {
         this.outerVisible = false;
@@ -1046,8 +1361,83 @@
     },
   };
 </script>
-
 <style>
+
+ .student-contain  .item-ck{
+    margin-top: 30px;
+    margin-left: 50px;
+  }
+.item-ck .item-title{
+  margin-left: 100px;
+  font-size: 12px;
+  line-height: 20px;
+  color: rgba(13,0,19,.56);
+  margin-top: 10px;
+}
+ .item-ck   .item-class{
+   margin-left: 100px;
+ }
+ .item-ck   .item-class .item-class-title{
+   line-height: 40px;
+   border-bottom: 1px solid #e8e8e8;
+ }
+ .item-ck   .item-class  .item-class-content{
+   margin-left: 100px;
+   line-height: 50px;
+ }
+  .student-contain .el-checkbox{
+    width: 80px;
+  }
+ .student-contain .item-ck  .el-form-item__label{
+    width: 100px!important;
+  }
+  .el-checkbox-group{
+    margin-left: 100px;
+
+  }
+  .student-contain .el-tree-node__content {
+    height: 30px !important;
+  }
+ .student-contain  .ant-tree-node-content-btn {
+    margin-top: 4px;
+  }
+ .student-contain  .el-drawer__header{
+    padding: 20px 20px 10px 20px!important;
+    border-bottom: 1px solid #e8e8e8;
+  }
+  .student-contain .el-drawer__open .el-drawer.rtl{
+    width: 40%!important;
+    overflow-y: scroll;
+    color: rgba(0,0,0,.65);
+  }
+  .student-contain  .el-drawer__header{
+    font-size: 16px;
+    font-weight: 500;
+    color: rgba(0,0,0,.85);
+  }
+  .student-contain ._1OGXkpwTB-08ZVOTYhQESl{
+    background: #eceff4;
+    padding-left: 20px;
+    line-height: 40px;
+    margin-left: 20px;
+    font-size: 14px;
+  }
+ .item-ck .el-select{
+   width:100px;
+  }
+
+</style>
+
+<style scoped>
+
+  .item-footer{
+     position: fixed;
+     right: 0px;
+     padding-top: 10px;
+     bottom: 0px;
+     background-color: #FFFFFF;
+     padding-bottom: 10px;
+  }
   .box {
     height: 800px;
   }
@@ -1095,11 +1485,7 @@
     padding: 4px 10px;
     font-size: 12px;
   }
-  .el-tree-node__content {
-    height: 30px !important;
-  }
-  .ant-tree-node-content-btn {
-    margin-top: 4px;
-  }
+
+
 
 </style>

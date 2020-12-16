@@ -2324,12 +2324,13 @@ document.oncontextmenu = function(){return false};
   width: 50%!important;
   overflow-y: scroll;
 }
+
 </style>
 
 
 <style scoped>
 
-  .item-allergy{
+.item-allergy{
     min-height: 100px;
     max-height: 250px;
     overflow:scroll;

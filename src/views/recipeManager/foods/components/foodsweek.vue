@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 0px; height: 1080px">
+  <div style="padding: 0px; height: 1080px" class="foodsweek">
     <div
       ref="contextmenuFood"
       id="contextmenuFood"
