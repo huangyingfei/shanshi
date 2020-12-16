@@ -22,11 +22,15 @@
       <p>弹出菜单</p>
     </div>
     <!-- table-week start   -->
-    <el-table class="table-week" style="width: 100%" :data="datas" border fit>
+    <el-table class="table-week" style="width: 100%" :data="datas" border fit :header-cell-style="headerCellStyle" :cell-style ="cellStyle">
+      <img src="/img/cater/left.png" style="width: 3rem;height: 3rem;position: absolute;left:10px;z-index: 9999;" />
       <el-table-column align="center" width="100" fixed class-name="col-date3 colNoneBorder" >
         <template slot="header"> 菜品/食物 </template>
         <template slot-scope="scope">
-          <div v-bind:data="scope.row.name" class="meals-foodType">{{ scope.row.name }}</div>
+          <div v-bind:data="scope.row.name" class="meals-foodType">
+            <i class="ico1"></i>
+            <span>{{ scope.row.name }}</span>
+          </div>
         </template>
       </el-table-column>
       <!-- 周一   -->
@@ -326,8 +330,8 @@
                 label="菜品/食材"
                 prop="name"
                 header-align="center"
-                align="left"
-              ></el-table-column>
+                align="left">
+              </el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
                 <template slot-scope="scope1">
                   <div v-show="scope1.$index === 0 &&scope.row.weeks.find((p) => p.name == 'week3')"  style="width: 100px; height: 102px; margin: 0 auto">
@@ -1125,6 +1129,52 @@ export default {
   },
 
   methods: {
+    headerCellStyle({row,colunm, rowIndex,columnIndex}){
+      var backgroundImage = [
+        {'background': '#f8fbfc !important'},
+        {'background-image': 'url("/img/cater/tue.png")!important'},
+        {'background-image': 'url("/img/cater/tue.png")!important'},
+        {'background-image': 'url("/img/cater/wed.png")!important'},
+        {'background-image': 'url("/img/cater/thu.png")!important'},
+        {'background-image': 'url("/img/cater/fri.png")!important'},
+        {'background-image': 'url("/img/cater/tue.png")!important'},
+        {'background-image': 'url("/img/cater/tue.png")!important'},
+      ]
+
+      return backgroundImage[columnIndex]
+    },
+    cellStyle({row,colunm, rowIndex,columnIndex}){
+      // var backgroundImage = {}
+      // if(columnIndex == 0){
+      //   console.log(rowIndex + '---------------' + columnIndex)
+      //   console.log(row);
+      //   switch(row.name){
+      //     case '早餐':
+      //       backgroundImage= {'background-image': 'url("/img/cater/food1.png")!important',
+      //                         'background-position': 'center !important',
+      //                         'background-repeat' : 'no-repeat!important'}
+      //       break;
+      //     case '早点':
+      //       backgroundImage= {'background-image': 'url("/img/cater/food1.png")!important','background-size': 'cover!important',}
+      //       break;
+      //     case '午餐':
+      //       backgroundImage= {'background-image': 'url("/img/cater/food3.png")!important','background-size': 'cover!important',}
+      //       break;
+      //     case '午点':
+      //       backgroundImage= {'background-image': 'url("/img/cater/food1.png")!important','background-size': 'cover!important',}
+      //       break;
+      //     case '晚餐':
+      //       backgroundImage= {'background-image': 'url("/img/cater/food1.png")!important','background-size': 'cover!important',}
+      //       break;
+      //     case '晚点':
+      //       backgroundImage= {'background-image': 'url("/img/cater/food1.png")!important','background-size': 'cover!important',}
+      //       break;
+      //     default:
+      //       break;
+      //   }
+      // }
+      // return backgroundImage
+    },
     getToken() {
       let str = JSON.parse(localStorage.getItem("saber-token"));
       this.token["Blade-Auth"] = `bearer ${str.content}`;
@@ -1672,9 +1722,9 @@ export default {
 };
 </script>
 <style>
-.table-week th {
+/* .table-week th {
   background: #f8fbfc !important;
-}
+} */
 .table-week td {
   padding: 0 !important;
   vertical-align: top !important;
@@ -1701,6 +1751,15 @@ export default {
 }
 .drapInActive .el-table th {
   background-color: #dcdfe6 !important;
+}
+
+.ico1{
+  background: url("/img/cater/food11.png") no-repeat center!important;
+  display: block;
+  height: 24px;
+}
+.ico1::before{
+
 }
 .colNoneBorder
 {
