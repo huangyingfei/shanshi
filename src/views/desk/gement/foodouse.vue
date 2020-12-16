@@ -106,7 +106,9 @@
               ref="tree"
             >
               <span class="custom-tree-node" slot-scope="{ node, data }">
-                <span>{{ node.label }}</span>
+                <span :class="[data.isPub == 0 ? 'cannot' : '']">{{
+                  node.label
+                }}</span>
                 <span>
                   <el-button
                     v-if="data.editors == 1"
@@ -193,8 +195,12 @@
             class="demo-ruleForm"
           >
             <el-form-item label="菜品名字" prop="name" style="width: 345px">
-              <el-input    maxlength="10"
-                  show-word-limit style="width: 200px" v-model="ruleForm.name"></el-input>
+              <el-input
+                maxlength="10"
+                show-word-limit
+                style="width: 200px"
+                v-model="ruleForm.name"
+              ></el-input>
             </el-form-item>
             <el-form-item label="菜品分类" prop="fooddata" style="width: 345px">
               <el-select
@@ -270,8 +276,9 @@
                 <!-- <img v-if="dialogImageUrl" :src="dialogImageUrl" class="avatar" /> -->
                 <i class="el-icon-plus"></i>
               </el-upload>
-              <span style="color:#e0e0e0;  font-size: 11px;"
-                >上传图片不能超过2M 只能是JPG PNG格式</span
+              <span style="color: #000;font-weight: bold; font-size: 11px"
+                >上传图片不能超过2M 只能是<span style="color:red">JPG PNG</span
+                >格式</span
               >
               <el-dialog append-to-body :visible.sync="dialogVisible">
                 <img width="100%" :src="dialogImageUrl" alt />
@@ -503,10 +510,13 @@
         :visible.sync="dateTime"
         :close-on-click-modal="false"
       >
-        <el-input 
-        clearable
-             style="width: 290px; margin-left: 11px; margin-top: 20px"
-         @change="Addraudit" placeholder="输入关键字进行查询" v-model="filterText1">
+        <el-input
+          clearable
+          style="width: 290px; margin-left: 11px; margin-top: 20px"
+          @change="Addraudit"
+          placeholder="输入关键字进行查询"
+          v-model="filterText1"
+        >
         </el-input>
         <div class="block">
           <div class="rolling">
@@ -715,9 +725,8 @@ export default {
   watch: {
     // (scope.row.stats / 100) * scope.row.malloc
     filterText(val) {
-     
       this.$refs.tree.filter(val);
-    },
+    }
     // filterText1(val) {
     //   this.$refs.tree.filter(val);
     // }
@@ -834,11 +843,14 @@ export default {
     Addraudit() {
       this.loadFlag3 = true;
       this.$axios
-        .get(`api/blade-food/basetype/getFoodByBaseId?isPrivate=1&foodName=${this.filterText1}`, {
-          headers: {
-            "Content-Type": "application/json"
+        .get(
+          `api/blade-food/basetype/getFoodByBaseId?isPrivate=1&foodName=${this.filterText1}`,
+          {
+            headers: {
+              "Content-Type": "application/json"
+            }
           }
-        })
+        )
         .then(res => {
           this.loadFlag3 = false;
           // console.log(res);
@@ -1963,5 +1975,8 @@ export default {
 }
 /deep/ .hide .el-upload--picture-card {
   display: none;
+}
+.cannot {
+  color: #000;
 }
 </style>

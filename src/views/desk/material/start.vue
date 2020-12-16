@@ -124,7 +124,9 @@
               ref="tree"
             >
               <span class="custom-tree-node" slot-scope="{ node, data }">
-                <span>{{ node.label }}</span>
+                <span :class="[data.isPub == 0 ? 'cannot' : '']">{{
+                  node.label
+                }}</span>
                 <span>
                   <!-- <el-button
                     v-if="data.view == 1"
@@ -378,8 +380,9 @@
               >
                 <i class="el-icon-plus"></i>
               </el-upload>
-              <span style="color: #e0e0e0; font-size: 11px"
-                >上传图片不能超过2M 只能是JPG PNG格式</span
+              <span style="color: #000;font-weight: bold; font-size: 11px"
+                >上传图片不能超过2M 只能是<span style="color:red">JPG PNG</span
+                >格式</span
               >
               <el-dialog append-to-body :visible.sync="dialogVisible">
                 <img width="100%" :src="dialogImageUrl" alt />
@@ -1520,6 +1523,13 @@ export default {
 /deep/ .hide .el-upload--picture-card {
   display: none;
 }
+.orgin {
+  color: gray;
+}
+.cannot {
+  color: #000;
+}
+
 /* .demo-block .avatar-uploader .el-upload {
     border: 1px dashed #d9d9d9;
     border-radius: 6px;
