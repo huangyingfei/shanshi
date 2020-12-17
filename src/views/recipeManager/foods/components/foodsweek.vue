@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 0px; height: 1080px" class="foodsweek">
+  <div style="padding: 0px; height: 1080px;position:relative">
     <div
       ref="contextmenuFood"
       id="contextmenuFood"
@@ -22,13 +22,21 @@
       <p>弹出菜单</p>
     </div>
     <!-- table-week start   -->
-    <el-table class="table-week" style="width: 100%" :data="datas" border fit :header-cell-style="headerCellStyle" :cell-style ="cellStyle">
-      <img src="/img/cater/left.png" style="width: 3rem;height: 3rem;position: absolute;left:10px;z-index: 9999;" />
+    <el-button  icon="el-icon-arrow-left" circle style="position: absolute;left:105px;top: 5px;z-index: 2;" @click="toLeft">
+    </el-button>
+    <el-button  icon="el-icon-arrow-right" 
+               circle 
+               style="position: absolute;right:10px;top: 5px;z-index: 2;" @click="toRight">
+    </el-button>
+    <!-- <img src="/img/cater/left.png" style="width: 3rem;height: 3rem;position: absolute;left:100px;z-index: 9999;"/>
+    <img src="/img/cater/right.png" style="width: 3rem;height: 3rem;position: absolute;right:10px;z-index: 9999;" /> -->
+    <el-table class="table-week" style="width: 100%" :data="datas" border fit :header-cell-style="headerCellStyle" ref="foodWeekTable">
+      
       <el-table-column align="center" width="100" fixed class-name="col-date3 colNoneBorder" >
         <template slot="header"> 菜品/食物 </template>
         <template slot-scope="scope">
           <div v-bind:data="scope.row.name" class="meals-foodType">
-            <i class="ico1"></i>
+            <i class="ico1" :style="cellStyle(scope.row.name)"></i>
             <span>{{ scope.row.name }}</span>
           </div>
         </template>
@@ -40,10 +48,12 @@
         width="400"
       >
         <template slot="header">
-          <div class="">
+          <div class=""> 
+            <span>
             {{ headers.find((p) => p.name == "week1").lable }}({{
               headers.find((p) => p.name == "week1").date
             }})
+            </span>
           </div>
           <div class="">
             <!--<el-checkbox-->
@@ -125,15 +135,15 @@
                 <template slot-scope="scope1">
                   <div v-show="scope1.$index === 0 &&scope.row.weeks.find((p) => p.name == 'week1')"  style="width: 100px; height: 102px; margin: 0 auto">
                     <el-upload action="/api/blade-resource/oss/endpoint/put-file"
-                               :on-success="(res,file)=>{handleAvatarSuccess(scope.row.id,scope.row.weeks.find((p) => p.name == 'week1').id,res,file)}"
-                               class="avue-upload-item"
-                               :headers="token"  :auto-upload="true"
-                               accept=".jpeg,.jpg,.gif,.png"
-                               :file-list="(scope.row.weeks.find((p) => p.name == 'week1').image==''||scope.row.weeks.find((p) => p.name == 'week1').image==undefined)?[]:[{url:scope.row.weeks.find((p) => p.name == 'week1').image}]"
-                               :limit="1"
-                               :on-preview="(file)=>{handlePictureCardPreview(scope.row.id,scope.row.weeks.find((p) => p.name == 'week1').id,file)}"
-                               :on-remove="(file)=>{handleAvatarRemove(scope.row.id,scope.row.weeks.find((p) => p.name == 'week1').id,file)}"
-                               list-type="picture-card" >
+                              :on-success="(res,file)=>{handleAvatarSuccess(scope.row.id,scope.row.weeks.find((p) => p.name == 'week1').id,res,file)}"
+                              class="avue-upload-item"
+                              :headers="token"  :auto-upload="true"
+                              accept=".jpeg,.jpg,.gif,.png"
+                              :file-list="(scope.row.weeks.find((p) => p.name == 'week1').image==''||scope.row.weeks.find((p) => p.name == 'week1').image==undefined)?[]:[{url:scope.row.weeks.find((p) => p.name == 'week1').image}]"
+                              :limit="1"
+                              :on-preview="(file)=>{handlePictureCardPreview(scope.row.id,scope.row.weeks.find((p) => p.name == 'week1').id,file)}"
+                              :on-remove="(file)=>{handleAvatarRemove(scope.row.id,scope.row.weeks.find((p) => p.name == 'week1').id,file)}"
+                              list-type="picture-card" >
                       <i  class="el-icon-plus"></i>
                     </el-upload>
                     <el-dialog  append-to-body   :visible.sync="scope.row.weeks.find((p) => p.name == 'week1').dialogVisible" >
@@ -252,15 +262,15 @@
                 <template slot-scope="scope1">
                   <div v-show="scope1.$index === 0 &&scope.row.weeks.find((p) => p.name == 'week2')"  style="width: 100px; height: 102px; margin: 0 auto">
                     <el-upload action="/api/blade-resource/oss/endpoint/put-file"
-                               :on-success="(res,file)=>{handleAvatarSuccess(scope.row.id,scope.row.weeks.find((p) => p.name == 'week2').id,res,file)}"
-                               class="avue-upload-item"
-                               :headers="token"  :auto-upload="true"
-                               accept=".jpeg,.jpg,.gif,.png"
-                               :file-list="(scope.row.weeks.find((p) => p.name == 'week2').image==''||scope.row.weeks.find((p) => p.name == 'week2').image==undefined)?[]:[{url:scope.row.weeks.find((p) => p.name == 'week2').image}]"
-                               :limit="1"
-                               :on-preview="(file)=>{handlePictureCardPreview(scope.row.id,scope.row.weeks.find((p) => p.name == 'week2').id,file)}"
-                               :on-remove="(file)=>{handleAvatarRemove(scope.row.id,scope.row.weeks.find((p) => p.name == 'week2').id,file)}"
-                               list-type="picture-card" >
+                              :on-success="(res,file)=>{handleAvatarSuccess(scope.row.id,scope.row.weeks.find((p) => p.name == 'week2').id,res,file)}"
+                              class="avue-upload-item"
+                              :headers="token"  :auto-upload="true"
+                              accept=".jpeg,.jpg,.gif,.png"
+                              :file-list="(scope.row.weeks.find((p) => p.name == 'week2').image==''||scope.row.weeks.find((p) => p.name == 'week2').image==undefined)?[]:[{url:scope.row.weeks.find((p) => p.name == 'week2').image}]"
+                              :limit="1"
+                              :on-preview="(file)=>{handlePictureCardPreview(scope.row.id,scope.row.weeks.find((p) => p.name == 'week2').id,file)}"
+                              :on-remove="(file)=>{handleAvatarRemove(scope.row.id,scope.row.weeks.find((p) => p.name == 'week2').id,file)}"
+                              list-type="picture-card" >
                       <i  class="el-icon-plus"></i>
                     </el-upload>
                     <el-dialog  append-to-body   :visible.sync="scope.row.weeks.find((p) => p.name == 'week2').dialogVisible" >
@@ -336,15 +346,15 @@
                 <template slot-scope="scope1">
                   <div v-show="scope1.$index === 0 &&scope.row.weeks.find((p) => p.name == 'week3')"  style="width: 100px; height: 102px; margin: 0 auto">
                     <el-upload action="/api/blade-resource/oss/endpoint/put-file"
-                               :on-success="(res,file)=>{handleAvatarSuccess(scope.row.id,scope.row.weeks.find((p) => p.name == 'week3').id,res,file)}"
-                               class="avue-upload-item"
-                               :headers="token"  :auto-upload="true"
-                               accept=".jpeg,.jpg,.gif,.png"
-                               :file-list="(scope.row.weeks.find((p) => p.name == 'week3').image==''||scope.row.weeks.find((p) => p.name == 'week3').image==undefined)?[]:[{url:scope.row.weeks.find((p) => p.name == 'week3').image}]"
-                               :limit="1"
-                               :on-preview="(file)=>{handlePictureCardPreview(scope.row.id,scope.row.weeks.find((p) => p.name == 'week3').id,file)}"
-                               :on-remove="(file)=>{handleAvatarRemove(scope.row.id,scope.row.weeks.find((p) => p.name == 'week3').id,file)}"
-                               list-type="picture-card" >
+                              :on-success="(res,file)=>{handleAvatarSuccess(scope.row.id,scope.row.weeks.find((p) => p.name == 'week3').id,res,file)}"
+                              class="avue-upload-item"
+                              :headers="token"  :auto-upload="true"
+                              accept=".jpeg,.jpg,.gif,.png"
+                              :file-list="(scope.row.weeks.find((p) => p.name == 'week3').image==''||scope.row.weeks.find((p) => p.name == 'week3').image==undefined)?[]:[{url:scope.row.weeks.find((p) => p.name == 'week3').image}]"
+                              :limit="1"
+                              :on-preview="(file)=>{handlePictureCardPreview(scope.row.id,scope.row.weeks.find((p) => p.name == 'week3').id,file)}"
+                              :on-remove="(file)=>{handleAvatarRemove(scope.row.id,scope.row.weeks.find((p) => p.name == 'week3').id,file)}"
+                              list-type="picture-card" >
                       <i  class="el-icon-plus"></i>
                     </el-upload>
                     <el-dialog  append-to-body   :visible.sync="scope.row.weeks.find((p) => p.name == 'week3').dialogVisible" >
@@ -493,15 +503,15 @@
                 <template slot-scope="scope1">
                   <div v-show="scope1.$index === 0 &&scope.row.weeks.find((p) => p.name == 'week4')"  style="width: 100px; height: 102px; margin: 0 auto">
                     <el-upload action="/api/blade-resource/oss/endpoint/put-file"
-                               :on-success="(res,file)=>{handleAvatarSuccess(scope.row.id,scope.row.weeks.find((p) => p.name == 'week4').id,res,file)}"
-                               class="avue-upload-item"
-                               :headers="token"  :auto-upload="true"
-                               accept=".jpeg,.jpg,.gif,.png"
-                               :file-list="(scope.row.weeks.find((p) => p.name == 'week4').image==''||scope.row.weeks.find((p) => p.name == 'week4').image==undefined)?[]:[{url:scope.row.weeks.find((p) => p.name == 'week4').image}]"
-                               :limit="1"
-                               :on-preview="(file)=>{handlePictureCardPreview(scope.row.id,scope.row.weeks.find((p) => p.name == 'week4').id,file)}"
-                               :on-remove="(file)=>{handleAvatarRemove(scope.row.id,scope.row.weeks.find((p) => p.name == 'week4').id,file)}"
-                               list-type="picture-card" >
+                              :on-success="(res,file)=>{handleAvatarSuccess(scope.row.id,scope.row.weeks.find((p) => p.name == 'week4').id,res,file)}"
+                              class="avue-upload-item"
+                              :headers="token"  :auto-upload="true"
+                              accept=".jpeg,.jpg,.gif,.png"
+                              :file-list="(scope.row.weeks.find((p) => p.name == 'week4').image==''||scope.row.weeks.find((p) => p.name == 'week4').image==undefined)?[]:[{url:scope.row.weeks.find((p) => p.name == 'week4').image}]"
+                              :limit="1"
+                              :on-preview="(file)=>{handlePictureCardPreview(scope.row.id,scope.row.weeks.find((p) => p.name == 'week4').id,file)}"
+                              :on-remove="(file)=>{handleAvatarRemove(scope.row.id,scope.row.weeks.find((p) => p.name == 'week4').id,file)}"
+                              list-type="picture-card" >
                       <i  class="el-icon-plus"></i>
                     </el-upload>
                     <el-dialog  append-to-body   :visible.sync="scope.row.weeks.find((p) => p.name == 'week4').dialogVisible" >
@@ -620,15 +630,15 @@
                 <template slot-scope="scope1">
                   <div v-show="scope1.$index === 0 &&scope.row.weeks.find((p) => p.name == 'week5')"  style="width: 100px; height: 102px; margin: 0 auto">
                     <el-upload action="/api/blade-resource/oss/endpoint/put-file"
-                               :on-success="(res,file)=>{handleAvatarSuccess(scope.row.id,scope.row.weeks.find((p) => p.name == 'week5').id,res,file)}"
-                               class="avue-upload-item"
-                               :headers="token"  :auto-upload="true"
-                               accept=".jpeg,.jpg,.gif,.png"
-                               :file-list="(scope.row.weeks.find((p) => p.name == 'week5').image==''||scope.row.weeks.find((p) => p.name == 'week5').image==undefined)?[]:[{url:scope.row.weeks.find((p) => p.name == 'week5').image}]"
-                               :limit="1"
-                               :on-preview="(file)=>{handlePictureCardPreview(scope.row.id,scope.row.weeks.find((p) => p.name == 'week5').id,file)}"
-                               :on-remove="(file)=>{handleAvatarRemove(scope.row.id,scope.row.weeks.find((p) => p.name == 'week5').id,file)}"
-                               list-type="picture-card" >
+                              :on-success="(res,file)=>{handleAvatarSuccess(scope.row.id,scope.row.weeks.find((p) => p.name == 'week5').id,res,file)}"
+                              class="avue-upload-item"
+                              :headers="token"  :auto-upload="true"
+                              accept=".jpeg,.jpg,.gif,.png"
+                              :file-list="(scope.row.weeks.find((p) => p.name == 'week5').image==''||scope.row.weeks.find((p) => p.name == 'week5').image==undefined)?[]:[{url:scope.row.weeks.find((p) => p.name == 'week5').image}]"
+                              :limit="1"
+                              :on-preview="(file)=>{handlePictureCardPreview(scope.row.id,scope.row.weeks.find((p) => p.name == 'week5').id,file)}"
+                              :on-remove="(file)=>{handleAvatarRemove(scope.row.id,scope.row.weeks.find((p) => p.name == 'week5').id,file)}"
+                              list-type="picture-card" >
                       <i  class="el-icon-plus"></i>
                     </el-upload>
                     <el-dialog  append-to-body   :visible.sync="scope.row.weeks.find((p) => p.name == 'week5').dialogVisible" >
@@ -747,15 +757,15 @@
                 <template slot-scope="scope1">
                   <div v-show="scope1.$index === 0 &&scope.row.weeks.find((p) => p.name == 'week6')"  style="width: 100px; height: 102px; margin: 0 auto">
                     <el-upload action="/api/blade-resource/oss/endpoint/put-file"
-                               :on-success="(res,file)=>{handleAvatarSuccess(scope.row.id,scope.row.weeks.find((p) => p.name == 'week6').id,res,file)}"
-                               class="avue-upload-item"
-                               :headers="token"  :auto-upload="true"
-                               accept=".jpeg,.jpg,.gif,.png"
-                               :file-list="(scope.row.weeks.find((p) => p.name == 'week6').image==''||scope.row.weeks.find((p) => p.name == 'week6').image==undefined)?[]:[{url:scope.row.weeks.find((p) => p.name == 'week6').image}]"
-                               :limit="1"
-                               :on-preview="(file)=>{handlePictureCardPreview(scope.row.id,scope.row.weeks.find((p) => p.name == 'week6').id,file)}"
-                               :on-remove="(file)=>{handleAvatarRemove(scope.row.id,scope.row.weeks.find((p) => p.name == 'week6').id,file)}"
-                               list-type="picture-card" >
+                              :on-success="(res,file)=>{handleAvatarSuccess(scope.row.id,scope.row.weeks.find((p) => p.name == 'week6').id,res,file)}"
+                              class="avue-upload-item"
+                              :headers="token"  :auto-upload="true"
+                              accept=".jpeg,.jpg,.gif,.png"
+                              :file-list="(scope.row.weeks.find((p) => p.name == 'week6').image==''||scope.row.weeks.find((p) => p.name == 'week6').image==undefined)?[]:[{url:scope.row.weeks.find((p) => p.name == 'week6').image}]"
+                              :limit="1"
+                              :on-preview="(file)=>{handlePictureCardPreview(scope.row.id,scope.row.weeks.find((p) => p.name == 'week6').id,file)}"
+                              :on-remove="(file)=>{handleAvatarRemove(scope.row.id,scope.row.weeks.find((p) => p.name == 'week6').id,file)}"
+                              list-type="picture-card" >
                       <i  class="el-icon-plus"></i>
                     </el-upload>
                     <el-dialog  append-to-body   :visible.sync="scope.row.weeks.find((p) => p.name == 'week6').dialogVisible" >
@@ -874,15 +884,15 @@
                 <template slot-scope="scope1">
                   <div v-show="scope1.$index === 0 &&scope.row.weeks.find((p) => p.name == 'week7')"  style="width: 100px; height: 102px; margin: 0 auto">
                     <el-upload action="/api/blade-resource/oss/endpoint/put-file"
-                               :on-success="(res,file)=>{handleAvatarSuccess(scope.row.id,scope.row.weeks.find((p) => p.name == 'week7').id,res,file)}"
-                               class="avue-upload-item"
-                               :headers="token"  :auto-upload="true"
-                               accept=".jpeg,.jpg,.gif,.png"
-                               :file-list="(scope.row.weeks.find((p) => p.name == 'week7').image==''||scope.row.weeks.find((p) => p.name == 'week7').image==undefined)?[]:[{url:scope.row.weeks.find((p) => p.name == 'week7').image}]"
-                               :limit="1"
-                               :on-preview="(file)=>{handlePictureCardPreview(scope.row.id,scope.row.weeks.find((p) => p.name == 'week7').id,file)}"
-                               :on-remove="(file)=>{handleAvatarRemove(scope.row.id,scope.row.weeks.find((p) => p.name == 'week7').id,file)}"
-                               list-type="picture-card" >
+                              :on-success="(res,file)=>{handleAvatarSuccess(scope.row.id,scope.row.weeks.find((p) => p.name == 'week7').id,res,file)}"
+                              class="avue-upload-item"
+                              :headers="token"  :auto-upload="true"
+                              accept=".jpeg,.jpg,.gif,.png"
+                              :file-list="(scope.row.weeks.find((p) => p.name == 'week7').image==''||scope.row.weeks.find((p) => p.name == 'week7').image==undefined)?[]:[{url:scope.row.weeks.find((p) => p.name == 'week7').image}]"
+                              :limit="1"
+                              :on-preview="(file)=>{handlePictureCardPreview(scope.row.id,scope.row.weeks.find((p) => p.name == 'week7').id,file)}"
+                              :on-remove="(file)=>{handleAvatarRemove(scope.row.id,scope.row.weeks.find((p) => p.name == 'week7').id,file)}"
+                              list-type="picture-card" >
                       <i  class="el-icon-plus"></i>
                     </el-upload>
                     <el-dialog  append-to-body   :visible.sync="scope.row.weeks.find((p) => p.name == 'week7').dialogVisible" >
@@ -1126,54 +1136,96 @@ export default {
   mounted() {
     this.init();
     this.getToken()//获取token
+    console.log('this.$refs.foodWeekTable')
+    console.log('this.$refs.foodWeekTable')
   },
 
   methods: {
+    toRight(){
+      var colNum = this.$refs.foodWeekTable.columns.length-1;
+      var nowLeftWidth  = this.$refs.foodWeekTable.bodyWrapper.scrollLeft
+      var LeftWidth  = 0
+      for(let i = 0;i<colNum;i++){
+        if(nowLeftWidth<400*(i+1)){
+          LeftWidth =400*(i+1)
+          break;
+        }
+      }
+      console.log(LeftWidth)
+      this.$refs.foodWeekTable.bodyWrapper.scrollLeft = LeftWidth;
+    },
+    toLeft(){
+      var colNum = this.$refs.foodWeekTable.columns.length-2;
+      var nowLeftWidth  = this.$refs.foodWeekTable.bodyWrapper.scrollLeft
+      var LeftWidth  = 0
+      for(let i = colNum;i>0;i--){
+        if(nowLeftWidth>400*(i-1)){
+          LeftWidth =400*(i-1)
+          break;
+        }
+      }
+      console.log(LeftWidth)
+      console.log(colNum)
+      this.$refs.foodWeekTable.bodyWrapper.scrollLeft = LeftWidth;
+    },
     headerCellStyle({row,colunm, rowIndex,columnIndex}){
       var backgroundImage = [
         {'background': '#f8fbfc !important'},
-        {'background-image': 'url("/img/cater/tue.png")!important'},
-        {'background-image': 'url("/img/cater/tue.png")!important'},
-        {'background-image': 'url("/img/cater/wed.png")!important'},
-        {'background-image': 'url("/img/cater/thu.png")!important'},
-        {'background-image': 'url("/img/cater/fri.png")!important'},
-        {'background-image': 'url("/img/cater/tue.png")!important'},
-        {'background-image': 'url("/img/cater/tue.png")!important'},
+        {'background': 'url("/img/cater/mon.png") 20% 50% no-repeat, linear-gradient(90deg, #FFFAEC 0%,#FDD36D 100%)!important',
+        'color': '#DA9501!important',},
+        {'background': 'url("/img/cater/tue.png") 20% 50% no-repeat, linear-gradient(90deg, #FFFAEC 0%,#FDD36D 100%)!important',
+        'color': '#DA9501!important',},
+        {'background': 'url("/img/cater/wed.png") 20% 50% no-repeat, linear-gradient(90deg, #FFFAEC 0%,#FDD36D 100%)!important',
+        'color': '#DA9501!important',},
+        {'background': 'url("/img/cater/thu.png") 20% 50% no-repeat, linear-gradient(90deg, #FFFAEC 0%,#FDD36D 100%)!important',
+        'color': '#DA9501!important',},
+        {'background': 'url("/img/cater/fri.png") 20% 50% no-repeat, linear-gradient(90deg, #FFFAEC 0%,#FDD36D 100%)!important',
+        'color': '#DA9501!important',},
+        {'background': 'url("/img/cater/sat.png") 20% 50% no-repeat, linear-gradient(90deg, #FFFAEC 0%,#FDD36D 100%)!important',
+        'color': '#DA9501!important',},
+        {'background': 'url("/img/cater/sun.png") 20% 50% no-repeat, linear-gradient(90deg, #FFFAEC 0%,#FDD36D 100%)!important',
+        'color': '#DA9501!important',},
       ]
 
       return backgroundImage[columnIndex]
     },
-    cellStyle({row,colunm, rowIndex,columnIndex}){
-      // var backgroundImage = {}
-      // if(columnIndex == 0){
-      //   console.log(rowIndex + '---------------' + columnIndex)
-      //   console.log(row);
-      //   switch(row.name){
-      //     case '早餐':
-      //       backgroundImage= {'background-image': 'url("/img/cater/food1.png")!important',
-      //                         'background-position': 'center !important',
-      //                         'background-repeat' : 'no-repeat!important'}
-      //       break;
-      //     case '早点':
-      //       backgroundImage= {'background-image': 'url("/img/cater/food1.png")!important','background-size': 'cover!important',}
-      //       break;
-      //     case '午餐':
-      //       backgroundImage= {'background-image': 'url("/img/cater/food3.png")!important','background-size': 'cover!important',}
-      //       break;
-      //     case '午点':
-      //       backgroundImage= {'background-image': 'url("/img/cater/food1.png")!important','background-size': 'cover!important',}
-      //       break;
-      //     case '晚餐':
-      //       backgroundImage= {'background-image': 'url("/img/cater/food1.png")!important','background-size': 'cover!important',}
-      //       break;
-      //     case '晚点':
-      //       backgroundImage= {'background-image': 'url("/img/cater/food1.png")!important','background-size': 'cover!important',}
-      //       break;
-      //     default:
-      //       break;
-      //   }
-      // }
-      // return backgroundImage
+    cellStyle(name){
+      var backgroundImage = {}
+        switch(name){
+          case '早餐':
+            backgroundImage= {'background': 'url("/img/cater/food1.png") no-repeat center!important',
+                              'display': 'block',
+                              'height': '24px',}
+            break;
+          case '早点':
+            backgroundImage= {'background': 'url("/img/cater/food2.png") no-repeat center!important',
+                              'display': 'block',
+                              'height': '24px',}
+            break;
+          case '午餐':
+            backgroundImage= {'background': 'url("/img/cater/food3.png") no-repeat center!important',
+                              'display': 'block',
+                              'height': '24px',}
+            break;
+          case '午点':
+            backgroundImage= {'background': 'url("/img/cater/food2.png") no-repeat center!important',
+                              'display': 'block',
+                              'height': '24px',}
+            break;
+          case '晚餐':
+            backgroundImage= {'background': 'url("/img/cater/food6.png") no-repeat center!important',
+                              'display': 'block',
+                              'height': '24px',}
+            break;
+          case '晚点':
+            backgroundImage= {'background': 'url("/img/cater/food2.png") no-repeat center!important',
+                              'display': 'block',
+                              'height': '24px',}
+            break;
+          default:
+            break;
+        }
+      return backgroundImage
     },
     getToken() {
       let str = JSON.parse(localStorage.getItem("saber-token"));
@@ -1721,7 +1773,7 @@ export default {
   },
 };
 </script>
-<style>
+<style scoped>
 /* .table-week th {
   background: #f8fbfc !important;
 } */
@@ -1758,8 +1810,19 @@ export default {
   display: block;
   height: 24px;
 }
-.ico1::before{
-
+.ico2{
+  background: url("/img/cater/food11.png") no-repeat center!important;
+  display: block;
+  height: 24px;
+}
+.ico3{
+  background: url("/img/cater/food11.png") no-repeat center!important;
+  display: block;
+  height: 24px;
+}
+.week1-ico{
+  background: url("/img/cater/food11.png") no-repeat !important;
+  display: inline-block;
 }
 .colNoneBorder
 {

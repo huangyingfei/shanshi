@@ -1122,7 +1122,18 @@ export default {
           // console.log(this.ruleForm.delivery);
           this.ruleForm.delivery1 = this.subquery.isUse == 0 ? true : false; //常用
           // this.ruleForm.
-          this.record = this.subquery.audits[1]; //记录
+          // this.record = this.subquery.audits[1]; //记录
+          // console.log(this.record);
+          let system = [];
+          this.subquery.audits.forEach((item, index) => {
+            console.log(item);
+            // console.log(item.type);
+            if (item.type == 2) {
+              system.push(item);
+            }
+            // console.log(system);
+          });
+          this.record = system[0];
           console.log(this.record);
           let units = this.subquery.nutritions;
           units.forEach(item => {

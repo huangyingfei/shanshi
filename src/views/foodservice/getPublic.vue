@@ -112,7 +112,9 @@
                   ref="tree"
                 >
                   <span class="custom-tree-node" slot-scope="{ node, data }">
-                    <span>{{ node.label }}</span>
+                    <span :class="[data.isPub == 0 ? 'cannot' : '']">{{
+                      node.label
+                    }}</span>
                     <span>
                       <el-button
                         v-if="data.editors == 1"
@@ -322,8 +324,10 @@
                     <!-- <img v-if="dialogImageUrl" :src="dialogImageUrl" class="avatar" /> -->
                     <i class="el-icon-plus"></i>
                   </el-upload>
-                  <span style="color:#e0e0e0;  font-size: 11px;"
-                    >上传图片不能超过2M 只能是JPG PNG格式</span
+                  <span style="color: #000;font-weight: bold; font-size: 11px"
+                    >上传图片不能超过2M 只能是<span style="color:red"
+                      >JPG PNG</span
+                    >格式</span
                   >
                   <el-dialog append-to-body :visible.sync="dialogVisible">
                     <img width="100%" :src="dialogImageUrl" alt />
@@ -1690,7 +1694,7 @@ export default {
       const sums = [];
       columns.forEach((column, index) => {
         if (index === 0) {
-          sums[index] = "能量合计";
+          sums[index] = "用量/能量合计";
           return;
         }
         const values = data.map(item => Number(item[column.property]));
@@ -1707,8 +1711,13 @@ export default {
               return prev;
             }
           }, 0);
-          sums[index] += "";
-          this.sumss = sums[index];
+          // sums[index] += "";
+          // this.sumss = sums[index];
+          if (index == 2 || index == 4) {
+            sums[index] = sums[index].toFixed(2);
+          } else {
+            sums[index] += "";
+          }
         }
       });
       return sums;
@@ -2344,5 +2353,11 @@ export default {
 }
 /deep/ .hide .el-upload--picture-card {
   display: none;
+}
+.orgin {
+  color: gray;
+}
+.cannot {
+  color: #000;
 }
 </style>
