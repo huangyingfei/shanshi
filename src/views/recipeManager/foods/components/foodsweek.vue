@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 0px; height: 1080px;position:relative">
+  <div style="padding: 0px; height: 1080px;position:relative" class="foodsweek">
     <div
       ref="contextmenuFood"
       id="contextmenuFood"
@@ -24,14 +24,14 @@
     <!-- table-week start   -->
     <el-button  icon="el-icon-arrow-left" circle style="position: absolute;left:105px;top: 5px;z-index: 2;" @click="toLeft">
     </el-button>
-    <el-button  icon="el-icon-arrow-right" 
-               circle 
+    <el-button  icon="el-icon-arrow-right"
+               circle
                style="position: absolute;right:10px;top: 5px;z-index: 2;" @click="toRight">
     </el-button>
     <!-- <img src="/img/cater/left.png" style="width: 3rem;height: 3rem;position: absolute;left:100px;z-index: 9999;"/>
     <img src="/img/cater/right.png" style="width: 3rem;height: 3rem;position: absolute;right:10px;z-index: 9999;" /> -->
     <el-table class="table-week" style="width: 100%" :data="datas" border fit :header-cell-style="headerCellStyle" ref="foodWeekTable">
-      
+
       <el-table-column align="center" width="100" fixed class-name="col-date3 colNoneBorder" >
         <template slot="header"> 菜品/食物 </template>
         <template slot-scope="scope">
@@ -48,7 +48,7 @@
         width="400"
       >
         <template slot="header">
-          <div class=""> 
+          <div class="">
             <span>
             {{ headers.find((p) => p.name == "week1").lable }}({{
               headers.find((p) => p.name == "week1").date
@@ -1773,6 +1773,20 @@ export default {
   },
 };
 </script>
+<style>
+  .foodsweek .table-week  .avue-upload-item .el-upload--picture-card ,.foodsweek .el-upload-list--picture-card .el-upload-list__item{
+    width: 100px!important;
+    height: 100px!important;
+    line-height: 100px!important;
+  }
+  .foodsweek .table-week .avue-upload-item{
+    width: 100px;
+    height: 100px;
+  }
+  .foodsweek .table-week .el-upload-list--picture-card .el-upload-list__item-status-label{
+    width: 0px!important;
+  }
+</style>
 <style scoped>
 /* .table-week th {
   background: #f8fbfc !important;
