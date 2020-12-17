@@ -22,7 +22,7 @@
       <p>弹出菜单</p>
     </div>
     <!-- table-week start   -->
-    <el-button  icon="el-icon-arrow-left" circle style="position: absolute;left:105px;top: 5px;z-index: 2;">
+    <el-button  icon="el-icon-arrow-left" circle style="position: absolute;left:105px;top: 5px;z-index: 2;" @click="toLeft">
     </el-button>
     <el-button  icon="el-icon-arrow-right" 
                circle 
@@ -1137,18 +1137,36 @@ export default {
     this.init();
     this.getToken()//获取token
     console.log('this.$refs.foodWeekTable')
-    
+    console.log('this.$refs.foodWeekTable')
   },
 
   methods: {
     toRight(){
-
-      var leftWidth = 0;
-
-      this.$refs.foodWeekTable.bodyWrapper.scrollLeft
-
-
-      this.$refs.foodWeekTable.bodyWrapper.scrollLeft = 400;
+      var colNum = this.$refs.foodWeekTable.columns.length-1;
+      var nowLeftWidth  = this.$refs.foodWeekTable.bodyWrapper.scrollLeft
+      var LeftWidth  = 0
+      for(let i = 0;i<colNum;i++){
+        if(nowLeftWidth<400*(i+1)){
+          LeftWidth =400*(i+1)
+          break;
+        }
+      }
+      console.log(LeftWidth)
+      this.$refs.foodWeekTable.bodyWrapper.scrollLeft = LeftWidth;
+    },
+    toLeft(){
+      var colNum = this.$refs.foodWeekTable.columns.length-2;
+      var nowLeftWidth  = this.$refs.foodWeekTable.bodyWrapper.scrollLeft
+      var LeftWidth  = 0
+      for(let i = colNum;i>0;i--){
+        if(nowLeftWidth>400*(i-1)){
+          LeftWidth =400*(i-1)
+          break;
+        }
+      }
+      console.log(LeftWidth)
+      console.log(colNum)
+      this.$refs.foodWeekTable.bodyWrapper.scrollLeft = LeftWidth;
     },
     headerCellStyle({row,colunm, rowIndex,columnIndex}){
       var backgroundImage = [
