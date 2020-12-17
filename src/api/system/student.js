@@ -89,7 +89,7 @@ export const detail = (id) => {
   return request({
     url: '/api/blade-food/student/detail?id='+id,
     method: 'get',
-    
+
   })
 }
 
@@ -98,7 +98,7 @@ export const getById = (id) => {
   return request({
     url: '/api/blade-food/class/getById?classId='+id,
     method: 'get',
-    
+
   })
 }
 
@@ -110,6 +110,14 @@ export const getChildNo = (student) => {
   })
 }
 
+
+export const createClass = (row) => {
+  return request({
+    url: '/api/blade-food/class/createClass',
+    method: 'post',
+    data: row
+  })
+}
 
 
 

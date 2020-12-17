@@ -1599,8 +1599,6 @@ document.oncontextmenu = function(){return false};
           }
           that.drogNode = JSON.parse(JSON.stringify(node.data));
           ev.dataTransfer.setData("Text", JSON.stringify(node.data));
-          console.log("node.data",node.data)
-          console.log("this.datas",this.datas)
           that.drogNodeStats = true;
           setTimeout(() => {
             that.$refs.child.refreshData();
@@ -1614,7 +1612,6 @@ document.oncontextmenu = function(){return false};
     allergy(){
       this.jundgeallergy=true;
       let recipeCycles=[];
-      console.log(this.datas)
       this.datas.forEach(data=>{
         data.weeks.forEach(week=>{
           week.foods.forEach(food=>{
@@ -1678,11 +1675,11 @@ document.oncontextmenu = function(){return false};
               if(!flag){
                 foodMutuals.push({data_id:id,week_id:wk,foodId:result.data.data.foodMutuals[i].foodId,foodId1:result.data.data.foodMutuals[i].foodId1,msg:result.data.data.msg[i]})
               }
-              msg+=result.data.data.msg[i];
+              msg+=result.data.data.msg[i]+"，";
             }
             that.foodMutuals=foodMutuals;
 
-            this.$message.warning(msg);
+            this.$message.warning(msg.substring(0,msg.length-1));
             console.log("that.foodMutuals",that.foodMutuals)
           }
       })

@@ -15,12 +15,12 @@
       </el-table-column>
       <el-table-column
         prop="range"
-        :label="intake.mealSelect"
+        :label="intake.mealSelect==null?'推荐范围':intake.mealSelect"
         width="180">
       </el-table-column>
       <el-table-column
         prop="jl"
-        :label="intake.avg"
+        :label="intake.avg==null?'食谱净量':intake.avg"
         width="180">
       </el-table-column>
       <el-table-column

@@ -1297,8 +1297,6 @@
             }
             that.drogNode = JSON.parse(JSON.stringify(node.data));
             ev.dataTransfer.setData("Text", JSON.stringify(node.data));
-            console.log("node.data",node.data)
-            console.log("this.datas",this.datas)
             that.drogNodeStats = true;
             setTimeout(() => {
               that.$refs.child.refreshData();
@@ -1380,7 +1378,7 @@
             }
             that.foodMutuals=foodMutuals;
 
-            this.$message.warning(msg);
+            this.$message.warning(msg.substring(0,msg.length-1));
             console.log("that.foodMutuals",that.foodMutuals)
           }
         })

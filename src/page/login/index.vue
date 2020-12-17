@@ -31,7 +31,7 @@
       :visible.sync="dialogVisible"
       width="30%"   :close-on-click-modal="false"
       :before-close="cancel">
-      <codeLogin ref="codeLogin"></codeLogin>
+      <codeLogin ref="codeLogin"  @cancel="cancel"></codeLogin>
       <span slot="footer" class="dialog-footer">
     <el-button @click="cancel">取 消</el-button>
     <el-button type="primary" @click="subCodeLogin" >确 定</el-button>

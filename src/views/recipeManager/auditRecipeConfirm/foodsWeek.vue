@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 0px;">
+  <div style="padding: 0px;" class="foodsweek">
     <!-- table-week start   -->
     <el-table class="foods-table-week" :data="datas" border max-height = "430px">
       <el-table-column align="center" width="100" fixed class-name="col-date3 colNoneBorder" >

@@ -74,6 +74,22 @@ import { mapGetters } from "vuex";
 export default {
   name: "codelogin",
   data() {
+    const validatePass = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请输入密码"));
+      } else {
+        callback();
+      }
+    };
+    const validatePass2 = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请再次输入密码"));
+      } else if (value !== this.loginForm.newPassword) {
+        callback(new Error("两次输入密码不一致!"));
+      } else {
+        callback();
+      }
+    };
     const validatePhone = (rule, value, callback) => {
       let list;
         this.isvalidatemobile(value).then(res=>{
@@ -108,8 +124,8 @@ export default {
       loginRules: {
         phone: [{ required: true, trigger: "blur", validator: validatePhone }],
         code: [{ required: true, trigger: "blur", validator: validateCode }],
-        newPassword:[{required:true,trigger:"blur",message:"请输入密码"}],
-        newPassword1:[{required:true,trigger:"blur",message:"请输入确认密码"}]
+        newPassword:[{required:true,trigger:"blur",validator: validatePass}],
+        newPassword1:[{required:true,trigger:"blur",validator: validatePass2}]
       }
     };
   },
@@ -156,7 +172,6 @@ export default {
             let user={};
             user["phone"]=phone;
             await  vilatePhone(user).then(res=>{
-              debugger
               if(res.data.success){
                 if(res.data.msg){
                   msg= '该手机号没有对应的用户';
@@ -198,6 +213,7 @@ export default {
                 type: "success",
                 message: "修改密码成功!"
               });
+              that.$emit("cancel")
             }
           })
         }})

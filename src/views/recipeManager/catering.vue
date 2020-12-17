@@ -1845,7 +1845,7 @@ document.oncontextmenu = function(){return false};
             }
             that.foodMutuals=foodMutuals;
 
-            this.$message.warning(msg);
+            this.$message.warning(msg.substring(0,msg.length-1));
             console.log("that.foodMutuals",that.foodMutuals)
           }
       })
