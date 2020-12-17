@@ -32,7 +32,7 @@
           @node-click="handleNodeClick"
         >
           <span class="custom-tree-node" slot-scope="{ node, data }">
-            <span> <i :class="data.icon"></i>{{ node.label }} </span>
+            <span> {{ node.label }} </span>
 
             <!-- <span>{{ node.label }}</span> -->
             <span>
@@ -356,7 +356,7 @@
                 clearable
                 v-model="stringClass"
                 :options="loadClass"
-                :props="{ checkStrictly: true }"
+                :props="{ multiple: true, checkStrictly: true }"
                 @change="handleChange"
               ></el-cascader>
             </el-form-item>
@@ -1125,6 +1125,7 @@ export default {
     },
     //添加员工
     cameras(formName) {
+      console.log(this.stringClass);
       // console.log(this.ruleForm.name); //姓名
       // console.log(this.ruleForm.radio); //性别
       // console.log(this.ruleForm.marriages); //婚姻状况
@@ -1142,17 +1143,14 @@ export default {
       // console.log(this.ruleForm.emails); //邮箱
       // console.log(this.ruleForm.ddeparture); //当前状态
       // console.log(this.ruleForm.nextstate); //状态更新日期
-      console.log(this.stringClass);
-      if (this.stringClass.length == 2) {
-        // this.sqlClass = this.stringClass[1];
-        // console.log(this.sqlClass);
-        this.sqlClass.push(this.stringClass[1]);
-      }
-      if (this.stringClass.length == 3) {
-        // this.sqlClass = this.stringClass[2];
-        // console.log(this.sqlClass);
-        this.sqlClass.push(this.stringClass[2]);
-      }
+      // console.log(this.stringClass);
+      // if (this.stringClass.length == 2) {
+      //   this.sqlClass.push(this.stringClass[1]);
+      // }
+      // if (this.stringClass.length == 3) {
+
+      //   this.sqlClass.push(this.stringClass[2]);
+      // }
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.$axios
@@ -1405,6 +1403,16 @@ export default {
       console.log(this.view);
       this.under = index1;
       this.dateTime = true;
+      setTimeout(() => {
+        let list = document.getElementsByClassName("el-cascader-node");
+        console.log(list);
+        for (let i = 0; i < list.length; i++) {
+          list[i].childNodes[0].style = "display:none";
+        }
+        // list.forEach((item, i) => {
+        //   item.childNodes[0].style = "display: none";
+        // });
+      }, 500);
     },
     //添加部门
     added(index) {
@@ -1754,9 +1762,12 @@ export default {
             label: item.title,
             into: item.level,
             view: 0,
-            tment: 0,
-            icon: "el-icon-success"
+            tment: 0
           };
+          // auto.push({
+          //   id: 123,
+          //   label: "新增"
+          // });
           auto[index].children = [];
           if (item.children) {
             item.children.forEach((item1, index1) => {
@@ -1765,9 +1776,12 @@ export default {
                 label: item1.title,
                 into: item1.level,
                 view: 1,
-                tment: 1,
-                icon: "el-icon-info"
+                tment: 1
               };
+            });
+            auto[index].children.push({
+              id: 123,
+              label: "新增"
             });
           }
         });
