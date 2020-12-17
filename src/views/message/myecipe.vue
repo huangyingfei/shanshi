@@ -168,7 +168,11 @@
             <el-button type="text" size="small" @click="protocol(scope.row)"
               >查看</el-button
             >
-            <el-button type="text" size="small" @click="seecol(scope.row)"
+            <el-button
+              type="text"
+              size="small"
+              v-if="scope.row.status != 1 && scope.row.status != 0"
+              @click="seecol(scope.row)"
               >编辑</el-button
             >
             <el-button type="text" size="small" @click="remove(scope.row)"
@@ -492,6 +496,7 @@ ${this.timezone1}`,
   /* height: 700px; */
   height: 100%;
   background-color: #fff;
+  margin-bottom: 40px;
 }
 
 .header {

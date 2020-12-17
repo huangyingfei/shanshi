@@ -69,7 +69,7 @@ export default {
     title: "登录 ",
     info: "华园紫杭膳食营养智慧管理系统",
     tenantId: "请输入租户ID",
-    username: "请输入账号",
+    username: "请输入账号或手机号",
     password: "请输入密码",
     wechat: "微信",
     qq: "QQ",
@@ -79,7 +79,7 @@ export default {
     code: "请输入验证码",
     submit: "登录",
     userLogin: "账号密码登录",
-    phoneLogin: "手机号登录",
+    phoneLogin: "找回密码",
     thirdLogin: "第三方系统登录",
     msgText: "发送验证码",
     msgSuccess: "秒后重发"

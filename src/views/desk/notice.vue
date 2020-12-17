@@ -3,35 +3,35 @@
     <!-- 总量 -->
     <div class="total">
       <div class="mechanism">
-        <img src="http://www.huangyingfei.cn/img/123.jpg" alt />
+        <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
         <div class="nism1">
           <div class="ingredients">机构总量</div>
           <div class="food1">559</div>
         </div>
       </div>
       <div class="mechanism">
-        <img src="http://www.huangyingfei.cn/img/123.jpg" alt />
+        <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
         <div class="nism1">
           <div class="ingredients">政府总量</div>
           <div class="food1">559</div>
         </div>
       </div>
       <div class="mechanism">
-        <img src="http://www.huangyingfei.cn/img/123.jpg" alt />
+        <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
         <div class="nism1">
           <div class="ingredients">食材总量</div>
           <div class="food1">559</div>
         </div>
       </div>
       <div class="mechanism">
-        <img src="http://www.huangyingfei.cn/img/123.jpg" alt />
+        <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
         <div class="nism1">
           <div class="ingredients">菜品总量</div>
           <div class="food1">559</div>
         </div>
       </div>
       <div class="mechanism">
-        <img src="http://www.huangyingfei.cn/img/123.jpg" alt />
+        <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
         <div class="nism1">
           <div class="ingredients">食谱总量</div>
           <div class="food1">559</div>
@@ -45,35 +45,35 @@
         <h4 class="welcome">本周最受欢迎菜品</h4>
         <div class="menu">
           <div class="menuimg">
-            <img src="http://www.huangyingfei.cn/img/123.jpg" alt />
+            <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
           </div>
           <div class="menutext">爆炒金针菇</div>
           <div class="menunum">655</div>
         </div>
         <div class="menu1">
           <div class="menuimg">
-            <img src="http://www.huangyingfei.cn/img/123.jpg" alt />
+            <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
           </div>
           <div class="menutext">翠竹报春</div>
           <div class="menunum">642</div>
         </div>
         <div class="menu1">
           <div class="menuimg">
-            <img src="http://www.huangyingfei.cn/img/123.jpg" alt />
+            <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
           </div>
           <div class="menutext">炒三丁</div>
           <div class="menunum">598</div>
         </div>
         <div class="menu1">
           <div class="menuimg">
-            <img src="http://www.huangyingfei.cn/img/123.jpg" alt />
+            <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
           </div>
           <div class="menutext">扶手观音莲</div>
           <div class="menunum">576</div>
         </div>
         <div class="menu1">
           <div class="menuimg">
-            <img src="http://www.huangyingfei.cn/img/123.jpg" alt />
+            <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
           </div>
           <div class="menutext">干锅土豆片</div>
           <div class="menunum">566</div>
@@ -85,7 +85,7 @@
         <div class="school">
           <div class="ranking">1</div>
           <div class="schoolimg">
-            <img src="http://www.huangyingfei.cn/img/123.jpg" alt />
+            <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
           </div>
           <div class="schooltxt">杭州市实验外国语学校</div>
           <div class="schoolnum">4.50分</div>
@@ -93,7 +93,7 @@
         <div class="school1">
           <div class="ranking1">2</div>
           <div class="schoolimg">
-            <img src="http://www.huangyingfei.cn/img/123.jpg" alt />
+            <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
           </div>
           <div class="schooltxt">杭州市大成实验学校</div>
           <div class="schoolnum">4.25分</div>
@@ -102,7 +102,7 @@
         <div class="school1">
           <div class="ranking2">3</div>
           <div class="schoolimg">
-            <img src="http://www.huangyingfei.cn/img/123.jpg" alt />
+            <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
           </div>
           <div class="schooltxt">浙江省东阳市外国语学校</div>
           <div class="schoolnum">4.00分</div>
@@ -111,7 +111,7 @@
         <div class="school1">
           <div class="ranking3">4</div>
           <div class="schoolimg">
-            <img src="http://www.huangyingfei.cn/img/123.jpg" alt />
+            <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
           </div>
           <div class="schooltxt">杭州市览新第二幼儿园</div>
           <div class="schoolnum">4.00分</div>
@@ -120,7 +120,7 @@
         <div class="school1">
           <div class="ranking4">5</div>
           <div class="schoolimg">
-            <img src="http://www.huangyingfei.cn/img/123.jpg" alt />
+            <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
           </div>
           <div class="schooltxt">杭州外国语学校</div>
           <div class="schoolnum">4.00分</div>

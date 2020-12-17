@@ -104,3 +104,31 @@ export const checkInfo = (param) => {
     data:param
   })
 }
+
+
+export const sendMsg = (phone) => {
+  return request({
+    url: '/api/blade-user/send-msg',
+    method: 'get',
+    params: {
+      phone,
+    }
+  })
+}
+
+
+export const vilateCode = (param) => {
+  return request({
+    url: '/api/blade-user/vilate-code',
+    method: 'post',
+    data:param
+  })
+}
+export const vilatePhone = (param) => {
+  return request({
+    url: '/api/blade-user/vilate-phone',
+    method: 'post',
+    data:param
+  })
+}
+

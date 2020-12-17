@@ -1,388 +1,383 @@
 <template>
-  <div>
-    <div class="management">
-      <!-- <h2>分享食谱</h2> -->
-      <!-- 左边 -->
-      <div class="onchange">
-        <div class="const">
-          <el-button @click="added(1)" size="small" type="primary"
-            >添加部门</el-button
-          >
-          <el-button @click="drawer = true" size="small" type="primary"
+  <div class="management">
+    <!-- <h2>分享食谱</h2> -->
+    <!-- 左边 -->
+    <div class="onchange">
+      <div class="const">
+        <el-button @click="added(1)" size="small" type="primary"
+          >添加部门</el-button
+        >
+        <!-- <el-button @click="drawer = true" size="small" type="primary"
             >测试测试</el-button
-          >
-          <!-- <el-button size="small" type="primary">部门排序</el-button> -->
-        </div>
-        <el-drawer
+          > -->
+        <!-- <el-button size="small" type="primary">部门排序</el-button> -->
+      </div>
+      <!-- <el-drawer
           title="新建学段"
           :visible.sync="drawer"
           :direction="direction"
           :modal-append-to-body="false"
         >
           <student></student>
-        </el-drawer>
+        </el-drawer> -->
 
-        <div class="block">
-          <p></p>
-          <el-tree
-            :data="data"
-            node-key="id"
-            v-loading="loadFlag"
-            :default-expand-all="false"
-            :expand-on-click-node="false"
-            @node-click="handleNodeClick"
-          >
-            <span class="custom-tree-node" slot-scope="{ node, data }">
-              <span>{{ node.label }}</span>
-              <span>
-                <!-- <el-button
+      <div class="block">
+        <p></p>
+        <el-tree
+          :data="data"
+          node-key="id"
+          v-loading="loadFlag"
+          :default-expand-all="true"
+          :expand-on-click-node="false"
+          @node-click="handleNodeClick"
+        >
+          <span class="custom-tree-node" slot-scope="{ node, data }">
+            <span> <i :class="data.icon"></i>{{ node.label }} </span>
+
+            <!-- <span>{{ node.label }}</span> -->
+            <span>
+              <!-- <el-button
                   type="text"
                   size="mini"
                   @click="() => defcustom(data)"
                 >
                   查看
                 </el-button> -->
-                <el-button
-                  v-if="data.view == 0"
-                  type="text"
-                  size="mini"
-                  @click.stop="() => editorBase(data, 2)"
-                >
-                  编辑
-                </el-button>
-                <el-button
-                  v-if="data.tment == 1"
-                  type="text"
-                  size="mini"
-                  @click.stop="() => setDepartment(data, 2)"
-                >
-                  编辑子部门
-                </el-button>
-                <el-button
-                  v-if="data.into == 1"
-                  type="text"
-                  size="mini"
-                  @click.stop="() => gate(data, 1)"
-                >
-                  添加
-                </el-button>
+              <el-button
+                v-if="data.view == 0"
+                type="text"
+                size="mini"
+                @click.stop="() => editorBase(data, 2)"
+              >
+                编辑
+              </el-button>
+              <el-button
+                v-if="data.tment == 1"
+                type="text"
+                size="mini"
+                @click.stop="() => setDepartment(data, 2)"
+              >
+                编辑子部门
+              </el-button>
+              <el-button
+                v-if="data.into == 1"
+                type="text"
+                size="mini"
+                @click.stop="() => gate(data, 1)"
+              >
+                添加
+              </el-button>
 
-                <el-button
-                  type="text"
-                  size="mini"
-                  @click.stop="() => remove(node, data)"
-                >
-                  删除
-                </el-button>
-              </span>
+              <el-button
+                type="text"
+                size="mini"
+                @click.stop="() => remove(node, data)"
+              >
+                删除
+              </el-button>
             </span>
-          </el-tree>
-        </div>
+          </span>
+        </el-tree>
       </div>
-      <div class="consults">
-        <div class="header">
-          <!-- <span style="margin-right: 10px">关键字:</span>
+    </div>
+    <div class="consults">
+      <div class="header">
+        <!-- <span style="margin-right: 10px">关键字:</span>
           <el-input
             v-model="input"
             placeholder="请输入内容"
             style="width: 200px"
             size="small"
           ></el-input> -->
-          <span style="margin-right: 10px">工号:</span>
-          <el-input
-            v-model="workers"
-            placeholder="请输入内容"
-            style="width: 100px"
-            size="small"
-          ></el-input>
-          <span style="margin-left: 10px;margin-right: 10px">姓名:</span>
-          <el-input
-            v-model="username"
-            placeholder="请输入内容"
-            style="width: 100px"
-            size="small"
-          ></el-input>
-          <span style="margin-right: 10px; margin-left: 15px">职务:</span>
-          <el-select
-            style="width: 100px; height: 30px"
-            v-model="callback"
-            placeholder="请选择"
-          >
-            <el-option
-              v-for="item in vposition"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-              style="width: 100px"
-            >
-            </el-option>
-          </el-select>
-          <span style="margin-right: 10px; margin-left: 15px">当前状态:</span>
-          <el-select
-            style="width: 100px; height: 30px"
-            v-model="driver"
-            placeholder="请选择"
-          >
-            <el-option
-              v-for="item in mState"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-              style="width: 100px"
-            >
-            </el-option>
-          </el-select>
-          <span style="margin-right: 10px; margin-left: 15px">工号排序:</span>
-          <el-select
-            style="width: 100px; height: 30px"
-            v-model="working"
-            placeholder="请选择"
-          >
-            <el-option
-              v-for="item in number"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-              style="width: 100px"
-            >
-            </el-option>
-          </el-select>
-        </div>
-        <!-- 添加部门弹框 -->
-        <el-dialog
-          title="部门"
-          width="30%"
-          append-to-body
-          :visible.sync="department"
-          :close-on-click-modal="false"
+        <span style="margin-right: 10px">工号:</span>
+        <el-input
+          v-model="workers"
+          placeholder="请输入内容"
+          style="width: 100px"
+          size="small"
+        ></el-input>
+        <span style="margin-left: 10px;margin-right: 10px">姓名:</span>
+        <el-input
+          v-model="username"
+          placeholder="请输入内容"
+          style="width: 100px"
+          size="small"
+        ></el-input>
+        <span style="margin-right: 10px; margin-left: 15px">职务:</span>
+        <el-select
+          style="width: 100px; height: 30px"
+          v-model="callback"
+          placeholder="请选择"
         >
-          <el-form
-            :model="storage"
-            :rules="rules"
-            ref="ruleForm"
-            :inline="true"
-            label-width="105px"
-            class="demo-ruleForm"
+          <el-option
+            v-for="item in vposition"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+            style="width: 100px"
           >
-            <el-form-item label="部门名称" style="width: 355px">
-              <el-input
-                maxlength="10"
-                show-word-limit
-                style="width: 250px"
-                v-model="storage.name"
-              ></el-input>
-            </el-form-item>
-            <!-- <el-form-item label="部门排序" style="width: 355px">
+          </el-option>
+        </el-select>
+        <span style="margin-right: 10px; margin-left: 15px">当前状态:</span>
+        <el-select
+          style="width: 100px; height: 30px"
+          v-model="driver"
+          placeholder="请选择"
+        >
+          <el-option
+            v-for="item in mState"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+            style="width: 100px"
+          >
+          </el-option>
+        </el-select>
+        <span style="margin-right: 10px; margin-left: 15px">工号排序:</span>
+        <el-select
+          style="width: 100px; height: 30px"
+          v-model="working"
+          placeholder="请选择"
+        >
+          <el-option
+            v-for="item in number"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+            style="width: 100px"
+          >
+          </el-option>
+        </el-select>
+      </div>
+      <!-- 添加部门弹框 -->
+      <el-dialog
+        title="部门"
+        width="30%"
+        append-to-body
+        :visible.sync="department"
+        :close-on-click-modal="false"
+      >
+        <el-form
+          :model="storage"
+          :rules="rules"
+          ref="ruleForm"
+          :inline="true"
+          label-width="105px"
+          class="demo-ruleForm"
+        >
+          <el-form-item label="部门名称" style="width: 355px">
+            <el-input
+              maxlength="10"
+              show-word-limit
+              style="width: 250px"
+              v-model="storage.name"
+            ></el-input>
+          </el-form-item>
+          <!-- <el-form-item label="部门排序" style="width: 355px">
             <el-input
               type="number"
               style="width: 250px"
               v-model="storage.sorting"
             ></el-input>
           </el-form-item> -->
-          </el-form>
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="department = false">取 消</el-button>
-            <el-button
-              v-if="this.departments == 1"
-              @click="Determine"
-              type="primary"
-              >确 定</el-button
-            >
-            <el-button
-              v-if="this.departments == 2"
-              @click="selection"
-              type="primary"
-              >编辑确定</el-button
-            >
-          </div>
-        </el-dialog>
-        <!-- 添加子部门弹框 -->
-        <el-dialog
-          title="子部门"
-          width="30%"
-          append-to-body
-          :visible.sync="obtained"
-          :close-on-click-modal="false"
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="department = false">取 消</el-button>
+          <el-button
+            v-if="this.departments == 1"
+            @click="Determine"
+            type="primary"
+            >确 定</el-button
+          >
+          <el-button
+            v-if="this.departments == 2"
+            @click="selection"
+            type="primary"
+            >编辑确定</el-button
+          >
+        </div>
+      </el-dialog>
+      <!-- 添加子部门弹框 -->
+      <el-dialog
+        title="子部门"
+        width="30%"
+        append-to-body
+        :visible.sync="obtained"
+        :close-on-click-modal="false"
+      >
+        <el-form
+          :model="acetone"
+          :rules="rules"
+          ref="ruleForm"
+          :inline="true"
+          label-width="105px"
+          class="demo-ruleForm"
         >
+          <el-form-item label="子部门名称" style="width: 355px">
+            <el-input
+              maxlength="10"
+              show-word-limit
+              style="width: 250px"
+              v-model="acetone.name"
+            ></el-input>
+          </el-form-item>
+          <!-- <el-form-item label="子部门排序" style="width: 355px">
+              <el-input
+                style="width: 250px"
+                v-model="acetone.sorting"
+              ></el-input>
+            </el-form-item> -->
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="obtained = false">取 消</el-button>
+          <el-button v-if="this.support == 0" @click="atomic" type="primary"
+            >确 定</el-button
+          >
+          <el-button v-if="this.support == 1" @click="addNotify" type="primary"
+            >编辑确定</el-button
+          >
+        </div>
+      </el-dialog>
+      <!-- 添加员工弹框 -->
+      <el-dialog
+        title="添加员工"
+        width="60%"
+        append-to-body
+        :visible.sync="dateTime"
+        :close-on-click-modal="false"
+      >
+        <div class="onlymsgid">
           <el-form
-            :model="acetone"
+            :model="ruleForm"
             :rules="rules"
             ref="ruleForm"
             :inline="true"
             label-width="105px"
             class="demo-ruleForm"
           >
-            <el-form-item label="子部门名称" style="width: 355px">
-              <el-input
-                maxlength="10"
-                show-word-limit
+            <el-form-item label="姓名" style="width: 355px" prop="name">
+              <el-input style="width: 250px" v-model="ruleForm.name"></el-input>
+            </el-form-item>
+            <el-form-item label="性别" style="width: 355px">
+              <el-radio
+                style="margin-left: 30px"
+                v-model="ruleForm.radio"
+                label="1"
+                >男</el-radio
+              >
+              <el-radio v-model="ruleForm.radio" label="2">女</el-radio>
+            </el-form-item>
+            <el-form-item style="width: 355px" label="图片">
+              <el-upload
+                :class="{ hide: hideUploadEdit }"
+                accept=".jpeg,.jpg,.gif,.png"
+                action="api/blade-resource/oss/endpoint/put-file"
+                list-type="picture-card"
+                :limit="1"
+                :file-list="productImgs"
+                :on-exceed="handleExceed"
+                :on-change="handleChangePic"
+                :on-preview="handlePictureCardPreview"
+                :before-upload="beforeAvatarUpload"
+                :on-success="handleAvatarSuccess"
+                :on-remove="handleRemove"
+                :headers="headerObj"
+              >
+                <!-- <img v-if="dialogImageUrl" :src="dialogImageUrl" class="avatar" /> -->
+                <i class="el-icon-plus"></i>
+              </el-upload>
+              <span style="color:#e0e0e0;  font-size: 11px;"
+                >上传图片不能超过2M 只能是JPG PNG格式</span
+              >
+              <el-dialog append-to-body :visible.sync="dialogVisible">
+                <img width="100%" :src="dialogImageUrl" alt />
+              </el-dialog>
+            </el-form-item>
+            <el-form-item style="width: 355px" label="婚姻状况">
+              <el-radio
+                style="margin-left: 30px"
+                v-model="ruleForm.marriages"
+                label="0"
+                >已婚</el-radio
+              >
+              <el-radio v-model="ruleForm.marriages" label="1">未婚</el-radio>
+            </el-form-item>
+            <el-form-item label="出生日期" style="width: 355px" prop="value1">
+              <el-date-picker
+                v-model="ruleForm.value1"
                 style="width: 250px"
-                v-model="acetone.name"
+                format="yyyy 年 MM 月 dd 日 "
+                value-format="yyyy-MM-dd HH:mm:ss"
+                type="datetime"
+                placeholder="选择日期时间"
+              >
+              </el-date-picker>
+            </el-form-item>
+            <el-form-item label="手机号码" style="width: 355px" prop="phones">
+              <el-input
+                style="width: 250px"
+                v-model="ruleForm.phones"
               ></el-input>
             </el-form-item>
-            <!-- <el-form-item label="子部门排序" style="width: 355px">
+            <el-form-item label="民族" style="width: 355px">
+              <el-select
+                style="width: 250px"
+                v-model="ruleForm.national"
+                placeholder="请选择"
+              >
+                <el-option
+                  v-for="item in college"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="职务" style="width: 355px" prop="position">
+              <el-select
+                clearable
+                style="width: 250px"
+                v-model="ruleForm.position"
+                placeholder="请选择"
+              >
+                <el-option
+                  v-for="item in vposition"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="所在年级/班级" style="width: 355px">
+              <el-cascader
+                style="width: 250px"
+                clearable
+                v-model="stringClass"
+                :options="loadClass"
+                :props="{ checkStrictly: true }"
+                @change="handleChange"
+              ></el-cascader>
+            </el-form-item>
+            <el-form-item label="工号" style="width: 355px">
               <el-input
                 style="width: 250px"
-                v-model="acetone.sorting"
+                v-model="ruleForm.thejob"
               ></el-input>
-            </el-form-item> -->
-          </el-form>
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="obtained = false">取 消</el-button>
-            <el-button v-if="this.support == 0" @click="atomic" type="primary"
-              >确 定</el-button
-            >
-            <el-button
-              v-if="this.support == 1"
-              @click="addNotify"
-              type="primary"
-              >编辑确定</el-button
-            >
-          </div>
-        </el-dialog>
-        <!-- 添加员工弹框 -->
-        <el-dialog
-          title="添加员工"
-          width="60%"
-          append-to-body
-          :visible.sync="dateTime"
-          :close-on-click-modal="false"
-        >
-          <div class="onlymsgid">
-            <el-form
-              :model="ruleForm"
-              :rules="rules"
-              ref="ruleForm"
-              :inline="true"
-              label-width="105px"
-              class="demo-ruleForm"
-            >
-              <el-form-item label="姓名" style="width: 355px" prop="name">
-                <el-input
-                  style="width: 250px"
-                  v-model="ruleForm.name"
-                ></el-input>
-              </el-form-item>
-              <el-form-item label="性别" style="width: 355px">
-                <el-radio
-                  style="margin-left: 30px"
-                  v-model="ruleForm.radio"
-                  label="1"
-                  >男</el-radio
-                >
-                <el-radio v-model="ruleForm.radio" label="2">女</el-radio>
-              </el-form-item>
-              <el-form-item style="width: 355px" label="图片">
-                <el-upload
-                  :class="{ hide: hideUploadEdit }"
-                  accept=".jpeg,.jpg,.gif,.png"
-                  action="api/blade-resource/oss/endpoint/put-file"
-                  list-type="picture-card"
-                  :limit="1"
-                  :file-list="productImgs"
-                  :on-exceed="handleExceed"
-                  :on-change="handleChangePic"
-                  :on-preview="handlePictureCardPreview"
-                  :before-upload="beforeAvatarUpload"
-                  :on-success="handleAvatarSuccess"
-                  :on-remove="handleRemove"
-                  :headers="headerObj"
-                >
-                  <!-- <img v-if="dialogImageUrl" :src="dialogImageUrl" class="avatar" /> -->
-                  <i class="el-icon-plus"></i>
-                </el-upload>
-                <span style="color:#e0e0e0;  font-size: 11px;"
-                  >上传图片不能超过2M 只能是JPG PNG格式</span
-                >
-                <el-dialog append-to-body :visible.sync="dialogVisible">
-                  <img width="100%" :src="dialogImageUrl" alt />
-                </el-dialog>
-              </el-form-item>
-              <el-form-item style="width: 355px" label="婚姻状况">
-                <el-radio
-                  style="margin-left: 30px"
-                  v-model="ruleForm.marriages"
-                  label="0"
-                  >已婚</el-radio
-                >
-                <el-radio v-model="ruleForm.marriages" label="1">未婚</el-radio>
-              </el-form-item>
-              <el-form-item label="出生日期" style="width: 355px" prop="value1">
-                <el-date-picker
-                  v-model="ruleForm.value1"
-                  style="width: 250px"
-                  format="yyyy 年 MM 月 dd 日 "
-                  value-format="yyyy-MM-dd HH:mm:ss"
-                  type="datetime"
-                  placeholder="选择日期时间"
-                >
-                </el-date-picker>
-              </el-form-item>
-              <el-form-item label="手机号码" style="width: 355px" prop="phones">
-                <el-input
-                  style="width: 250px"
-                  v-model="ruleForm.phones"
-                ></el-input>
-              </el-form-item>
-              <el-form-item label="民族" style="width: 355px">
-                <el-select
-                  style="width: 250px"
-                  v-model="ruleForm.national"
-                  placeholder="请选择"
-                >
-                  <el-option
-                    v-for="item in college"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  >
-                  </el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="职务" style="width: 355px" prop="position">
-                <el-select
-                  clearable
-                  style="width: 250px"
-                  v-model="ruleForm.position"
-                  placeholder="请选择"
-                >
-                  <el-option
-                    v-for="item in vposition"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  >
-                  </el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="所在年级/班级" style="width: 355px">
-                <el-cascader
-                  style="width: 250px"
-                  clearable
-                  v-model="stringClass"
-                  :options="loadClass"
-                  :props="{ checkStrictly: true }"
-                  @change="handleChange"
-                ></el-cascader>
-              </el-form-item>
-              <el-form-item label="工号" style="width: 355px">
-                <el-input
-                  style="width: 250px"
-                  v-model="ruleForm.thejob"
-                ></el-input>
-              </el-form-item>
-              <el-form-item style="width: 355px">
-                <span style="font-size: 12px"
-                  >若为年级组长、保教主任、老师、保育员时需选择
-                  所在年级/班级</span
-                >
-              </el-form-item>
-              <el-form-item
-                label="入职日期"
-                style="width: 355px"
-                prop="inductions"
+            </el-form-item>
+            <el-form-item style="width: 355px">
+              <span style="font-size: 12px"
+                >若为年级组长、保教主任、老师、保育员时需选择
+                所在年级/班级</span
               >
-                <!-- <el-date-picker
+            </el-form-item>
+            <el-form-item
+              label="入职日期"
+              style="width: 355px"
+              prop="inductions"
+            >
+              <!-- <el-date-picker
               style="width: 250px"
               v-model="ruleForm.inductions"
               format="yyyy 年 MM 月 dd 日"
@@ -390,19 +385,19 @@
               placeholder="选择日期"
             >
             </el-date-picker> -->
-                <el-date-picker
-                  v-model="ruleForm.inductions"
-                  style="width: 250px"
-                  format="yyyy 年 MM 月 dd 日"
-                  value-format="yyyy-MM-dd HH:mm:ss"
-                  type="datetime"
-                  placeholder="选择日期时间"
-                >
-                </el-date-picker>
-              </el-form-item>
-              <el-form-item label="参加工作日期" style="width: 355px">
-                <!--  -->
-                <!-- <el-date-picker
+              <el-date-picker
+                v-model="ruleForm.inductions"
+                style="width: 250px"
+                format="yyyy 年 MM 月 dd 日"
+                value-format="yyyy-MM-dd HH:mm:ss"
+                type="datetime"
+                placeholder="选择日期时间"
+              >
+              </el-date-picker>
+            </el-form-item>
+            <el-form-item label="参加工作日期" style="width: 355px">
+              <!--  -->
+              <!-- <el-date-picker
               style="width: 250px"
               @change="stop()"
               v-model="ruleForm.workin"
@@ -411,59 +406,59 @@
               placeholder="选择日期"
             >
             </el-date-picker> -->
-                <el-date-picker
-                  v-model="ruleForm.workin"
-                  style="width: 250px"
-                  @change="stop()"
-                  format="yyyy 年 MM 月 dd 日 "
-                  value-format="yyyy-MM-dd HH:mm:ss"
-                  type="datetime"
-                  placeholder="选择日期时间"
+              <el-date-picker
+                v-model="ruleForm.workin"
+                style="width: 250px"
+                @change="stop()"
+                format="yyyy 年 MM 月 dd 日 "
+                value-format="yyyy-MM-dd HH:mm:ss"
+                type="datetime"
+                placeholder="选择日期时间"
+              >
+              </el-date-picker>
+            </el-form-item>
+            <el-form-item label="工龄" style="width: 355px">
+              <el-input
+                :disabled="true"
+                style="width: 250px"
+                v-model="ruleForm.process"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="证件号码" style="width: 355px">
+              <el-input
+                style="width: 250px"
+                v-model="ruleForm.update"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="工作单位" style="width: 355px">
+              <el-input
+                style="width: 250px"
+                v-model="ruleForm.worker"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="邮箱" style="width: 355px">
+              <el-input
+                style="width: 250px"
+                v-model="ruleForm.emails"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="当前状态" style="width: 355px">
+              <el-select
+                style="width: 250px"
+                v-model="ruleForm.ddeparture"
+                placeholder="请选择"
+              >
+                <el-option
+                  v-for="item in emailslist"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
                 >
-                </el-date-picker>
-              </el-form-item>
-              <el-form-item label="工龄" style="width: 355px">
-                <el-input
-                  :disabled="true"
-                  style="width: 250px"
-                  v-model="ruleForm.process"
-                ></el-input>
-              </el-form-item>
-              <el-form-item label="证件号码" style="width: 355px">
-                <el-input
-                  style="width: 250px"
-                  v-model="ruleForm.update"
-                ></el-input>
-              </el-form-item>
-              <el-form-item label="工作单位" style="width: 355px">
-                <el-input
-                  style="width: 250px"
-                  v-model="ruleForm.worker"
-                ></el-input>
-              </el-form-item>
-              <el-form-item label="邮箱" style="width: 355px">
-                <el-input
-                  style="width: 250px"
-                  v-model="ruleForm.emails"
-                ></el-input>
-              </el-form-item>
-              <el-form-item label="当前状态" style="width: 355px">
-                <el-select
-                  style="width: 250px"
-                  v-model="ruleForm.ddeparture"
-                  placeholder="请选择"
-                >
-                  <el-option
-                    v-for="item in emailslist"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  >
-                  </el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="状态更新日期" style="width: 355px">
-                <!-- <el-date-picker
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="状态更新日期" style="width: 355px">
+              <!-- <el-date-picker
               style="width: 250px"
               v-model="ruleForm.nextstate"
               format="yyyy 年 MM 月 dd 日"
@@ -471,142 +466,137 @@
               placeholder="选择日期"
             >
             </el-date-picker> -->
-                <el-date-picker
-                  v-model="ruleForm.nextstate"
-                  format="yyyy 年 MM 月 dd 日 "
-                  value-format="yyyy-MM-dd HH:mm:ss"
-                  type="datetime"
-                  placeholder="选择日期时间"
-                >
-                </el-date-picker>
-              </el-form-item>
-            </el-form>
-          </div>
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="dateTime = false">取 消</el-button>
-            <!-- <el-button @click="resetForm('ruleForm')">重置</el-button> -->
-            <el-button
-              v-if="this.under == 1"
-              @click="cameras('ruleForm')"
-              type="primary"
-              >确 定</el-button
-            >
-            <el-button v-if="this.under == 2" @click="edittab" type="primary"
-              >编辑 确定</el-button
-            >
-            <!-- <el-button @click="stop" type="primary">计算</el-button>  -->
-          </div>
-        </el-dialog>
-        <!-- 弹框结束 -->
-        <div class="network">
+              <el-date-picker
+                v-model="ruleForm.nextstate"
+                format="yyyy 年 MM 月 dd 日 "
+                value-format="yyyy-MM-dd HH:mm:ss"
+                type="datetime"
+                placeholder="选择日期时间"
+              >
+              </el-date-picker>
+            </el-form-item>
+          </el-form>
+        </div>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dateTime = false">取 消</el-button>
+          <!-- <el-button @click="resetForm('ruleForm')">重置</el-button> -->
           <el-button
-            style="margin-left: 20px"
-            icon="el-icon-search"
-            size="medium"
+            v-if="this.under == 1"
+            @click="cameras('ruleForm')"
             type="primary"
-            :disabled="this.nbottoms == 1"
-            @click="searchType"
-            >搜索</el-button
+            >确 定</el-button
           >
-          <el-button
-            style="margin-left: 20px"
-            icon="el-icon-delete"
-            size="medium"
-            :disabled="this.nbottoms == 1"
-            @click="emptyset"
-            >清空</el-button
+          <el-button v-if="this.under == 2" @click="edittab" type="primary"
+            >编辑 确定</el-button
           >
-          <el-button
-            style="margin-left: 20px"
-            size="medium"
-            type="primary"
-            :disabled="this.nbottoms == 1"
-            icon="el-icon-plus"
-            @click="addition(1)"
-            >添加员工</el-button
-          >
-          <!-- <el-button
+          <!-- <el-button @click="stop" type="primary">计算</el-button>  -->
+        </div>
+      </el-dialog>
+      <!-- 弹框结束 -->
+      <div class="network">
+        <el-button
+          style="margin-left: 20px"
+          icon="el-icon-search"
+          size="medium"
+          type="primary"
+          :disabled="this.nbottoms == 1"
+          @click="searchType"
+          >搜索</el-button
+        >
+        <el-button
+          style="margin-left: 20px"
+          icon="el-icon-delete"
+          size="medium"
+          :disabled="this.nbottoms == 1"
+          @click="emptyset"
+          >清空</el-button
+        >
+        <el-button
+          style="margin-left: 20px"
+          size="medium"
+          type="primary"
+          :disabled="this.nbottoms == 1"
+          icon="el-icon-plus"
+          @click="addition(1)"
+          >添加员工</el-button
+        >
+        <!-- <el-button
           icon="el-icon-download"
           style="margin-left: 20px"
           size="medium"
           type="primary"
           >导出</el-button
         > -->
-        </div>
-        <!-- 表格数据 -->
-        <div class="address">
-          <el-table
-            v-loading="loadFlag1"
-            :data="tableData"
-            border
-            style="width: 100%"
-          >
-            <el-table-column
-              label="序号"
-              type="index"
-              width="50"
-              align="center"
-            >
-            </el-table-column>
-            <el-table-column
-              prop="jobNumber"
-              label="工号"
-              align="center"
-            ></el-table-column>
-            <el-table-column
-              prop="name"
-              label="姓名"
-              align="center"
-            ></el-table-column>
-            <el-table-column prop="sex" label="性别" align="center">
-              <template slot-scope="scope">
-                <p v-if="scope.row.sex == 1">男</p>
-                <p v-else-if="scope.row.sex == 2">
-                  女
-                </p>
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="birthDate"
-              label="出生日期"
-              align="center"
-            ></el-table-column>
-            <el-table-column
-              prop="mobile"
-              label="手机号"
-              align="center"
-            ></el-table-column>
-            <el-table-column
-              prop="post"
-              label="职务"
-              align="center"
-            ></el-table-column>
-            <el-table-column
-              prop="reason"
-              label="所在班级"
-              align="center"
-            ></el-table-column>
+      </div>
+      <!-- 表格数据 -->
+      <div class="address">
+        <el-table
+          v-loading="loadFlag1"
+          :data="tableData"
+          border
+          style="width: 100%"
+        >
+          <el-table-column label="序号" type="index" width="50" align="center">
+          </el-table-column>
+          <el-table-column
+            prop="jobNumber"
+            label="工号"
+            align="center"
+          ></el-table-column>
+          <el-table-column
+            prop="name"
+            label="姓名"
+            align="center"
+          ></el-table-column>
+          <el-table-column prop="sex" label="性别" align="center">
+            <template slot-scope="scope">
+              <p v-if="scope.row.sex == 1">男</p>
+              <p v-else-if="scope.row.sex == 2">
+                女
+              </p>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="birthDate"
+            label="出生日期"
+            align="center"
+          ></el-table-column>
+          <el-table-column
+            prop="mobile"
+            label="手机号"
+            align="center"
+          ></el-table-column>
+          <el-table-column
+            prop="post"
+            label="职务"
+            align="center"
+          ></el-table-column>
+          <el-table-column
+            prop="reason"
+            label="所在班级"
+            align="center"
+          ></el-table-column>
 
-            <el-table-column
-              prop="entryTime"
-              label="入职日期"
-              align="center"
-            ></el-table-column>
-            <el-table-column prop="stutas" label="当前状态" align="center">
-              <template slot-scope="scope">
-                <p v-if="scope.row.stutas == 1">在职</p>
-                <p v-else-if="scope.row.stutas == 2">
-                  离职
-                </p>
-                <p v-else-if="scope.row.stutas == 3">
-                  停职
-                </p>
-                <p v-else-if="scope.row.status == 4">
-                  退休
-                </p>
-              </template>
-            </el-table-column>
-            <!-- <el-table-column label="是否有效" width="120" align="center">
+          <el-table-column
+            prop="entryTime"
+            label="入职日期"
+            align="center"
+          ></el-table-column>
+          <el-table-column prop="stutas" label="当前状态" align="center">
+            <template slot-scope="scope">
+              <p v-if="scope.row.stutas == 1">在职</p>
+              <p v-else-if="scope.row.stutas == 2">
+                离职
+              </p>
+              <p v-else-if="scope.row.stutas == 3">
+                停职
+              </p>
+              <p v-else-if="scope.row.status == 4">
+                退休
+              </p>
+            </template>
+          </el-table-column>
+          <!-- <el-table-column label="是否有效" width="120" align="center">
             <template slot-scope="scope">
               <p class="stop" v-if="scope.row.isActive == 0">是</p>
               <p style="color: #409eff" v-else-if="scope.row.isActive == 1">
@@ -615,28 +605,40 @@
             </template>
           </el-table-column> -->
 
-            <!--操作格-->
-            <el-table-column label="操作" width="220" align="center">
-              <template slot-scope="scope">
-                <el-button
-                  @click="editorTheme(scope.row, 2)"
-                  type="text"
-                  size="small"
-                  icon="el-icon-edit"
-                  style="margin-left: 20px"
-                  >编辑</el-button
-                >
-                <el-button
-                  type="text"
-                  size="small"
-                  icon="el-icon-delete"
-                  style="margin-left: 20px"
-                  @click="DeleteUser(scope.row)"
-                  >删除</el-button
-                >
-              </template>
-            </el-table-column>
-          </el-table>
+          <!--操作格-->
+          <el-table-column label="操作" width="220" align="center">
+            <template slot-scope="scope">
+              <el-button
+                @click="editorTheme(scope.row, 2)"
+                type="text"
+                size="small"
+                icon="el-icon-edit"
+                style="margin-left: 20px"
+                >编辑</el-button
+              >
+              <el-button
+                type="text"
+                size="small"
+                icon="el-icon-delete"
+                style="margin-left: 20px"
+                @click="DeleteUser(scope.row)"
+                >删除</el-button
+              >
+            </template>
+          </el-table-column>
+        </el-table>
+        <!-- 分页 -->
+        <div class="pagingClass">
+          <el-pagination
+            :page-sizes="m_page.sizes"
+            :page-size="m_page.size"
+            :current-page="m_page.number"
+            @size-change="m_handleSizeChange"
+            @current-change="m_handlePageChange"
+            layout="total,sizes,prev, pager, next"
+            background
+            :total="m_page.totalElements"
+          ></el-pagination>
         </div>
       </div>
     </div>
@@ -697,6 +699,13 @@ export default {
         nextstate: "", //状态更新日期
         desc: "",
         resource: ""
+      },
+      m_page: {
+        sizes: [10, 20, 40, 50, 100], //每页最大显示数
+        size: 10,
+        totalElements: 0,
+        totalPages: 3,
+        number: 1
       },
       stringClass: [],
       rules: {
@@ -1628,6 +1637,7 @@ export default {
           });
           this.loadFlag1 = false;
           this.tableData = res.data.data.records;
+          this.m_page.totalElements = res.data.data.total;
         })
         .catch(() => {
           this.$message.error("查询失败");
@@ -1744,7 +1754,8 @@ export default {
             label: item.title,
             into: item.level,
             view: 0,
-            tment: 0
+            tment: 0,
+            icon: "el-icon-success"
           };
           auto[index].children = [];
           if (item.children) {
@@ -1754,7 +1765,8 @@ export default {
                 label: item1.title,
                 into: item1.level,
                 view: 1,
-                tment: 1
+                tment: 1,
+                icon: "el-icon-info"
               };
             });
           }
@@ -1811,14 +1823,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.avue-view {
-  padding: 0 0px !important;
-}
 .management {
   width: 100%;
   height: 100%;
   background-color: #fff;
   display: flex;
+  margin-bottom: 50px;
   /* margin-bottom: 40px; */
 }
 .onlymsgid {
@@ -1828,12 +1838,14 @@ export default {
 }
 .onchange {
   width: 24%;
+  height: 100%;
   /* height: 700px; */
   /* background-color: red; */
   border-right: 1px solid #e0e0e0;
 }
 .consults {
   width: 75%;
+  height: 100%;
   /* height: 700px; */
   /* background-color: yellow; */
   margin-left: 10px;
@@ -1868,5 +1880,13 @@ export default {
 
 /deep/ .hide .el-upload--picture-card {
   display: none;
+}
+.pagingClass {
+  text-align: right;
+  /* margin: 20px 0; */
+  background-color: #fff;
+  margin-top: 0px;
+  margin-right: 0px;
+  margin-bottom: 60px;
 }
 </style>

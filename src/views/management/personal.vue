@@ -50,6 +50,7 @@
                   v-model="valuepark2"
                   :options="options"
                   @change="gProvinces"
+                  :props="{ checkStrictly: true }"
                 ></el-cascader>
               </div>
               <div class="country2">
@@ -99,7 +100,9 @@
                   ref="tree"
                 >
                   <span class="custom-tree-node" slot-scope="{ node, data }">
-                    <span>{{ node.label }}</span>
+                    <span :class="[data.isPub == 0 ? 'cannot' : '']">{{
+                      node.label
+                    }}</span>
                     <span>
                       <!-- <el-button
                           v-if="data.view == 1"
@@ -346,8 +349,10 @@
                     <!-- <img v-if="dialogImageUrl" :src="dialogImageUrl" class="avatar" /> -->
                     <i class="el-icon-plus"></i>
                   </el-upload>
-                  <span style="color:#e0e0e0;  font-size: 11px;"
-                    >上传图片不能超过2M 只能是JPG PNG格式</span
+                  <span style="color: #000;font-weight: bold; font-size: 11px"
+                    >上传图片不能超过2M 只能是<span style="color:red"
+                      >JPG PNG</span
+                    >格式</span
                   >
                   <el-dialog append-to-body :visible.sync="dialogVisible">
                     <img width="100%" :src="dialogImageUrl" alt />
@@ -925,9 +930,21 @@ export default {
     //省市区查询
     gProvinces() {
       // this.fallen = this.valuepark2[1];
-      if (this.valuepark2[1]) {
+
+      // if (this.valuepark2[1]) {
+      //   this.fallen = this.valuepark2[1];
+      // } else {
+      //   this.fallen = "";
+      // }
+      if (this.valuepark2.length == 1) {
+        this.fallen = this.valuepark2[0];
+        // console.log(this.fallen);
+      }
+      if (this.valuepark2.length == 2) {
         this.fallen = this.valuepark2[1];
-      } else {
+        // console.log(this.fallen);
+      }
+      if (!this.valuepark2.length) {
         this.fallen = "";
       }
       this.treeDrawing();
@@ -1820,5 +1837,8 @@ export default {
 }
 /deep/ .hide .el-upload--picture-card {
   display: none;
+}
+.cannot {
+  color: #000;
 }
 </style>

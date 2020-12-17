@@ -1370,7 +1370,15 @@ export default {
             };
           }
           this.productImgs = picture;
-          this.record = this.handler.dishAudits[1]; //记录
+          // this.record = this.handler.dishAudits[1]; //记录
+          // console.log(this.record);
+          let system = [];
+          this.handler.dishAudits.forEach((item, index) => {
+            if (item.type == 2) {
+              system.push(item);
+            }
+          });
+          this.record = system[0];
           console.log(this.record);
           this.hideUploadEdit = this.productImgs.length >= 1;
           this.ruleForm.region = this.handler.function; //特点

@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 0px; height: 1080px">
+  <div style="padding: 0px; height: 1080px" class="foodsweek">
     <div
       ref="contextmenuFood"
       id="contextmenuFood"
@@ -1670,50 +1670,50 @@ export default {
 };
 </script>
 <style>
-.table-week th {
+.foodsweek .table-week th {
   background: #f8fbfc !important;
 }
-.table-week td {
+.foodsweek .table-week td {
   padding: 0 !important;
   vertical-align: top !important;
 }
 
-.table-week td .cell {
+.foodsweek .table-week td .cell {
   padding: 0 !important;
 }
-.table-week .col-date3 {
+.foodsweek .table-week .col-date3 {
   vertical-align: middle !important;
   background: #f8fbfc !important;
 }
 
-.table-foods th {
+.foodsweek .table-foods th {
   background: #fff !important;
 }
-.table-foods td {
+.foodsweek .table-foods td {
   padding: 12px 0 !important;
   vertical-align: middle !important;
   background: #fff !important;
 }
-.table-foods td .cell {
+.foodsweek .table-foods td .cell {
   padding: 0 10px !important;
 }
-.drapInActive .el-table th {
+.foodsweek .drapInActive .el-table th {
   background-color: #dcdfe6 !important;
 }
 .colNoneBorder
 {
   /* border-bottom: 1px solid transparent !important; */
 }
-.table-week  .avue-upload-item .el-upload--picture-card ,.el-upload-list--picture-card .el-upload-list__item{
+.foodsweek .table-week  .avue-upload-item .el-upload--picture-card ,.foodsweek .el-upload-list--picture-card .el-upload-list__item{
     width: 100px!important;
     height: 100px!important;
     line-height: 100px!important;
   }
-.table-week .avue-upload-item{
+.foodsweek .table-week .avue-upload-item{
     width: 100px;
     height: 100px;
   }
-.table-week .el-upload-list--picture-card .el-upload-list__item-status-label{
+.foodsweek .table-week .el-upload-list--picture-card .el-upload-list__item-status-label{
   width: 0px!important;
 }
 </style>
