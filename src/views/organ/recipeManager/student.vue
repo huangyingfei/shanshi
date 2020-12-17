@@ -39,18 +39,23 @@
                       class="ant-tree-node-content-1"
                       v-if="!data.addBtn && data.classType != 3"
                     />
+
                     <span v-if="!data.addBtn && data.classType == 0">{{
                       data.label
                     }}</span>
+
                     <span v-if="!data.addBtn && data.classType == 1">{{
                       data.label
                     }}</span>
+
                     <span v-if="!data.addBtn && data.classType == 2">{{
                       data.label
                     }}</span>
+
                     <span v-if="!data.addBtn && data.classType == 3">{{
                       data.label
                     }}</span>
+
                     <span
                       class="ant-tree-node-content-wrapper-addItem"
                       v-if="data.addBtn"
@@ -58,6 +63,20 @@
                       >{{ data.label }}</span
                     >
                   </span>
+
+                  <span class="ant-tree-node-content-btn">
+                    <img
+                      src="/img/bg/edit.png"
+                      width="15px"
+                      class="ant-tree-node-content-1"
+                      v-if="
+                        !data.addBtn &&
+                          data.classType != 0 &&
+                          (!data.children || data.children.length == 1)
+                      "
+                    />
+                  </span>
+
                   <span class="ant-tree-node-content-btn">
                     <img
                       src="/img/bg/delete.png"
@@ -73,11 +92,13 @@
                   </span>
                 </span>
               </el-tree>
+
               <!-- <avue-tree :option="treeOption" :data="treeData" @node-click="nodeClick"/> -->
             </basic-container>
           </el-scrollbar>
         </div>
       </el-col>
+
       <el-col :span="19">
         <basic-container>
           <avue-crud
@@ -100,6 +121,7 @@
           >
             <template slot="menuLeft">
               <!--<router-link to="/oprate/addStudent">-->
+
               <el-button
                 type="el-button el-button--primary el-button--small"
                 size="small"
@@ -108,7 +130,9 @@
               >
                 添加学生
               </el-button>
+
               <!--</router-link>-->
+
               <el-button
                 type="danger"
                 size="small"
@@ -118,6 +142,7 @@
                 >删 除
               </el-button>
             </template>
+
             <template slot-scope="scope" slot="menu">
               <el-button
                 type="text"
@@ -126,6 +151,7 @@
                 @click.stop="handleView(scope.row)"
                 >查看
               </el-button>
+
               <el-button
                 type="text"
                 icon="el-icon-edit"
@@ -133,6 +159,7 @@
                 @click.stop="handleEdit(scope.row)"
                 >编辑
               </el-button>
+
               <el-button
                 type="text"
                 icon="el-icon-edit"
@@ -140,6 +167,7 @@
                 @click.stop="rowDel(scope.row)"
                 >删除
               </el-button>
+
               <el-button
                 type="text"
                 icon="el-icon-edit"
@@ -147,6 +175,7 @@
                 @click.stop="leaveSchool(scope)"
                 >离校
               </el-button>
+
               <el-button
                 type="text"
                 icon="el-icon-edit"
@@ -159,6 +188,7 @@
         </basic-container>
       </el-col>
     </el-row>
+
     <el-dialog
       :title="离校"
       append-to-body="true"
@@ -167,23 +197,41 @@
       :before-close="handleClose"
     >
       <!--<el-row>-->
+
       <!--<el-col :span="5">离校原因</el-col>-->
+
       <!--<el-col :span="19">-->
+
       <!--<el-input v-model="leaveReason" placeholder="请输入内容"></el-input>-->
+
       <!--</el-col>-->
+
       <!--</el-row>-->
+
       <!--<el-row>-->
+
       <!--<el-col :span="5">离校时间</el-col>-->
+
       <!--<el-col :span="19">-->
+
       <!--<avue-date v-model="leaveDate" placeholder="请选择日期"></avue-date>-->
+
       <!--</el-col>-->
+
       <!--</el-row>-->
+
       <!--<span slot="footer" class="dialog-footer">-->
+
       <!--<el-button @click="cancel()">取 消</el-button>-->
+
       <!--<el-button type="primary" @click="handleUpdate(rowId, null, 2)"-->
+
       <!--&gt;确 定</el-button-->
+
       <!--&gt;-->
+
       <!--</span>-->
+
       <avue-form
         :option="leaveOption"
         v-model="leaveData"
@@ -192,137 +240,387 @@
       ></avue-form>
     </el-dialog>
 
-    <el-dialog
-      :title="tclass.classTitle"
-      append-to-body="true"
-      :visible.sync="outerVisible"
-      width="30%"
-      :before-close="handleClose"
+    <!--<el-dialog-->
+
+    <!--:title="tclass.classTitle"-->
+
+    <!--append-to-body="true"-->
+
+    <!--:visible.sync="outerVisible"-->
+
+    <!--width="30%"-->
+
+    <!--:before-close="handleClose"-->
+
+    <!--&gt;-->
+
+    <!--<el-row>-->
+
+    <!--<el-col :span="5">{{ tclass.classPName }}</el-col>-->
+
+    <!--<el-col :span="19">-->
+
+    <!--<el-select v-model="addValue.pidValue" disabled placeholder="请选择">-->
+
+    <!--<el-option-->
+
+    <!--v-for="item in pidOptions"-->
+
+    <!--:key="item.value"-->
+
+    <!--:label="item.label"-->
+
+    <!--:value="item.value"-->
+
+    <!--&gt;-->
+
+    <!--</el-option> </el-select-->
+
+    <!--&gt;</el-col>-->
+
+    <!--</el-row>-->
+
+    <!--<el-row>-->
+
+    <!--<el-col :span="5">{{ tclass.className }}</el-col>-->
+
+    <!--<el-col :span="19">-->
+
+    <!--<el-input-->
+
+    <!--v-model="addValue.nameValue"-->
+
+    <!--placeholder="请输入内容"-->
+
+    <!--&gt;</el-input>-->
+
+    <!--</el-col>-->
+
+    <!--</el-row>-->
+
+    <!--<el-row v-if="tclass.classType == 3">-->
+
+    <!--<el-col :span="5">{{ tclass.classAlias }}</el-col>-->
+
+    <!--<el-col :span="19">-->
+
+    <!--<el-input-->
+
+    <!--v-model="addValue.aliasValue"-->
+
+    <!--placeholder="请输入内容"-->
+
+    <!--&gt;</el-input>-->
+
+    <!--</el-col>-->
+
+    <!--</el-row>-->
+
+    <!--&lt;!&ndash; <el-row v-if="tclass.classType == 3">-->
+
+    <!--<el-col :span="5">{{ tclass.classEdu }}</el-col>-->
+
+    <!--<el-col :span="19">-->
+
+    <!--<el-input-->
+
+    <!--v-model="addValue.eduValue"-->
+
+    <!--placeholder="请输入内容"-->
+
+    <!--oninput="value=value.replace(/\d{5}/g,'')"-->
+
+    <!--&gt;</el-input>-->
+
+    <!--</el-col>-->
+
+    <!--</el-row> &ndash;&gt;-->
+
+    <!--<span slot="footer" class="dialog-footer">-->
+
+    <!--<el-button @click="cancel()">取 消</el-button>-->
+
+    <!--<el-button type="primary" @click="submitClass()">确 定</el-button>-->
+
+    <!--</span>-->
+
+    <!--</el-dialog>-->
+
+    <el-drawer
+      title="新建班级"
+      :destroy-on-close="true"
+      :visible.sync="banjiVisible"
+      :modal-append-to-body="false"
+      :before-close="beforeClosebj"
     >
-      <el-row>
-        <el-col :span="5">{{ tclass.classPName }}</el-col>
-        <el-col :span="19">
-          <el-select v-model="addValue.pidValue" disabled placeholder="请选择">
-            <el-option
-              v-for="item in pidOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option> </el-select
-        ></el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="5">{{ tclass.className }}</el-col>
-        <el-col :span="19">
-          <el-input
-            v-model="addValue.nameValue"
-            placeholder="请输入内容"
-          ></el-input>
-        </el-col>
-      </el-row>
+      <div class="_1OGXkpwTB-08ZVOTYhQESl">班级信息</div>
 
-      <el-row v-if="tclass.classType == 3">
-        <el-col :span="5">{{ tclass.classAlias }}</el-col>
-        <el-col :span="19">
-          <el-input
-            v-model="addValue.aliasValue"
-            placeholder="请输入内容"
-          ></el-input>
-        </el-col>
-      </el-row>
-      <!-- <el-row v-if="tclass.classType == 3">
-        <el-col :span="5">{{ tclass.classEdu }}</el-col>
-        <el-col :span="19">
-          <el-input
-            v-model="addValue.eduValue"
-            placeholder="请输入内容"
-            oninput="value=value.replace(/\d{5}/g,'')"
-          ></el-input>
-        </el-col>
-      </el-row> -->
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="cancel()">取 消</el-button>
-        <el-button type="primary" @click="submitClass()">确 定</el-button>
-      </span>
-    </el-dialog>
+      <el-form
+        status-icon
+        :rules="banjiRules"
+        ref="banjiForm"
+        :model="banjiForm"
+        label-width="0"
+      >
+        <el-form-item prop="className" class="item-ck" label="班级名称:">
+          <div>
+            <span class="item-ck-title">小班</span>
 
+            <el-select v-model="banjiForm.startYear" placeholder="请选择">
+              <el-option
+                v-for="item in same"
+                :key="item.value"
+                :label="item.value"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
 
+            班
+          </div>
+        </el-form-item>
+
+        <el-form-item class="item-ck" prop="classAlias" label="班级别名:">
+          <div class="item-ck-bj">
+            <el-input
+              v-model="banjiForm.classAlias"
+              placeholder="请输入内容"
+            ></el-input>
+          </div>
+        </el-form-item>
+
+        <div class="item-footer">
+          <el-button type="primary" @click="subCodeXd">确 定</el-button>
+
+          <el-button @click="cancel">取 消</el-button>
+        </div>
+      </el-form>
+    </el-drawer>
+
+    <el-drawer
+      title="新建年级"
+      :destroy-on-close="true"
+      :visible.sync="xuejiVisible"
+      :modal-append-to-body="false"
+      :before-close="beforeClosenj"
+    >
+      <div class="_1OGXkpwTB-08ZVOTYhQESl">年级信息</div>
+
+      <el-form
+        status-icon
+        :rules="xuejiRules"
+        ref="xuejiForm"
+        :model="xuejiForm"
+        label-width="0"
+      >
+        <el-form-item prop="startYear" class="item-ck-xj" label="入学年份:">
+          <div>
+            <el-select v-model="xuejiForm.startYear" placeholder="请选择">
+              <el-option
+                v-for="item in same"
+                :key="item.value"
+                :label="item.value"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </div>
+        </el-form-item>
+
+        <el-form-item class="item-ck-xj" prop="classes" label="班级数量:">
+          <div>
+            <el-select v-model="xuejiForm.classes" placeholder="请选择">
+              <el-option
+                v-for="item in xdInfo.classOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </div>
+        </el-form-item>
+
+        <div class="item-footer">
+          <el-button type="primary" @click="subCodeXd">确 定</el-button>
+
+          <el-button @click="cancel">取 消</el-button>
+        </div>
+      </el-form>
+    </el-drawer>
 
     <el-drawer
       title="新建学段"
+      :destroy-on-close="true"
       :visible.sync="xueduanVisible"
       :modal-append-to-body="false"
+      :before-close="beforeClosexd"
     >
       <div class="_1OGXkpwTB-08ZVOTYhQESl">学段信息</div>
+
       <el-form
-               status-icon
-               :rules="xueduanRules"
-               ref="xueduanForm"
-               :model="xueduanForm"
-               label-width="0">
-        <el-form-item prop="xueduanCk"  class="item-ck" label="学段:">
-          <div >
-        <el-checkbox-group v-model="xueduanForm.xueduanCk" @change="ckChange">
-          <div  v-for="(claStuItem,index) in claStu" :key="index"><el-checkbox  :label="claStuItem.className"  :name="claStuItem.className"></el-checkbox>
-            <span>
-            <el-select :disabled="claStuItem.disFlag" v-model="claStuItem.disValue" placeholder="请选择">
-            <el-option
-              v-for="item in claStuItem.disOption"
-              :key="item.value"
-              :label="item.value"
-              :value="item.value">
-            </el-option>
-          </el-select>
-          </span><span class="el-checkbox__label"> 个年级</span></div>
+        status-icon
+        :rules="xueduanRules"
+        ref="xueduanForm"
+        :model="xueduanForm"
+        label-width="0"
+      >
+        <el-form-item prop="xueduanCk" class="item-ck" label="学段:">
+          <div>
+            <el-checkbox-group
+              v-model="xueduanForm.xueduanCk"
+              @change="ckChange"
+            >
+              <div v-for="(claStuItem, index) in claStu" :key="index">
+                <el-checkbox
+                  :label="claStuItem.className"
+                  :name="claStuItem.className"
+                ></el-checkbox>
 
-        </el-checkbox-group>
+                <span>
+                  <el-select
+                    :disabled="claStuItem.disFlag"
+                    @change="numbChange"
+                    v-model="claStuItem.disValue"
+                    placeholder="请选择"
+                  >
+                    <el-option
+                      v-for="item in claStuItem.disOption"
+                      :key="item.value"
+                      :label="item.value"
+                      :value="item.value"
+                    >
+                    </el-option>
+                  </el-select> </span
+                ><span class="el-checkbox__label"> 个年级</span>
+              </div>
+            </el-checkbox-group>
           </div>
         </el-form-item>
-        <el-form-item    class="item-ck"   label="选择班级数量:">
-          <div class="item-title"><b>智能升班：</b>每个新学年开始，各年级将自动升班。如：明年9月，「一年级1班」自动更名「二年级1班」，「小班1班」自动更名「中班1班」</div>
-          <div class="item-class"  v-if="!claStu.find((p)=>p.className=='幼儿园').disFlag">
-              <div class="item-class-title">幼儿园</div>
-              <div class="item-class-content"><span>小班：</span>
-                <el-select v-model="xueduanForm.classOptionsValue" placeholder="请选择">
-                  <el-option
-                    v-for="item in xdInfo.classOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
-                </el-select>
-                个班级
-              </div>
-              <div class="item-class-content"> <span>中班：</span>
-                <el-select v-model="xueduanForm.classOptionsValue" placeholder="请选择">
-                  <el-option
-                    v-for="item in xdInfo.classOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
-                </el-select>
-                个班级
-              </div>
-              <div class="item-class-content"><span>大班：</span>
-                <el-select v-model="xueduanForm.classOptionsValue" placeholder="请选择">
-                  <el-option
-                    v-for="item in xdInfo.classOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
-                </el-select>
-                个班级
-              </div>
 
+        <el-form-item class="item-ck" label="选择班级数量:">
+          <div class="item-title">
+            <b>智能升班：</b
+            >每个新学年开始，各年级将自动升班。如：明年9月，「一年级1班」自动更名「二年级1班」，「小班1班」自动更名「中班1班」
+          </div>
+
+          <div
+            class="item-class"
+            v-if="!claStu.find(p => p.className == '幼儿园').disFlag"
+          >
+            <div class="item-class-title">幼儿园</div>
+
+            <div
+              class="item-class-content"
+              v-for="(gradeItem, index) in claStu.find(
+                p => p.className == '幼儿园'
+              ).children"
+            >
+              <span class="item-samewidth">{{ gradeItem.className }}：</span>
+
+              <el-select v-model="gradeItem.classNum" placeholder="请选择">
+                <el-option
+                  v-for="item in xdInfo.classOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
+
+              个班级
+            </div>
+          </div>
+
+          <div
+            class="item-class"
+            v-if="!claStu.find(p => p.className == '小学').disFlag"
+          >
+            <div class="item-class-title">小学</div>
+
+            <div
+              class="item-class-content"
+              v-for="(gradeItem, index) in claStu.find(
+                p => p.className == '小学'
+              ).children"
+            >
+              <span class="item-samewidth">{{ gradeItem.className }}：</span>
+
+              <el-select v-model="gradeItem.classNum" placeholder="请选择">
+                <el-option
+                  v-for="item in xdInfo.classOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
+
+              个班级
+            </div>
+          </div>
+
+          <div
+            class="item-class"
+            v-if="!claStu.find(p => p.className == '初中').disFlag"
+          >
+            <div class="item-class-title">初中</div>
+
+            <div
+              class="item-class-content"
+              v-for="(gradeItem, index) in claStu.find(
+                p => p.className == '初中'
+              ).children"
+            >
+              <span class="item-samewidth">{{ gradeItem.className }}：</span>
+
+              <el-select v-model="gradeItem.classNum" placeholder="请选择">
+                <el-option
+                  v-for="item in xdInfo.classOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
+
+              个班级
+            </div>
+          </div>
+
+          <div
+            class="item-class"
+            v-if="!claStu.find(p => p.className == '高中').disFlag"
+          >
+            <div class="item-class-title">高中</div>
+
+            <div
+              class="item-class-content"
+              v-for="(gradeItem, index) in claStu.find(
+                p => p.className == '高中'
+              ).children"
+            >
+              <span class="item-samewidth">{{ gradeItem.className }}：</span>
+
+              <el-select v-model="gradeItem.classNum" placeholder="请选择">
+                <el-option
+                  v-for="item in xdInfo.classOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
+
+              个班级
+            </div>
           </div>
         </el-form-item>
+
         <div class="item-footer">
-          <el-button type="primary" @click="subCodeXd" >确 定</el-button>
-          <el-button @click="cancel">取 消</el-button>
+          <el-button type="primary" @click="subCodeXd">确 定</el-button>
 
+          <el-button @click="cancel">取 消</el-button>
         </div>
       </el-form>
     </el-drawer>
@@ -330,255 +628,8 @@
 </template>
 
 <script>
-<<<<<<< Updated upstream
-  import { grant, resetPassword } from "@/api/system/user";
-  import {
-    tree,
-    add,
-    remove,
-    update,
-    orderClass,
-    getList,
-    removeStuId,
-  } from "@/api/system/student";
-  import { nation } from "@/api/tool/data";
-  import { formateDate } from "@/api/tool/date";
-  import { mapGetters } from "vuex";
-  import website from "@/config/website";
-  import { getToken } from "@/util/auth";
-  export default {
-    data() {
-      return {
-        yey:["小小班","小班","中班","大班","学前班"],
-        xueduanRules:{
-          xueduanCk:[{required:true,trigger:"blur",message:"请至少选择一个学段"}]
-        },
-        xueduanForm:{
-          xueduanCk:[],
-          classOptionsValue:1
-        },
-        claStu:[
-          {
-            disFlag:true,
-            disValue:3,
-            className:"幼儿园",
-            grade:[],
-            disOption:[
-              {
-                value:3
-              },
-              {
-                value:4
-              },{
-                value:5
-              },
-            ]
-          },
-          {
-            disFlag:true,
-            disValue:6,
-            className:"小学",
-            grade:[],
-            disOption:[
-              {
-                value:1
-              },
-              {
-                value:2
-              },{
-                value:3
-              },{
-                value:4
-              },{
-                value:5
-              },{
-                value:6
-              },{
-                value:7
-              },{
-                value:8
-              },{
-                value:9
-              },{
-                value:10
-              },
-            ]
-          },
-          {
-            disFlag:true,
-            disValue:3,
-            className:"初中",
-            grade:[],
-            disOption:[
-              {
-                value:1
-              },
-              {
-                value:2
-              },{
-                value:3
-              },{
-                value:4
-              },{
-                value:5
-              },{
-                value:6
-              },{
-                value:7
-              },{
-                value:8
-              },{
-                value:9
-              },{
-                value:10
-              },
-            ]
-          },
-          {
-            disFlag:true,
-            disValue:3,
-            className:"高中",
-            grade:[],
-            disOption:[
-              {
-                value:1
-              },
-              {
-                value:2
-              },{
-                value:3
-              },{
-                value:4
-              },{
-                value:5
-              },{
-                value:6
-              },{
-                value:7
-              },{
-                value:8
-              },{
-                value:9
-              },{
-                value:10
-              },
-            ]
-          }
-        ],
-        xdInfo:{
-          classOptions:[{
-            value:1,
-          },{
-            value:2,
-          },{
-            value:3,
-          },{
-            value:4,
-          },{
-            value:5,
-          },{
-            value:6,
-          },{
-            value:7,
-          },{
-            value:8,
-          },{
-            value:9,
-          },{
-            value:10,
-          },{
-            value:11,
-          },{
-            value:12,
-          },{
-            value:13,
-          },{
-            value:14,
-          },{
-            value:15,
-          },{
-            value:16,
-          },{
-            value:17,
-          },{
-            value:18,
-          },{
-            value:19,
-          },{
-            value:20,
-          },{
-            value:21,
-          },{
-            value:22,
-          },{
-            value:23,
-          },{
-            value:24,
-          },{
-            value:25,
-          },{
-            value:26,
-          },{
-            value:27,
-          },{
-            value:28,
-          },{
-            value:29,
-          },{
-            value:30,
-          },{
-            value:31,
-          },{
-            value:32,
-          },{
-            value:33,
-          },{
-            value:34,
-          },{
-            value:35,
-          },{
-            value:36,
-          },{
-            value:37,
-          },{
-            value:38,
-          },{
-            value:39,
-          },{
-            value:40,
-          },{
-            value:41,
-          },{
-            value:42,
-          },{
-            value:43,
-          },{
-            value:44,
-          },{
-            value:45,
-          },{
-            value:46,
-          },{
-            value:47,
-          },{
-            value:48,
-          },{
-            value:49,
-          },{
-            value:50,
-          }]
-        },
-        xueduanVisible:false,
-
-        leaveData:{},
-        leaveOption:{
-          column:[
-            {
-              label:'离校原因',
-              prop:'leaveReason',
-              rules: [{
-=======
 import { grant, resetPassword } from "@/api/system/user";
+
 import {
   tree,
   add,
@@ -586,333 +637,778 @@ import {
   update,
   orderClass,
   getList,
-  removeStuId
+  removeStuId,
+  createClass
 } from "@/api/system/student";
+
 import { nation } from "@/api/tool/data";
+
 import { formateDate } from "@/api/tool/date";
+
 import { mapGetters } from "vuex";
+
 import website from "@/config/website";
+
 import { getToken } from "@/util/auth";
+
 export default {
   data() {
     return {
+      banjiForm: {
+        className: "",
+
+        classAlias: ""
+      },
+
+      banjiRules: {
+        className: [
+          { required: true, trigger: "blur", message: "请至少选择一个班级" }
+        ]
+      },
+
+      xuejiRules: {
+        startYear: [
+          { required: true, trigger: "blur", message: "请至少选择一个年份" }
+        ],
+
+        classes: [
+          { required: true, trigger: "blur", message: "请选择班级数量" }
+        ]
+      },
+
+      xuejiForm: {
+        startYear: "",
+
+        classes: ""
+      },
+
+      yey: [
+        {
+          title: "小小班",
+
+          value: 1
+        },
+
+        {
+          title: "小班",
+
+          value: 2
+        },
+
+        {
+          title: "中班",
+
+          value: 3
+        },
+
+        {
+          title: "大班",
+
+          value: 4
+        },
+
+        {
+          title: "学前班",
+
+          value: 5
+        }
+      ],
+
+      same: [
+        {
+          title: "一",
+
+          value: 1
+        },
+
+        {
+          title: "二",
+
+          value: 2
+        },
+
+        {
+          title: "三",
+
+          value: 3
+        },
+
+        {
+          title: "四",
+
+          value: 4
+        },
+        {
+          title: "五",
+
+          value: 5
+        },
+
+        {
+          title: "六",
+
+          value: 6
+        },
+
+        {
+          title: "七",
+
+          value: 7
+        },
+
+        {
+          title: "八",
+
+          value: 8
+        }
+      ],
+
+      xueduanRules: {
+        xueduanCk: [
+          { required: true, trigger: "blur", message: "请至少选择一个学段" }
+        ]
+      },
+
+      xueduanForm: {
+        xueduanCk: [],
+
+        classOptionsValue: 1
+      },
+
+      claStu: [
+        {
+          disFlag: true,
+
+          disValue: 3,
+
+          grade: 1,
+
+          className: "幼儿园",
+
+          classType: 1,
+
+          children: [],
+
+          disOption: [
+            {
+              value: 3
+            },
+
+            {
+              value: 4
+            },
+            {
+              value: 5
+            }
+          ]
+        },
+
+        {
+          disFlag: true,
+
+          disValue: 6,
+
+          className: "小学",
+
+          grade: 2,
+
+          classType: 1,
+
+          children: [],
+
+          disOption: [
+            {
+              value: 6
+            },
+            {
+              value: 7
+            },
+            {
+              value: 8
+            }
+          ]
+        },
+
+        {
+          disFlag: true,
+
+          disValue: 3,
+
+          grade: 3,
+
+          className: "初中",
+
+          classType: 1,
+
+          children: [],
+
+          disOption: [
+            {
+              value: 3
+            },
+            {
+              value: 4
+            },
+            {
+              value: 5
+            }
+          ]
+        },
+
+        {
+          disFlag: true,
+
+          disValue: 3,
+
+          className: "高中",
+
+          grade: 4,
+
+          classType: 1,
+
+          children: [],
+
+          disOption: [
+            {
+              value: 3
+            },
+            {
+              value: 4
+            },
+            {
+              value: 5
+            }
+          ]
+        }
+      ],
+
+      xdInfo: {
+        classOptions: [
+          {
+            value: 1
+          },
+          {
+            value: 2
+          },
+          {
+            value: 3
+          },
+          {
+            value: 4
+          },
+          {
+            value: 5
+          },
+          {
+            value: 6
+          },
+          {
+            value: 7
+          },
+          {
+            value: 8
+          },
+          {
+            value: 9
+          },
+          {
+            value: 10
+          },
+          {
+            value: 11
+          },
+          {
+            value: 12
+          },
+          {
+            value: 13
+          },
+          {
+            value: 14
+          },
+          {
+            value: 15
+          },
+          {
+            value: 16
+          },
+          {
+            value: 17
+          },
+          {
+            value: 18
+          },
+          {
+            value: 19
+          },
+          {
+            value: 20
+          },
+          {
+            value: 21
+          },
+          {
+            value: 22
+          },
+          {
+            value: 23
+          },
+          {
+            value: 24
+          },
+          {
+            value: 25
+          },
+          {
+            value: 26
+          },
+          {
+            value: 27
+          },
+          {
+            value: 28
+          },
+          {
+            value: 29
+          },
+          {
+            value: 30
+          }
+        ]
+      },
+
+      xueduanVisible: false,
+
+      xuejiVisible: false,
+
+      banjiVisible: false,
+
       leaveData: {},
+
       leaveOption: {
         column: [
           {
             label: "离校原因",
+
             prop: "leaveReason",
+
             rules: [
               {
->>>>>>> Stashed changes
                 required: true,
+
                 message: "请输入离校原因",
+
                 trigger: "blur"
               }
             ],
+
             span: 24
           },
           {
             label: "离校时间",
+
             prop: "leaveDate",
+
             type: "date",
+
             rules: [
               {
                 required: true,
+
                 message: "请输入离校时间",
+
                 trigger: "blur"
               }
             ],
+
             span: 24
           }
         ]
       },
+
       rowId: "",
+
       rowName: "",
+
       leaveReason: "",
+
       leaveDate: "",
+
       outerVisible: false,
+
       leaveVisible: false,
+
       filterText: "",
+
       form: {},
+
       search: {},
+
       roleBox: false,
+
       excelBox: false,
+
       initFlag: true,
+
       selectionList: [],
+
       query: {},
+
       loading: true,
+
       page: {
         pageSize: 10,
+
         currentPage: 1,
+
         total: 0
       },
+
       classes: [
         { type: 1, pName: "所属校区", title: "新增学段", name: "学段名称" },
+
         {
           type: 2,
+
           pName: "所属学段",
+
           title: "新增年级",
+
           name: "年级名称",
+
           alias: "年级别名"
         },
+
         {
           type: 3,
+
           pName: "所属年级",
+
           title: "新增班级",
+
           name: "班级名称",
+
           alias: "班级别名",
+
           edu: "学界"
         }
       ],
+
       tclass: {
         classType: "",
+
         classPName: "",
+
         classTitle: "",
+
         className: "",
+
         classAlias: "",
+
         classEdu: ""
       },
+
       addValue: {
         id: "",
+
         pidValue: "",
+
         nameValue: "",
+
         aliasValue: ""
+
         // eduValue: "",
       },
+
       init: {
         roleTree: [],
+
         deptTree: []
       },
-<<<<<<< Updated upstream
-    },
-    mounted() {
-      this.initData();
-      document.getElementById('boxTree').style.height=(document.body.clientHeight-113)+"px";
-    },
-    methods: {
-      ckChange(){
-        this.claStu.forEach(_=>{_.disFlag=true})
-        for(let i=0;i<this.xueduanForm.xueduanCk.length;i++){
-          this.claStu.find(p=>p.className==this.xueduanForm.xueduanCk[i]).disFlag=false;
-        }
-      },
-      subCodeXd(){
-        this.$refs.xueduanForm.validate(function (valid ) {
-          if (valid) {
 
-          }
-      })},
-      allowDrag(draggingNode) {
-        return draggingNode.data.classType == 3;
-=======
       props: {
         label: "title",
+
         value: "key"
->>>>>>> Stashed changes
       },
+
       roleGrantList: [],
+
       roleTreeObj: [],
+
       classId: "", //包括年级学校
+
       selectClassId: "", //只有班级,
+
       treeData: [],
+
       treeProps: {
         children: "children",
+
         label: "label"
       },
+
       option: {
         height: "auto",
+
         calcHeight: 80,
+
         tip: false,
+
         searchShow: true,
+
         searchMenuSpan: 6,
+
         border: true,
+
         index: true,
+
         indexLabel: "序号",
+
         selection: true,
+
         menuWidth: 300,
+
         // viewBtn: true,
+
         editBtn: false,
+
         addBtn: false,
+
         delBtn: false,
+
         //dialogType: 'drawer',
+
         dialogClickModal: false,
+
         column: [
           {
             label: "学级",
+
             prop: "educationalCircles",
+
             search: true,
+
             display: false,
+
             minlength: 0,
+
             maxlength: 4
           },
+
           {
             label: "姓名",
+
             prop: "name",
+
             search: true,
+
             display: false,
+
             minlength: 0,
+
             maxlength: 10
           },
+
           {
             label: "班级名称",
+
             prop: "className",
+
             display: false,
+
             width: 100
           },
+
           {
             label: "性别",
+
             prop: "sex",
+
             type: "select",
+
             dicData: [
               {
                 label: "男",
+
                 value: 1
               },
+
               {
                 label: "女",
+
                 value: 2
               }
             ],
+
             search: true,
+
             display: false
           },
+
           {
             label: "出生日期",
+
             prop: "birthDate",
+
             display: false
           },
+
           {
             label: "年龄",
+
             prop: "age",
+
             display: false
           },
+
           {
             label: "民族",
+
             prop: "nation",
+
             display: false,
+
             type: "select",
+
             dicData: nation
           },
+
           {
             label: "户口所在地",
+
             prop: "location",
+
             display: false
           },
+
           {
             label: "档案号",
+
             prop: "fileNumber",
+
             display: false
           },
+
           {
             label: "入园日期",
+
             prop: "admissionDate",
+
             display: false
           }
         ]
       },
+
       data: [],
+
       excelForm: {},
+
       excelOption: {
         submitBtn: false,
+
         emptyBtn: false,
+
         column: [
           {
             label: "模板上传",
+
             prop: "excelFile",
+
             type: "upload",
+
             drag: true,
+
             loadText: "模板上传中，请稍等",
+
             span: 24,
+
             propsHttp: {
               res: "data"
             },
+
             tip: "请上传 .xls,.xlsx 标准格式文件",
+
             action: "/api/blade-user/import-user"
           },
+
           {
             label: "数据覆盖",
+
             prop: "isCovered",
+
             type: "switch",
+
             align: "center",
+
             width: 80,
+
             dicData: [
               {
                 label: "否",
+
                 value: 0
               },
+
               {
                 label: "是",
+
                 value: 1
               }
-<<<<<<< Updated upstream
-            });
-          })
-          .catch(() => {
-            this.$message({
-              type: "info",
-              message: "已取消删除",
-            });
-          });
-      },
-      emptyDialog() {
-        this.addValue.pidValue = "";
-        this.addValue.nameValue = "";
-        this.addValue.aliasValue = "";
-        this.addValue.id="";
-        // this.addValue.eduValue = "";
-        this.leaveReason = "";
-        this.leaveDate = "";
-      },
-      filterNode(value, data) {
-        if (!value) return true;
-        return data.label.indexOf(value) !== -1;
-      },
-      addClass(node, data) {
-        debugger
-        // this.outerVisible = true;
-        let classs = this.classes.filter((_) => {
-          return _.type == data.type;
-=======
             ],
+
             value: 0,
+
             slot: true,
+
             rules: [
               {
                 required: true,
+
                 message: "请选择是否覆盖",
+
                 trigger: "blur"
               }
             ]
           },
+
           {
             label: "模板下载",
+
             prop: "excelTemplate",
+
             formslot: true,
+
             span: 24
           }
         ]
       }
     };
   },
+
   watch: {
     filterText(val) {
       this.$refs.tree.filter(val);
     },
+
     "form.tenantId"() {
       if (this.form.tenantId !== "" && this.initFlag) {
         this.initData(this.form.tenantId);
       }
     },
+
     "excelForm.isCovered"() {
       if (this.excelForm.isCovered !== "") {
         const column = this.findObject(this.excelOption.column, "excelFile");
+
         column.action = `/api/blade-user/import-user?isCovered=${this.excelForm.isCovered}`;
       }
     }
   },
+
   computed: {
     ...mapGetters(["userInfo", "permission"]),
+
     permissionList() {
       return {
         // addBtn: this.vaildData(this.permission.user_add, false),
@@ -921,240 +1417,482 @@ export default {
         // editBtn: this.vaildData(this.permission.user_edit, false)
       };
     },
+
     ids() {
       let ids = [];
+
       this.selectionList.forEach(ele => {
         ids.push(ele.id);
       });
+
       return ids.join(",");
     }
   },
+
   mounted() {
     this.initData();
+
     document.getElementById("boxTree").style.height =
       document.body.clientHeight - 113 + "px";
   },
+
   methods: {
+    beforeClosenj() {
+      this.xuejiVisible = false;
+    },
+
+    beforeClosexd() {
+      debugger;
+
+      this.xueduanVisible = false;
+
+      this.xueduanForm.xueduanCk = [];
+
+      this.claStu.forEach(_ => {
+        _.disFlag = true;
+
+        _.disValue = 3;
+
+        if (_.className == "小学") {
+          _.disValue = 6;
+        }
+
+        _.children = [];
+      });
+    },
+
+    numbChange() {
+      this.sameChange();
+    },
+
+    ckChange() {
+      this.claStu.forEach(_ => {
+        _.disFlag = true;
+        _.children = [];
+      });
+
+      this.sameChange();
+    },
+
+    sameChange() {
+      for (let i = 0; i < this.xueduanForm.xueduanCk.length; i++) {
+        let obj = this.claStu.find(
+          p => p.className == this.xueduanForm.xueduanCk[i]
+        );
+
+        let children = [];
+
+        let year = parseInt(new Date().getFullYear());
+
+        if (obj.className == "幼儿园") {
+          if (obj.disValue == 3) {
+            for (let j = 0; j < 3; j++) {
+              children.push({
+                startYear: year - j,
+                className: this.yey[1 + j].title,
+                grade: this.yey[1 + j].value,
+                classNum: 5,
+                classStr: this.yey[1 + j].title
+              });
+            }
+          }
+
+          if (obj.disValue == 4 || obj.disValue == 5) {
+            for (let j = 0; j < obj.disValue; j++) {
+              children.push({
+                startYear: year - j,
+                className: this.yey[0 + j].title,
+                grade: this.yey[0 + j].value,
+                classNum: 5,
+                classStr: this.yey[0 + j].title
+              });
+            }
+          }
+        }
+
+        if (obj.className == "小学") {
+          for (let j = 0; j < obj.disValue; j++) {
+            children.push({
+              startYear: year - j,
+              className:
+                this.same[j].title +
+                "年级" +
+                parseInt(year - j).toString() +
+                "级",
+              grade: this.same[j].value,
+              classNum: 5,
+              classStr: this.same[j].title + "年级"
+            });
+          }
+        }
+
+        if (obj.className == "初中") {
+          for (let j = 0; j < obj.disValue; j++) {
+            children.push({
+              startYear: year - j,
+              className:
+                this.same[j].title +
+                "年级" +
+                parseInt(year - j).toString() +
+                "级",
+              grade: this.same[j].value,
+              classNum: 5,
+              classStr: this.same[j].title + "年级"
+            });
+          }
+        }
+
+        if (obj.className == "高中") {
+          for (let j = 0; j < obj.disValue; j++) {
+            children.push({
+              startYear: year - j,
+              className:
+                this.same[j].title +
+                "年级" +
+                parseInt(year - j).toString() +
+                "级",
+              grade: this.same[j].value,
+              classNum: 5,
+              classStr: this.same[j].title + "年级"
+            });
+          }
+        }
+
+        this.claStu.find(
+          p => p.className == this.xueduanForm.xueduanCk[i]
+        ).disFlag = false;
+
+        this.claStu.find(
+          p => p.className == this.xueduanForm.xueduanCk[i]
+        ).children = children;
+      }
+    },
+
+    subCodeXd() {
+      let that = this;
+
+      this.$refs.xueduanForm.validate(function(valid) {
+        if (valid) {
+          let row = [];
+
+          that.claStu.forEach(stu => {
+            if (stu.children.length > 0) {
+              row.push(stu);
+            }
+          });
+
+          createClass(row).then(res => {
+            debugger;
+
+            if (res.data.success) {
+              that.$message({
+                type: "success",
+
+                message: "新增成功!"
+              });
+
+              that.initData();
+            }
+          });
+        }
+      });
+    },
+
     allowDrag(draggingNode) {
       return draggingNode.data.classType == 3;
     },
+
     allowDrop(draggingNode, dropNode, type) {
       return type !== "inner";
     },
+
     updateClass(node, data) {
-      if (data.parentId != 0) {
-        // debugger;
-        this.outerVisible = true;
-        let classs = this.classes.filter(_ => {
-          return _.type == data.classType;
->>>>>>> Stashed changes
-        })[0];
-        if (classs.type == 2) {
-          this.tclass.classAlias = classs.alias;
-        }
-        if (classs.type == 3) {
-          this.tclass.classAlias = classs.alias;
-          this.tclass.classEdu = classs.edu;
-        }
-<<<<<<< Updated upstream
-        if(classs.type==1){
-          this.xueduanVisible=true;
-        }
-        // // debugger;
-        // this.tclass.classType = classs.type;
-        // this.tclass.classPName = classs.pName;
-        // this.tclass.classTitle = classs.title;
-        // this.tclass.className = classs.name;
-        // this.pidOptions = [{ value: data.pId, label: data.pName }];
-        // this.addValue.pidValue = data.pId;
-      },
-      cancel() {
-        this.outerVisible = false;
-        this.leaveVisible = false;
-        this.Visible;
-        this.emptyDialog();
-      },
-      submitClass() {
-        let row = {};
-        // debugger;
-        if (this.tclass.classType == 1) {
-          row = {
-            id: this.addValue.id,
-            parentId: this.addValue.pidValue,
-            className: this.addValue.nameValue,
-            classType: this.tclass.classType,
-          };
-=======
-        this.tclass.classType = classs.type;
-        this.tclass.classPName = classs.pName;
-        this.tclass.classTitle = classs.title;
-        this.tclass.className = classs.name;
-        this.pidOptions = [{ value: data.parentId, label: data.parentName }];
-        this.addValue.pidValue = data.parentId;
-        this.addValue.nameValue = data.label;
-        this.addValue.id = data.id;
-        if (classs.type == 1) {
-          this.tclass.classTitle = "修改学段";
->>>>>>> Stashed changes
-        }
-        if (classs.type == 2) {
-          this.tclass.classTitle = "修改年级";
-        }
-        if (classs.type == 3) {
-          this.tclass.classTitle = "修改班级";
-          this.addValue.aliasValue = data.classAlias;
-          // this.addValue.eduValue = data.educationalCircles;
-        }
-      }
+      // if (data.parentId != 0) {
+      //   // debugger;
+      //   this.outerVisible = true;
+      //   let classs = this.classes.filter((_) => {
+      //     return _.type == data.classType;
+      //   })[0];
+      //   if (classs.type == 2) {
+      //     this.tclass.classAlias = classs.alias;
+      //   }
+      //   if (classs.type == 3) {
+      //     this.tclass.classAlias = classs.alias;
+      //     this.tclass.classEdu = classs.edu;
+      //   }
+      //   this.tclass.classType = classs.type;
+      //   this.tclass.classPName = classs.pName;
+      //   this.tclass.classTitle = classs.title;
+      //   this.tclass.className = classs.name;
+      //   this.pidOptions = [{ value: data.parentId, label: data.parentName }];
+      //   this.addValue.pidValue = data.parentId;
+      //   this.addValue.nameValue = data.label;
+      //   this.addValue.id = data.id;
+      //   if (classs.type == 1) {
+      //     this.tclass.classTitle = "修改学段";
+      //   }
+      //   if (classs.type == 2) {
+      //     this.tclass.classTitle = "修改年级";
+      //   }
+      //   if (classs.type == 3) {
+      //     this.tclass.classTitle = "修改班级";
+      //     this.addValue.aliasValue = data.classAlias;
+      //     // this.addValue.eduValue = data.educationalCircles;
+      //   }
+      // }
     },
+
     orderClass() {},
+
     removeClass(id) {
       this.$confirm("是否确认删除", "提示", {
         confirmButtonText: "确定",
+
         cancelButtonText: "取消",
+
         type: "warning"
       })
+
         .then(() => {
           remove(id).then(res => {
             if (res.data.success) {
               this.$message({
                 type: "success",
+
                 message: "删除成功!"
               });
+
               this.initData();
             }
           });
         })
+
         .catch(() => {
           this.$message({
             type: "info",
+
             message: "已取消删除"
           });
         });
     },
+
     emptyDialog() {
       this.addValue.pidValue = "";
+
       this.addValue.nameValue = "";
+
       this.addValue.aliasValue = "";
+
       this.addValue.id = "";
+
       // this.addValue.eduValue = "";
+
       this.leaveReason = "";
+
       this.leaveDate = "";
     },
+
     filterNode(value, data) {
       if (!value) return true;
+
       return data.label.indexOf(value) !== -1;
     },
+
     addClass(node, data) {
-      this.outerVisible = true;
+      debugger;
+
       let classs = this.classes.filter(_ => {
         return _.type == data.type;
       })[0];
+
       if (classs.type == 2) {
-        this.tclass.classAlias = classs.alias;
+        this.xuejiVisible = true;
       }
+
       if (classs.type == 3) {
-        this.tclass.classAlias = classs.alias;
-        this.tclass.classEdu = classs.edu;
+        this.banjiVisible = true;
       }
-      // debugger;
-      this.tclass.classType = classs.type;
-      this.tclass.classPName = classs.pName;
-      this.tclass.classTitle = classs.title;
-      this.tclass.className = classs.name;
-      console.log(this.tclass);
-      this.pidOptions = [{ value: data.pId, label: data.pName }];
-      this.addValue.pidValue = data.pId;
-      console.log(this.pidOptions);
+
+      if (classs.type == 1) {
+        this.xueduanVisible = true;
+      }
+
+      // // debugger;
+
+      // this.tclass.classType = classs.type;
+
+      // this.tclass.classPName = classs.pName;
+
+      // this.tclass.classTitle = classs.title;
+
+      // this.tclass.className = classs.name;
+
+      // this.pidOptions = [{ value: data.pId, label: data.pName }];
+
+      // this.addValue.pidValue = data.pId;
     },
+
     cancel() {
-      this.outerVisible = false;
+      // this.outerVisible = false;
+
       this.leaveVisible = false;
+
       this.Visible;
+
       this.emptyDialog();
     },
+
     submitClass() {
       let row = {};
+
       // debugger;
+
       if (this.tclass.classType == 1) {
         row = {
           id: this.addValue.id,
+
           parentId: this.addValue.pidValue,
+
           className: this.addValue.nameValue,
+
           classType: this.tclass.classType
         };
       }
+
       if (this.tclass.classType == 2) {
         row = {
           id: this.addValue.id,
+
           parentId: this.addValue.pidValue,
+
           className: this.addValue.nameValue,
+
           classType: this.tclass.classType
         };
       }
+
       if (this.tclass.classType == 3) {
         row = {
           id: this.addValue.id,
+
           parentId: this.addValue.pidValue,
+
           className: this.addValue.nameValue,
+
           classType: this.tclass.classType,
+
           classAlias: this.addValue.aliasValue
+
           // educationalCircles: this.addValue.eduValue,
         };
       }
+
       if (this.addValue.id != null && this.addValue.id != "") {
         update(row).then(res => {
           if (res.data.success) {
-            this.outerVisible = false;
+            // this.outerVisible = false;
+
             this.$message({
               type: "success",
+
               message: "修改成功!"
             });
+
             this.initData();
+
             this.emptyDialog();
           }
         });
       } else {
         add(row).then(res => {
           if (res.data.success) {
-            this.outerVisible = false;
+            // this.outerVisible = false;
+
             this.$message({
               type: "success",
+
               message: "添加成功!"
             });
+
             this.initData();
+
             this.emptyDialog();
           }
         });
       }
     },
+
     nodeClick(data) {
       this.classId = data.id;
+
       if (data.classType && data.classType == 3) {
         this.selectClassId = data.id;
       }
+
       this.page.currentPage = 1;
+
       this.onLoad(this.page);
     },
+
     addTreeItem(data, value, type, pId, pName) {
+      debugger;
+
       let tData = [];
+
+      let nbSelect = []; //年级/班级select
+
       if (data) {
         for (let i = 0; i < data.length; i++) {
           tData.push(data[i]);
+
+          if (pName == "幼儿园") {
+            this.yey.forEach(_ => {
+              if (_.value == data[i].grade) {
+                nbSelect.push({
+                  title: _.title,
+                  value: _.value,
+                  disabled: true
+                });
+              } else {
+                nbSelect.push({
+                  title: _.title,
+                  value: _.value,
+                  disabled: false
+                });
+              }
+            });
+          }
         }
       }
+
+      if (type == 2) {
+        //年级
+      }
+
+      if (type == 3) {
+        //班级
+      }
+
       tData.push({
         label: value,
+
         addBtn: true,
+
         type: type,
+
         pId: pId,
+
         pName: pName
       });
+
       return tData;
     },
+
     handleDrop(draggingNode, dropNode, dropType, ev) {
       let rows = [];
+
       let rowData = [];
+
       this.treeData.forEach(_ => {
         if (_.children) {
           _.children.forEach(__ => {
@@ -1168,52 +1906,65 @@ export default {
           });
         }
       });
+
       if (dropType == "after") {
         rows = rows.filter(_ => {
           return dropNode.data.sort
             ? _.sort <= dropNode.data.sort && _.sort >= draggingNode.data.sort
             : _.sort >= draggingNode.data.sort;
         });
+
         for (let i = 0; i < rows.length; i++) {
           if (i >= 1) {
             rowData.push({ id: rows[i].id, sort: rows[i - 1].sort });
           }
         }
+
         rowData.push({ id: rows[0].id, sort: rows[rows.length - 1].sort });
+
         console.log(rows);
       }
+
       if (dropType == "before") {
         rows = rows.filter(_ => {
           return (
             _.sort >= dropNode.data.sort && _.sort <= draggingNode.data.sort
           );
         });
+
         for (let i = 0; i <= rows.length; i++) {
           if (i < rows.length - 1) {
             rowData.push({ id: rows[i].id, sort: rows[i + 1].sort });
           }
         }
+
         rowData.push({ id: rows[rows.length - 1].id, sort: rows[0].sort });
 
         console.log(rows);
       }
+
       orderClass(rowData).then(res => {
         if (res.data.success) {
           this.$message({
             type: "success",
+
             message: "排序成功!"
           });
+
           this.initData();
         }
       });
     },
+
     initData() {
       tree().then(res => {
         for (let i = 0; i < res.data.data.length; i++) {
           //学校
+
           if (res.data.data[i].children) {
             for (let k = 0; k < res.data.data[i].children.length; k++) {
               //学段
+
               if (res.data.data[i].children[k].children) {
                 for (
                   let j = 0;
@@ -1221,157 +1972,234 @@ export default {
                   j++
                 ) {
                   //年级
+
                   res.data.data[i].children[k].children[
                     j
                   ].children = this.addTreeItem(
                     res.data.data[i].children[k].children[j].children,
+
                     "+ 新增班级",
+
                     3,
+
                     res.data.data[i].children[k].children[j].id,
+
                     res.data.data[i].children[k].children[j].label
                   );
                 }
               }
+
               res.data.data[i].children[k].children = this.addTreeItem(
                 res.data.data[i].children[k].children,
+
                 "+ 新增年级",
+
                 2,
+
                 res.data.data[i].children[k].id,
+
                 res.data.data[i].children[k].label //1-学段，2-年级，3-班级
               );
             }
           }
+
           res.data.data[i].children = this.addTreeItem(
             res.data.data[i].children,
+
             "+ 新增学段",
+
             1,
+
             res.data.data[i].id,
+
             res.data.data[i].label
           );
         }
+
         this.treeData = res.data.data;
+
         console.log(this.treeData);
       });
     },
+
     rowSave(row, done, loading) {
       console.log(row);
+
       row.deptId = row.deptId.join(",");
+
       row.roleId = row.roleId.join(",");
+
       row.postId = row.postId.join(",");
+
       add(row).then(
         () => {
           this.initFlag = false;
+
           this.onLoad(this.page);
+
           this.$message({
             type: "success",
+
             message: "操作成功!"
           });
+
           done();
         },
+
         error => {
           window.console.log(error);
+
           loading();
         }
       );
     },
+
     rowUpdate(row, index, done, loading) {
       row.deptId = row.deptId.join(",");
+
       row.roleId = row.roleId.join(",");
+
       row.postId = row.postId.join(",");
+
       update(row).then(
         () => {
           this.initFlag = false;
+
           this.onLoad(this.page);
+
           this.$message({
             type: "success",
+
             message: "操作成功!"
           });
+
           done();
         },
+
         error => {
           window.console.log(error);
+
           loading();
         }
       );
     },
+
     rowDel(row) {
       this.$confirm("确定将选择数据删除?", {
         confirmButtonText: "确定",
+
         cancelButtonText: "取消",
+
         type: "warning"
       })
+
         .then(() => {
           let rows = [];
+
           rows.push({ id: row.id, isDelete: 1 });
+
           return removeStuId(rows);
         })
+
         .then(() => {
           this.onLoad(this.page);
+
           this.$message({
             type: "success",
+
             message: "操作成功!"
           });
         });
     },
+
     leaveSchool(scope) {
       // debugger
+
       this.leaveVisible = true;
+
       this.rowId = scope.row.id;
+
       this.rowName = scope.row.className;
+
       this.$set(this.leaveData, "leaveDate", new Date());
     },
+
     addStudent() {
       this.$router.push({
         path: "/oprate/addStudent",
         query: { selectClassId: this.selectClassId }
       });
     },
+
     handleView(row) {
       this.$router.push({
         path: "/oprate/addStudent",
         query: { id: row.id, detailFlag: true, addView: true }
       });
     },
+
     handleEdit(row) {
       this.$router.push({ path: "/oprate/addStudent", query: { id: row.id } });
     },
+
     searchReset() {
       this.query = {};
+
       this.classId = "";
+
       this.onLoad(this.page);
     },
+
     searchChange(params, done) {
       this.query = params;
+
       this.page.currentPage = 1;
+
       this.onLoad(this.page, params);
+
       done();
     },
+
     selectionChange(list) {
       this.selectionList = list;
     },
+
     selectionClear() {
       this.selectionList = [];
+
       this.$refs.crud.toggleSelection();
     },
+
     handleUpdate(row, index, type) {
       // debugger;
+
       let rows = [];
+
       if (type == "2") {
         rows.push({
           id: row,
+
           isDelete: type,
+
           leaveDate: formateDate(this.leaveData.leaveDate, "yyyy-MM-dd"),
+
           reason: this.leaveData.leaveReason,
+
           leaveClassName: this.rowName
         });
+
         this.emptyDialog();
+
         removeStuId(rows).then(res => {
           this.onLoad(this.page);
+
           this.$message({
             type: "success",
+
             message: "操作成功!"
           });
         });
+
         this.leaveVisible = false;
       } else {
         rows.push({
@@ -1379,61 +2207,87 @@ export default {
           isDelete: type,
           leaveClassName: row.className
         });
+
         this.$confirm("是否确认毕业?", {
           confirmButtonText: "确定",
+
           cancelButtonText: "取消",
+
           type: "warning"
         }).then(() => {
           removeStuId(rows).then(res => {
             this.onLoad(this.page);
+
             this.$message({
               type: "success",
+
               message: "操作成功!"
             });
           });
         });
       }
     },
+
     handleDelete() {
       if (this.selectionList.length === 0) {
         this.$message.warning("请选择至少一条数据");
+
         return;
       }
+
       this.$confirm("确定将选择数据删除?", {
         confirmButtonText: "确定",
+
         cancelButtonText: "取消",
+
         type: "warning"
       })
+
         .then(() => {
           let id = this.ids.split(",");
+
           let row = [];
+
           for (let i = 0; i < id.length; i++) {
             row.push({ id: id[i], isDelete: 1 });
           }
+
           return removeStuId(row);
         })
+
         .then(() => {
           this.onLoad(this.page);
+
           this.$message({
             type: "success",
+
             message: "操作成功!"
           });
+
           this.$refs.crud.toggleSelection();
         });
     },
+
     handleImport() {
       this.excelBox = true;
     },
+
     uploadAfter(res, done, loading, column) {
       window.console.log(column);
+
       this.excelBox = false;
+
       this.refreshChange();
+
       done();
     },
+
     handleExport() {
       this.$confirm("是否导出用户数据?", "提示", {
         confirmButtonText: "确定",
+
         cancelButtonText: "取消",
+
         type: "warning"
       }).then(() => {
         window.open(
@@ -1445,6 +2299,7 @@ export default {
         );
       });
     },
+
     handleTemplate() {
       window.open(
         `/api/blade-user/export-template?${
@@ -1452,24 +2307,34 @@ export default {
         }=${getToken()}`
       );
     },
+
     currentChange(currentPage) {
       this.page.currentPage = currentPage;
     },
+
     sizeChange(pageSize) {
       this.page.pageSize = pageSize;
     },
+
     refreshChange() {
       this.onLoad(this.page, this.query);
     },
+
     onLoad(page, params = {}) {
       this.loading = true;
+
       params["isDelete"] = 0;
+
       getList(page.currentPage, page.pageSize, params, this.classId).then(
         res => {
           const data = res.data.data;
+
           this.page.total = data.total;
+
           this.data = data.records;
+
           this.loading = false;
+
           this.selectionClear();
         }
       );
@@ -1477,187 +2342,219 @@ export default {
   }
 };
 </script>
-<style>
-<<<<<<< Updated upstream
 
- .student-contain  .item-ck{
-    margin-top: 30px;
-    margin-left: 50px;
-  }
-.item-ck .item-title{
+<style>
+.student-contain .item-ck,
+.item-ck-xj {
+  margin-top: 30px;
+
+  margin-left: 50px;
+}
+
+.item-ck-bj {
+  width: 200px;
+
+  float: left;
+}
+
+.item-ck-title {
+  margin-right: 10px;
+}
+
+.item-samewidth {
+  width: 110px;
+
+  display: block;
+
+  float: left;
+
+  text-align: right;
+}
+
+.item-ck .item-title {
   margin-left: 100px;
+
   font-size: 12px;
+
   line-height: 20px;
-  color: rgba(13,0,19,.56);
+
+  color: rgba(13, 0, 19, 0.56);
+
   margin-top: 10px;
 }
- .item-ck   .item-class{
-   margin-left: 100px;
- }
- .item-ck   .item-class .item-class-title{
-   line-height: 40px;
-   border-bottom: 1px solid #e8e8e8;
- }
- .item-ck   .item-class  .item-class-content{
-   margin-left: 100px;
-   line-height: 50px;
- }
-  .student-contain .el-checkbox{
-    width: 80px;
-  }
- .student-contain .item-ck  .el-form-item__label{
-    width: 100px!important;
-  }
-  .el-checkbox-group{
-    margin-left: 100px;
 
-  }
-  .student-contain .el-tree-node__content {
-    height: 30px !important;
-  }
- .student-contain  .ant-tree-node-content-btn {
-    margin-top: 4px;
-  }
- .student-contain  .el-drawer__header{
-    padding: 20px 20px 10px 20px!important;
-    border-bottom: 1px solid #e8e8e8;
-  }
-  .student-contain .el-drawer__open .el-drawer.rtl{
-    width: 40%!important;
-    overflow-y: scroll;
-    color: rgba(0,0,0,.65);
-  }
-  .student-contain  .el-drawer__header{
-    font-size: 16px;
-    font-weight: 500;
-    color: rgba(0,0,0,.85);
-  }
-  .student-contain ._1OGXkpwTB-08ZVOTYhQESl{
-    background: #eceff4;
-    padding-left: 20px;
-    line-height: 40px;
-    margin-left: 20px;
-    font-size: 14px;
-  }
- .item-ck .el-select{
-   width:100px;
-  }
+.item-ck .item-class {
+  margin-left: 100px;
+}
 
+.item-ck .item-class .item-class-title {
+  line-height: 40px;
+
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.item-ck .item-class .item-class-content {
+  margin-left: 100px;
+
+  line-height: 50px;
+}
+
+.student-contain .item-ck .el-checkbox {
+  width: 80px;
+}
+
+.student-contain .item-ck .el-form-item__label,
+.student-contain .item-ck-xj .el-form-item__label {
+  width: 100px !important;
+}
+
+.item-ck .el-checkbox-group {
+  margin-left: 100px;
+}
+
+.student-contain .el-tree-node__content {
+  height: 30px !important;
+}
+
+.student-contain .ant-tree-node-content-btn {
+  margin-top: 4px;
+}
+
+.student-contain .el-drawer__header {
+  padding: 20px 20px 10px 20px !important;
+
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.student-contain .el-drawer__open .el-drawer.rtl {
+  width: 40% !important;
+
+  overflow-y: scroll;
+
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.student-contain .el-drawer__header {
+  font-size: 16px;
+
+  font-weight: 500;
+
+  color: rgba(0, 0, 0, 0.85);
+}
+
+.student-contain ._1OGXkpwTB-08ZVOTYhQESl {
+  background: #eceff4;
+
+  padding-left: 20px;
+
+  line-height: 40px;
+
+  margin-left: 20px;
+
+  font-size: 14px;
+}
+
+.item-ck .el-select {
+  width: 100px;
+}
 </style>
 
 <style scoped>
+.el-form {
+  padding-bottom: 60px;
+}
 
-  .item-footer{
-     position: fixed;
-     right: 0px;
-     padding-top: 10px;
-     bottom: 0px;
-     background-color: #FFFFFF;
-     padding-bottom: 10px;
-  }
-  .box {
-    height: 800px;
-  }
-  .el-tree {
-    margin-top: 20px;
-  }
-  .el-scrollbar {
-    height: 100%;
-  }
-  .box .el-scrollbar__wrap {
-    overflow: scroll;
-  }
-  .ant-tree-node-content-0::before {
-    content: "\73ED";
-    color: #fff;
-    opacity: 0.8;
-    background: #00b853;
-    display: inline-block;
-    width: 28px;
-    height: 28px;
-    border-radius: 4px;
-    font-size: 20px;
-    line-height: 28px;
-    text-align: center;
-    -webkit-transform: translateY(-50%) scale(0.5);
-    -ms-transform: translateY(-50%) scale(0.5);
-    transform: translateY(-50%) scale(0.5);
-    font-style: normal;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    z-index: 1;
-    position: relative;
-    top: 18px;
-  }
-  .ant-tree-node-content-0 {
-    margin-top: 30px;
-    margin-left: -8px;
-  }
-  .ant-tree-node-content-1 {
-    margin-right: 5px;
-  }
-  .ant-tree-node-content-wrapper-addItem {
-    color: #92959b;
-    border: #dcdfe6 1px solid;
-    padding: 4px 10px;
-    font-size: 12px;
-  }
+.item-footer {
+  position: fixed;
 
+  right: 20%;
 
+  padding-top: 10px;
 
-=======
+  bottom: 0px;
+
+  background-color: #ffffff;
+
+  padding-bottom: 10px;
+
+  margin-right: -100px;
+}
+
 .box {
   height: 800px;
 }
+
 .el-tree {
   margin-top: 20px;
 }
+
 .el-scrollbar {
   height: 100%;
 }
+
 .box .el-scrollbar__wrap {
   overflow: scroll;
 }
+
 .ant-tree-node-content-0::before {
   content: "\73ED";
+
   color: #fff;
+
   opacity: 0.8;
+
   background: #00b853;
+
   display: inline-block;
+
   width: 28px;
+
   height: 28px;
+
   border-radius: 4px;
+
   font-size: 20px;
+
   line-height: 28px;
+
   text-align: center;
+
   -webkit-transform: translateY(-50%) scale(0.5);
+
   -ms-transform: translateY(-50%) scale(0.5);
+
   transform: translateY(-50%) scale(0.5);
+
   font-style: normal;
+
   -webkit-font-smoothing: antialiased;
+
   -moz-osx-font-smoothing: grayscale;
+
   z-index: 1;
+
   position: relative;
+
   top: 18px;
 }
+
 .ant-tree-node-content-0 {
   margin-top: 30px;
+
   margin-left: -8px;
 }
+
 .ant-tree-node-content-1 {
   margin-right: 5px;
 }
+
 .ant-tree-node-content-wrapper-addItem {
   color: #92959b;
+
   border: #dcdfe6 1px solid;
+
   padding: 4px 10px;
+
   font-size: 12px;
 }
-.el-tree-node__content {
-  height: 30px !important;
-}
-.ant-tree-node-content-btn {
-  margin-top: 4px;
-}
->>>>>>> Stashed changes
 </style>
