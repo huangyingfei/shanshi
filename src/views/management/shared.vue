@@ -74,29 +74,30 @@
         <el-table-column
           prop="foodName"
           label="食材名称"
-          width="180"
           align="center"
         ></el-table-column>
         <el-table-column
           prop="foodTypeName"
           label="分类"
-          width="100"
           align="center"
         ></el-table-column>
         <el-table-column
           prop="createName"
           label="提交人"
-          width="180"
           align="center"
         ></el-table-column>
 
         <el-table-column
           prop="createTime"
           label="提交时间"
-          width="270"
           align="center"
         ></el-table-column>
-        <el-table-column label="审核状态" width="150" align="center">
+        <el-table-column
+          prop="updateTime"
+          label="分享时间"
+          align="center"
+        ></el-table-column>
+        <el-table-column label="审核状态" align="center">
           <template slot-scope="scope">
             <el-tag type="danger" v-if="scope.row.status == 0">待审核</el-tag>
             <el-tag v-else-if="scope.row.status == 3">无需审核</el-tag>
