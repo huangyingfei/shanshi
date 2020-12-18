@@ -7,11 +7,17 @@
       append-to-body
       :visible.sync="dialog"
       :close-on-click-modal="false"
+               :before-close="cancel"
     >
+
       <el-tabs v-model="angelfood" >
         <el-tab-pane label="公共食材库" name="third">
           <div class="block">
             <p></p>
+            <el-input
+              placeholder="输入关键字进行过滤"
+              v-model="filterText">
+            </el-input>
             <el-tree
               :data="foodDataPub"
               node-key="id"
@@ -23,6 +29,7 @@
               ref="treePub"
               :default-expand-all="false"
               @check-change="handleCheckChange"
+              :filter-node-method="filterNode"
             >
             </el-tree>
           </div>
@@ -30,6 +37,10 @@
         <el-tab-pane label="个人食材库" name="fourth">
           <div class="block">
             <p></p>
+            <el-input
+              placeholder="输入关键字进行过滤"
+              v-model="filterText1">
+            </el-input>
             <el-tree
               :data="foodDataPri"
               node-key="id"
@@ -41,6 +52,7 @@
               v-loading="loadFlag2"
               :default-expand-all="false"
               @check-change="handleCheckChange"
+              :filter-node-method="filterNode1"
             >
             </el-tree>
           </div>
@@ -49,7 +61,7 @@
       </el-tabs>
 
       <div slot="footer" class="dialog-footer">
-        <el-button @click="certain">取 消</el-button>
+        <el-button @click="cancel">取 消</el-button>
         <el-button @click="certain" type="primary">确 定</el-button>
       </div>
     </el-dialog>
@@ -62,6 +74,13 @@
   export default {
     data() {
       return {
+        dialog: false, //弹出框
+        foodIds:"",
+        oldFoodIds:"",
+        oldFoodNames:"",
+
+        filterText:'',
+        filterText1:'',
         angelfood: "third",
         defaultProps:{
           children: 'foods',
@@ -73,7 +92,6 @@
         checkedDataPub:[],
         checkedDataPri:[],
         foodIdArr:[],
-        dialog: false, //弹出框
         option: {
           detail: false,
           height:'auto',
@@ -136,7 +154,7 @@
             },
             {
               label: "过敏食材",
-              prop: "foodIds",
+              prop: "foodNames2",
               hide:true,
               span:24,
               rules: [{
@@ -144,12 +162,7 @@
                 message: "请选择过敏食材",
                 trigger: this.validatefoodIds
               }],
-              click:()=>{
-                this.dialog=true;
-                if(this.form.foodIds!=""){
-                  this.$set(this.form,"foodIds",this.form.foodIds+",");
-                }
-              }
+              click:this.openDialog
             },
             {
               label: "过敏症状",
@@ -182,45 +195,129 @@
       };
     },
     watch:{
+      filterText(val) {
+        this.$refs.treePub.filter(val);
+      },
+      filterText1(val) {
+        this.$refs.treePri.filter(val);
+      },
       'form.studentId'(){
         // var x=  document.getElementsByClassName("el-input__inner")[5]
         // x.value="";
-        debugger
       }
     },
     methods: {
+      openDialog(){
+          this.dialog=true;
+          debugger
+          this.oldFoodIds=this.foodIds;
+          this.oldFoodNames=this.form.foodNames2;
+          let foodIds=this.foodIds.split(",");
+          let checkedDataPub=[];
+          let checkedDataPri=[];
+          for(let i=0;i<foodIds.length;i++){
+            this.foodDataPub.forEach(_=>{
+              if(_.foods){
+                _.foods.forEach(__=>{
+                  if(foodIds[i]==__.id){
+                    checkedDataPub.push(foodIds[i])
+                  }
+                })
+              }
+            })
+            this.foodDataPri.forEach(_=>{
+              if(_.foods){
+                _.foods.forEach(__=>{
+                  if(foodIds[i]==__.id){
+                    checkedDataPri.push(foodIds[i])
+                  }
+                })
+              }
+            })
+          }
+          let that=this;
+          setTimeout(function () {
+            that.$refs.treePub.setCheckedKeys(checkedDataPub)
+            that.$refs.treePri.setCheckedKeys(checkedDataPri)
+          },1000)
+
+
+          if(this.form.foodNames2!=""){
+            this.$set(this.form,"foodNames2",this.form.foodNames2+",");
+            this.$set( this,'foodIds',this.foodIds+",")
+          }
+      },
       validatefoodIds(rule, value, callback) {
-        debugger
         if (value === ""||value=="undefined"||!value) {
           callback(new Error("请选择过敏食材"));
         }
         callback();
       },
+      cancel(){
+        this.dialog = false;
+        this.foodIds=this.oldFoodIds;
+        debugger
+        this.$set(this.form,"foodNames2",this.oldFoodNames);
+        let foodIds=this.foodIds.split(",");
+        let checkedDataPub=[];
+        let checkedDataPri=[];
+        for(let i=0;i<foodIds.length;i++){
+          this.foodDataPub.forEach(_=>{
+            if(_.foods){
+              _.foods.forEach(__=>{
+                if(foodIds[i]==__.id){
+                  checkedDataPub.push(foodIds[i])
+                }
+              })
+            }
+          })
+          this.foodDataPri.forEach(_=>{
+            if(_.foods){
+              _.foods.forEach(__=>{
+                if(foodIds[i]==__.id){
+                  checkedDataPri.push(foodIds[i])
+                }
+              })
+            }
+          })
+        }
+        this.$refs.treePub.setCheckedKeys(checkedDataPub)
+        this.$refs.treePri.setCheckedKeys(checkedDataPri)
+      },
       certain(){
         this.dialog = false;
-        if(this.form.foodIds!=''){
-          this.$set(this.form,'foodIds',this.form.foodIds.substring(0,this.form.foodIds.length-1))
+        if(this.form.foodNames2!=''){
+          this.$set(this.form,'foodNames2',this.form.foodNames2.substring(0,this.form.foodNames2.length-1))
+          this.$set( this,'foodIds',this.foodIds.substring(0,this.foodIds.length-1))
         }
+      },
+      filterNode(value, data) {
+        if (!value) return true;
+        return data.foodName.indexOf(value) !== -1;
+      },
+      filterNode1(value, data) {
+        if (!value) return true;
+        return data.foodName.indexOf(value) !== -1;
       },
       handleCheckChange(data, checked, indeterminate) {
         debugger
-        if(checked&&!data.foods&&this.form.foodIds.indexOf(data.foodName)==-1){
-          this.form.foodIds+=data.foodName+","
-          this.$set( this.form,'foodIds',this.form.foodIds)
-        }else if(!checked&&!data.foods&&this.form.foodIds.indexOf(data.foodName)!=-1){
-          this.$set( this.form,'foodIds',this.form.foodIds.replace(data.foodName+",",""))
+        if(checked&&!data.foods&&this.foodIds.indexOf(data.id)==-1){
+          this.form.foodNames2+=data.foodName+","
+          this.$set( this.form,'foodNames2',this.form.foodNames2)
+
+          this.foodIds+=data.id+","
+        }else if(!checked&&!data.foods&&this.foodIds.indexOf(data.id)!=-1){
+          this.$set( this.form,'foodNames2',this.form.foodNames2.replace(data.foodName+",",""))
+
+          this.$set( this,'foodIds',this.foodIds.replace(data.id+",",""))
         }
       },
       submit(form, done) {
         let that=this;
-        let treePri=that.$refs.treePri.getCheckedKeys()
-        let treePub=that.$refs.treePub.getCheckedKeys()
         let foods=[];
-        treePri.forEach(id=>{
-          foods.push({"foodId":id})
-        })
-        treePub.forEach(id=>{
-          foods.push({"foodId":id})
+        let foodIds= this.foodIds.split(",")
+        foodIds.forEach(_=>{
+          foods.push({"foodId":_})
         })
         if(this.form.id){
           let row={
@@ -230,7 +327,6 @@
             symptom:this.form.symptom,
             remark:this.form.remark
           }
-          debugger
           update(row).then(() => {
             this.$message({
               type: "success",
@@ -249,7 +345,6 @@
             symptom:this.form.symptom,
             remark:this.form.remark
           }
-          debugger
           add(row).then(() => {
             this.$message({
               type: "success",
@@ -266,21 +361,28 @@
 
     },
     mounted() {
-
-      debugger
       let that=this;
       if (this.$route.query.id) {
         getDetail(this.$route.query.id).then(res => {
           that.form=res.data.data
-          that.$set(that.form,"foodIds",res.data.data.foodNames)
-          that.checkedDataPub=[];
-          that.checkedDataPri=[];
           debugger
+          that.$set(that.form,"foodNames2",res.data.data.foodNames)
+          let foodIds="";
           that.form.foods.forEach(_=>{
-            that.checkedDataPub.push(_.foodId)
-            that.checkedDataPri.push(_.foodId)
+            foodIds+=_.foodId+","
           })
-          console.log(res.data.data)
+          this.foodIds=foodIds.substring(0,foodIds.length-1)
+
+          // let checkedDataPub=[];
+          // let checkedDataPri=[];
+          // that.form.foods.forEach(_=>{
+          //   checkedDataPub.push(_.foodId)
+          //   checkedDataPri.push(_.foodId)
+          //   foodIds+=_.foodId+","
+          // })
+
+          // that.checkedDataPub=checkedDataPub
+          // that.checkedDataPri=checkedDataPri
         });
       }else{
 
@@ -290,16 +392,21 @@
           _.foodName=_.typeName
           _.disabled=true
         })
-        this.foodDataPri=res.data.data;
+        that.foodDataPri=res.data.data;
       })//机构
       getFoodByBaseId(1).then(res=>{
         res.data.data.forEach(_=>{
           _.foodName=_.typeName
           _.disabled=true
         })
-        this.foodDataPub=res.data.data;
-        that.$refs.treePub.setCheckedKeys(this.checkedDataPub)
-        that.$refs.treePri.setCheckedKeys(this.checkedDataPri)
+        that.foodDataPub=res.data.data;
+        // if (that.$route.query.id) {
+        //   debugger
+        //   setTimeout(function () {
+        //     // that.$refs.treePub.setCheckedKeys(that.checkedDataPub)
+        //     // that.$refs.treePri.setCheckedKeys(that.checkedDataPri)
+        //   },1000)
+        // }
 
       })//平台
     }

@@ -1382,7 +1382,7 @@ export default {
       }
       foods["recipeVals"]=recipeVals
       foods["days"]=days;
-      debugger
+    //  debugger
      let types='';
       for(let i=0;i<this.foodCatalog.length;i++){
         types+= that.getmealTypeData(this.foodCatalog[i])+","
@@ -1458,7 +1458,7 @@ export default {
               meal.forEach(_=>{
                 _["real"]=parseFloat(_["real"]).toFixed(2)
               })
-              debugger
+           // /   debugger
               that.pcScore=that.score;
               that.$emit('childfn', Math.floor(that.getData(res.data.data) * 100) / 100,"datas",this.pcScore, intake, nutrition, power, protein, meal);
             }

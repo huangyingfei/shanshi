@@ -67,9 +67,15 @@ export const getStudentClass = (id) => {
   })
 }
 
-export const getFoodByBaseId = (isPrivate) => {
+export const getFoodByBaseId = (isPrivate,foodName) => {
+  let url='';
+  if(foodName){
+    url='/api/blade-food/basetype/getFoodByBaseId?isPrivate='+isPrivate+'&foodName='+foodName;
+  }else{
+    url='/api/blade-food/basetype/getFoodByBaseId?isPrivate='+isPrivate;
+  }
   return request({
-    url: '/api/blade-food/basetype/getFoodByBaseId?isPrivate='+isPrivate,
+    url: url,
     method: 'get',
   })
 }
