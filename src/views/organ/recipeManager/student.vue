@@ -10,12 +10,12 @@
 
               <el-tree default-expand-all
                        :data="treeData"
-                :props="treeProps"
-                @node-click="nodeClick"
-                :filter-node-method="filterNode"
-                :expand-on-click-node="false"
-                :highlight-current="true"
-                ref="tree"
+                       :props="treeProps"
+                       @node-click="nodeClick"
+                       :filter-node-method="filterNode"
+                       :expand-on-click-node="false"
+                       :highlight-current="true"
+                       ref="tree"
               >
                 <span
                   class="custom-tree-node"
@@ -106,14 +106,14 @@
           >
             <template slot="menuLeft">
               <!--<router-link to="/oprate/addStudent">-->
-                <el-button
-                  type="el-button el-button--primary el-button--small"
-                  size="small"
-                  @click="addStudent"
-                  icon="el-icon-plus"
-                >
-                  添加学生
-                </el-button>
+              <el-button
+                type="el-button el-button--primary el-button--small"
+                size="small"
+                @click="addStudent"
+                icon="el-icon-plus"
+              >
+                添加学生
+              </el-button>
               <!--</router-link>-->
               <el-button
                 type="danger"
@@ -174,79 +174,79 @@
       :before-close="handleClose"
     >
       <!--<el-row>-->
-        <!--<el-col :span="5">离校原因</el-col>-->
-        <!--<el-col :span="19">-->
-          <!--<el-input v-model="leaveReason" placeholder="请输入内容"></el-input>-->
-        <!--</el-col>-->
+      <!--<el-col :span="5">离校原因</el-col>-->
+      <!--<el-col :span="19">-->
+      <!--<el-input v-model="leaveReason" placeholder="请输入内容"></el-input>-->
+      <!--</el-col>-->
       <!--</el-row>-->
       <!--<el-row>-->
-        <!--<el-col :span="5">离校时间</el-col>-->
-        <!--<el-col :span="19">-->
-          <!--<avue-date v-model="leaveDate" placeholder="请选择日期"></avue-date>-->
-        <!--</el-col>-->
+      <!--<el-col :span="5">离校时间</el-col>-->
+      <!--<el-col :span="19">-->
+      <!--<avue-date v-model="leaveDate" placeholder="请选择日期"></avue-date>-->
+      <!--</el-col>-->
       <!--</el-row>-->
       <!--<span slot="footer" class="dialog-footer">-->
-        <!--<el-button @click="cancel()">取 消</el-button>-->
-        <!--<el-button type="primary" @click="handleUpdate(rowId, null, 2)"-->
-        <!--&gt;确 定</el-button-->
-        <!--&gt;-->
+      <!--<el-button @click="cancel()">取 消</el-button>-->
+      <!--<el-button type="primary" @click="handleUpdate(rowId, null, 2)"-->
+      <!--&gt;确 定</el-button-->
+      <!--&gt;-->
       <!--</span>-->
       <avue-form :option="leaveOption" v-model="leaveData" @submit="handleUpdate(rowId,null,2)" @error="error"></avue-form>
     </el-dialog>
 
     <!--<el-dialog-->
-      <!--:title="tclass.classTitle"-->
-      <!--append-to-body="true"-->
-      <!--:visible.sync="outerVisible"-->
-      <!--width="30%"-->
-      <!--:before-close="handleClose"-->
+    <!--:title="tclass.classTitle"-->
+    <!--append-to-body="true"-->
+    <!--:visible.sync="outerVisible"-->
+    <!--width="30%"-->
+    <!--:before-close="handleClose"-->
     <!--&gt;-->
-      <!--<el-row>-->
-        <!--<el-col :span="5">{{ tclass.classPName }}</el-col>-->
-        <!--<el-col :span="19">-->
-          <!--<el-select v-model="addValue.pidValue" disabled placeholder="请选择">-->
-            <!--<el-option-->
-              <!--v-for="item in pidOptions"-->
-              <!--:key="item.value"-->
-              <!--:label="item.label"-->
-              <!--:value="item.value"-->
-            <!--&gt;-->
-            <!--</el-option> </el-select-->
-          <!--&gt;</el-col>-->
-      <!--</el-row>-->
-      <!--<el-row>-->
-        <!--<el-col :span="5">{{ tclass.className }}</el-col>-->
-        <!--<el-col :span="19">-->
-          <!--<el-input-->
-            <!--v-model="addValue.nameValue"-->
-            <!--placeholder="请输入内容"-->
-          <!--&gt;</el-input>-->
-        <!--</el-col>-->
-      <!--</el-row>-->
+    <!--<el-row>-->
+    <!--<el-col :span="5">{{ tclass.classPName }}</el-col>-->
+    <!--<el-col :span="19">-->
+    <!--<el-select v-model="addValue.pidValue" disabled placeholder="请选择">-->
+    <!--<el-option-->
+    <!--v-for="item in pidOptions"-->
+    <!--:key="item.value"-->
+    <!--:label="item.label"-->
+    <!--:value="item.value"-->
+    <!--&gt;-->
+    <!--</el-option> </el-select-->
+    <!--&gt;</el-col>-->
+    <!--</el-row>-->
+    <!--<el-row>-->
+    <!--<el-col :span="5">{{ tclass.className }}</el-col>-->
+    <!--<el-col :span="19">-->
+    <!--<el-input-->
+    <!--v-model="addValue.nameValue"-->
+    <!--placeholder="请输入内容"-->
+    <!--&gt;</el-input>-->
+    <!--</el-col>-->
+    <!--</el-row>-->
 
-      <!--<el-row v-if="tclass.classType == 3">-->
-        <!--<el-col :span="5">{{ tclass.classAlias }}</el-col>-->
-        <!--<el-col :span="19">-->
-          <!--<el-input-->
-            <!--v-model="addValue.aliasValue"-->
-            <!--placeholder="请输入内容"-->
-          <!--&gt;</el-input>-->
-        <!--</el-col>-->
-      <!--</el-row>-->
-      <!--&lt;!&ndash; <el-row v-if="tclass.classType == 3">-->
-        <!--<el-col :span="5">{{ tclass.classEdu }}</el-col>-->
-        <!--<el-col :span="19">-->
-          <!--<el-input-->
-            <!--v-model="addValue.eduValue"-->
-            <!--placeholder="请输入内容"-->
-            <!--oninput="value=value.replace(/\d{5}/g,'')"-->
-          <!--&gt;</el-input>-->
-        <!--</el-col>-->
-      <!--</el-row> &ndash;&gt;-->
-      <!--<span slot="footer" class="dialog-footer">-->
-        <!--<el-button @click="cancel()">取 消</el-button>-->
-        <!--<el-button type="primary" @click="submitClass()">确 定</el-button>-->
-      <!--</span>-->
+    <!--<el-row v-if="tclass.classType == 3">-->
+    <!--<el-col :span="5">{{ tclass.classAlias }}</el-col>-->
+    <!--<el-col :span="19">-->
+    <!--<el-input-->
+    <!--v-model="addValue.aliasValue"-->
+    <!--placeholder="请输入内容"-->
+    <!--&gt;</el-input>-->
+    <!--</el-col>-->
+    <!--</el-row>-->
+    <!--&lt;!&ndash; <el-row v-if="tclass.classType == 3">-->
+    <!--<el-col :span="5">{{ tclass.classEdu }}</el-col>-->
+    <!--<el-col :span="19">-->
+    <!--<el-input-->
+    <!--v-model="addValue.eduValue"-->
+    <!--placeholder="请输入内容"-->
+    <!--oninput="value=value.replace(/\d{5}/g,'')"-->
+    <!--&gt;</el-input>-->
+    <!--</el-col>-->
+    <!--</el-row> &ndash;&gt;-->
+    <!--<span slot="footer" class="dialog-footer">-->
+    <!--<el-button @click="cancel()">取 消</el-button>-->
+    <!--<el-button type="primary" @click="submitClass()">确 定</el-button>-->
+    <!--</span>-->
     <!--</el-dialog>-->
     <el-drawer
       title="修改班级"  :destroy-on-close="true"
@@ -359,13 +359,13 @@
         <el-form-item    class="item-ck-xj"   prop="classes"  label="班级数量:">
           <div>
             <el-select v-model="xuejiForm.classes" placeholder="请选择">
-            <el-option
-              v-for="item in xdInfo.classOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
+              <el-option
+                v-for="item in xdInfo.classOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
           </div>
         </el-form-item>
         <div class="item-footer">
@@ -384,16 +384,16 @@
     >
       <div class="_1OGXkpwTB-08ZVOTYhQESl">学段信息</div>
       <el-form
-               status-icon
-               :rules="xueduanRules"
-               ref="xueduanForm"
-               :model="xueduanForm"
-               label-width="0">
+        status-icon
+        :rules="xueduanRules"
+        ref="xueduanForm"
+        :model="xueduanForm"
+        label-width="0">
         <el-form-item prop="xueduanCk"  class="item-ck" label="学段:">
           <div >
-        <el-checkbox-group v-model="xueduanForm.xueduanCk" @change="ckChange">
-          <div  v-for="(claStuItem,index) in claStu" :key="index"><el-checkbox  :label="claStuItem.className"  :name="claStuItem.className"></el-checkbox>
-            <span>
+            <el-checkbox-group v-model="xueduanForm.xueduanCk" @change="ckChange">
+              <div  v-for="(claStuItem,index) in claStu" :key="index"><el-checkbox  :label="claStuItem.className"  :name="claStuItem.className"></el-checkbox>
+                <span>
             <el-select :disabled="claStuItem.disFlag" @change="numbChange"  v-model="claStuItem.disValue" placeholder="请选择">
             <el-option
               v-for="item in claStuItem.disOption"
@@ -404,24 +404,24 @@
           </el-select>
           </span><span class="el-checkbox__label"> 个年级</span></div>
 
-        </el-checkbox-group>
+            </el-checkbox-group>
           </div>
         </el-form-item>
         <el-form-item     class="item-ck"   label="选择班级数量:">
           <div class="item-title"><b>智能升班：</b>每个新学年开始，各年级将自动升班。如：明年9月，「一年级1班」自动更名「二年级1班」，「小班1班」自动更名「中班1班」</div>
           <div class="item-class" v-if="!claStu.find((p)=>p.className=='幼儿园').disFlag"  >
-              <div class="item-class-title" >幼儿园</div>
-              <div class="item-class-content" v-for="(gradeItem,index) in (claStu.find((p)=>p.className=='幼儿园').children)"><span class="item-samewidth">{{gradeItem.className}}：</span>
-                <el-select v-model="gradeItem.classNum" placeholder="请选择">
-                  <el-option
-                    v-for="item in xdInfo.classOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
-                </el-select>
-                个班级
-              </div>
+            <div class="item-class-title" >幼儿园</div>
+            <div class="item-class-content" v-for="(gradeItem,index) in (claStu.find((p)=>p.className=='幼儿园').children)"><span class="item-samewidth">{{gradeItem.className}}：</span>
+              <el-select v-model="gradeItem.classNum" placeholder="请选择">
+                <el-option
+                  v-for="item in xdInfo.classOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+              个班级
+            </div>
           </div>
           <div class="item-class" v-if="!claStu.find((p)=>p.className=='小学').disFlag"  >
             <div class="item-class-title" >小学</div>
@@ -536,7 +536,7 @@
           {
             title:"小小班" ,
             value:1
-           },
+          },
           {
             title:"小班" ,
             value:2
@@ -622,7 +622,7 @@
             classType:1,
             children:[],
             disOption:[
-             {
+              {
                 value:6
               },{
                 value:7
@@ -639,7 +639,7 @@
             classType:1,
             children:[],
             disOption:[
-             {
+              {
                 value:3
               },{
                 value:4
@@ -1020,7 +1020,7 @@
       beforeClosebj(){
         this.banjiPid="";
         this.banjiStartYear="",
-        this.banjiName="";
+          this.banjiName="";
         this.banjiForm.className="";
         this.banjiForm.classAlias="";
         this.banjiSelect=[];
@@ -1133,51 +1133,51 @@
               }
             })
           }}
-          )
+        )
       },
       subCodeNj(){
         let that =this;
         this.$refs.xuejiForm.validate(function (valid ) {
-          if (valid) {
-            let row=[];
-            let className="";
-            let classStr="";
-           let year= new Date().getFullYear();
-           let grade=undefined;
-           let startYear=undefined;
-           if(that.showYear){//年份
-             that.same.forEach(_=>{
-                if(_.value==(year-that.xuejiForm.startYear)+1){
-                  className=_.title+"年级"+that.xuejiForm.startYear+"级";
-                  classStr=_.title+"年级";
-                  grade=_.value
+            if (valid) {
+              let row=[];
+              let className="";
+              let classStr="";
+              let year= new Date().getFullYear();
+              let grade=undefined;
+              let startYear=undefined;
+              if(that.showYear){//年份
+                that.same.forEach(_=>{
+                  if(_.value==(year-that.xuejiForm.startYear)+1){
+                    className=_.title+"年级"+that.xuejiForm.startYear+"级";
+                    classStr=_.title+"年级";
+                    grade=_.value
+                  }
+                })
+                startYear=that.xuejiForm.startYear;
+              }else{
+                className=that.xuejiForm.className
+                classStr=that.xuejiForm.className
+                that.yey.forEach(_=>{
+                  if(_.title==className){
+                    grade=_.value;
+                  }
+                })
+                startYear=year-grade+1;
+              }
+              row.push({parentId:that.xuejiPid ,className:className,classType:2,grade:grade,startYear:startYear,classStr:classStr,classNum:that.xuejiForm.classes})
+              createClass(row).then((res)=>{
+                debugger
+                if(res.data.success){
+                  that.$message({
+                    type: "success",
+                    message: "新增成功!"
+                  });
+                  that.initData();
+                  that.beforeClosenj();
                 }
               })
-             startYear=that.xuejiForm.startYear;
-           }else{
-             className=that.xuejiForm.className
-             classStr=that.xuejiForm.className
-               that.yey.forEach(_=>{
-                 if(_.title==className){
-                   grade=_.value;
-                 }
-               })
-             startYear=year-grade+1;
-           }
-           row.push({parentId:that.xuejiPid ,className:className,classType:2,grade:grade,startYear:startYear,classStr:classStr,classNum:that.xuejiForm.classes})
-            createClass(row).then((res)=>{
-              debugger
-              if(res.data.success){
-                that.$message({
-                  type: "success",
-                  message: "新增成功!"
-                });
-                that.initData();
-                that.beforeClosenj();
-              }
-            })
+            }
           }
-        }
         )
       },
       subCodeXd(){
@@ -1202,7 +1202,7 @@
               }
             })
           }
-      })
+        })
       },
       // allowDrag(draggingNode) {
       //   return draggingNode.data.classType == 3;
@@ -1411,13 +1411,13 @@
           }
           if (pName == "初中"||pName == "高中") {
             for(let j=0;j<5;j++){
-                nbSelect.push({title: (year - j) + "", value: j + 1, disabled: false})
+              nbSelect.push({title: (year - j) + "", value: j + 1, disabled: false})
             }
           }
         }
         if(type==3){
           this.xdInfo.classOptions.forEach(_=>{
-              nbSelect.push({title: _.value, value: _.value, disabled: false})
+            nbSelect.push({title: _.value, value: _.value, disabled: false})
           })
         }
         if (data) {
@@ -1545,7 +1545,10 @@
             );
           }
           this.treeData = res.data.data;
+          console.log(this.treeData)
         });
+
+
       },
       rowSave(row, done, loading) {
         row.deptId = row.deptId.join(",");
@@ -1605,7 +1608,7 @@
           });
       },
       leaveSchool(scope){
-       // debugger
+        // debugger
         this.leaveVisible = true;
         this.rowId = scope.row.id;
         this.rowName=scope.row.className;
@@ -1759,45 +1762,45 @@
 </script>
 <style>
 
- .student-contain  .item-ck  ,.item-ck-xj{
+  .student-contain  .item-ck  ,.item-ck-xj{
     margin-top: 30px;
     margin-left: 50px;
   }
- .item-ck-bj{
-   width: 200px;
-   float: left;
- }
- .item-ck-title{
-  margin-right: 10px;
- }
- .item-samewidth{
-   width: 110px;
-   display: block;
-   float: left;
-   text-align: right;
- }
-.item-ck .item-title{
-  margin-left: 100px;
-  font-size: 12px;
-  line-height: 20px;
-  color: rgba(13,0,19,.56);
-  margin-top: 10px;
-}
+  .item-ck-bj{
+    width: 200px;
+    float: left;
+  }
+  .item-ck-title{
+    margin-right: 10px;
+  }
+  .item-samewidth{
+    width: 110px;
+    display: block;
+    float: left;
+    text-align: right;
+  }
+  .item-ck .item-title{
+    margin-left: 100px;
+    font-size: 12px;
+    line-height: 20px;
+    color: rgba(13,0,19,.56);
+    margin-top: 10px;
+  }
   .item-ck   .item-class{
-   margin-left: 100px;
- }
- .item-ck   .item-class .item-class-title{
-   line-height: 40px;
-   border-bottom: 1px solid #e8e8e8;
- }
- .item-ck   .item-class  .item-class-content{
-   margin-left: 100px;
-   line-height: 50px;
- }
+    margin-left: 100px;
+  }
+  .item-ck   .item-class .item-class-title{
+    line-height: 40px;
+    border-bottom: 1px solid #e8e8e8;
+  }
+  .item-ck   .item-class  .item-class-content{
+    margin-left: 100px;
+    line-height: 50px;
+  }
   .student-contain .item-ck .el-checkbox{
     width: 80px;
   }
- .student-contain .item-ck  .el-form-item__label, .student-contain .item-ck-xj  .el-form-item__label{
+  .student-contain .item-ck  .el-form-item__label, .student-contain .item-ck-xj  .el-form-item__label{
     width: 100px!important;
   }
   .item-ck .el-checkbox-group{
@@ -1807,10 +1810,10 @@
   .student-contain .el-tree-node__content {
     height: 30px !important;
   }
- .student-contain  .ant-tree-node-content-btn {
+  .student-contain  .ant-tree-node-content-btn {
     margin-top: 4px;
   }
- .student-contain  .el-drawer__header{
+  .student-contain  .el-drawer__header{
     padding: 20px 20px 10px 20px!important;
     border-bottom: 1px solid #e8e8e8;
   }
@@ -1832,24 +1835,24 @@
     font-size: 14px;
   }
 
- .item-ck .el-select{
-   width:100px;
+  .item-ck .el-select{
+    width:100px;
   }
 
 </style>
 
 <style scoped>
-.el-form{
-  padding-bottom: 60px;
-}
+  .el-form{
+    padding-bottom: 60px;
+  }
   .item-footer{
-     position: fixed;
-     right: 20%;
-     padding-top: 10px;
-     bottom: 0px;
-     background-color: #FFFFFF;
-     padding-bottom: 10px;
-     margin-right: -100px;
+    position: fixed;
+    right: 20%;
+    padding-top: 10px;
+    bottom: 0px;
+    background-color: #FFFFFF;
+    padding-bottom: 10px;
+    margin-right: -100px;
   }
   .box {
     height: 800px;

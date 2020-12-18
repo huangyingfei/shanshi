@@ -1716,7 +1716,7 @@ document.oncontextmenu = function(){return false};
       ev.srcElement.addEventListener("dragend",function(e){
          that.$refs.foodmenudLayer.style.display="none";
       });
-      if(node.childNodes.length==0) {
+      if(node.childNodes.length==0&&node.level!=1) {
         var that = this;
         dishDetail(node.data.id).then(res => {
           let data = res.data.data;

@@ -685,7 +685,7 @@
       }
 
       this.datas.forEach(_=>{
-        
+
         _.weeks.forEach(__=>{
 
           __.foods.forEach(___=>{
@@ -702,8 +702,8 @@
               foodsObj.foodId = ____.id//食材ID
               foodsObj.val = ____.count//餐点类型
               foodsObj.mealType = this.getmealTypeData(_.name)//餐点类型
-              foodsObj.week = weekNum[__.name]//星期几   
-              mealTypes.recipevals.push(foodsObj)                      
+              foodsObj.week = weekNum[__.name]//星期几
+              mealTypes.recipevals.push(foodsObj)
             })
             foods.connctVos.push(mealTypes);
           })
@@ -711,7 +711,7 @@
       });
       foods.days = sum(day);
       return foods;
-    },    
+    },
     auditRecipeConfirmAgree(auditSign){
       let params = {
         id: this.$route.query.userid,//食谱主键
@@ -1135,7 +1135,7 @@
       ev.srcElement.addEventListener("dragend",function(e){
          that.$refs.foodmenudLayer.style.display="none";
       });
-      if(node.childNodes.length==0) {
+      if(node.childNodes.length==0&&node.level!=1) {
         var that = this;
         dishDetail(node.data.id).then(res => {
           let data = res.data.data;
