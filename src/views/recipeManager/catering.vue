@@ -1767,8 +1767,8 @@ document.oncontextmenu = function(){return false};
           that.drogNodeStats = true;
           setTimeout(() => {
             that.$refs.child.refreshData();
-            // that.$refs.child.resizeExpendHeight();
-          }, 1000);
+            that.$refs.child.resizeExpendHeight();
+          }, 100);
         })
       }
 

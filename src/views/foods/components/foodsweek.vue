@@ -1233,6 +1233,7 @@ export default {
     resizeExpendHeight() {
       setTimeout(() => {
         //真实高度列表
+        debugger
       var foodTypeList = document.querySelectorAll(".colNoneBorder.is-hidden .meals-foodType");
       for (var i = 0; i < foodTypeList.length; i++) {
         var pnode = foodTypeList[i].parentNode.parentNode.parentNode;
@@ -1281,6 +1282,7 @@ export default {
     },
 
     expandchange(a, b) {
+      debugger
       this.resizeExpendHeight();
     },
     // 根据名称获取mealtype
@@ -1325,7 +1327,6 @@ export default {
     //拖放结束
     drop(ev, id, week) {
       ev.preventDefault();
-      //debugger
       var node = JSON.parse(JSON.stringify(this.dragnode.node));
       this.appendDragFood(node, id, week);
       this.$emit('jundgeFood',node,id,week);
