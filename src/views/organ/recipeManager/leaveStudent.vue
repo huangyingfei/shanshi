@@ -28,6 +28,13 @@
       </template>
 
       <template slot-scope="scope" slot="menu">
+        <el-button
+          type="text"
+          icon="el-icon-view"
+          size="small"
+          @click.stop="handleReset(scope.row)"
+        >恢复
+        </el-button>
            <el-button
           type="text"
           icon="el-icon-view"
@@ -275,6 +282,9 @@ export default {
     // },
     handleView(row){
       this.$router.push({ path: "/oprate/addStudent",query:{id:row.id,detailFlag:true} });
+    },
+    handleReset(row){
+
     },
     handleDel(row) {
     this.$confirm("确定将选择数据删除?", {
