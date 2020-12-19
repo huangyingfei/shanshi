@@ -123,6 +123,12 @@
                 @click="handleDelete"
               >删 除
               </el-button>
+              <el-button type="success"
+                         size="small"
+                         plain
+                         icon="el-icon-upload2"
+                         @click="handleImport">导入
+              </el-button>
             </template>
             <template slot-scope="scope" slot="menu">
               <el-button
@@ -473,6 +479,19 @@
         </div>
       </el-form>
     </el-drawer>
+
+    <el-dialog title="学生信息导入"
+               append-to-body
+               :visible.sync="excelBox"
+               width="555px">
+      <avue-form :option="excelOption" v-model="excelForm" :upload-after="uploadAfter">
+        <template slot="excelTemplate">
+          <el-button type="primary" @click="handleTemplate">
+            点击下载<i class="el-icon-download el-icon--right"></i>
+          </el-button>
+        </template>
+      </avue-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -935,33 +954,7 @@
                 res: "data",
               },
               tip: "请上传 .xls,.xlsx 标准格式文件",
-              action: "/api/blade-user/import-user",
-            },
-            {
-              label: "数据覆盖",
-              prop: "isCovered",
-              type: "switch",
-              align: "center",
-              width: 80,
-              dicData: [
-                {
-                  label: "否",
-                  value: 0,
-                },
-                {
-                  label: "是",
-                  value: 1,
-                },
-              ],
-              value: 0,
-              slot: true,
-              rules: [
-                {
-                  required: true,
-                  message: "请选择是否覆盖",
-                  trigger: "blur",
-                },
-              ],
+              action: "/api/blade-food/student/import-info",
             },
             {
               label: "模板下载",
@@ -982,12 +975,12 @@
           this.initData(this.form.tenantId);
         }
       },
-      "excelForm.isCovered"() {
-        if (this.excelForm.isCovered !== "") {
-          const column = this.findObject(this.excelOption.column, "excelFile");
-          column.action = `/api/blade-user/import-user?isCovered=${this.excelForm.isCovered}`;
-        }
-      },
+      // "excelForm.isCovered"() {
+      //   if (this.excelForm.isCovered !== "") {
+      //     const column = this.findObject(this.excelOption.column, "excelFile");
+      //     column.action = `/api/blade-user/import-user?isCovered=${this.excelForm.isCovered}`;
+      //   }
+      // },
     },
     computed: {
       ...mapGetters(["userInfo", "permission"]),
@@ -1012,6 +1005,15 @@
       document.getElementById('boxTree').style.height=(document.body.clientHeight-113)+"px";
     },
     methods: {
+      uploadAfter(res, done, loading, column) {
+        window.console.log(column);
+        this.excelBox = false;
+        this.refreshChange();
+        done();
+      },
+      handleTemplate() {
+        window.open(`/api/blade-food/student/export-template?${this.website.tokenHeader}=${getToken()}`);
+      },
       beforeClosebjUp(){
         this.banjiUpVisible=false;
         this.banjiUpForm.className="";
@@ -1617,6 +1619,9 @@
       addStudent(){
         this.$router.push({ path: "/oprate/addStudent",query:{selectClassId: this.selectClassId} });
       },
+      handleImport() {
+        this.excelBox = true;
+      },
       handleView(row){
         this.$router.push({ path: "/oprate/addStudent",query:{id:row.id,detailFlag:true,addView:true} });
       },
@@ -1708,11 +1713,6 @@
       handleImport() {
         this.excelBox = true;
       },
-      uploadAfter(res, done, loading, column) {
-        this.excelBox = false;
-        this.refreshChange();
-        done();
-      },
       handleExport() {
         this.$confirm("是否导出用户数据?", "提示", {
           confirmButtonText: "确定",
@@ -1727,13 +1727,6 @@
               }`
           );
         });
-      },
-      handleTemplate() {
-        window.open(
-          `/api/blade-user/export-template?${
-            this.website.tokenHeader
-            }=${getToken()}`
-        );
       },
       currentChange(currentPage) {
         this.page.currentPage = currentPage;
