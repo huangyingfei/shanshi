@@ -77,7 +77,7 @@
               <span
                 class="editorpara"
                 v-if="data.view == 1"
-                @click="() => editorBase(data, 2)"
+                @click="() => setDepartment(data, 2)"
               >
                 <img src="/img/bianji1.png" />
               </span>
@@ -516,7 +516,10 @@
             type="primary"
             >确 定</el-button
           >
-          <el-button v-if="this.under == 2" @click="edittab" type="primary"
+          <el-button
+            v-if="this.under == 2"
+            @click="edittab('ruleForm')"
+            type="primary"
             >编辑 确定</el-button
           >
           <!-- <el-button @click="stop" type="primary">计算</el-button>  -->
@@ -636,7 +639,7 @@
           </el-table-column> -->
 
           <!--操作格-->
-          <el-table-column label="操作" width="220" align="center">
+          <el-table-column label="操作" align="center">
             <template slot-scope="scope">
               <el-button
                 @click="editorTheme(scope.row, 2)"
@@ -1245,57 +1248,69 @@ export default {
       });
     },
     //编辑保存
-    edittab() {
-      this.$axios
-        .post(`api/blade-food/teacher/update`, {
-          id: this.edits,
-          name: this.ruleForm.name, //姓名
-          sex: this.ruleForm.radio, //性别
-          pic: this.dialogImageUrl, //图片
-          marriage: this.ruleForm.marriages, //婚姻状况
-          birthDate: this.ruleForm.value1, //出生日期
-          mobile: this.ruleForm.phones, //手机号码
-          nation: this.ruleForm.national, //民族
-          post: this.ruleForm.position, //职务
-          jobNumber: this.ruleForm.thejob, //工号
-          entryTime: this.ruleForm.inductions, //入职日期
-          workTime: this.ruleForm.workin, //参加工作日期
-          cardNo: this.ruleForm.update, //证件号码
-          workUnit: this.ruleForm.worker, //工作单位
-          email: this.ruleForm.emails, //邮箱
-          stutas: this.ruleForm.ddeparture, //当前状态
-          changeDate: this.ruleForm.nextstate //状态变更日期
-        })
-        .then(res => {
-          console.log(res);
-
-          this.$message({
-            message: "编辑成功",
-            type: "success"
-          });
-
-          this.dateTime = false;
-          this.loadFlag1 = true;
+    edittab(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
           this.$axios
-            .get(`api/blade-food/teacher/list?deptId=${this.view}`, {})
+            .post(`api/blade-food/teacher/update`, {
+              id: this.edits,
+              name: this.ruleForm.name, //姓名
+              sex: this.ruleForm.radio, //性别
+              pic: this.dialogImageUrl, //图片
+              marriage: this.ruleForm.marriages, //婚姻状况
+              birthDate: this.ruleForm.value1, //出生日期
+              mobile: this.ruleForm.phones, //手机号码
+              nation: this.ruleForm.national, //民族
+              managerClass: this.stringClass, //班级
+              post: this.ruleForm.position, //职务
+              jobNumber: this.ruleForm.thejob, //工号
+              entryTime: this.ruleForm.inductions, //入职日期
+              workTime: this.ruleForm.workin, //参加工作日期
+              cardNo: this.ruleForm.update, //证件号码
+              workUnit: this.ruleForm.worker, //工作单位
+              email: this.ruleForm.emails, //邮箱
+              stutas: this.ruleForm.ddeparture, //当前状态
+              changeDate: this.ruleForm.nextstate //状态变更日期
+            })
             .then(res => {
-              // console.log(res);
-              // this.store = res.data.data.records;
-              // console.log(this.store);
+              console.log(res);
+
               this.$message({
-                message: "查询成功",
+                message: "编辑成功",
                 type: "success"
               });
-              this.loadFlag1 = false;
-              this.tableData = res.data.data.records;
+
+              this.dateTime = false;
+              this.loadFlag1 = true;
+              this.$axios
+                .get(`api/blade-food/teacher/list?deptId=${this.view}`, {})
+                .then(res => {
+                  // console.log(res);
+                  // this.store = res.data.data.records;
+                  // console.log(this.store);
+                  // this.$message({
+                  //   message: "查询成功",
+                  //   type: "success"
+                  // });
+                  this.loadFlag1 = false;
+                  this.tableData = res.data.data.records;
+                })
+                .catch(() => {
+                  this.$message.error("查询失败");
+                });
             })
             .catch(() => {
-              this.$message.error("查询失败");
+              this.$message.error("编辑失败");
             });
-        })
-        .catch(() => {
-          this.$message.error("编辑失败");
-        });
+        } else {
+          // console.log("error submit!!");
+          this.$message({
+            message: "信息未填全",
+            type: "warning"
+          });
+          return false;
+        }
+      });
     },
     //计算工龄
     stop() {
@@ -1333,6 +1348,16 @@ export default {
     //编辑员工
     editorTheme(row, index1) {
       console.log(row);
+      setTimeout(() => {
+        let list = document.getElementsByClassName("el-cascader-node");
+        console.log(list);
+        for (let i = 0; i < list.length; i++) {
+          list[i].childNodes[0].style = "display:none";
+        }
+        // list.forEach((item, i) => {
+        //   item.childNodes[0].style = "display: none";
+        // });
+      }, 500);
       this.edits = row.id; //ID
       this.under = index1;
       this.dateTime = true;
@@ -1353,11 +1378,24 @@ export default {
       this.ruleForm.national = row.nation; //民族
       this.ruleForm.position = row.post; //职务
       //所在班级
-      if (row.createBy) {
-        this.stringClass.push(row.createBy);
+      // if (row.createBy) {
+      //   this.stringClass.push(row.createBy);
+      //   console.log(this.stringClass);
+      // } else {
+      //   this.stringClass = "";
+      // }
+      // let classifiers = [];
+
+      // console.log(row.classStr);
+      if (row.classStr) {
+        let elseclass = {
+          class: [row.classStr]
+        };
+        elseclass.class = [...JSON.parse(elseclass.class[0])];
+        this.stringClass = elseclass.class;
         console.log(this.stringClass);
       } else {
-        this.stringClass = "";
+        this.stringClass = [];
       }
 
       this.ruleForm.thejob = row.jobNumber; //工号
@@ -1429,6 +1467,7 @@ export default {
       this.ruleForm.update = "";
       this.ruleForm.worker = "";
       this.ruleForm.emails = "";
+      this.stringClass = []; //所在年级班级
       this.ruleForm.ddeparture = "";
       this.ruleForm.nextstate = "";
       this.productImgs = [];
@@ -1896,7 +1935,13 @@ export default {
 .management {
   width: 100%;
   height: 100%;
-  background-color: #fff;
+  position: absolute;
+  overflow-y: auto;
+  top: 50px;
+  left: 10px;
+  bottom: 20px;
+  right: 10px;
+  // background-color: #fff;
   display: flex;
   margin-bottom: 50px;
   /* margin-bottom: 40px; */
@@ -1907,18 +1952,35 @@ export default {
   height: 400px;
 }
 .onchange {
-  width: 20%;
-  height: 100%;
+  width: 250px;
+
+  background-color: #fff;
+
+  overflow-y: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
   /* height: 700px; */
   /* background-color: red; */
   border-right: 1px solid #e0e0e0;
 }
+.block {
+  width: 100%;
+  margin-bottom: 50px;
+}
 .consults {
-  width: 79%;
-  height: 100%;
+  // height: 100%;
   /* height: 700px; */
   /* background-color: yellow; */
-  margin-left: 10px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: #fff;
+  position: absolute;
+  left: 251px;
+  right: 19px;
+  bottom: 0;
+  top: 0;
 }
 .const {
   width: 250px;
