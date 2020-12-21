@@ -204,7 +204,7 @@
               trigger="click">
               <div v-if="foodMutuals.length==0" > <p>无相克食材</p></div>
               <div v-if="foodMutuals.length>0" >
-                  <div  v-for="(item,index) in foodMutuals" > <p>{{index+1}}、{{item.msg}}</p></div>
+                  <div  v-for="(item,index) in foodMutuals" :key="item.msg"> <p>{{index+1}}、{{item.msg}}</p></div>
               </div>
               
               <el-button  slot="reference" style="margin-left: 10px" size="medium"  v-if="foodMutuals.length==0"
