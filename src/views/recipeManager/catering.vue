@@ -2063,7 +2063,7 @@ document.oncontextmenu = function(){return false};
         isRecommend:this.WeekInfo.isRecommend?1:0,
         score:this.score
       }
-      if(row.recipeName&&row.recipeCycles.length>0&&row.startTime&&!flag&&this.WeekInfo.startAge&&this.WeekInfo.endAge)  {
+      if(row.recipeName&&row.recipeCycles.length>0&&row.startTime&&!flag&&this.WeekInfo.startAge)  {
         if (this.id) {
           row["id"] = this.id;
           update(row).then(res => {
