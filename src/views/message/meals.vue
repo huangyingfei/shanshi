@@ -217,6 +217,9 @@
             <el-button style="margin-left: 10px" size="medium"  @click="openNutritionDialog"
             ><img src="/img/baobiao.png" width="10px"   /> 带量食谱</el-button
             >
+             <el-button style="margin-left: 10px" size="medium"  @click="openNoNumRecipeDialog">
+              <img src="/img/baobiao.png" width="10px"   /> 不带量食谱
+            </el-button>
           </el-form-item>
         </el-form>
       </el-col>
@@ -635,12 +638,15 @@
         <el-button @click="jundgeallergy=false" type="primary">确 定</el-button>
       </div>
     </el-dialog>
+    <noNumRecipe :datas ="datas" :recipeDay ="WeekInfo.weekType" ref="children2">
+    </noNumRecipe>
   </div>
   </basic-container>
 </template>
 
 <script>
   import nutrition from "@/views/recipeManager/nutrition.vue";
+  import noNumRecipe from "@/views/recipeManager/noNumRecipe.vue";
   import foodsWeek from "@/views/foods/components/foodsweek";
   import showfoodsWeek from "@/views/foods/components/showfoodsweek";
   import {getList} from "@/api/system/special"
@@ -659,6 +665,7 @@
     showScore,
     smartfoodsWeek,
     nutrition,
+    noNumRecipe,
   },
   mounted(){
     this.initData()
@@ -970,6 +977,9 @@ document.oncontextmenu = function(){return false};
     // }
   },
   methods: {
+    openNoNumRecipeDialog(){
+      this.$refs.children2.openDialogVisible()
+    },
     //打开带量食谱弹出框
     openNutritionDialog(){
       this.WeekInfo.crowd
