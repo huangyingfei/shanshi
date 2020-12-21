@@ -51,17 +51,53 @@
         </el-button>
       </template>
     </avue-crud>
+
+    <el-dialog title="请选择班级"  class="resetClass"
+               append-to-body
+               :visible.sync="resetBox"
+               width="555px">
+      <avue-form  :option="stuOption" v-model="stuForm" @submit="recoverStudent" @error="error">
+      </avue-form>
+    </el-dialog>
   </basic-container>
 </template>
 
 <script>
-import { getList,removeStuId } from "@/api/system/student";
+import { getList,removeStuId ,recoverStudent,stuTree} from "@/api/system/student";
 import { mapGetters } from "vuex";
 import { nation } from "@/api/tool/data";
 import { formateDate} from "@/api/tool/date";
 export default {
   data() {
     return {
+      stuForm:{},
+      stuOption:{
+
+        menuPosition:"right",
+        column: [
+          {
+            label: "班级",
+            prop: "classId",
+            type: "tree",
+            dicUrl: "/api/blade-food/class/tree",
+            rules: [
+              {
+                required: true,
+                message: "请选择班级",
+                trigger: "blur",
+              },
+            ],
+            props: {
+              children: "children",
+              label: "label",
+              value: "id",
+            },
+            span: 24,
+          }
+          ]
+      },
+      resetBox:false,
+      resetRowId:'',
       form: {},
       box: false,
       props: {
@@ -208,6 +244,9 @@ export default {
       data: [],
     };
   },
+  mounted(){
+
+  },
   computed: {
     ...mapGetters(["userInfo", "permission"]),
     permissionList() {
@@ -284,7 +323,21 @@ export default {
       this.$router.push({ path: "/oprate/addStudent",query:{id:row.id,detailFlag:true} });
     },
     handleReset(row){
-
+      this.resetBox=true;
+      this.resetRowId=row.id;
+    },
+    recoverStudent(){
+      let rows={ id: this.resetRowId, classId:this.stuForm.classId }
+      recoverStudent(rows).then(res=>{
+        if(res.data.success){
+          this.onLoad(this.page);
+          this.resetBox=false;
+          this.$message({
+            type: "success",
+            message: "操作成功!",
+          });
+        }
+      })
     },
     handleDel(row) {
     this.$confirm("确定将选择数据删除?", {
@@ -334,3 +387,10 @@ export default {
   },
 };
 </script>
+
+<style>
+
+  .resetClass .el-dialog__body{
+    padding: 30px 20px 0px 20px !important;
+  }
+</style>
