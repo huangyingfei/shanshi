@@ -1814,24 +1814,5 @@ export default {
   background-color: #dcdfe6 !important;
 }
 
-.ico1{
-  background: url("/img/cater/food11.png") no-repeat center!important;
-  display: block;
-  height: 24px;
-}
-.ico2{
-  background: url("/img/cater/food11.png") no-repeat center!important;
-  display: block;
-  height: 24px;
-}
-.ico3{
-  background: url("/img/cater/food11.png") no-repeat center!important;
-  display: block;
-  height: 24px;
-}
-.week1-ico{
-  background: url("/img/cater/food11.png") no-repeat !important;
-  display: inline-block;
-}
 
 </style>

@@ -154,8 +154,8 @@
                 label: 'name',
                 value: 'id',
                 children:'students',
-
               },
+
               leafOnly:true,
               rules: [
                 {
@@ -167,7 +167,6 @@
               span:24,
               multiple:true,
               change:(data)=>{
-                debugger
                 let people=data.value;
                 if(people.length>0){
                   for(let i=0;i<people.length;i++ ){
@@ -269,14 +268,20 @@
     },
     methods: {
       nodeClick(data){
-        debugger
         if(data.peopleName!="人群列表"){
           let that=this;
           this.$set(that.specialForm,"people",[])
           detailByPeopleId(data.id).then(res=>{
+            if(res.data.data.isDefault==1){
+              that.$set(that.findObject(that.option.column, "people"),"display",false)
+              that.$set(that.findObject(that.option.column, "peopleName"),"disabled",true)
+
+            }else{
+              that.$set(that.findObject(that.option.column, "people"),"display",true)
+              that.$set(that.findObject(that.option.column, "peopleName"),"disabled",false)
+            }
             that.specialForm=res.data.data;
             let ids=res.data.data.ids;
-            debugger
             let people=[];
             ids.forEach(_=>{
               people.push(_.studentId+"")
@@ -350,7 +355,6 @@
 
       submit(form, done){
         let people=this.specialForm.people;
-        debugger
         for(let i=0;i<people.length;i++ ){
           this.findObject(this.option.column,"people").dicData.forEach(_=>{
             if(_.id==people[i]){
@@ -383,7 +387,6 @@
           dinner:this.morenData[4].mealNum,
           dinnerSnack:this.morenData[5].mealNum,
         }
-        // debugger
         submit(row).then(res=>{
             if(res.data.success){
               this.$message({
@@ -396,7 +399,6 @@
               }
               done()
             }else{
-              debugger
 
               // this.$message({
               //   type: "error",

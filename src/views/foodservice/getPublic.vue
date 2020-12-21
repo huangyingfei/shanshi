@@ -1444,7 +1444,7 @@ export default {
               this.valuepark = bar;
             }
 
-            // console.log(this.valuepark);
+            console.log(this.valuepark);
             let picture = [];
             if (this.handler.pic) {
               picture[0] = {

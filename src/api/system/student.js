@@ -66,6 +66,20 @@ export const removeStuId = (rows) => {
 }
 
 
+export const recoverStudent = (row) => {
+  return request({
+    url: '/api/blade-food/student/recoverStudent',
+    method: 'post',
+    data:row
+  })
+}
+
+export const stuTree=()=>{
+  return request({
+    url:'/api/blade-food/class/tree',
+    method:'get',
+  })
+}
 
 export const save = (row) => {
   return request({

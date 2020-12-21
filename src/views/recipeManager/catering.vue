@@ -1729,7 +1729,7 @@ document.oncontextmenu = function(){return false};
       ev.srcElement.addEventListener("dragend",function(e){
          that.$refs.foodmenudLayer.style.display="none";
       });
-      if(node.childNodes.length==0) {
+      if(node.childNodes.length==0&&node.level!=1) {
         var that = this;
         dishDetail(node.data.id).then(res => {
           let data = res.data.data;
@@ -1780,8 +1780,8 @@ document.oncontextmenu = function(){return false};
           that.drogNodeStats = true;
           setTimeout(() => {
             that.$refs.child.refreshData();
-            // that.$refs.child.resizeExpendHeight();
-          }, 1000);
+            that.$refs.child.resizeExpendHeight();
+          }, 100);
         })
       }
 
@@ -2076,7 +2076,7 @@ document.oncontextmenu = function(){return false};
         isRecommend:this.WeekInfo.isRecommend?1:0,
         score:this.score
       }
-      if(row.recipeName&&row.recipeCycles.length>0&&row.startTime&&!flag&&this.WeekInfo.startAge&&this.WeekInfo.endAge)  {
+      if(row.recipeName&&row.recipeCycles.length>0&&row.startTime&&!flag&&this.WeekInfo.startAge)  {
         if (this.id) {
           row["id"] = this.id;
           update(row).then(res => {

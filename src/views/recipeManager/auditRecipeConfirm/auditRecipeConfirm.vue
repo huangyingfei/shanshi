@@ -1198,6 +1198,28 @@
       foods.days = sum(day);
       return foods;
     },
+    auditRecipeConfirmAgree(auditSign){
+      let params = {
+        id: this.$route.query.userid,//食谱主键
+        ...auditSign
+      }
+      auditRecipe(params).then(res =>{
+        this.$message({
+          message: '审核通过',
+          type: 'success'
+        });
+
+        this.goToUrl()
+      })
+    },
+    goToUrl(){
+      this.$router.$avueRouter.closeTag();
+      this.$router.push({
+      path: "/recipeManager/auditRecipe",
+      });
+      foods.days = sum(day);
+      return foods;
+    },
     dragFunc(id) {
       var Drag = document.getElementById(id);
       Drag.onmousedown = function(event) {
@@ -1720,7 +1742,7 @@
       ev.srcElement.addEventListener("dragend",function(e){
          that.$refs.foodmenudLayer.style.display="none";
       });
-      if(node.childNodes.length==0) {
+      if(node.childNodes.length==0&&node.level!=1) {
         var that = this;
         dishDetail(node.data.id).then(res => {
           let data = res.data.data;

@@ -1251,7 +1251,7 @@
         ev.srcElement.addEventListener("dragend",function(e){
           that.$refs.foodmenudLayer.style.display="none";
         });
-        if(node.childNodes.length==0) {
+        if(node.childNodes.length==0&&node.level!=1) {
           var that = this;
           dishDetail(node.data.id).then(res => {
             let data = res.data.data;
@@ -1300,8 +1300,8 @@
             that.drogNodeStats = true;
             setTimeout(() => {
               that.$refs.child.refreshData();
-              // that.$refs.child.resizeExpendHeight();
-            }, 1000);
+              that.$refs.child.resizeExpendHeight();
+            }, 100);
           })
         }
 

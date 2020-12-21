@@ -1,6 +1,6 @@
 <template>
-  <basic-container>
-    <avue-form :option="option" v-model="form" @submit="submit" @error="error">
+  <basic-container  id="addStudent">
+    <avue-form  :option="option" v-model="form" @submit="submit" @error="error">
     </avue-form>
   </basic-container>
 </template>
@@ -44,7 +44,6 @@ export default {
         title4: "幼儿其他信息",
       },
       option: {
-        height: "auto",
         detail: false,
         column: [
           {
@@ -61,18 +60,7 @@ export default {
             ],
             change: (row) => {
               if (row.value && row.value != "") {
-                getById(row.value + "").then((res) => {
-                  this.$set(
-                    this.form,
-                    "classSection",
-                    res.data.data.parentName
-                  );
-                  // this.$set(
-                  //   this.form,
-                  //   "educationalDircles",
-                  //   res.data.data.educationalCircles
-                  // );
-                });
+                  this.getById(row);
               }
             },
             props: {
@@ -180,6 +168,10 @@ export default {
             type: "select",
             dicData: nation,
             span: 8,
+            props: {
+              label: 'label',
+              value: 'label'
+            },
           },
           {
             label: "户口所在地",
@@ -187,6 +179,10 @@ export default {
             type: "select",
             dicData: location,
             span: 8,
+            props: {
+              label: 'label',
+              value: 'label'
+            },
           },
           {
             label: "年龄",
@@ -236,6 +232,10 @@ export default {
             type: "select",
             span: 8,
             dicData: nationality,
+            props: {
+              label: 'label',
+              value: 'label'
+            },
           },
           {
             label: "现住址",
@@ -258,6 +258,10 @@ export default {
                 value: 2,
               },
             ],
+            props: {
+              label: 'label',
+              value: 'label'
+            },
             span: 8,
           },
           {
@@ -273,6 +277,10 @@ export default {
             type: "select",
             dicData: cardType,
             span: 8,
+            props: {
+              label: 'label',
+              value: 'label'
+            },
           },
           {
             label: "户口地址",
@@ -407,6 +415,10 @@ export default {
             type: "select",
             dicData: nation,
             span: 8,
+            props: {
+              label: 'label',
+              value: 'label'
+            },
           },
           {
             label: "国籍",
@@ -414,6 +426,10 @@ export default {
             type: "select",
             span: 8,
             dicData: nationality,
+            props: {
+              label: 'label',
+              value: 'label'
+            },
           },
           {
             label: "身份证类型",
@@ -421,6 +437,10 @@ export default {
             type: "select",
             span: 8,
             dicData: cardType,
+            props: {
+              label: 'label',
+              value: 'label'
+            },
           },
           {
             label: "身份证号码",
@@ -435,13 +455,16 @@ export default {
             type: "select",
             dicData: location,
             span: 8,
+            props: {
+              label: 'label',
+              value: 'label'
+            },
           },
           {
             label: "户口类型",
             prop: "fatherAccountType",
             type: "select",
             span: 8,
-
             dicData: [
               {
                 label: "农村户口",
@@ -452,6 +475,10 @@ export default {
                 value: 2,
               },
             ],
+            props: {
+              label: 'label',
+              value: 'label'
+            },
           },
           {
             label: "工作单位",
@@ -495,6 +522,10 @@ export default {
             type: "select",
             dicData: nation,
             span: 8,
+            props: {
+              label: 'label',
+              value: 'label'
+            },
           },
           {
             label: "国籍",
@@ -502,6 +533,10 @@ export default {
             type: "select",
             span: 8,
             dicData: nationality,
+            props: {
+              label: 'label',
+              value: 'label'
+            },
           },
           {
             label: "身份证类型",
@@ -509,6 +544,10 @@ export default {
             type: "select",
             span: 8,
             dicData: cardType,
+            props: {
+              label: 'label',
+              value: 'label'
+            },
           },
           {
             label: "身份证号码",
@@ -523,13 +562,16 @@ export default {
             type: "select",
             dicData: location,
             span: 8,
+            props: {
+              label: 'label',
+              value: 'label'
+            },
           },
           {
             label: "户口类型",
             prop: "momAccountType",
             type: "select",
             span: 8,
-
             dicData: [
               {
                 label: "农村户口",
@@ -540,6 +582,10 @@ export default {
                 value: 2,
               },
             ],
+            props: {
+              label: 'label',
+              value: 'label'
+            },
           },
           {
             label: "工作单位",
@@ -581,7 +627,6 @@ export default {
             prop: "oneSex",
             span: 8,
             type: "select",
-
             dicData: [
               {
                 label: "男",
@@ -600,14 +645,21 @@ export default {
             span: 8,
 
             dicData: nationality,
+            props: {
+              label: 'label',
+              value: 'label'
+            },
           },
           {
             label: "身份证类型",
             prop: "oneCardType",
             type: "select",
             span: 8,
-
             dicData: cardType,
+            props: {
+              label: 'label',
+              value: 'label'
+            },
           },
           {
             label: "身份证号码",
@@ -622,6 +674,10 @@ export default {
             type: "select",
             dicData: nation,
             span: 8,
+            props: {
+              label: 'label',
+              value: 'label'
+            },
           },
           {
             label: "出生日期",
@@ -735,6 +791,10 @@ export default {
             type: "select",
             span: 8,
             dicData: nationality,
+            props: {
+              label: 'label',
+              value: 'label'
+            },
           },
           {
             label: "身份证类型",
@@ -742,6 +802,10 @@ export default {
             type: "select",
             span: 8,
             dicData: cardType,
+            props: {
+              label: 'label',
+              value: 'label'
+            },
           },
           {
             label: "身份证号码",
@@ -756,6 +820,10 @@ export default {
             type: "select",
             dicData: nation,
             span: 8,
+            props: {
+              label: 'label',
+              value: 'label'
+            },
           },
           {
             label: "出生日期",
@@ -1058,6 +1126,14 @@ export default {
     };
   },
   methods: {
+    getById(row){
+      getById(row.value + "").then((res) => {
+        this.$set(this.form, "classSection", res.data.data.pparentName);
+        if (!this.$route.query.id) {
+          this.$set(this.form, "educationalCircles", res.data.data.startYear);
+        }
+      });
+    },
     validateChildNo(rule, value, callback) {
       if (value === ""||value=="undefined"||!value) {
         callback(new Error("请输入幼儿号"));
@@ -1067,7 +1143,7 @@ export default {
         this.$set(this.form,"childNo",undefined)
       } else {
         debugger
-        if(value<=999999999999999){
+        if(value<=999999999999999&&value>0){
           let student = {};
           student["classId"] = this.form.classId;
           student["childNo"] = value;
@@ -1084,7 +1160,7 @@ export default {
           });
         }else{
           this.$set(this.form,"childNo",undefined)
-          callback(new Error("幼儿号需要在15位数以内"));
+          callback(new Error("幼儿号需要在15位数以内且是正数"));
         }
       }
     },
@@ -1093,7 +1169,6 @@ export default {
       if (typeof this.form.educationalCircles != "string") {
         this.form.educationalCircles = this.form.educationalCircles.getFullYear();
       }
-
       if (this.$route.query.id) {
         updateStu(this.form).then((res) => {
           if (res.data.success) {
@@ -1178,3 +1253,15 @@ export default {
   },
 };
 </script>
+
+<style>
+  #addStudent .avue-form__menu{
+    position: fixed !important;
+    bottom: 0;
+    right:0;
+    background-color: #FFFFFF;
+    margin-bottom: 0px;
+    margin-right: 17px;
+    width: calc(100% - 270px)
+  }
+</style>

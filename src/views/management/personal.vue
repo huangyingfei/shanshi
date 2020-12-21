@@ -1037,6 +1037,7 @@ export default {
             type: "success"
           });
           this.treeDrawing();
+          this.addition();
         })
         .catch(() => {
           this.$message.error("编辑失败");
@@ -1096,6 +1097,7 @@ export default {
             .then(res => {
               console.log(res);
               this.treeDrawing();
+              this.addition();
               this.$message({
                 message: "保存成功",
                 type: "success"

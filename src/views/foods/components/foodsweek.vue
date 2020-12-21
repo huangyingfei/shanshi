@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 0px; height: 1080px" class="foodsweek">
+  <div style="padding: 0px; height: 1080px;position:relative" class="foodsweek">
     <div
       ref="contextmenuFood"
       id="contextmenuFood"
@@ -21,12 +21,21 @@
 
       <p>弹出菜单</p>
     </div>
+    <el-button  icon="el-icon-arrow-left" circle style="position: absolute;left:105px;top: 5px;z-index: 2;" @click="toLeft">
+    </el-button>
+    <el-button  icon="el-icon-arrow-right"
+                circle
+                style="position: absolute;right:10px;top: 5px;z-index: 2;" @click="toRight">
+    </el-button>
     <!-- table-week start   -->
-    <el-table class="table-week" style="width: 100%" :data="datas" border fit>
+    <el-table class="table-week" style="width: 100%" :data="datas" border fit :header-cell-style="headerCellStyle" ref="foodWeekTable">
       <el-table-column align="center" width="100" fixed class-name="col-date3 colNoneBorder" >
         <template slot="header"> 菜品/食物 </template>
         <template slot-scope="scope">
-          <div v-bind:data="scope.row.name" class="meals-foodType">{{ scope.row.name }}</div>
+          <div v-bind:data="scope.row.name" class="meals-foodType">
+            <i class="ico1" :style="cellStyle(scope.row.name)"></i>
+            <span>{{ scope.row.name }}</span>
+          </div>
         </template>
       </el-table-column>
       <!-- 周一   -->
@@ -1130,6 +1139,92 @@ export default {
   },
 
   methods: {
+    toRight(){
+      var colNum = this.$refs.foodWeekTable.columns.length-1;
+      var nowLeftWidth  = this.$refs.foodWeekTable.bodyWrapper.scrollLeft
+      var LeftWidth  = 0
+      for(let i = 0;i<colNum;i++){
+        if(nowLeftWidth<400*(i+1)){
+          LeftWidth =400*(i+1)
+          break;
+        }
+      }
+      console.log(LeftWidth)
+      this.$refs.foodWeekTable.bodyWrapper.scrollLeft = LeftWidth;
+    },
+    toLeft(){
+      var colNum = this.$refs.foodWeekTable.columns.length-2;
+      var nowLeftWidth  = this.$refs.foodWeekTable.bodyWrapper.scrollLeft
+      var LeftWidth  = 0
+      for(let i = colNum;i>0;i--){
+        if(nowLeftWidth>400*(i-1)){
+          LeftWidth =400*(i-1)
+          break;
+        }
+      }
+      console.log(LeftWidth)
+      console.log(colNum)
+      this.$refs.foodWeekTable.bodyWrapper.scrollLeft = LeftWidth;
+    },
+    headerCellStyle({row,colunm, rowIndex,columnIndex}){
+      var backgroundImage = [
+        {'background': '#f8fbfc !important'},
+        {'background': 'url("/img/cater/mon.png") 20% 50% no-repeat, linear-gradient(90deg, #FFFAEC 0%,#FDD36D 100%)!important',
+          'color': '#DA9501!important',},
+        {'background': 'url("/img/cater/tue.png") 20% 50% no-repeat, linear-gradient(90deg, #FFFAEC 0%,#FDD36D 100%)!important',
+          'color': '#DA9501!important',},
+        {'background': 'url("/img/cater/wed.png") 20% 50% no-repeat, linear-gradient(90deg, #FFFAEC 0%,#FDD36D 100%)!important',
+          'color': '#DA9501!important',},
+        {'background': 'url("/img/cater/thu.png") 20% 50% no-repeat, linear-gradient(90deg, #FFFAEC 0%,#FDD36D 100%)!important',
+          'color': '#DA9501!important',},
+        {'background': 'url("/img/cater/fri.png") 20% 50% no-repeat, linear-gradient(90deg, #FFFAEC 0%,#FDD36D 100%)!important',
+          'color': '#DA9501!important',},
+        {'background': 'url("/img/cater/sat.png") 20% 50% no-repeat, linear-gradient(90deg, #FFFAEC 0%,#FDD36D 100%)!important',
+          'color': '#DA9501!important',},
+        {'background': 'url("/img/cater/sun.png") 20% 50% no-repeat, linear-gradient(90deg, #FFFAEC 0%,#FDD36D 100%)!important',
+          'color': '#DA9501!important',},
+      ]
+
+      return backgroundImage[columnIndex]
+    },
+    cellStyle(name){
+      var backgroundImage = {}
+      switch(name){
+        case '早餐':
+          backgroundImage= {'background': 'url("/img/cater/food1.png") no-repeat center!important',
+            'display': 'block',
+            'height': '24px',}
+          break;
+        case '早点':
+          backgroundImage= {'background': 'url("/img/cater/food2.png") no-repeat center!important',
+            'display': 'block',
+            'height': '24px',}
+          break;
+        case '午餐':
+          backgroundImage= {'background': 'url("/img/cater/food3.png") no-repeat center!important',
+            'display': 'block',
+            'height': '24px',}
+          break;
+        case '午点':
+          backgroundImage= {'background': 'url("/img/cater/food2.png") no-repeat center!important',
+            'display': 'block',
+            'height': '24px',}
+          break;
+        case '晚餐':
+          backgroundImage= {'background': 'url("/img/cater/food6.png") no-repeat center!important',
+            'display': 'block',
+            'height': '24px',}
+          break;
+        case '晚点':
+          backgroundImage= {'background': 'url("/img/cater/food2.png") no-repeat center!important',
+            'display': 'block',
+            'height': '24px',}
+          break;
+        default:
+          break;
+      }
+      return backgroundImage
+    },
     getToken() {
       let str = JSON.parse(localStorage.getItem("saber-token"));
       this.token["Blade-Auth"] = `bearer ${str.content}`;
@@ -1138,6 +1233,7 @@ export default {
     resizeExpendHeight() {
       setTimeout(() => {
         //真实高度列表
+        debugger
       var foodTypeList = document.querySelectorAll(".colNoneBorder.is-hidden .meals-foodType");
       for (var i = 0; i < foodTypeList.length; i++) {
         var pnode = foodTypeList[i].parentNode.parentNode.parentNode;
@@ -1186,6 +1282,7 @@ export default {
     },
 
     expandchange(a, b) {
+      debugger
       this.resizeExpendHeight();
     },
     // 根据名称获取mealtype
@@ -1230,7 +1327,6 @@ export default {
     //拖放结束
     drop(ev, id, week) {
       ev.preventDefault();
-      //debugger
       var node = JSON.parse(JSON.stringify(this.dragnode.node));
       this.appendDragFood(node, id, week);
       this.$emit('jundgeFood',node,id,week);
@@ -1287,7 +1383,7 @@ export default {
       }
       foods["recipeVals"]=recipeVals
       foods["days"]=days;
-      debugger
+    //  debugger
      let types='';
       for(let i=0;i<this.foodCatalog.length;i++){
         types+= that.getmealTypeData(this.foodCatalog[i])+","
@@ -1363,7 +1459,7 @@ export default {
               meal.forEach(_=>{
                 _["real"]=parseFloat(_["real"]).toFixed(2)
               })
-              debugger
+           // /   debugger
               that.pcScore=that.score;
               that.$emit('childfn', Math.floor(that.getData(res.data.data) * 100) / 100,"datas",this.pcScore, intake, nutrition, power, protein, meal);
             }
@@ -1715,5 +1811,24 @@ export default {
   }
 .foodsweek .table-week .el-upload-list--picture-card .el-upload-list__item-status-label{
   width: 0px!important;
+}
+.ico1{
+  background: url("/img/cater/food11.png") no-repeat center!important;
+  display: block;
+  height: 24px;
+}
+.ico2{
+  background: url("/img/cater/food11.png") no-repeat center!important;
+  display: block;
+  height: 24px;
+}
+.ico3{
+  background: url("/img/cater/food11.png") no-repeat center!important;
+  display: block;
+  height: 24px;
+}
+.week1-ico{
+  background: url("/img/cater/food11.png") no-repeat !important;
+  display: inline-block;
 }
 </style>

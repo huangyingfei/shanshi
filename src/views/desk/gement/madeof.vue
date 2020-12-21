@@ -89,40 +89,39 @@
         <el-table-column
           prop="dishName"
           label="菜品名称"
-          width="100"
           align="center"
         ></el-table-column>
         <el-table-column
           prop="dishTypeName"
           label="分类"
-          width="100"
           align="center"
         ></el-table-column>
         <el-table-column
           prop="orgName"
           label="创建机构"
-          width="180"
           align="center"
         ></el-table-column>
         <el-table-column
           prop="createName"
           label="提交人"
-          width="90"
           align="center"
         ></el-table-column>
         <el-table-column
           prop="mobile"
           label="联系电话"
-          width="140"
           align="center"
         ></el-table-column>
         <el-table-column
           prop="createTime"
           label="提交时间"
-          width="170"
           align="center"
         ></el-table-column>
-        <el-table-column label="审核状态" width="110" align="center">
+        <el-table-column
+          prop="updateTime"
+          label="分享时间"
+          align="center"
+        ></el-table-column>
+        <el-table-column label="审核状态" align="center">
           <template slot-scope="scope">
             <el-tag type="danger" v-if="scope.row.status == 0">待审核</el-tag>
             <el-tag v-else-if="scope.row.status == 3">无需审核</el-tag>
@@ -1003,8 +1002,32 @@
             </el-table>
           </div>
         </div>
-        <div class="worm1">记录</div>
-        <el-timeline>
+        <div class="worm1" v-if="this.agree == 1 || this.agree == 3">
+          公共库所属分类
+        </div>
+
+        <span
+          v-if="this.agree == 1 || this.agree == 3"
+          style="  margin-left: 20px;  margin-right: 15px;"
+          >公共库分类</span
+        >
+        <el-select
+          v-if="this.agree == 1 || this.agree == 3"
+          clearable
+          :disabled="true"
+          v-model="nominated.menu"
+          placeholder="请选择"
+        >
+          <el-option
+            v-for="item in source"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+        <div class="worm1" v-if="this.agree == 2">记录</div>
+        <el-timeline v-if="this.agree == 2">
           <el-timeline-item :timestamp="this.record.aduitTime" placement="top">
             <el-card>
               <!-- <h4>{{ this.record.tenant_name }}</h4>
@@ -1179,7 +1202,8 @@ export default {
         aduitTime: "", //时间
         refuseReason: "", //拒绝理由
         type: "" //状态
-      } //记录
+      }, //记录
+      agree: ""
     };
   },
   watch: {
@@ -1323,6 +1347,8 @@ export default {
     seecol(row, index) {
       console.log(row);
       this.dumpdbtostream = true;
+
+      this.nominated.menu = "";
       this.active = [];
       this.valuepark = [];
       this.nbottoms = index;
@@ -1333,6 +1359,8 @@ export default {
       this.dsquery.phone = row.mobile;
       this.dsquery.time = row.createTime;
       this.dsquery.examineto = row.status;
+      this.agree = row.status;
+      console.log(this.agree);
       let design = `?id=${row.id}`;
       this.$axios
         .get(`api/blade-food/dish/dishDetail` + design, {
@@ -1383,6 +1411,7 @@ export default {
           this.hideUploadEdit = this.productImgs.length >= 1;
           this.ruleForm.region = this.handler.function; //特点
           this.ruleForm.desc = this.handler.remark; //做法
+          this.nominated.menu = this.handler.dishPubType; //公共库分类
           this.ruleForm.delivery1 = this.handler.isUse == 1 ? false : true; //常用
           this.ruleForm.delivery = this.handler.isPub == 1 ? false : true; //公开
           if (this.handler.dishMxVos) {
@@ -1441,7 +1470,7 @@ export default {
                 result: "0",
                 type: "2",
                 // refuseReason: "通过了!!!",
-                dishPubType: this.menu //公共库分类
+                dishPubType: this.nominated.menu //公共库分类
               })
               .then(res => {
                 // console.log(res);
@@ -1573,6 +1602,7 @@ export default {
       this.active = [];
       this.valuepark = [];
       this.productImgs = [];
+      this.nominated.menu = "";
       // console.log(index);
       this.nbottoms = index;
       console.log(row);

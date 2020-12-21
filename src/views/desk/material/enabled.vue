@@ -105,6 +105,11 @@
           label="提交时间"
           align="center"
         ></el-table-column>
+        <el-table-column
+          prop="updateTime"
+          label="分享时间"
+          align="center"
+        ></el-table-column>
         <el-table-column label="审核状态" align="center">
           <template slot-scope="scope">
             <el-tag type="danger" v-if="scope.row.status == 0">待审核</el-tag>
@@ -788,8 +793,39 @@
             </el-table>
           </div>
         </div>
-        <div class="worm1">记录</div>
-        <el-timeline>
+        <!-- 公共库所分类 -->
+        <div class="worm1" v-if="this.agree == 1 || this.agree == 3">
+          公共库所属分类
+        </div>
+        <el-form
+          :model="ruleForm"
+          :rules="rules"
+          ref="ruleForm"
+          label-width="100px"
+          class="demo-ruleForm"
+        >
+          <el-form-item
+            label="公共库分类"
+            v-if="this.agree == 1 || this.agree == 3"
+          >
+            <el-select
+              clearable
+              :disabled="true"
+              v-model="menu"
+              placeholder="请选择"
+            >
+              <el-option
+                v-for="item in fication"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
+        <div v-if="this.agree == 2" class="worm1">记录</div>
+        <el-timeline v-if="this.agree == 2">
           <el-timeline-item :timestamp="this.record.aduitTime" placement="top">
             <el-card>
               <!-- <h4>{{ this.record.tenant_name }}</h4>
@@ -953,6 +989,7 @@ export default {
       value: "", //审核状态
       tableData1: [],
       flour: "", //ID
+      agree: "", //审核状态
       according: "0",
       timezone: "",
       classification: "" //分类ID
@@ -1069,9 +1106,10 @@ export default {
           // console.log(res);
           this.subquery = res.data.data;
           console.log(this.subquery);
-          // this.menu = this.subquery.foodPubType;
+          this.menu = this.subquery.foodPubType;
           this.flour = this.subquery.id; //ID
           this.agree = this.subquery.status; //审核状态
+          // console.log(this.agree);
           this.dsquery.establish = this.subquery.orgName; //创建机构
           this.dsquery.submit = this.subquery.createName; //提交人
           this.dsquery.phone = this.subquery.mobile; //提交电话
@@ -1121,6 +1159,7 @@ export default {
           this.ruleForm.delivery = this.subquery.isPub == 0 ? true : false; //公开
           // console.log(this.ruleForm.delivery);
           this.ruleForm.delivery1 = this.subquery.isUse == 0 ? true : false; //常用
+
           // this.ruleForm.
           // this.record = this.subquery.audits[1]; //记录
           // console.log(this.record);

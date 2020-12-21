@@ -32,8 +32,15 @@
           @node-click="handleNodeClick"
         >
           <span class="custom-tree-node" slot-scope="{ node, data }">
-            <span> <i :class="data.icon"></i>{{ node.label }} </span>
-
+            <span v-if="data.view == 0 || data.view == 1">
+              {{ node.label }}
+            </span>
+            <span
+              class="newcastle"
+              @click="() => gate(data, 1)"
+              v-if="data.view == 3"
+              >{{ node.label }}</span
+            >
             <!-- <span>{{ node.label }}</span> -->
             <span>
               <!-- <el-button
@@ -43,38 +50,61 @@
                 >
                   查看
                 </el-button> -->
-              <el-button
+              <!-- <el-button
                 v-if="data.view == 0"
                 type="text"
                 size="mini"
                 @click.stop="() => editorBase(data, 2)"
               >
                 编辑
-              </el-button>
-              <el-button
+              </el-button> -->
+              <span
+                class="editorpara"
+                @click.stop="() => editorBase(data, 2)"
+                v-if="data.view == 0"
+              >
+                <img src="/img/bianji1.png" />
+              </span>
+              <!-- 编辑子部门 -->
+              <!-- <el-button
                 v-if="data.tment == 1"
                 type="text"
                 size="mini"
-                @click.stop="() => setDepartment(data, 2)"
+                @click="() => setDepartment(data, 2)"
               >
-                编辑子部门
-              </el-button>
-              <el-button
+                编辑子
+              </el-button> -->
+              <span
+                class="editorpara"
+                v-if="data.view == 1"
+                @click="() => setDepartment(data, 2)"
+              >
+                <img src="/img/bianji1.png" />
+              </span>
+              <!-- <el-button
                 v-if="data.into == 1"
                 type="text"
                 size="mini"
                 @click.stop="() => gate(data, 1)"
               >
                 添加
-              </el-button>
+              </el-button> -->
 
-              <el-button
+              <!-- <el-button
                 type="text"
                 size="mini"
+                v-if="data.view == 0 || data.view == 1"
                 @click.stop="() => remove(node, data)"
               >
                 删除
-              </el-button>
+              </el-button> -->
+              <span
+                class="delete-insert"
+                v-if="data.view == 0 || data.view == 1"
+                @click.stop="() => remove(node, data)"
+              >
+                <img src="/img/shanchu.png" />
+              </span>
             </span>
           </span>
         </el-tree>
@@ -230,10 +260,10 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="obtained = false">取 消</el-button>
-          <el-button v-if="this.support == 0" @click="atomic" type="primary"
+          <el-button v-if="this.support == 1" @click="atomic" type="primary"
             >确 定</el-button
           >
-          <el-button v-if="this.support == 1" @click="addNotify" type="primary"
+          <el-button v-if="this.support == 2" @click="addNotify" type="primary"
             >编辑确定</el-button
           >
         </div>
@@ -356,7 +386,7 @@
                 clearable
                 v-model="stringClass"
                 :options="loadClass"
-                :props="{ checkStrictly: true }"
+                :props="{ multiple: true, checkStrictly: true }"
                 @change="handleChange"
               ></el-cascader>
             </el-form-item>
@@ -486,7 +516,10 @@
             type="primary"
             >确 定</el-button
           >
-          <el-button v-if="this.under == 2" @click="edittab" type="primary"
+          <el-button
+            v-if="this.under == 2"
+            @click="edittab('ruleForm')"
+            type="primary"
             >编辑 确定</el-button
           >
           <!-- <el-button @click="stop" type="primary">计算</el-button>  -->
@@ -606,7 +639,7 @@
           </el-table-column> -->
 
           <!--操作格-->
-          <el-table-column label="操作" width="220" align="center">
+          <el-table-column label="操作" align="center">
             <template slot-scope="scope">
               <el-button
                 @click="editorTheme(scope.row, 2)"
@@ -1100,7 +1133,8 @@ export default {
       support: "", //添加子部门
       sqlClass: [],
       empty: "", //升序
-      ordered: "" //降序
+      ordered: "", //降序
+      Superior: ""
     };
   },
   beforeMount() {
@@ -1125,6 +1159,7 @@ export default {
     },
     //添加员工
     cameras(formName) {
+      console.log(this.stringClass);
       // console.log(this.ruleForm.name); //姓名
       // console.log(this.ruleForm.radio); //性别
       // console.log(this.ruleForm.marriages); //婚姻状况
@@ -1142,17 +1177,14 @@ export default {
       // console.log(this.ruleForm.emails); //邮箱
       // console.log(this.ruleForm.ddeparture); //当前状态
       // console.log(this.ruleForm.nextstate); //状态更新日期
-      console.log(this.stringClass);
-      if (this.stringClass.length == 2) {
-        // this.sqlClass = this.stringClass[1];
-        // console.log(this.sqlClass);
-        this.sqlClass.push(this.stringClass[1]);
-      }
-      if (this.stringClass.length == 3) {
-        // this.sqlClass = this.stringClass[2];
-        // console.log(this.sqlClass);
-        this.sqlClass.push(this.stringClass[2]);
-      }
+      // console.log(this.stringClass);
+      // if (this.stringClass.length == 2) {
+      //   this.sqlClass.push(this.stringClass[1]);
+      // }
+      // if (this.stringClass.length == 3) {
+
+      //   this.sqlClass.push(this.stringClass[2]);
+      // }
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.$axios
@@ -1167,7 +1199,7 @@ export default {
               nation: this.ruleForm.national, //民族
 
               post: this.ruleForm.position, //职务
-              // managerClass: this.sqlClass, //班级
+              managerClass: this.stringClass, //班级
               jobNumber: this.ruleForm.thejob, //工号
               entryTime: this.ruleForm.inductions, //入职日期
               workTime: this.ruleForm.workin, //参加工作日期
@@ -1216,57 +1248,69 @@ export default {
       });
     },
     //编辑保存
-    edittab() {
-      this.$axios
-        .post(`api/blade-food/teacher/update`, {
-          id: this.edits,
-          name: this.ruleForm.name, //姓名
-          sex: this.ruleForm.radio, //性别
-          pic: this.dialogImageUrl, //图片
-          marriage: this.ruleForm.marriages, //婚姻状况
-          birthDate: this.ruleForm.value1, //出生日期
-          mobile: this.ruleForm.phones, //手机号码
-          nation: this.ruleForm.national, //民族
-          post: this.ruleForm.position, //职务
-          jobNumber: this.ruleForm.thejob, //工号
-          entryTime: this.ruleForm.inductions, //入职日期
-          workTime: this.ruleForm.workin, //参加工作日期
-          cardNo: this.ruleForm.update, //证件号码
-          workUnit: this.ruleForm.worker, //工作单位
-          email: this.ruleForm.emails, //邮箱
-          stutas: this.ruleForm.ddeparture, //当前状态
-          changeDate: this.ruleForm.nextstate //状态变更日期
-        })
-        .then(res => {
-          console.log(res);
-
-          this.$message({
-            message: "编辑成功",
-            type: "success"
-          });
-
-          this.dateTime = false;
-          this.loadFlag1 = true;
+    edittab(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
           this.$axios
-            .get(`api/blade-food/teacher/list?deptId=${this.view}`, {})
+            .post(`api/blade-food/teacher/update`, {
+              id: this.edits,
+              name: this.ruleForm.name, //姓名
+              sex: this.ruleForm.radio, //性别
+              pic: this.dialogImageUrl, //图片
+              marriage: this.ruleForm.marriages, //婚姻状况
+              birthDate: this.ruleForm.value1, //出生日期
+              mobile: this.ruleForm.phones, //手机号码
+              nation: this.ruleForm.national, //民族
+              managerClass: this.stringClass, //班级
+              post: this.ruleForm.position, //职务
+              jobNumber: this.ruleForm.thejob, //工号
+              entryTime: this.ruleForm.inductions, //入职日期
+              workTime: this.ruleForm.workin, //参加工作日期
+              cardNo: this.ruleForm.update, //证件号码
+              workUnit: this.ruleForm.worker, //工作单位
+              email: this.ruleForm.emails, //邮箱
+              stutas: this.ruleForm.ddeparture, //当前状态
+              changeDate: this.ruleForm.nextstate //状态变更日期
+            })
             .then(res => {
-              // console.log(res);
-              // this.store = res.data.data.records;
-              // console.log(this.store);
+              console.log(res);
+
               this.$message({
-                message: "查询成功",
+                message: "编辑成功",
                 type: "success"
               });
-              this.loadFlag1 = false;
-              this.tableData = res.data.data.records;
+
+              this.dateTime = false;
+              this.loadFlag1 = true;
+              this.$axios
+                .get(`api/blade-food/teacher/list?deptId=${this.view}`, {})
+                .then(res => {
+                  // console.log(res);
+                  // this.store = res.data.data.records;
+                  // console.log(this.store);
+                  // this.$message({
+                  //   message: "查询成功",
+                  //   type: "success"
+                  // });
+                  this.loadFlag1 = false;
+                  this.tableData = res.data.data.records;
+                })
+                .catch(() => {
+                  this.$message.error("查询失败");
+                });
             })
             .catch(() => {
-              this.$message.error("查询失败");
+              this.$message.error("编辑失败");
             });
-        })
-        .catch(() => {
-          this.$message.error("编辑失败");
-        });
+        } else {
+          // console.log("error submit!!");
+          this.$message({
+            message: "信息未填全",
+            type: "warning"
+          });
+          return false;
+        }
+      });
     },
     //计算工龄
     stop() {
@@ -1304,6 +1348,16 @@ export default {
     //编辑员工
     editorTheme(row, index1) {
       console.log(row);
+      setTimeout(() => {
+        let list = document.getElementsByClassName("el-cascader-node");
+        console.log(list);
+        for (let i = 0; i < list.length; i++) {
+          list[i].childNodes[0].style = "display:none";
+        }
+        // list.forEach((item, i) => {
+        //   item.childNodes[0].style = "display: none";
+        // });
+      }, 500);
       this.edits = row.id; //ID
       this.under = index1;
       this.dateTime = true;
@@ -1324,11 +1378,24 @@ export default {
       this.ruleForm.national = row.nation; //民族
       this.ruleForm.position = row.post; //职务
       //所在班级
-      if (row.createBy) {
-        this.stringClass.push(row.createBy);
+      // if (row.createBy) {
+      //   this.stringClass.push(row.createBy);
+      //   console.log(this.stringClass);
+      // } else {
+      //   this.stringClass = "";
+      // }
+      // let classifiers = [];
+
+      // console.log(row.classStr);
+      if (row.classStr) {
+        let elseclass = {
+          class: [row.classStr]
+        };
+        elseclass.class = [...JSON.parse(elseclass.class[0])];
+        this.stringClass = elseclass.class;
         console.log(this.stringClass);
       } else {
-        this.stringClass = "";
+        this.stringClass = [];
       }
 
       this.ruleForm.thejob = row.jobNumber; //工号
@@ -1400,11 +1467,24 @@ export default {
       this.ruleForm.update = "";
       this.ruleForm.worker = "";
       this.ruleForm.emails = "";
+      this.stringClass = []; //所在年级班级
       this.ruleForm.ddeparture = "";
       this.ruleForm.nextstate = "";
+      this.productImgs = [];
+      this.hideUploadEdit = this.productImgs.length >= 1;
       console.log(this.view);
       this.under = index1;
       this.dateTime = true;
+      setTimeout(() => {
+        let list = document.getElementsByClassName("el-cascader-node");
+        console.log(list);
+        for (let i = 0; i < list.length; i++) {
+          list[i].childNodes[0].style = "display:none";
+        }
+        // list.forEach((item, i) => {
+        //   item.childNodes[0].style = "display: none";
+        // });
+      }, 500);
     },
     //添加部门
     added(index) {
@@ -1415,12 +1495,14 @@ export default {
     },
     //添加子部门
     gate(data, index) {
+      console.log(data);
+      console.log(index);
+      this.support = index;
       this.acetone.name = "";
-      // console.log(data);
-      this.support = data.tment;
-      console.log(this.support);
-      this.adds = data.id;
-      console.log(this.adds);
+      // this.support = data.tment;
+      // console.log(this.support);
+      // this.adds = data.id;
+      // console.log(this.adds);
       this.obtained = true;
     },
     //编辑部门
@@ -1436,8 +1518,9 @@ export default {
     },
     //编辑子部门
     setDepartment(data, index) {
-      this.support = data.tment;
-      console.log(this.support);
+      // console.log(index);
+      this.support = index;
+
       console.log(data);
       this.acetone.name = data.label;
       this.acetone.id = data.id;
@@ -1447,7 +1530,7 @@ export default {
     addNotify() {
       this.$axios
         .post(`api/blade-food/teacherdept/submit`, {
-          parentId: this.adds, //上级ID
+          parentId: this.Superior, //上级ID
           id: this.acetone.id, //子部门ID
           deptName: this.acetone.name //部门名称
           // level: this.acetone.sorting //部门排序
@@ -1472,9 +1555,9 @@ export default {
       if (this.acetone.name != "") {
         this.$axios
           .post(`api/blade-food/teacherdept/submit`, {
-            parentId: this.adds, //上级ID
-            deptName: this.acetone.name, //部门名称
-            level: this.acetone.sorting //部门排序
+            parentId: this.Superior, //上级ID
+            deptName: this.acetone.name //部门名称
+            // level: this.acetone.sorting //部门排序
           })
           .then(res => {
             this.getStorage();
@@ -1602,16 +1685,17 @@ export default {
       // handleNodeClick(data){
       //  this.view = data.id;
       // }
+      this.loadFlag1 = true;
       this.$axios
         .get(
           `api/blade-food/teacher/list?deptId=${this.view}&jobNumber=${this.workers}&name=${this.username}&post=${this.callback}&stutas=${this.driver}&descs=${this.empty}&ascs=${this.ordered}`,
           {}
         )
         .then(res => {
-          this.$message({
-            message: "查询成功",
-            type: "success"
-          });
+          // this.$message({
+          //   message: "查询成功",
+          //   type: "success"
+          // });
           this.loadFlag1 = false;
           this.tableData = res.data.data.records;
         })
@@ -1620,28 +1704,39 @@ export default {
         });
     },
     //查看
-    handleNodeClick(data) {
+    handleNodeClick(data, e) {
+      // console.log(item);
+      // console.log(e);
+      // console.log(data);
+      // console.log(e.parent.data.id);
       this.view = data.id;
+      this.Superior = e.parent.data.id; //父级ID
+      console.log(this.Superior);
       this.nbottoms = 2;
-      console.log(this.view);
-      this.loadFlag1 = true;
-      this.$axios
-        .get(`api/blade-food/teacher/list?deptId=${this.view}`, {})
-        .then(res => {
-          // console.log(res);
-          // this.store = res.data.data.records;
-          // console.log(this.store);
-          this.$message({
-            message: "查询成功",
-            type: "success"
+      // console.log(this.view);
+
+      if (this.view == 0) {
+        return;
+      } else {
+        this.loadFlag1 = true;
+        this.$axios
+          .get(`api/blade-food/teacher/list?deptId=${this.view}`, {})
+          .then(res => {
+            // console.log(res);
+            // this.store = res.data.data.records;
+            // console.log(this.store);
+            // this.$message({
+            //   message: "查询成功",
+            //   type: "success"
+            // });
+            this.loadFlag1 = false;
+            this.tableData = res.data.data.records;
+            this.m_page.totalElements = res.data.data.total;
+          })
+          .catch(() => {
+            this.$message.error("查询失败");
           });
-          this.loadFlag1 = false;
-          this.tableData = res.data.data.records;
-          this.m_page.totalElements = res.data.data.total;
-        })
-        .catch(() => {
-          this.$message.error("查询失败");
-        });
+      }
     },
     //查看详情
     defcustom(data) {
@@ -1754,10 +1849,19 @@ export default {
             label: item.title,
             into: item.level,
             view: 0,
-            tment: 0,
-            icon: "el-icon-success"
+            tment: 0
           };
+          // auto.push({
+          //   id: 123,
+          //   label: "新增"
+          // });
           auto[index].children = [];
+          auto[index].children.push({
+            id: 0,
+            label: "+新增",
+            into: 0,
+            view: 3
+          });
           if (item.children) {
             item.children.forEach((item1, index1) => {
               auto[index].children[index1] = {
@@ -1765,9 +1869,14 @@ export default {
                 label: item1.title,
                 into: item1.level,
                 view: 1,
-                tment: 1,
-                icon: "el-icon-info"
+                tment: 1
               };
+            });
+            auto[index].children.push({
+              id: 0,
+              label: "+新增",
+              into: 0,
+              view: 3
             });
           }
         });
@@ -1826,7 +1935,13 @@ export default {
 .management {
   width: 100%;
   height: 100%;
-  background-color: #fff;
+  position: absolute;
+  overflow-y: auto;
+  top: 50px;
+  left: 10px;
+  bottom: 20px;
+  right: 10px;
+  // background-color: #fff;
   display: flex;
   margin-bottom: 50px;
   /* margin-bottom: 40px; */
@@ -1837,18 +1952,35 @@ export default {
   height: 400px;
 }
 .onchange {
-  width: 24%;
-  height: 100%;
+  width: 250px;
+
+  background-color: #fff;
+
+  overflow-y: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
   /* height: 700px; */
   /* background-color: red; */
   border-right: 1px solid #e0e0e0;
 }
+.block {
+  width: 100%;
+  margin-bottom: 50px;
+}
 .consults {
-  width: 75%;
-  height: 100%;
+  // height: 100%;
   /* height: 700px; */
   /* background-color: yellow; */
-  margin-left: 10px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: #fff;
+  position: absolute;
+  left: 251px;
+  right: 19px;
+  bottom: 0;
+  top: 0;
 }
 .const {
   width: 250px;
@@ -1888,5 +2020,33 @@ export default {
   margin-top: 0px;
   margin-right: 0px;
   margin-bottom: 60px;
+}
+.newcastle {
+  width: 70px;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  // background-color: red;
+  color: #92959b;
+  border: 1px solid #dcdfe6;
+  font-size: 14px;
+}
+.delete-insert {
+  width: 15px;
+  height: 15px;
+  // background-color: red;
+  img {
+    width: 15px;
+    height: 15px;
+  }
+}
+.editorpara {
+  width: 15px;
+  height: 15px;
+  margin-right: 5px;
+  img {
+    width: 15px;
+    height: 15px;
+  }
 }
 </style>
