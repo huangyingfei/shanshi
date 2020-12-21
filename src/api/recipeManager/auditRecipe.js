@@ -58,3 +58,26 @@ export const auditRecipe = (params) => {
   })
 }
 
+export function calData(datas){
+  var recipeTableData = [];
+  datas.forEach(el => {
+    var recipeData = {
+      mealsType:'',
+      week1: '',
+      week2: '',
+      week3: '',
+      week4: '',
+      week5: '',
+      week6: '',
+      week7: '',
+    }
+    recipeData.mealsType = el.name
+    el.weeks.forEach(el1=>{
+      el1.foods.forEach(el2 => {
+        recipeData[el1.name] = (recipeData[el1.name]||'')+el2.name +"\n"
+      });
+    })
+    recipeTableData.push(recipeData);
+  });
+  return recipeTableData
+}
