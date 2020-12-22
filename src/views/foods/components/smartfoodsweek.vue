@@ -1367,7 +1367,7 @@
 
               let power=[];
               that.powerValue.forEach(_=>{
-                power.push({name:_.name,req:resData.powerCalDTOList[_.code].min+"-"+resData.powerCalDTOList[_.code].max,real:resData.powerCalDTOList[_.code].real,grade:resData.powerCalDTOList[_.code].grade,point:resData.powerCalDTOList[_.code].point})
+                power.push({name:_.name,req:resData.powerCalDTOList[_.code].min+"-"+resData.powerCalDTOList[_.code].max,real:resData.powerCalDTOList[_.code].real,grade:resData.powerCalDTOList[_.code].grade,point:resData.powerCalDTOList[_.code].point.toFixed(2)})
               })
               let protein=[];
               protein=resData.proteinCalDTOList;
@@ -1378,6 +1378,7 @@
               protein.forEach(_ => {
                 _["realSum"] = parseFloat(sum).toFixed(2)
                 _["req"] = ">=" + _.min
+                _["real"]=_.real.toFixed(2)
                 if(parseFloat( _.min)<=parseFloat(sum)){
                   _["grade"]="ok"
                   _["point"]="0"

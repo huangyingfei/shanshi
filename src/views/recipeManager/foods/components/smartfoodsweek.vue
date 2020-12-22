@@ -1375,7 +1375,7 @@
                     req: resData.powerCalDTOList[_.code].min + "-" + resData.powerCalDTOList[_.code].max,
                     real: resData.powerCalDTOList[_.code].real,
                     grade: resData.powerCalDTOList[_.code].grade,
-                    point: resData.powerCalDTOList[_.code].point
+                    point: resData.powerCalDTOList[_.code].point.toFixed(2)
                   })
                 })
                 let protein = [];
@@ -1387,6 +1387,7 @@
                 protein.forEach(_ => {
                   _["realSum"] = parseFloat(sum).toFixed(2)
                   _["req"] = ">=" + _.min
+                  _["real"]=_.real.toFixed(2)
                   if(parseFloat( _.min)<=parseFloat(sum)){
                     _["grade"]="ok"
                     _["point"]="0"

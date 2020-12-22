@@ -1779,7 +1779,7 @@ document.oncontextmenu = function(){return false};
                 delete __["down"]
                 delete __["up"]
               }
-              this.$set(__, "count", count);
+              this.$set(__, "count", count.toFixed(2));
             })
           })
         })

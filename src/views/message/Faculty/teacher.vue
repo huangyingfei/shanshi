@@ -1374,7 +1374,7 @@
               if(!flag){
                 foodMutuals.push({data_id:id,week_id:wk,foodId:result.data.data.foodMutuals[i].foodId,foodId1:result.data.data.foodMutuals[i].foodId1,msg:result.data.data.msg[i]})
               }
-              msg+=result.data.data.msg[i];
+              msg+=result.data.data.msg[i]+"，"
             }
             that.foodMutuals=foodMutuals;
 

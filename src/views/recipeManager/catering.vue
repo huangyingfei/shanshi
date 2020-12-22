@@ -207,7 +207,7 @@
               <div v-if="foodMutuals.length>0">
                 <div v-for="(item,index) in foodMutuals" :key="item.msg"> <p>{{index+1}}、{{item.msg}}</p></div>
               </div>
-              
+
               <el-button  slot="reference" style="margin-left: 10px" size="medium"  v-if="foodMutuals.length==0"
               > 不宜同食</el-button>
               <!--<button  slot="reference" > 不宜同食</button>-->
@@ -1856,7 +1856,7 @@ document.oncontextmenu = function(){return false};
               if(!flag){
                 foodMutuals.push({data_id:id,week_id:wk,foodId:result.data.data.foodMutuals[i].foodId,foodId1:result.data.data.foodMutuals[i].foodId1,msg:result.data.data.msg[i]})
               }
-              msg+=result.data.data.msg[i];
+              msg+=result.data.data.msg[i]+",";
             }
             that.foodMutuals=foodMutuals;
 
@@ -1948,7 +1948,7 @@ document.oncontextmenu = function(){return false};
                 delete __["down"]
                 delete __["up"]
               }
-              this.$set(__, "count", count);
+              this.$set(__, "count", count.toFixed(2));
             })
           })
         })
