@@ -462,10 +462,21 @@
           </el-button>
         </el-col>
         <el-col :span="4">
-          <el-button
+          <el-popover
+            placement="top"
+            width="160"
+            v-model="visible">
+            <p>确定同意审核</p>
+            <div style="text-align: right; margin: 0">
+              <el-button size="mini" type="text" @click="visible = false">取消</el-button>
+              <el-button type="primary" size="mini" @click="auditRecipeConfirmAgree({status: 1})">确定</el-button>
+            </div>
+            <el-button type="primary" slot="reference">同 意</el-button>
+          </el-popover>
+          <!-- <el-button
             type="primary"
             @click="auditRecipeConfirmAgree({status: 1})">同 意
-          </el-button>
+          </el-button> -->
         </el-col>
       </el-row>
     </div>
@@ -725,6 +736,7 @@
   },
   data() {
     return {
+      visible:false,
       tenantId:'',
       auditButtonShow: false,
       tableData: [],
@@ -1023,12 +1035,14 @@
     },
 
     auditRecipeConfirmAgree(auditSign){
+      this.visible = false
       let row = this.buttonend()
       let params = {
         id: this.$route.query.userid,//食谱主键
         ...auditSign,
         ...row
       }
+      console.log(params);
       auditRecipe(params).then(res =>{
         this.$message({
           message: '审核通过',
@@ -1198,28 +1212,15 @@
       foods.days = sum(day);
       return foods;
     },
-    auditRecipeConfirmAgree(auditSign){
-      let params = {
-        id: this.$route.query.userid,//食谱主键
-        ...auditSign
-      }
-      auditRecipe(params).then(res =>{
-        this.$message({
-          message: '审核通过',
-          type: 'success'
-        });
 
-        this.goToUrl()
-      })
-    },
-    goToUrl(){
-      this.$router.$avueRouter.closeTag();
-      this.$router.push({
-      path: "/recipeManager/auditRecipe",
-      });
-      foods.days = sum(day);
-      return foods;
-    },
+    // goToUrl(){
+    //   this.$router.$avueRouter.closeTag();
+    //   this.$router.push({
+    //   path: "/recipeManager/auditRecipe",
+    //   });
+    //   foods.days = sum(day);
+    //   return foods;
+    // },
     dragFunc(id) {
       var Drag = document.getElementById(id);
       Drag.onmousedown = function(event) {
