@@ -1231,6 +1231,7 @@ document.oncontextmenu = function(){return false};
 
           setTimeout(function () {
             that.dishesData("datas",recipeCycles,that);
+            that.$refs.child.getFoodScore();
           }, 1000);
         }
       })

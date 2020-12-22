@@ -1372,6 +1372,7 @@ document.oncontextmenu = function(){return false};
           that.WeekInfo.foodCatalog=foodCatalog;
           that.WeekInfo.weekType=res.data.data.recipeDay
           that.WeekInfo.weekValue=new Date(res.data.data.startTime)
+          that.WeekInfo.startAge=res.data.data.startAge;
           that.FixWeek();
           that.ShowWeekSelect();
           let recipeCycles=data.recipeCycles;
@@ -1385,6 +1386,7 @@ document.oncontextmenu = function(){return false};
 
           setTimeout(function () {
             that.dishesData("datas",recipeCycles,that);
+            that.$refs.child.getFoodScore();
           }, 1000);
         }
       })
