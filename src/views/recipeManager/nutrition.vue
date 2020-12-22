@@ -522,7 +522,7 @@ export default {
       foods:{},
       printObj: {
         id: "printMe",
-        popTitle: 'good print',
+        popTitle: '',
       }
     };
   },
