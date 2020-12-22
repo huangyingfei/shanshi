@@ -1453,8 +1453,10 @@ export default {
                   _["req"] = ">=" + _.min
                   if(parseFloat( _.min)<=parseFloat(sum)){
                     _["grade"]="ok"
+                    _["point"]="0"
                   }else{
                     _["grade"]="不足"
+                    _["point"]=10/_.min*(_.min-sum)
                   }
                 })
                 let meal = [];

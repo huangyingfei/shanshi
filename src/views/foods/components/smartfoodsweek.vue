@@ -1375,13 +1375,15 @@
               resData.proteinCalDTOList.forEach(_=>{
                 sum+=parseFloat(_.real)
               })
-              protein.forEach(_=>{
-                _["realSum"]=sum
-                _["req"]=">="+_.min
+              protein.forEach(_ => {
+                _["realSum"] = parseFloat(sum).toFixed(2)
+                _["req"] = ">=" + _.min
                 if(parseFloat( _.min)<=parseFloat(sum)){
                   _["grade"]="ok"
+                  _["point"]="0"
                 }else{
                   _["grade"]="不足"
+                  _["point"]=10/_.min*(_.min-sum)
                 }
               })
               let meal=[];

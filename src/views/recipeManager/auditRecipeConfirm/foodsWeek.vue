@@ -1453,8 +1453,10 @@ export default {
                 _["req"] = ">=" + _.min
                 if(parseFloat( _.min)<=parseFloat(sum)){
                   _["grade"]="ok"
+                  _["point"]="0"
                 }else{
                   _["grade"]="不足"
+                  _["point"]=10/_.min*(_.min-sum)
                 }
               })
               let meal = [];
@@ -1462,7 +1464,7 @@ export default {
               meal.forEach(_=>{
                 _["real"]=parseFloat(_["real"]).toFixed(2)
               })
-    
+
               that.pcScore=that.score;
               that.$emit('childfn', Math.floor(that.getData(res.data.data) * 100) / 100,"datas",this.pcScore, intake, nutrition, power, protein, meal);
             }
