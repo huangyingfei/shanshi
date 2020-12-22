@@ -206,7 +206,7 @@
               <div v-if="foodMutuals.length>0" >
                   <div  v-for="(item,index) in foodMutuals" :key="item.msg"> <p>{{index+1}}、{{item.msg}}</p></div>
               </div>
-              
+
               <el-button  slot="reference" style="margin-left: 10px" size="medium"  v-if="foodMutuals.length==0"
               > 不宜同食</el-button>
               <!--<button  slot="reference" > 不宜同食</button>-->
@@ -1791,7 +1791,7 @@
           that.drogNodeStats = true;
           setTimeout(() => {
             that.$refs.child.refreshData();
-            // that.$refs.child.resizeExpendHeight();
+            that.$refs.child.resizeExpendHeight();
           }, 1000);
         })
       }
@@ -2764,12 +2764,12 @@
   overflow-y: scroll;
   height: 450px;
 }
-.fixed{ 
-  position:fixed; 
-  padding-top: 10px; 
+.fixed{
+  position:fixed;
+  padding-top: 10px;
   bottom:0px;
-  width:100%;  
-  
+  width:100%;
+
   z-index:2;
   }
 
