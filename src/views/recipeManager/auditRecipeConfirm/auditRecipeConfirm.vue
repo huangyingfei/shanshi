@@ -1792,7 +1792,7 @@
           setTimeout(() => {
             that.$refs.child.refreshData();
             that.$refs.child.resizeExpendHeight();
-          }, 1000);
+          }, 100);
         })
       }
 
