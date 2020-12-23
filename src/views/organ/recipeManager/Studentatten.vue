@@ -362,6 +362,7 @@ export default {
         position: ""
       },
       ctest: true,
+      agree:"",//名字ID
       ruleForm: {
         name: "",
         position: "", //班级
@@ -487,11 +488,11 @@ export default {
       ],
       comfortable: [
         {
-          value: "事假",
+          value: "1",
           label: "事假"
         },
         {
-          value: "病假",
+          value: "2",
           label: "病假"
         }
       ]
@@ -534,7 +535,8 @@ export default {
               //   console.log(res);
               this.students = res.data.data;
 
-              console.log(this.students);
+              // console.log(this.students);
+                this.restaurants=[];
               this.students.forEach((item, index) => {
                 console.log(item);
                 this.restaurants.push({
@@ -557,8 +559,10 @@ export default {
       };
     },
     handleSelect(item) {
-      //   console.log(item);
+        console.log(item);
       this.ruleForm.name = item.value;
+      this.agree=item.id;
+      console.log(this.agree);
     },
 
     started() {
@@ -579,9 +583,23 @@ export default {
     //保存
     cameras(formName) {
       console.log(this.ruleForm.name);
-      this.$refs[formName].validate(valid => {
+      this.$refs[formName].validate(valid => {clearInterval
         if (valid) {
-          alert("123123!");
+          // alert("123123!");
+          this.$axios.post(`api/blade-food/studentleave/save`,{
+              studentId:this.agree,//姓名ID
+              leaveType:this.forgreater,//请假类型
+              applyTime:this.formula,//请假申请日期
+              startTime:this.starting,//请假开始时间
+              startStr:this.engine,//上午下午
+              endTime:this.software,//请假结束时间
+              endStr:this.dauphine,//上午下午
+              daysOff:this.weekday,//请假天数
+              realtive:this.between,//关系
+              disease:this.relieve,//
+          }).then(res=>{
+            console.log(res);
+          })
         } else {
           this.$message({
             message: "信息未填全",
