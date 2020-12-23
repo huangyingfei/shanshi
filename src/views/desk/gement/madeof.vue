@@ -1776,8 +1776,13 @@ export default {
               return prev;
             }
           }, 0);
-          sums[index] += "";
-          this.sumss = sums[index];
+          if (index == 2 || index == 4) {
+            sums[index] = sums[index].toFixed(2);
+          } else {
+            sums[index] += "";
+          }
+          // sums[index] += "";
+          // this.sumss = sums[index];
           // if (this.mailto[0].children[0].id == "101") {
           //   this.mailto[0].children[0].result = this.sumss;
           // }

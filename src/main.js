@@ -10,6 +10,7 @@ import store from "./store";
 import { loadStyle } from "./util/util";
 import * as urls from "@/config/env";
 import Element from "element-ui";
+import "element-ui/lib/theme-chalk/index.css";
 import { iconfontUrl, iconfontVersion } from "@/config/env";
 import i18n from "./lang"; // Internationalization
 import "./styles/common.scss";
@@ -20,9 +21,7 @@ import avueUeditor from "avue-plugin-ueditor";
 import website from "@/config/website";
 import echarts from "echarts";
 import vueConfig from "../vue.config";
-import Print from 'vue-print-nb'
-
-
+import Print from "vue-print-nb";
 
 Vue.prototype.$echarts = echarts;
 Vue.use(router);
@@ -53,7 +52,7 @@ iconfontVersion.forEach(ele => {
 });
 
 Vue.config.productionTip = true;
-if(process.env.NODE_ENV == 'development') {
+if (process.env.NODE_ENV == "development") {
   Vue.config.devtools = true;
 } else {
   Vue.config.devtools = false;

@@ -968,7 +968,7 @@ export default {
             this.ruleForm.foodFood = this.inquired.foodAlias; //食物别名1
             this.ruleForm.ovenFood = this.inquired.foodAlias1; //食物别名2
             this.ruleForm.buffer = this.inquired.foodReal; //食材真名
-            this.ruleForm.fooddata = this.inquired.foodPubType; //食材分类
+            this.ruleForm.fooddata = this.inquired.foodType; //食材分类
             this.ruleForm.foods = this.inquired.foodType1; //食物分类1
             this.ruleForm.dogfood = this.inquired.foodType2; //食物分类2
             this.ruleForm.besaved = this.inquired.foodEat; //食部
