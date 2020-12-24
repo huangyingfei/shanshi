@@ -190,8 +190,8 @@
     >
       <div class="block">
         <el-input
-            clearable
-           @change="treeDrawing"
+          clearable
+          @change="treeDrawing"
           style="width:290px; margin-left: 9px;margin-top: 10px;"
           placeholder="输入关键字进行查询"
           v-model="filterText"
@@ -326,10 +326,9 @@ export default {
     //   return data.label.indexOf(value) !== -1;
     // },
     handleNodeClick(data) {
-      if(data.view==0){
-        return
-      }else{
-
+      if (data.view == 0) {
+        return;
+      } else {
         if (this.dataindex1 == 1) {
           this.ruleForm.adding = data.label;
           this.support = data.id;
@@ -525,13 +524,13 @@ export default {
             trees[index] = {
               id: item.id,
               label: item.typeName,
-              view:0,
+              view: 0
             };
             trees[index].children = [];
             item.foods.forEach((item1, index1) => {
               trees[index].children[index1] = {
                 id: item1.id,
-                view:1,
+                view: 1,
                 label: item1.foodName,
                 isPub: item1.isPub,
                 isUse: item1.isUse

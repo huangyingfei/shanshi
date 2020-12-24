@@ -1106,7 +1106,7 @@ export default {
           // console.log(res);
           this.subquery = res.data.data;
           console.log(this.subquery);
-          this.menu = this.subquery.foodPubType;
+          this.menu = this.subquery.foodType;
           this.flour = this.subquery.id; //ID
           this.agree = this.subquery.status; //审核状态
           // console.log(this.agree);
