@@ -235,6 +235,7 @@ export default {
         calcHeight: 80,
         tip: false,
         columnBtn:false,
+        refreshBtn:false,
         searchShow: true,
         searchMenuSpan: 6,
         border: true,

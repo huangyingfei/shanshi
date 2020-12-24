@@ -91,6 +91,7 @@ export default {
         tip: false,
         searchShow: true,
         columnBtn:false,
+        refreshBtn:false,
         searchMenuSpan: 6,
         border: true,
         index: true,

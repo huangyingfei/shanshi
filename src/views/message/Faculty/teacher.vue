@@ -1491,7 +1491,7 @@
                 this.initMealData();
                 this.$router.$avueRouter.closeTag();
                 this.$router.push({
-                  path: "./myecipe"
+                  path: "./recipes"
                 });
               }
             })
@@ -1503,6 +1503,10 @@
                   message: "新增成功!"
                 });
                 this.initMealData();
+                this.$router.$avueRouter.closeTag();
+                this.$router.push({
+                  path: "./recipes"
+                });
               }
             })
           }

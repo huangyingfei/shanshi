@@ -1471,7 +1471,7 @@
                     _["point"]="0"
                   }else{
                     _["grade"]="不足"
-                    _["point"]=10/_.min*(_.min-sum)
+                    _["point"]=(10/_.min*(_.min-sum)).toFixed(2)
                   }
                 })
                 let meal = [];

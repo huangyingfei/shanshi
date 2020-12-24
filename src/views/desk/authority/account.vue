@@ -242,6 +242,7 @@ export default {
         selection: true,
         viewBtn: true,
         columnBtn:false,
+        refreshBtn:false,
         //dialogType: 'drawer',
         dialogClickModal: false,
         delBtn: false,

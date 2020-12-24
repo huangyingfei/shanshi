@@ -65,6 +65,7 @@ export default {
         searchShow: true,
         searchMenuSpan: 6,
         columnBtn:false,
+        refreshBtn:false,
         tree: true,
         border: true,
         index: true,

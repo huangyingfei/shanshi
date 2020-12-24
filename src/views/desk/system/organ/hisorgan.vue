@@ -150,6 +150,7 @@ export default {
         searchMenuSpan: 6,
         tree: true,
         columnBtn:false,
+        refreshBtn:false,
         border: true,
         index: true,
         indexLabel:'序号',
