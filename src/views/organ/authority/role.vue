@@ -125,6 +125,7 @@
           selection: true,
           viewBtn: true,
           columnBtn:false,
+          refreshBtn:false,
           dialogWidth: 900,
           dialogHeight:200,
           dialogClickModal: false,

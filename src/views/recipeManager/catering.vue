@@ -2102,6 +2102,10 @@ document.oncontextmenu = function(){return false};
                 message: "新增成功!"
               });
               this.initMealData();
+              this.$router.$avueRouter.closeTag();
+              this.$router.push({
+                path: "./recipe"
+              });
             }
           })
         }

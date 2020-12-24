@@ -159,6 +159,7 @@ export default {
         menuAlign: "center",
         tip: false,
         columnBtn:false,
+        refreshBtn:false,
         calcHeight: 30,
         searchShow: true,
         searchMenuSpan: 6,

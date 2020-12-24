@@ -63,4 +63,7 @@ export default {
   margin-left: -10px;
   border-radius: 2px;
 }
+.avue-crud__menu .avue-crud__right .is-circle{
+    visibility:hidden
+}
 </style>

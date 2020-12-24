@@ -121,6 +121,8 @@ export default {
         pageSizes: [8, 16, 24, 32, 40, 48],
       },
       option: {
+        columnBtn:false,
+        refreshBtn:false,
         height: "auto",
         tip: false,
         simplePage: true,

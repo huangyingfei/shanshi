@@ -138,7 +138,7 @@
           index: true,
           indexLabel:'序号',
           selection: true,
-
+          refreshBtn:false,
           viewBtn: true,
           columnBtn:false,
           dialogWidth: 900,

@@ -61,6 +61,7 @@ export default {
 				menuAlign: 'center',
 				searchMenuSpan:8,
         columnBtn:false,
+        refreshBtn:false,
 				height: "auto",
 				border:true,
 				column:[

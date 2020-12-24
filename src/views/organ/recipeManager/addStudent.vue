@@ -1,6 +1,10 @@
 <template>
   <basic-container  id="addStudent">
     <avue-form  :option="option" v-model="form" @submit="submit" @error="error">
+      <template slot="menuForm">
+        <el-button icon="el-icon-back"
+                   @click="handleBack()">返 回</el-button>
+      </template>
     </avue-form>
   </basic-container>
 </template>
@@ -1126,6 +1130,10 @@ export default {
     };
   },
   methods: {
+    handleBack(){
+      this.$router.push({ path: "/organ/recipeManager/student" });
+      this.$router.$avueRouter.closeTag();
+    },
     getById(row){
       getById(row.value + "").then((res) => {
         this.$set(this.form, "classSection", res.data.data.pparentName);
