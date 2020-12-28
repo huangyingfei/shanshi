@@ -839,7 +839,7 @@ export default {
     //删除
     DeleteUser(row) {
       this.term = row.id;
-      this.$confirm("确认删除该相克食材?", "提示", {
+      this.$confirm("确定删除吗?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"

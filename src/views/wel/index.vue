@@ -6,35 +6,35 @@
         <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
         <div class="nism1">
           <div class="ingredients">机构总量</div>
-          <div class="food1">559</div>
+          <div class="food1">{{ this.newhead.organ }}</div>
         </div>
       </div>
       <div class="mechanism">
         <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
         <div class="nism1">
           <div class="ingredients">政府总量</div>
-          <div class="food1">559</div>
+          <div class="food1">{{ this.newhead.gover }}</div>
         </div>
       </div>
       <div class="mechanism">
         <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
         <div class="nism1">
           <div class="ingredients">食材总量</div>
-          <div class="food1">559</div>
+          <div class="food1">{{ this.newhead.food }}</div>
         </div>
       </div>
       <div class="mechanism">
         <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
         <div class="nism1">
           <div class="ingredients">菜品总量</div>
-          <div class="food1">559</div>
+          <div class="food1">{{ this.newhead.dish }}</div>
         </div>
       </div>
       <div class="mechanism">
         <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
         <div class="nism1">
           <div class="ingredients">食谱总量</div>
-          <div class="food1">559</div>
+          <div class="food1">{{ this.newhead.recipe }}</div>
         </div>
       </div>
     </div>
@@ -148,6 +148,13 @@ export default {
   name: "wel",
   data() {
     return {
+      newhead: {
+        organ: "", //机构
+        gover: "", //政府
+        food: "", //食材
+        dish: "", //菜品
+        recipe: "" //食谱
+      },
       activeNames: ["1", "2", "3", "5"],
       logActiveNames: ["17"]
     };
@@ -159,7 +166,25 @@ export default {
     this.drawLine();
     this.extract();
   },
+  beforeMount() {
+    this.siteheader(); //头部
+    this.welcomeUser();
+  },
   methods: {
+    //头部
+    siteheader() {
+      this.$axios.get(`api/blade-food/food/getTotal`).then(res => {
+        // console.log(res);
+        this.newhead = res.data.data;
+        // console.log(this.newhead);
+      });
+    },
+    //本周最受欢迎菜品
+    welcomeUser() {
+      this.$axios.get(`api/blade-food/food/dishTotal`).then(res => {
+        console.log(res);
+      });
+    },
     handleChange(val) {
       window.console.log(val);
     },
