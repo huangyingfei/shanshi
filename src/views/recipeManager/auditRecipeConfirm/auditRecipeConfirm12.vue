@@ -685,7 +685,7 @@
       }
 
       this.datas.forEach(_=>{
-        
+
         _.weeks.forEach(__=>{
 
           __.foods.forEach(___=>{
@@ -702,8 +702,8 @@
               foodsObj.foodId = ____.id//食材ID
               foodsObj.val = ____.count//餐点类型
               foodsObj.mealType = this.getmealTypeData(_.name)//餐点类型
-              foodsObj.week = weekNum[__.name]//星期几   
-              mealTypes.recipevals.push(foodsObj)                      
+              foodsObj.week = weekNum[__.name]//星期几
+              mealTypes.recipevals.push(foodsObj)
             })
             foods.connctVos.push(mealTypes);
           })
@@ -711,7 +711,7 @@
       });
       foods.days = sum(day);
       return foods;
-    },    
+    },
     auditRecipeConfirmAgree(auditSign){
       let params = {
         id: this.$route.query.userid,//食谱主键
@@ -1643,8 +1643,8 @@
         }
         that.startTime=new Date(year+"-"+begin_mouth+"-"+begin_day);
         that.startTimeStr=year+"-"+begin_mouth+"-"+begin_day;
-        that.endTime=new Date(year+"-"+end_mouth+"-"+end_day);
-        that.endTimeStr=year+"-"+end_mouth+"-"+end_day;
+        that.endTime=new Date(end_year+"-"+end_mouth+"-"+end_day);
+        that.endTimeStr=end_year+"-"+end_mouth+"-"+end_day;
         //获取每天
         that.WeekList = [];
 

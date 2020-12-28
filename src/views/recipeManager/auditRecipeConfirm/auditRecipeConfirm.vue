@@ -2461,8 +2461,8 @@
         }
         that.startTime=new Date(year+"-"+begin_mouth+"-"+begin_day);
         that.startTimeStr=year+"-"+begin_mouth+"-"+begin_day;
-        that.endTime=new Date(year+"-"+end_mouth+"-"+end_day);
-        that.endTimeStr=year+"-"+end_mouth+"-"+end_day;
+        that.endTime=new Date(end_year+"-"+end_mouth+"-"+end_day);
+        that.endTimeStr=end_year+"-"+end_mouth+"-"+end_day;
         //获取每天
         that.WeekList = [];
 
