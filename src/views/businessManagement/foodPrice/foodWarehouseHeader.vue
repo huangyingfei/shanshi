@@ -32,18 +32,17 @@
         ></el-input>
       </el-col>
       <el-col :span="2">
-        <el-button
-          type="primary"
-          style="width: 100%"
-          @click="$emit('getFoodTable', foodPriceFrom)"
+        <el-button type="primary" style="width: 100%" @click="getFoodTable"
           >搜索</el-button
         >
       </el-col>
       <el-col :span="2">
-        <el-button style="width: 100%">清空</el-button>
+        <el-button style="width: 100%" @click="clearSearch">清空</el-button>
       </el-col>
       <el-col :span="3">
-        <el-button type="primary" style="width: 100%">清空价格</el-button>
+        <el-button type="primary" style="width: 100%" @click="clearPrice"
+          >清空价格</el-button
+        >
       </el-col>
     </el-row>
     <!-- <el-row :gutter="20">
@@ -76,6 +75,24 @@ export default {
         isPrice: "",
       },
     };
+  },
+  mounted() {
+    this.getFoodTable();
+  },
+  methods: {
+    getFoodTable() {
+      this.$emit("getFoodTable", this.foodPriceFrom);
+    },
+    clearSearch() {
+      this.foodPriceFrom = {
+        foodName: "",
+        isUse: "",
+        isPrice: "",
+      };
+    },
+    clearPrice() {
+      this.$emit("clearPrice");
+    },
   },
 };
 </script>

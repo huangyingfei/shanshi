@@ -1,6 +1,10 @@
 <template>
   <div class="food-warehouse-box">
-    <food-warehouse-header @getFoodTable="beforeGetFoodTable" />
+    <food-warehouse-header
+      @getFoodTable="beforeGetFoodTable"
+      @clearPrice="clearPrice"
+      ref="foodHeader"
+    />
     <food-table :foodTable="foodPriceTable" />
     <div class="block">
       <el-pagination
@@ -21,6 +25,8 @@
 <script>
 import FoodTable from "./foodTable.vue";
 import foodWarehouseHeader from "./foodWarehouseHeader.vue";
+import { debounce } from "../../../util/debounce";
+
 export default {
   props: {
     searchType: {
@@ -35,12 +41,61 @@ export default {
       foodPriceTable: [],
       currentPage: 1,
       size: 10,
-      total: 200,
+      total: 0,
+      selUpdate: false,
     };
   },
+  watch: {
+    foodPriceTable: {
+      handler: function (val, oldVal) {
+        if (!this.selUpdate) {
+          this.saveFoodTable();
+        } else {
+          this.selUpdate = false;
+        }
+      },
+      deep: true,
+      immediate: false,
+    },
+  },
+  mounted() {},
   methods: {
+    //清空价格
+    clearPrice() {
+      console.log("clearPrice");
+      this.foodPriceTable.forEach((e) => {
+        e.price = null;
+      });
+    },
+    //表格数据保存
+    saveFoodTable: debounce(function () {
+      this.axios({
+        url: "/api/blade-food/foodmanager/saveOrUpdate",
+        method: "post",
+        data: this.foodPriceTable,
+      }).then((res) => {
+        console.log(res);
+        this.$message({
+          message: "保存成功",
+          type: "success",
+        });
+      });
+    }, 1000),
+
+    //每页条数值改变
+    handleSizeChange(val) {
+      console.log("handleSizeChange");
+      this.size = val;
+      this.currentPage = 1;
+      this.$refs.foodHeader.getFoodTable();
+    },
+    //页数值改变
+    handleCurrentChange(val) {
+      this.currentPage = val;
+      this.$refs.foodHeader.getFoodTable();
+    },
+    //查询条件处理
     beforeGetFoodTable(param) {
-      //查询条件处理
       var params = {
         searchType: this.searchType,
       };
@@ -51,13 +106,16 @@ export default {
       }
       this.getFoodTable(params);
     },
+    //表格数据查询
     getFoodTable(params) {
       this.axios({
         url: "/api/blade-food/foodmanager/list",
         method: "get",
-        params,
+        params: { current: this.currentPage, size: this.size, ...params },
       }).then((res) => {
+        this.selUpdate = true;
         this.foodPriceTable = res.data.data.records;
+        this.total = res.data.data.total;
         console.log(res);
       });
     },
