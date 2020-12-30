@@ -390,7 +390,7 @@
                 @change="handleChange"
               ></el-cascader>
             </el-form-item>
-            <el-form-item label="工号" style="width: 355px">
+            <el-form-item label="工号" style="width: 355px" prop="thejob">
               <el-input
                 style="width: 250px"
                 v-model="ruleForm.thejob"
@@ -605,7 +605,7 @@
             align="center"
           ></el-table-column>
           <el-table-column
-            prop="reason"
+            prop="className"
             label="所在班级"
             align="center"
           ></el-table-column>
@@ -749,10 +749,14 @@ export default {
         value1: [
           { required: true, message: "请选择出生日期", trigger: "blur" }
         ],
-        position: [{ required: true, message: "请选择职务", trigger: "blur" }],
+
+        position: [
+          { required: true, message: "请选择职务", trigger: "change" }
+        ],
         inductions: [
           { required: true, message: "请选择入职日期", trigger: "blur" }
-        ]
+        ],
+        thejob: [{ required: true, message: "工号不能为空", trigger: "blur" }]
       },
       tableData: [],
       emailslist: [
@@ -1151,10 +1155,9 @@ export default {
     Takeone() {
       let str = JSON.parse(localStorage.getItem("saber-token"));
       this.headerObj["Blade-Auth"] = `bearer ${str.content}`;
-      console.log(this.headerObj);
+      // console.log(this.headerObj);
     },
     resetForm(formName) {
-      console.log(12321);
       this.$refs[formName].resetFields();
     },
     //添加员工
@@ -1223,10 +1226,10 @@ export default {
                   // console.log(res);
                   // this.store = res.data.data.records;
                   // console.log(this.store);
-                  this.$message({
-                    message: "查询成功",
-                    type: "success"
-                  });
+                  // this.$message({
+                  //   message: "查询成功",
+                  //   type: "success"
+                  // });
                   this.loadFlag1 = false;
                   this.tableData = res.data.data.records;
                 })
@@ -1328,7 +1331,7 @@ export default {
       let year = ((myDate - afterTime) / (24 * 60 * 60 * 1000 * 365)).toFixed(
         0
       );
-      console.log(year);
+      // console.log(year);
       this.ruleForm.process = year;
       // console.log(myDate);
       // let vtop = d.getFullYear();
@@ -1472,7 +1475,7 @@ export default {
       this.ruleForm.nextstate = "";
       this.productImgs = [];
       this.hideUploadEdit = this.productImgs.length >= 1;
-      console.log(this.view);
+      // console.log(this.view);
       this.under = index1;
       this.dateTime = true;
       setTimeout(() => {
@@ -1490,13 +1493,13 @@ export default {
     added(index) {
       this.storage.name = "";
       this.departments = index;
-      console.log(this.departments);
+      // console.log(this.departments);
       this.department = true;
     },
     //添加子部门
     gate(data, index) {
-      console.log(data);
-      console.log(index);
+      // console.log(data);
+      // console.log(index);
       this.support = index;
       this.acetone.name = "";
       // this.support = data.tment;
@@ -1509,8 +1512,8 @@ export default {
     editorBase(data, index) {
       this.storage.name = "";
       this.departments = index;
-      console.log(this.departments);
-      console.log(data);
+      // console.log(this.departments);
+      // console.log(data);
       this.storage.name = data.label;
       (this.storage.id = data.id),
         //  this.adds = data.id;
@@ -1521,7 +1524,7 @@ export default {
       // console.log(index);
       this.support = index;
 
-      console.log(data);
+      // console.log(data);
       this.acetone.name = data.label;
       this.acetone.id = data.id;
       this.obtained = true;
@@ -1540,7 +1543,7 @@ export default {
           this.obtained = false;
           this.acetone.name = "";
           // this.acetone.storage = "";
-          console.log(res);
+          // console.log(res);
           this.$message({
             message: "添加成功",
             type: "success"
@@ -1564,7 +1567,7 @@ export default {
             this.obtained = false;
             this.acetone.name = "";
             this.acetone.storage = "";
-            console.log(res);
+            // console.log(res);
             this.$message({
               message: "添加成功",
               type: "success"
@@ -1591,7 +1594,7 @@ export default {
             this.department = false;
             this.storage.name = "";
             // this.storage.storage = "";
-            console.log(res);
+            // console.log(res);
             this.$message({
               message: "添加成功",
               type: "success"
@@ -1617,7 +1620,7 @@ export default {
             this.department = false;
             this.storage.name = "";
             // this.storage.storage = "";
-            console.log(res);
+            // console.log(res);
             this.$message({
               message: "添加成功",
               type: "success"
@@ -1665,10 +1668,10 @@ export default {
     },
     //搜索
     searchType() {
-      console.log(this.workers);
-      console.log(this.callback);
-      console.log(this.driver);
-      console.log(this.working);
+      // console.log(this.workers);
+      // console.log(this.callback);
+      // console.log(this.driver);
+      // console.log(this.working);
       let ascen = "job_number";
       if (this.working == 1) {
         this.empty = ascen;
@@ -1797,7 +1800,7 @@ export default {
           });
         });
         this.loadClass = fwork;
-        console.log(this.loadClass);
+        // console.log(this.loadClass);
         // this.bufs.forEach((item, index) => {
         //   console.log(item);
         //   fwork[index] = {

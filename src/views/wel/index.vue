@@ -43,87 +43,35 @@
       <!-- 菜谱排行榜 -->
       <div class="variety">
         <h4 class="welcome">本周最受欢迎菜品</h4>
-        <div class="menu">
+        <div class="menu1" v-for="(item, i) in double" :key="i">
           <div class="menuimg">
-            <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
+            <img :src="item.dishPic" alt />
           </div>
-          <div class="menutext">爆炒金针菇</div>
-          <div class="menunum">655</div>
-        </div>
-        <div class="menu1">
-          <div class="menuimg">
-            <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
-          </div>
-          <div class="menutext">翠竹报春</div>
-          <div class="menunum">642</div>
-        </div>
-        <div class="menu1">
-          <div class="menuimg">
-            <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
-          </div>
-          <div class="menutext">炒三丁</div>
-          <div class="menunum">598</div>
-        </div>
-        <div class="menu1">
-          <div class="menuimg">
-            <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
-          </div>
-          <div class="menutext">扶手观音莲</div>
-          <div class="menunum">576</div>
-        </div>
-        <div class="menu1">
-          <div class="menuimg">
-            <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
-          </div>
-          <div class="menutext">干锅土豆片</div>
-          <div class="menunum">566</div>
+          <div class="menutext">{{ item.dishName }}</div>
+          <div class="menunum">{{ item.dishCount }}</div>
         </div>
       </div>
       <!-- 健康指数排行榜 -->
       <div class="recipes">
+        <div class="chooser">
+          <el-select clearable v-model="activity" placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </div>
         <h4 class="welcome1">本周食谱健康指数排行榜</h4>
-        <div class="school">
-          <div class="ranking">1</div>
+        <div class="school1" v-for="(item1, i) in getHealth" :key="i">
+          <!-- <div class="ranking">1</div> -->
           <div class="schoolimg">
-            <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
+            <img :src="item1.dishPic" alt />
           </div>
-          <div class="schooltxt">杭州市实验外国语学校</div>
-          <div class="schoolnum">4.50分</div>
-        </div>
-        <div class="school1">
-          <div class="ranking1">2</div>
-          <div class="schoolimg">
-            <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
-          </div>
-          <div class="schooltxt">杭州市大成实验学校</div>
-          <div class="schoolnum">4.25分</div>
-        </div>
-
-        <div class="school1">
-          <div class="ranking2">3</div>
-          <div class="schoolimg">
-            <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
-          </div>
-          <div class="schooltxt">浙江省东阳市外国语学校</div>
-          <div class="schoolnum">4.00分</div>
-        </div>
-
-        <div class="school1">
-          <div class="ranking3">4</div>
-          <div class="schoolimg">
-            <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
-          </div>
-          <div class="schooltxt">杭州市览新第二幼儿园</div>
-          <div class="schoolnum">4.00分</div>
-        </div>
-
-        <div class="school1">
-          <div class="ranking4">5</div>
-          <div class="schoolimg">
-            <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
-          </div>
-          <div class="schooltxt">杭州外国语学校</div>
-          <div class="schoolnum">4.00分</div>
+          <div class="schooltxt">{{ item1.tenantName }}</div>
+          <div class="schoolnum">{{ item1.score }}</div>
         </div>
       </div>
       <!-- !!! -->
@@ -131,7 +79,7 @@
     <!-- !echarts图标! -->
     <div class="daychart">
       <div class="foodinta">
-        <div id="myChart" :style="{ width: '500px', height: '500px' }"></div>
+        <div id="leiDaTu" :style="{ width: '500px', height: '500px' }"></div>
       </div>
       <div class="nutrient">
         <div id="mynutrient" :style="{ width: '500px', height: '500px' }"></div>
@@ -155,6 +103,12 @@ export default {
         dish: "", //菜品
         recipe: "" //食谱
       },
+      options: [],
+      activity: "",
+      double: [],
+      getHealth: [],
+      today: [], //
+      greater: [],
       activeNames: ["1", "2", "3", "5"],
       logActiveNames: ["17"]
     };
@@ -162,15 +116,203 @@ export default {
   computed: {
     ...mapGetters(["userInfo"])
   },
-  mounted() {
-    this.drawLine();
-    this.extract();
-  },
+
   beforeMount() {
     this.siteheader(); //头部
     this.welcomeUser();
+    this.HealthBar();
+    this.fattyfood();
+    this.allchildren();
+    this.fromSearch();
+  },
+  mounted() {
+    // this.drawLine();
+    // this.extract();
+    // this.drawPie();
+    setTimeout(() => {
+      this.drawPie();
+      this.extract();
+    }, 1000);
   },
   methods: {
+    extract() {
+      let charts = this.$echarts.init(document.getElementById("mynutrient"));
+      var option = {
+        title: {
+          text: "儿童每人每日营养素提取（DRls）",
+
+          textAlign: "left"
+        },
+        tooltip: {}, //提示层
+        legend: {
+          data: ["name1"]
+        },
+        radar: {
+          name: {
+            textStyle: {
+              color: "#fff", //字体颜色
+              backgroundColor: "#999", //背景色
+              borderRadius: 3, //圆角
+              padding: [3, 5] //padding
+            }
+          },
+          center: ["50%", "50%"],
+          radius: "60%",
+          startAngle: 270,
+          indicator: [
+            {
+              name: "能量",
+              max: 300
+            },
+            {
+              name: "钠",
+              max: 300
+            },
+            {
+              name: "铁",
+              max: 350
+            },
+            {
+              name: "锌",
+              max: 300
+            },
+            {
+              name: "钙",
+              max: 300
+            },
+            {
+              name: "维生素C",
+              max: 300
+            },
+            {
+              name: "维生素B2",
+              max: 300
+            },
+            {
+              name: "维生素B1",
+              max: 300
+            },
+            {
+              name: "维生素A",
+              max: 300
+            },
+            {
+              name: "脂肪",
+              max: 300
+            },
+            {
+              name: "蛋白质",
+              max: 300
+            }
+          ]
+        },
+        series: [
+          {
+            name: "儿童每日进食量",
+            type: "radar",
+            data: [
+              {
+                value: this.greater,
+                name: "儿童每日进食量"
+              }
+            ]
+          }
+        ]
+      };
+      charts.setOption(option);
+    },
+    drawPie() {
+      let charts = this.$echarts.init(document.getElementById("leiDaTu"));
+      var option = {
+        title: {
+          text: "儿童每日进食量",
+
+          textAlign: "left"
+        },
+        tooltip: {}, //提示层
+        legend: {
+          data: ["name1"]
+        },
+        radar: {
+          name: {
+            textStyle: {
+              color: "#fff", //字体颜色
+              backgroundColor: "#999", //背景色
+              borderRadius: 3, //圆角
+              padding: [3, 5] //padding
+            }
+          },
+          center: ["50%", "50%"],
+          radius: "60%",
+          startAngle: 270,
+          indicator: [
+            {
+              name: "谷类",
+              max: 300
+            },
+            {
+              name: "盐",
+              max: 300
+            },
+            {
+              name: "食用油",
+              max: 350
+            },
+            {
+              name: "乳制品",
+              max: 300
+            },
+            {
+              name: "大豆",
+              max: 300
+            },
+            {
+              name: "畜禽肉类",
+              max: 300
+            },
+            {
+              name: "水果",
+              max: 300
+            },
+            {
+              name: "蔬菜",
+              max: 300
+            }
+          ]
+        },
+        series: [
+          {
+            name: "儿童每日进食量",
+            type: "radar",
+            data: [
+              {
+                value: this.today,
+                name: "儿童每日进食量"
+              }
+            ]
+          }
+        ]
+      };
+      charts.setOption(option);
+      // console.log(this.double);
+    },
+    fromSearch() {
+      this.$axios
+        .get(`api/blade-system/tenant/getChildTenant`, {})
+        .then(res => {
+          // console.log(res);
+          this.rsearch = res.data.data;
+          // console.log(this.rsearch);
+          let second = [];
+          this.rsearch.forEach(item => {
+            second.push({
+              value: item.tenantId,
+              label: item.tenantName
+            });
+          });
+          this.options = second;
+        });
+    },
     //头部
     siteheader() {
       this.$axios.get(`api/blade-food/food/getTotal`).then(res => {
@@ -182,112 +324,38 @@ export default {
     //本周最受欢迎菜品
     welcomeUser() {
       this.$axios.get(`api/blade-food/food/dishTotal`).then(res => {
-        console.log(res);
+        // console.log(res);
+        this.double = res.data.data;
+        // console.log(this.double);
       });
+    },
+    //本周食谱健康指数排行榜
+    HealthBar() {
+      this.$axios.get(`api/blade-food/food/recipeTotal`).then(res => {
+        // console.log(res);
+        this.getHealth = res.data.data;
+        // console.log(this.getHealth);
+      });
+    },
+    fattyfood() {
+      this.$axios
+        .get(`api/blade-food/recipe/getChildRecipeCal`, {})
+        .then(res => {
+          // console.log(res);
+          this.today = res.data.data;
+          // console.log(this.today);
+        });
+    },
+    allchildren() {
+      this.$axios
+        .get(`api/blade-food/recipe/getChildNutritionCal `, {})
+        .then(res => {
+          this.greater = res.data.data;
+          // console.log(this.greater);
+        });
     },
     handleChange(val) {
       window.console.log(val);
-    },
-    extract() {
-      let mynutrient = this.$echarts.init(
-        document.getElementById("mynutrient")
-      );
-      // 绘制图表
-      mynutrient.setOption({
-        title: {
-          text: "儿童每人每日营养素提取（DRls）",
-          left: "center"
-        },
-        tooltip: {
-          trigger: "item",
-          formatter: "{a} <br/>{b} : {c} ({d}%)"
-        },
-        legend: {
-          orient: "vertical",
-          left: "left",
-          data: [
-            "直接访问",
-            "邮件营销",
-            "联盟广告",
-            "视频广告",
-            "搜索引擎",
-            "水果"
-          ]
-        },
-        series: [
-          {
-            name: "访问来源",
-            type: "pie",
-            radius: "55%",
-            center: ["50%", "60%"],
-            data: [
-              { value: 335, name: "直接访问" },
-              { value: 310, name: "邮件营销" },
-              { value: 234, name: "联盟广告" },
-              { value: 135, name: "视频广告" },
-              { value: 1548, name: "搜索引擎" },
-              { value: 450, name: "水果" }
-            ],
-            emphasis: {
-              itemStyle: {
-                shadowBlur: 10,
-                shadowOffsetX: 0,
-                shadowColor: "rgba(0, 0, 0, 0.5)"
-              }
-            }
-          }
-        ]
-      });
-    },
-    drawLine() {
-      // 基于准备好的dom，初始化echarts实例
-      let myChart = this.$echarts.init(document.getElementById("myChart"));
-      // 绘制图表
-      myChart.setOption({
-        title: {
-          text: "儿童每人每日进食量",
-          left: "center"
-        },
-        tooltip: {
-          trigger: "item",
-          formatter: "{a} <br/>{b} : {c} ({d}%)"
-        },
-        legend: {
-          orient: "vertical",
-          left: "left",
-          data: [
-            "直接访问",
-            "邮件营销",
-            "联盟广告",
-            "视频广告",
-            "搜索引擎",
-            "水果"
-          ]
-        },
-        series: [
-          {
-            name: "访问来源",
-            type: "pie",
-            radius: "55%",
-            center: ["50%", "60%"],
-            data: [
-              { value: 335, name: "直接访问" },
-              { value: 310, name: "邮件营销" },
-              { value: 234, name: "联盟广告" },
-              { value: 135, name: "视频广告" },
-              { value: 1548, name: "搜索引擎" },
-              { value: 450, name: "水果" }
-            ],
-            emphasis: {
-              itemStyle: {
-                shadowBlur: 10,
-                shadowOffsetX: 0,
-                shadowColor: "rgba(0, 0, 0, 0.5)"
-              }
-            }
-          }
-        ]
-      });
     }
   }
 };
@@ -296,6 +364,8 @@ export default {
 <style>
 .wel {
   width: 100%;
+  height: 100%;
+  /* background-color: #fff; */
 }
 .el-font-size {
   font-size: 14px;
@@ -353,6 +423,8 @@ export default {
 .variety {
   width: 50%;
   height: 600px;
+  overflow-y: auto;
+  overflow-x: hidden;
   background-color: #fff;
 }
 .recipes {
@@ -366,7 +438,7 @@ export default {
   margin-top: 40px;
 }
 .welcome1 {
-  margin-top: 40px;
+  margin-top: 10px;
 }
 .menu {
   width: 100%;
@@ -413,8 +485,7 @@ export default {
 .school1 {
   width: 100%;
   height: 60px;
-
-  margin-top: 40px;
+  margin-top: 20px;
 }
 .ranking {
   width: 30px;
@@ -509,5 +580,12 @@ export default {
   width: 50%;
   height: 100%;
   float: left;
+}
+.chooser {
+  width: 400px;
+  height: 50px;
+  /* background-color: red; */
+  margin-left: 20px;
+  margin-top: 10px;
 }
 </style>

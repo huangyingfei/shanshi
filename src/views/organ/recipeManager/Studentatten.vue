@@ -26,24 +26,18 @@
             >
             </el-date-picker></div
         ></el-col>
-        <el-col :span="6"
+        <el-col :span="7"
           ><div>
             <span style="margin-right: 10px;">班级:</span>
-            <el-select
+
+            <el-cascader
+              style="width: 250px"
               clearable
-              style="width: 180px; height: 30px"
-              v-model="formsearch.position"
-              placeholder="请选择"
-            >
-              <el-option
-                v-for="item in vposition"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-                style="width: 100px"
-              >
-              </el-option>
-            </el-select></div
+              v-model="classInfo"
+              :options="loadClass"
+              :props="{ expandTrigger: 'hover' }"
+              @change="handleChange"
+            ></el-cascader></div
         ></el-col>
       </el-row>
       <el-row style="  padding-top: 10px;">
@@ -71,13 +65,13 @@
               @click="addition(1)"
               >添加请假记录</el-button
             >
-            <el-button
+            <!-- <el-button
               style="margin-left: 20px"
               icon="el-icon-delete"
               size="medium"
-              @click="emptyset"
+              @click="notEmpty"
               >删除</el-button
-            >
+            > -->
             <el-button
               style="margin-left: 20px"
               type="primary"
@@ -115,19 +109,24 @@
 
               <el-table-column prop="studentName" label="姓名" align="center">
               </el-table-column>
-              <el-table-column prop="className" label="班级" align="center">
-              </el-table-column>
               <el-table-column
-                prop="startTime"
-                label="请假开始日期"
+                width="100"
+                prop="className"
+                label="班级"
                 align="center"
               >
               </el-table-column>
-              <el-table-column
-                prop="endTime"
-                label="请假结束日期"
-                align="center"
-              >
+              <el-table-column width="150" label="请假开始日期" align="center">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.startTime }}</span>
+                  <span>{{ scope.row.startStr }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column width="150" label="请假结束日期" align="center">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.endTime }}</span>
+                  <span>{{ scope.row.endStr }}</span>
+                </template>
               </el-table-column>
               <el-table-column prop="leaveType" label="请假类型" align="center">
                 <!-- <template slot-scope="scope">
@@ -139,13 +138,24 @@
               </el-table-column>
               <el-table-column prop="daysOff" label="请假天数" align="center">
               </el-table-column>
-              <el-table-column prop="reason" label="请假原因" align="center">
+              <el-table-column
+                width="100"
+                prop="reason"
+                label="请假原因"
+                align="center"
+              >
               </el-table-column>
-              <el-table-column prop="applyTime" label="申请日期" align="center">
+              <el-table-column
+                width="150"
+                prop="applyTime"
+                label="申请日期"
+                align="center"
+              >
               </el-table-column>
               <el-table-column prop="createBy" label="创建人" align="center">
               </el-table-column>
               <el-table-column
+                width="150"
                 prop="createTime"
                 label="创建日期"
                 align="center"
@@ -166,7 +176,12 @@
                   >
                 </template>
               </el-table-column>
-              <el-table-column label="操作" align="center">
+              <el-table-column
+                width="150"
+                fixed="right"
+                label="操作"
+                align="center"
+              >
                 <template slot-scope="scope">
                   <el-button
                     @click="editorTheme(scope.row, 2)"
@@ -228,10 +243,11 @@
           label-width="110px"
           class="demo-ruleForm"
         >
-          <el-form-item label="学生姓名" prop="state" style="width: 360px">
+          <el-form-item label="学生姓名" prop="state" style="width: 370px">
             <!-- <el-input style="width: 250px" v-model="ruleForm.name"></el-input> -->
             <el-autocomplete
-              v-model="state"
+              style="width: 250px"
+              v-model="ruleForm.state"
               :fetch-suggestions="querySearchAsync"
               placeholder="请输入内容"
               @select="handleSelect"
@@ -264,10 +280,11 @@
             </el-select>
           </el-form-item>
 
-          <el-form-item label="请假申请日期">
+          <el-form-item label="请假申请日期" style="width: 370px">
             <el-date-picker
+              :disabled="true"
               style="width: 250px"
-              format="yyyy 年 MM 月 dd 日 "
+              format="yyyy 年 MM 月 dd 日HH时 mm分 "
               value-format="yyyy-MM-dd HH:mm:ss"
               v-model="ruleForm.formula"
               type="datetime"
@@ -281,8 +298,9 @@
             style="width: 370px"
           >
             <el-date-picker
+              @change="started()"
               style="width: 180px"
-              format="yyyy 年 MM 月 dd 日 "
+              format="yyyy 年 MM 月 dd 日"
               value-format="yyyy-MM-dd HH:mm:ss"
               v-model="ruleForm.starting"
               type="datetime"
@@ -290,6 +308,7 @@
             >
             </el-date-picker>
             <el-select
+              @change="started()"
               style="width: 75px"
               v-model="engine"
               placeholder="请选择"
@@ -309,6 +328,7 @@
             style="width: 370px"
           >
             <el-date-picker
+              @change="started()"
               style="width: 180px"
               v-model="ruleForm.software"
               format="yyyy 年 MM 月 dd 日 "
@@ -318,6 +338,7 @@
             >
             </el-date-picker>
             <el-select
+              @change="started()"
               style="width: 75px"
               v-model="dauphine"
               placeholder="请选择"
@@ -331,8 +352,10 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="请假天数" prop="weekday">
+          <el-form-item label="请假天数" prop="weekday" style="width:370">
             <el-input
+              :disabled="true"
+              type="number"
               style="width: 250px"
               v-model="ruleForm.weekday"
             ></el-input>
@@ -370,8 +393,9 @@
             >
             </el-input>
           </el-form-item>
-          <el-form-item label="体温" prop="weekday">
+          <el-form-item label="体温(℃)" prop="weekday">
             <el-input
+              type="number"
               style="width: 250px"
               v-model="ruleForm.bodypart"
             ></el-input>
@@ -412,11 +436,16 @@
       <div slot="footer" class="dialog-footer" style="text-align: center;">
         <el-button @click="ratycancel('ruleForm')">取 消</el-button>
         <!-- <el-button @click="resetForm('ruleForm')">重置</el-button> -->
-        <el-button @click="cameras('ruleForm')" type="primary">确 定</el-button>
-        <el-button @click="editorPara('ruleForm')" type="primary"
+        <el-button
+          v-if="this.under == 1"
+          @click="cameras('ruleForm')"
+          type="primary"
+          >确 定</el-button
+        >
+        <el-button v-else @click="editorPara('ruleForm')" type="primary"
           >编辑确定</el-button
         >
-        <el-button @click="started" type="primary">测试计算</el-button>
+        <!-- <el-button @click="started" type="primary">测试计算</el-button> -->
       </div>
     </el-dialog>
   </div>
@@ -427,7 +456,7 @@ export default {
   data() {
     return {
       restaurants: [],
-      state: "",
+
       timeout: null,
       gmfmcItems: [], // 名称
       formsearch: {
@@ -435,9 +464,11 @@ export default {
         getDate: "",
         position: ""
       },
+      classInfo: [],
       ctest: true,
       agree: "", //名字ID
       ruleForm: {
+        state: "",
         name: "",
         position: "", //班级
         forgreater: "", //请假类型
@@ -452,7 +483,7 @@ export default {
         bodypart: "" //体温
       },
       rules: {
-        // state: [{ required: true, message: "请输入姓名", trigger: "blur" }],
+        state: [{ required: true, message: "请输入姓名", trigger: "change" }],
         // stringClass: [
         //   { required: true, message: "请选择班级", trigger: "blur" }
         // ],
@@ -577,7 +608,9 @@ export default {
       ],
       bonus: "", //编辑ID
       timezone: "",
-      timezone1: ""
+      timezone1: "",
+      under: "",
+      builtinclass: ""
     };
   },
   beforeMount() {
@@ -590,6 +623,9 @@ export default {
     this.restaurants = this.loadAll();
   },
   methods: {
+    handleChange(value) {
+      console.log(value);
+    },
     loadAll() {
       return [
         // { value: "三全鲜食（北新泾店）", address: "长宁区新渔路144号" },
@@ -621,14 +657,13 @@ export default {
             // console.log(this.students);
             this.restaurants = [];
             this.students.forEach((item, index) => {
-              console.log(item);
               this.restaurants.push({
                 id: item.id,
                 value: item.stuStr
               });
-              console.log(this.restaurants);
+              // console.log(this.restaurants);
             });
-            cb(restaurants);
+            cb(this.restaurants);
           });
         // }
       }, 500);
@@ -649,20 +684,55 @@ export default {
     },
 
     started() {
-      if (this.ruleForm.starting == this.ruleForm.software) {
-        if (this.engine == "上午" && this.dauphine == "上午") {
-          this.ruleForm.weekday = 0.5;
-        } else if (this.engine == "上午" && this.dauphine == "下午") {
-          this.ruleForm.weekday = 1;
-        } else if (this.engine == "下午" && this.dauphine == "下午") {
-          this.ruleForm.weekday = 0.5;
+      if (this.ruleForm.starting != "" && this.ruleForm.software != "") {
+        if (this.ruleForm.software < this.ruleForm.starting) {
+          this.$message({
+            message: "结束时间不能小于开始时间",
+            type: "warning"
+          });
+          this.ruleForm.weekday = "";
+          return;
+        } else {
+          var afterTime = Date.parse(this.ruleForm.starting.replace(/-/g, "/"));
+          var before = Date.parse(this.ruleForm.software.replace(/-/g, "/"));
+          if (this.engine == "下午") {
+            afterTime += 12 * 60 * 60 * 1000;
+          }
+          if (this.dauphine == "上午") {
+            before += 12 * 60 * 60 * 1000;
+          } else {
+            before += 24 * 60 * 60 * 1000;
+          }
+          let year = (before - afterTime) / (1000 * 60 * 60 * 24);
+          console.log(year);
+          this.ruleForm.weekday = year;
         }
       } else {
+        return;
       }
     },
-    addition() {
+    addition(index) {
+      this.under = index;
       this.titlebar = "添加请假记录";
       this.dateTime = true;
+      //默认获取请假申请日期
+      let yy = new Date().getFullYear();
+      let mm = new Date().getMonth() + 1;
+      let dd = new Date().getDate();
+      let hh = new Date().getHours();
+      let mf =
+        new Date().getMinutes() < 10
+          ? "0" + new Date().getMinutes()
+          : new Date().getMinutes();
+      let ss =
+        new Date().getSeconds() < 10
+          ? "0" + new Date().getSeconds()
+          : new Date().getSeconds();
+      this.gettime = yy + "-" + mm + "-" + dd + " " + hh + ":" + mf + ":" + ss;
+      // console.log(this.gettime);
+      this.ruleForm.formula = this.gettime;
+      // console.log(time);
+      this.notEmpty();
     },
     //清空
     emptyset() {
@@ -670,6 +740,8 @@ export default {
       this.formsearch.getDate = "";
       this.timezone = "";
       this.timezone1 = "";
+      this.classInfo = [];
+      this.builtinclass = "";
       this.getStorage();
     },
     searchBtn() {
@@ -681,6 +753,13 @@ export default {
       } else {
         this.timezone = "";
         this.timezone1 = "";
+      }
+      console.log(this.classInfo.length);
+      if (this.classInfo.length != 0) {
+        this.builtinclass = this.classInfo[2];
+        console.log(this.builtinclass);
+      } else {
+        this.builtinclass = "";
       }
       this.getStorage();
     },
@@ -701,13 +780,13 @@ export default {
           this.getStorage();
         })
         .catch(() => {
-          this.$message.error("确认成功");
+          this.$message.error("确认失败");
         });
     },
     //获取列表
     getStorage() {
       this.loadFlag = true;
-      let urlParams = `?size=${this.m_page.size}&current=${this.m_page.number}&studentName=${this.formsearch.name}&startTimeStr=${this.timezone}&endTimeStr=${this.timezone1}`;
+      let urlParams = `?size=${this.m_page.size}&current=${this.m_page.number}&studentName=${this.formsearch.name}&startTimeStr=${this.timezone}&endTimeStr=${this.timezone1}&classId=${this.builtinclass}`;
       this.$axios
         .get(`api/blade-food/studentleave/page` + urlParams, {})
         .then(res => {
@@ -717,8 +796,24 @@ export default {
           this.m_page.totalElements = res.data.data.total;
         });
     },
+    notEmpty() {
+      this.ruleForm.state = "";
+      this.ruleForm.forgreater = "";
+      // this.ruleForm.formula = "";
+      this.ruleForm.starting = "";
+      this.engine = "上午";
+      this.ruleForm.software = "";
+      this.dauphine = "下午";
+      this.ruleForm.weekday = "";
+      this.ruleForm.between = "";
+      this.ruleForm.relieve = "";
+      this.ruleForm.reason = "";
+      this.ruleForm.bodypart = "";
+      this.ruleForm.newnotes = "";
+    },
     //保存
     cameras(formName) {
+      console.log(this.ruleForm.formula);
       console.log(this.ruleForm.name);
       this.$refs[formName].validate(valid => {
         clearInterval;
@@ -748,6 +843,7 @@ export default {
                 type: "success"
               });
               this.getStorage();
+              this.notEmpty();
               this.dateTime = false;
             })
             .catch(() => {
@@ -792,6 +888,7 @@ export default {
                 type: "success"
               });
               this.getStorage();
+              this.notEmpty();
               this.dateTime = false;
             })
             .catch(() => {
@@ -807,7 +904,8 @@ export default {
       });
     },
     //编辑
-    editorTheme(row) {
+    editorTheme(row, index) {
+      this.under = index;
       this.titlebar = "编辑请假记录";
       this.dateTime = true;
       // console.log(row);
@@ -821,7 +919,7 @@ export default {
           this.bonus = this.dateEnd.id;
           console.log(this.bonus);
           this.agree = this.dateEnd.studentId; //姓名ID
-          this.state = this.dateEnd.stuStr;
+          this.ruleForm.state = this.dateEnd.stuStr;
           this.ruleForm.forgreater = this.dateEnd.leaveType;
           this.ruleForm.formula = this.dateEnd.applyTime; //申请日期
           this.ruleForm.starting = this.dateEnd.startTime; //开始日期
