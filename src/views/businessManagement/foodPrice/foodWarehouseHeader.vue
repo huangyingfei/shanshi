@@ -76,7 +76,7 @@ export default {
       },
     };
   },
-  mounted() {
+  created() {
     this.getFoodTable();
   },
   methods: {

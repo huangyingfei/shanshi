@@ -25,9 +25,9 @@
       <el-table-column label="配送方式" width="120" align="center">
         <template slot-scope="scope">
           <el-select v-model="scope.row.transMode">
-            <el-option label="按天" value="1"></el-option>
-            <el-option label="按周" value="2"></el-option>
-            <el-option label="按月" value="3"></el-option>
+            <el-option label="按天" :value="1"></el-option>
+            <el-option label="按周" :value="2"></el-option>
+            <el-option label="按月" :value="3"></el-option>
           </el-select>
         </template>
       </el-table-column>
@@ -49,7 +49,11 @@
         <template slot-scope="scope">
           <div class="flex-box">
             <label style="white-space: nowrap">1{{ scope.row.unit }}=</label>
-            <el-input v-model="scope.row.convert"></el-input>
+            <el-input-number
+              v-model="scope.row.convert"
+              :controls="false"
+            ></el-input-number>
+            <!-- <el-input v-model="scope.row.convert"></el-input> -->
             <label style="white-space: nowrap">Kg</label>
           </div>
         </template>
@@ -57,7 +61,11 @@
       <el-table-column label="价格" width="150" align="center">
         <template slot-scope="scope">
           <div class="flex-box">
-            <el-input v-model="scope.row.price"></el-input>
+            <!-- <el-input v-model="scope.row.price"></el-input> -->
+            <el-input-number
+              v-model="scope.row.price"
+              :controls="false"
+            ></el-input-number>
             <label style="white-space: nowrap">元/斤</label>
           </div>
         </template>
@@ -107,7 +115,7 @@ export default {
   display: flex;
   align-items: center;
 }
-.flex-box .el-input {
+.flex-box .el-input-number {
   padding: 0px 5px 0px 5px;
 }
 </style>

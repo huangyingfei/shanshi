@@ -48,10 +48,9 @@ export default {
   watch: {
     foodPriceTable: {
       handler: function (val, oldVal) {
+        console.log(this.selUpdate);
         if (!this.selUpdate) {
           this.saveFoodTable();
-        } else {
-          this.selUpdate = false;
         }
       },
       deep: true,
@@ -117,6 +116,9 @@ export default {
         this.foodPriceTable = res.data.data.records;
         this.total = res.data.data.total;
         console.log(res);
+        setTimeout(() => {
+          this.selUpdate = false;
+        }, 1000);
       });
     },
   },
