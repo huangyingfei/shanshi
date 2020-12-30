@@ -12,11 +12,11 @@
         @current-change="currentChange"
       >
         <template slot="search" slot-scope="{ row, size }">
-          <label style="line-height: 32px; padding-right: 12px">关键字：</label>
+          <label style="line-height: 36px; padding-right: 12px">关键字：</label>
           <el-input
             placeholder="请输入微信名、微信号、手机号"
             :size="size"
-            style="width: 220px"
+            style="width: 240px"
             v-model="search.weChat"
           ></el-input>
         </template>
@@ -42,6 +42,8 @@ export default {
         menu: false,
         addBtn: false,
         searchMenuSpan: 6,
+        indexLabel: "序号",
+        size: "medium",
         column: [
           {
             label: "时间",
