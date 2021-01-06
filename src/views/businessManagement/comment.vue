@@ -11,7 +11,7 @@
         @size-change="sizeChange"
         @current-change="currentChange"
       >
-        <template slot="search" slot-scope="{ row, size }">
+        <template slot="search">
           <label style="line-height: 36px; padding-right: 12px">关键字：</label>
           <el-input
             placeholder="请输入微信名、微信号、手机号"

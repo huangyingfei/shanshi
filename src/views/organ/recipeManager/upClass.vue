@@ -13,11 +13,15 @@
           </el-col>
           <el-col span="1"> </el-col>
           <el-col span="5"
-            ><el-button type="primary" size="small">开始升班</el-button>
+            ><el-button type="primary" size="small" @click="upClass"
+              >开始升班</el-button
+            >
           </el-col>
           <el-col span="1"> </el-col>
           <el-col span="5">
-            <el-button type="primary" size="small">撤销上次升班</el-button>
+            <el-button type="primary" size="small" @click="cancelUpClass"
+              >撤销上次升班</el-button
+            >
           </el-col>
         </el-row>
       </template>
@@ -29,8 +33,8 @@
           :dic="scope.parentData"
         ></avue-select>
       </template>
-       <template slot="isGradute" slot-scope="scope">
-         <avue-select
+      <template slot="isGradute" slot-scope="scope">
+        <avue-select
           v-model="scope.isGradute"
           placeholder="请选择内容"
           type="tree"
@@ -38,7 +42,6 @@
         ></avue-select>
       </template>
       <template slot="className" slot-scope="scope">
-
         <avue-input
           v-model="scope.className"
           placeholder="请输入内容"
@@ -58,14 +61,14 @@
 export default {
   data() {
     return {
-      currentDate:new Date(),
+      currentDate: new Date(),
       data: [
         {
           oldParentClassName: "xxx",
           oldClassName: "xxx",
           oldClassAlias: "xxx",
           parentData: [{ label: "是", value: 2 }],
-          isGradute:"",
+          isGradute: "",
           parentId: "1",
           className: "xx",
           classAlias: "xxx",
@@ -74,7 +77,7 @@ export default {
       option: {
         height: "auto",
         addBtn: false,
-        menu:false,
+        menu: false,
         column: [
           {
             label: "升班前年级",
@@ -94,10 +97,10 @@ export default {
             prop: "parentId",
             slot: true,
           },
-           {
+          {
             label: "是否毕业",
             prop: "isGradute",
-            slot:true
+            slot: true,
           },
           {
             label: "升班后班级名称",
@@ -112,6 +115,45 @@ export default {
         ],
       },
     };
+  },
+  mounted() {
+    this.selUpClass();
+  },
+  methods: {
+    //升班
+    upClass() {
+      this.axios({
+        url: "/api/blade-food/class/upClass",
+        method: "get",
+        params: {
+          currentDate: this.currentDate,
+        },
+      }).then((res) => {
+        this.$message({
+          message: "升班成功",
+          type: "sucess",
+        });
+      });
+    },
+    //撤销上次升班
+    cancelUpClass() {
+      this.axios({
+        url: "/api/blade-food/class/cancelUpClass",
+        method: "get",
+      }).then((res) => {
+        this.$message({
+          message: "撤销上次升班成功",
+          type: "sucess",
+        });
+      });
+    },
+    //查询升班班级
+    selUpClass() {
+      this.axios({
+        url: "/api/blade-food/class/cancelUpClass",
+        method: "get",
+      }).then((res) => {});
+    },
   },
 };
 </script>
