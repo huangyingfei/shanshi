@@ -48,7 +48,6 @@ export default {
   watch: {
     foodPriceTable: {
       handler: function (val, oldVal) {
-        console.log(this.selUpdate);
         if (!this.selUpdate) {
           this.saveFoodTable();
         }

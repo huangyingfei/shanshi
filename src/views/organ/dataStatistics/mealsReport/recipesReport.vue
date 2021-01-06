@@ -20,7 +20,7 @@
               :span-method="dtosSpanMethod"
               class="dtosTable"
               :header-cell-style="rowStyle"
-              :cell-stylee="rowStyle"
+              :cell-style="rowStyle"
             >
               <el-table-column
                 label=""
