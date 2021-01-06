@@ -10,21 +10,18 @@
         </div>
       </div>
       <div class="mechanism">
-        <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
         <div class="nism1">
           <div class="ingredients">政府总量</div>
           <div class="food1">{{ this.newhead.gover }}</div>
         </div>
       </div>
       <div class="mechanism">
-        <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
         <div class="nism1">
           <div class="ingredients">食材总量</div>
           <div class="food1">{{ this.newhead.food }}</div>
         </div>
       </div>
       <div class="mechanism">
-        <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
         <div class="nism1">
           <div class="ingredients">菜品总量</div>
           <div class="food1">{{ this.newhead.dish }}</div>
@@ -129,173 +126,173 @@ export default {
     // this.drawLine();
     // this.extract();
     // this.drawPie();
-    setTimeout(() => {
-      this.drawPie();
-      this.extract();
-    }, 1000);
+    // setTimeout(() => {
+    //   this.drawPie();
+    //   this.extract();
+    // }, 1000);
   },
   methods: {
-    extract() {
-      let charts = this.$echarts.init(document.getElementById("mynutrient"));
-      var option = {
-        title: {
-          text: "儿童每人每日营养素提取（DRls）",
-
-          textAlign: "left"
-        },
-        tooltip: {}, //提示层
-        legend: {
-          data: ["name1"]
-        },
-        radar: {
-          name: {
-            textStyle: {
-              color: "#fff", //字体颜色
-              backgroundColor: "#999", //背景色
-              borderRadius: 3, //圆角
-              padding: [3, 5] //padding
-            }
-          },
-          center: ["50%", "50%"],
-          radius: "60%",
-          startAngle: 270,
-          indicator: [
-            {
-              name: "能量",
-              max: 300
-            },
-            {
-              name: "钠",
-              max: 300
-            },
-            {
-              name: "铁",
-              max: 350
-            },
-            {
-              name: "锌",
-              max: 300
-            },
-            {
-              name: "钙",
-              max: 300
-            },
-            {
-              name: "维生素C",
-              max: 300
-            },
-            {
-              name: "维生素B2",
-              max: 300
-            },
-            {
-              name: "维生素B1",
-              max: 300
-            },
-            {
-              name: "维生素A",
-              max: 300
-            },
-            {
-              name: "脂肪",
-              max: 300
-            },
-            {
-              name: "蛋白质",
-              max: 300
-            }
-          ]
-        },
-        series: [
-          {
-            name: "儿童每日进食量",
-            type: "radar",
-            data: [
-              {
-                value: this.greater,
-                name: "儿童每日进食量"
-              }
-            ]
-          }
-        ]
-      };
-      charts.setOption(option);
-    },
-    drawPie() {
-      let charts = this.$echarts.init(document.getElementById("leiDaTu"));
-      var option = {
-        title: {
-          text: "儿童每日进食量",
-
-          textAlign: "left"
-        },
-        tooltip: {}, //提示层
-        legend: {
-          data: ["name1"]
-        },
-        radar: {
-          name: {
-            textStyle: {
-              color: "#fff", //字体颜色
-              backgroundColor: "#999", //背景色
-              borderRadius: 3, //圆角
-              padding: [3, 5] //padding
-            }
-          },
-          center: ["50%", "50%"],
-          radius: "60%",
-          startAngle: 270,
-          indicator: [
-            {
-              name: "谷类",
-              max: 300
-            },
-            {
-              name: "盐",
-              max: 300
-            },
-            {
-              name: "食用油",
-              max: 350
-            },
-            {
-              name: "乳制品",
-              max: 300
-            },
-            {
-              name: "大豆",
-              max: 300
-            },
-            {
-              name: "畜禽肉类",
-              max: 300
-            },
-            {
-              name: "水果",
-              max: 300
-            },
-            {
-              name: "蔬菜",
-              max: 300
-            }
-          ]
-        },
-        series: [
-          {
-            name: "儿童每日进食量",
-            type: "radar",
-            data: [
-              {
-                value: this.today,
-                name: "儿童每日进食量"
-              }
-            ]
-          }
-        ]
-      };
-      charts.setOption(option);
-      // console.log(this.double);
-    },
+    //     extract() {
+    //       let charts = this.$echarts.init(document.getElementById("mynutrient"));
+    //       var option = {
+    //         title: {
+    //           text: "儿童每人每日营养素提取（DRls）",
+    //
+    //           textAlign: "left"
+    //         },
+    //         tooltip: {}, //提示层
+    //         legend: {
+    //           data: ["name1"]
+    //         },
+    //         radar: {
+    //           name: {
+    //             textStyle: {
+    //               color: "#fff", //字体颜色
+    //               backgroundColor: "#999", //背景色
+    //               borderRadius: 3, //圆角
+    //               padding: [3, 5] //padding
+    //             }
+    //           },
+    //           center: ["50%", "50%"],
+    //           radius: "60%",
+    //           startAngle: 270,
+    //           indicator: [
+    //             {
+    //               name: "能量",
+    //               max: 300
+    //             },
+    //             {
+    //               name: "钠",
+    //               max: 300
+    //             },
+    //             {
+    //               name: "铁",
+    //               max: 350
+    //             },
+    //             {
+    //               name: "锌",
+    //               max: 300
+    //             },
+    //             {
+    //               name: "钙",
+    //               max: 300
+    //             },
+    //             {
+    //               name: "维生素C",
+    //               max: 300
+    //             },
+    //             {
+    //               name: "维生素B2",
+    //               max: 300
+    //             },
+    //             {
+    //               name: "维生素B1",
+    //               max: 300
+    //             },
+    //             {
+    //               name: "维生素A",
+    //               max: 300
+    //             },
+    //             {
+    //               name: "脂肪",
+    //               max: 300
+    //             },
+    //             {
+    //               name: "蛋白质",
+    //               max: 300
+    //             }
+    //           ]
+    //         },
+    //         series: [
+    //           {
+    //             name: "儿童每日进食量",
+    //             type: "radar",
+    //             data: [
+    //               {
+    //                 value: this.greater,
+    //                 name: "儿童每日进食量"
+    //               }
+    //             ]
+    //           }
+    //         ]
+    //       };
+    //       charts.setOption(option);
+    //     },
+    //     drawPie() {
+    //       let charts = this.$echarts.init(document.getElementById("leiDaTu"));
+    //       var option = {
+    //         title: {
+    //           text: "儿童每日进食量",
+    //
+    //           textAlign: "left"
+    //         },
+    //         tooltip: {}, //提示层
+    //         legend: {
+    //           data: ["name1"]
+    //         },
+    //         radar: {
+    //           name: {
+    //             textStyle: {
+    //               color: "#fff", //字体颜色
+    //               backgroundColor: "#999", //背景色
+    //               borderRadius: 3, //圆角
+    //               padding: [3, 5] //padding
+    //             }
+    //           },
+    //           center: ["50%", "50%"],
+    //           radius: "60%",
+    //           startAngle: 270,
+    //           indicator: [
+    //             {
+    //               name: "谷类",
+    //               max: 300
+    //             },
+    //             {
+    //               name: "盐",
+    //               max: 300
+    //             },
+    //             {
+    //               name: "食用油",
+    //               max: 350
+    //             },
+    //             {
+    //               name: "乳制品",
+    //               max: 300
+    //             },
+    //             {
+    //               name: "大豆",
+    //               max: 300
+    //             },
+    //             {
+    //               name: "畜禽肉类",
+    //               max: 300
+    //             },
+    //             {
+    //               name: "水果",
+    //               max: 300
+    //             },
+    //             {
+    //               name: "蔬菜",
+    //               max: 300
+    //             }
+    //           ]
+    //         },
+    //         series: [
+    //           {
+    //             name: "儿童每日进食量",
+    //             type: "radar",
+    //             data: [
+    //               {
+    //                 value: this.today,
+    //                 name: "儿童每日进食量"
+    //               }
+    //             ]
+    //           }
+    //         ]
+    //       };
+    //       charts.setOption(option);
+    //       // console.log(this.double);
+    //     },
     fromSearch() {
       this.$axios
         .get(`api/blade-system/tenant/getChildTenant`, {})
@@ -361,7 +358,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 .wel {
   width: 100%;
   height: 100%;

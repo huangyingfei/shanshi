@@ -677,7 +677,7 @@ export default {
           label: "事假"
         },
         {
-          value: "事假",
+          value: "病假",
           label: "病假"
         }
       ],
@@ -709,33 +709,78 @@ export default {
       this.ioimport = true;
       this.fileList = [];
     },
-    //导入Excel
-    importExcel() {
-      // /* 从表生成工作簿对象 */
-      var wb = XLSX.utils.table_to_book(document.querySelector("#out-table"), {
-        raw: true
-      });
-      /* 获取二进制字符串作为输出 */
-      var wbout = XLSX.write(wb, {
-        bookType: "xlsx",
-        bookSST: true,
-        type: "array"
-      });
-      try {
-        FileSaver.saveAs(
-          //Blob 对象表示一个不可变、原始数据的类文件对象。
-          //Blob 表示的不一定是JavaScript原生格式的数据。
-          //File 接口基于Blob，继承了 blob 的功能并将其扩展使其支持用户系统上的文件。
-          //返回一个新创建的 Blob 对象，其内容由参数中给定的数组串联组成。
-          new Blob([wbout], { type: "application/octet-stream" }),
-          //设置导出文件名称
-          "学生出勤管理.xlsx"
-        );
-      } catch (e) {
-        if (typeof console !== "undefined") console.log(e, wbout);
-      }
-      return wbout;
+    async downloadExcel() {},
+    downloadExcel() {
+      let urlParams = `?size=${this.m_page.size}&current=${this.m_page.number}&studentName=${this.formsearch.name}&startTimeStr=${this.timezone}&endTimeStr=${this.timezone1}&classId=${this.builtinclass}`;
+      this.$axios
+        .get(`api/blade-food/studentleave/page` + urlParams, {})
+        .then(res => {
+          // console.log(res);
+          // this.loadFlag = false;
+          this.tableData = res.data.data.records;
+          // this.m_page.totalElements = res.data.data.total;
+        });
     },
+    //导入Excel
+    imgLimit() {
+      require.ensure([], () => {
+        // const { export_json_to_excel } = require("~@/excel/export2Excel"); //这里必须使用绝对路径，使用@/+存放export2Excel的路径
+        const tHeader = [
+          "序号",
+          "姓名",
+          "请假开始日期",
+          "请假结束日期",
+          "请假类型",
+          "请假天数",
+          "请假原因",
+          "申请日期",
+          "创建人",
+          "创建日期",
+          "来源",
+          "状态"
+        ]; //导出表头信息
+        const filterVal = [
+          "studentName",
+          "className",
+          "startTime",
+          "endTime",
+          "leaveType",
+          "daysOff",
+          "reason",
+          "applyTime",
+          "createBy",
+          "createTime",
+          "source",
+          "status"
+        ]; // 导出的表头字段名，需要导出表格字段名
+      });
+    },
+    // importExcel() {
+    //   // /* 从表生成工作簿对象 */
+    //   var wb = XLSX.utils.table_to_book(document.querySelector("#out-table"), {
+    //     raw: true
+    //   });
+    //   /* 获取二进制字符串作为输出 */
+    //   var wbout = XLSX.write(wb, {
+    //     bookType: "xlsx",
+    //     bookSST: true,
+    //     type: "array"
+    //   });
+    //   try {
+    //     FileSaver.saveAs(
+    //       //Blob 对象表示一个不可变、原始数据的类文件对象。
+    //       //Blob 表示的不一定是JavaScript原生格式的数据。
+    //       //File 接口基于Blob，继承了 blob 的功能并将其扩展使其支持用户系统上的文件。
+    //       //返回一个新创建的 Blob 对象，其内容由参数中给定的数组串联组成。
+    //       new Blob([wbout], { type: "application/octet-stream" }),
+    //       //设置导出文件名称
+    //       "学生出勤管理.xlsx"
+    //     );
+    //   } catch (e) {
+    //     if (typeof console !== "undefined") console.log(e, wbout);
+    //   }
+    //   return wbout;
+    // },
     //定义导出Excel表格事件
     exportExcel() {
       this.$axios

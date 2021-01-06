@@ -361,7 +361,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 .wel {
   width: 100%;
   height: 100%;
