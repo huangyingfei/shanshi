@@ -75,7 +75,7 @@ export default {
             span: 8,
           },
           {
-            label: "幼儿号",
+            label: "学号",
             prop: "childNo",
             type:"number",
             rules: [
@@ -211,6 +211,7 @@ export default {
                 trigger: "blur",
               },
             ],
+            disabled: true,
             span: 8,
           },
           {
@@ -218,6 +219,18 @@ export default {
             prop: "classSection",
             disabled: true,
             span: 8,
+          },
+
+          {
+            label: "国籍/地区",
+            prop: "nationality",
+            type: "select",
+            span: 8,
+            dicData: nationality,
+            props: {
+              label: 'label',
+              value: 'label'
+            },
           },
           {
             label: "所在省",
@@ -229,17 +242,6 @@ export default {
               label: "name",
             },
             span: 8,
-          },
-          {
-            label: "国籍/地区",
-            prop: "nationality",
-            type: "select",
-            span: 8,
-            dicData: nationality,
-            props: {
-              label: 'label',
-              value: 'label'
-            },
           },
           {
             label: "现住址",
@@ -269,13 +271,6 @@ export default {
             span: 8,
           },
           {
-            label: "身份证号码",
-            prop: "cardNo",
-            span: 8,
-            minlength:0,
-            maxlength:18
-          },
-          {
             label: "身份证类型",
             prop: "cardType",
             type: "select",
@@ -286,6 +281,14 @@ export default {
               value: 'label'
             },
           },
+          {
+            label: "身份证号码",
+            prop: "cardNo",
+            span: 8,
+            minlength:0,
+            maxlength:18
+          },
+
           {
             label: "户口地址",
             prop: "accountAddress",
@@ -1144,7 +1147,7 @@ export default {
     },
     validateChildNo(rule, value, callback) {
       if (value === ""||value=="undefined"||!value) {
-        callback(new Error("请输入幼儿号"));
+        callback(new Error("请输入学号"));
         this.$set(this.form,"childNo",undefined)
       } else if (this.form.classId === "") {
         callback(new Error("请先选择班级"));
@@ -1163,12 +1166,12 @@ export default {
             } else {
               flag = false;
               this.$set(this.form,"childNo",undefined)
-              callback(new Error("幼儿号重复"));
+              callback(new Error("学号重复"));
             }
           });
         }else{
           this.$set(this.form,"childNo",undefined)
-          callback(new Error("幼儿号需要在15位数以内且是正数"));
+          callback(new Error("学号需要在15位数以内且是正数"));
         }
       }
     },

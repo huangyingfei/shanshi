@@ -420,6 +420,13 @@ export default {
                     value: 4,
                   },
                 ],
+                rules: [
+                  {
+                    required: true,
+                    message: "请输入账号类型",
+                    trigger: "blur",
+                  }
+              ]
               },
               {
                 label: "机构名称",
