@@ -8,14 +8,12 @@
         @openShopTablePrint="openShopTablePrint"
       />
       <shop-table :shopListData="shopListData" ref="shopTable" />
-      <el-dialog
-        title="提示"
-        :visible.sync="dialogVisible"
-        width="90%"
-        :append-to-body="true"
-      >
-        <shop-table-print />
-      </el-dialog>
+
+      <shop-table-print
+        ref="shopPrint"
+        @closeShopPrint="closeShopPrint"
+        :dialogVisible="dialogVisible"
+      />
     </basic-container>
   </div>
 </template>
@@ -33,13 +31,19 @@ export default {
     return {
       shopListData: [],
       shopList: {},
-      dialogVisible: false,
     };
   },
   methods: {
     //打开打印页面弹窗
-    openShopTablePrint() {
-      this.dialogVisible = true;
+    openShopTablePrint(weekObj) {
+      if (weekObj.stockTimeStr) {
+        this.$refs.shopPrint.openShopTablePrint(weekObj.stockTimeStr);
+      } else {
+        this.$message({
+          message: "请选择采购日期",
+          type: "warning",
+        });
+      }
     },
     //获取采购清单数据
     getShopList(params, url) {

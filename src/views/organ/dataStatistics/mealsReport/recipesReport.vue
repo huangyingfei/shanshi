@@ -369,7 +369,7 @@ export default {
     },
     //导出带量食谱报表
     exportRrecipeInfo() {
-      axios({
+      this.axios({
         method: "post",
         url: "/api/blade-food/recipe/export-recipeInfo",
         data: this.foods,
