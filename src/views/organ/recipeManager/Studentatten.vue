@@ -76,23 +76,74 @@
               style="margin-left: 20px"
               type="primary"
               size="medium"
-              @click="emptyset"
-              >导入</el-button
+              icon="el-icon-download"
+              @click="importExcel"
+              >导出</el-button
             >
             <el-button
               style="margin-left: 20px"
-              type="primary"
               size="medium"
-              @click="emptyset"
-              >导出</el-button
+              type="primary"
+              icon="el-icon-upload"
+              @click="osimport"
+              >导入</el-button
             >
           </div></el-col
         >
       </el-row>
+
+      <!-- 添加部门弹框 -->
+      <el-dialog
+        title="导入学生"
+        width="30%"
+        append-to-body
+        :visible.sync="ioimport"
+        :close-on-click-modal="false"
+      >
+        <div>
+          <div>
+            <span>① 下载导入模板</span>
+            <el-button
+              style="margin-left: 20px"
+              type="primary"
+              size="medium"
+              @click="exportExcel"
+              >下载模板</el-button
+            >
+          </div>
+
+          <div class="newbie">
+            <el-upload
+              class="upload-demo"
+              action="api/blade-food/studentleave/import-info"
+              :headers="headerObj"
+              accept=".xlsx"
+              :on-preview="handlePreview"
+              :before-remove="beforeRemove"
+              multiple
+              :limit="1"
+              :on-exceed="handleExceed"
+              :file-list="fileList"
+              :before-upload="beforeUpload"
+              :on-success="handleSuccess"
+              :on-error="handleError"
+            >
+              <span>② 上传导入文件</span>
+              <el-button size="medium" type="primary" style="margin-left: 20px"
+                >点击上传</el-button
+              >
+              <!-- <div slot="tip" class="el-upload__tip">
+                只能上传jpg/png文件，且不超过500kb
+              </div> -->
+            </el-upload>
+          </div>
+        </div>
+      </el-dialog>
       <el-row>
         <el-col :span="24"
           ><div>
             <el-table
+              id="out-table"
               :data="tableData"
               v-loading="loadFlag"
               border
@@ -420,15 +471,25 @@
           </el-form-item> -->
           <el-form-item label="附件上传" style="width: 360px">
             <el-upload
-              action="https://jsonplaceholder.typicode.com/posts/"
+              :class="{ hide: hideUploadEdit }"
+              accept=".jpeg,.jpg,.gif,.png"
+              action="api/blade-resource/oss/endpoint/put-file"
               list-type="picture-card"
+              :limit="1"
+              :file-list="productImgs"
+              :on-exceed="handleExceed"
+              :on-change="handleChangePic"
               :on-preview="handlePictureCardPreview"
+              :before-upload="beforeAvatarUpload"
+              :on-success="handleAvatarSuccess"
               :on-remove="handleRemove"
+              :headers="headerObj"
             >
+              <!-- <img v-if="dialogImageUrl" :src="dialogImageUrl" class="avatar" /> -->
               <i class="el-icon-plus"></i>
             </el-upload>
-            <el-dialog :visible.sync="dialogVisible">
-              <img width="100%" :src="dialogImageUrl" alt="" />
+            <el-dialog append-to-body :visible.sync="dialogVisible">
+              <img width="100%" :src="dialogImageUrl" alt />
             </el-dialog>
           </el-form-item>
         </el-form>
@@ -452,13 +513,27 @@
 </template>
 
 <script>
+// 引入导出Excel表格依赖
+import FileSaver from "file-saver";
+import XLSX from "xlsx";
 export default {
   data() {
     return {
+      headerObj: {
+        "Blade-Auth": ""
+      }, //上传图片请求头
+      fileList: [],
       restaurants: [],
-
+      ioimport: false,
       timeout: null,
+      dialogImageUrl: "", //图片
+      imgLimit: 1, //文件个数
+      hideUploadEdit: false, // 是否隐藏上传按钮
       gmfmcItems: [], // 名称
+      dialogVisible: false,
+      headerObj: {
+        "Blade-Auth": ""
+      }, //上传图片请求头
       formsearch: {
         name: "",
         getDate: "",
@@ -616,6 +691,7 @@ export default {
   beforeMount() {
     this.getToolkit(); //班级渲染
     this.getStorage();
+    this.Takeone();
     // this.getList();
   },
   watch: {},
@@ -623,6 +699,64 @@ export default {
     this.restaurants = this.loadAll();
   },
   methods: {
+    Takeone() {
+      let str = JSON.parse(localStorage.getItem("saber-token"));
+      this.headerObj["Blade-Auth"] = `bearer ${str.content}`;
+      // console.log(this.headerObj);
+    },
+    //导入学生弹框
+    osimport() {
+      this.ioimport = true;
+      this.fileList = [];
+    },
+    //导入Excel
+    importExcel() {
+      // /* 从表生成工作簿对象 */
+      var wb = XLSX.utils.table_to_book(document.querySelector("#out-table"), {
+        raw: true
+      });
+      /* 获取二进制字符串作为输出 */
+      var wbout = XLSX.write(wb, {
+        bookType: "xlsx",
+        bookSST: true,
+        type: "array"
+      });
+      try {
+        FileSaver.saveAs(
+          //Blob 对象表示一个不可变、原始数据的类文件对象。
+          //Blob 表示的不一定是JavaScript原生格式的数据。
+          //File 接口基于Blob，继承了 blob 的功能并将其扩展使其支持用户系统上的文件。
+          //返回一个新创建的 Blob 对象，其内容由参数中给定的数组串联组成。
+          new Blob([wbout], { type: "application/octet-stream" }),
+          //设置导出文件名称
+          "学生出勤管理.xlsx"
+        );
+      } catch (e) {
+        if (typeof console !== "undefined") console.log(e, wbout);
+      }
+      return wbout;
+    },
+    //定义导出Excel表格事件
+    exportExcel() {
+      this.$axios
+        .get(`api/blade-food/studentleave/export-template`, {
+          responseType: "blob"
+        })
+        .then(res => {
+          console.log(res);
+          var blob = new Blob([res.data], {
+            type: "application/octet-stream"
+          }); //type这里表示xlsx类型
+
+          var downloadElement = document.createElement("a");
+          var href = window.URL.createObjectURL(blob); //创建下载的链接
+          downloadElement.href = href;
+          downloadElement.download = "学生出勤管理模板.xlsx"; //下载后文件名
+          document.body.appendChild(downloadElement);
+          downloadElement.click(); //点击下载
+          document.body.removeChild(downloadElement); //下载完成移除元素
+        });
+    },
     handleChange(value) {
       console.log(value);
     },
@@ -972,6 +1106,68 @@ export default {
       this.m_page.size = currSize;
       this.getStorage();
     },
+    //移除图片
+    handleRemove(file, productImgs) {
+      // console.log(file, fileList);
+      this.dialogImageUrl = "";
+      this.hideUploadEdit = productImgs.length >= 1;
+    },
+    //预览图片
+    handlePictureCardPreview(file) {
+      console.log(file.url);
+
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
+    handleChangePic(file, productImgs) {
+      this.hideUploadEdit = productImgs.length >= 1;
+    },
+    handleExceed(files, fileList) {
+      //图片上传超过数量限制
+      this.$message.error("上传图片不能超过1张!");
+      console.log(files, fileList);
+    },
+    // 上传成功
+    handleAvatarSuccess(res, file) {
+      console.log(res);
+      this.dialogImageUrl = URL.createObjectURL(file.raw);
+      this.dialogImageUrl = res.data.link;
+      // this.imageUrl = URL.createObjectURL(file.raw);
+      // this.imageUrl = res.data.link;
+      console.log(this.dialogImageUrl);
+    },
+    beforeAvatarUpload(file) {
+      // const isJPG = file.type === "image/jpeg";
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      // if (!isJPG) {
+      //   this.$message.error("上传图片只能是 JPG 格式!");
+      // }
+      if (!isLt2M) {
+        this.$message.error("上传图片大小不能超过 2MB!");
+      }
+      return isLt2M;
+    },
+    beforeUpload(file) {
+      let extension = file.name.substring(file.name.lastIndexOf(".") + 1);
+      let size = file.size / 1024 / 1024;
+      if (extension !== "xlsx") {
+        this.$message.warning("只能上传后缀是.xlsx的文件");
+      }
+      if (size > 10) {
+        this.$message.warning("文件大小不得超过10M");
+      }
+    },
+    // 文件上传成功
+    handleSuccess(res, file, fileList) {
+      this.$message.success("文件上传成功");
+      this.ioimport = false;
+      this.getStorage();
+    },
+    // 文件上传失败
+    handleError(err, file, fileList) {
+      this.$message.error("文件上传失败");
+    },
     //获取班级
     getToolkit() {
       this.$axios.get(`api/blade-food/class/tree`, {}).then(res => {
@@ -1041,5 +1237,12 @@ export default {
   margin-top: 0px;
   margin-right: 0px;
   margin-bottom: 60px;
+}
+.newbie {
+  height: 100px;
+  margin-top: 20px;
+}
+/deep/ .hide .el-upload--picture-card {
+  display: none;
 }
 </style>

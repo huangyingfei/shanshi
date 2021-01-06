@@ -53,7 +53,7 @@
       </div>
       <!-- 健康指数排行榜 -->
       <div class="recipes">
-        <!-- <div class="chooser">
+        <div class="chooser">
           <el-select clearable v-model="activity" placeholder="请选择">
             <el-option
               v-for="item in options"
@@ -63,7 +63,7 @@
             >
             </el-option>
           </el-select>
-        </div> -->
+        </div>
         <h4 class="welcome1">本周食谱健康指数排行榜</h4>
         <div class="school1" v-for="(item1, i) in getHealth" :key="i">
           <!-- <div class="ranking">1</div> -->
@@ -77,14 +77,14 @@
       <!-- !!! -->
     </div>
     <!-- !echarts图标! -->
-    <!-- <div class="daychart">
+    <div class="daychart">
       <div class="foodinta">
         <div id="leiDaTu" :style="{ width: '500px', height: '500px' }"></div>
       </div>
       <div class="nutrient">
         <div id="mynutrient" :style="{ width: '500px', height: '500px' }"></div>
       </div>
-    </div> -->
+    </div>
     <!-- -->
   </div>
 </template>

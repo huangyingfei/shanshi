@@ -657,7 +657,7 @@ export default {
     Takeone() {
       let str = JSON.parse(localStorage.getItem("saber-token"));
       this.headerObj["Blade-Auth"] = `bearer ${str.content}`;
-      console.log(this.headerObj);
+      // console.log(this.headerObj);
     },
     buttonClick(flat) {
       // console.log(index);
