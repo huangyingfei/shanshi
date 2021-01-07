@@ -30,14 +30,6 @@
           </el-col>
         </el-row>
       </template>
-      <template slot="parentId" slot-scope="scope">
-        <avue-select
-          v-model="scope.parentId"
-          placeholder="请选择内容"
-          type="tree"
-          :dic="scope.parentData"
-        ></avue-select>
-      </template>
       <template slot="isGraduation" slot-scope="scope">
         <avue-select
           v-model="scope.row.isGraduation"
@@ -45,18 +37,6 @@
           type="tree"
           :dic="dic"
         ></avue-select>
-      </template>
-      <template slot="className" slot-scope="scope">
-        <avue-input
-          v-model="scope.className"
-          placeholder="请输入内容"
-        ></avue-input>
-      </template>
-      <template slot="classAlias" slot-scope="scope">
-        <avue-input
-          v-model="scope.classAlias"
-          placeholder="请输入内容"
-        ></avue-input>
       </template>
     </avue-crud>
   </basic-container>
@@ -77,18 +57,7 @@ export default {
           value: 1,
         },
       ],
-      upClassData: [
-        {
-          oldParentClassName: "xxx",
-          oldClassName: "xxx",
-          oldClassAlias: "xxx",
-          parentData: [{ label: "是", value: 2 }],
-          isGradute: "",
-          parentId: "1",
-          className: "xx",
-          classAlias: "xxx",
-        },
-      ],
+      upClassData: [],
       page: {
         pageSize: 20,
         pagerCount: 5,
@@ -104,17 +73,13 @@ export default {
           },
           {
             label: "升班前班级名称",
-            prop: "oldClassName",
+            prop: "className",
           },
           {
             label: "班级别名",
-            prop: "oldClassAlias",
+            prop: "classAlias",
           },
 
-          {
-            label: "升班后年级",
-            prop: "parentId",
-          },
           {
             label: "是否毕业",
             prop: "isGraduation",
@@ -122,13 +87,7 @@ export default {
           },
           {
             label: "升班后班级名称",
-            prop: "className",
-            slot: true,
-          },
-          {
-            label: "升班后班级别名",
-            prop: "classAlias",
-            slot: true,
+            prop: "afterClassName",
           },
         ],
       },
