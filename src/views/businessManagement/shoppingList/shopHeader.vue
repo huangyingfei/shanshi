@@ -25,7 +25,9 @@
         >
       </el-col>
       <el-col :span="2">
-        <el-button style="width: 100%" @click="$emit('openShopTablePrint')"
+        <el-button
+          style="width: 100%"
+          @click="$emit('openShopTablePrint', weekObj)"
           >打印</el-button
         >
       </el-col>

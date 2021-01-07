@@ -485,7 +485,6 @@
               :on-remove="handleRemove"
               :headers="headerObj"
             >
-              <!-- <img v-if="dialogImageUrl" :src="dialogImageUrl" class="avatar" /> -->
               <i class="el-icon-plus"></i>
             </el-upload>
             <el-dialog append-to-body :visible.sync="dialogVisible">
@@ -528,12 +527,11 @@ export default {
       timeout: null,
       dialogImageUrl: "", //图片
       imgLimit: 1, //文件个数
+      productImgs: [],
+      dialogVisible: false,
       hideUploadEdit: false, // 是否隐藏上传按钮
       gmfmcItems: [], // 名称
       dialogVisible: false,
-      headerObj: {
-        "Blade-Auth": ""
-      }, //上传图片请求头
       formsearch: {
         name: "",
         getDate: "",
@@ -709,8 +707,9 @@ export default {
       this.ioimport = true;
       this.fileList = [];
     },
-    async downloadExcel() {},
-    downloadExcel() {
+    // downloadExcel() {},
+    importExcel() {
+      // console.log(123);
       let urlParams = `?size=${this.m_page.size}&current=${this.m_page.number}&studentName=${this.formsearch.name}&startTimeStr=${this.timezone}&endTimeStr=${this.timezone1}&classId=${this.builtinclass}`;
       this.$axios
         .get(`api/blade-food/studentleave/page` + urlParams, {})
@@ -718,18 +717,22 @@ export default {
           // console.log(res);
           // this.loadFlag = false;
           this.tableData = res.data.data.records;
+          this.export2Excel();
           // this.m_page.totalElements = res.data.data.total;
         });
     },
     //导入Excel
-    imgLimit() {
+    export2Excel() {
       require.ensure([], () => {
-        // const { export_json_to_excel } = require("~@/excel/export2Excel"); //这里必须使用绝对路径，使用@/+存放export2Excel的路径
+        const { export_json_to_excel } = require("@/excel/export2Excel"); //这里必须使用绝对路径，使用@/+存放export2Excel的路径
         const tHeader = [
-          "序号",
+          // "序号",
           "姓名",
+          "班级",
           "请假开始日期",
+          "上下午",
           "请假结束日期",
+          "上下午",
           "请假类型",
           "请假天数",
           "请假原因",
@@ -743,7 +746,9 @@ export default {
           "studentName",
           "className",
           "startTime",
+          "startStr",
           "endTime",
+          "endStr",
           "leaveType",
           "daysOff",
           "reason",
@@ -753,7 +758,14 @@ export default {
           "source",
           "status"
         ]; // 导出的表头字段名，需要导出表格字段名
+        const list = this.tableData;
+        const data = this.formatJson(filterVal, list);
+        export_json_to_excel(tHeader, data, "学生出勤管理"); // 导出的表格名称
       });
+    },
+    //格式转换
+    formatJson(filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => v[j]));
     },
     // importExcel() {
     //   // /* 从表生成工作簿对象 */
@@ -921,6 +933,7 @@ export default {
       this.timezone1 = "";
       this.classInfo = [];
       this.builtinclass = "";
+
       this.getStorage();
     },
     searchBtn() {
@@ -989,6 +1002,8 @@ export default {
       this.ruleForm.reason = "";
       this.ruleForm.bodypart = "";
       this.ruleForm.newnotes = "";
+      this.productImgs = [];
+      this.hideUploadEdit = this.productImgs.length >= 1;
     },
     //保存
     cameras(formName) {
@@ -1012,8 +1027,8 @@ export default {
               disease: this.ruleForm.relieve, //症状
               reason: this.ruleForm.reason, //事由
               temperature: this.ruleForm.bodypart, //体温
-              remark: this.ruleForm.newnotes //备注
-              // enclosure:
+              remark: this.ruleForm.newnotes, //备注
+              enclosure: this.dialogImageUrl
             })
             .then(res => {
               // console.log(res);
@@ -1058,7 +1073,8 @@ export default {
               disease: this.ruleForm.relieve, //症状
               reason: this.ruleForm.reason, //事由
               temperature: this.ruleForm.bodypart, //体温
-              remark: this.ruleForm.newnotes //备注
+              remark: this.ruleForm.newnotes, //备注
+              enclosure: this.dialogImageUrl
             })
             .then(res => {
               // console.log(res);
@@ -1111,6 +1127,15 @@ export default {
           this.ruleForm.reason = this.dateEnd.reason;
           this.ruleForm.bodypart = this.dateEnd.temperature;
           this.ruleForm.newnotes = this.dateEnd.remark;
+          let picture = [];
+          if (this.dateEnd.enclosure) {
+            picture[0] = {
+              url: this.dateEnd.enclosure
+            };
+          }
+          this.productImgs = picture;
+          this.hideUploadEdit = this.productImgs.length >= 1;
+          this.dialogImageUrl = this.dateEnd.enclosure;
         });
     },
     //删除
