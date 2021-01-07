@@ -316,6 +316,7 @@
 </template>
 
 <script>
+  import { formateDate } from "@/api/tool/date";
   import foodsWeek from "@/views/recipeManager/foods/components/foodsweek";
   import showfoodsWeek from "@/views/recipeManager/foods/components/showfoodsweek";
   import {mealList,getDishByBaseId,dishDetail,save,detail,update,grantTree} from "@/api/system/meals"
@@ -1085,8 +1086,8 @@
           recipeCycles:recipeCycles,
           isUse:this.WeekInfo.isUse?1:0,
           recipeCategory:1,
-          startTime:this.startTime,
-          endTime:this.endTime,
+          startTime:formateDate(this.startTime, "yyyy-MM-dd HH:mm:ss"),
+          endTime:formateDate(this.endTime, "yyyy-MM-dd HH:mm:ss"),
           isRecommend:this.WeekInfo.isRecommend?1:0
         }
         if(row.recipeName&&row.recipeCycles.length>0&&row.startTime&&!flag&&this.WeekInfo.startAge&&this.WeekInfo.endAge) {
