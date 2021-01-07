@@ -645,6 +645,7 @@
 </template>
 
 <script>
+  import { formateDate } from "@/api/tool/date";
   import nutrition from "@/views/recipeManager/nutrition.vue";
   import noNumRecipe from "@/views/recipeManager/noNumRecipe.vue";
   import foodsWeek from "@/views/foods/components/foodsweek";
@@ -667,6 +668,7 @@
     nutrition,
     noNumRecipe,
   },
+
   mounted(){
     this.initData()
     this.dragFunc("df");
@@ -1896,6 +1898,7 @@ document.oncontextmenu = function(){return false};
           })
         })
       })
+      debugger
       let row={
         recipeName:this.WeekInfo.Weekdetails,
         peopleId:this.WeekInfo.crowd,
@@ -1904,8 +1907,8 @@ document.oncontextmenu = function(){return false};
         recipeCycles:recipeCycles,
         isUse:this.WeekInfo.collection?1:0,
         recipeCategory:1,
-        startTime:this.startTime,
-        endTime:this.endTime,
+        startTime:formateDate(this.startTime, "yyyy-MM-dd HH:mm:ss"),
+        endTime:formateDate(this.endTime, "yyyy-MM-dd HH:mm:ss"),
         isBoard:this.WeekInfo.shareTell?1:0,
         score:this.score
       }
@@ -2223,6 +2226,7 @@ document.oncontextmenu = function(){return false};
         begin_mouth = mouth;
         end_mouth = mouth;
         var StartEliment = document.querySelectorAll(".in-range.start-date");
+        debugger
         var begin_day = StartEliment[0].innerText.trim();
         that.month=begin_mouth+"-"+begin_day+"";
         //判断是否为上一个月

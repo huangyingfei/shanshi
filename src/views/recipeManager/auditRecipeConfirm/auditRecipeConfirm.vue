@@ -688,6 +688,7 @@
 </template>
 
 <script>
+  import { formateDate } from "@/api/tool/date";
   import nutrition from "@/views/recipeManager/nutrition.vue";
   import noNumRecipe from "@/views/recipeManager/noNumRecipe.vue";
   import foodsWeek from "@/views/recipeManager/auditRecipeConfirm/foodsWeek";
@@ -2082,8 +2083,8 @@
         recipeCycles:recipeCycles,
         isUse:this.WeekInfo.collection?1:0,
         recipeCategory:1,
-        startTime:this.startTime,
-        endTime:this.endTime,
+        startTime:formateDate(this.startTime, "yyyy-MM-dd HH:mm:ss"),
+        endTime:formateDate(this.endTime, "yyyy-MM-dd HH:mm:ss"),
         isBoard:this.WeekInfo.shareTell?1:0,
         score:this.score
       }

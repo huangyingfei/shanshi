@@ -977,6 +977,7 @@
 </template>
 
 <script>
+  import { formateDate } from "@/api/tool/date";
 import nutrition from "@/views/recipeManager/nutrition.vue";
 import foodsWeek from "@/views/recipeManager/foods/components/foodsweek";
 import showfoodsWeek from "@/views/recipeManager/foods/components/showfoodsweek";
@@ -2375,8 +2376,8 @@ export default {
         recipeCycles: recipeCycles,
         isUse: this.WeekInfo.isUse ? 1 : 0,
         recipeCategory: 1,
-        startTime: this.startTime,
-        endTime: this.endTime,
+        startTime:formateDate(this.startTime, "yyyy-MM-dd HH:mm:ss"),
+        endTime:formateDate(this.endTime, "yyyy-MM-dd HH:mm:ss"),
         isRecommend: this.WeekInfo.isRecommend ? 1 : 0,
         score: this.score,
       };
