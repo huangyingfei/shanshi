@@ -1,7 +1,12 @@
 <template>
   <basic-container>
-    <avue-crud :option="option" :data="data">
-      <template slot-scope="scope" slot="menuLeft">
+    <avue-crud
+      :option="option"
+      :data="upClassData"
+      :page.sync="page"
+      @on-load="selUpClass"
+    >
+      <template slot="menuLeft">
         <el-row>
           <el-col span="10">
             <avue-date
@@ -33,12 +38,12 @@
           :dic="scope.parentData"
         ></avue-select>
       </template>
-      <template slot="isGradute" slot-scope="scope">
+      <template slot="isGraduation" slot-scope="scope">
         <avue-select
-          v-model="scope.isGradute"
+          v-model="scope.row.isGraduation"
           placeholder="请选择内容"
           type="tree"
-          :dic="scope.parentData"
+          :dic="dic"
         ></avue-select>
       </template>
       <template slot="className" slot-scope="scope">
@@ -62,7 +67,17 @@ export default {
   data() {
     return {
       currentDate: new Date(),
-      data: [
+      dic: [
+        {
+          label: "否",
+          value: 0,
+        },
+        {
+          label: "是",
+          value: 1,
+        },
+      ],
+      upClassData: [
         {
           oldParentClassName: "xxx",
           oldClassName: "xxx",
@@ -74,6 +89,10 @@ export default {
           classAlias: "xxx",
         },
       ],
+      page: {
+        pageSize: 20,
+        pagerCount: 5,
+      },
       option: {
         height: "auto",
         addBtn: false,
@@ -81,7 +100,7 @@ export default {
         column: [
           {
             label: "升班前年级",
-            prop: "oldParentClassName",
+            prop: "startYear",
           },
           {
             label: "升班前班级名称",
@@ -95,11 +114,10 @@ export default {
           {
             label: "升班后年级",
             prop: "parentId",
-            slot: true,
           },
           {
             label: "是否毕业",
-            prop: "isGradute",
+            prop: "isGraduation",
             slot: true,
           },
           {
@@ -116,9 +134,7 @@ export default {
       },
     };
   },
-  mounted() {
-    this.selUpClass();
-  },
+  mounted() {},
   methods: {
     //升班
     upClass() {
@@ -148,11 +164,23 @@ export default {
       });
     },
     //查询升班班级
-    selUpClass() {
+    selUpClass(page) {
+      console.log(page);
       this.axios({
-        url: "/api/blade-food/class/cancelUpClass",
+        url: "/api/blade-food/class/list",
         method: "get",
-      }).then((res) => {});
+        params: {
+          current: page.currentPage,
+          size: page.pageSize,
+        },
+      }).then((res) => {
+        this.upClassData = res.data.data.records;
+        this.page.total = res.data.data.total;
+        //         page: {
+        //   pageSize: 20,
+        //   pagerCount: 5,
+        // },
+      });
     },
   },
 };

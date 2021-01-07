@@ -1,7 +1,27 @@
 <template>
   <div>
     <div>
-      <week></week>
+      <el-row>
+        <el-col :span="6">
+          <week @weekChange="weekChange"></week>
+        </el-col>
+        <el-col :span="2"> </el-col>
+        <el-col :span="12">
+          <label style="font-size: 14px; color: #606266; margin-right: 12px">
+            食谱列表</label
+          >
+          <el-select v-model="recipeValue" placeholder="请选择">
+            <el-option
+              v-for="item in recipeOptions"
+              :key="item.id"
+              :label="item.recipeName"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </el-col>
+      </el-row>
+
       <form method="post" action="#" id="printJS-form">
         <p style="text-align: center; font-weight: bold; font-size: 16px">
           华园健康智慧幼儿园带量食谱
@@ -287,9 +307,6 @@
     <div class="fixed">
       <el-row type="flex" justify="center">
         <el-col :span="4">
-          <el-button @click="nutritionDialogVisible = false">取消</el-button>
-        </el-col>
-        <el-col :span="4">
           <el-button @click="exportRrecipeInfo">导出Excel</el-button>
         </el-col>
         <el-col :span="4">
@@ -318,18 +335,10 @@ export default {
   components: { week },
   data() {
     return {
-      nutritionDialogVisible: false,
-      recipeWidth: "20",
-      calSourceExcelDTOList: [], //配餐能量结构表格
-      foodNutritionExcleDtoList: [], //营养素摄入量
-      powerSourceExcelDtoList: [], //能量来源分布
-      proteinrSourceExcelDtoList: [], //蛋白质来源分布
-      foodAvgPeopleExcelDto: [], //平均每人进食量表格
       dtos: [], //食谱表格
-      foods: {},
-      WeekInfo: {
-        weekType: "7",
-      },
+      WeekInfo: {},
+      recipeOptions: [],
+      recipeValue: "",
     };
   },
   computed: {
@@ -355,53 +364,29 @@ export default {
   },
   mounted() {},
   methods: {
-    dtosSpanMethod({ row, column, rowIndex, columnIndex }) {
-      if (rowIndex == 0 && columnIndex == 1) {
-        console.log(row);
-        console.log(column);
-      }
-    },
     rowStyle() {
       return {
         border: "1px solid black",
-        "background-color": "rgb(255, 255, 255)",
       };
     },
-    //导出带量食谱报表
-    exportRrecipeInfo() {
+    weekChange(WeekInfo) {
+      this.WeekInfo = WeekInfo;
       this.axios({
-        method: "post",
-        url: "/api/blade-food/recipe/export-recipeInfo",
-        data: this.foods,
-        responseType: "blob",
+        method: "get",
+        url: "/api/blade-food/recipe/recipelist",
+        params: { startTime: WeekInfo.startTime, endTime: WeekInfo.endTime },
       }).then((res) => {
-        console.log("res");
-        console.log(res);
-        const { data, headers } = res;
-        const fileName = headers["content-disposition"].replace(
-          /\w+;filename=(.*)/,
-          "$1"
-        );
-        // 此处当返回json文件时需要先对data进行JSON.stringify处理，其他类型文件不用做处理
-        //const blob = new Blob([JSON.stringify(data)], ...)
-        const blob = new Blob([data], { type: "application/octet-stream" });
-        let dom = document.createElement("a");
-        let url = window.URL.createObjectURL(blob);
-        dom.href = url;
-        dom.setAttribute("download", decodeURI(fileName));
-        dom.style.display = "none";
-        document.body.appendChild(dom);
-        dom.click();
-        dom.parentNode.removeChild(dom);
-        window.URL.revokeObjectURL(url);
+        this.recipeOptions = res.data.data;
       });
     },
+    //导出带量食谱报表
+    exportRrecipeInfo() {},
 
     getNutritionDataList(data) {
       console.log(data);
       this.axios({
-        method: "post",
-        url: "/api/blade-food/recipe/getRecipeQuantity",
+        method: "get",
+        url: "/api/blade-food/recipe/recipelist",
         data: data,
       }).then((res) => {
         var dtos = res.data.data.dtos; //食谱表格
@@ -480,5 +465,8 @@ export default {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+}
+.el-table--border {
+  border: 1px solid #000000 !important;
 }
 </style>

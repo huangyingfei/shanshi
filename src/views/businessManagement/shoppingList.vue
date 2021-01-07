@@ -31,13 +31,22 @@ export default {
     return {
       shopListData: [],
       shopList: {},
+      spareNum: 5,
     };
   },
   methods: {
     //打开打印页面弹窗
     openShopTablePrint(weekObj) {
       if (weekObj.stockTimeStr) {
-        this.$refs.shopPrint.openShopTablePrint(weekObj.stockTimeStr);
+        this.shopList.children = this.shopListData;
+        this.shopList.spareNum = this.spareNum;
+        this.axios({
+          url: "/api/blade-food/stock/saveOrUpdate",
+          method: "post",
+          data: this.shopList,
+        }).then((res) => {
+          this.$refs.shopPrint.openShopTablePrint(weekObj);
+        });
       } else {
         this.$message({
           message: "请选择采购日期",
@@ -71,6 +80,7 @@ export default {
     },
     //备用人数值改变
     spareNumChange(num) {
+      this.spareNum = num;
       spareNumChange(num, this.shopListData);
       this.shopListData.forEach((_el) => {
         this.$refs.shopTable.peopleChange("备用", _el.children, num);

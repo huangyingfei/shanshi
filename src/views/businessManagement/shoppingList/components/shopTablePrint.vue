@@ -8,11 +8,8 @@
     >
       <div id="test">
         <form method="post" action="#" id="printJS-form" style="padding: 5px">
-          <h1>2020年9月第2周采购单</h1>
-          <h2>
-            采购单-按天
-            <p>9月14日 至 9月20日</p>
-          </h2>
+          <h2>{{ stockTimeStr }}采购单</h2>
+          <h3>采购单-按天{{ startTime }} 至 {{ endTime }}</h3>
           <el-table
             :data="tableData"
             :span-method="dtosSpanMethod"
@@ -111,14 +108,20 @@ export default {
       headerData: [],
       dialogVisible: false,
       stockTimeStr: "",
+      startTime: "",
+      endTime: "",
+      weekObj: {},
     };
   },
   mounted() {},
   methods: {
-    openShopTablePrint(stockTimeStr) {
-      this.stockTimeStr = stockTimeStr;
+    openShopTablePrint(weekObj) {
+      this.stockTimeStr = weekObj.stockTimeStr;
+      this.startTime = weekObj.startTime.substr(0, 11);
+      this.endTime = weekObj.endTime.substr(0, 11);
       this.dialogVisible = true;
-      this.getPrintData(stockTimeStr);
+      console.log(weekObj);
+      this.getPrintData(weekObj.stockTimeStr);
     },
     rowStyle() {
       return {
@@ -165,5 +168,8 @@ export default {
 }
 .el-table--border {
   border: 1px solid #000000 !important;
+}
+h2 {
+  text-align: center;
 }
 </style>

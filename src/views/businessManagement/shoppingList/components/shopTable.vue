@@ -47,7 +47,13 @@
           </li>
           <li>
             <label>配送时间</label>
-            <el-date-picker v-model="item.deliverTime" type="date" size="small">
+            <el-date-picker
+              v-model="item.deliverTime"
+              type="datetime"
+              size="small"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              default-time="10:00:00"
+            >
             </el-date-picker>
           </li>
           <li>
@@ -133,6 +139,9 @@ export default {
     console.log(this.shopListData.length);
   },
   methods: {
+    dataChange(val) {
+      console.log(val);
+    },
     //展开折叠面板
     listCardsHandle(e) {
       //根据当前点击的dom，获取需要展示隐藏的dom
@@ -182,7 +191,7 @@ ul {
   padding-left: 0px;
   margin-bottom: 0px;
   margin-top: 0px;
-  min-width: 320px;
+  min-width: 340px;
   list-style-type: none;
 }
 ul li {
@@ -206,7 +215,7 @@ li label {
   text-align: center;
 }
 .el-input-number {
-  width: 70px;
+  width: 110px;
   margin-right: 12px;
   margin-left: 12px;
 }
@@ -216,7 +225,7 @@ li label {
   margin-left: 12px;
 }
 .el-date-editor {
-  width: 150px !important;
+  width: 180px !important;
   margin-right: 12px;
   margin-left: 12px;
 }
