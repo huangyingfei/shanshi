@@ -5,32 +5,52 @@
       <div class="mechanism">
         <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
         <div class="nism1">
-          <div class="ingredients">机构总量 559</div>
-          <div class="food1">今日新增 2</div>
+          <div class="ingredients">
+            机构总量 <span>{{ this.newhead.orgCount }}</span>
+          </div>
+          <div class="food1">
+            今日新增 <span>{{ this.newhead.orgAdd }}</span>
+          </div>
         </div>
       </div>
       <div class="mechanism">
         <div class="nism1">
-          <div class="ingredients">政府总量 559</div>
-          <div class="food1">今日新增 2</div>
+          <div class="ingredients">
+            政府总量 <span>{{ this.newhead.goverCount }}</span>
+          </div>
+          <div class="food1">
+            今日新增 <span>{{ this.newhead.goverAdd }}</span>
+          </div>
         </div>
       </div>
       <div class="mechanism">
         <div class="nism1">
-          <div class="ingredients">食材总量 559</div>
-          <div class="food1">今日新增 2</div>
+          <div class="ingredients">
+            食材总量 <span>{{ this.newhead.foodCount }}</span>
+          </div>
+          <div class="food1">
+            今日新增 <span>{{ this.newhead.foodAdd }}</span>
+          </div>
         </div>
       </div>
       <div class="mechanism">
         <div class="nism1">
-          <div class="ingredients">菜品总量 559</div>
-          <div class="food1">今日新增 2</div>
+          <div class="ingredients">
+            菜品总量 <span>{{ this.newhead.dishCount }}</span>
+          </div>
+          <div class="food1">
+            今日新增 <span>{{ this.newhead.dishAdd }}</span>
+          </div>
         </div>
       </div>
       <div class="mechanism">
         <div class="nism1">
-          <div class="ingredients">食谱总量 559</div>
-          <div class="food1">今日新增 2</div>
+          <div class="ingredients">
+            食谱总量 <span>{{ this.newhead.recipeCount }}</span>
+          </div>
+          <div class="food1">
+            今日新增 <span>{{ this.newhead.recipeAdd }}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -42,7 +62,7 @@
           >选择时间:</span
         >
         <el-date-picker
-          v-model="formsearch.getDate"
+          v-model="value1"
           format="yyyy 年 MM 月 dd 日"
           value-format="yyyy-MM-dd"
           type="daterange"
@@ -116,29 +136,160 @@ export default {
   data() {
     return {
       newhead: {
-        organ: "", //机构
-        gover: "", //政府
-        food: "", //食材
-        dish: "", //菜品
-        recipe: "" //食谱
+        dishCount: "", //菜品
+        dishAdd: "", //菜品新增
+        foodCount: "", //食材
+        foodAdd: "", //食材新增
+        goverCount: "", //政府
+        goverAdd: "", //新增
+        orgCount: "", //机构
+        orgAdd: "", //机构新增
+        recipeCount: "", //食谱
+        recipeAdd: "" //新增
+        // organ: "", //机构
+        // organnewest: "", //机构新增
+        // gover: "", //政府
+        // governewest: "", //政府新增
+        // food: "", //食材
+        // foodnewest: "", //食材新增
+        // dish: "", //菜品
+        // dishnewest: "", //菜品新增
+        // recipe: "", //食谱
+        // recipenewest: "" //食谱新增
       },
+      value1: [],
+
       formsearch: {
         getDate: "", //时间
         name: "", //机构名称
         number: "" //时间
-      }
+      },
+      strtotime: "", //
+      quantity: "", //机构数量统计
+
+      timezone: "",
+      timezone1: "", //时间搜索
+      Numbers: [], //数量
+      setDate: [], //日期
+      mappings: {
+        school: "", //学校
+        hospitals: "", //医院
+        catering: "" //餐饮
+      } //机构类型分布图
     };
   },
+  created() {
+    // let d = new Date();
+    // let year1, month1, day1;
+    // [year1, month1, day1] = [d.getFullYear(), d.getMonth(), d.getDate()];
+    // let date1 = new Date(year1, month1, day1, 7);
+    // // console.log(date1);
+    // function checkTime(i) {
+    //   if (i < 10) {
+    //     i = "0" + i;
+    //   }
+    //   return i;
+    // }
+    // var date = new Date(date1);
+    // this.date_value =
+    //   date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+    // console.log(this.date_value);
+    // this.value1.push(this.date_value);
+    // //前一天设定的日期时间
+    // let year2, month2, day2;
+    // d.setTime(d.getTime() - 3600 * 1000 * 24 * 7);
+    // [year2, month2, day2] = [d.getFullYear(), d.getMonth(), d.getDate()];
+    // // var date1 = new Date(date1);
+    // let date2 = new Date(year2, month2, day2, 7);
+    // var calendar = new Date(date2);
+    // this.week =
+    //   calendar.getFullYear() +
+    //   "-" +
+    //   (calendar.getMonth() + 1) +
+    //   "-" +
+    //   calendar.getDate();
+    // console.log(this.week);
+    // this.value1.unshift(this.week);
+  },
+  beforeMount() {
+    this.nsmpsearly();
+    this.Statistics();
+    this.multimap();
+  },
   mounted() {
-    this.extract(); //折线图
+    // setTimeout(() => {
+    //   this.extract(); //折线图
+    // }, 1000);
     this.$nextTick(function() {
-      this.getPie(); //机构类型分布图
+      // this.extract("chartLineBox"); //折线图
+      // this.getPie(); //机构类型分布图
       this.gradschools(); //学校类型分布图
     });
     // this.initialWeek();
     // this.fullLength();
   },
   methods: {
+    //头部请求
+    nsmpsearly() {
+      this.$axios.get(`api/blade-food/report/tenantCount`, {}).then(res => {
+        // console.log(res);
+        this.newhead = res.data.data;
+
+        // console.log(this.newhead);
+      });
+    },
+    //查询
+    searchBtn() {
+      console.log(this.value1);
+      if (this.value1) {
+        this.timezone = this.value1[0];
+        this.timezone1 = this.value1[1];
+      } else {
+        this.timezone = "";
+        this.timezone1 = "";
+      }
+      this.Statistics();
+    },
+    //机构数量统计趋势分析图
+    Statistics() {
+      let urlParams = `?startTime=${this.timezone}&endTime=${this.timezone1}`;
+      this.$axios
+        .get(`api/blade-food/report/tenantAnalyse` + urlParams, {})
+        .then(res => {
+          // console.log(res);
+          this.quantity = res.data.data;
+          console.log(this.quantity);
+          let number = [];
+          let validate = []; //日期
+          this.quantity.forEach((item, index) => {
+            console.log(item);
+            number.push(item.orgNum);
+            validate.push(item.dateStr);
+          });
+          this.Numbers = number;
+          console.log(number);
+          this.setDate = validate;
+          console.log(this.setDate);
+          this.extract("chartLineBox"); //折线图
+        });
+      // this.$nextTick(function() {
+      //   this.extract("chartLineBox"); //折线图
+      // });
+    },
+    //机构类型分布图
+    multimap() {
+      this.$axios.get(`api/blade-food/report/typeAnalyse`, {}).then(res => {
+        // console.log(res);
+        this.maps = res.data.data;
+
+        // force.push(this.maps.hospital, this.maps.restaurant, this.maps.school);
+        // console.log(force);
+        this.mappings.school = this.maps.school;
+        this.mappings.hospitals = this.maps.restaurant;
+        this.mappings.catering = this.maps.hospital;
+        this.getPie(); //机构类型分布图
+      });
+    },
     //折线图
     extract() {
       this.chartLine = this.$echarts.init(
@@ -154,23 +305,16 @@ export default {
 
         legend: {
           //设置区分（哪条线属于什么）
-          data: ["平均成绩", "学生成绩"]
+          data: ["计数"]
         },
-        color: ["#8AE09F", "#FA6F53"], //设置区分（每条线是什么颜色，和 legend 一一对应）
+        color: ["#2A8FF7"], //设置区分（每条线是什么颜色，和 legend 一一对应）
         xAxis: {
           //设置x轴
           type: "category",
           boundaryGap: false, //坐标轴两边不留白
-          data: [
-            "2020-1-1",
-            "2020-2-1",
-            "2020-3-1",
-            "2020-4-1",
-            "2020-5-1",
-            "2020-6-1",
-            "2020-7-1"
-          ],
-          name: "DATE", //X轴 name
+          data: this.setDate,
+
+          name: "日期", //X轴 name
           nameTextStyle: {
             //坐标轴名称的文字样式
             color: "#000",
@@ -200,26 +344,26 @@ export default {
         },
         series: [
           {
-            name: "平均成绩",
-            data: [20, 32, 61, 34, 90, 30, 20],
+            name: "计数",
+            data: this.Numbers,
             type: "line", // 类型为折线图
             lineStyle: {
               // 线条样式 => 必须使用normal属性
               normal: {
-                color: "#8AE09F"
-              }
-            }
-          },
-          {
-            name: "学生成绩",
-            data: [48, 25, 50, 80, 70, 11, 30],
-            type: "line",
-            lineStyle: {
-              normal: {
-                color: "#FA6F53"
+                color: "#2A8FF7"
               }
             }
           }
+          // {
+          //   name: "学生成绩",
+          //   data: [48, 25, 50, 80, 70, 11, 30],
+          //   type: "line",
+          //   lineStyle: {
+          //     normal: {
+          //       color: "#FA6F53"
+          //     }
+          //   }
+          // }
         ]
       };
 
@@ -261,10 +405,10 @@ export default {
             color: "#000",
             fontSize: 16
           },
-          data: ["学校", "——", "医院", "餐饮"] //图例上显示的饼图各模块上的名字
+          data: ["学校", "医院", "餐饮"] //图例上显示的饼图各模块上的名字
         },
         //饼图中各模块的颜色
-        color: ["#69A8E8", "#82B986", "#F4D67C", "#F07F77"],
+        color: ["#69A8E8", "#F4D67C", "#F07F77"],
         // 饼图数据
         series: {
           // name: 'bug分布',
@@ -274,10 +418,10 @@ export default {
           // data:''               //饼图数据
           data: [
             //每个模块的名字和值
-            { name: "学校", value: 36 },
-            { name: "——", value: 27 },
-            { name: "医院", value: 27 },
-            { name: "餐饮", value: 9 }
+            { name: "学校", value: this.mappings.school },
+
+            { name: "医院", value: this.mappings.hospitals },
+            { name: "餐饮", value: this.mappings.catering }
           ],
           itemStyle: {
             normal: {

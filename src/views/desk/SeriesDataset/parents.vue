@@ -22,6 +22,25 @@
       >
       </el-date-picker>
     </div>
+    <!-- 浏览量 -->
+    <div class="browse">
+      <div class="fontify">
+        <div class="fontifytxt">浏览量PV</div>
+        <div class="fontifynum">{{ this.browse.extrapv }}</div>
+      </div>
+      <div class="fontify">
+        <div class="fontifytxt">浏览人数UV</div>
+        <div class="fontifynum">{{ this.browse.visitorsuv }}</div>
+      </div>
+      <div class="fontify">
+        <div class="fontifytxt">总浏览量PV</div>
+        <div class="fontifynum">{{ this.browse.property }}</div>
+      </div>
+      <div class="fontify">
+        <div class="fontifytxt">总浏览人数UV</div>
+        <div class="fontifynum">{{ this.browse.ofcleaning }}</div>
+      </div>
+    </div>
     <div class="linewidth">
       <div id="chartLineBox" style="width: 90%;height: 70vh;"></div>
     </div>
@@ -52,6 +71,12 @@ export default {
         name: "", //机构名称
         number: "" //时间
       },
+      browse: {
+        extrapv: "", //浏览量PV
+        visitorsuv: "", //浏览人数UA
+        property: "", //总浏览量
+        ofcleaning: "" //总浏览人数
+      },
       tableData: [
         {
           date: "2016-05-02",
@@ -69,7 +94,27 @@ export default {
       this.extract(); //机构类型分布图
     });
   },
+  beforeMount() {
+    this.profileuser();
+  },
   methods: {
+    //访问量统计
+    profileuser() {
+      this.$axios.get(`api/blade-food/report/visitCount`, {}).then(res => {
+        // console.log(res);
+        this.offers = res.data.data;
+        // console.log(this.offers);
+        this.browse.extrapv = this.offers.lookPeople; //浏览量
+        this.browse.visitorsuv = this.offers.lookPeopleTotal; //浏览人数
+        this.browse.property = this.offers.looks; //总流量
+        this.browse.ofcleaning = this.offers.looksTotal; //总人数
+        // console.log(this.browse.ofcleaning);
+        let recent = [];
+        this.offers.visitLogVOs.forEach((item, index) => {
+          recent.push(item.dateStr);
+        });
+      });
+    },
     //折线图
     extract() {
       this.chartLine = this.$echarts.init(
@@ -199,6 +244,31 @@ export default {
     font-weight: bold;
     padding-left: 10px;
     margin-bottom: 20px;
+  }
+}
+.browse {
+  width: 100%;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  // background-color: red;
+  .fontify {
+    width: 200px;
+    height: 80px;
+
+    // background-color: red;
+    text-align: center;
+    margin-left: 35px;
+    margin-right: 50px;
+    .fontifytxt {
+      font-size: 14px;
+    }
+    .fontifynum {
+      font-size: 20px;
+      font-weight: bold;
+      padding-top: 10px;
+    }
   }
 }
 </style>

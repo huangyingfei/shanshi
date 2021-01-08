@@ -939,17 +939,17 @@ export default {
     searchBtn() {
       if (this.formsearch.getDate) {
         this.timezone = this.formsearch.getDate[0];
-        console.log(this.timezone);
+        // console.log(this.timezone);
         this.timezone1 = this.formsearch.getDate[1];
-        console.log(this.timezone1);
+        // console.log(this.timezone1);
       } else {
         this.timezone = "";
         this.timezone1 = "";
       }
-      console.log(this.classInfo.length);
+      // console.log(this.classInfo.length);
       if (this.classInfo.length != 0) {
         this.builtinclass = this.classInfo[2];
-        console.log(this.builtinclass);
+        // console.log(this.builtinclass);
       } else {
         this.builtinclass = "";
       }
@@ -1039,10 +1039,10 @@ export default {
               this.getStorage();
               this.notEmpty();
               this.dateTime = false;
-            })
-            .catch(() => {
-              this.$message.error("保存失败");
             });
+          // .catch(() => {
+          //   this.$message.error("保存失败");
+          // });
         } else {
           this.$message({
             message: "信息未填全",
