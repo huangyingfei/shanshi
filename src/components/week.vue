@@ -2,12 +2,14 @@
   <div class="flex-box">
     <label>采购日期</label>
     <div style="position: relative; width: 100%">
-      <el-input
-        placeholder="请选择周期"
-        v-model="WeekInfo.stockTimeStr"
-        suffix-icon="el-icon-date"
-      >
-      </el-input>
+      <slot>
+        <el-input
+          placeholder="请选择周期"
+          v-model="WeekInfo.stockTimeStr"
+          suffix-icon="el-icon-date"
+        >
+        </el-input>
+      </slot>
       <el-date-picker
         v-model="weekValue"
         type="week"

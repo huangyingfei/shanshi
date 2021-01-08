@@ -1,13 +1,10 @@
 <template>
   <basic-container :block="true">
     <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane label="膳食空白表" name="first">膳食空白表</el-tab-pane>
-      <el-tab-pane label="食谱报表" name="second">
+      <el-tab-pane label="食谱报表" name="first">
         <recipes-report> </recipes-report>
       </el-tab-pane>
-      <el-tab-pane label="营养计算" name="third">营养计算</el-tab-pane>
-      <el-tab-pane label="营养统计" name="fourth">营养统计</el-tab-pane>
-      <el-tab-pane label="膳食计划" name="fifth">膳食计划</el-tab-pane>
+      <el-tab-pane label="营养统计" name="second">营养统计</el-tab-pane>
     </el-tabs>
   </basic-container>
 </template>
@@ -19,7 +16,7 @@ export default {
   components: { RecipesReport },
   data() {
     return {
-      activeName: "second",
+      activeName: "first",
     };
   },
   methods: {
