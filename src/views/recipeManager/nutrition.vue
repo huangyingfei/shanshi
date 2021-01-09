@@ -749,7 +749,7 @@ export default {
         let dom = document.createElement("a");
         let url = window.URL.createObjectURL(blob);
         dom.href = url;
-        dom.setAttribute("download", decodeURI(fileName));
+        dom.setAttribute("download", decodeURI("带量食谱报表.xlsx"));
         dom.style.display = "none";
         document.body.appendChild(dom);
         dom.click();

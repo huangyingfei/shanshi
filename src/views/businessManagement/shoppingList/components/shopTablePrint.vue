@@ -153,9 +153,10 @@ export default {
     },
     exportPrintData() {
       exportExcel(
-        this.axios,
+        this,
         { stockTimeStr: this.stockTimeStr },
-        "/api/blade-food/stock/export-stockInfo"
+        "/api/blade-food/stock/export-stockInfo",
+        this.stockTimeStr + "采购单"
       );
     },
   },

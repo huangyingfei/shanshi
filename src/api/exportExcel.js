@@ -1,20 +1,26 @@
 
 
-export function exportExcel(vm, datas, url) {
+export function exportExcel(vm, datas, url, fileName) {
   vm.axios
     .post(url, datas, {
       responseType: "blob"
     })
     .then(res => {
       console.log(res);
+      var headers = res.headers;
       var blob = new Blob([res.data], {
         type: "application/octet-stream"
       }); //type这里表示xlsx类型
-
+      const fileName1 = headers["content-disposition"].replace(
+        /\w+;filename=(.*)/,
+        "$1"
+      );
+      console.log(fileName1);
+      console.log(headers)
       var downloadElement = document.createElement("a");
       var href = window.URL.createObjectURL(blob); //创建下载的链接
       downloadElement.href = href;
-      downloadElement.download = "学生出勤管理模板.xlsx"; //下载后文件名
+      downloadElement.download = fileName + ".xlsx"; //下载后文件名
       document.body.appendChild(downloadElement);
       downloadElement.click(); //点击下载
       document.body.removeChild(downloadElement); //下载完成移除元素

@@ -457,7 +457,8 @@ export default {
       exportExcel(
         this,
         { id: this.recipeId },
-        "/api/blade-food/recipe/recipeReportExport"
+        "/api/blade-food/recipe/recipeReportExport",
+        "食谱报表"
       );
     },
 
