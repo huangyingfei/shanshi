@@ -5,12 +5,12 @@
         <el-row>
           <el-col :span="24"
             ><div>
-              <el-radio v-model="allrules" label="1">按月</el-radio>
-              <el-radio v-model="allrules" label="2">按学期</el-radio>
+              <el-radio v-model="allrules" label="0">按月</el-radio>
+              <el-radio v-model="allrules" label="1">按学期</el-radio>
             </div></el-col
           >
         </el-row>
-        <div v-if="this.allrules == 1">
+        <div v-if="this.allrules == 0">
           <el-row style="margin-top: 20px;font-size:14px">
             <el-col :span="6"
               ><div>
@@ -98,32 +98,54 @@
             <el-col :span="24"
               ><div>
                 <el-table :data="tableData" border style="width: 100%">
-                  <el-table-column prop="date" label="序号" align="center">
+                  <el-table-column
+                    label="序号"
+                    type="index"
+                    width="50"
+                    align="center"
+                  >
                   </el-table-column>
-                  <el-table-column prop="name" label="月度" align="center">
+                  <el-table-column prop="monthy" label="月度" align="center">
                   </el-table-column>
-                  <el-table-column prop="name" label="班级" align="center">
-                  </el-table-column>
-                  <el-table-column prop="name" label="姓名" align="center">
-                  </el-table-column>
-                  <el-table-column prop="name" label="退费类型" align="center">
-                  </el-table-column>
-                  <el-table-column prop="name" label="累计天数" align="center">
+                  <el-table-column prop="className" label="班级" align="center">
                   </el-table-column>
                   <el-table-column
-                    prop="name"
+                    prop="studentName"
+                    label="姓名"
+                    align="center"
+                  >
+                  </el-table-column>
+                  <el-table-column prop="fate" label="累计天数" align="center">
+                  </el-table-column>
+                  <el-table-column
+                    prop="conFate"
+                    label="连续天数"
+                    align="center"
+                  >
+                  </el-table-column>
+                  <el-table-column
+                    prop="refundAmount"
                     label="退膳金额（元）"
                     align="center"
                   >
                   </el-table-column>
-                  <el-table-column prop="name" label="是否退费" align="center">
+                  <el-table-column label="是否退费" align="center">
+                    <template slot-scope="scope">
+                      <el-radio v-model="refundId" :label="scope.row.isRefund"
+                        >是</el-radio
+                      >
+                      <el-radio v-model="refundId" :label="scope.row.isRefund"
+                        >否</el-radio
+                      >
+                    </template>
                   </el-table-column>
-                </el-table></div
-            ></el-col>
+                </el-table>
+              </div></el-col
+            >
           </el-row>
         </div>
         <!--按学期  -->
-        <div v-if="this.allrules == 2">
+        <div v-if="this.allrules == 1">
           <el-row style="margin-top: 20px;font-size:14px">
             <el-col :span="6"
               ><div>
@@ -259,12 +281,12 @@ export default {
   name: "myform",
   data() {
     return {
-      allrules: "1",
+      allrules: "0",
       activeName: "first",
       value2: "",
       name: "",
       value: "",
-
+      refundId: "0", //是否退费
       idSemester: [
         {
           value: "0",
@@ -289,24 +311,35 @@ export default {
           label: "否"
         }
       ],
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎"
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎"
-        }
-      ],
+
+      tableData: [],
+      m_page: {
+        sizes: [10, 20, 40, 50, 100], //每页最大显示数
+        size: 10,
+        totalElements: 0,
+        totalPages: 3,
+        number: 1
+      },
       state: "全部"
     };
   },
   beforeMount() {
     // this.getRules();
+    this.getStorage();
   },
 
   methods: {
+    //获取列表
+    getStorage() {
+      let urlParams = `?size=${this.m_page.size}&current=${this.m_page.number}&type=${this.allrules}`;
+      this.$axios
+        .get(`api/blade-food/returnmeallist/page` + urlParams, {})
+        .then(res => {
+          // console.log(res);
+          this.tableData = res.data.data.records;
+          console.log(this.tableData);
+        });
+    },
     handleClick(tab, event) {
       console.log(tab, event);
     },

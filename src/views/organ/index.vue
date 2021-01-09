@@ -1,18 +1,26 @@
 <template>
   <div class="wel">
     <!-- 总量 -->
+    <div class=""></div>
     <div class="total">
       <div class="mechanism">
         <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
         <div class="nism1">
-          <div class="ingredients">机构总量</div>
+          <div class="ingredients">园所人数</div>
           <div class="food1">{{ this.newhead.organ }}</div>
         </div>
       </div>
       <div class="mechanism">
         <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
         <div class="nism1">
-          <div class="ingredients">政府总量</div>
+          <div class="ingredients">男生人数</div>
+          <div class="food1">{{ this.newhead.organ }}</div>
+        </div>
+      </div>
+      <div class="mechanism">
+        <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
+        <div class="nism1">
+          <div class="ingredients">女生人数</div>
           <div class="food1">{{ this.newhead.gover }}</div>
         </div>
       </div>
@@ -85,7 +93,9 @@
         <div id="mynutrient" :style="{ width: '500px', height: '500px' }"></div>
       </div>
     </div>
-    <!-- -->
+    <!--没有子机构显示当前机构数量统计---雷达图
+        有子机构  有机构选择包括全部 当前机构  子机构  不显示雷达图
+     -->
   </div>
 </template>
 
@@ -375,6 +385,8 @@ export default {
   width: 100%;
   height: 60px;
   background-color: #fff;
+  // background-color: red;
+  // margin-top: 30px;
   display: flex;
   justify-content: space-between;
 }
