@@ -1,7 +1,30 @@
 <template>
   <div class="wel">
     <!-- 总量 -->
-    <div class=""></div>
+    <div class="research">
+      <div class="chooser">
+        <span style="margin-right: 10px;margin-left: 15px;  font-size: 14px;"
+          >机构选择:</span
+        >
+        <el-select clearable v-model="activity" placeholder="请选择">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+        <el-button
+          style="margin-left: 20px"
+          icon="el-icon-search"
+          size="medium"
+          type="primary"
+          @click="searchBtn"
+          >查询</el-button
+        >
+      </div>
+    </div>
     <div class="total">
       <div class="mechanism">
         <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
@@ -61,17 +84,6 @@
       </div>
       <!-- 健康指数排行榜 -->
       <div class="recipes">
-        <div class="chooser">
-          <el-select clearable v-model="activity" placeholder="请选择">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-        </div>
         <h4 class="welcome1">本周食谱健康指数排行榜</h4>
         <div class="school1" v-for="(item1, i) in getHealth" :key="i">
           <!-- <div class="ranking">1</div> -->
@@ -107,11 +119,12 @@ export default {
   data() {
     return {
       newhead: {
-        organ: "", //机构
-        gover: "", //政府
-        food: "", //食材
-        dish: "", //菜品
-        recipe: "" //食谱
+        organ: "", //园所人数
+        boys: "", //男生人数
+        girls: "", //女生人数
+        dish: "", //食材总量
+        recipe: "", //菜品总量
+        recipe: "" //食谱总量
       },
       options: [],
       activity: "",
@@ -128,23 +141,25 @@ export default {
   },
 
   beforeMount() {
-    this.siteheader(); //头部
+    this.fromSearch();
     this.welcomeUser();
     this.HealthBar();
     this.fattyfood();
     this.allchildren();
-    this.fromSearch();
   },
+  created() {},
   mounted() {
     // this.drawLine();
     // this.extract();
     // this.drawPie();
-    setTimeout(() => {
-      this.drawPie();
-      this.extract();
-    }, 1000);
+    this.drawPie();
+    this.extract();
   },
   methods: {
+    searchBtn() {
+      console.log(this.activity);
+      console.log(this.options[0].value);
+    },
     extract() {
       let charts = this.$echarts.init(document.getElementById("mynutrient"));
       var option = {
@@ -316,20 +331,26 @@ export default {
           let second = [];
           this.rsearch.forEach(item => {
             second.push({
-              value: item.tenantId,
+              value: item.tenantIds,
               label: item.tenantName
             });
           });
           this.options = second;
+          this.activity = this.options[0].value;
+          console.log(this.options);
+          this.siteheader(); //头部
         });
     },
     //头部
     siteheader() {
-      this.$axios.get(`api/blade-food/food/getTotal`).then(res => {
-        // console.log(res);
-        this.newhead = res.data.data;
-        // console.log(this.newhead);
-      });
+      let urlParams = `?tenantId=${this.activity}`;
+      this.$axios
+        .get(`api/blade-food/food/getTotalByTenant` + urlParams)
+        .then(res => {
+          console.log(res);
+          // this.newhead = res.data.data;
+          // console.log(this.newhead);
+        });
     },
     //本周最受欢迎菜品
     welcomeUser() {
@@ -596,8 +617,12 @@ export default {
 .chooser {
   width: 400px;
   height: 50px;
-  /* background-color: red; */
-  margin-left: 20px;
-  margin-top: 10px;
+  float: right;
+}
+.research {
+  width: 100%;
+  height: 70px;
+  line-height: 60px;
+  background-color: #fff;
 }
 </style>
