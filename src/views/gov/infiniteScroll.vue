@@ -1,41 +1,52 @@
 <template>
-  <div class="infinite-list-wrapper" style="overflow: auto; height: auto">
-    <ul
-      class="list"
-      v-infinite-scroll="load"
-      infinite-scroll-disabled="disabled"
-    >
-      <li v-for="i in count" class="list-item">{{ i }}</li>
+  <div class="detetion-box" ref="boxScroll">
+    <ul>
+      <li v-for="(item, index) in liArray" :key="index">
+        <slot :liData="item"></slot>
+      </li>
     </ul>
-    <p v-if="loading">加载中...</p>
-    <p v-if="noMore">没有更多了</p>
   </div>
 </template>
 
 <script>
 export default {
+  props: {
+    liType: {
+      type: Number,
+    },
+    liArray: {
+      type: Array,
+    },
+  },
   data() {
-    return {
-      count: 10,
-      loading: false,
-    };
+    return {};
   },
-  computed: {
-    noMore() {
-      return this.count >= 20;
-    },
-    disabled() {
-      return this.loading || this.noMore;
-    },
+  computed: {},
+  mounted() {
+    this.$refs.boxScroll.addEventListener("scroll", this.getData);
   },
+  destroyed() {},
   methods: {
-    load() {
-      this.loading = true;
-      setTimeout(() => {
-        this.count += 2;
-        this.loading = false;
-      }, 1000);
+    getData() {
+      console.log(this.$refs.boxScroll.scrollHeight);
+      console.log(this.$refs.boxScroll.scrollTop);
+      console.log(this.$refs.boxScroll.clientHeight);
+    },
+    ScrollUp() {
+      this.speed = 50;
+      var boxScrollHeight = this.$refs.boxScroll.scrollHeight;
+      var boxScrollTop = this.$refs.boxScroll.scrollTop;
+      var boxClientHeight = this.$refs.boxScroll.clientHeight;
+      if (boxScrollHeight - (boxScrollTop + boxClientHeight) < 100) {
+        this.$emit("scrollUp", this.liType);
+      }
     },
   },
 };
 </script>
+<style scoped>
+.detetion-box {
+  height: inherit;
+  overflow: scroll;
+}
+</style>

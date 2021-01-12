@@ -3,14 +3,19 @@
     <el-row :gutter="20">
       <el-col :span="6">
         <label>选择部门</label>
-        <el-select style="width: 100%">
-          <el-option value=""></el-option>
-        </el-select>
+        <el-cascader
+          v-model="classId"
+          :options="options"
+          :props="{ value: 'id', disabled: 'edisabled' }"
+          @change="getStudentWork"
+          :show-all-levels="false"
+        ></el-cascader>
       </el-col>
       <el-col :span="10">
         <label>时间</label>
         <el-date-picker
-          v-model="value1"
+          v-model="dateRangeValue"
+          value-format="yyyy-MM-dd HH:mm:ss"
           type="daterange"
           range-separator="至"
           start-placeholder="开始日期"
@@ -37,25 +42,70 @@
 </template>
 
 <script>
+import { dateFormat } from "@/util/date.js";
 export default {
   data() {
     return {
       leaveType: {
-        legendData: ["--", "事假", "病假", "其他"],
+        legendData: ["事假", "病假", "其他"],
         seriesData: [],
       },
       leaveSymptoms: {
         legendData: ["--", "事假", "病假", "其他"],
         seriesData: [],
       },
+      dateRangeValue: [],
+      classId: [""],
+      options: [],
     };
   },
   mounted() {
-    this.leaveTypePic();
     this.leaveSymptomsPic();
     this.leaveSymptomsline();
+
+    this.dateRangeDefaultValue();
+    this.getclassTree();
+    this.getStudentWork();
   },
   methods: {
+    //默认时间
+    dateRangeDefaultValue() {
+      const end = new Date();
+      const start = new Date();
+      start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+      this.dateRangeValue = [dateFormat(start), dateFormat(end)];
+    },
+    //获取图表数据
+    getStudentWork() {
+      this.axios({
+        url: "/api/blade-food/report/orgStudentWorkDistri",
+        method: "get",
+        params: {
+          startTime: this.dateRangeValue[0],
+          endTime: this.dateRangeValue[1],
+          classId: this.classId.slice(-1)[0],
+        },
+      }).then((res) => {
+        var result = res.data.data;
+        this.leaveType.seriesData = [
+          { value: result.sjNum, name: "事假" },
+          { value: result.bjNum, name: "病假" },
+          { value: result.otherNum, name: "其他" },
+        ];
+
+        this.leaveTypePic();
+      });
+    },
+    //获取部门级联内容
+    getclassTree() {
+      this.axios({
+        url: "/api/blade-food/class/tree",
+        method: "get",
+      }).then((res) => {
+        this.options = res.data.data[0].children;
+        console.log(this.options);
+      });
+    },
     leaveTypePic() {
       var chartPie = this.$echarts.init(document.getElementById("leaveType"));
 
@@ -67,26 +117,21 @@ export default {
         },
         tooltip: {
           //设置tip提示
-          trigger: "axis",
+          trigger: "item",
+          formatter: "{b}:{c} ({d}%)",
         },
         legend: {
           bottom: 10,
           left: "center",
-          data: ["视频广告", "联盟广告", "邮件营销", "直接访问", "搜索引擎"],
+          data: this.leaveType.legendData,
         },
         series: [
           {
             type: "pie", // 类型为饼图
-            center: ["50%", "50%"],
+            center: ["50%", "45%"],
             radius: "70%",
             selectedMode: "single",
-            data: [
-              { value: 235, name: "视频广告" },
-              { value: 274, name: "联盟广告" },
-              { value: 310, name: "邮件营销" },
-              { value: 335, name: "直接访问" },
-              { value: 400, name: "搜索引擎" },
-            ],
+            data: this.leaveType.seriesData,
           },
         ],
       };

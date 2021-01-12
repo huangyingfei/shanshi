@@ -1,189 +1,73 @@
 <template>
-  <div>
-    <h4>数据看板</h4>
-    <el-row>
-      <el-col :span="6">
-        <label>区域选择</label>
-        <el-cascader
-          :options="options"
-          clearable
-          v-model="region1"
-          @change="cascaderChange"
-        ></el-cascader>
-      </el-col>
-    </el-row>
-    <el-row>
-      <el-col :span="6"> 机构总量 </el-col>
-      <el-col :span="6"> 食材总量 </el-col>
-      <el-col :span="6"> 菜品总量 </el-col>
-      <el-col :span="6"> 食谱总量 </el-col>
-    </el-row>
-    <el-row>
-      <el-col :span="12">
-        <h4>营养素摄入量分析</h4>
-        <div class="input-box">
+  <basic-container>
+    <div>
+      <h4>数据看板</h4>
+      <el-row>
+        <el-col :span="6">
           <label>区域选择</label>
           <el-cascader
-            :options="options"
+            :options="cascaderOptions"
             clearable
             v-model="region1"
             @change="cascaderChange"
           ></el-cascader>
-        </div>
-        <div class="input-box">
-          <label>周期选择</label>
-          <el-radio-group v-model="radio">
-            <el-radio :label="3">日</el-radio>
-            <el-radio :label="6">周</el-radio>
-            <el-radio :label="9">月</el-radio>
-          </el-radio-group>
-        </div>
-        <div id="nutrientLine" style="width: 100%; height: 300px"></div>
-      </el-col>
-      <el-col :span="12">
-        <h4>病假症状排行</h4>
-        <div>
-          <label>区域选择</label>
-          <el-cascader
-            :options="options"
-            clearable
-            v-model="region1"
-            @change="cascaderChange"
-          ></el-cascader>
-        </div>
-        <div id="leaveSymptomsBar" style="width: 100%; height: 300px"></div>
-      </el-col>
-    </el-row>
-    <el-row>
-      <el-col :span="12">
-        <h4>过敏食材分布图</h4>
-        <div class="input-box">
-          <label>区域选择</label>
-          <el-cascader
-            :options="options"
-            clearable
-            v-model="region1"
-            @change="cascaderChange"
-          ></el-cascader>
-        </div>
-        <div class="input-box">
-          <label>机构选择</label>
-          <el-select
-            multiple
-            filterable
-            remote
-            reserve-keyword
-            placeholder="请输入关键词"
-            :remote-method="remoteMethod"
-            :loading="loading"
-          >
-            <el-option> </el-option>
-          </el-select>
-        </div>
-        <div id="allergyFoodRadar" style="width: 100%; height: 350px"></div>
-      </el-col>
-      <el-col :span="12">
-        <h4>学生每人每日营养素提取（DRIs）</h4>
-        <div class="input-box">
-          <label>区域选择</label>
-          <el-cascader
-            :options="options"
-            clearable
-            v-model="region1"
-            @change="cascaderChange"
-          ></el-cascader>
-        </div>
-        <div class="input-box">
-          <label>机构选择</label>
-          <el-select
-            multiple
-            filterable
-            remote
-            reserve-keyword
-            placeholder="请输入关键词"
-            :remote-method="remoteMethod"
-            :loading="loading"
-          >
-            <el-option> </el-option>
-          </el-select>
-        </div>
-        <div style="margin-top: 12px; width: 100%">
-          <label>时间</label>
-          <el-date-picker
-            v-model="value1"
-            type="daterange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-          >
-          </el-date-picker>
-        </div>
-        <div id="everyDayNutrientPic" style="width: 100%; height: 300px"></div>
-      </el-col>
-    </el-row>
-    <el-row>
-      <el-col :span="12">
-        <h4>学生每人每日进食量分布</h4>
-        <div class="input-box">
-          <label>区域选择</label>
-          <el-cascader
-            :options="options"
-            clearable
-            v-model="region1"
-            @change="cascaderChange"
-          ></el-cascader>
-        </div>
-        <div class="input-box">
-          <label>机构选择</label>
-          <el-select
-            multiple
-            filterable
-            remote
-            reserve-keyword
-            placeholder="请输入关键词"
-            :remote-method="remoteMethod"
-            :loading="loading"
-          >
-            <el-option> </el-option>
-          </el-select>
-        </div>
-        <div style="margin-top: 12px; width: 100%">
-          <label>时间</label>
-          <el-date-picker
-            v-model="value1"
-            type="daterange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-          >
-          </el-date-picker>
-        </div>
-        <div id="everyDayEatPic" style="width: 100%; height: 300px"></div>
-      </el-col>
-      <el-col :span="12">
-        <h4>最受欢迎菜品</h4>
-        <div
-          id="everyDayEatPic"
-          style="width: 100%; height: 100px; overflow: auto"
-        >
-          <infinite-scroll />
-        </div>
-      </el-col>
-    </el-row>
-    <el-row>
-      <el-col :span="24">
-        <h4>食谱健康指数排行榜</h4>
-        <div>
-          <div class="die-healthyt-box">
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="6"> 机构总量 </el-col>
+        <el-col :span="6"> 食材总量 </el-col>
+        <el-col :span="6"> 菜品总量 </el-col>
+        <el-col :span="6"> 食谱总量 </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="12">
+          <h4>营养素摄入量分析</h4>
+          <div class="input-box">
             <label>区域选择</label>
             <el-cascader
-              :options="options"
+              :options="cascaderOptions"
               clearable
               v-model="region1"
               @change="cascaderChange"
             ></el-cascader>
           </div>
-          <div class="die-healthyt-box">
+          <div class="input-box">
+            <label>周期选择</label>
+            <el-radio-group v-model="radio">
+              <el-radio :label="3">日</el-radio>
+              <el-radio :label="6">周</el-radio>
+              <el-radio :label="9">月</el-radio>
+            </el-radio-group>
+          </div>
+          <div id="nutrientLine" style="width: 100%; height: 300px"></div>
+        </el-col>
+        <el-col :span="12">
+          <h4>病假症状排行</h4>
+          <div>
+            <label>区域选择</label>
+            <el-cascader
+              :options="cascaderOptions"
+              clearable
+              v-model="region1"
+              @change="cascaderChange"
+            ></el-cascader>
+          </div>
+          <div id="leaveSymptomsBar" style="width: 100%; height: 300px"></div>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="12">
+          <h4>过敏食材分布图</h4>
+          <div class="input-box">
+            <label>区域选择</label>
+            <el-cascader
+              :options="cascaderOptions"
+              clearable
+              v-model="region1"
+              @change="cascaderChange"
+            ></el-cascader>
+          </div>
+          <div class="input-box">
             <label>机构选择</label>
             <el-select
               multiple
@@ -197,7 +81,34 @@
               <el-option> </el-option>
             </el-select>
           </div>
-          <div class="die-healthyt-box">
+          <div id="allergyFoodRadar" style="width: 100%; height: 350px"></div>
+        </el-col>
+        <el-col :span="12">
+          <h4>学生每人每日营养素提取（DRIs）</h4>
+          <div class="input-box">
+            <label>区域选择</label>
+            <el-cascader
+              :options="cascaderOptions"
+              clearable
+              v-model="region1"
+              @change="cascaderChange"
+            ></el-cascader>
+          </div>
+          <div class="input-box">
+            <label>机构选择</label>
+            <el-select
+              multiple
+              filterable
+              remote
+              reserve-keyword
+              placeholder="请输入关键词"
+              :remote-method="remoteMethod"
+              :loading="loading"
+            >
+              <el-option> </el-option>
+            </el-select>
+          </div>
+          <div style="margin-top: 12px; width: 100%">
             <label>时间</label>
             <el-date-picker
               v-model="value1"
@@ -208,20 +119,126 @@
             >
             </el-date-picker>
           </div>
-        </div>
-      </el-col>
-    </el-row>
-    <div style="height: 20px; width: 100%"></div>
-  </div>
+          <div
+            id="everyDayNutrientPic"
+            style="width: 100%; height: 300px"
+          ></div>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="12">
+          <h4>学生每人每日进食量分布</h4>
+          <div class="input-box">
+            <label>区域选择</label>
+            <el-cascader
+              :options="cascaderOptions"
+              clearable
+              v-model="region1"
+              @change="cascaderChange"
+            ></el-cascader>
+          </div>
+          <div class="input-box">
+            <label>机构选择</label>
+            <el-select
+              multiple
+              filterable
+              remote
+              reserve-keyword
+              placeholder="请输入关键词"
+              :remote-method="remoteMethod"
+              :loading="loading"
+            >
+              <el-option> </el-option>
+            </el-select>
+          </div>
+          <div style="margin-top: 12px; width: 100%">
+            <label>时间</label>
+            <el-date-picker
+              v-model="value1"
+              type="daterange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+            >
+            </el-date-picker>
+          </div>
+          <div id="everyDayEatPic" style="width: 100%; height: 300px"></div>
+        </el-col>
+        <el-col :span="12">
+          <h4>最受欢迎菜品</h4>
+          <div
+            id="everyDayEatPic"
+            style="width: 100%; height: 360px; overflow: hidden"
+          >
+            <infinite-scroll>
+              <template v-slot="scope">
+                <li-row :imgurl="scope.liData" />
+              </template>
+            </infinite-scroll>
+          </div>
+        </el-col>
+      </el-row>
+      <el-row style="margin-bottom: 20px">
+        <el-col :span="24">
+          <h4>食谱健康指数排行榜</h4>
+          <div>
+            <div class="die-healthyt-box">
+              <label>区域选择</label>
+              <el-cascader
+                :options="cascaderOptions"
+                clearable
+                v-model="region1"
+                @change="cascaderChange"
+              ></el-cascader>
+            </div>
+            <div class="die-healthyt-box">
+              <label>机构选择</label>
+              <el-select
+                v-model="organName"
+                multiple
+                filterable
+                remote
+                reserve-keyword
+                placeholder="请输入关键词"
+                :remote-method="remoteMethod"
+                :loading="loading"
+              >
+                <el-option> </el-option>
+              </el-select>
+            </div>
+            <div class="die-healthyt-box">
+              <label>时间</label>
+              <el-date-picker
+                v-model="value1"
+                type="daterange"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+              >
+              </el-date-picker>
+            </div>
+          </div>
+          <div
+            id="everyDayEatPic"
+            style="width: 100%; height: inherit; overflow: hidden"
+          >
+            <infinite-scroll />
+          </div>
+        </el-col>
+      </el-row>
+      <div style="height: 20px; width: 100%"></div>
+    </div>
+  </basic-container>
 </template>
 
 <script>
 import infiniteScroll from "./infiniteScroll.vue";
+import LiRow from "./liRow.vue";
 export default {
-  components: { infiniteScroll },
+  components: { infiniteScroll, LiRow },
   data() {
     return {
-      options: [],
+      cascaderOptions: [],
       region1: [],
       count: 10,
       loading: false,
@@ -274,7 +291,7 @@ export default {
           });
 
           // this.$set(this.national, arr)
-          this.options = arr;
+          this.cascaderOptions = arr;
         });
     },
     cascaderChange(val) {
