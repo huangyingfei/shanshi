@@ -27,7 +27,7 @@
             <el-cascader
               :options="cascaderOptions"
               clearable
-              v-model="region1"
+              v-model="nutrientData.region"
               @change="cascaderChange"
             ></el-cascader>
           </div>
@@ -48,7 +48,7 @@
             <el-cascader
               :options="cascaderOptions"
               clearable
-              v-model="region1"
+              v-model="leaveSymptoms.region"
               @change="cascaderChange"
             ></el-cascader>
           </div>
@@ -63,7 +63,7 @@
             <el-cascader
               :options="cascaderOptions"
               clearable
-              v-model="region1"
+              v-model="allergyFood.region"
               @change="cascaderChange"
             ></el-cascader>
           </div>
@@ -90,7 +90,7 @@
             <el-cascader
               :options="cascaderOptions"
               clearable
-              v-model="region1"
+              v-model="everyDayNutrient.region"
               @change="cascaderChange"
             ></el-cascader>
           </div>
@@ -133,7 +133,7 @@
             <el-cascader
               :options="cascaderOptions"
               clearable
-              v-model="region1"
+              v-model="everyDayEat.region"
               @change="cascaderChange"
             ></el-cascader>
           </div>
@@ -166,16 +166,31 @@
         </el-col>
         <el-col :span="12">
           <h4>最受欢迎菜品</h4>
-          <div
-            id="everyDayEatPic"
-            style="width: 100%; height: 360px; overflow: hidden"
-          >
-            <infinite-scroll>
-              <template v-slot="scope">
-                <li-row :imgurl="scope.liData" />
-              </template>
-            </infinite-scroll>
+          <div class="die-healthyt-box">
+            <label>区域选择</label>
+            <el-cascader
+              :options="cascaderOptions"
+              clearable
+              v-model="region1"
+              @change="cascaderChange"
+            ></el-cascader>
           </div>
+          <div class="die-healthyt-box">
+            <label>时间</label>
+            <el-date-picker
+              v-model="value1"
+              type="daterange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+            >
+            </el-date-picker>
+          </div>
+          <infinite-scroll>
+            <template v-slot="scope">
+              <li-row :imgurl="scope.liData" />
+            </template>
+          </infinite-scroll>
         </el-col>
       </el-row>
       <el-row style="margin-bottom: 20px">
@@ -240,6 +255,21 @@ export default {
     return {
       cascaderOptions: [],
       region1: [],
+      nutrientData: {
+        region: "",
+      },
+      leaveSymptoms: {
+        region: "",
+      },
+      allergyFood: {
+        region: "",
+      },
+      everyDayNutrient: {
+        region: "",
+      },
+      everyDayEat: {
+        region: "",
+      },
       count: 10,
       loading: false,
       noMore: false,
@@ -261,6 +291,7 @@ export default {
         this.loading = false;
       }, 2000);
     },
+    //获取区域选择内容
     Provinces() {
       this.$axios
         .get(`api/blade-system/region/selectCityOrProvince`, {
@@ -585,6 +616,54 @@ export default {
       };
       // 使用刚指定的配置项和数据显示图表。
       chartPie.setOption(option);
+    },
+    //获取营养素摄入量分析数据
+    getNutrientLine() {
+      this.axios({
+        url: "",
+        method: "",
+        params: "",
+      }).then((res) => {});
+    },
+    //获取病假症状排行
+    getLeaveSymptomsBar() {
+      this.axios({
+        url: "",
+        method: "",
+        params: "",
+      }).then((res) => {});
+    },
+    //获取过敏食材分布图
+    getAllergyFoodRadar() {
+      this.axios({
+        url: "",
+        method: "",
+        params: "",
+      }).then((res) => {});
+    },
+    //获取学生每人每日营养素提取
+    getEveryDayNutrientPic() {
+      this.axios({
+        url: "",
+        method: "",
+        params: "",
+      }).then((res) => {});
+    },
+    //获取学生每人每日进食量分布
+    getEveryDayEatPic() {
+      this.axios({
+        url: "",
+        method: "",
+        params: "",
+      }).then((res) => {});
+    },
+    //获取学生每人每日营养素提取
+    getEveryDayNutrientPic() {
+      this.axios({
+        url: "",
+        method: "",
+        params: "",
+      }).then((res) => {});
     },
   },
 };

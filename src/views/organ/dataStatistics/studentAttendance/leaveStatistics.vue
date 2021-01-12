@@ -15,7 +15,7 @@
         <label>时间</label>
         <el-date-picker
           v-model="dateRangeValue"
-          value-format="yyyy-MM-dd HH:mm:ss"
+          value-format="yyyy-MM-dd"
           type="daterange"
           range-separator="至"
           start-placeholder="开始日期"
@@ -71,7 +71,10 @@ export default {
       const end = new Date();
       const start = new Date();
       start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-      this.dateRangeValue = [dateFormat(start), dateFormat(end)];
+      this.dateRangeValue = [
+        dateFormat(start, "yyyy-MM-dd"),
+        dateFormat(end, "yyyy-MM-dd"),
+      ];
     },
     getclassTree() {
       this.axios({
