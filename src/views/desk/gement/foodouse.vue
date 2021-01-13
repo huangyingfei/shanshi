@@ -613,7 +613,7 @@ export default {
       rules: {
         name: [{ required: true, message: "请输入活动名称", trigger: "blur" }],
         fooddata: [
-          { required: true, message: "请选择菜品分类", trigger: "change" }
+          { required: true, message: "请选择菜品分类", trigger: "blur" }
         ]
       },
       value1: [], //所属季节
@@ -1089,7 +1089,7 @@ export default {
             this.handler = res.data.data;
             console.log(this.handler);
             this.ruleForm.name = this.handler.dishName; //菜品名字
-            this.ruleForm.fooddata = this.handler.dishPubType; //菜品分类
+            this.ruleForm.fooddata = this.handler.dishType; //菜品分类
             // this.value1.push(this.handler.season); //季节
             if (this.handler.season) {
               this.handler.season.split(",").forEach(item => {
@@ -1382,6 +1382,7 @@ export default {
         .then(res => {
           console.log(res);
           // this.muito();
+          this.padded();
           this.obtains();
           this.$message({
             message: "保存成功",
