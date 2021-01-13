@@ -157,6 +157,14 @@ export default {
             maxlength:5
           },
           {
+            label: "学号",
+            prop: "childNo",
+            search: false,
+            display: false,
+            minlength:0,
+            maxlength:10
+          },
+          {
             label: "性别",
             prop: "sex",
             type: "select",

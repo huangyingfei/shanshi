@@ -1156,8 +1156,26 @@ export default {
             let  data=[];
             intake.mealSelect="推荐范围("+resData.recipeCalDTOList.gl.mealSelect+"%)"
             that.intakeValue.forEach(_=>{
-              data.push({ avg: resData.recipeCalDTOList[_.code].avg,name:_.name,range:resData.recipeCalDTOList.gl.rang_min+"-"+resData.recipeCalDTOList[_.code].rang_max+"("+resData.recipeCalDTOList[_.code].recomRangMin+"-"+resData.recipeCalDTOList[_.code].recomRangMax+")",jl:resData.recipeCalDTOList[_.code].jl,grade:resData.recipeCalDTOList[_.code].grade,point:resData.recipeCalDTOList[_.code].point})
-            })
+              if(_.code=="sl"||_.code=="jg"){
+                data.push({
+                  name: _.name,
+                  range: "适量",
+                  jl: parseFloat(resData.recipeCalDTOList[_.code].jl).toFixed(2),
+                  grade: "OK",
+                  point: 0,
+                  avg: resData.recipeCalDTOList[_.code].avg
+                })
+              }else {
+                data.push({
+                  avg: resData.recipeCalDTOList[_.code].avg,
+                  name: _.name,
+                  range: resData.recipeCalDTOList[_.code].rang_min + "-" + resData.recipeCalDTOList[_.code].rang_max + "(" + resData.recipeCalDTOList[_.code].recomRangMin + "-" + resData.recipeCalDTOList[_.code].recomRangMax + ")",
+                  jl: resData.recipeCalDTOList[_.code].jl,
+                  grade: resData.recipeCalDTOList[_.code].grade,
+                  point: resData.recipeCalDTOList[_.code].point
+                })
+              }
+              })
             intake.data=data;
             intake.avg = "食谱净量(平均年龄"+data[0].avg+")"
             let nutrition = [];
@@ -1229,11 +1247,11 @@ export default {
       if(data.recipeCalDTOList){
         lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["dd"].point);
         lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["gl"].point);
-        lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["jg"].point);
+        // lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["jg"].point);
         lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["rzp"].point);
         lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["sc"].point);
         lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["sg"].point);
-        lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["sl"].point);
+        // lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["sl"].point);
         lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["sy"].point);
         lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["syy"].point);
         lastScore= parseFloat(lastScore)-parseFloat(data.recipeCalDTOList["xql:scp:dl"].point);

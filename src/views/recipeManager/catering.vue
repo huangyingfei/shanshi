@@ -184,23 +184,12 @@
                 type="primary"
                 >保存食谱</el-button
               >
-              <!--<el-button style="margin-left: 10px" size="medium"-->
-              <!--&gt;自动设置油盐糖</el-button-->
-              <!--&gt;-->
-
-              <!--<el-button style="margin-left: 10px" size="medium"-->
-              <!--&gt;自动清除油盐糖</el-button-->
-              <!--&gt;-->
               <el-button
                 style="margin-left: 10px"
                 size="medium"
                 @click="dishClear"
                 >清空</el-button
               >
-
-              <!--<el-button style="margin-left: 10px" size="medium"  @click="allergy()"-->
-              <!--&gt;过敏</el-button>-->
-
               <el-popover placement="right" width="300" trigger="click">
                 <div v-if="foodMutuals.length == 0"><p>无相克食材</p></div>
                 <div v-if="foodMutuals.length > 0">
@@ -476,269 +465,26 @@
         </el-col>
       </el-row>
 
-      <!--<el-row :gutter="20" style="padding: 0px; margin-top: 0px">-->
-      <!--<el-col :span="5">-->
-      <!--<el-card class="box-car" shadow="never">-->
-      <!--<div class="clearfix panel_head">-->
-      <!--<el-button-group>-->
-      <!--<el-button size="small" :class="{'showFoodListColor':!showFoodList}"  @click="showFoodList = false"-->
-      <!--&gt;食谱</el-button-->
-      <!--&gt;-->
-      <!--<el-button size="small"  :class="{'showFoodListColor':showFoodList}"   @click="showFoodList = true"-->
-      <!--&gt;菜品</el-button-->
-      <!--&gt;-->
-      <!--</el-button-group>-->
-      <!--</div>-->
 
-      <!--<el-tabs-->
-      <!--v-show="!showFoodList"-->
-      <!--v-model="activeName"-->
-      <!--&gt;-->
-      <!--&lt;!&ndash;//分享食谱&ndash;&gt;-->
-      <!--<el-tab-pane label="分享食谱" name="first" >-->
-      <!--<div style="margin-top: -5px; padding:5px">-->
-      <!--<el-input-->
-      <!--size="small"-->
-      <!--placeholder="请输入内容"-->
-      <!--v-model="recipeNameSharePub"-->
-      <!--class="input-with-select"-->
-      <!--@change="recipeNameShareSearchPub()">-->
-      <!--</el-input>-->
-      <!--</div>-->
-      <!--<div style="font-size: 10px;margin:0 10px;display: flex;justify-content:space-around">-->
-      <!--<el-link :underline="false" :class="{'recipeColor':recipeSelectPub=='1'}"   @click="recipeNameShareSearchPub('1')">全部</el-link>-->
-      <!--|-->
-      <!--<el-link :underline="false"  :class="{'recipeColor':recipeSelectPub=='2'}"  @click="recipeNameShareSearchPub('2',1)">收藏</el-link>-->
-      <!--</div>-->
-
-      <!--<div style="margin-top: 5px; margin-bottom: 2px">-->
-      <!--&lt;!&ndash;<el-divider></el-divider>&ndash;&gt;-->
-      <!--</div>-->
-
-      <!--<ul class="foodWeekListHis">-->
-      <!--<li  v-for="f in mealListLeft" :key="f.id"  style="font-size: 14px">-->
-      <!--<span  @mouseover="ShowFoodTips($event,f)"  @mouseout="HidenFoodTips($event)">{{f.recipeName}}</span> <img style="width: 20px" @click="mealLoad(f.id,f.recipeName)" src="/img/arrow.png" alt />-->
-      <!--</li>-->
-      <!--</ul>-->
-      <!--</el-tab-pane>-->
-
-      <!--&lt;!&ndash;//个人食谱&ndash;&gt;-->
-      <!--<el-tab-pane label="个人食谱" name="second">-->
-      <!--<div style="margin-top: -5px; padding: 5px">-->
-      <!--<el-input-->
-      <!--size="small"-->
-      <!--placeholder="请输入内容"-->
-      <!--v-model="recipeNameSharePri"-->
-      <!--class="input-with-select"-->
-      <!--@change="recipeNameShareSearchPri()"-->
-      <!--&gt;-->
-      <!--&lt;!&ndash;<el-button slot="append" icon="el-icon-search" @click="recipeNameShareSearchPri()"></el-button>&ndash;&gt;-->
-      <!--</el-input>-->
-      <!--</div>-->
-      <!--<div style="font-size: 10px;margin:0 10px;display: flex;justify-content: space-between">-->
-      <!--<el-link :underline="false"  :class="{'recipeColor':recipeSelectPri=='1'}" @click="recipeNameShareSearchPri('1')">全部</el-link>-->
-      <!--|-->
-      <!--<el-link :underline="false"   :class="{'recipeColor':recipeSelectPri=='2'}" @click="recipeNameShareSearchPri('2',0)">公开</el-link>-->
-      <!--|-->
-      <!--<el-link :underline="false"   :class="{'recipeColor':recipeSelectPri=='3'}" @click="recipeNameShareSearchPri('3',1)">隐藏</el-link>-->
-      <!--</div>-->
-
-      <!--<div style="margin-top: 5px; margin-bottom: 2px">-->
-      <!--&lt;!&ndash;<el-divider></el-divider>&ndash;&gt;-->
-      <!--</div>-->
-
-      <!--<ul class="foodWeekListHis">-->
-      <!--<li  v-for="f in peopleMealListLeft" :key="f.id"  style="font-size: 14px" >-->
-      <!--<span  @mouseover="ShowFoodTips($event,f)"  @mouseout="HidenFoodTips($event)">{{f.recipeName}}</span>  <img style="width: 20px" @click="mealLoad(f.id,f.recipeName)" src="/img/arrow.png" alt />-->
-      <!--</li>-->
-      <!--</ul>-->
-      <!--</el-tab-pane>-->
-      <!--</el-tabs>-->
-
-      <!--&lt;!&ndash;菜品&ndash;&gt;-->
-      <!--<el-tabs-->
-      <!--v-show="showFoodList"-->
-      <!--v-model="activeName2"-->
-      <!--&gt;-->
-      <!--<el-tab-pane label="公共菜品" name="thread">-->
-
-      <!--<div style="margin-top: -5px; padding: 5px">-->
-      <!--<el-input-->
-      <!--size="small"-->
-      <!--placeholder="请输入内容"-->
-      <!--v-model="dishSharePub"-->
-      <!--class="input-with-select"-->
-      <!--@change="dishShareSearchPub()"-->
-      <!--&gt;-->
-      <!--&lt;!&ndash;<el-button slot="append" icon="el-icon-search" ></el-button>&ndash;&gt;-->
-      <!--</el-input>-->
-      <!--</div>-->
-      <!--<div style=" font-size: 10px;margin:0 15px;display: flex;justify-content: space-between">-->
-      <!--<el-link :underline="false"  :class="{'recipeColor':dishSelectPub=='1'}"  @click="dishShareSearchPub('1')">全部</el-link>-->
-      <!--|-->
-      <!--<el-link :underline="false" :class="{'recipeColor':dishSelectPub=='2'}"  @click="dishShareSearchPub('2',0)">常用</el-link>-->
-      <!--</div>-->
-
-      <!--<div style="margin-top: 5px; margin-bottom: 2px">-->
-      <!--&lt;!&ndash;<el-divider></el-divider>&ndash;&gt;-->
-      <!--</div>-->
-
-      <!--<el-tree-->
-      <!--class="filter-tree"-->
-      <!--:data="menuDishList"-->
-      <!--:props="defaultProps"-->
-      <!--default-expand-all-->
-      <!--:filter-node-method="filterNode"-->
-      <!--draggable-->
-      <!--@node-drag-start="foodmenueDragStart"-->
-      <!--:allow-drop="foodmenueDragEnd"-->
-      <!--@node-drag-over="foodmenueDragMove"-->
-
-      <!--&gt;-->
-      <!--</el-tree>-->
-      <!--</el-tab-pane>-->
-      <!--<el-tab-pane label="个人菜品" name="four">-->
-      <!--<div style="margin-top: -5px; padding: 5px">-->
-      <!--<el-input-->
-      <!--size="small"-->
-      <!--placeholder="请输入内容"-->
-      <!--v-model="dishSharePri"-->
-      <!--class="input-with-select"-->
-      <!--@change="dishShareSearchPri()"-->
-      <!--&gt;-->
-      <!--&lt;!&ndash;<el-button slot="append" icon="el-icon-search"></el-button>&ndash;&gt;-->
-      <!--</el-input>-->
-      <!--</div>-->
-      <!--<div style=" font-size: 10px;margin:0 15px;display: flex;justify-content: space-between">-->
-      <!--<el-link :underline="false" :class="{'recipeColor':dishSelectPri=='1'}" @click="dishShareSearchPri('1',2)">全部</el-link>-->
-      <!--|-->
-      <!--<el-link :underline="false" :class="{'recipeColor':dishSelectPri=='2'}"  @click="dishShareSearchPri('2',0)">公开</el-link>-->
-      <!--|-->
-      <!--<el-link :underline="false"  :class="{'recipeColor':dishSelectPri=='3'}"  @click="dishShareSearchPri('3',1)">隐藏</el-link>-->
-      <!--</div>-->
-      <!--<div class="select-item" >-->
-
-      <!--<el-cascader  size="mini"-->
-      <!--:options="belongRegionOption"   style="width: 100px"  v-model="belongRegion" @change="dishShareSearchPri()"-->
-      <!--:props="{ checkStrictly: true,label:'name',value:'code' }"-->
-      <!--clearable></el-cascader>-->
-      <!--<el-select  size="mini" v-model="seasonl"  clearable  style="width: 60px" placeholder="请选择" @change="dishShareSearchPri()">-->
-      <!--<el-option-->
-      <!--v-for="item in seasonlOptions"-->
-      <!--:key="item.value"-->
-      <!--:label="item.label"-->
-      <!--:value="item.value" >-->
-      <!--</el-option>-->
-      <!--</el-select>-->
-      <!--<el-select size="mini"  v-model="isUse"  clearable  style="width: 70px"  placeholder="请选择" @change="dishShareSearchPri()">-->
-      <!--<el-option-->
-      <!--v-for="item in isUseOptions"-->
-      <!--:key="item.value"-->
-      <!--:label="item.label"-->
-      <!--:value="item.value"-->
-      <!--&gt;-->
-      <!--</el-option>-->
-      <!--</el-select>-->
-      <!--</div>-->
-
-      <!--<div style="margin-top: 5px; margin-bottom: 2px">-->
-      <!--&lt;!&ndash;<el-divider></el-divider>&ndash;&gt;-->
-      <!--</div>-->
-      <!--<el-tree-->
-      <!--class="filter-tree"-->
-      <!--:data="personMenuDishList"-->
-      <!--:props="defaultProps"-->
-      <!--default-expand-all-->
-      <!--:filter-node-method="filterNode"-->
-      <!--draggable-->
-      <!--@node-drag-start="foodmenueDragStart"-->
-      <!--:allow-drop="foodmenueDragEnd"-->
-      <!--@node-drag-over="foodmenueDragMove"-->
-      <!--&gt;-->
-      <!--</el-tree>-->
-      <!--</el-tab-pane>-->
-      <!--</el-tabs>-->
-
-      <!--</el-card>-->
-      <!--</el-col>-->
-      <!--<el-col :span="19">-->
-      <!--<div class="foodPanel"  @mouseover="HidenFoodTips($event)">-->
-      <!--<foods-week-->
-      <!--@childfn="parentFn"-->
-      <!--@jundgeFood="jundgeFood"-->
-      <!--:headers="headers"-->
-      <!--:datas="datas"-->
-      <!--days="5"-->
-      <!--:score="score"-->
-      <!--:crowd="WeekInfo.crowd"-->
-      <!--:dragnode="drogNode"-->
-      <!--ref="child"-->
-      <!--:foodMutuals="foodMutuals"-->
-      <!--&gt;-->
-      <!--</foods-week>-->
-      <!--</div>-->
-      <!--</el-col>-->
-
-      <!--</el-row>-->
       <div id="df" class="scores">
-        <div v-if="parseFloat(score) >= 85" class="scores1">
+        <div v-if="parseFloat(score)>=90" class="scores-same scores-youxiu" >
           <div class="scores3">
-            <p class="gnus" @click="tfractio">{{ score }}</p>
-            <p class="scorefor">分</p>
-          </div>
-          <div class="scores2">
-            <div class="scores2-item">
-              <img class="picture" src="/img/fenshu.png" alt="" />
-              <p class="vertical">{{ scoreTitle }}</p>
-            </div>
-            <p
-              v-show="parseFloat(scxjSc) != 0 && parseFloat(scxjSc) < 0"
-              class="scores2-item2"
-            >
-              <img src="/img/arrowdown.png" width="20px" height="20px" /><span
-                style="height: 20px; line-height: 20px; margin-top: 0px"
-                >{{ scxjSc }}</span
-              >
-            </p>
-            <p
-              v-show="parseFloat(scxjSc) != 0 && parseFloat(scxjSc) > 0"
-              class="scores2-item2"
-            >
-              <img src="/img/arrowup.png" width="20px" height="20px" /><span
-                style="height: 20px; line-height: 20px; margin-top: 0px"
-                >{{ scxjSc }}</span
-              >
-            </p>
+            <p class="gnus" @click="tfractio">{{score}}<span class="gnus-fen">分</span></p>
           </div>
         </div>
-        <div v-if="parseFloat(score) < 85" class="scores1-1">
+        <div v-if="parseFloat(score)<90&&parseFloat(score)>=85" class="scores-same scores-hege" >
           <div class="scores3">
-            <p class="gnus" @click="tfractio">{{ score }}</p>
-            <p class="scorefor">分</p>
+            <p class="gnus" @click="tfractio">{{score}}<span class="gnus-fen">分</span></p>
+          </div>
+        </div>
+        <div v-if="parseFloat(score)<85"  class="scores-same scores-buhege">
+          <div class="scores3" style="color: #dd6161">
+            <p class="gnus"   @click="tfractio">{{score}}<span class="gnus-fen" style="color: #dd6161">分</span></p>
           </div>
           <div class="scores2">
-            <div class="scores2-item">
-              <img class="picture" src="/img/fenshu2.png" alt="" />
-              <p class="vertical" style="color: #d94d00">{{ scoreTitle }}</p>
-            </div>
-            <p
-              v-show="parseFloat(scxjSc) != 0 && parseFloat(scxjSc) < 0"
-              class="scores2-item2"
-            >
-              <img src="/img/arrowdown.png" width="20px" height="20px" /><span
-                style="height: 20px; line-height: 20px; margin-top: 0px"
-                >{{ scxjSc }}</span
-              >
-            </p>
-            <p
-              v-show="parseFloat(scxjSc) != 0 && parseFloat(scxjSc) > 0"
-              class="scores2-item2"
-            >
-              <img src="/img/arrowup.png" width="20px" height="20px" /><span
-                style="height: 20px; line-height: 20px; margin-top: 0px"
-                >{{ scxjSc }}</span
-              >
-            </p>
+            <p class="gnus-fen" style="color: #dd6161;margin-top: 35px"><span>离</span><span class="gnus-hege">合格</span>
+              <br>
+              <span class="gnus-fen" style="color: #dd6161">需提升{{(85-score).toFixed(2)}}分！</span> </p>
           </div>
         </div>
       </div>
@@ -852,73 +598,24 @@
         </div>
 
         <div class="scores">
-          <!--<div class="scores1">-->
-          <!--<div class="scores3">-->
-          <!--<p class="gnus">{{peipScore}}</p>-->
-          <!--<p class="scorefor">分</p>-->
-          <!--</div>-->
-          <!--<div class="scores2">-->
-          <!--<img class="picture" src="/img/fenshu.png" alt="" />-->
-          <!--<p class="vertical">{{scoreTitle}}</p>-->
-          <!--</div>-->
-          <!--</div>-->
-          <div v-if="parseFloat(peipScore) >= 85" class="scores1">
+          <div v-if="parseFloat(peipScore)>=90" class="scores-same scores-youxiu">
             <div class="scores3">
-              <p class="gnus">{{ peipScore }}</p>
-              <p class="scorefor">分</p>
-            </div>
-            <div class="scores2">
-              <div class="scores2-item">
-                <img class="picture" src="/img/fenshu.png" alt="" />
-                <p class="vertical">{{ scoreTitle }}</p>
-              </div>
-              <p
-                v-show="parseFloat(ppscxjSc) != 0 && parseFloat(ppscxjSc) < 0"
-                class="scores2-item2"
-              >
-                <img src="/img/arrowdown.png" width="20px" height="20px" /><span
-                  style="height: 20px; line-height: 20px; margin-top: 0px"
-                  >{{ ppscxjSc }}</span
-                >
-              </p>
-              <p
-                v-show="parseFloat(ppscxjSc) != 0 && parseFloat(ppscxjSc) > 0"
-                class="scores2-item2"
-              >
-                <img src="/img/arrowup.png" width="20px" height="20px" /><span
-                  style="height: 20px; line-height: 20px; margin-top: 0px"
-                  >{{ ppscxjSc }}</span
-                >
-              </p>
+              <p class="gnus">{{peipScore}}<span class="gnus-fen">分</span></p>
             </div>
           </div>
-          <div v-if="parseFloat(peipScore) < 85" class="scores1-1">
+          <div v-if="parseFloat(score)<90&&parseFloat(score)>=85" class="scores-same scores-hege" >
             <div class="scores3">
-              <p class="gnus">{{ peipScore }}</p>
-              <p class="scorefor">分</p>
+              <p class="gnus">{{peipScore}}<span class="gnus-fen">分</span></p>
+            </div>
+          </div>
+          <div v-if="parseFloat(peipScore)<85"  class="scores-same scores-buhege">
+            <div class="scores3"  style="color: #dd6161">
+              <p class="gnus" >{{peipScore}}<span class="gnus-fen" style="color: #dd6161">分</span></p>
             </div>
             <div class="scores2">
-              <div class="scores2-item">
-                <img class="picture" src="/img/fenshu2.png" alt="" />
-                <p class="vertical" style="color: #d94d00">{{ scoreTitle }}</p>
-              </div>
-              <p
-                v-show="parseFloat(ppscxjSc) != 0 && parseFloat(ppscxjSc) < 0"
-                class="scores2-item2"
-              >
-                <img src="/img/arrowdown.png" width="20px" height="20px" /><span
-                  style="height: 20px; line-height: 20px; margin-top: 0px"
-                  >{{ ppscxjSc }}</span
-                >
-              </p>
-              <p
-                v-show="parseFloat(ppscxjSc) != 0 && parseFloat(ppscxjSc) > 0"
-                class="scores2-item2"
-              >
-                <img src="/img/arrowup.png" width="20px" height="20px" /><span
-                  style="height: 20px; line-height: 20px; margin-top: 0px"
-                  >{{ ppscxjSc }}</span
-                >
+              <p class="gnus-fen" style="color: #dd6161;margin-top: 35px"><span>离</span><span class="gnus-hege">合格</span>
+                <br>
+                <span class="gnus-fen" style="color: #dd6161">需提升{{(85-score).toFixed(2)}}分！</span>
               </p>
             </div>
           </div>
@@ -930,48 +627,7 @@
         ref="children2"
       >
       </noNumRecipe>
-      <!-- 智能配平弹框结束 -->
 
-      <!--&lt;!&ndash;过敏&ndash;&gt;-->
-      <!--<el-dialog-->
-      <!--title="食物过敏"-->
-      <!--append-to-body-->
-      <!--:visible.sync="jundgeallergy"-->
-      <!--:close-on-click-modal="false"-->
-      <!--&gt;-->
-      <!--<div class="item-allergy">-->
-      <!--<el-table  :span-method="objectSpanMethod"-->
-      <!--:data="tableData"-->
-      <!--border-->
-      <!--style="width: 100%; margin-top: 20px">-->
-      <!--<el-table-column-->
-      <!--prop="className"-->
-      <!--label="班级"-->
-      <!--width="180">-->
-      <!--</el-table-column>-->
-      <!--<el-table-column-->
-      <!--prop="studentName"-->
-      <!--label="姓名">-->
-      <!--</el-table-column>-->
-      <!--<el-table-column-->
-      <!--prop="dishName"-->
-      <!--label="菜品">-->
-      <!--</el-table-column>-->
-      <!--<el-table-column-->
-      <!--prop="foodName"-->
-      <!--label="食材">-->
-      <!--</el-table-column>-->
-      <!--<el-table-column-->
-      <!--prop="symptom"-->
-      <!--label="过敏症状">-->
-      <!--</el-table-column>-->
-      <!--</el-table>-->
-      <!--</div>-->
-
-      <!--<div slot="footer" class="dialog-footer">-->
-      <!--<el-button @click="jundgeallergy=false" type="primary">确 定</el-button>-->
-      <!--</div>-->
-      <!--</el-dialog>-->
     </div>
   </basic-container>
 </template>
@@ -1430,29 +1086,6 @@ export default {
       that.ShowWeekSelect();
       that.SelectWeek(new Date());
       that.$refs.refweekSelect.hidePicker();
-      //   detailByPeopleId(this.WeekInfo.crowd).then(res=>{
-      // //    debugger
-      //     let arr= [];
-      //     if(res.data.data.defaultMeal){
-      //       let defaultMeal= res.data.data.defaultMeal.split(",")
-      //       for(let i=0;i<defaultMeal.length;i++){
-      //         arr.push(defaultMeal[i])
-      //       }
-      //     }
-      //     // for(let i=0;i< that.WeekInfo.foodCatalog.length;i++){
-      //     //   if(arr.indexOf(parseInt(that.getmealTypeData(that.WeekInfo.foodCatalog[i])))==-1){
-      //     //     arr.push(parseInt(that.getmealTypeData(that.WeekInfo.foodCatalog[i])))
-      //     //   }
-      //     // }
-      //     // arr.sort()
-      //     let foodCatalog= []
-      //     for(let i=0;i<arr.length;i++){
-      //   //    debugger
-      //       foodCatalog.push(that.getmealTypeDataValue(arr[i]))
-      //     }
-      //     that.WeekInfo.foodCatalog=foodCatalog;
-
-      // })
     },
     recipeNameShareSearchPub(recipeSelect, isPub, isUse) {
       if (recipeSelect) {
@@ -1472,22 +1105,6 @@ export default {
         this.mealListLeft = res.data.data;
       });
     },
-    // recipeNameShareSearchPri(recipeSelectPri,isPub){
-    //   // debugger
-    //   if(recipeSelectPri){
-    //     this.recipeSelectPri=recipeSelectPri;
-    //   }else{
-    //     if( this.recipeSelectPri=='2'){
-    //       isPub='0';
-    //     }
-    //     if( this.recipeSelectPri=='3'){
-    //       isPub='1';
-    //     }
-    //   }
-    //     mealList(2,isPub,this.recipeNameSharePri,1).then(res=>{
-    //       this.peopleMealListLeft=res.data.data;
-    //     })
-    // },
     mealLoad(id, name) {
       let that = this;
       if (this.WeekInfo.weekValue) {
@@ -1526,6 +1143,7 @@ export default {
             }
           }
           arr.sort();
+
           let foodCatalog = [];
           for (let i = 0; i < arr.length; i++) {
             foodCatalog.push(that.getmealTypeDataValue(arr[i]));
@@ -1601,16 +1219,14 @@ export default {
           });
           let arr = Array.from(new Set(mealsType));
           for (let i = 0; i < that.WeekInfo.foodCatalog.length; i++) {
-            if (
-              arr.indexOf(
-                parseInt(that.getmealTypeData(that.WeekInfo.foodCatalog[i]))
-              ) == -1
+            if (arr.indexOf(parseInt(that.getmealTypeData(that.WeekInfo.foodCatalog[i]))) == -1
             ) {
               arr.push(
                 parseInt(that.getmealTypeData(that.WeekInfo.foodCatalog[i]))
               );
             }
           }
+          debugger
           arr.sort();
           let foodCatalog = [];
           for (let i = 0; i < arr.length; i++) {
@@ -1787,46 +1403,6 @@ export default {
       });
     },
 
-    // dishShareSearchPri(dishSelectPri,typeTemp){
-    //   //私人
-    //   if(dishSelectPri){
-    //     this.dishSelectPri=dishSelectPri;
-    //   }else{
-    //     if(this.dishSelectPri=='1'){
-    //     }
-    //     if(this.dishSelectPri=='2'){
-    //       typeTemp=0
-    //     }
-    //     if(this.dishSelectPri=='3'){
-    //       typeTemp=1
-    //     }
-    //   }
-    //   let dishSharePri= this.dishSharePri?this.dishSharePri:undefined;
-    //   let belongRegion= this.belongRegion?this.belongRegion[0]:undefined;
-    //   let seasonl= this.seasonl?this.seasonl:undefined;
-    //   let isUse= (this.isUse||this.isUse==0)&&this.isUse!=""?this.isUse:undefined;
-    //   // debugger
-    //   getDishByBaseId(0,typeTemp,dishSharePri,belongRegion,seasonl,isUse).then(res=>{
-    //     if(res.data.success){
-    //       let data=[];
-    //       res.data.data.forEach(_=>{
-    //         let item={};
-    //         item["id"]=_.id;
-    //         item["label"]=_.typeName;
-    //         let children=[];
-    //         _.dishes.forEach(__=>{
-    //           let item1={};
-    //           item1["id"]=__.id;
-    //           item1["label"]=__.dishName;
-    //           children.push(item1)
-    //         })
-    //         item["children"]=children
-    //         data.push(item)
-    //       })
-    //       this.personMenuDishList=data;
-    //     }
-    //   })
-    // },
     initData() {
       this.initMealData();
       let that = this;
@@ -1835,14 +1411,7 @@ export default {
         that.id = this.$route.query.userid;
         that.mealDetail(that.$route.query.userid, that);
       }
-      // getList().then(res=>{
-      //   this.crowdData=res.data.data;
-      //   this.WeekInfo.crowd=this.crowdData[0].id;
-      //
-      // })
       this.dishShareSearchPub();
-      // this.dishShareSearchPri()
-
       grantTree().then((res) => {
         res.data.data.forEach((_) => {
           if (_.children) {
@@ -2891,66 +2460,50 @@ export default {
   right: 30px;
   z-index: 999;
 }
-.scores3 {
-  width: 100px;
+.scores3{
+  width: 128px;
 }
-.scores1-1 {
-  width: 216px;
-  height: 102px;
-  /* background-color: yellow; */
-  background-image: url("/img/yuan1.png");
+.scores-same{
+  width: 250px;
+  height: 132px;
+  color: #FFFFFF;
   background-size: 100% 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content:space-between;
 }
-.scores1 {
-  width: 216px;
-  height: 102px;
+.scores-youxiu{
   /* background-color: yellow; */
-  background-image: url("/img/yuan.png");
-  background-size: 100% 100%;
-  display: flex;
-  justify-content: space-between;
+  background-image: url("/img/youxiu.png");
 }
-.scores2-item {
-  display: flex;
-  flex-direction: row;
+.scores-buhege {
+  background-image: url("/img/buhege.png");
 }
-.scores2-item2 {
-  margin-top: -20px;
-  padding-left: 20px;
+.scores-hege{
+  background-image: url("/img/hege.png");
 }
 .scores2 {
   width: 120px;
   height: 65px;
   margin-top: 10px;
   display: flex;
-  flex-direction: column;
+  flex-direction:column;
   /* background-color: blue; */
   background-size: 100% 100%;
 }
 .gnus {
-  font-size: 24px;
+  font-size: 30px;
   text-align: center;
-  color: #ffffff;
+  font-weight: 600;
+  margin-top: 40px;
 }
-.picture {
-  width: 30px;
-  height: 30px;
-  margin-top: 20px;
-  margin-left: 10px;
-}
-.vertical {
-  font-size: 20px;
-  color: #00bfaf;
-  line-height: 30px;
-  padding-left: 5px;
-}
-.scorefor {
-  text-align: center;
-  color: #ffffff;
+.gnus-fen{
+  color: #FFFFFF;
   font-size: 10px;
-  margin-top: -23px;
+  font-weight: 600;
+}
+.gnus-hege{
+  font-size: 20px;
+  font-weight: 600;
 }
 .meals .header {
   width: 100%;

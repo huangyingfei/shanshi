@@ -482,38 +482,27 @@
     </div>
     <!-- 审核确认取消通过按钮结束 -->
     <div  id="df" class="scores" >
-      <div v-if="parseFloat(score)>=85" class="scores1">
+      <div v-if="parseFloat(score)>=90" class="scores-same scores-youxiu" >
         <div class="scores3">
-        <p class="gnus" @click="tfractio">{{score}}</p>
-        <p class="scorefor">分</p>
-          </div>
-        <div class="scores2">
-          <div class="scores2-item"><img class="picture" src="/img/fenshu.png" alt="" />
-          <p class="vertical">{{scoreTitle}}</p></div>
-         <p v-show="parseFloat(scxjSc)!=0&&parseFloat(scxjSc)<0" class="scores2-item2">
-           <img src="/img/arrowdown.png" width="20px" height="20px"/><span style="height: 20px;line-height: 20px;margin-top: 0px">{{scxjSc}}</span>
-         </p>
-          <p v-show="parseFloat(scxjSc)!=0&&parseFloat(scxjSc)>0" class="scores2-item2">
-            <img src="/img/arrowup.png" width="20px" height="20px"/><span style="height: 20px;line-height: 20px;margin-top: 0px">{{scxjSc}}</span>
-          </p>
+          <p class="gnus" @click="tfractio">{{score}}<span class="gnus-fen">分</span></p>
         </div>
       </div>
-      <div v-if="parseFloat(score)<85"  class="scores1-1">
+      <div v-if="parseFloat(score)<90&&parseFloat(score)>=85" class="scores-same scores-hege" >
         <div class="scores3">
-          <p class="gnus" @click="tfractio">{{score}}</p>
-          <p class="scorefor">分</p>
-        </div>
-        <div class="scores2">
-          <div class="scores2-item"><img class="picture" src="/img/fenshu2.png" alt="" />
-            <p class="vertical" style="color: #d94d00;">{{scoreTitle}}</p></div>
-          <p v-show="parseFloat(scxjSc)!=0&&parseFloat(scxjSc)<0"   class="scores2-item2">
-            <img src="/img/arrowdown.png" width="20px" height="20px"/><span style="height: 20px;line-height: 20px;margin-top: 0px">{{scxjSc}}</span>
-          </p>
-          <p v-show="parseFloat(scxjSc)!=0&&parseFloat(scxjSc)>0" class="scores2-item2">
-            <img src="/img/arrowup.png" width="20px" height="20px"/><span style="height: 20px;line-height: 20px;margin-top: 0px">{{scxjSc}}</span>
-          </p>
+          <p class="gnus" @click="tfractio">{{score}}<span class="gnus-fen">分</span></p>
         </div>
       </div>
+      <div v-if="parseFloat(score)<85"  class="scores-same scores-buhege">
+        <div class="scores3" style="color: #dd6161">
+          <p class="gnus"   @click="tfractio">{{score}}<span class="gnus-fen" style="color: #dd6161">分</span></p>
+        </div>
+        <div class="scores2">
+          <p class="gnus-fen" style="color: #dd6161;margin-top: 35px"><span>离</span><span class="gnus-hege">合格</span>
+            <br>
+            <span class="gnus-fen" style="color: #dd6161">需提升{{(85-score).toFixed(2)}}分！</span> </p>
+        </div>
+      </div>
+
     </div>
     <!-- 分数弹框 -->
     <el-drawer
@@ -562,13 +551,7 @@
           ~
           <span style="padding-right: 10px; padding-left: 10px">期望值(%)</span>
           <el-input-number v-model="node.exceptValue" controls-position="right"></el-input-number>
-          <!--<el-input-->
-            <!--style="width: 140px"-->
-            <!--placeholder="请输入内容"-->
-            <!--v-model="node.exceptValue"-->
-            <!--clearable-->
-          <!--&gt;-->
-          <!--</el-input>-->
+
 
           <el-button style="margin-left: 30px" type="primary"  @click="startTrim"
             >开始配平</el-button
@@ -594,49 +577,27 @@
       </div>
 
       <div  class="scores">
-        <!--<div class="scores1">-->
-          <!--<div class="scores3">-->
-            <!--<p class="gnus">{{peipScore}}</p>-->
-            <!--<p class="scorefor">分</p>-->
-          <!--</div>-->
-          <!--<div class="scores2">-->
-            <!--<img class="picture" src="/img/fenshu.png" alt="" />-->
-            <!--<p class="vertical">{{scoreTitle}}</p>-->
-          <!--</div>-->
-        <!--</div>-->
-        <div v-if="parseFloat(peipScore)>=85" class="scores1">
+        <div v-if="parseFloat(peipScore)>=90" class="scores-same scores-youxiu">
           <div class="scores3">
-            <p class="gnus">{{peipScore}}</p>
-            <p class="scorefor">分</p>
+            <p class="gnus">{{peipScore}}<span class="gnus-fen">分</span></p>
+          </div>
+        </div>
+        <div v-if="parseFloat(score)<90&&parseFloat(score)>=85" class="scores-same scores-hege" >
+          <div class="scores3">
+            <p class="gnus">{{peipScore}}<span class="gnus-fen">分</span></p>
+          </div>
+        </div>
+        <div v-if="parseFloat(peipScore)<85"  class="scores-same scores-buhege">
+          <div class="scores3"  style="color: #dd6161">
+            <p class="gnus" >{{peipScore}}<span class="gnus-fen" style="color: #dd6161">分</span></p>
           </div>
           <div class="scores2">
-            <div class="scores2-item"><img class="picture" src="/img/fenshu.png" alt="" />
-              <p class="vertical">{{scoreTitle}}</p></div>
-            <p v-show="parseFloat(ppscxjSc)!=0&&parseFloat(ppscxjSc)<0" class="scores2-item2">
-              <img src="/img/arrowdown.png" width="20px" height="20px"/><span style="height: 20px;line-height: 20px;margin-top: 0px">{{ppscxjSc}}</span>
-            </p>
-            <p v-show="parseFloat(ppscxjSc)!=0&&parseFloat(ppscxjSc)>0" class="scores2-item2">
-              <img src="/img/arrowup.png" width="20px" height="20px"/><span style="height: 20px;line-height: 20px;margin-top: 0px">{{ppscxjSc}}</span>
+            <p class="gnus-fen" style="color: #dd6161;margin-top: 35px"><span>离</span><span class="gnus-hege">合格</span>
+              <br>
+              <span class="gnus-fen" style="color: #dd6161">需提升{{(85-score).toFixed(2)}}分！</span>
             </p>
           </div>
         </div>
-        <div v-if="parseFloat(peipScore)<85"  class="scores1-1">
-          <div class="scores3">
-            <p class="gnus">{{peipScore}}</p>
-            <p class="scorefor">分</p>
-          </div>
-          <div class="scores2">
-            <div class="scores2-item"><img class="picture" src="/img/fenshu2.png" alt="" />
-              <p class="vertical" style="color: #d94d00;">{{scoreTitle}}</p></div>
-            <p v-show="parseFloat(ppscxjSc)!=0&&parseFloat(ppscxjSc)<0"   class="scores2-item2">
-              <img src="/img/arrowdown.png" width="20px" height="20px"/><span style="height: 20px;line-height: 20px;margin-top: 0px">{{ppscxjSc}}</span>
-            </p>
-            <p v-show="parseFloat(ppscxjSc)!=0&&parseFloat(ppscxjSc)>0" class="scores2-item2">
-              <img src="/img/arrowup.png" width="20px" height="20px"/><span style="height: 20px;line-height: 20px;margin-top: 0px">{{ppscxjSc}}</span>
-            </p>
-          </div>
-        </div>
-
       </div>
     </el-dialog>
     <!-- 智能配平弹框结束 -->
@@ -2596,66 +2557,51 @@
   z-index: 999;
 }
 .scores3{
-  width: 100px;
+  width: 128px;
 }
-  .scores1-1 {
-    width: 216px;
-    height: 102px;
-    /* background-color: yellow; */
-    background-image: url("/img/yuan1.png");
-    background-size: 100% 100%;
-    display: flex;
-    justify-content:space-between;
-  }
-.scores1 {
-  width: 216px;
-  height: 102px;
-  /* background-color: yellow; */
-  background-image: url("/img/yuan.png");
+.scores-same{
+  width: 250px;
+  height: 132px;
+  color: #FFFFFF;
   background-size: 100% 100%;
   display: flex;
   justify-content:space-between;
 }
-.scores2-item{
-  display: flex;
-  flex-direction:row;
+.scores-youxiu{
+  /* background-color: yellow; */
+  background-image: url("/img/youxiu.png");
 }
-.scores2-item2{
-  margin-top: -20px;
-  padding-left: 20px;
+.scores-buhege {
+  background-image: url("/img/buhege.png");
 }
- .scores2 {
+.scores-hege{
+  background-image: url("/img/hege.png");
+}
+.scores2 {
   width: 120px;
   height: 65px;
   margin-top: 10px;
   display: flex;
-   flex-direction:column;
+  flex-direction:column;
   /* background-color: blue; */
   background-size: 100% 100%;
 }
 .gnus {
-  font-size: 24px;
+  font-size: 30px;
   text-align: center;
-  color: #ffffff;
+  font-weight: 600;
+  margin-top: 40px;
 }
-.picture {
-  width: 30px;
-  height: 30px;
-  margin-top: 20px;
-  margin-left: 10px;
-}
-.vertical {
-  font-size: 20px;
-  color: #00bfaf;
-  line-height: 30px;
-  padding-left: 5px;
-}
-.scorefor {
-  text-align: center;
-  color: #ffffff;
+.gnus-fen{
+  color: #FFFFFF;
   font-size: 10px;
-  margin-top: -23px;
+  font-weight: 600;
 }
+.gnus-hege{
+  font-size: 20px;
+  font-weight: 600;
+}
+
 .meals .header {
   width: 100%;
   height: 120px;

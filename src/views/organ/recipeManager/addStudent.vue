@@ -51,50 +51,6 @@ export default {
         detail: false,
         column: [
           {
-            label: "班级",
-            prop: "classId",
-            type: "tree",
-            dicUrl: "/api/blade-food/class/tree",
-            rules: [
-              {
-                required: true,
-                message: "请选择班级",
-                trigger: "blur",
-              },
-            ],
-            change: (row) => {
-              if (row.value && row.value != "") {
-                  this.getById(row);
-              }
-            },
-            props: {
-              children: "children",
-              label: "label",
-              value: "id",
-            },
-            span: 8,
-          },
-          {
-            label: "学号",
-            prop: "childNo",
-            type:"number",
-            rules: [
-              {
-                required: true,
-                trigger: "blur",
-                validator: this.validateChildNo,
-              },
-            ],
-            span: 8,
-          },
-          {
-            label: "档案号",
-            prop: "fileNumber",
-            span: 8,
-            minlength:0,
-            maxlength:16
-          },
-          {
             label: "姓名",
             prop: "name",
             rules: [
@@ -151,7 +107,7 @@ export default {
                   this.form,
                   "age",
 
-                    ((new Date().getTime() - date.getTime()) / 31536000000).toFixed(2)
+                  ((new Date().getTime() - date.getTime()) / 31536000000).toFixed(2)
 
                 );
               }
@@ -165,6 +121,12 @@ export default {
                 );
               }
             },
+          },
+          {
+            label: "年龄",
+            prop: "age",
+            span: 8,
+            disabled: true,
           },
           {
             label: "民族",
@@ -189,11 +151,50 @@ export default {
             },
           },
           {
-            label: "年龄",
-            prop: "age",
+            label: "班级",
+            prop: "classId",
+            type: "tree",
+            dicUrl: "/api/blade-food/class/tree",
+            rules: [
+              {
+                required: true,
+                message: "请选择班级",
+                trigger: "blur",
+              },
+            ],
+            change: (row) => {
+              if (row.value && row.value != "") {
+                  this.getById(row);
+              }
+            },
+            props: {
+              children: "children",
+              label: "label",
+              value: "id",
+            },
             span: 8,
-            disabled: true,
           },
+          {
+            label: "学号",
+            prop: "childNo",
+            type:"number",
+            rules: [
+              {
+                required: true,
+                trigger: "blur",
+                validator: this.validateChildNo,
+              },
+            ],
+            span: 8,
+          },
+          {
+            label: "档案号",
+            prop: "fileNumber",
+            span: 8,
+            minlength:0,
+            maxlength:16
+          },
+
           {
             label: "入园日期",
             prop: "admissionDate",
@@ -207,7 +208,7 @@ export default {
             rules: [
               {
                 required: true,
-                message: "请输入性别",
+                message: "请输入学级",
                 trigger: "blur",
               },
             ],
@@ -297,7 +298,7 @@ export default {
             maxlength:255
           },
           {
-            label: "是否过敏",
+            label: "过敏",
             prop: "isAllergy",
             type: "radio",
             dicData: [
@@ -314,7 +315,7 @@ export default {
             maxlength:255
           },
           {
-            label: "接种证所在省",
+            label: "接种所在省",
             prop: "vaccinationProvince",
             dicUrl: "/api/blade-system/region/lazy-list",
             type: "select",
@@ -957,7 +958,7 @@ export default {
             span: 8,
           },
           {
-            label: "是否残疾儿童",
+            label: "残疾儿童",
             prop: "isDisabled",
             type: "radio",
             dicData: [
@@ -973,14 +974,14 @@ export default {
             span: 8,
           },
           {
-            label: "残疾幼儿类别",
+            label: "残疾类别",
             prop: "disabledLevel",
             dicData: disabledLevel,
             type: "select",
             span: 8,
           },
           {
-            label: "是否独生子女",
+            label: "独生子女",
             prop: "onlyChild",
             type: "radio",
             dicData: [
@@ -996,7 +997,7 @@ export default {
             span: 8,
           },
           {
-            label: "是否孤儿",
+            label: "孤儿",
             prop: "isAlone",
             type: "radio",
             dicData: [
@@ -1012,7 +1013,7 @@ export default {
             span: 8,
           },
           {
-            label: "是否来自低保家庭",
+            label: "低保家庭",
             prop: "lowIncome",
             type: "radio",
             dicData: [
@@ -1028,7 +1029,7 @@ export default {
             span: 8,
           },
           {
-            label: "是否接受资助",
+            label: "接受资助",
             prop: "support",
             type: "radio",
             dicData: [
@@ -1044,7 +1045,7 @@ export default {
             span: 8,
           },
           {
-            label: "是否留守儿童",
+            label: "留守儿童",
             prop: "staryHome",
             type: "radio",
             dicData: [
@@ -1060,7 +1061,7 @@ export default {
             span: 8,
           },
           {
-            label: "是否务工人员随迁子女",
+            label: "随迁子女",
             prop: "migrantChild",
             type: "radio",
             dicData: [
@@ -1076,7 +1077,7 @@ export default {
             span: 8,
           },
           {
-            label: "是否寄宿生",
+            label: "寄宿生",
             prop: "resident",
             type: "radio",
             dicData: [
@@ -1106,7 +1107,7 @@ export default {
             maxlength:16
           },
           {
-            label: "是否寄宿生",
+            label: "寄宿生",
             prop: "studyMode",
             type: "select",
             dicData: [
