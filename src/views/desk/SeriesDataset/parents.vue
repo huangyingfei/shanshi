@@ -1,7 +1,7 @@
 <template>
   <div class="rparents">
     <div class="cursor">
-      <span class="exact">机构:</span>
+      <!-- <span class="exact">机构:</span>
 
       <el-input
         style="width:180px; margin-left: 20px;"
@@ -20,7 +20,7 @@
         start-placeholder="开始日期"
         end-placeholder="结束日期"
       >
-      </el-date-picker>
+      </el-date-picker> -->
     </div>
     <!-- 浏览量 -->
     <div class="browse">
@@ -48,14 +48,20 @@
     <div class="rankings">
       <div class="teamran">浏览排行</div>
       <div>
-        <el-table :data="tableData" border style="width: 100%">
+        <el-table
+          :data="teamranking"
+          v-loading="loadFlag"
+          border
+          :element-loading-text="page_data.loadTxt"
+          style="width: 100%"
+        >
           <el-table-column label="序号" type="index" width="50" align="center">
           </el-table-column>
-          <el-table-column prop="name" label="机构" align="center">
+          <el-table-column prop="tenantName" label="机构" align="center">
           </el-table-column>
-          <el-table-column prop="name" label="浏览量PV" align="center">
+          <el-table-column prop="lookCount" label="浏览量PV" align="center">
           </el-table-column>
-          <el-table-column prop="name" label="浏览人数UV" align="center">
+          <el-table-column prop="peopleCount" label="浏览人数UV" align="center">
           </el-table-column>
         </el-table>
       </div>
@@ -67,6 +73,10 @@
 export default {
   data() {
     return {
+      loadFlag: false, //加载flag
+      page_data: {
+        loadTxt: "数据加载中..."
+      },
       formsearch: {
         name: "", //机构名称
         number: "" //时间
@@ -86,7 +96,11 @@ export default {
           date: "2016-05-04",
           name: "王小虎"
         }
-      ]
+      ],
+      teamranking: [], //浏览排行
+      updated: [], //日期
+      fontify: [], //浏览量
+      instanceof: [] //总人数
     };
   },
   mounted() {
@@ -100,8 +114,10 @@ export default {
   methods: {
     //访问量统计
     profileuser() {
+      this.loadFlag - true;
       this.$axios.get(`api/blade-food/report/visitCount`, {}).then(res => {
         // console.log(res);
+        this.loadFlag = false;
         this.offers = res.data.data;
         // console.log(this.offers);
         this.browse.extrapv = this.offers.lookPeople; //浏览量
@@ -109,10 +125,21 @@ export default {
         this.browse.property = this.offers.looks; //总流量
         this.browse.ofcleaning = this.offers.looksTotal; //总人数
         // console.log(this.browse.ofcleaning);
-        let recent = [];
+        let recent = []; //日期
+        let ring = []; //浏览量
+        let offset = []; //总人数
         this.offers.visitLogVOs.forEach((item, index) => {
           recent.push(item.dateStr);
+          ring.push(item.lookCount);
+          offset.push(item.peopleCount);
         });
+        this.updated = recent;
+        this.fontify = ring;
+        this.instanceof = offset;
+        this.teamranking = this.offers.visitLogVOList;
+        console.log(this.teamranking);
+        this.extract();
+        // console.log(recent);
       });
     },
     //折线图
@@ -147,15 +174,7 @@ export default {
           //设置x轴
           type: "category",
           boundaryGap: false, //坐标轴两边不留白
-          data: [
-            "2020-1-1",
-            "2020-2-1",
-            "2020-3-1",
-            "2020-4-1",
-            "2020-5-1",
-            "2020-6-1",
-            "2020-7-1"
-          ],
+          data: this.updated,
           name: "DATE", //X轴 name
           nameTextStyle: {
             //坐标轴名称的文字样式
@@ -187,7 +206,7 @@ export default {
         series: [
           {
             name: "PV",
-            data: [1500, 1500, 1400, 500, 500, 2000, 600],
+            data: this.fontify,
             type: "line", // 类型为折线图
             lineStyle: {
               // 线条样式 => 必须使用normal属性
@@ -198,7 +217,7 @@ export default {
           },
           {
             name: "UV",
-            data: [3200, 3100, 2500, 1500, 1000, 3500, 1500],
+            data: this.instanceof,
             type: "line",
             lineStyle: {
               normal: {
@@ -225,8 +244,8 @@ export default {
 }
 .cursor {
   width: 100%;
-  height: 50px;
-  padding-top: 20px;
+  height: 20px;
+  // padding-top: 20px;
   padding-left: 14px;
   font-size: 14px;
 }

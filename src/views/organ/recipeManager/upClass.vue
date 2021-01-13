@@ -34,6 +34,7 @@
         <avue-select
           v-model="scope.row.isGraduation"
           placeholder="请选择内容"
+          disabled
           type="tree"
           :dic="dic"
         ></avue-select>

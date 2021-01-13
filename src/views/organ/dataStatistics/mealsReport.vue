@@ -4,26 +4,28 @@
       <el-tab-pane label="食谱报表" name="first">
         <recipes-report> </recipes-report>
       </el-tab-pane>
-      <el-tab-pane label="营养统计" name="second">营养统计</el-tab-pane>
+      <el-tab-pane label="营养统计" name="second">
+        <nutrition></nutrition>
+      </el-tab-pane>
     </el-tabs>
   </basic-container>
 </template>
 
 <script>
 import RecipesReport from "./mealsReport/recipesReport.vue";
-
+import nutrition from "./nutritionValue";
 export default {
-  components: { RecipesReport },
+  components: { RecipesReport, nutrition },
   data() {
     return {
-      activeName: "first",
+      activeName: "second"
     };
   },
   methods: {
     handleClick(tab, event) {
       console.log(tab, event);
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -32,4 +34,4 @@ export default {
   height: 100%;
   position: absolute;
 }
-</style>>
+</style>

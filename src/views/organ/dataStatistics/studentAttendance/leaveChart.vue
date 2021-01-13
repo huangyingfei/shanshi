@@ -3,14 +3,19 @@
     <el-row :gutter="20">
       <el-col :span="6">
         <label>选择部门</label>
-        <el-select style="width: 100%">
-          <el-option value=""></el-option>
-        </el-select>
+        <el-cascader
+          v-model="classId"
+          :options="options"
+          :props="{ value: 'id', disabled: 'edisabled' }"
+          @change="getStudentWork"
+          :show-all-levels="false"
+        ></el-cascader>
       </el-col>
       <el-col :span="10">
         <label>时间</label>
         <el-date-picker
-          v-model="value1"
+          v-model="dateRangeValue"
+          value-format="yyyy-MM-dd"
           type="daterange"
           range-separator="至"
           start-placeholder="开始日期"
@@ -22,10 +27,10 @@
     </el-row>
     <el-row>
       <el-col :span="12">
-        <div id="leaveType" style="width: 100%; height: 300px"></div>
+        <div id="leaveType" style="width: 100%; height: 400px"></div>
       </el-col>
       <el-col :span="12">
-        <div id="leaveSymptoms" style="width: 100%; height: 300px"></div>
+        <div id="leaveSymptoms" style="width: 100%; height: 400px"></div>
       </el-col>
     </el-row>
     <el-row>
@@ -37,25 +42,122 @@
 </template>
 
 <script>
+import { dateFormat } from "@/util/date.js";
 export default {
   data() {
     return {
       leaveType: {
-        legendData: ["--", "事假", "病假", "其他"],
+        legendData: ["事假", "病假", "其他"],
         seriesData: [],
       },
       leaveSymptoms: {
-        legendData: ["--", "事假", "病假", "其他"],
+        legendData: [
+          "感冒",
+          "咳嗽",
+          "发热",
+          "肠胃不适",
+          "皮疹",
+          "腹泻",
+          "黄疸",
+          "结膜红肿",
+          "呕吐",
+          "牙疼",
+          "外伤",
+          "咽喉",
+          "其他",
+        ],
         seriesData: [],
       },
+      leaveSymptoms2: {
+        cwNum: [],
+        dateStr: [],
+        frNum: [],
+        fxNum: [],
+        gmNum: [],
+        hdNum: [],
+        jmhzNum: [],
+        ksNum: [],
+        otNum: [],
+        pzPNum: [],
+        qtNum: [],
+        wsNum: [],
+        yhNum: [],
+        ytNum: [],
+      },
+      dateRangeValue: [],
+      classId: [""],
+      options: [],
     };
   },
   mounted() {
-    this.leaveTypePic();
-    this.leaveSymptomsPic();
-    this.leaveSymptomsline();
+    this.dateRangeDefaultValue();
+    this.getclassTree();
+    this.getStudentWork();
   },
   methods: {
+    //默认时间
+    dateRangeDefaultValue() {
+      const end = new Date();
+      const start = new Date();
+      start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+      this.dateRangeValue = [
+        dateFormat(start, "yyyy-MM-dd"),
+        dateFormat(end, "yyyy-MM-dd"),
+      ];
+    },
+    //获取图表数据
+    getStudentWork() {
+      this.axios({
+        url: "/api/blade-food/report/orgStudentWorkDistri",
+        method: "get",
+        params: {
+          startTime: this.dateRangeValue[0],
+          endTime: this.dateRangeValue[1],
+          classId: this.classId.slice(-1)[0],
+        },
+      }).then((res) => {
+        var result = res.data.data;
+        this.leaveType.seriesData = [
+          { value: result.sjNum, name: "事假" },
+          { value: result.bjNum, name: "病假" },
+          { value: result.otherNum, name: "其他" },
+        ];
+        this.leaveSymptoms.seriesData = [
+          { value: result.diseaseDTO.gmNum, name: "感冒" },
+          { value: result.diseaseDTO.ksNum, name: "咳嗽" },
+          { value: result.diseaseDTO.frNum, name: "发热" },
+          { value: result.diseaseDTO.cwNum, name: "肠胃不适" },
+          { value: result.diseaseDTO.pzPNum, name: "皮疹" },
+          { value: result.diseaseDTO.fxNum, name: "腹泻" },
+          { value: result.diseaseDTO.hdNum, name: "黄疸" },
+          { value: result.diseaseDTO.jmhzNum, name: "结膜红肿" },
+          { value: result.diseaseDTO.otNum, name: "呕吐" },
+          { value: result.diseaseDTO.ytNum, name: "牙疼" },
+          { value: result.diseaseDTO.wsNum, name: "外伤" },
+          { value: result.diseaseDTO.yhNum, name: "咽喉" },
+          { value: result.diseaseDTO.qtNum, name: "其他" },
+        ];
+
+        result.diseaseTrend.forEach((el) => {
+          for (let k in el) {
+            this.leaveSymptoms2[k].push(el[k]);
+          }
+        });
+        this.leaveTypePic();
+        this.leaveSymptomsPic();
+        this.leaveSymptomsline();
+      });
+    },
+    //获取部门级联内容
+    getclassTree() {
+      this.axios({
+        url: "/api/blade-food/class/tree",
+        method: "get",
+      }).then((res) => {
+        this.options = res.data.data[0].children;
+        console.log(this.options);
+      });
+    },
     leaveTypePic() {
       var chartPie = this.$echarts.init(document.getElementById("leaveType"));
 
@@ -67,26 +169,21 @@ export default {
         },
         tooltip: {
           //设置tip提示
-          trigger: "axis",
+          trigger: "item",
+          formatter: "{b}:{c} ({d}%)",
         },
         legend: {
           bottom: 10,
           left: "center",
-          data: ["视频广告", "联盟广告", "邮件营销", "直接访问", "搜索引擎"],
+          data: this.leaveType.legendData,
         },
         series: [
           {
             type: "pie", // 类型为饼图
             center: ["50%", "50%"],
-            radius: "70%",
+            radius: "60%",
             selectedMode: "single",
-            data: [
-              { value: 235, name: "视频广告" },
-              { value: 274, name: "联盟广告" },
-              { value: 310, name: "邮件营销" },
-              { value: 335, name: "直接访问" },
-              { value: 400, name: "搜索引擎" },
-            ],
+            data: this.leaveType.seriesData,
           },
         ],
       };
@@ -112,21 +209,15 @@ export default {
         legend: {
           bottom: 10,
           left: "center",
-          data: ["视频广告", "联盟广告", "邮件营销", "直接访问", "搜索引擎"],
+          data: this.leaveSymptoms.legendData,
         },
         series: [
           {
             type: "pie", // 类型为饼图
             center: ["50%", "50%"],
-            radius: "70%",
+            radius: "60%",
             selectedMode: "single",
-            data: [
-              { value: 235, name: "视频广告" },
-              { value: 274, name: "联盟广告" },
-              { value: 310, name: "邮件营销" },
-              { value: 335, name: "直接访问" },
-              { value: 400, name: "搜索引擎" },
-            ],
+            data: this.leaveSymptoms.seriesData,
           },
         ],
       };
@@ -137,6 +228,18 @@ export default {
       let chartLine = this.$echarts.init(
         document.getElementById("leaveSymptomsLine")
       );
+      let seriesData = [];
+      let i = 0;
+      for (var k in this.leaveSymptoms2) {
+        if (k != "dateStr") {
+          seriesData.push({
+            name: this.leaveSymptoms.legendData[i],
+            data: this.leaveSymptoms2[k],
+            type: "line", // 类型为折线图
+          });
+          i++;
+        }
+      }
 
       // 指定图表的配置项和数据
       var option = {
@@ -147,23 +250,28 @@ export default {
 
         legend: {
           //设置区分（哪条线属于什么）
-          data: ["平均成绩", "学生成绩"],
+          data: [
+            "感冒",
+            "咳嗽",
+            "发热",
+            "肠胃不适",
+            "皮疹",
+            "腹泻",
+            "黄疸",
+            "结膜红肿",
+            "呕吐",
+            "牙疼",
+            "外伤",
+            "咽喉",
+            "其他",
+          ],
         },
-        color: ["#8AE09F", "#FA6F53"], //设置区分（每条线是什么颜色，和 legend 一一对应）
+        // color: ["#8AE09F", "#FA6F53"], //设置区分（每条线是什么颜色，和 legend 一一对应）
         xAxis: {
           //设置x轴
           type: "category",
           boundaryGap: false, //坐标轴两边不留白
-          data: [
-            "2020-1-1",
-            "2020-2-1",
-            "2020-3-1",
-            "2020-4-1",
-            "2020-5-1",
-            "2020-6-1",
-            "2020-7-1",
-          ],
-          name: "DATE", //X轴 name
+          data: this.leaveSymptoms2.dateStr,
           nameTextStyle: {
             //坐标轴名称的文字样式
             color: "#000",
@@ -178,7 +286,6 @@ export default {
           },
         },
         yAxis: {
-          //   name: "SALES VOLUME",
           nameTextStyle: {
             color: "#000",
             fontSize: 16,
@@ -191,29 +298,7 @@ export default {
           },
           type: "value",
         },
-        series: [
-          {
-            name: "平均成绩",
-            data: [20, 32, 61, 34, 90, 30, 20],
-            type: "line", // 类型为折线图
-            lineStyle: {
-              // 线条样式 => 必须使用normal属性
-              normal: {
-                color: "#8AE09F",
-              },
-            },
-          },
-          {
-            name: "学生成绩",
-            data: [48, 25, 50, 80, 70, 11, 30],
-            type: "line",
-            lineStyle: {
-              normal: {
-                color: "#FA6F53",
-              },
-            },
-          },
-        ],
+        series: seriesData,
       };
 
       // 使用刚指定的配置项和数据显示图表。
