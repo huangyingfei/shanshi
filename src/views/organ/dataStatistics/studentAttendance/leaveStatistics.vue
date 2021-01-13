@@ -26,7 +26,7 @@
         </el-date-picker>
       </el-col>
       <el-col :span="2">
-        <el-button type="primary">导出</el-button>
+        <el-button type="primary" @click="studentWorkExport">导出</el-button>
       </el-col>
     </el-row>
     <el-row>
@@ -51,6 +51,7 @@
 
 <script>
 import { dateFormat } from "@/util/date.js";
+import { exportExcel } from "../../../../api/exportExcel";
 
 export default {
   data() {
@@ -97,6 +98,18 @@ export default {
       }).then((res) => {
         this.leaveData = res.data.data;
       });
+    },
+    studentWorkExport() {
+      exportExcel(
+        this,
+        {
+          startTime: this.dateRangeValue[0],
+          endTime: this.dateRangeValue[1],
+          classId: this.classId.slice(-1)[0],
+        },
+        "/api/report/orgStudentWorkExport",
+        "请假统计"
+      );
     },
   },
 };
