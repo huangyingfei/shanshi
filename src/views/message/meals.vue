@@ -2375,7 +2375,7 @@ document.oncontextmenu = function(){return false};
   /* background-color: red; */
   position: absolute;
   top: 60px;
-  right: 40px;
+  right: 45px;
   z-index: 999;
 }
 .scores3{

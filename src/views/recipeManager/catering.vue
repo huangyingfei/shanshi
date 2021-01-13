@@ -2456,8 +2456,8 @@ export default {
   height: 102px;
   /* background-color: red; */
   position: absolute;
-  top: 90px;
-  right: 30px;
+  top: 60px;
+  right: 45px;
   z-index: 999;
 }
 .scores3{

@@ -1,7 +1,7 @@
 <template>
   <div class="student-contain">
     <el-row>
-      <el-col :span="5">
+      <el-col :span="5" >
         <div class="box"   id="boxTree">
           <el-scrollbar>
             <basic-container   >
