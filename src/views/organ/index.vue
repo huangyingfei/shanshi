@@ -2,7 +2,7 @@
   <div class="wel">
     <!-- 总量 -->
     <div class="research">
-      <div class="chooser">
+      <div class="chooser" v-if="this.storage == 2">
         <span style="margin-right: 10px;margin-left: 15px;  font-size: 14px;"
           >机构选择:</span
         >
@@ -147,7 +147,8 @@ export default {
       getHealth: [],
       today: [], //
       greater: [],
-      preRanking: "2", //显示隐藏
+      preRanking: "", //显示隐藏
+      storage: "", //下拉框显示隐藏
       activeNames: ["1", "2", "3", "5"],
       logActiveNames: ["17"]
     };
@@ -170,14 +171,15 @@ export default {
       console.log(this.activity);
       // console.log(this.options[0].value);
       // this.fromSearch();
+
       if (this.activity.indexOf(",") != -1) {
-        // console.log(1111);
+        // console.log("有逗号");
         this.preRanking = 2;
         this.siteheader(); //头部
         this.welcomeUser(); //最受欢迎菜品
         this.HealthBar(); //排行榜
       } else {
-        console.log(2222);
+        // console.log("没有逗号");
         this.preRanking = 1;
         this.siteheader(); //头部
         this.welcomeUser(); //最受欢迎菜品
@@ -366,10 +368,15 @@ export default {
           console.log(this.options.length);
           if (this.options.length > 2) {
             this.preRanking = 2;
-            console.log(this.preRanking);
+            this.storage = 2;
+            // console.log(this.preRanking);
           } else {
             this.preRanking = 1;
+            this.storage = 1;
+            this.fattyfood(); //每日进食量
+            this.allchildren(); //每日营养素提取
           }
+
           this.siteheader(); //头部
           this.welcomeUser(); //最受欢迎菜品
           this.HealthBar(); //排行榜
