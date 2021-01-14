@@ -42,7 +42,11 @@
         <h4 class="welcome">本周最受欢迎菜品</h4>
         <div class="menu1" v-for="(item, i) in double" :key="i">
           <div class="menuimg">
-            <img :src="item.dishPic" alt />
+            <!-- <img :src="item.dishPic" alt /> -->
+            <el-image
+              style="width: 80px; height: 80px"
+              :src="item.dishPic"
+            ></el-image>
           </div>
           <div class="menutext">{{ item.dishName }}</div>
           <div class="menunum">{{ item.dishCount }}</div>
@@ -65,7 +69,11 @@
         <div class="school1" v-for="(item1, i) in getHealth" :key="i">
           <!-- <div class="ranking">1</div> -->
           <div class="schoolimg">
-            <img :src="item1.dishPic" alt />
+            <!-- <img :src="item1.dishPic" alt /> -->
+            <el-image
+              style="width: 80px; height: 80px"
+              :src="item1.dishPic"
+            ></el-image>
           </div>
           <div class="schooltxt">{{ item1.tenantName }}</div>
           <div class="schoolnum">{{ item1.score }}</div>
@@ -363,6 +371,7 @@ export default {
   width: 100%;
   height: 100%;
   /* background-color: #fff; */
+  margin-bottom: 50px;
 }
 .el-font-size {
   font-size: 14px;
@@ -412,21 +421,22 @@ export default {
 }
 .dishes {
   width: 100%;
-  height: 600px;
+  height: 700px;
   /* background-color: yellow; */
   display: flex;
   margin-top: 5px;
+  margin-bottom: 40px;
 }
 .variety {
   width: 50%;
-  height: 600px;
+  height: 700px;
   overflow-y: auto;
   overflow-x: hidden;
   background-color: #fff;
 }
 .recipes {
   width: 50%;
-  height: 600px;
+  height: 700px;
   background-color: #fff;
   margin-bottom: 40px;
 }
@@ -481,7 +491,7 @@ export default {
 }
 .school1 {
   width: 100%;
-  height: 60px;
+  height: 90px;
   margin-top: 20px;
 }
 .ranking {
@@ -535,8 +545,8 @@ export default {
   margin-top: 15px;
 }
 .schoolimg {
-  width: 50px;
-  height: 50px;
+  width: 80px;
+  height: 80px;
   background-color: #fff;
   float: left;
   margin-left: 30px;
@@ -548,8 +558,8 @@ export default {
 }
 .schooltxt {
   width: 200px;
-  height: 60px;
-  line-height: 60px;
+  height: 80px;
+  line-height: 80px;
   margin-left: 20px;
   float: left;
   font-size: 14px;

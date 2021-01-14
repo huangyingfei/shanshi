@@ -6,7 +6,7 @@
         <span style="margin-right: 10px;margin-left: 15px;  font-size: 14px;"
           >机构选择:</span
         >
-        <el-select clearable v-model="activity" placeholder="请选择">
+        <el-select v-model="activity" placeholder="请选择">
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -30,21 +30,21 @@
         <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
         <div class="nism1">
           <div class="ingredients">园所人数</div>
-          <div class="food1">{{ this.newhead.organ }}</div>
+          <div class="food1">{{ this.newhead.ysrs }}</div>
         </div>
       </div>
       <div class="mechanism">
         <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
         <div class="nism1">
           <div class="ingredients">男生人数</div>
-          <div class="food1">{{ this.newhead.organ }}</div>
+          <div class="food1">{{ this.newhead.boys }}</div>
         </div>
       </div>
       <div class="mechanism">
         <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
         <div class="nism1">
           <div class="ingredients">女生人数</div>
-          <div class="food1">{{ this.newhead.gover }}</div>
+          <div class="food1">{{ this.newhead.girls }}</div>
         </div>
       </div>
       <div class="mechanism">
@@ -76,7 +76,11 @@
         <h4 class="welcome">本周最受欢迎菜品</h4>
         <div class="menu1" v-for="(item, i) in double" :key="i">
           <div class="menuimg">
-            <img :src="item.dishPic" alt />
+            <!-- <img :src="item.dishPic" alt /> -->
+            <el-image
+              style="width: 80px; height: 80px"
+              :src="item.dishPic"
+            ></el-image>
           </div>
           <div class="menutext">{{ item.dishName }}</div>
           <div class="menunum">{{ item.dishCount }}</div>
@@ -84,27 +88,38 @@
       </div>
       <!-- 健康指数排行榜 -->
       <div class="recipes">
-        <h4 class="welcome1">本周食谱健康指数排行榜</h4>
-        <div class="school1" v-for="(item1, i) in getHealth" :key="i">
-          <!-- <div class="ranking">1</div> -->
-          <div class="schoolimg">
-            <img :src="item1.dishPic" alt />
+        <div v-if="this.preRanking == 2">
+          <h4 class="welcome1">本周食谱健康指数排行榜</h4>
+          <div class="school1" v-for="(item1, i) in getHealth" :key="i">
+            <div class="schoolimg">
+              <el-image
+                style="width: 80px; height: 80px"
+                :src="item1.logoUrl"
+              ></el-image>
+            </div>
+            <div class="schooltxt">{{ item1.tenantName }}</div>
+            <div class="schoolnum">{{ item1.score }}</div>
           </div>
-          <div class="schooltxt">{{ item1.tenantName }}</div>
-          <div class="schoolnum">{{ item1.score }}</div>
+        </div>
+        <!-- !echarts图标! -->
+        <div class="daychart" v-if="this.preRanking == 1">
+          <div class="foodinta">
+            <div
+              id="leiDaTu"
+              :style="{ width: '300px', height: '300px' }"
+            ></div>
+          </div>
+          <div class="nutrient">
+            <div
+              id="mynutrient"
+              :style="{ width: '300px', height: '300px' }"
+            ></div>
+          </div>
         </div>
       </div>
       <!-- !!! -->
     </div>
-    <!-- !echarts图标! -->
-    <div class="daychart">
-      <div class="foodinta">
-        <div id="leiDaTu" :style="{ width: '500px', height: '500px' }"></div>
-      </div>
-      <div class="nutrient">
-        <div id="mynutrient" :style="{ width: '500px', height: '500px' }"></div>
-      </div>
-    </div>
+
     <!--没有子机构显示当前机构数量统计---雷达图
         有子机构  有机构选择包括全部 当前机构  子机构  不显示雷达图
      -->
@@ -119,11 +134,11 @@ export default {
   data() {
     return {
       newhead: {
-        organ: "", //园所人数
+        ysrs: "", //园所人数
         boys: "", //男生人数
         girls: "", //女生人数
-        dish: "", //食材总量
-        recipe: "", //菜品总量
+        food: "", //食材总量
+        dish: "", //菜品总量
         recipe: "" //食谱总量
       },
       options: [],
@@ -132,6 +147,7 @@ export default {
       getHealth: [],
       today: [], //
       greater: [],
+      preRanking: "2", //显示隐藏
       activeNames: ["1", "2", "3", "5"],
       logActiveNames: ["17"]
     };
@@ -142,23 +158,33 @@ export default {
 
   beforeMount() {
     this.fromSearch();
-    this.welcomeUser();
-    this.HealthBar();
-    this.fattyfood();
-    this.allchildren();
   },
   created() {},
   mounted() {
     // this.drawLine();
     // this.extract();
     // this.drawPie();
-    this.drawPie();
-    this.extract();
   },
   methods: {
     searchBtn() {
       console.log(this.activity);
-      console.log(this.options[0].value);
+      // console.log(this.options[0].value);
+      // this.fromSearch();
+      if (this.activity.indexOf(",") != -1) {
+        // console.log(1111);
+        this.preRanking = 2;
+        this.siteheader(); //头部
+        this.welcomeUser(); //最受欢迎菜品
+        this.HealthBar(); //排行榜
+      } else {
+        console.log(2222);
+        this.preRanking = 1;
+        this.siteheader(); //头部
+        this.welcomeUser(); //最受欢迎菜品
+        this.HealthBar(); //排行榜
+        this.fattyfood(); //每日进食量
+        this.allchildren(); //每日营养素提取
+      }
     },
     extract() {
       let charts = this.$echarts.init(document.getElementById("mynutrient"));
@@ -337,8 +363,16 @@ export default {
           });
           this.options = second;
           this.activity = this.options[0].value;
-          console.log(this.options);
+          console.log(this.options.length);
+          if (this.options.length > 2) {
+            this.preRanking = 2;
+            console.log(this.preRanking);
+          } else {
+            this.preRanking = 1;
+          }
           this.siteheader(); //头部
+          this.welcomeUser(); //最受欢迎菜品
+          this.HealthBar(); //排行榜
         });
     },
     //头部
@@ -348,13 +382,14 @@ export default {
         .get(`api/blade-food/food/getTotalByTenant` + urlParams)
         .then(res => {
           console.log(res);
-          // this.newhead = res.data.data;
+          this.newhead = res.data.data;
           // console.log(this.newhead);
         });
     },
     //本周最受欢迎菜品
     welcomeUser() {
-      this.$axios.get(`api/blade-food/food/dishTotal`).then(res => {
+      let Dishes = `?tenantId=${this.activity}`;
+      this.$axios.get(`api/blade-food/food/dishTotal` + Dishes).then(res => {
         // console.log(res);
         this.double = res.data.data;
         // console.log(this.double);
@@ -362,27 +397,35 @@ export default {
     },
     //本周食谱健康指数排行榜
     HealthBar() {
-      this.$axios.get(`api/blade-food/food/recipeTotal`).then(res => {
-        // console.log(res);
-        this.getHealth = res.data.data;
-        // console.log(this.getHealth);
-      });
-    },
-    fattyfood() {
+      let rankings = `?tenantId=${this.activity}`;
       this.$axios
-        .get(`api/blade-food/recipe/getChildRecipeCal`, {})
+        .get(`api/blade-food/food/recipeTotal` + rankings)
+        .then(res => {
+          // console.log(res);
+          this.getHealth = res.data.data;
+          // console.log(this.getHealth);
+        });
+    },
+    //儿童每日进食量报表
+    fattyfood() {
+      let sorted = `?tenantId=${this.activity}`;
+      this.$axios
+        .get(`api/blade-food/recipe/getChildRecipeCal` + sorted, {})
         .then(res => {
           // console.log(res);
           this.today = res.data.data;
+          this.drawPie();
           // console.log(this.today);
         });
     },
     allchildren() {
+      let sorted = `?tenantId=${this.activity}`;
       this.$axios
-        .get(`api/blade-food/recipe/getChildNutritionCal `, {})
+        .get(`api/blade-food/recipe/getChildNutritionCal` + sorted, {})
         .then(res => {
           this.greater = res.data.data;
           // console.log(this.greater);
+          this.extract();
         });
     },
     handleChange(val) {
@@ -397,6 +440,7 @@ export default {
   width: 100%;
   height: 100%;
   /* background-color: #fff; */
+  margin-bottom: 50px;
 }
 .el-font-size {
   font-size: 14px;
@@ -448,30 +492,31 @@ export default {
 }
 .dishes {
   width: 100%;
-  height: 600px;
+  height: 700px;
   /* background-color: yellow; */
   display: flex;
   margin-top: 5px;
+  margin-bottom: 40px;
 }
 .variety {
   width: 50%;
-  height: 600px;
+  height: 700px;
   overflow-y: auto;
   overflow-x: hidden;
   background-color: #fff;
 }
 .recipes {
   width: 50%;
-  height: 600px;
+  height: 700px;
   background-color: #fff;
   margin-bottom: 40px;
 }
 .welcome {
   margin-left: 20px;
-  margin-top: 40px;
+  // margin-top: 40px;
 }
 .welcome1 {
-  margin-top: 10px;
+  margin-top: 21px;
 }
 .menu {
   width: 100%;
@@ -517,7 +562,7 @@ export default {
 }
 .school1 {
   width: 100%;
-  height: 60px;
+  height: 90px;
   margin-top: 20px;
 }
 .ranking {
@@ -571,8 +616,8 @@ export default {
   margin-top: 15px;
 }
 .schoolimg {
-  width: 50px;
-  height: 50px;
+  width: 80px;
+  height: 80px;
   background-color: #fff;
   float: left;
   margin-left: 30px;
@@ -584,8 +629,8 @@ export default {
 }
 .schooltxt {
   width: 200px;
-  height: 60px;
-  line-height: 60px;
+  height: 80px;
+  line-height: 80px;
   margin-left: 20px;
   float: left;
   font-size: 14px;
@@ -593,26 +638,28 @@ export default {
 .schoolnum {
   float: right;
   width: 100px;
-  height: 60px;
-  line-height: 60px;
+  height: 80px;
+  line-height: 80px;
   text-align: center;
   font-size: 14px;
 }
 .daychart {
   width: 100%;
-  height: 600px;
+  // height: 600px;
+  height: 100%;
   background-color: #fff;
   margin-top: 10px;
 }
 .foodinta {
-  width: 50%;
-  height: 100%;
-  float: left;
+  width: 100%;
+  text-align: center;
+  // height: 100%;
+  // float: left;
 }
 .nutrient {
-  width: 50%;
-  height: 100%;
-  float: left;
+  width: 100%;
+  // height: 100%;
+  // float: left;
 }
 .chooser {
   width: 400px;

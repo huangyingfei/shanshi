@@ -1,50 +1,49 @@
 <template>
   <div class="web">
     <el-row>
-      <el-col :span="24"
-        ><div class="search_all">
-          <span style="margin-right: 10px;margin-left: 15px;">选择部门</span>
-          <el-select v-model="value" placeholder="请选择">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-          <span style="margin-right: 10px;margin-left: 15px;">选择时间:</span>
-          <el-date-picker
-            v-model="strtotime"
-            format="yyyy 年 MM 月 dd 日"
-            value-format="yyyy-MM-dd"
-            type="daterange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
+      <el-col :span="8">
+        <week @weekChange="weekChange"></week>
+      </el-col>
+      <el-col :span="10">
+        <span style="margin-right: 10px;margin-left: 15px;">食谱报表:</span>
+        <el-select
+          v-model="recipeId"
+          placeholder="请选择"
+          @change="extractvalue"
+          style="width: 300px"
+        >
+          <el-option
+            v-for="item in recipeOptions"
+            :key="item.id"
+            :label="item.recipeName"
+            :value="item.id"
           >
-          </el-date-picker></div
-      ></el-col>
+          </el-option>
+        </el-select>
+      </el-col>
     </el-row>
     <el-row>
       <el-col :span="24"
         ><div class="students">
-          <div id="main" style="width:100% ;height:400px;"></div></div
+          <div id="main" style="width:100% ;height:500px;"></div></div
       ></el-col>
     </el-row>
     <el-row>
       <el-col :span="24"
         ><div class="students1">
-          <div id="schoolis" style="width:100% ;height:400px;"></div></div
+          <div id="schoolis" style="width:100% ;height:500px;"></div></div
       ></el-col>
     </el-row>
   </div>
 </template>
 
 <script>
+import week from "../../../components/week.vue";
 export default {
+  components: { week },
   data() {
     return {
+      WeekInfo: {},
       options: [
         {
           value: "选项1",
@@ -52,214 +51,219 @@ export default {
         }
       ],
       value: "",
-      strtotime: []
+      strtotime: [],
+      recipeOptions: [],
+      recipeId: "",
+      nutrients: [], //每日营养素
+      binge: []
     };
   },
-  mounted() {
-    this.getPie();
-    this.gradschools();
-  },
+  mounted() {},
   methods: {
+    //学生每人每日营养素提取
+    extractvalue() {
+      let urlParams = `?recipeId=${this.recipeId}`;
+      this.$axios
+        .get(
+          `/api/blade-food/recipe/getChildNutritionByRecipeId` + urlParams,
+          {}
+        )
+        .then(res => {
+          //   console.log(res);
+          this.nutrients = res.data.data;
+          this.getPie();
+        });
+    },
+
+    //学生每人每日进食量分布
+    creating() {
+      let urlParams = `?recipeId=${this.recipeId}`;
+      this.$axios
+        .get(
+          `/api/blade-food/recipe/getChildRecipeCalByRecipeId` + urlParams,
+          {}
+        )
+        .then(res => {
+          // console.log(res);
+          this.binge = res.data.data;
+          this.gradschools();
+        });
+    },
+    getNutritionDataList() {},
+    weekChange(WeekInfo) {
+      this.WeekInfo = WeekInfo;
+      this.axios({
+        method: "get",
+        url: "/api/blade-food/recipe/recipelist",
+        params: { startTime: WeekInfo.startTime, endTime: WeekInfo.endTime }
+      })
+        .then(res => {
+          this.recipeOptions = res.data.data;
+          if (res.data.data) {
+            this.recipeId = res.data.data[0].id;
+            // this.getNutritionDataList();
+          } else {
+            this.recipeId = "";
+          }
+          this.extractvalue();
+          this.creating();
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
     getPie() {
       // 绘制图表
       var myChart = this.$echarts.init(document.getElementById("main"));
-      // 指定图表的配置项和数据
       var option = {
-        //标题
         title: {
-          text: "学生每人每日营养素提取（DRIs）",
-          x: "center" //标题位置
-          // textStyle: { //标题内容的样式
-          //   color: '#000',
-          //   fontStyle: 'normal',
-          //   fontWeight: 100,
-          //   fontSize: 16 //主题文字字体大小，默认为18px
-          // },
+          text: "儿童每日进食量",
+
+          textAlign: "left"
         },
-        // stillShowZeroSum: true,
-        //鼠标划过时饼状图上显示的数据
-        tooltip: {
-          trigger: "item",
-          formatter: "{a}<br/>{b}:{c} ({d}%)"
-        },
-        //图例
+        tooltip: {}, //提示层
         legend: {
-          //图例  标注各种颜色代表的模块
-          // orient: 'vertical',//图例的显示方式  默认横向显示
-          bottom: 0, //控制图例出现的距离  默认左上角
-          left: "center", //控制图例的位置
-          itemWidth: 16, //图例颜色块的宽度和高度
-          itemHeight: 12,
-          textStyle: {
-            //图例中文字的样式
-            color: "#000",
-            fontSize: 16
-          },
-          data: [
-            "蛋白质(g)",
-            "能量(kcal)",
-            "---",
-            "脂肪(g)",
-            "钙(mg)",
-            "维生素A(ug)",
-            "其他",
-            "铁(mg)",
-            "维生素C(mg)",
-            "维生素B2(mg)",
-            "钠(mg)",
-            "维生素B1(mg)",
-            "锌(mg)"
-          ] //图例上显示的饼图各模块上的名字
+          // data: ["儿童每日进食量", "标准"]
         },
-        //饼图中各模块的颜色
-        color: [
-          "#69A8E8",
-          "#82B986",
-          "#F4D67C",
-          "#F07F77",
-          "#6BD6E9",
-          "#EF759D",
-          "#F2D39E",
-          "#C6ABF2",
-          "#F6B892",
-          "#CB9E9E",
-          "#C888D4",
-          "#9EC66F",
-          "#D288A7"
-        ],
-        // 饼图数据
-        series: {
-          // name: 'bug分布',
-          type: "pie", //echarts图的类型   pie代表饼图
-          radius: "70%", //饼图中饼状部分的大小所占整个父元素的百分比
-          center: ["50%", "50%"], //整个饼图在整个父元素中的位置
-          // data:''               //饼图数据
-          data: [
-            //每个模块的名字和值
-            { name: "蛋白质(g)", value: 5 },
-
-            { name: "能量(kcal)", value: 15 },
-            { name: "---", value: 5 },
-            { name: "脂肪(g)", value: 10 },
-
-            { name: "钙(mg)", value: 10 },
-            { name: "维生素A(ug)", value: 10 },
-            { name: "其他", value: 5 },
-
-            { name: "铁(mg)", value: 5 },
-            { name: "维生素C(mg)", value: 10 },
-            { name: "维生素B2(mg)", value: 5 },
-            { name: "钠(mg)", value: 5 },
-
-            { name: "维生素B1(mg)", value: 10 },
-            { name: "锌(mg)", value: 5 }
-          ],
-          itemStyle: {
-            normal: {
-              label: {
-                show: true //饼图上是否出现标注文字 标注各模块代表什么  默认是true
-                // position: 'inner',//控制饼图上标注文字相对于饼图的位置  默认位置在饼图外
-              },
-              labelLine: {
-                show: true //官网demo里外部标注上的小细线的显示隐藏    默认显示
-              }
+        radar: {
+          name: {
+            textStyle: {
+              color: "#fff", //字体颜色
+              backgroundColor: "#999", //背景色
+              borderRadius: 3, //圆角
+              padding: [3, 5] //padding
             }
+          },
+          center: ["50%", "50%"],
+          radius: "60%",
+          startAngle: 270,
+          indicator: [
+            {
+              name: "能量"
+            },
+            {
+              name: "蛋白质"
+            },
+            {
+              name: "脂肪"
+            },
+            {
+              name: "碳水化合物"
+            },
+            {
+              name: "钙"
+            },
+            {
+              name: "钠"
+            },
+            {
+              name: "铁"
+            },
+            {
+              name: "锌"
+            },
+            {
+              name: "维生素A"
+            },
+            {
+              name: "维生素B1"
+            },
+            {
+              name: "维生素B2"
+            },
+            {
+              name: "维生素C"
+            }
+          ]
+        },
+        series: [
+          {
+            name: "儿童每日进食量",
+            type: "radar",
+            data: [
+              {
+                value: this.nutrients,
+                name: "儿童每日进食量"
+              },
+              {
+                value: [80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80],
+                name: "标准"
+              }
+            ]
           }
-        }
+        ]
       };
-      // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
+      // console.log(this.double);
     },
     gradschools() {
       // 绘制图表
       var myChart = this.$echarts.init(document.getElementById("schoolis"));
-      // 指定图表的配置项和数据
       var option = {
-        //标题
         title: {
           text: "学生每人每日进食量分布",
-          x: "center" //标题位置
-          // textStyle: { //标题内容的样式
-          //   color: '#000',
-          //   fontStyle: 'normal',
-          //   fontWeight: 100,
-          //   fontSize: 16 //主题文字字体大小，默认为18px
-          // },
+
+          textAlign: "left"
         },
-        // stillShowZeroSum: true,
-        //鼠标划过时饼状图上显示的数据
-        tooltip: {
-          trigger: "item",
-          formatter: "{a}<br/>{b}:{c} ({d}%)"
-        },
-        //图例
+        tooltip: {}, //提示层
         legend: {
-          //图例  标注各种颜色代表的模块
-          // orient: 'vertical',//图例的显示方式  默认横向显示
-          bottom: 10, //控制图例出现的距离  默认左上角
-          left: "center", //控制图例的位置
-          itemWidth: 16, //图例颜色块的宽度和高度
-          itemHeight: 12,
-          textStyle: {
-            //图例中文字的样式
-            color: "#000",
-            fontSize: 16
-          },
-          data: [
-            "蔬菜(g)",
-            "水果(g)",
-            "---",
-            "盐",
-            "大豆(g)",
-            "乳制品(g)",
-            "食用油(g)",
-            "肉类(g)",
-            "谷类(g)"
-          ] //图例上显示的饼图各模块上的名字
+          data: ["name1"]
         },
-        //饼图中各模块的颜色
-        color: [
-          "#69A8E8",
-          "#82B986",
-          "#F4D67C",
-          "#F07F77",
-          "#6BD6E9",
-          "#EF759D",
-          "#F2D39E",
-          "#C6ABF2",
-          "#F6B892"
-        ],
-        // 饼图数据
-        series: {
-          // name: 'bug分布',
-          type: "pie", //echarts图的类型   pie代表饼图
-          radius: "70%", //饼图中饼状部分的大小所占整个父元素的百分比
-          center: ["50%", "50%"], //整个饼图在整个父元素中的位置
-          // data:''               //饼图数据
-          data: [
-            //每个模块的名字和值
-            { name: "蔬菜(g)", value: 15 },
-            { name: "水果(g)", value: 10 },
-            { name: "---", value: 5 },
-            { name: "盐", value: 5 },
-            { name: "大豆(g)", value: 25 },
-            { name: "乳制品(g)", value: 10 },
-            { name: "食用油(g)", value: 10 },
-            { name: "肉类(g)", value: 15 },
-            { name: "谷类(g)", value: 5 }
-          ],
-          itemStyle: {
-            normal: {
-              label: {
-                show: true //饼图上是否出现标注文字 标注各模块代表什么  默认是true
-                // position: 'inner',//控制饼图上标注文字相对于饼图的位置  默认位置在饼图外
-              },
-              labelLine: {
-                show: true //官网demo里外部标注上的小细线的显示隐藏    默认显示
-              }
+        radar: {
+          name: {
+            textStyle: {
+              color: "#fff", //字体颜色
+              backgroundColor: "#999", //背景色
+              borderRadius: 3, //圆角
+              padding: [3, 5] //padding
             }
+          },
+          center: ["50%", "50%"],
+          radius: "60%",
+          startAngle: 270,
+          indicator: [
+            {
+              name: "谷类(g)"
+            },
+            {
+              name: "蔬菜(g)"
+            },
+            {
+              name: " 水果(g)"
+            },
+            {
+              name: "乳制品(g)"
+            },
+            {
+              name: " 大豆(g)"
+            },
+            {
+              name: " 食盐(g)"
+            },
+            {
+              name: "食用油(g)"
+            },
+            {
+              name: " 畜禽肉类-蛋类-水产品(g)"
+            }
+          ]
+        },
+        series: [
+          {
+            name: "学生每人每日进食量分布vs标准",
+            type: "radar",
+            data: [
+              {
+                value: this.binge,
+                name: "学生每人每日进食量分布"
+              },
+              {
+                value: [80, 80, 80, 80, 80, 80, 80, 80],
+                name: "标准"
+              }
+            ]
           }
-        }
+        ]
       };
       // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
@@ -271,13 +275,15 @@ export default {
 <style lang="scss" scoped>
 .web {
   width: 100%;
-  height: 700px;
+  height: 669px;
   background-color: #fff;
   overflow: auto;
   margin-bottom: 50px;
 }
 .search_all {
+  width: 100%;
   font-size: 14px;
+  float: left;
 }
 .students {
   width: 100%;

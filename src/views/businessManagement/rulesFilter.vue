@@ -165,7 +165,6 @@ export default {
           returnFee: this.formsearch.refunded, //应退伙食费
           type: this.refunds, //标准
           calType: this.runway, //计算方式
-
           ...obj
         })
         .then(res => {

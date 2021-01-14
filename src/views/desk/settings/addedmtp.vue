@@ -531,8 +531,9 @@ export default {
   display: inline-block;
 }
 .accto {
-  width: 1100px;
-  height: 70px;
+  /* width: 1100px; */
+  width: 100%;
+  height: 90px;
   position: relative;
   top: 5px;
   margin-left: 50px;
