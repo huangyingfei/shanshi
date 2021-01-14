@@ -83,6 +83,7 @@ export default {
         wsNum: [],
         yhNum: [],
         ytNum: [],
+        regionName: [],
       },
       dateRangeValue: [],
       classId: [""],
@@ -140,6 +141,12 @@ export default {
 
         result.diseaseTrend.forEach((el) => {
           for (let k in el) {
+            console.log(this.leaveSymptoms2);
+            console.log(k);
+            if (this.leaveSymptoms2[k] == undefined) {
+              this.leaveSymptoms2[k] = [];
+            }
+
             this.leaveSymptoms2[k].push(el[k]);
           }
         });
