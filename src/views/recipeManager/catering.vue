@@ -603,7 +603,7 @@
               <p class="gnus">{{peipScore}}<span class="gnus-fen">分</span></p>
             </div>
           </div>
-          <div v-if="parseFloat(score)<90&&parseFloat(score)>=85" class="scores-same scores-hege" >
+          <div v-if="parseFloat(peipScore)<90&&parseFloat(peipScore)>=85" class="scores-same scores-hege" >
             <div class="scores3">
               <p class="gnus">{{peipScore}}<span class="gnus-fen">分</span></p>
             </div>
