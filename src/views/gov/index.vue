@@ -33,7 +33,7 @@
           </div>
           <div class="input-box">
             <label>周期选择</label>
-            <el-radio-group v-model="radio">
+            <el-radio-group v-model="nutrientData.dateCycle">
               <el-radio :label="3">日</el-radio>
               <el-radio :label="6">周</el-radio>
               <el-radio :label="9">月</el-radio>
@@ -111,7 +111,7 @@
           <div style="margin-top: 12px; width: 100%">
             <label>时间</label>
             <el-date-picker
-              v-model="value1"
+              v-model="everyDayNutrient.dateRange"
               type="daterange"
               range-separator="至"
               start-placeholder="开始日期"
@@ -154,7 +154,7 @@
           <div style="margin-top: 12px; width: 100%">
             <label>时间</label>
             <el-date-picker
-              v-model="value1"
+              v-model="everyDayEat.dateRange"
               type="daterange"
               range-separator="至"
               start-placeholder="开始日期"
@@ -186,11 +186,13 @@
             >
             </el-date-picker>
           </div>
-          <infinite-scroll>
-            <template v-slot="scope">
-              <li-row :imgurl="scope.liData" />
-            </template>
-          </infinite-scroll>
+          <div style="height: 350px">
+            <infinite-scroll>
+              <template v-slot="scope">
+                <li-row :imgurl="scope.liData" />
+              </template>
+            </infinite-scroll>
+          </div>
         </el-col>
       </el-row>
       <el-row style="margin-bottom: 20px">
@@ -235,12 +237,26 @@
           </div>
           <div
             id="everyDayEatPic"
-            style="width: 100%; height: inherit; overflow: hidden"
+            style="width: 100%; height: 500px; overflow: hidden"
           >
-            <infinite-scroll />
+            <infinite-scroll>
+              <template>
+                <school-li-row @openDialog="protocol"></school-li-row>
+              </template>
+            </infinite-scroll>
           </div>
+          <v-calendar />
         </el-col>
       </el-row>
+      <el-dialog
+        :visible.sync="dialogVisible"
+        width="80%"
+        :before-close="handleClose"
+        :append-to-body="true"
+      >
+        <sharing />
+      </el-dialog>
+
       <div style="height: 20px; width: 100%"></div>
     </div>
   </basic-container>
@@ -249,14 +265,40 @@
 <script>
 import infiniteScroll from "./infiniteScroll.vue";
 import LiRow from "./liRow.vue";
+import VCalendar from "../../components/vCalendar.vue";
+import SchoolLiRow from "./schoolLiRow.vue";
+import Sharing from "../PublicLicense/sharing.vue";
 export default {
-  components: { infiniteScroll, LiRow },
+  components: { infiniteScroll, LiRow, VCalendar, SchoolLiRow, Sharing },
   data() {
     return {
       cascaderOptions: [],
       region1: [],
       nutrientData: {
         region: "",
+        dateCycle: "",
+        legendData: ["平均成绩", "学生成绩"],
+        xAxisData: [
+          "2020-1-1",
+          "2020-2-1",
+          "2020-3-1",
+          "2020-4-1",
+          "2020-5-1",
+          "2020-6-1",
+          "2020-7-1",
+        ],
+        seriesData: [
+          {
+            name: "平均成绩",
+            data: [20, 32, 61, 34, 90, 30, 20],
+            type: "line", // 类型为折线图
+          },
+          {
+            name: "学生成绩",
+            data: [48, 25, 50, 80, 70, 11, 30],
+            type: "line",
+          },
+        ],
       },
       leaveSymptoms: {
         region: "",
@@ -273,10 +315,11 @@ export default {
       count: 10,
       loading: false,
       noMore: false,
+      dialogVisible: false,
     };
   },
   mounted() {
-    this.Provinces();
+    this.getProvinces();
     this.nutrientLine();
     this.leaveSymptomsBar();
     this.allergyFoodRadar();
@@ -284,6 +327,12 @@ export default {
     this.everyDayEatPic();
   },
   methods: {
+    protocol(row) {
+      this.$nextTick(() => {
+        this.dialogVisible = true;
+        this.$refs.toolb.overview();
+      });
+    },
     load() {
       this.loading = true;
       setTimeout(() => {
@@ -292,7 +341,7 @@ export default {
       }, 2000);
     },
     //获取区域选择内容
-    Provinces() {
+    getProvinces() {
       this.$axios
         .get(`api/blade-system/region/selectCityOrProvince`, {
           headers: {
@@ -344,23 +393,13 @@ export default {
 
         legend: {
           //设置区分（哪条线属于什么）
-          data: ["平均成绩", "学生成绩"],
+          data: this.nutrientData.legendData,
         },
-        color: ["#8AE09F", "#FA6F53"], //设置区分（每条线是什么颜色，和 legend 一一对应）
         xAxis: {
           //设置x轴
           type: "category",
           boundaryGap: false, //坐标轴两边不留白
-          data: [
-            "2020-1-1",
-            "2020-2-1",
-            "2020-3-1",
-            "2020-4-1",
-            "2020-5-1",
-            "2020-6-1",
-            "2020-7-1",
-          ],
-          // name: "DATE", //X轴 name
+          data: this.nutrientData.xAxisData,
           nameTextStyle: {
             //坐标轴名称的文字样式
             color: "#000",
@@ -388,29 +427,7 @@ export default {
           },
           type: "value",
         },
-        series: [
-          {
-            name: "平均成绩",
-            data: [20, 32, 61, 34, 90, 30, 20],
-            type: "line", // 类型为折线图
-            lineStyle: {
-              // 线条样式 => 必须使用normal属性
-              normal: {
-                color: "#8AE09F",
-              },
-            },
-          },
-          {
-            name: "学生成绩",
-            data: [48, 25, 50, 80, 70, 11, 30],
-            type: "line",
-            lineStyle: {
-              normal: {
-                color: "#FA6F53",
-              },
-            },
-          },
-        ],
+        series: this.nutrientData.seriesData,
       };
 
       // 使用刚指定的配置项和数据显示图表。

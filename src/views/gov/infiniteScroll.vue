@@ -1,7 +1,7 @@
 <template>
   <div class="detetion-box" ref="boxScroll">
     <ul>
-      <li v-for="(item, index) in liArray" :key="index">
+      <li v-for="(item, index) in 10" :key="index">
         <slot :liData="item"></slot>
       </li>
     </ul>
@@ -28,9 +28,9 @@ export default {
   destroyed() {},
   methods: {
     getData() {
-      console.log(this.$refs.boxScroll.scrollHeight);
-      console.log(this.$refs.boxScroll.scrollTop);
-      console.log(this.$refs.boxScroll.clientHeight);
+      // console.log(this.$refs.boxScroll.scrollHeight);
+      // console.log(this.$refs.boxScroll.scrollTop);
+      // console.log(this.$refs.boxScroll.clientHeight);
     },
     ScrollUp() {
       this.speed = 50;
@@ -48,5 +48,9 @@ export default {
 .detetion-box {
   height: inherit;
   overflow: scroll;
+}
+ul {
+  list-style: none;
+  padding-left: 2px;
 }
 </style>
