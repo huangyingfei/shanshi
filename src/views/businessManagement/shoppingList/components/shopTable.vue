@@ -12,36 +12,34 @@
               size="small"
               disabled
             ></el-input-number>
-            <el-popover placement="right" width="200" trigger="click">
-              <el-card class="box-card">
-                <el-form size="mini" label-width="80px">
-                  <el-form-item
-                    :label="people.peopleName"
-                    v-for="people in item.peopleStrs"
-                    :key="people"
-                  >
-                    <el-input-number
-                      v-model="people.finalNum"
-                      :controls="false"
-                      :disabled="people.peopleName == '请假人数'"
-                      @change="
-                        peopleChange(
-                          people.peopleName,
-                          item.children,
-                          people.finalNum
-                        )
-                      "
-                    ></el-input-number>
-                  </el-form-item>
-                  <el-form-item label="合计">
-                    <el-input-number
-                      :value="peopleSum(item.peopleStrs)"
-                      :controls="false"
-                      disabled
-                    ></el-input-number>
-                  </el-form-item>
-                </el-form>
-              </el-card>
+            <el-popover placement="right" width="250" trigger="click">
+              <el-form size="mini" label-width="80px">
+                <el-form-item
+                  :label="people.peopleName"
+                  v-for="people in item.peopleStrs"
+                  :key="people"
+                >
+                  <el-input-number
+                    v-model="people.finalNum"
+                    :controls="false"
+                    :disabled="people.peopleName == '请假人数'"
+                    @change="
+                      peopleChange(
+                        people.peopleName,
+                        item.children,
+                        people.finalNum
+                      )
+                    "
+                  ></el-input-number>
+                </el-form-item>
+                <el-form-item label="合计">
+                  <el-input-number
+                    :value="peopleSum(item.peopleStrs)"
+                    :controls="false"
+                    disabled
+                  ></el-input-number>
+                </el-form-item>
+              </el-form>
               <el-button type="text" slot="reference">查看全部</el-button>
             </el-popover>
           </li>

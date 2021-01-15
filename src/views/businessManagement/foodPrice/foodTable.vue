@@ -50,7 +50,7 @@
           <div class="flex-box">
             <label style="white-space: nowrap">1{{ scope.row.unit }}=</label>
             <el-input-number
-              v-model="scope.row.convert"
+              v-model="scope.row.converts"
               :controls="false"
             ></el-input-number>
             <!-- <el-input v-model="scope.row.convert"></el-input> -->
@@ -66,7 +66,7 @@
               v-model="scope.row.price"
               :controls="false"
             ></el-input-number>
-            <label style="white-space: nowrap">元/斤</label>
+            <label style="white-space: nowrap">元/Kg</label>
           </div>
         </template>
       </el-table-column>

@@ -2,7 +2,7 @@
   <div>
     <el-row :gutter="20">
       <el-col :span="6">
-        <label>选择部门</label>
+        <label>选择班级</label>
         <el-cascader
           v-model="classId"
           :options="options"
@@ -41,8 +41,7 @@
           </el-table-column>
           <el-table-column prop="sj" label="事假(天)"> </el-table-column>
           <el-table-column prop="bj" label="病假(天)"> </el-table-column>
-          <el-table-column prop="other" label="其他病假(天)"> </el-table-column>
-          <el-table-column prop="hj" label="合计病假(天)"> </el-table-column>
+          <el-table-column prop="hj" label="合计(天)"> </el-table-column>
         </el-table>
       </el-col>
     </el-row>
