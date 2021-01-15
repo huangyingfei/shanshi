@@ -42,7 +42,7 @@
                     <span    v-if="!data.addBtn && data.classType == 2">{{
                       data.label
                     }}</span>
-                    <el-tooltip  :content="data.classAlias" placement="bottom" effect="light">
+                    <el-tooltip    :content="data.classAlias" placement="bottom" effect="light">
                     <span    v-if="!data.addBtn && data.classType == 3">{{
                       data.label
                     }}</span>

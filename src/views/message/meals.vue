@@ -1846,6 +1846,8 @@ document.oncontextmenu = function(){return false};
       })
       debugger
       let row={
+        //---
+        // mealTypeStrs:JSON.stringify(this.WeekInfo.foodCatalog),
         recipeName:this.WeekInfo.Weekdetails,
         peopleId:this.WeekInfo.crowd,
         isPub:this.WeekInfo.sharePlant?0:1,
