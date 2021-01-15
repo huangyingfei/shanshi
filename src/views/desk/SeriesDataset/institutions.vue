@@ -175,7 +175,13 @@ export default {
         school: "", //学校
         hospitals: "", //医院
         catering: "" //餐饮
-      } //机构类型分布图
+      }, //机构类型分布图
+      schoolis: {
+        robinson: "",
+        noschool: "",
+        highly: "",
+        lehigh: ""
+      }
     };
   },
   created() {
@@ -223,7 +229,6 @@ export default {
     this.$nextTick(function() {
       // this.extract("chartLineBox"); //折线图
       // this.getPie(); //机构类型分布图
-      this.gradschools(); //学校类型分布图
     });
     // this.initialWeek();
     // this.fullLength();
@@ -287,7 +292,12 @@ export default {
         this.mappings.school = this.maps.school;
         this.mappings.hospitals = this.maps.restaurant;
         this.mappings.catering = this.maps.hospital;
+        this.schoolis.robinson = this.maps.yey;
+        this.schoolis.noschool = this.maps.xx;
+        this.schoolis.highly = this.maps.cz;
+        this.schoolis.lehigh = this.maps.gz;
         this.getPie(); //机构类型分布图
+        this.gradschools(); //学校类型分布图
       });
     },
     //折线图
@@ -411,7 +421,7 @@ export default {
         color: ["#69A8E8", "#F4D67C", "#F07F77"],
         // 饼图数据
         series: {
-          // name: 'bug分布',
+          name: "机构类型分布图",
           type: "pie", //echarts图的类型   pie代表饼图
           radius: "70%", //饼图中饼状部分的大小所占整个父元素的百分比
           center: ["50%", "50%"], //整个饼图在整个父元素中的位置
@@ -480,17 +490,17 @@ export default {
         color: ["#69A8E8", "#82B986", "#F4D67C", "#F07F77"],
         // 饼图数据
         series: {
-          // name: 'bug分布',
+          name: "学校类型分布图",
           type: "pie", //echarts图的类型   pie代表饼图
           radius: "70%", //饼图中饼状部分的大小所占整个父元素的百分比
           center: ["50%", "50%"], //整个饼图在整个父元素中的位置
           // data:''               //饼图数据
           data: [
             //每个模块的名字和值
-            { name: "幼儿园", value: 45 },
-            { name: "小学", value: 36 },
-            { name: "初中", value: 9 },
-            { name: "高中", value: 9 }
+            { name: "幼儿园", value: this.schoolis.robinson },
+            { name: "小学", value: this.schoolis.noschool },
+            { name: "初中", value: this.schoolis.highly },
+            { name: "高中", value: this.schoolis.lehigh }
           ],
           itemStyle: {
             normal: {

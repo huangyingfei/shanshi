@@ -14,7 +14,7 @@
         ></el-col>
         <el-col :span="10"
           ><div>
-            <span style="margin-right: 10px;margin-left: 15px;">提交日期:</span>
+            <span style="margin-right: 10px;margin-left: 15px;">请假日期:</span>
             <el-date-picker
               v-model="formsearch.getDate"
               format="yyyy 年 MM 月 dd 日"
@@ -400,7 +400,6 @@
           </el-form-item>
           <el-form-item label="请假天数" prop="weekday">
             <el-input
-              :disabled="true"
               type="number"
               style="width: 250px"
               v-model="ruleForm.weekday"
@@ -469,7 +468,7 @@
           >确 定</el-button
         >
         <el-button v-else @click="editorPara('ruleForm')" type="primary"
-          >编辑确定</el-button
+          >确定</el-button
         >
         <!-- <el-button @click="started" type="primary">测试计算</el-button> -->
       </div>

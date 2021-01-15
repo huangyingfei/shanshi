@@ -104,6 +104,7 @@
         ><div>
           <el-table
             :data="tableData"
+            v-loading="loadFlag"
             border
             style="width: 100%"
             @selection-change="handleSelectionChange"
@@ -132,15 +133,13 @@
               align="center"
             >
             </el-table-column>
-            <el-table-column label="是否退费" align="center">
-              <!-- <template slot-scope="scope">
-                      <el-radio v-model="refundId" :label="scope.row.isRefund"
-                        >是</el-radio
-                      >
-                      <el-radio v-model="refundId" :label="scope.row.isRefund"
-                        >否</el-radio
-                      >
-                    </template> -->
+            <el-table-column prop="isRefund" label="是否退费" align="center">
+              <template slot-scope="scope">
+                <el-radio-group v-model="scope.row.isRefund">
+                  <el-radio label="1">是</el-radio>
+                  <el-radio label="0">否</el-radio>
+                </el-radio-group>
+              </template>
             </el-table-column>
           </el-table>
         </div></el-col
@@ -153,6 +152,7 @@
 export default {
   data() {
     return {
+      loadFlag: false, //加载flag
       value2: "", //月度
       elseclass: [],
       ei_class: "", //班级
@@ -191,6 +191,7 @@ export default {
   methods: {
     //获取列表
     getStorage() {
+      this.loadFlag = true;
       let urlParams = `?size=${this.m_page.size}&current=${
         this.m_page.number
       }&type=${0}`;
@@ -198,6 +199,7 @@ export default {
         .get(`api/blade-food/returnmeallist/page` + urlParams, {})
         .then(res => {
           // console.log(res);
+          this.loadFlag = false;
           this.tableData = res.data.data.records;
           console.log(this.tableData);
           this.m_page.totalElements = res.data.data.total;

@@ -117,14 +117,12 @@ export default {
       var myChart = this.$echarts.init(document.getElementById("main"));
       var option = {
         title: {
-          text: "儿童每日进食量",
+          text: "儿童每人每日营养素提取（DRls)",
 
           textAlign: "left"
         },
         tooltip: {}, //提示层
-        legend: {
-          // data: ["儿童每日进食量", "标准"]
-        },
+
         radar: {
           name: {
             textStyle: {
@@ -178,16 +176,16 @@ export default {
         },
         series: [
           {
-            name: "儿童每日进食量",
+            name: "儿童每人每日营养素提取（DRls）",
             type: "radar",
             data: [
               {
                 value: this.nutrients,
-                name: "儿童每日进食量"
+                name: "儿童每人每日营养素提取（DRls）"
               },
               {
                 value: [80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80],
-                name: "标准"
+                name: "要求比例"
               }
             ]
           }
@@ -201,7 +199,7 @@ export default {
       var myChart = this.$echarts.init(document.getElementById("schoolis"));
       var option = {
         title: {
-          text: "学生每人每日进食量分布",
+          text: "儿童每人每日进食量",
 
           textAlign: "left"
         },
@@ -250,16 +248,16 @@ export default {
         },
         series: [
           {
-            name: "学生每人每日进食量分布vs标准",
+            name: "儿童每人每日进食量",
             type: "radar",
             data: [
               {
                 value: this.binge,
-                name: "学生每人每日进食量分布"
+                name: "儿童每人每日进食量"
               },
               {
                 value: [80, 80, 80, 80, 80, 80, 80, 80],
-                name: "标准"
+                name: "推荐最大量"
               }
             ]
           }

@@ -46,7 +46,19 @@
             <el-image
               style="width: 80px; height: 80px"
               :src="item.dishPic"
-            ></el-image>
+              lazy
+            >
+              <div
+                slot="error"
+                class="image-slot"
+                style="width: 80px; height: 80px; text-align: center;  line-height: 80px;"
+              >
+                <!-- <i class="el-icon-picture-outline"></i> -->
+                <div class="el-image__error">
+                  暂无图片
+                </div>
+              </div>
+            </el-image>
           </div>
           <div class="menutext">{{ item.dishName }}</div>
           <div class="menunum">{{ item.dishCount }}</div>
@@ -73,7 +85,19 @@
             <el-image
               style="width: 80px; height: 80px"
               :src="item1.dishPic"
-            ></el-image>
+              lazy
+            >
+              <div
+                slot="error"
+                class="image-slot"
+                style="width: 80px; height: 80px; text-align: center;  line-height: 80px;"
+              >
+                <!-- <i class="el-icon-picture-outline"></i> -->
+                <div class="el-image__error">
+                  暂无图片
+                </div>
+              </div>
+            </el-image>
           </div>
           <div class="schooltxt">{{ item1.tenantName }}</div>
           <div class="schoolnum">{{ item1.score }}</div>
@@ -126,198 +150,9 @@ export default {
     this.siteheader(); //头部
     this.welcomeUser();
     this.HealthBar();
-    this.fattyfood();
-    this.allchildren();
-    this.fromSearch();
   },
-  mounted() {
-    // this.drawLine();
-    // this.extract();
-    // this.drawPie();
-    // setTimeout(() => {
-    //   this.drawPie();
-    //   this.extract();
-    // }, 1000);
-  },
+  mounted() {},
   methods: {
-    //     extract() {
-    //       let charts = this.$echarts.init(document.getElementById("mynutrient"));
-    //       var option = {
-    //         title: {
-    //           text: "儿童每人每日营养素提取（DRls）",
-    //
-    //           textAlign: "left"
-    //         },
-    //         tooltip: {}, //提示层
-    //         legend: {
-    //           data: ["name1"]
-    //         },
-    //         radar: {
-    //           name: {
-    //             textStyle: {
-    //               color: "#fff", //字体颜色
-    //               backgroundColor: "#999", //背景色
-    //               borderRadius: 3, //圆角
-    //               padding: [3, 5] //padding
-    //             }
-    //           },
-    //           center: ["50%", "50%"],
-    //           radius: "60%",
-    //           startAngle: 270,
-    //           indicator: [
-    //             {
-    //               name: "能量",
-    //               max: 300
-    //             },
-    //             {
-    //               name: "钠",
-    //               max: 300
-    //             },
-    //             {
-    //               name: "铁",
-    //               max: 350
-    //             },
-    //             {
-    //               name: "锌",
-    //               max: 300
-    //             },
-    //             {
-    //               name: "钙",
-    //               max: 300
-    //             },
-    //             {
-    //               name: "维生素C",
-    //               max: 300
-    //             },
-    //             {
-    //               name: "维生素B2",
-    //               max: 300
-    //             },
-    //             {
-    //               name: "维生素B1",
-    //               max: 300
-    //             },
-    //             {
-    //               name: "维生素A",
-    //               max: 300
-    //             },
-    //             {
-    //               name: "脂肪",
-    //               max: 300
-    //             },
-    //             {
-    //               name: "蛋白质",
-    //               max: 300
-    //             }
-    //           ]
-    //         },
-    //         series: [
-    //           {
-    //             name: "儿童每日进食量",
-    //             type: "radar",
-    //             data: [
-    //               {
-    //                 value: this.greater,
-    //                 name: "儿童每日进食量"
-    //               }
-    //             ]
-    //           }
-    //         ]
-    //       };
-    //       charts.setOption(option);
-    //     },
-    //     drawPie() {
-    //       let charts = this.$echarts.init(document.getElementById("leiDaTu"));
-    //       var option = {
-    //         title: {
-    //           text: "儿童每日进食量",
-    //
-    //           textAlign: "left"
-    //         },
-    //         tooltip: {}, //提示层
-    //         legend: {
-    //           data: ["name1"]
-    //         },
-    //         radar: {
-    //           name: {
-    //             textStyle: {
-    //               color: "#fff", //字体颜色
-    //               backgroundColor: "#999", //背景色
-    //               borderRadius: 3, //圆角
-    //               padding: [3, 5] //padding
-    //             }
-    //           },
-    //           center: ["50%", "50%"],
-    //           radius: "60%",
-    //           startAngle: 270,
-    //           indicator: [
-    //             {
-    //               name: "谷类",
-    //               max: 300
-    //             },
-    //             {
-    //               name: "盐",
-    //               max: 300
-    //             },
-    //             {
-    //               name: "食用油",
-    //               max: 350
-    //             },
-    //             {
-    //               name: "乳制品",
-    //               max: 300
-    //             },
-    //             {
-    //               name: "大豆",
-    //               max: 300
-    //             },
-    //             {
-    //               name: "畜禽肉类",
-    //               max: 300
-    //             },
-    //             {
-    //               name: "水果",
-    //               max: 300
-    //             },
-    //             {
-    //               name: "蔬菜",
-    //               max: 300
-    //             }
-    //           ]
-    //         },
-    //         series: [
-    //           {
-    //             name: "儿童每日进食量",
-    //             type: "radar",
-    //             data: [
-    //               {
-    //                 value: this.today,
-    //                 name: "儿童每日进食量"
-    //               }
-    //             ]
-    //           }
-    //         ]
-    //       };
-    //       charts.setOption(option);
-    //       // console.log(this.double);
-    //     },
-    fromSearch() {
-      this.$axios
-        .get(`api/blade-system/tenant/getChildTenant`, {})
-        .then(res => {
-          // console.log(res);
-          this.rsearch = res.data.data;
-          // console.log(this.rsearch);
-          let second = [];
-          this.rsearch.forEach(item => {
-            second.push({
-              value: item.tenantId,
-              label: item.tenantName
-            });
-          });
-          this.options = second;
-        });
-    },
     //头部
     siteheader() {
       this.$axios.get(`api/blade-food/food/getTotal`).then(res => {
@@ -328,37 +163,25 @@ export default {
     },
     //本周最受欢迎菜品
     welcomeUser() {
-      this.$axios.get(`api/blade-food/food/dishTotal`).then(res => {
+      let urlParams = `?size=${500}&current=${1}`;
+      this.$axios.get(`api/blade-food/food/dishTotal` + urlParams).then(res => {
         // console.log(res);
-        this.double = res.data.data;
+        this.double = res.data.data.records;
         // console.log(this.double);
       });
     },
     //本周食谱健康指数排行榜
     HealthBar() {
-      this.$axios.get(`api/blade-food/food/recipeTotal`).then(res => {
-        // console.log(res);
-        this.getHealth = res.data.data;
-        // console.log(this.getHealth);
-      });
-    },
-    fattyfood() {
+      let urlParams = `?size=${500}&current=${1}`;
       this.$axios
-        .get(`api/blade-food/recipe/getChildRecipeCal`, {})
+        .get(`api/blade-food/food/recipeTotal` + urlParams)
         .then(res => {
           // console.log(res);
-          this.today = res.data.data;
-          // console.log(this.today);
+          this.getHealth = res.data.data.records;
+          // console.log(this.getHealth);
         });
     },
-    allchildren() {
-      this.$axios
-        .get(`api/blade-food/recipe/getChildNutritionCal `, {})
-        .then(res => {
-          this.greater = res.data.data;
-          // console.log(this.greater);
-        });
-    },
+
     handleChange(val) {
       window.console.log(val);
     }
@@ -421,7 +244,7 @@ export default {
 }
 .dishes {
   width: 100%;
-  height: 700px;
+  height: 750px;
   /* background-color: yellow; */
   display: flex;
   margin-top: 5px;
@@ -437,15 +260,17 @@ export default {
 .recipes {
   width: 50%;
   height: 700px;
+  overflow-y: auto;
+  overflow-x: hidden;
   background-color: #fff;
-  margin-bottom: 40px;
+  // margin-bottom: 40px;
 }
 .welcome {
   margin-left: 20px;
-  margin-top: 40px;
+  // margin-top: 40px;
 }
 .welcome1 {
-  margin-top: 10px;
+  margin-top: 20px;
 }
 .menu {
   width: 100%;

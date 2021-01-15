@@ -93,6 +93,7 @@
             :data="create"
             border
             style="width: 100%"
+            v-loading="loadFlag"
             @selection-change="handleSelectionChange"
           >
             <el-table-column type="selection" width="55"> </el-table-column>
@@ -119,10 +120,17 @@
               align="center"
             >
             </el-table-column>
-            <el-table-column prop="name" label="是否退费" align="center">
+            <el-table-column prop="isRefund" label="是否退费" align="center">
+              <template slot-scope="scope">
+                <el-radio-group v-model="scope.row.isRefund">
+                  <el-radio label="1">是</el-radio>
+                  <el-radio label="0">否</el-radio>
+                </el-radio-group>
+              </template>
             </el-table-column>
-          </el-table></div
-      ></el-col>
+          </el-table>
+        </div></el-col
+      >
     </el-row>
   </div>
 </template>
@@ -130,6 +138,7 @@
 export default {
   data() {
     return {
+      loadFlag: false, //加载flag
       idSemester: [
         {
           value: "0",
@@ -172,6 +181,7 @@ export default {
   methods: {
     //学期
     getSemester() {
+      this.loadFlag = true;
       let urlParams = `?size=${this.m_page.size}&current=${
         this.m_page.number
       }&type=${1}`;
@@ -179,6 +189,7 @@ export default {
         .get(`api/blade-food/returnmeallist/page` + urlParams, {})
         .then(res => {
           // console.log(res);
+          this.loadFlag = false;
           this.create = res.data.data.records;
           console.log(this.create);
         });
