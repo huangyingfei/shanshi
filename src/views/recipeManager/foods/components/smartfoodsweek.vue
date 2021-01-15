@@ -1573,8 +1573,7 @@
           }
         });
       },
-
-      //食材数量改变
+//食材数量改变
       foodChange(data_id, week_id){
         this.smartDatas.forEach((data) => {
           if (data.id === data_id) {
@@ -1583,6 +1582,9 @@
                 week.foods.forEach(food=>{
                   let count = 0;
                   food.children.forEach(___ => {
+                    if(isNaN(___.count)){
+                      this.$set(___, "count", 0);
+                    }
                     count += parseFloat(___.count ? ___.count : 0)
                   })
                   this.$set(food, "count", count);
@@ -1604,11 +1606,24 @@
                   food.children.forEach(___ => {
                     count += parseFloat(___.count ? ___.count : 0)
                   })
+                  if(isNaN(food.count)){
+                    this.$set(food, "count",0);
+                  }
                   if(parseFloat(count)!=parseFloat(food.count)){
                     food.children.forEach(___ => {
-                      this.$set(___,"count",((parseFloat(food.count)/parseFloat(count))*___.count).toFixed(2))
+                      if(isNaN(food.count)||isNaN(___.count)){
+                        this.$set(___, "count",0);
+                      }
+                      if (food.count == 0&&___.count==0) {
+                        this.$set(___, "count", (1 / food.children.length) * food.count).toFixed(2);
+                      } else {
+                        if(___.count!=0){
+                          this.$set(___, "count", ((parseFloat(food.count) / parseFloat(count)) * ___.count).toFixed(2))
+                        }
+                      }
                     })
                   }
+
                 })
               }
             });
@@ -1616,23 +1631,6 @@
         });
         this.getFoodScoreSmart();
       },
-      // // 移除
-      // onRemove(data_id, week_id, food_id) {
-      //   this.datas.forEach((data) => {
-      //     if (data.id === data_id) {
-      //       data.weeks.forEach((week) => {
-      //         if (week.id === week_id) {
-      //           var idx = week.foods.findIndex((p) => p.id === food_id);
-      //           if (idx > -1) {
-      //             week.foods.splice(idx, 1);
-      //
-      //             return;
-      //           }
-      //         }
-      //       });
-      //     }
-      //   });
-      // },
 
       // // 上传图片
       // onUploadImage(data_id, week_id, res) {
