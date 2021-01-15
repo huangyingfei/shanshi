@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { formateDate } from "@/api/tool/date";
+import { dateFormat } from "@/util/date";
 
 export default {
   data() {
@@ -84,9 +84,10 @@ export default {
         current: this.page.currentPage,
         size: this.page.pageSize,
       };
-      if (this.search.data) {
-        params.startTimeStr = formateDate(this.search.data[0]);
-        params.endTimeStr = formateDate(this.search.data[1]);
+
+      if (this.search.createTime) {
+        params.startTimeStr = dateFormat(this.search.createTime[0]);
+        params.endTimeStr = dateFormat(this.search.createTime[1]);
       }
       this.axios({
         url: "/api/blade-food/recipecomment/list",
