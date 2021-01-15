@@ -30,6 +30,7 @@
               v-model="region"
               :disabled="ableFlag"
               style="width: 324.8px"
+              @change="change"
             ></avue-cascader>
 
             <avue-input
@@ -40,6 +41,7 @@
               minlength="0"
               maxlength="255"
               span="12"
+              @change="change"
             ></avue-input>
           </el-col>
         </el-row>
@@ -471,6 +473,13 @@ export default {
                 prop: "tenantAddress",
                 formslot: true,
                 span: 24,
+                rules: [
+                  {
+                    required: true,
+                    message: "请输入机构地址",
+                    trigger: "blur",
+                  }
+                ]
               },
               {
                 label: "机构地址",
@@ -694,6 +703,7 @@ export default {
         });
       }
     },
+
     validatePhone(rule, value, callback){
       if (value === ""||value=="undefined"||!value) {
         callback(new Error("请输入手机号"));
@@ -757,6 +767,7 @@ export default {
         });
       });
     },
+
      handleAdd(row) {
        this.$set(this.$refs.crud.value,"parentId",row.id)
         // this.$refs.crud.option.group.filter(item => {
@@ -799,6 +810,12 @@ export default {
           });
         });
     },
+    change(){
+      debugger
+            if(this.region!=null&&this.region!=""&&this.region!=undefined){
+              this.$set(this.form,"tenantAddress","null")
+            }
+        },
     //新增
     rowSave(row, done, loading) {
       this.ableFlag=true;

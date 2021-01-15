@@ -1,9 +1,12 @@
 import request from '@/router/axios';
 
-export const tree = () => {
+export const tree = (flag) => {
   return request({
     url: '/api/blade-food/class/tree',
     method: 'get',
+    params:{
+      flag
+    }
   })
 }
 
