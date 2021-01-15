@@ -41,6 +41,9 @@ export default {
       weekValue: "",
     };
   },
+  mounted() {
+    this.SelectWeek(new Date());
+  },
   methods: {
     SelectWeek(d) {
       var toDay = new Date(d);
@@ -59,6 +62,7 @@ export default {
         new Date(time + (7 - week) * 24 * 60 * 60 * 1000),
         "yyyy-MM-dd 00:00:00"
       );
+      console.log("weekChange");
       this.$emit("weekChange", this.WeekInfo);
     },
   },

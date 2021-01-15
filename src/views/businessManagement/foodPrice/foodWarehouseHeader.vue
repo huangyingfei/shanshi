@@ -89,6 +89,7 @@ export default {
         isUse: "",
         isPrice: "",
       };
+      this.$emit("getFoodTable", this.foodPriceFrom);
     },
     clearPrice() {
       this.$emit("clearPrice");

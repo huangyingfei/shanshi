@@ -976,11 +976,8 @@ document.oncontextmenu = function(){return false};
       }
 
       this.datas.forEach(_=>{
-
         _.weeks.forEach(__=>{
-
           __.foods.forEach(___=>{
-
             let mealTypes={}
             mealTypes.dishName = ___.name//菜品名称
             mealTypes.week = weekNum[__.name].toString()//星期几
@@ -1023,10 +1020,10 @@ document.oncontextmenu = function(){return false};
     };
   },
 
+    //选择人群  修改日期信息
     mealsTypeById(){
       var that=this;
       detailByPeopleId(this.WeekInfo.crowd).then(res=>{
-    //    debugger
         let arr= [];
         if(res.data.data.defaultMeal){
           let defaultMeal= res.data.data.defaultMeal.split(",")
@@ -1034,23 +1031,18 @@ document.oncontextmenu = function(){return false};
             arr.push(defaultMeal[i])
           }
         }
-        // for(let i=0;i< that.WeekInfo.foodCatalog.length;i++){
-        //   if(arr.indexOf(parseInt(that.getmealTypeData(that.WeekInfo.foodCatalog[i])))==-1){
-        //     arr.push(parseInt(that.getmealTypeData(that.WeekInfo.foodCatalog[i])))
-        //   }
-        // }
-        // arr.sort()
         let foodCatalog= []
         for(let i=0;i<arr.length;i++){
-      //    debugger
           foodCatalog.push(that.getmealTypeDataValue(arr[i]))
         }
         that.WeekInfo.foodCatalog=foodCatalog;
         that.AppendFoodType();
-        that.WeekInfo.weekValue=new Date()
+        if(that.WeekInfo.weekValue==""||that.WeekInfo.weekValue==null||that.WeekInfo.weekValue==undefined){
+          that.WeekInfo.weekValue=new Date()
+        }
         that.FixWeek();
         that.ShowWeekSelect();
-        that.SelectWeek(new Date())
+        that.SelectWeek(that.WeekInfo.weekValue)
         that.$refs.refweekSelect.hidePicker();
       })
     },
@@ -1854,6 +1846,8 @@ document.oncontextmenu = function(){return false};
       })
       debugger
       let row={
+        //---
+        // mealTypeStrs:JSON.stringify(this.WeekInfo.foodCatalog),
         recipeName:this.WeekInfo.Weekdetails,
         peopleId:this.WeekInfo.crowd,
         isPub:this.WeekInfo.sharePlant?0:1,

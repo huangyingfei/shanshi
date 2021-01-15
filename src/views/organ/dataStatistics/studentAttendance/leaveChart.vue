@@ -2,7 +2,7 @@
   <div class="leave-chart">
     <el-row :gutter="20">
       <el-col :span="6">
-        <label>选择部门</label>
+        <label>选择班级</label>
         <el-cascader
           v-model="classId"
           :options="options"
@@ -21,6 +21,7 @@
           start-placeholder="开始日期"
           end-placeholder="结束日期"
           style="width: 100%"
+          @change="getStudentWork"
         >
         </el-date-picker>
       </el-col>
@@ -47,7 +48,7 @@ export default {
   data() {
     return {
       leaveType: {
-        legendData: ["事假", "病假", "其他"],
+        legendData: ["事假", "病假"],
         seriesData: [],
       },
       leaveSymptoms: {
@@ -121,7 +122,6 @@ export default {
         this.leaveType.seriesData = [
           { value: result.sjNum, name: "事假" },
           { value: result.bjNum, name: "病假" },
-          { value: result.otherNum, name: "其他" },
         ];
         this.leaveSymptoms.seriesData = [
           { value: result.diseaseDTO.gmNum, name: "感冒" },

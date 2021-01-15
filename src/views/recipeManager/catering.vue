@@ -1081,10 +1081,12 @@ export default {
     mealsTypeById() {
       var that = this;
       that.AppendFoodType();
-      that.WeekInfo.weekValue = new Date();
+      if(that.WeekInfo.weekValue==""||that.WeekInfo.weekValue==null||that.WeekInfo.weekValue==undefined){
+        that.WeekInfo.weekValue=new Date()
+      }
       that.FixWeek();
       that.ShowWeekSelect();
-      that.SelectWeek(new Date());
+      that.SelectWeek(that.WeekInfo.weekValue);
       that.$refs.refweekSelect.hidePicker();
     },
     recipeNameShareSearchPub(recipeSelect, isPub, isUse) {

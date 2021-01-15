@@ -30,6 +30,7 @@
               v-model="region"
               :disabled="ableFlag"
               style="width: 324.8px"
+              @change="change"
             ></avue-cascader>
 
             <avue-input
@@ -40,6 +41,7 @@
               minlength="0"
               maxlength="255"
               span="12"
+              @change="change"
             ></avue-input>
           </el-col>
         </el-row>
@@ -145,6 +147,9 @@ export default {
           callback();
         }
         else {
+           if(this.form.expireTime.getTime()-this.form.startUseTime.getTime()<0){
+             callback(new Error('开始时间不得大于结束时间'));
+           }
           this.form.days=getInervalHour(this.form.startUseTime,this.form.expireTime)
           callback();
         }
@@ -156,6 +161,9 @@ export default {
           callback();
         }
          else {
+           if(this.form.expireTime.getTime()-this.form.startUseTime.getTime()<0){
+             callback(new Error('开始时间不得大于结束时间'));
+           }
           this.form.days=getInervalHour(this.form.startUseTime,this.form.expireTime)
           callback();
         }
@@ -289,15 +297,17 @@ export default {
           },
           {
             label: "开始使用日期",
-            prop: "startUseTime",
+            prop: "startTimeStr",
             type: "datetime",
             display: false,
+            width:100
           },
           {
             label: "结束使用日期",
-            prop: "expireTime",
+            prop: "endTimeStr",
             type: "datetime",
             display: false,
+            width:100
           },
           {
             label: "状态",
@@ -463,6 +473,13 @@ export default {
                 prop: "tenantAddress",
                 formslot: true,
                 span: 24,
+                rules: [
+                  {
+                    required: true,
+                    message: "请输入机构地址",
+                    trigger: "blur",
+                  }
+                ]
               },
               {
                 label: "机构地址",
@@ -582,18 +599,18 @@ export default {
               },
             ],
           },
-          {
-            label: "营养素设置",
-            prop: "nutrientInfo",
-            icon: "el-icon-s-custom",
-            column: [
-              {
-                label: "显示3级营养素",
-                prop: "nutrientDisplay",
-                type: "switch",
-              },
-            ],
-          },
+          // {
+          //   label: "营养素设置",
+          //   prop: "nutrientInfo",
+          //   icon: "el-icon-s-custom",
+          //   column: [
+          //     {
+          //       label: "显示3级营养素",
+          //       prop: "nutrientDisplay",
+          //       type: "switch",
+          //     },
+          //   ],
+          // },
           {
             label: "系统设置",
             prop: "systemInfo",
@@ -602,13 +619,13 @@ export default {
               {
                 label: "开始使用日期",
                 prop: "startUseTime",
-                type: "datetime",
+                type: "date",
                 rules: [{required: true, validator: validateStartTime, trigger: 'blur'}]
               },
               {
                 label: "结束使用日期",
                 prop: "expireTime",
-                type: "datetime",
+                type: "date",
                 rules: [{required: true, validator: validateEndTime, trigger: 'blur'}]
               },
               {
@@ -686,6 +703,7 @@ export default {
         });
       }
     },
+
     validatePhone(rule, value, callback){
       if (value === ""||value=="undefined"||!value) {
         callback(new Error("请输入手机号"));
@@ -711,7 +729,7 @@ export default {
     initData() {
       var params={};
       this.query["tenantType"] = 2;
-      this.$set(this.form,"nutrientDisplay",false)
+      // this.$set(this.form,"nutrientDisplay",false)
       getList(
         this.page.currentPage,
         this.page.pageSize,
@@ -749,6 +767,7 @@ export default {
         });
       });
     },
+
      handleAdd(row) {
        this.$set(this.$refs.crud.value,"parentId",row.id)
         // this.$refs.crud.option.group.filter(item => {
@@ -791,6 +810,12 @@ export default {
           });
         });
     },
+    change(){
+      debugger
+            if(this.region!=null&&this.region!=""&&this.region!=undefined){
+              this.$set(this.form,"tenantAddress","null")
+            }
+        },
     //新增
     rowSave(row, done, loading) {
       this.ableFlag=true;
@@ -812,7 +837,7 @@ export default {
         avatar: row.avatar,
         nutrientId: row.nutrientId,
         powerId: row.powerId,
-        nutrientDisplay: row.nutrientDisplay == "" ||row.nutrientDisplay? 1 : 0,
+        // nutrientDisplay: row.nutrientDisplay == "" ||row.nutrientDisplay? 1 : 0,
         startUseTime: formateDate(row.startUseTime, "yyyy-MM-dd HH:mm:ss"),
         expireTime: formateDate(row.expireTime, "yyyy-MM-dd HH:mm:ss"),
         webTitle: row.webTitle,
@@ -859,7 +884,7 @@ export default {
         avatar: row.avatar,
         nutrientId: row.nutrientId,
         powerId: row.powerId,
-        nutrientDisplay: row.nutrientDisplay == "" ||row.nutrientDisplay? 1 : 0,
+        // nutrientDisplay: row.nutrientDisplay == "" ||row.nutrientDisplay? 1 : 0,
         startUseTime: typeof row.startUseTime=="string"?row.startUseTime: formateDate(row.startUseTime, "yyyy-MM-dd HH:mm:ss"),
         expireTime:typeof row.expireTime=="string"?row.expireTime: formateDate(row.expireTime, "yyyy-MM-dd HH:mm:ss"),
         webId:row.webId,
@@ -936,7 +961,7 @@ export default {
             }else{
               data["accountSchoolType"]=[data.accountType,data.schoolType]
             }
-            data["nutrientDisplay"]=data.nutrientDisplay==1?true:false;
+            // data["nutrientDisplay"]=data.nutrientDisplay==1?true:false;
             data["startUseTime"]=getDate(data.startUseTime)
             data["expireTime"]=getDate(data.expireTime)
             debugger

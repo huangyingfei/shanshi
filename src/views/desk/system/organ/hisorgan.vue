@@ -234,15 +234,17 @@ export default {
           },
           {
             label: "开始使用日期",
-            prop: "startUseTime",
-            type: "datetime",
+            prop: "startTimeStr",
+            type: "date",
             display: false,
+            width:100
           },
           {
             label: "结束使用日期",
-            prop: "expireTime",
-            type: "datetime",
+            prop: "endTimeStr",
+            type: "date",
             display: false,
+            width:100
           },
           {
             label: "状态",
@@ -494,18 +496,18 @@ export default {
               },
             ],
           },
-          {
-            label: "营养素设置",
-            prop: "nutrientInfo",
-            icon: "el-icon-s-custom",
-            column: [
-              {
-                label: "显示3级营养素",
-                prop: "nutrientDisplay",
-                type: "switch",
-              },
-            ],
-          },
+          // {
+          //   label: "营养素设置",
+          //   prop: "nutrientInfo",
+          //   icon: "el-icon-s-custom",
+          //   column: [
+          //     {
+          //       label: "显示3级营养素",
+          //       prop: "nutrientDisplay",
+          //       type: "switch",
+          //     },
+          //   ],
+          // },
           {
             label: "系统设置",
             prop: "systemInfo",
@@ -514,13 +516,13 @@ export default {
               {
                 label: "开始使用日期",
                 prop: "startUseTime",
-                type: "datetime",
+                type: "date",
                 rules: [{required: true, validator: validateStartTime, trigger: 'blur'}]
               },
               {
                 label: "结束使用日期",
                 prop: "expireTime",
-                type: "datetime",
+                type: "date",
                 rules: [{required: true, validator: validateEndTime, trigger: 'blur'}]
               },
               {
@@ -670,9 +672,9 @@ export default {
         avatar: row.avatar,
         nutrientId: row.nutrientId,
         powerId: row.powerId,
-        nutrientDisplay: row.nutrientDisplay == "" ||row.nutrientDisplay? 1 : 0,
-        startUseTime: formateDate(row.startUseTime, "yyyy-MM-dd HH:mm:ss"),
-        expireTime: formateDate(row.expireTime, "yyyy-MM-dd HH:mm:ss"),
+        // nutrientDisplay: row.nutrientDisplay == "" ||row.nutrientDisplay? 1 : 0,
+        startUseTime: formateDate(row.startUseTime, "yyyy-MM-dd"),
+        expireTime: formateDate(row.expireTime, "yyyy-MM-dd"),
         webTitle: row.webTitle,
         webLogo: row.webLogo,
         schoolType:
@@ -715,7 +717,7 @@ export default {
         avatar: row.avatar,
         nutrientId: row.nutrientId,
         powerId: row.powerId,
-        nutrientDisplay: row.nutrientDisplay == "" ||row.nutrientDisplay? 1 : 0,
+        // nutrientDisplay: row.nutrientDisplay == "" ||row.nutrientDisplay? 1 : 0,
         startUseTime: typeof row.startUseTime=="string"?row.startUseTime: formateDate(row.startUseTime, "yyyy-MM-dd HH:mm:ss"),
         expireTime:typeof row.expireTime=="string"?row.expireTime: formateDate(row.expireTime, "yyyy-MM-dd HH:mm:ss"),
         webId:row.webId,
@@ -793,7 +795,7 @@ export default {
             }else{
               data["accountSchoolType"]=[data.accountType,data.schoolType]
             }
-            data["nutrientDisplay"]=data.nutrientDisplay==1?true:false;
+            // data["nutrientDisplay"]=data.nutrientDisplay==1?true:false;
             data["startUseTime"]=getDate(data.startUseTime)
             data["expireTime"]=getDate(data.expireTime)
             this.form = data;

@@ -33,18 +33,20 @@
                       class="ant-tree-node-content-1"
                       v-if="!data.addBtn && data.classType != 3"
                     />
-                    <span v-if="!data.addBtn && data.classType == 0">{{
+                    <span   v-if="!data.addBtn && data.classType == 0">{{
                       data.label
                     }}</span>
-                    <span v-if="!data.addBtn && data.classType == 1">{{
+                    <span    v-if="!data.addBtn && data.classType == 1">{{
                       data.label
                     }}</span>
-                    <span v-if="!data.addBtn && data.classType == 2">{{
+                    <span    v-if="!data.addBtn && data.classType == 2">{{
                       data.label
                     }}</span>
-                    <span v-if="!data.addBtn && data.classType == 3">{{
+                    <el-tooltip    :content="data.classAlias" placement="bottom" effect="light">
+                    <span    v-if="!data.addBtn && data.classType == 3">{{
                       data.label
                     }}</span>
+                    </el-tooltip>
                     <span
                       class="ant-tree-node-content-wrapper-addItem"
                       v-if="data.addBtn"
@@ -1513,7 +1515,7 @@
       //
       // },
       initData() {
-        tree().then((res) => {
+        tree(true).then((res) => {
           for (let i = 0; i < res.data.data.length; i++) {
             //学校
             if (res.data.data[i].children) {

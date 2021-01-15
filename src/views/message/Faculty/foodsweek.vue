@@ -126,6 +126,7 @@
                   </div>
                 </template>
               </el-table-column>
+
               <el-table-column label="图片"  align="center">
                 <template slot-scope="scope1">
                   <div v-show="scope1.$index === 0 &&scope.row.weeks.find((p) => p.name == 'week1')"  style="width: 100px; height: 102px; margin: 0 auto">
@@ -1662,7 +1663,8 @@
           }
         });
       },
-//食材数量改变
+
+      //食材数量改变
       foodChange(data_id, week_id){
         this.datas.forEach((data) => {
           if (data.id === data_id) {
@@ -1671,6 +1673,9 @@
                 week.foods.forEach(food=>{
                   let count = 0;
                   food.children.forEach(___ => {
+                    if(isNaN(___.count)){
+                      this.$set(___, "count", 0);
+                    }
                     count += parseFloat(___.count ? ___.count : 0)
                   })
                   this.$set(food, "count", count);
@@ -1692,9 +1697,21 @@
                   food.children.forEach(___ => {
                     count += parseFloat(___.count ? ___.count : 0)
                   })
+                  if(isNaN(food.count)){
+                    this.$set(food, "count",0);
+                  }
                   if(parseFloat(count)!=parseFloat(food.count)){
                     food.children.forEach(___ => {
-                      this.$set(___,"count",((parseFloat(food.count)/parseFloat(count))*___.count).toFixed(2))
+                      if(isNaN(food.count)||isNaN(___.count)){
+                        this.$set(___, "count",0);
+                      }
+                      if (food.count == 0&&___.count==0) {
+                        this.$set(___, "count", (1 / food.children.length) * food.count).toFixed(2);
+                      } else {
+                        if(___.count!=0){
+                          this.$set(___, "count", ((parseFloat(food.count) / parseFloat(count)) * ___.count).toFixed(2))
+                        }
+                      }
                     })
                   }
                 })

@@ -97,6 +97,7 @@
           <div class="input-box">
             <label>机构选择</label>
             <el-select
+              v-model="everyDayNutrient.tenantId"
               multiple
               filterable
               remote
@@ -308,6 +309,8 @@ export default {
       },
       everyDayNutrient: {
         region: "",
+        tenantId: "",
+        dateRange: [],
       },
       everyDayEat: {
         region: "",
@@ -661,7 +664,7 @@ export default {
     //获取学生每人每日营养素提取
     getEveryDayNutrientPic() {
       this.axios({
-        url: "",
+        url: "/api/blade-food/recipe/getStuNutrition",
         method: "",
         params: "",
       }).then((res) => {});
