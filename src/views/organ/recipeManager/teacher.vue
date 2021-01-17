@@ -532,7 +532,7 @@
           icon="el-icon-search"
           size="medium"
           type="primary"
-          :disabled="this.nbottoms == 1"
+         
           @click="searchType"
           >搜索</el-button
         >
@@ -540,7 +540,7 @@
           style="margin-left: 20px"
           icon="el-icon-delete"
           size="medium"
-          :disabled="this.nbottoms == 1"
+    
           @click="emptyset"
           >清空</el-button
         >
@@ -548,7 +548,7 @@
           style="margin-left: 20px"
           size="medium"
           type="primary"
-          :disabled="this.nbottoms == 1"
+    
           icon="el-icon-plus"
           @click="addition(1)"
           >添加员工</el-button
@@ -1132,7 +1132,7 @@ export default {
       under: "", //添加员工下标
       edits: "", //ID
       view: "",
-      nbottoms: 1,
+   
       departments: "", //添加部门
       support: "", //添加子部门
       sqlClass: [],
@@ -1145,6 +1145,7 @@ export default {
     this.getStorage(); //获取部门树形结构
     this.getToolkit(); //获取班级
     this.Takeone();
+    this.searchType()
   },
   methods: {
     handleChange(value) {
@@ -1684,14 +1685,12 @@ export default {
       } else {
         this.ordered = "";
       }
-      // this.stutas
-      // handleNodeClick(data){
-      //  this.view = data.id;
-      // }
+
       this.loadFlag1 = true;
+      let parter=""
       this.$axios
         .get(
-          `api/blade-food/teacher/list?deptId=${this.view}&jobNumber=${this.workers}&name=${this.username}&post=${this.callback}&stutas=${this.driver}&descs=${this.empty}&ascs=${this.ordered}`,
+          `api/blade-food/teacher/list?deptId=${parter}&jobNumber=${this.workers}&name=${this.username}&post=${this.callback}&stutas=${this.driver}&descs=${this.empty}&ascs=${this.ordered}`,
           {}
         )
         .then(res => {
@@ -1715,7 +1714,7 @@ export default {
       this.view = data.id;
       this.Superior = e.parent.data.id; //父级ID
       console.log(this.Superior);
-      this.nbottoms = 2;
+  
       // console.log(this.view);
 
       if (this.view == 0) {

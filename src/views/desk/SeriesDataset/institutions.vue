@@ -132,6 +132,7 @@
 </template>
 
 <script>
+import { dateFormat } from "@/util/date.js";
 export default {
   data() {
     return {
@@ -223,6 +224,8 @@ export default {
     this.multimap();
   },
   mounted() {
+    this.dateRangeDefaultValue();
+ 
     // setTimeout(() => {
     //   this.extract(); //折线图
     // }, 1000);
@@ -234,6 +237,16 @@ export default {
     // this.fullLength();
   },
   methods: {
+     dateRangeDefaultValue() {
+      const end = new Date();
+      const start = new Date();
+      start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+      this.value1 = [
+        dateFormat(start, "yyyy-MM-dd"),
+        dateFormat(end, "yyyy-MM-dd"),
+      ];
+         this.searchBtn()
+    },
     //头部请求
     nsmpsearly() {
       this.$axios.get(`api/blade-food/report/tenantCount`, {}).then(res => {
