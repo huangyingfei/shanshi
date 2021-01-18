@@ -2,19 +2,29 @@
   <div class="demo-image__preview">
     <el-row>
       <el-col :span="1">
-        <span>{{ 1 }}</span>
+        <span>{{ index }}</span>
       </el-col>
       <el-col :span="5">
-        <el-image style="width: 100px; height: 100px" :src="imgurl"> </el-image>
+        <el-image style="width: 100px; height: 100px" :src="logoUrl">
+          <div
+            slot="error"
+            class="image-slot"
+            style="line-height: 100px; text-align: center"
+          >
+            <div class="el-image__error">暂无图片</div>
+          </div>
+        </el-image>
       </el-col>
       <el-col :span="6">
-        <span>{{ schoolName }}</span>
+        <span>{{ tenantName }}</span>
       </el-col>
       <el-col :span="6">
-        <span>{{ schoolNum }}</span>
+        <span>{{ score }}</span>
       </el-col>
       <el-col :span="6">
-        <el-button type="text" @click="$emit('openDialog')">查看食谱</el-button>
+        <el-button type="text" @click="$emit('openDialog', tenantId)"
+          >查看食谱</el-button
+        >
       </el-col>
     </el-row>
   </div>
@@ -23,18 +33,20 @@
 <script>
 export default {
   props: {
-    imgurl: {
+    logoUrl: {
       type: String,
-      default:
-        "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
     },
-    schoolName: {
-      type: String,
-      default: "杭州市实验外国语学校",
+    index: {
+      type: Number,
     },
-    schoolNum: {
+    tenantName: {
       type: String,
-      default: "4.50分",
+    },
+    tenantId: {
+      type: String,
+    },
+    score: {
+      type: String,
     },
   },
   data() {

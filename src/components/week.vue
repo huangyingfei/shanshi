@@ -1,6 +1,6 @@
 <template>
   <div class="flex-box">
-    <label>采购日期</label>
+    <label>{{ dateLabel }}</label>
     <div style="position: relative; width: 100%">
       <slot>
         <el-input
@@ -31,6 +31,12 @@
 import { formateDate } from "@/api/tool/date";
 
 export default {
+  props: {
+    dateLabel: {
+      type: String,
+      default: "采购日期",
+    },
+  },
   data() {
     return {
       WeekInfo: {
