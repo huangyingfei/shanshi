@@ -29,10 +29,10 @@
           <div id="byteLength" style="width: 90%;height: 70vh;"></div></div
       ></el-col>
     </el-row>
-    <el-row>
+    <el-row style="margin-bottom: 40px;">
       <el-col :span="24"
         ><div>
-          <div id="weekRules" style="width: 100%;height: 600px;"></div></div
+          <div id="weekRules" style="width: 100%;height: 400px;"></div></div
       ></el-col>
     </el-row>
   </div>
@@ -47,7 +47,8 @@ export default {
       value: "",
       builtinclass: "",
       ingredients: [], //食材
-      numbers: [] //数量
+      numbers: [], //数量
+      notowned: []
     };
   },
   mounted() {
@@ -55,6 +56,7 @@ export default {
   },
   beforeMount() {
     this.getToolkit();
+    this.searchBtn();
   },
   methods: {
     searchBtn() {
@@ -83,6 +85,15 @@ export default {
           this.numbers = yoffset;
           console.log(this.ingredients);
           console.log(this.numbers);
+          let Front = [];
+          this.allergy.forEach((item, index) => {
+            Front[index] = {
+              name: item.foodName,
+              value: item.num
+            };
+          });
+          console.log(Front);
+          this.notowned = Front;
           this.fullLength();
           this.initialWeek();
         });
@@ -132,67 +143,67 @@ export default {
       // 使用刚指定的配置项和数据显示图表。
       this.chartLine.setOption(option);
     },
+    //过敏食材分布图
     initialWeek() {
       let myChart = this.$echarts.init(document.getElementById("weekRules"));
+      // 指定图表的配置项和数据
       var option = {
+        //标题
         title: {
-          text: "食材",
-
-          target: "blank",
-          textAlign: "left"
+          text: "过敏食材分布图",
+          x: "left" //标题位置
+          // textStyle: { //标题内容的样式
+          //   color: '#000',
+          //   fontStyle: 'normal',
+          //   fontWeight: 100,
+          //   fontSize: 16 //主题文字字体大小，默认为18px
+          // },
         },
-        tooltip: {}, //提示层
+        // stillShowZeroSum: true,
+        //鼠标划过时饼状图上显示的数据
+        tooltip: {
+          trigger: "item",
+          formatter: "{a}<br/>{b}:{c} ({d}%)"
+        },
+        //图例
         legend: {
-          data: ["食材"]
-        },
-        radar: {
-          name: {
-            textStyle: {
-              color: "#fff", //字体颜色
-              backgroundColor: "#999", //背景色
-              borderRadius: 3, //圆角
-              padding: [3, 5] //padding
-            }
+          //图例  标注各种颜色代表的模块
+          // orient: 'vertical',//图例的显示方式  默认横向显示
+          bottom: 10, //控制图例出现的距离  默认左上角
+          left: "center", //控制图例的位置
+          // itemWidth: 16,//图例颜色块的宽度和高度
+          // itemHeight: 12,
+          textStyle: {
+            //图例中文字的样式
+            color: "#000",
+            fontSize: 16
           },
-          center: ["50%", "50%"],
-          radius: "60%",
-          startAngle: 270,
-          indicator: [
-            {
-              name: "土豆"
-            },
-            {
-              name: "猕猴桃"
-            },
-            {
-              name: "芒果"
-            },
-            {
-              name: "花蛤"
-            }
-          ]
+          data: this.ingredients //图例上显示的饼图各模块上的名字
         },
-        series: [
-          {
-            name: "食材",
-            type: "radar",
-            data: [
-              {
-                value: [70, 80, 90, 85, 75],
-                name: "食材"
+        //饼图中各模块的颜色
+        color: ["#69A8E8", "#82B986", "#F4D67C", "#F07F77"],
+        // 饼图数据
+        series: {
+          name: "学校类型分布图",
+          type: "pie", //echarts图的类型   pie代表饼图
+          radius: "70%", //饼图中饼状部分的大小所占整个父元素的百分比
+          center: ["50%", "50%"], //整个饼图在整个父元素中的位置
+          // data:''               //饼图数据
+          data: this.notowned,
+          //每个模块的名字和值
+
+          itemStyle: {
+            normal: {
+              label: {
+                show: true //饼图上是否出现标注文字 标注各模块代表什么  默认是true
+                // position: 'inner',//控制饼图上标注文字相对于饼图的位置  默认位置在饼图外
+              },
+              labelLine: {
+                show: true //官网demo里外部标注上的小细线的显示隐藏    默认显示
               }
-            ],
-            lineStyle: {
-              color: "rgba(64, 155, 220, 1)"
-            },
-            areaStyle: {
-              color: "rgba(64, 155, 220, 1)"
-            },
-            itemStyle: {
-              color: "rgba(64, 155, 220, 1)"
             }
           }
-        ]
+        }
       };
       // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);

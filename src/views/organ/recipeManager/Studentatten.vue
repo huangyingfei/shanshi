@@ -167,17 +167,27 @@
                 align="center"
               >
               </el-table-column>
-              <el-table-column width="150" label="请假开始日期" align="center">
-                <template slot-scope="scope">
+              <el-table-column
+                prop="startTimeStr"
+                width="160"
+                label="请假开始日期"
+                align="center"
+              >
+                <!-- <template slot-scope="scope">
                   <span>{{ scope.row.startTime }}</span>
                   <span>{{ scope.row.startStr }}</span>
-                </template>
+                </template> -->
               </el-table-column>
-              <el-table-column width="150" label="请假结束日期" align="center">
-                <template slot-scope="scope">
+              <el-table-column
+                prop="endTimeStr"
+                width="160"
+                label="请假结束日期"
+                align="center"
+              >
+                <!-- <template slot-scope="scope">
                   <span>{{ scope.row.endTime }}</span>
                   <span>{{ scope.row.endStr }}</span>
-                </template>
+                </template> -->
               </el-table-column>
               <el-table-column prop="leaveType" label="请假类型" align="center">
                 <!-- <template slot-scope="scope">
@@ -405,7 +415,6 @@
           </el-form-item>
           <el-form-item label="请假天数" prop="weekday" style="width:370">
             <el-input
-              :disabled="true"
               type="number"
               style="width: 250px"
               v-model="ruleForm.weekday"
@@ -487,6 +496,10 @@
             >
               <i class="el-icon-plus"></i>
             </el-upload>
+            <span style="color: #000;font-weight: bold; font-size: 11px"
+              >上传图片不能超过2M 只能是<span style="color:red">JPG PNG</span
+              >格式</span
+            >
             <el-dialog append-to-body :visible.sync="dialogVisible">
               <img width="100%" :src="dialogImageUrl" alt />
             </el-dialog>
@@ -730,9 +743,7 @@ export default {
           "姓名",
           "班级",
           "请假开始日期",
-          "上下午",
           "请假结束日期",
-          "上下午",
           "请假类型",
           "请假天数",
           "请假原因",
@@ -745,10 +756,8 @@ export default {
         const filterVal = [
           "studentName",
           "className",
-          "startTime",
-          "startStr",
-          "endTime",
-          "endStr",
+          "startTimeStr",
+          "endTimeStr",
           "leaveType",
           "daysOff",
           "reason",

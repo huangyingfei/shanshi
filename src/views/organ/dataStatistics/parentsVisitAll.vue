@@ -59,9 +59,9 @@
           </el-table-column>
           <el-table-column prop="tenantName" label="机构" align="center">
           </el-table-column>
-          <el-table-column prop="lookCount" label="浏览量PV" align="center">
+          <el-table-column prop="peopleCount" label="浏览量PV" align="center">
           </el-table-column>
-          <el-table-column prop="peopleCount" label="浏览人数UV" align="center">
+          <el-table-column prop="lookCount" label="浏览人数UV" align="center">
           </el-table-column>
         </el-table>
       </div>
@@ -121,8 +121,8 @@ export default {
         this.offers = res.data.data;
         // console.log(this.offers);
         this.browse.extrapv = this.offers.lookPeople; //浏览量
-        this.browse.visitorsuv = this.offers.lookPeopleTotal; //浏览人数
-        this.browse.property = this.offers.looks; //总流量
+        this.browse.visitorsuv = this.offers.looks; //浏览人数
+        this.browse.property = this.offers.lookPeopleTotal; //总流量
         this.browse.ofcleaning = this.offers.looksTotal; //总人数
         // console.log(this.browse.ofcleaning);
         let recent = []; //日期
@@ -175,7 +175,7 @@ export default {
           type: "category",
           boundaryGap: false, //坐标轴两边不留白
           data: this.updated,
-          name: "DATE", //X轴 name
+          name: "日期", //X轴 name
           nameTextStyle: {
             //坐标轴名称的文字样式
             color: "#000",
