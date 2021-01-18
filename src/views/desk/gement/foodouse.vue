@@ -513,7 +513,6 @@
         <el-input
           clearable
           style="width: 290px; margin-left: 11px; margin-top: 20px"
-          @change="Addraudit"
           placeholder="输入关键字进行查询"
           v-model="filterText1"
         >
@@ -726,10 +725,10 @@ export default {
     // (scope.row.stats / 100) * scope.row.malloc
     filterText(val) {
       this.$refs.tree.filter(val);
+    },
+    filterText1(val) {
+      this.$refs.tree.filter(val);
     }
-    // filterText1(val) {
-    //   this.$refs.tree.filter(val);
-    // }
   },
   beforeMount() {
     this.Protocol(); //营养素含量
@@ -760,12 +759,12 @@ export default {
 
       return data.label.indexOf(value) !== -1;
     },
-    // filterNode1(value, data1) {
-    //   // console.log(data1);
-    //   if (!value) return true;
+    filterNode1(value, data1) {
+      // console.log(data1);
+      if (!value) return true;
 
-    //   return data1.label.indexOf(value) !== -1;
-    // },
+      return data1.label.indexOf(value) !== -1;
+    },
     //全部常用查询
     commonly() {
       console.log(this.really1);

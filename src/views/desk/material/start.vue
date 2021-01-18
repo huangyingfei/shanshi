@@ -5,7 +5,6 @@
       <div class="cation">
         <el-input
           clearable
-          @change="graph"
           style="width: 290px; margin-left: 11px; margin-top: 20px"
           placeholder="输入关键字进行查询"
           v-model="filterText"
@@ -144,7 +143,7 @@
                     size="mini"
                     @click.stop="() => append(data)"
                   >
-                    常用
+                    设置常用
                   </el-button>
                   <el-button
                     type="text"
@@ -153,7 +152,7 @@
                     size="mini"
                     @click.stop="() => insert(data)"
                   >
-                    不常用
+                    取消常用
                   </el-button>
                   <el-button
                     v-if="data.isPub == 0"
@@ -162,7 +161,7 @@
                     size="mini"
                     @click.stop="() => multi(data)"
                   >
-                    隐藏
+                    不公开
                   </el-button>
                   <el-button
                     v-if="data.isPub == 1"
@@ -627,10 +626,10 @@ export default {
   },
   created() {},
   watch: {
-    // filterText(val) {
-    //   console.log(this.$refs.tree);
-    //   this.$refs.tree.filter(val);
-    // }
+    filterText(val) {
+      // console.log(this.$refs.tree);
+      this.$refs.tree.filter(val);
+    }
   },
   methods: {
     ofmoisture() {
@@ -666,11 +665,11 @@ export default {
       this.display = flat;
       this.Addraudit();
     },
-    // filterNode(value, data) {
-    //   if (!value) return true;
+    filterNode(value, data) {
+      if (!value) return true;
 
-    //   return data.label.indexOf(value) !== -1;
-    // },
+      return data.label.indexOf(value) !== -1;
+    },
     //省市区查询
     gProvinces() {
       // console.log(this.valuepark1[1]);
@@ -895,9 +894,9 @@ export default {
     stored() {
       console.log(123);
     },
-    graph() {
-      this.Addraudit();
-    },
+    // graph() {
+    //   this.Addraudit();
+    // },
     //树形渲染数
     Addraudit() {
       this.loadFlag = true;

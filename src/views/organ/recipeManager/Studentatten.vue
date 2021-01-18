@@ -359,6 +359,7 @@
             style="width: 370px"
           >
             <el-date-picker
+              class="date_picker"
               @change="started()"
               style="width: 180px"
               format="yyyy 年 MM 月 dd 日"
@@ -389,6 +390,7 @@
             style="width: 370px"
           >
             <el-date-picker
+              class="date_picker"
               @change="started()"
               style="width: 180px"
               v-model="ruleForm.software"
@@ -1323,5 +1325,8 @@ export default {
 }
 /deep/ .hide .el-upload--picture-card {
   display: none;
+}
+.el-picker-panel__footer .el-button--text .el-picker-panel__link-btn {
+  display: none !important;
 }
 </style>

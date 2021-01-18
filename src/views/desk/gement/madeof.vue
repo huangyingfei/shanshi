@@ -472,7 +472,11 @@
             :visible.sync="dateTime"
             :close-on-click-modal="false"
           >
-            <el-input placeholder="输入关键字进行过滤" v-model="filterText1">
+            <el-input
+              style="width:250px"
+              placeholder="输入关键字进行过滤"
+              v-model="filterText1"
+            >
             </el-input>
             <div class="block">
               <div class="rolling">

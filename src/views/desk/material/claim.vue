@@ -191,7 +191,6 @@
       <div class="block">
         <el-input
           clearable
-          @change="treeDrawing"
           style="width:290px; margin-left: 9px;margin-top: 10px;"
           placeholder="输入关键字进行查询"
           v-model="filterText"
@@ -300,10 +299,10 @@ export default {
   },
   computed() {},
   watch: {
-    // filterText(val) {
-    //   console.log(this.$refs.tree);
-    //   this.$refs.tree.filter(val);
-    // }
+    filterText(val) {
+      console.log(this.$refs.tree);
+      this.$refs.tree.filter(val);
+    }
   },
   mounted() {
     this.$nextTick(() => {
@@ -320,11 +319,11 @@ export default {
       this.value = "";
       this.generator(); //获取表格数据
     },
-    // filterNode(value, data) {
-    //   if (!value) return true;
+    filterNode(value, data) {
+      if (!value) return true;
 
-    //   return data.label.indexOf(value) !== -1;
-    // },
+      return data.label.indexOf(value) !== -1;
+    },
     handleNodeClick(data) {
       if (data.view == 0) {
         return;

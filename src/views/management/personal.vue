@@ -7,7 +7,6 @@
           <!-- 左边 -->
           <div class="personal">
             <el-input
-              @blur="graph"
               clearable
               style="width:270px; margin-left: 9px;"
               placeholder="输入关键字进行查询"
@@ -93,6 +92,7 @@
                 <el-tree
                   :data="data"
                   v-loading="loadFlag"
+                  :props="defaultProps"
                   node-key="id"
                   :default-expand-all="false"
                   @node-click="handleNodeClick"
@@ -438,7 +438,6 @@
 
           <div class="personal">
             <el-input
-              @blur="saquery"
               style="width:290px; margin-left: 9px;"
               placeholder="输入关键字进行查询"
               v-model="filterText1"
@@ -496,7 +495,6 @@
                   v-loading="loadFlag1"
                   :default-expand-all="false"
                   @node-click="handleNodeClick1"
-                  :filter-node-method="filterNode1"
                   ref="tree"
                 >
                   <span class="custom-tree-node" slot-scope="{ node, data }">
@@ -839,10 +837,10 @@ export default {
     };
   },
   watch: {
-    // filterText(val) {
-    //   console.log(val);
-    //   this.$refs.tree.filter(val);
-    // }
+    filterText(val) {
+      console.log(val);
+      this.$refs.tree.filter(val);
+    }
     // filterText1(val) {
     //   this.$refs.tree.filter(val);
     // }
@@ -949,18 +947,13 @@ export default {
       }
       this.treeDrawing();
     },
-    // filterNode(value, data) {
-    //   console.log(data);
-    //   if (!value) return true;
+    filterNode(value, data) {
+      // console.log(data);
+      if (!value) return true;
 
-    //   return data.label.indexOf(value) !== -1;
-    // }, //树形结构搜索
-    // filterNode1(value, data1) {
-    //   // console.log(data1);
-    //   if (!value) return true;
+      return data.label.indexOf(value) !== -1;
+    }, //树形结构搜索
 
-    //   return data1.label.indexOf(value) !== -1;
-    // },
     buttonClick(flat) {
       // console.log(index);
       // console.log(flat);
@@ -1038,6 +1031,7 @@ export default {
           });
           this.treeDrawing();
           this.addition();
+          this.gavatorta = 0;
         })
         .catch(() => {
           this.$message.error("编辑失败");
@@ -1483,7 +1477,6 @@ export default {
         });
     },
     saquery() {
-      console.log(this.filterText1);
       this.publicDomain();
     },
     //公共食材渲染
@@ -1522,10 +1515,10 @@ export default {
           this.data1 = trees;
         });
     },
-    graph() {
-      // console.log(this.filterText);
-      this.treeDrawing();
-    },
+    // graph() {
+    //   // console.log(this.filterText);
+    //   this.treeDrawing();
+    // },
     //树形渲染
     treeDrawing() {
       this.loadFlag = true;

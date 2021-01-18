@@ -76,8 +76,8 @@
     </div>
     <!-- 查看 -->
     <el-dialog
-      title="食材"
-      width="50%"
+      title="食谱"
+      width="80%"
       append-to-body
       :visible.sync="dateTime"
       :close-on-click-modal="false"

@@ -127,7 +127,7 @@
         ></el-pagination>
       </div>
       <el-dialog
-        title="食材"
+        title="食谱"
         append-to-body
         width="80%"
         :visible.sync="dateTime"
@@ -207,10 +207,6 @@ export default {
         {
           value: "0",
           label: "待审核"
-        },
-        {
-          value: "3",
-          label: "已取消"
         }
       ],
       timezone: ""
