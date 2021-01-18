@@ -1340,6 +1340,7 @@ export default {
     },
     //获取分数
     getFoodScore(){
+      debugger
       this.dragnode.node={};
       let day=[0,0,0,0,0,0,0]
       let days=0;
@@ -1705,7 +1706,6 @@ export default {
     },
     // 移除
     onRemove(data_id, week_id, food_id,week_name) {
-     // debugger
       var foods;
       this.datas.forEach((data) => {
         if (data.id === data_id) {
@@ -1720,7 +1720,6 @@ export default {
           });
         }
       });
-      console.log(foods)
       for(let i=0;i<this.foodMutuals.length;i++){
         for(let j=0;j<foods.children.length;j++){
           if(this.foodMutuals[i]["data_id"]==data_id&&week_name==this.foodMutuals[i]["week_id"]){
@@ -1731,6 +1730,8 @@ export default {
         }
       }
       this.getFoodScore();
+      this.refreshData();
+      this.resizeExpendHeight();
     },
 
     // 上传图片

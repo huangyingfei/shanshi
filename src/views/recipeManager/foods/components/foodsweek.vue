@@ -1743,6 +1743,8 @@ export default {
         }
       }
       this.getFoodScore();
+      this.refreshData();
+      this.resizeExpendHeight();
     },
 
     // 上传图片

@@ -102,7 +102,7 @@
           </el-form-item>
           <el-form-item label="选择人群">
 
-          <el-select v-model="WeekInfo.crowd" placeholder="选择人群"  class="crow-item" @change="mealsTypeById" >
+          <el-select v-model="WeekInfo.crowd" placeholder="选择人群"  class="crow-item" @change="selectPeople" >
             <el-option  v-for="(item ,index) in crowdData" :label="item.peopleName" :value="item.id" :key="item.id"></el-option>
           </el-select>
           </el-form-item>
@@ -737,7 +737,8 @@ document.oncontextmenu = function(){return false};
         foodCatalog: [], //餐点类型
         crowd: "", //人群
         shareOrg: true,
-        showFoodCatalog:""//餐点类型
+        showFoodCatalog:"",//餐点类型
+
       },
       activeName: "first",
       activeName2: 'thread',
@@ -920,29 +921,12 @@ document.oncontextmenu = function(){return false};
     };
   },
   beforeMount() {},
-
-  watch:{
-    score(val){
-      if(parseFloat(val)==85){
-        this.scoreTitle="合格"
-      }
-      if(parseFloat(val)>85){
-        this.scoreTitle="真棒"
-      }
-      if(parseFloat(val)<85){
-        this.scoreTitle="加油"
-      }
-      // debugger
-
-    },
-  },
   methods: {
     openNoNumRecipeDialog(){
       this.$refs.children2.openDialogVisible()
     },
     //打开带量食谱弹出框
     openNutritionDialog(){
-      this.WeekInfo.crowd
       var foods = this.getNutritionData()
       this.$refs.nutritionChild.openNutritionDialog(foods)
     },
@@ -1020,31 +1004,39 @@ document.oncontextmenu = function(){return false};
     };
   },
 
+    selectPeople(){
+      this.mealsTypeById();
+    },
     //选择人群  修改日期信息
     mealsTypeById(){
-      var that=this;
-      detailByPeopleId(this.WeekInfo.crowd).then(res=>{
-        let arr= [];
-        if(res.data.data.defaultMeal){
-          let defaultMeal= res.data.data.defaultMeal.split(",")
-          for(let i=0;i<defaultMeal.length;i++){
-            arr.push(defaultMeal[i])
+      debugger
+       var that=this;
+        detailByPeopleId(this.WeekInfo.crowd).then(res => {
+          let arr = [];
+          if (res.data.data.defaultMeal) {
+            let defaultMeal = res.data.data.defaultMeal.split(",")
+            for (let i = 0; i < defaultMeal.length; i++) {
+              arr.push(defaultMeal[i])
+            }
           }
-        }
-        let foodCatalog= []
-        for(let i=0;i<arr.length;i++){
-          foodCatalog.push(that.getmealTypeDataValue(arr[i]))
-        }
-        that.WeekInfo.foodCatalog=foodCatalog;
-        that.AppendFoodType();
-        if(that.WeekInfo.weekValue==""||that.WeekInfo.weekValue==null||that.WeekInfo.weekValue==undefined){
-          that.WeekInfo.weekValue=new Date()
-        }
-        that.FixWeek();
-        that.ShowWeekSelect();
-        that.SelectWeek(that.WeekInfo.weekValue)
-        that.$refs.refweekSelect.hidePicker();
-      })
+          let foodCatalog = []
+          for (let i = 0; i < arr.length; i++) {
+            foodCatalog.push(that.getmealTypeDataValue(arr[i]))
+          }
+          that.WeekInfo.foodCatalog = foodCatalog;
+          that.AppendFoodType();
+          if (that.WeekInfo.weekValue == "" || that.WeekInfo.weekValue == null || that.WeekInfo.weekValue == undefined) {
+            that.WeekInfo.weekValue = new Date()
+          }
+          that.FixWeek();
+          that.ShowWeekSelect();
+          that.SelectWeek(that.WeekInfo.weekValue)
+          that.$refs.refweekSelect.hidePicker();
+          that.rebuildTable()
+          setTimeout(function () {
+            that.$refs.child.getFoodScore();
+          },200)
+        })
     },
     recipeNameShareSearchPub(recipeSelectPub,isUse){
     if(recipeSelectPub){
@@ -1094,23 +1086,8 @@ document.oncontextmenu = function(){return false};
     inserMeal(id,that){
       detail(id).then(res=>{
         if(res.data.success){
-          let mealsType=[];
           let data=res.data.data;
-          data.recipeCycles.forEach(_=>{
-            mealsType.push(_.mealsType);
-          })
-          let arr= Array.from(new Set(mealsType));
-          for(let i=0;i< that.WeekInfo.foodCatalog.length;i++){
-            if(arr.indexOf(parseInt(that.getmealTypeData(that.WeekInfo.foodCatalog[i])))==-1){
-              arr.push(parseInt(that.getmealTypeData(that.WeekInfo.foodCatalog[i])))
-            }
-          }
-          arr.sort()
-          let foodCatalog= []
-          for(let i=0;i<arr.length;i++){
-            foodCatalog.push(that.getmealTypeDataValue(arr[i]))
-          }
-          that.$set(that.WeekInfo,"foodCatalog",foodCatalog)
+          that.$set(that.WeekInfo,"foodCatalog",JSON.parse(res.data.data.mealTypestrs))
           that.AppendFoodType();
           let recipeCycles=res.data.data.recipeCycles;
           setTimeout(function () {
@@ -1158,26 +1135,14 @@ document.oncontextmenu = function(){return false};
       that.$refs.child.getFoodScore();
       that.$refs.child.refreshData();
     },
-    mealDetail(id,that){//根据id查询菜品详情
+
+    //修改的时候加载
+    //根据id查询菜品详情
+    mealDetail(id,that){
       detail(id).then(res=>{
         if(res.data.success){
-          let mealsType=[];
           let data=res.data.data;
-          data.recipeCycles.forEach(_=>{
-            mealsType.push(_.mealsType);
-          })
-          let arr= Array.from(new Set(mealsType));
-          for(let i=0;i< that.WeekInfo.foodCatalog.length;i++){
-            if(arr.indexOf(parseInt(that.getmealTypeData(that.WeekInfo.foodCatalog[i])))==-1){
-              arr.push(parseInt(that.getmealTypeData(that.WeekInfo.foodCatalog[i])))
-            }
-          }
-          arr.sort()
-          let foodCatalog= []
-          for(let i=0;i<arr.length;i++){
-              foodCatalog.push(that.getmealTypeDataValue(arr[i]))
-          }
-          that.WeekInfo.foodCatalog=foodCatalog;
+          that.$set(that.WeekInfo,"foodCatalog",JSON.parse(res.data.data.mealTypestrs))
           that.WeekInfo.weekType=res.data.data.recipeDay
           that.WeekInfo.weekValue=new Date(res.data.data.startTime)
           that.FixWeek();
@@ -1190,7 +1155,6 @@ document.oncontextmenu = function(){return false};
           that.WeekInfo.shareTell=data.isBoard=="1"?true:false
           that.WeekInfo.collection=data.isUse==1?true:false;
           that.WeekInfo.sharePlant=data.isPub==0?true:false
-
           setTimeout(function () {
             that.dishesData("datas",recipeCycles,that);
             that.$refs.child.getFoodScore();
@@ -1199,14 +1163,11 @@ document.oncontextmenu = function(){return false};
       })
     },
     //详情数据绑定前端
-
     dishesData(datas,recipeCycles,that){
       that[datas].forEach(_=>{
         _.weeks.forEach(__=>{
-          /////
           let foods=__.foods;
           for(let i=0;i<recipeCycles.length;i++){
-
             if(recipeCycles[i].mealsType+""==that.getmealTypeData(_.name)&&recipeCycles[i].week+""==__.name.slice(4)){
               __.image=recipeCycles[i].pic
               let recipeConncts=recipeCycles[i].recipeConncts;
@@ -1354,10 +1315,12 @@ document.oncontextmenu = function(){return false};
       getList().then(res=>{
         this.crowdData=res.data.data;
         this.WeekInfo.crowd=this.crowdData[0].id;
-        that.mealsTypeById();
         if(that.$route.query.userid){
           that.id=this.$route.query.userid;
+          //餐点详情
           that.mealDetail(that.$route.query.userid,that)
+        }else{
+          that.mealsTypeById();
         }
       })
       this.dishShareSearchPub()
@@ -1768,7 +1731,6 @@ document.oncontextmenu = function(){return false};
       this.$refs.child.refreshData();
     },
     resetMeals(){
-  //  debugger
         this.smartDatas=JSON.parse(localStorage.getItem("mealsDatas"))
       let that=this;
       setTimeout(function () {
@@ -1847,7 +1809,7 @@ document.oncontextmenu = function(){return false};
       debugger
       let row={
         //---
-        // mealTypeStrs:JSON.stringify(this.WeekInfo.foodCatalog),
+        mealTypestrs:JSON.stringify(this.WeekInfo.foodCatalog),
         recipeName:this.WeekInfo.Weekdetails,
         peopleId:this.WeekInfo.crowd,
         isPub:this.WeekInfo.sharePlant?0:1,
@@ -1919,10 +1881,19 @@ document.oncontextmenu = function(){return false};
 
     //餐点类型改变
     AppendFoodType() {
+      let mealsType=[]
+      let that=this;
+      this.mealTypeData.forEach(_=>{
+        if(JSON.stringify(this.WeekInfo.foodCatalog).indexOf(_.name)!=-1){
+          mealsType.push(_.name)
+        }
+      })
+      this.WeekInfo.foodCatalog=mealsType;
       var date3 = JSON.parse(JSON.stringify(this.WeekInfo.foodCatalog));
       let datas=this.datas;
       let res=[];
       //新增餐点类型
+      debugger
       for (let i = 0; i < date3.length; i++) {
         // debugger
         if (!this.hasFoodType(date3[i])) {
@@ -1943,7 +1914,6 @@ document.oncontextmenu = function(){return false};
               foods: [],
             });
           }
-
           datas.push(row);
         }
       }
@@ -1971,6 +1941,11 @@ document.oncontextmenu = function(){return false};
       deleteList.forEach((e) => {
         this.datas.splice(e, 1);
       });
+      setTimeout(function () {
+        that.$refs.child.getFoodScore();
+        that.$refs.child.refreshData();
+        that.$refs.child.resizeExpendHeight();
+      },200)
     },
 
     hasFoodType(foodTypeName) {
@@ -2133,29 +2108,23 @@ document.oncontextmenu = function(){return false};
     },
     selectWeekType(){
       let that=this;
-      this.$confirm("重新选择周期会清空已有菜品", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }).then(()=>{
-        let weekType=that.WeekInfo.weekType;
-        that.$refs.refweekSelect.showPicker();
-        that.SelectWeek(this.startTime)
-        that.$refs.refweekSelect.hidePicker();
-      })
+      let weekType=that.WeekInfo.weekType;
+      that.$refs.refweekSelect.showPicker();
+      that.SelectWeek(this.startTime)
+      that.$refs.refweekSelect.hidePicker();
     },
     SelectWeek1(d){
-      this.$confirm("重新选择周期会清空已有菜品", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }).then(()=>{
-        this.SelectWeek(d)
-      })
+      this.SelectWeek(d)
+      // this.$confirm("重新选择周期会清空已有菜品", "提示", {
+      //   confirmButtonText: "确定",
+      //   cancelButtonText: "取消",
+      //   type: "warning"
+      // }).then(()=>{
+      //
+      // })
     },
     //选择周
     SelectWeek(d,name,recipeCycles) {
-
       if(typeof  d =="string"){
         d=new Date(d)
       }

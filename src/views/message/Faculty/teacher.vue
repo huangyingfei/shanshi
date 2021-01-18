@@ -756,16 +756,10 @@
     methods: {
       selectWeekType(){
         let that=this;
-        this.$confirm("重新选择周期会清空已有菜品", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(()=>{
-          let weekType=that.WeekInfo.weekType;
-          that.$refs.refweekSelect.showPicker();
-          that.SelectWeek(this.startTime)
-          that.$refs.refweekSelect.hidePicker();
-        })
+        let weekType=that.WeekInfo.weekType;
+        that.$refs.refweekSelect.showPicker();
+        that.SelectWeek(this.startTime)
+        that.$refs.refweekSelect.hidePicker();
       },
       // mealsTypeById(){
       //   var that=this;
@@ -841,23 +835,8 @@
       inserMeal(id,that){
         detail(id).then(res=>{
           if(res.data.success){
-            let mealsType=[];
             let data=res.data.data;
-            data.recipeCycles.forEach(_=>{
-              mealsType.push(_.mealsType);
-            })
-            let arr= Array.from(new Set(mealsType));
-            for(let i=0;i< that.WeekInfo.foodCatalog.length;i++){
-              if(arr.indexOf(parseInt(that.getmealTypeData(that.WeekInfo.foodCatalog[i])))==-1){
-                arr.push(parseInt(that.getmealTypeData(that.WeekInfo.foodCatalog[i])))
-              }
-            }
-            arr.sort()
-            let foodCatalog= []
-            for(let i=0;i<arr.length;i++){
-              foodCatalog.push(that.getmealTypeDataValue(arr[i]))
-            }
-            that.$set(that.WeekInfo,"foodCatalog",foodCatalog)
+            that.$set(that.WeekInfo,"foodCatalog",JSON.parse(res.data.data.mealTypestrs))
             that.AppendFoodType();
             let recipeCycles=res.data.data.recipeCycles;
             setTimeout(function () {
@@ -904,26 +883,14 @@
         })
         that.$refs.child.refreshData();
       },
+
+      //修改的时候加载
+      //根据id查询菜品详情
       mealDetail(id,that){//根据id查询菜品详情
         detail(id).then(res=>{
           if(res.data.success){
-            let mealsType=[];
             let data=res.data.data;
-            data.recipeCycles.forEach(_=>{
-              mealsType.push(_.mealsType);
-            })
-            let arr= Array.from(new Set(mealsType));
-            for(let i=0;i< that.WeekInfo.foodCatalog.length;i++){
-              if(arr.indexOf(parseInt(that.getmealTypeData(that.WeekInfo.foodCatalog[i])))==-1){
-                arr.push(parseInt(that.getmealTypeData(that.WeekInfo.foodCatalog[i])))
-              }
-            }
-            arr.sort()
-            let foodCatalog= []
-            for(let i=0;i<arr.length;i++){
-              foodCatalog.push(that.getmealTypeDataValue(arr[i]))
-            }
-            that.WeekInfo.foodCatalog=foodCatalog;
+            that.$set(that.WeekInfo,"foodCatalog",JSON.parse(res.data.data.mealTypestrs))
             that.WeekInfo.weekType=res.data.data.recipeDay
             that.WeekInfo.weekValue=new Date(res.data.data.startTime)
             that.FixWeek();
@@ -936,7 +903,6 @@
             that.WeekInfo.shareTell=data.isBoard=="1"?true:false
             that.WeekInfo.collection=data.isUse==1?true:false;
             // that.WeekInfo.sharePlant=data.isPub==0?true:false
-
             setTimeout(function () {
               that.dishesData("datas",recipeCycles,that);
             }, 1000);
@@ -1092,6 +1058,13 @@
         if(that.$route.query.userid){
           that.id=this.$route.query.userid;
           that.mealDetail(that.$route.query.userid,that)
+        }else{
+          that.AppendFoodType();
+          that.WeekInfo.weekValue=new Date()
+          that.FixWeek();
+          that.ShowWeekSelect();
+          that.SelectWeek(new Date())
+          that.$refs.refweekSelect.hidePicker();
         }
         this.dishShareSearchPub()
         this.dishShareSearchPri()
@@ -1110,13 +1083,6 @@
           })
           this.belongRegionOption=res.data.data
         })
-
-        that.AppendFoodType();
-        that.WeekInfo.weekValue=new Date()
-        that.FixWeek();
-        that.ShowWeekSelect();
-        that.SelectWeek(new Date())
-        that.$refs.refweekSelect.hidePicker();
       },
 
       GetAbsoluteLocation(element)
@@ -1467,6 +1433,7 @@
           })
         })
         let row={
+          mealTypestrs:JSON.stringify(this.WeekInfo.foodCatalog),
           recipeCategory:2,
           recipeName:this.WeekInfo.Weekdetails,
           peopleId:this.WeekInfo.crowd,
@@ -1539,6 +1506,14 @@
 
       //餐点类型改变
       AppendFoodType() {
+        let mealsType=[]
+        let that=this;
+        this.mealTypeData.forEach(_=>{
+          if(JSON.stringify(this.WeekInfo.foodCatalog).indexOf(_.name)!=-1){
+            mealsType.push(_.name)
+          }
+        })
+        this.WeekInfo.foodCatalog=mealsType;
         var date3 = JSON.parse(JSON.stringify(this.WeekInfo.foodCatalog));
         let datas=this.datas;
         let res=[];
@@ -1591,6 +1566,9 @@
         deleteList.forEach((e) => {
           this.datas.splice(e, 1);
         });
+        setTimeout(function () {
+          that.$refs.child.refreshData();
+        },200)
       },
       hasFoodType(foodTypeName) {
         var result = this.datas.find((p) => p.name == foodTypeName);
@@ -1751,13 +1729,7 @@
         return cday;
       },
       SelectWeek1(d){
-        this.$confirm("重新选择周期会清空已有菜品", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(()=>{
-          this.SelectWeek(d)
-        })
+        this.SelectWeek(d)
       },
       //选择周
       SelectWeek(d,name,recipeCycles) {

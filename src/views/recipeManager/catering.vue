@@ -139,9 +139,9 @@
                 v-model="WeekInfo.foodCatalog"
                 @change="AppendFoodType"
               >
-                <el-checkbox label="早餐" checked name="早餐"></el-checkbox>
-                <el-checkbox label="早点" checked name="早点"></el-checkbox>
-                <el-checkbox label="午餐" checked name="午餐"></el-checkbox>
+                <el-checkbox label="早餐"  name="早餐"></el-checkbox>
+                <el-checkbox label="早点"  name="早点"></el-checkbox>
+                <el-checkbox label="午餐"  name="午餐"></el-checkbox>
                 <el-checkbox label="午点" name="午点"></el-checkbox>
                 <el-checkbox label="晚餐" name="晚餐"></el-checkbox>
                 <el-checkbox label="晚点" name="晚点"></el-checkbox>
@@ -780,6 +780,7 @@ export default {
         crowd: "", //人群
         shareOrg: true,
         showFoodCatalog: "", //餐点类型
+        flag:false,//第一次加载的时候  不计算分数
       },
       activeName: "first",
       activeName2: "thread",
@@ -1127,30 +1128,8 @@ export default {
     inserMeal(id, that) {
       detail(id).then((res) => {
         if (res.data.success) {
-          let mealsType = [];
           let data = res.data.data;
-          data.recipeCycles.forEach((_) => {
-            mealsType.push(_.mealsType);
-          });
-          let arr = Array.from(new Set(mealsType));
-          for (let i = 0; i < that.WeekInfo.foodCatalog.length; i++) {
-            if (
-              arr.indexOf(
-                parseInt(that.getmealTypeData(that.WeekInfo.foodCatalog[i]))
-              ) == -1
-            ) {
-              arr.push(
-                parseInt(that.getmealTypeData(that.WeekInfo.foodCatalog[i]))
-              );
-            }
-          }
-          arr.sort();
-
-          let foodCatalog = [];
-          for (let i = 0; i < arr.length; i++) {
-            foodCatalog.push(that.getmealTypeDataValue(arr[i]));
-          }
-          that.$set(that.WeekInfo, "foodCatalog", foodCatalog);
+          that.$set(that.WeekInfo,"foodCatalog",JSON.parse(res.data.data.mealTypestrs))
           that.AppendFoodType();
           let recipeCycles = res.data.data.recipeCycles;
           setTimeout(function () {
@@ -1214,30 +1193,11 @@ export default {
       //根据id查询菜品详情
       detail(id).then((res) => {
         if (res.data.success) {
-          let mealsType = [];
           let data = res.data.data;
-          data.recipeCycles.forEach((_) => {
-            mealsType.push(_.mealsType);
-          });
-          let arr = Array.from(new Set(mealsType));
-          for (let i = 0; i < that.WeekInfo.foodCatalog.length; i++) {
-            if (arr.indexOf(parseInt(that.getmealTypeData(that.WeekInfo.foodCatalog[i]))) == -1
-            ) {
-              arr.push(
-                parseInt(that.getmealTypeData(that.WeekInfo.foodCatalog[i]))
-              );
-            }
-          }
-          debugger
-          arr.sort();
-          let foodCatalog = [];
-          for (let i = 0; i < arr.length; i++) {
-            foodCatalog.push(that.getmealTypeDataValue(arr[i]));
-          }
-          that.WeekInfo.foodCatalog = foodCatalog;
+          that.WeekInfo.startAge = res.data.data.startAge;
           that.WeekInfo.weekType = res.data.data.recipeDay;
           that.WeekInfo.weekValue = new Date(res.data.data.startTime);
-          that.WeekInfo.startAge = res.data.data.startAge;
+          that.$set(that.WeekInfo,"foodCatalog",JSON.parse(res.data.data.mealTypestrs))
           that.FixWeek();
           that.ShowWeekSelect();
           let recipeCycles = data.recipeCycles;
@@ -1412,6 +1372,9 @@ export default {
       if (that.$route.query.userid) {
         that.id = this.$route.query.userid;
         that.mealDetail(that.$route.query.userid, that);
+      }else{
+         that.WeekInfo.foodCatalog=["早餐","早点","午餐"];
+          that.WeekInfo.flag=true;
       }
       this.dishShareSearchPub();
       grantTree().then((res) => {
@@ -1939,6 +1902,7 @@ export default {
         });
       });
       let row = {
+        mealTypestrs:JSON.stringify(this.WeekInfo.foodCatalog),
         recipeName: this.WeekInfo.Weekdetails,
         startAge: this.WeekInfo.startAge,
         endAge: this.WeekInfo.endAge,
@@ -2015,6 +1979,14 @@ export default {
 
     //餐点类型改变
     AppendFoodType() {
+      let mealsType=[]
+      let that=this;
+      this.mealTypeData.forEach(_=>{
+        if(JSON.stringify(this.WeekInfo.foodCatalog).indexOf(_.name)!=-1){
+          mealsType.push(_.name)
+        }
+      })
+      this.WeekInfo.foodCatalog=mealsType;
       var date3 = JSON.parse(JSON.stringify(this.WeekInfo.foodCatalog));
       let datas = this.datas;
       let res = [];
@@ -2067,6 +2039,14 @@ export default {
       deleteList.forEach((e) => {
         this.datas.splice(e, 1);
       });
+      setTimeout(function () {
+        if(!that.WeekInfo.flag){
+          that.$refs.child.getFoodScore();
+        }
+        that.WeekInfo.flag=false;
+        that.$refs.child.refreshData();
+        that.$refs.child.resizeExpendHeight();
+      },200)
     },
 
     hasFoodType(foodTypeName) {
@@ -2228,25 +2208,14 @@ export default {
     },
     selectWeekType() {
       let that = this;
-      this.$confirm("重新选择周期会清空已有菜品", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      }).then(() => {
-        let weekType = that.WeekInfo.weekType;
-        that.$refs.refweekSelect.showPicker();
-        that.SelectWeek(this.startTime);
-        that.$refs.refweekSelect.hidePicker();
-      });
+      let weekType = that.WeekInfo.weekType;
+      that.$refs.refweekSelect.showPicker();
+      that.SelectWeek(this.startTime);
+      that.$refs.refweekSelect.hidePicker();
+
     },
     SelectWeek1(d) {
-      this.$confirm("重新选择周期会清空已有菜品", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      }).then(() => {
-        this.SelectWeek(d);
-      });
+      this.SelectWeek(d);
     },
     //选择周
     SelectWeek(d, name, recipeCycles) {
