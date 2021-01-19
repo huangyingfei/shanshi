@@ -50,7 +50,7 @@ export const getList = (current, size, params,classId) => {
   return request({
     url: '/api/blade-food/student/page',
     method: 'post',
-    data: {
+    params: {
       ...params,
       current,
       size,
