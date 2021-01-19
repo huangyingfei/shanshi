@@ -146,7 +146,8 @@ export default {
       monthNum: 0,
       dayNum: 0,
       updated: [], //日期
-      dateRange: [] //全部日期
+      dateRange: [], //全部日期
+      canceloff: false
     };
   },
 
@@ -156,10 +157,10 @@ export default {
       handler: function() {
         this.leaveDateCopy = deepClone(this.leaveDate);
         this.leaveDateInfoCopy = deepClone(this.leaveDateInfo);
-        console.log(this.leaveDateCopy);
-        console.log(this.leaveDate);
-        console.log(this.leaveDateInfoCopy);
-        console.log(this.leaveDateInfo);
+        // console.log(this.leaveDateCopy);
+        // console.log(this.leaveDate);
+        // console.log(this.leaveDateInfoCopy);
+        // console.log(this.leaveDateInfo);
         this.updateCalendar();
       },
       deep: true,
@@ -209,7 +210,7 @@ export default {
         }
         day.type = 0;
       }
-      console.log(day.type);
+      // console.log(day.type);
       if (arrayIndex != -1 && day.type != 0) {
         console.log("day.type != 3");
         this.leaveDateInfoCopy[arrayIndex].type = day.type;
@@ -347,7 +348,7 @@ export default {
       // console.log(this.leaveDateInfoCopy);
     },
     closeCalendar() {
-      this.$emit("closeCalendar");
+      this.$emit("closeCalendar", this.canceloff);
     }
   }
 };

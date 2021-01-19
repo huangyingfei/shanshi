@@ -150,8 +150,20 @@
               </template>
             </el-table-column>
           </el-table>
-        </div></el-col
-      >
+          <!-- 分页 -->
+          <div class="pagingClass">
+            <el-pagination
+              :page-sizes="m_page.sizes"
+              :page-size="m_page.size"
+              :current-page="m_page.number"
+              @size-change="m_handleSizeChange"
+              @current-change="m_handlePageChange"
+              layout="total,sizes,prev, pager, next"
+              background
+              :total="m_page.totalElements"
+            ></el-pagination>
+          </div></div
+      ></el-col>
     </el-row>
     <el-dialog
       width="400px"
@@ -163,7 +175,8 @@
       <calendar
         :leaveDate="leaveDate"
         :leaveDateInfo="leaveDateInfo"
-        v-on:saveCalendar="saveCalendar"
+        @saveCalendar="saveCalendar"
+        @closeCalendar="canceloff"
       ></calendar>
     </el-dialog>
   </div>
@@ -171,7 +184,9 @@
 
 <script>
 import calendar from "@/components/vCalendar";
-
+// 引入导出Excel表格依赖
+import FileSaver from "file-saver";
+import XLSX from "xlsx";
 export default {
   components: {
     calendar
@@ -219,10 +234,13 @@ export default {
     this.getStorage(); //按月
   },
   methods: {
-    saveCalendar: function(leaveDateInfoCopy) {
-      console.log(leaveDateInfoCopy);
+    canceloff(data) {
+      this.calendars = data;
+    },
+    saveCalendar(data) {
+      // console.log(data);
       // console.log(this.secondrefund);
-      this.secondrefund.returnMealDateList = leaveDateInfoCopy;
+      this.secondrefund.returnMealDateList = data;
       console.log(this.secondrefund);
       this.$axios
         .post(`api/blade-food/returnmeallist/updateRMLDate`, this.secondrefund)
@@ -362,6 +380,47 @@ export default {
           this.$message.error("取消失败");
         });
     },
+    //导入Excel
+    importExcel() {
+      let urlParams = `?size=${this.m_page.size}&current=${
+        this.m_page.number
+      }&type=${0}`;
+      this.$axios
+        .get(`api/blade-food/returnmeallist/page` + urlParams, {})
+        .then(res => {
+          // console.log(res);
+
+          this.tableData = res.data.data.records;
+        });
+      require.ensure([], () => {
+        const { export_json_to_excel } = require("@/excel/export2Excel");
+        const tHeader = [
+          "月度",
+          "班级",
+          "姓名",
+          "累计天数",
+          "连续天数",
+          "退膳金额(元)",
+          "是否退费"
+        ]; //导出表头信息
+        const filterVal = [
+          "monthy",
+          "className",
+          "studentName",
+          "fate",
+          "conFate",
+          "refundAmount",
+          "isRefund"
+        ]; // 导出的表头字段名，需要导出表格字段名
+        const list = this.tableData;
+        const data = this.formatJson(filterVal, list);
+        export_json_to_excel(tHeader, data, "退膳清单"); // 导出的表格名称
+      });
+    },
+    //格式转换
+    formatJson(filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => v[j]));
+    },
     handleSelectionChange(val) {
       this.multipleSelection = val;
       if (this.multipleSelection.length != 0) {
@@ -369,9 +428,26 @@ export default {
       } else {
         this.cancelon = 1;
       }
+    },
+    m_handlePageChange(currPage) {
+      this.m_page.number = currPage;
+      this.getStorage();
+    },
+    m_handleSizeChange(currSize) {
+      this.m_page.size = currSize;
+      this.getStorage();
     }
   }
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.pagingClass {
+  text-align: right;
+  /* margin: 20px 0; */
+  background-color: #fff;
+  margin-top: 0px;
+  margin-right: 0px;
+  margin-bottom: 60px;
+}
+</style>
