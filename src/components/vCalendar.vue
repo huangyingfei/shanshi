@@ -15,8 +15,9 @@
         class="el-date-picker__prev-btn"
         @click="getNewDate(0)"
       ></el-button>
-      <span>{{ yearNum }}年</span>
-      <span>{{ monthNum + 1 }}月</span>
+      <label style="line-height: 40px">
+        {{ yearNum }}年 {{ monthNum + 1 }}月
+      </label>
       <!-- 下一年 -->
       <el-button
         type="text"
@@ -108,6 +109,17 @@
           ><span>请假作废</span>
         </div>
       </div>
+      <div>
+        <el-button type="text" style="width: 50%" @click="closeCalendar"
+          >取消</el-button
+        >
+        <el-button
+          type="text"
+          style="width: 50%; margin-left: 0"
+          @click="saveCalendar"
+          >确定</el-button
+        >
+      </div>
     </div>
   </div>
 </template>
@@ -182,7 +194,7 @@ export default {
         let dateStr = `${year}-${month}-${i} 00:00:00`;
         let dateInfo = {
           value: i,
-          type: 1,
+          type: 0,
           dateStr: dateStr,
           isNow: isNow,
         };
@@ -289,6 +301,12 @@ export default {
       }
       console.log(this.monthNum);
       this.updateCalendar(this.yearNum, this.monthNum, this.dayNum);
+    },
+    saveCalendar() {
+      this.$emit("saveCalendar", this.leaveDateInfoCopy);
+    },
+    closeCalendar() {
+      this.$emit("closeCalendar");
     },
   },
 };
