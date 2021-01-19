@@ -123,8 +123,8 @@
             <el-table-column prop="isRefund" label="是否退费" align="center">
               <template slot-scope="scope">
                 <el-radio-group v-model="scope.row.isRefund">
-                  <el-radio label="1">是</el-radio>
-                  <el-radio label="0">否</el-radio>
+                  <el-radio :label="1">是</el-radio>
+                  <el-radio :label="0">否</el-radio>
                 </el-radio-group>
               </template>
             </el-table-column>

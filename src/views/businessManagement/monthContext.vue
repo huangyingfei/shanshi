@@ -126,6 +126,11 @@
             <el-table-column prop="fate" label="累计天数" align="center">
             </el-table-column>
             <el-table-column prop="conFate" label="连续天数" align="center">
+              <template slot-scope="scope">
+                <span @click="openDetails(scope.row)">{{
+                  scope.row.conFate
+                }}</span>
+              </template>
             </el-table-column>
             <el-table-column
               prop="refundAmount"
@@ -135,9 +140,12 @@
             </el-table-column>
             <el-table-column prop="isRefund" label="是否退费" align="center">
               <template slot-scope="scope">
-                <el-radio-group v-model="scope.row.isRefund">
-                  <el-radio label="1">是</el-radio>
-                  <el-radio label="0">否</el-radio>
+                <el-radio-group
+                  v-model="scope.row.isRefund"
+                  @change="agreeChange(scope.row)"
+                >
+                  <el-radio :label="1">是</el-radio>
+                  <el-radio :label="0">否</el-radio>
                 </el-radio-group>
               </template>
             </el-table-column>
@@ -145,20 +153,41 @@
         </div></el-col
       >
     </el-row>
+    <el-dialog
+      width="400px"
+      title="日历"
+      append-to-body
+      :visible.sync="calendars"
+      :close-on-click-modal="false"
+    >
+      <calendar
+        :leaveDate="leaveDate"
+        :leaveDateInfo="leaveDateInfo"
+        v-on:saveCalendar="saveCalendar"
+      ></calendar>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import calendar from "@/components/vCalendar";
+
 export default {
+  components: {
+    calendar
+  },
   data() {
     return {
+      leaveDate: [],
+      leaveDateInfo: [],
       loadFlag: false, //加载flag
+      calendars: false,
       value2: "", //月度
       elseclass: [],
       ei_class: "", //班级
       name: "", //姓名
       state: "全部", //退费状态
-
+      sonData: "",
       options: [
         {
           value: "0",
@@ -175,6 +204,7 @@ export default {
       ],
       cancelon: "1",
       tableData: [], //按月
+      secondrefund: "",
       multipleSelection: [],
       m_page: {
         sizes: [10, 20, 40, 50, 100], //每页最大显示数
@@ -189,6 +219,85 @@ export default {
     this.getStorage(); //按月
   },
   methods: {
+    saveCalendar: function(leaveDateInfoCopy) {
+      console.log(leaveDateInfoCopy);
+      // console.log(this.secondrefund);
+      this.secondrefund.returnMealDateList = leaveDateInfoCopy;
+      console.log(this.secondrefund);
+      this.$axios
+        .post(`api/blade-food/returnmeallist/updateRMLDate`, this.secondrefund)
+        .then(res => {
+          this.$message({
+            message: "保存成功",
+            type: "success"
+          });
+          this.getStorage();
+        })
+        .catch(() => {
+          this.$message.error("保存失败");
+        });
+    },
+    // agreeChange: function(row, val) {
+    //   console.log(row);
+    //   console.log(val);
+    // },
+    openDetails(row) {
+      console.log(row);
+      this.calendars = true;
+
+      let param = row.returnMealDateList;
+      this.secondrefund = row;
+      // console.log(calendar);
+      this.leaveDateInfo = param;
+      let dateParsed = [];
+      param.forEach((item, index) => {
+        dateParsed.push(item.lateDate);
+      });
+      this.leaveDate = dateParsed;
+      // console.log(this.leaveDate);
+      // this.$nextTick(() => {
+      //   this.$refs.calendar.sonFun(param);
+      // });
+    },
+    // 取消退费 退费
+    agreeChange(row) {
+      console.log(row);
+      let force = row.id;
+      let editor = row.isRefund;
+      console.log(editor);
+      if (row.isRefund == 1) {
+        // console.log("是是是");
+        let addid = `?ids=${force}`;
+        this.$axios
+          .post(`api/blade-food/returnmeallist/refund` + addid, {})
+          .then(res => {
+            //   console.log(res);
+            this.$message({
+              message: "退费成功",
+              type: "success"
+            });
+            this.getStorage();
+          })
+          .catch(() => {
+            this.$message.error("退费失败");
+          });
+      } else {
+        // console.log("否否否");
+        let addid = `?ids=${force}`;
+        this.$axios
+          .post(`api/blade-food/returnmeallist/cancelRefund` + addid, {})
+          .then(res => {
+            this.$message({
+              message: "取消成功",
+              type: "success"
+            });
+            this.getStorage();
+          })
+          .catch(() => {
+            this.$message.error("取消失败");
+          });
+      }
+    },
     //获取列表
     getStorage() {
       this.loadFlag = true;
@@ -214,7 +323,7 @@ export default {
       });
       let invoice = filter.toString();
 
-      console.log(invoice);
+      // console.log(invoice);
       let addid = `?ids=${invoice}`;
       this.$axios
         .post(`api/blade-food/returnmeallist/refund` + addid, {})
@@ -240,7 +349,7 @@ export default {
       //   console.log(invoice);
       let addid = `?ids=${invoice}`;
       this.$axios
-        .post(`api/blade-food/returnmeallist/updateRMLDate` + addid, {})
+        .post(`api/blade-food/returnmeallist/cancelRefund` + addid, {})
         .then(res => {
           //   console.log(res);
           this.$message({
