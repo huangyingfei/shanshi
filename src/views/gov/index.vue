@@ -198,7 +198,7 @@
             ></el-cascader>
           </div>
           <div class="die-healthyt-box">
-            <week dateLabel="时间" @weekChange="beforeGetGoverDishTotal" />
+            <week dateLabel="时间" @weekChange="getGoverDishTotalWeekChange" />
           </div>
           <div style="height: 350px">
             <infinite-scroll
@@ -252,7 +252,7 @@
               </el-select>
             </div>
             <div class="die-healthyt-box">
-              <week dateLabel="时间" @weekChange="beforeGetGoverRecipeTotal" />
+              <week dateLabel="时间" @weekChange="goverRecipeTotalWeekChange" />
             </div>
           </div>
           <div
@@ -287,7 +287,7 @@
         :before-close="handleClose"
         :append-to-body="true"
       >
-        <gover-recipe-detail />
+        <gover-recipe-detail :recipeData="recipeData" />
       </el-dialog>
 
       <div style="height: 20px; width: 100%"></div>
@@ -322,7 +322,7 @@ export default {
         dishCount: 0,
         recipeCount: 0,
       },
-
+      recipeData: {},
       nutrientData: {
         region: "",
         legendData: [
@@ -439,9 +439,7 @@ export default {
         liData: [],
         orgCodeOptions: [],
       },
-      count: 10,
-      loading: false,
-      noMore: false,
+
       dialogVisible: false,
     };
   },
@@ -460,15 +458,18 @@ export default {
   methods: {
     //查看食谱的菜谱
     protocol(tenantId) {
+      this.dialogVisible = true;
       this.axios({
         url: "api/blade-food/recipe/goverRecipeDetail",
         method: "get",
         params: {
           tenantId: tenantId,
-          startTime: this.goverRecipeTotal.dateRange[0],
-          endTime: this.goverRecipeTotal.dateRange[1],
+          startTime: this.goverRecipeTotal.WeekInfo.startTime,
+          endTime: this.goverRecipeTotal.WeekInfo.endTime,
         },
-      }).then((res) => {});
+      }).then((res) => {
+        this.recipeData = res.data.data;
+      });
     },
 
     // load() {
@@ -960,10 +961,11 @@ export default {
         this.everyDayEatPic();
       });
     },
-    beforeGetGoverDishTotal(WeekInfo) {
-      if (WeekInfo) {
-        this.goverDishTotal.WeekInfo = WeekInfo;
-      }
+    getGoverDishTotalWeekChange(WeekInfo) {
+      this.goverDishTotal.WeekInfo = WeekInfo;
+      this.beforeGetGoverDishTotal();
+    },
+    beforeGetGoverDishTotal() {
       this.goverDishTotal.liData = [];
       this.goverDishTotal.current = 1;
       this.goverDishTotal.finished = false;
@@ -1004,14 +1006,15 @@ export default {
           console.log(err);
         });
     },
-    beforeGetGoverRecipeTotal(WeekInfo) {
-      if (WeekInfo) {
-        this.goverRecipeTotal.WeekInfo = WeekInfo;
-      }
+    goverRecipeTotalWeekChange(WeekInfo) {
+      this.goverRecipeTotal.WeekInfo = WeekInfo;
+      this.beforeGetGoverRecipeTotal();
+    },
+    beforeGetGoverRecipeTotal() {
       this.goverRecipeTotal.liData = [];
       this.goverRecipeTotal.finished = false;
-      this.getGoverRecipeTotal();
       this.goverRecipeTotal.current = 1;
+      this.getGoverRecipeTotal();
     },
     //获取食谱健康排行榜
     getGoverRecipeTotal() {
@@ -1019,10 +1022,14 @@ export default {
         return;
       }
       var areaId = null;
+      console.log(
+        "this.goverRecipeTotal.current" + this.goverRecipeTotal.current
+      );
       if (this.goverRecipeTotal.region instanceof Array) {
         areaId = this.goverRecipeTotal.region.slice(-1)[0];
       }
       var tenantId = this.goverRecipeTotal.tenantId;
+      console.log(this.goverRecipeTotal.WeekInfo);
       this.cascaderChange(this.goverRecipeTotal, this.goverRecipeTotal.region);
       this.axios({
         url: "/api/blade-food/food/goverRecipeTotal",

@@ -15,8 +15,9 @@
         class="el-date-picker__prev-btn"
         @click="getNewDate(0)"
       ></el-button>
-      <span>{{ yearNum }}年</span>
-      <span>{{ monthNum + 1 }}月</span>
+      <label style="line-height: 40px">
+        {{ yearNum }}年 {{ monthNum + 1 }}月
+      </label>
       <!-- 下一年 -->
       <el-button
         type="text"
@@ -108,6 +109,17 @@
           ><span>请假作废</span>
         </div>
       </div>
+      <div>
+        <el-button type="text" style="width: 50%" @click="closeCalendar"
+          >取消</el-button
+        >
+        <el-button
+          type="text"
+          style="width: 50%; margin-left: 0"
+          @click="saveCalendar"
+          >确定</el-button
+        >
+      </div>
     </div>
   </div>
 </template>
@@ -153,17 +165,28 @@ export default {
     getRvent(val, day) {
       // 1:请假一天，2：请假半天，3：补假 4：请假作废
       var arrayIndex = this.leaveDateCopy.indexOf(day.dateStr);
-
+      var returnMealDate = {
+        returnMealListId: this.leaveDateInfoCopy[0].returnMealListId,
+        lateDate: day.dateStr,
+        type: 3,
+        returnMealListPid: this.leaveDateInfoCopy[0].returnMealListPid,
+      };
       if (day.type == 0) {
         day.type = 3;
+        this.leaveDateInfoCopy.push(returnMealDate);
+        this.leaveDateCopy.push(day.dateStr);
       } else if (day.type == 1) {
         day.type = 4;
       } else if (day.type == 2) {
         day.type = 4;
       } else if (day.type == 3) {
+        if (arrayIndex != -1) {
+          this.leaveDateCopy.splice(arrayIndex, 1);
+          this.leaveDateInfoCopy.splice(arrayIndex, 1);
+        }
         day.type = 0;
       }
-      if (arrayIndex != -1) {
+      if (arrayIndex != -1 && day.type != 3) {
         this.leaveDateInfoCopy[arrayIndex].type = day.type;
       }
       // val.target.style.backgroundColor = "#409EFF";
@@ -182,7 +205,7 @@ export default {
         let dateStr = `${year}-${month}-${i} 00:00:00`;
         let dateInfo = {
           value: i,
-          type: 1,
+          type: 0,
           dateStr: dateStr,
           isNow: isNow,
         };
@@ -289,6 +312,12 @@ export default {
       }
       console.log(this.monthNum);
       this.updateCalendar(this.yearNum, this.monthNum, this.dayNum);
+    },
+    saveCalendar() {
+      this.$emit("saveCalendar", this.leaveDateInfoCopy);
+    },
+    closeCalendar() {
+      this.$emit("closeCalendar");
     },
   },
 };
