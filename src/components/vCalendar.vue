@@ -165,17 +165,28 @@ export default {
     getRvent(val, day) {
       // 1:请假一天，2：请假半天，3：补假 4：请假作废
       var arrayIndex = this.leaveDateCopy.indexOf(day.dateStr);
-
+      var returnMealDate = {
+        returnMealListId: this.leaveDateInfoCopy[0].returnMealListId,
+        lateDate: day.dateStr,
+        type: 3,
+        returnMealListPid: this.leaveDateInfoCopy[0].returnMealListPid,
+      };
       if (day.type == 0) {
         day.type = 3;
+        this.leaveDateInfoCopy.push(returnMealDate);
+        this.leaveDateCopy.push(day.dateStr);
       } else if (day.type == 1) {
         day.type = 4;
       } else if (day.type == 2) {
         day.type = 4;
       } else if (day.type == 3) {
+        if (arrayIndex != -1) {
+          this.leaveDateCopy.splice(arrayIndex, 1);
+          this.leaveDateInfoCopy.splice(arrayIndex, 1);
+        }
         day.type = 0;
       }
-      if (arrayIndex != -1) {
+      if (arrayIndex != -1 && day.type != 3) {
         this.leaveDateInfoCopy[arrayIndex].type = day.type;
       }
       // val.target.style.backgroundColor = "#409EFF";
