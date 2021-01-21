@@ -340,13 +340,12 @@
                 class="filter-tree"
                 :data="menuDishList"
                 :props="defaultProps"
-                default-expand-all
                 :filter-node-method="filterNode"
                 draggable
+                :accordion="true"
                 @node-drag-start="foodmenueDragStart"
                 :allow-drop="foodmenueDragEnd"
                 @node-drag-over="foodmenueDragMove"
-
               >
               </el-tree>
             </el-tab-pane>
@@ -402,9 +401,9 @@
                 class="filter-tree"
                 :data="personMenuDishList"
                 :props="defaultProps"
-                default-expand-all
                 :filter-node-method="filterNode"
                 draggable
+                :accordion="true"
                 @node-drag-start="foodmenueDragStart"
                 :allow-drop="foodmenueDragEnd"
                 @node-drag-over="foodmenueDragMove"
