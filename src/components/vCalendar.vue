@@ -157,10 +157,10 @@ export default {
       handler: function() {
         this.leaveDateCopy = deepClone(this.leaveDate);
         this.leaveDateInfoCopy = deepClone(this.leaveDateInfo);
-        // console.log(this.leaveDateCopy);
-        // console.log(this.leaveDate);
-        // console.log(this.leaveDateInfoCopy);
-        // console.log(this.leaveDateInfo);
+        console.log(this.leaveDateCopy);
+        console.log(this.leaveDate);
+        console.log(this.leaveDateInfoCopy);
+        console.log(this.leaveDateInfo);
         this.updateCalendar();
       },
       deep: true,
@@ -232,7 +232,12 @@ export default {
         if (i < 10) {
           j = "0" + i;
         }
-        let dateStr = `${year}-${month + 1}-${j} 00:00:00`;
+        var m = month + 1;
+        if (m < 10) {
+          m = "0" + m;
+        }
+        let dateStr = `${year}-${m}-${j} 00:00:00`;
+        // console.log(dateStr);
         let dateInfo = {
           value: i,
           type: 0,

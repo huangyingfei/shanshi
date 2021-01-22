@@ -4,14 +4,22 @@
       <el-col :span="6"
         ><div>
           <span style="margin-right: 20px;margin-left:20px">月度</span>
-          <el-date-picker
+          <!-- <el-date-picker
             style="width: 170px"
             size="small "
             v-model="value2"
             type="month"
+            format="yyyy 年 MM 月"
+            value-format="yyyy-MM"
             placeholder="选择月"
           >
-          </el-date-picker></div
+          </el-date-picker> -->
+          <el-input
+            size="small "
+            style="width: 170px"
+            v-model="value2"
+            placeholder="请输入内容"
+          ></el-input></div
       ></el-col>
       <el-col :span="6"
         ><div>
@@ -19,8 +27,10 @@
           <el-cascader
             size="small "
             style="width: 170px"
-            v-model="ei_class"
-            :options="elseclass"
+            clearable
+            v-model="classInfo"
+            :options="loadClass"
+            :props="{ expandTrigger: 'hover' }"
             @change="handleChange"
           ></el-cascader></div
       ></el-col>
@@ -124,13 +134,16 @@
             <el-table-column prop="studentName" label="姓名" align="center">
             </el-table-column>
             <el-table-column prop="fate" label="累计天数" align="center">
+              <template slot-scope="scope">
+                <span @click="openDetails(scope.row)">
+                  {{ scope.row.fate }}
+                </span>
+              </template>
             </el-table-column>
             <el-table-column prop="conFate" label="连续天数" align="center">
-              <template slot-scope="scope">
-                <span @click="openDetails(scope.row)">{{
-                  scope.row.conFate
-                }}</span>
-              </template>
+              <!-- <template slot-scope="scope">
+                <span>{{ scope.row.conFate }}</span>
+              </template> -->
             </el-table-column>
             <el-table-column
               prop="refundAmount"
@@ -199,13 +212,15 @@ export default {
       calendars: false,
       value2: "", //月度
       elseclass: [],
+      classInfo: [],
       ei_class: "", //班级
       name: "", //姓名
-      state: "全部", //退费状态
+      loadClass: [], //所在年级
+      state: "", //退费状态
       sonData: "",
       options: [
         {
-          value: "0",
+          value: "",
           label: "全部"
         },
         {
@@ -213,7 +228,7 @@ export default {
           label: "是"
         },
         {
-          value: "2",
+          value: "0",
           label: "否"
         }
       ],
@@ -227,11 +242,13 @@ export default {
         totalElements: 0,
         totalPages: 3,
         number: 1
-      }
+      },
+      monthly: ""
     };
   },
   beforeMount() {
     this.getStorage(); //按月
+    this.getToolkit();
   },
   methods: {
     canceloff(data) {
@@ -250,6 +267,7 @@ export default {
             type: "success"
           });
           this.getStorage();
+          this.calendars = false;
         })
         .catch(() => {
           this.$message.error("保存失败");
@@ -316,12 +334,37 @@ export default {
           });
       }
     },
+    notEmpty() {
+      this.value2 = "";
+      this.classInfo = [];
+      this.monthly = "";
+      this.name = "";
+      this.state = "";
+      this.getStorage();
+    },
+    searchStr() {
+      // console.log(this.value2.length);
+      // if (this.value2 != null) {
+      //   this.monthly = this.value2;
+      // } else {
+      //   this.monthly = "";
+      // }
+      if (this.classInfo.length != 0) {
+        this.monthly = this.classInfo[2];
+      } else {
+        this.monthly = "";
+      }
+      console.log(this.state);
+      this.getStorage();
+    },
     //获取列表
     getStorage() {
       this.loadFlag = true;
       let urlParams = `?size=${this.m_page.size}&current=${
         this.m_page.number
-      }&type=${0}`;
+      }&type=${0}&monthy=${this.value2}&classId=${this.monthly}&studentName=${
+        this.name
+      }&isRefund=${this.state}`;
       this.$axios
         .get(`api/blade-food/returnmeallist/page` + urlParams, {})
         .then(res => {
@@ -379,6 +422,41 @@ export default {
         .catch(() => {
           this.$message.error("取消失败");
         });
+    },
+    //获取班级
+    getToolkit() {
+      this.$axios.get(`api/blade-food/class/tree`, {}).then(res => {
+        this.bufs = res.data.data;
+        // console.log(this.bufs);
+        let fwork = [];
+        this.bufs.forEach(item => {
+          //   console.log(item);
+          item.children.forEach((item1, index1) => {
+            fwork[index1] = {
+              value: item1.id,
+              label: item1.label
+            };
+            fwork[index1].children = [];
+            item1.children.forEach((item2, index2) => {
+              fwork[index1].children[index2] = {
+                value: item2.id,
+                label: item2.label
+              };
+              fwork[index1].children[index2].children = [];
+              if (item2.children) {
+                item2.children.forEach((item3, index3) => {
+                  // console.log(item3),
+                  fwork[index1].children[index2].children[index3] = {
+                    value: item3.id,
+                    label: item3.label
+                  };
+                });
+              }
+            });
+          });
+        });
+        this.loadClass = fwork;
+      });
     },
     //导入Excel
     importExcel() {

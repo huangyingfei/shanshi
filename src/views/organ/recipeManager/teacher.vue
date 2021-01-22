@@ -1180,19 +1180,20 @@ export default {
     cameras(formName) {
       console.log(this.stringClass);
       console.log(this.ruleForm.domain);
-      if (this.ruleForm.domain.length == 1) {
-        this.summing = this.ruleForm.domain[0];
-        console.log(this.summing);
-      }
-      if (this.ruleForm.domain.length == 2) {
-        this.summing = this.ruleForm.domain[1];
-        console.log(this.summing);
-      }
+      // if (this.ruleForm.domain.length == 1) {
+      //   this.summing = this.ruleForm.domain[0];
+      //   console.log(this.summing);
+      // }
+      // if (this.ruleForm.domain.length == 2) {
+      //   this.summing = this.ruleForm.domain[1];
+      //   console.log(this.summing);
+      // }
+      console.log(this.ruleForm.domain);
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.$axios
             .post(`api/blade-food/teacher/save`, {
-              deptId: this.summing,
+              managerDept: [this.ruleForm.domain],
               name: this.ruleForm.name, //姓名
               sex: this.ruleForm.radio, //性别
               pic: this.dialogImageUrl, //图片
@@ -1264,7 +1265,8 @@ export default {
         if (valid) {
           this.$axios
             .post(`api/blade-food/teacher/update`, {
-              id: this.summing,
+              id: this.edits,
+              managerDept: [this.ruleForm.domain],
               name: this.ruleForm.name, //姓名
               sex: this.ruleForm.radio, //性别
               pic: this.dialogImageUrl, //图片
@@ -1406,6 +1408,13 @@ export default {
       } else {
         this.stringClass = [];
       }
+      let police = {
+        class: [row.deptStr]
+      };
+      police.class = [...JSON.parse(police.class[0])];
+      // console.log(police.class);
+      this.ruleForm.domain = police.class[0];
+      console.log(this.ruleForm.domain);
 
       this.ruleForm.thejob = row.jobNumber; //工号
       this.ruleForm.inductions = row.entryTime; //入职日期
