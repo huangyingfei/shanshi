@@ -352,7 +352,7 @@
                 class="filter-tree"
                 :data="menuDishList"
                 :props="defaultProps"
-                default-expand-all
+                :accordion="true"
                 :filter-node-method="filterNode"
                 draggable
                 @node-drag-start="foodmenueDragStart"
@@ -414,7 +414,7 @@
                 class="filter-tree"
                 :data="personMenuDishList"
                 :props="defaultProps"
-                default-expand-all
+                :accordion="true"
                 :filter-node-method="filterNode"
                 draggable
                 @node-drag-start="foodmenueDragStart"
