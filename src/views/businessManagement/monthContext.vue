@@ -135,9 +135,16 @@
             </el-table-column>
             <el-table-column prop="fate" label="累计天数" align="center">
               <template slot-scope="scope">
-                <span @click="openDetails(scope.row)">
+                <!-- <span @click="openDetails(scope.row)">
                   {{ scope.row.fate }}
-                </span>
+                </span> -->
+                <el-tag
+                  type="success"
+                  @click="openDetails(scope.row)"
+                  style="cursor:pointer"
+                >
+                  {{ scope.row.fate }}</el-tag
+                >
               </template>
             </el-table-column>
             <el-table-column prop="conFate" label="连续天数" align="center">
