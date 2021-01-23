@@ -1,12 +1,12 @@
 <template>
   <div class="cation">
     <div class="personal">
-      <!-- <el-input
+      <el-input
         style="width:290px; margin-left: 9px;"
         placeholder="输入关键字进行查询"
-        v-model="filterText1"
+        v-model="filterText"
       >
-      </el-input> -->
+      </el-input>
       <div class="country">
         <div class="country1">
           <el-cascader
@@ -60,6 +60,7 @@
             v-loading="loadFlag1"
             :default-expand-all="false"
             @node-click="handleNodeClick1"
+            :filter-node-method="filterNode"
             ref="tree"
           >
             <span class="custom-tree-node" slot-scope="{ node, data }">
@@ -314,7 +315,7 @@ export default {
       really1: "",
       waterfall: "2",
       fallen: "",
-      filterText1: "",
+      filterText: "",
       valuepark1: [] //公共省市区
     };
   },
@@ -323,7 +324,18 @@ export default {
     this.publicDomain();
     this.ToString(); //公共
   },
+  watch: {
+    filterText(val) {
+      // console.log(this.$refs.tree);
+      this.$refs.tree.filter(val);
+    }
+  },
   methods: {
+    filterNode(value, data) {
+      if (!value) return true;
+
+      return data.label.indexOf(value) !== -1;
+    },
     //公共食材库
     handleNodeClick1(data) {
       console.log(data);
@@ -435,7 +447,7 @@ export default {
       this.loadFlag1 = true;
       this.$axios
         .get(
-          `api/blade-food/basetype/getFoodByBaseId?isPrivate=1&typeTemp=${this.waterfall}&regionId=${this.fallen}&season=${this.before1}&isUse=${this.really1}&foodName=${this.filterText1}`,
+          `api/blade-food/basetype/getFoodByBaseId?isPrivate=1&typeTemp=${this.waterfall}&regionId=${this.fallen}&season=${this.before1}&isUse=${this.really1}&foodName=${this.filterText}`,
           {}
         )
         .then(res => {
