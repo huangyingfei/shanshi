@@ -1692,11 +1692,7 @@ export default {
       let parter = "";
       this.$axios
         .get(
-          `api/blade-food/teacher/list?size=${this.m_page.size}&current=${
-            this.m_page.number
-          }&deptId=${""}&jobNumber=${this.workers}&name=${this.username}&post=${
-            this.callback
-          }&stutas=${this.driver}&descs=${this.empty}&ascs=${this.ordered}`,
+          `api/blade-food/teacher/list?size=${this.m_page.size}&current=${this.m_page.number}&deptId=${this.view}&jobNumber=${this.workers}&name=${this.username}&post=${this.callback}&stutas=${this.driver}&descs=${this.empty}&ascs=${this.ordered}`,
           {}
         )
         .then(res => {
@@ -1818,41 +1814,6 @@ export default {
           });
         });
         this.loadClass = fwork;
-        // console.log(this.loadClass);
-        // this.bufs.forEach((item, index) => {
-        //   console.log(item);
-        //   fwork[index] = {
-        //     id: item.id,
-        //     label: item.label
-        //   };
-        //   fwork[index].children = [];
-        //   item.children.forEach((item1, index1) => {
-        //     fwork[index].children[index1] = {
-        //       value: item1.id,
-        //       label: item1.label
-        //     };
-        //     fwork[index].children[index1].children = [];
-        //     item1.children.forEach((item2, index2) => {
-        //       fwork[index].children[index1].children[index2] = {
-        //         value: item2.id,
-        //         label: item2.label
-        //       };
-        //       fwork[index].children[index1].children[index2].children = [];
-        //       if (item2.children) {
-        //         item2.children.forEach((item3, index3) => {
-        //           fwork[index].children[index1].children[index2].children[
-        //             index3
-        //           ] = {
-        //             value: item3.id,
-        //             label: item3.label
-        //           };
-        //         });
-        //       }
-        //     });
-        //   });
-        // });
-        // this.loadClass = fwork;
-        // console.log(this.loadClass);
       });
     },
     hobbiton() {
@@ -1934,20 +1895,22 @@ export default {
     m_handlePageChange(currPage) {
       console.log(currPage);
       this.m_page.number = currPage;
-      if (this.view == 0) {
-        // return;
+      console.log(this.view);
+      if (this.view == "") {
         this.searchType();
       } else {
+        this.searchType();
         this.handleNodeClick();
       }
     },
     m_handleSizeChange(currSize) {
       console.log(currPage);
       this.m_page.size = currSize;
-      if (this.view == 0) {
-        // return;
+      console.log(this.view);
+      if (this.view == "") {
         this.searchType();
       } else {
+        this.searchType();
         this.handleNodeClick();
       }
     },

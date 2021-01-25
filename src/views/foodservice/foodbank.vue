@@ -1,6 +1,12 @@
 <template>
   <div class="dishes">
     <div class="coffee">
+      <el-input
+        style="width:290px; margin-left: 9px;"
+        placeholder="输入关键字进行查询"
+        v-model="filterText"
+      >
+      </el-input>
       <div class="country">
         <div class="country1">
           <el-cascader
@@ -54,6 +60,8 @@
             v-loading="loadFlag3"
             :default-expand-all="false"
             @node-click="handleNodeClick3"
+            :filter-node-method="filterNode"
+            ref="tree"
           >
             <span class="custom-tree-node" slot-scope="{ node, data }">
               <span>{{ node.label }}</span>
@@ -119,7 +127,7 @@
             <el-select disabled v-model="value2" multiple placeholder="请选择">
               <el-option
                 style="width: 200px"
-                v-for="item in before"
+                v-for="item in before2"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -287,6 +295,7 @@ export default {
   data() {
     const data2 = [];
     return {
+      filterText: "",
       ruleForm1: {
         name: "", //菜品名字
         fooddata: "", //菜品分类
@@ -333,6 +342,25 @@ export default {
           label: "冬季"
         }
       ],
+      before2: [
+        {
+          value: "1",
+          label: "春季"
+        },
+        {
+          value: "2",
+          label: "夏季"
+        },
+        {
+          value: "3",
+          label: "秋季"
+        },
+        {
+          value: "4",
+          label: "冬季"
+        }
+      ],
+      value2: [],
       really1: "",
       //全部 常用
       really: [
@@ -355,7 +383,18 @@ export default {
     this.professional();
     this.Protocol1(); //营养素含量
   },
+  watch: {
+    filterText(val) {
+      // console.log(this.$refs.tree);
+      this.$refs.tree.filter(val);
+    }
+  },
   methods: {
+    filterNode(value, data) {
+      if (!value) return true;
+
+      return data.label.indexOf(value) !== -1;
+    },
     handleNodeClick3(data) {
       // this.editable = index;
       if (data.view == 0) {
@@ -366,8 +405,8 @@ export default {
           .get(`api/blade-food/dish/dishDetail?id=${this.auto}`, {})
           .then(res => {
             // console.log(res);
-            this.valuepark.length = 0;
-            this.value1.length = 0;
+            // this.valuepark.length = 0;
+            // this.value1.length = 0;
             this.handler = res.data.data;
             console.log(this.handler);
             this.valuepark1.length = 0;
