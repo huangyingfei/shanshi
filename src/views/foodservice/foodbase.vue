@@ -6,7 +6,6 @@
       <div class="block">
         <el-input
           clearable
-          @change="Addraudit"
           style="width:290px; margin-left: 9px;"
           placeholder="输入关键字进行查询"
           v-model="filterText"
@@ -20,6 +19,8 @@
             v-loading="loadFlag2"
             :default-expand-all="false"
             @node-click="handleNodeClick"
+            :filter-node-method="filterNode"
+            ref="tree"
           >
           </el-tree>
         </div>
@@ -38,10 +39,21 @@ export default {
       more: "0"
     };
   },
+  watch: {
+    filterText(val) {
+      // console.log(this.$refs.tree);
+      this.$refs.tree.filter(val);
+    }
+  },
   beforeMount() {
     this.Addraudit();
   },
   methods: {
+    filterNode(value, data) {
+      if (!value) return true;
+
+      return data.label.indexOf(value) !== -1;
+    },
     foodmatters(tab) {
       // console.log(tab);
       console.log(tab.index);

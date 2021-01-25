@@ -14,29 +14,39 @@
         placeholder="请输入内容"
         style="width: 200px"
       ></el-input>
-      <span style="margin: 0 10px">提交日期:</span>
-      <el-date-picker
-        format="yyyy 年 MM 月 dd 日"
-        value-format="yyyy-MM-dd"
-        v-model="value1"
-        type="date"
-        placeholder="选择日期"
-        style="width: 200px"
-      ></el-date-picker>
+
       <span style="margin: 0 10px">提交人:</span>
       <el-input
         v-model="editor"
         placeholder="请输入内容"
         style="width: 200px"
       ></el-input>
-
+      <span style="margin-left: 15px; margin-right: 10px">联系电话:</span>
+      <el-input
+        v-model="phoneId"
+        placeholder="请输入内容"
+        style="width: 200px"
+      ></el-input>
       <div class="tostring">
-        <span style="margin-left: 15px; margin-right: 10px">联系电话:</span>
-        <el-input
-          v-model="phoneId"
-          placeholder="请输入内容"
+        <span style="margin-left: 15px;margin-right: 10px">提交日期:</span>
+        <!-- <el-date-picker
+          format="yyyy 年 MM 月 dd 日"
+          value-format="yyyy-MM-dd"
+          v-model="value1"
+          type="date"
+          placeholder="选择日期"
           style="width: 200px"
-        ></el-input>
+        ></el-date-picker> -->
+        <el-date-picker
+          v-model="value1"
+          format="yyyy 年 MM 月 dd 日"
+          value-format="yyyy-MM-dd"
+          type="daterange"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+        >
+        </el-date-picker>
         <span style="margin: 0 10px">审核状态:</span>
         <el-select v-model="mState1" placeholder="请选择">
           <el-option
@@ -992,6 +1002,7 @@ export default {
       agree: "", //审核状态
       according: "0",
       timezone: "",
+      timezone1: "",
       classification: "" //分类ID
     };
   },
@@ -1048,10 +1059,19 @@ export default {
       // console.log(this.editor); //提交人
       // console.log(this.phoneId); //电话
       // console.log(this.mState); //审核状态
+      // if (this.value1) {
+      //   this.timezone = this.value1;
+      // } else {
+      //   this.timezone = "";
+      // }
       if (this.value1) {
-        this.timezone = this.value1;
+        this.timezone = this.value1[0];
+        console.log(this.timezone);
+        this.timezone1 = this.value1[1];
+        console.log(this.timezone1);
       } else {
         this.timezone = "";
+        this.timezone1 = "";
       }
       // console.log(this.timezone);
       this.auditing();
@@ -1062,7 +1082,7 @@ export default {
       this.loadFlag = true;
       this.$axios
         .get(
-          `api/blade-food/food/getAuditList?size=${this.m_page.size}&current=${this.m_page.number}&foodName=${this.input}&orgName=${this.noinst}&createTimeStr=${this.timezone}&mobile=${this.phoneId}&status=${this.mState1}&createName=${this.editor}`,
+          `api/blade-food/food/getAuditList?size=${this.m_page.size}&current=${this.m_page.number}&foodName=${this.input}&orgName=${this.noinst}&createTimeStr=${this.timezone}&endCreateTimeStr=${this.timezone1}&mobile=${this.phoneId}&status=${this.mState1}&createName=${this.editor}`,
           {
             headers: {
               "Content-Type": "application/json"

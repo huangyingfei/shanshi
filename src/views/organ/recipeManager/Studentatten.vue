@@ -597,6 +597,7 @@ export default {
       stringClass: [], //所在年级
       loadClass: [], //所在年级
       tableData: [],
+      attendance: [],
       loadFlag: false, //加载flag
       page_data: {
         loadTxt: "数据加载中..."
@@ -712,6 +713,13 @@ export default {
     this.restaurants = this.loadAll();
   },
   methods: {
+    switchText(mes) {
+      if (mes == 1) {
+        return "是";
+      } else {
+        return "否";
+      }
+    },
     Takeone() {
       let str = JSON.parse(localStorage.getItem("saber-token"));
       this.headerObj["Blade-Auth"] = `bearer ${str.content}`;
@@ -731,9 +739,14 @@ export default {
         .then(res => {
           // console.log(res);
           // this.loadFlag = false;
-          this.tableData = res.data.data.records;
+          this.attendance = res.data.data.records;
+          for (let i = 0; i < this.attendance.length; i++) {
+            this.attendance[i].status = this.switchText(
+              this.attendance[i].status
+            );
+            // console.log(this.attendance[i].status);
+          }
           this.export2Excel();
-          // this.m_page.totalElements = res.data.data.total;
         });
     },
     //导入Excel

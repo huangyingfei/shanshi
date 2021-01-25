@@ -16,7 +16,7 @@
         style="width:190px"
       ></el-input>
       <span style="margin: 0 10px;">提交日期:</span>
-      <!-- <el-date-picker
+      <el-date-picker
         v-model="value1"
         format="yyyy 年 MM 月 dd 日"
         value-format="yyyy-MM-dd"
@@ -25,16 +25,16 @@
         start-placeholder="开始日期"
         end-placeholder="结束日期"
       >
-      </el-date-picker> -->
+      </el-date-picker>
 
-      <el-date-picker
+      <!-- <el-date-picker
         format="yyyy 年 MM 月 dd 日"
         value-format="yyyy-MM-dd"
         v-model="value1"
         type="date"
         placeholder="选择日期"
         style="width:190px"
-      ></el-date-picker>
+      ></el-date-picker> -->
 
       <div class="tostring">
         <span style="margin-right: 24px;">提交人:</span>
@@ -1237,6 +1237,7 @@ export default {
       this.noinst = ""; //创建机构
       this.value1 = ""; //提交日期
       this.timezone = "";
+      this.timezone1 = "";
       this.editor = ""; //提交人
       this.phoneId = ""; //联系电话
       this.mState1 = ""; //审核状态
@@ -1282,10 +1283,18 @@ export default {
       // console.log(this.timezone);
       // this.timezone1 = this.value1[1];
       // console.log(this.timezone1);
+      // if (this.value1) {
+      //   this.timezone = this.value1;
+      // } else {
+      //   this.timezone = "";
+      // }
       if (this.value1) {
-        this.timezone = this.value1;
+        this.timezone = this.value1[0];
+        this.timezone1 = this.value1[1];
+        // console.log(this.timezone1);
       } else {
         this.timezone = "";
+        this.timezone1 = "";
       }
       this.auditing();
     },
@@ -1294,7 +1303,7 @@ export default {
       this.loadFlag = true;
       this.$axios
         .get(
-          `api/blade-food/dish/appPubDish?size=${this.m_page.size}&current=${this.m_page.number}&dishName=${this.input}&orgName=${this.noinst}&createTimeStr=${this.timezone}&mobile=${this.phoneId}&status=${this.mState1}&createName=${this.editor}`
+          `api/blade-food/dish/appPubDish?size=${this.m_page.size}&current=${this.m_page.number}&dishName=${this.input}&orgName=${this.noinst}&createTimeStr=${this.timezone}&endCreateTimeStr=${this.timezone1}&mobile=${this.phoneId}&status=${this.mState1}&createName=${this.editor}`
         )
         .then(res => {
           this.loadFlag = false;

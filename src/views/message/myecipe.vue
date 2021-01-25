@@ -427,9 +427,9 @@ export default {
       console.log(this.wupload.getDate);
       if (this.wupload.getDate) {
         this.timezone = this.wupload.getDate[0];
-        console.log(this.timezone);
+        // console.log(this.timezone);
         this.timezone1 = this.wupload.getDate[1];
-        console.log(this.timezone1);
+        // console.log(this.timezone1);
       } else {
         this.timezone = "";
         this.timezone1 = "";
