@@ -326,11 +326,12 @@
                 <li
                   v-for="f in mealListLeft"
                   :key="f.id"
+                  @mouseover="ShowFoodTips($event, f)"
+                  @mouseout="HidenFoodTips($event)"
                   style="font-size: 14px"
                 >
                   <span
-                    @mouseover="ShowFoodTips($event, f)"
-                    @mouseout="HidenFoodTips($event)"
+
                     >{{ f.recipeName }}</span
                   >
                   <img
@@ -349,7 +350,7 @@
                   placeholder="请输入内容"
                   v-model="dishSharePub"
                   class="input-with-select"
-                  @change="dishShareSearchPub()"
+
                 >
                 </el-input>
               </div>
@@ -434,7 +435,8 @@
                 :data="menuDishList"
                 :props="defaultProps"
                 :accordion="true"
-                :filter-node-method="filterNode"
+                ref="dishTreePub"
+                :filter-node-method="filterNodePub"
                 draggable
                 @node-drag-start="foodmenueDragStart"
                 :allow-drop="foodmenueDragEnd"
@@ -969,6 +971,9 @@ export default {
   beforeMount() {},
 
   watch: {
+    dishSharePub(val) {
+      this.$refs.dishTreePub.filter(val);
+    },
     score(val) {
       if (parseFloat(val) == 85) {
         this.scoreTitle = "合格";
@@ -979,13 +984,17 @@ export default {
       if (parseFloat(val) < 85) {
         this.scoreTitle = "加油";
       }
-      // debugger
+      //
     },
     // pcScore(val){
     //   this.scxjSc=(parseFloat(this.score)-parseFloat(this.pcScore)).toFixed(2)
     // }
   },
   methods: {
+    filterNodePub(value, data){
+      if (!value) return true;
+      return data.label.indexOf(value) !== -1;
+    },
     openNoNumRecipeDialog() {
       this.$refs.children2.openDialogVisible();
     },
@@ -1265,13 +1274,13 @@ export default {
       if (type == "smartDatas") {
         this.peipScore = score;
         this.peippcScore = pscore;
-        debugger;
+        ;
         this.ppscxjSc = (
           parseFloat(this.peipScore) - parseFloat(this.peippcScore)
         ).toFixed(2);
       }
       if (type == "datas") {
-        debugger;
+        ;
         this.score = score;
         this.pcScore = pscore;
         this.scxjSc = (
@@ -1335,7 +1344,7 @@ export default {
       getDishByBaseId(
         isPrivate,
         typeTemp,
-        dishSharePub,
+        undefined,
         this.belongRegion
           ? this.belongRegion.length > 1
             ? this.belongRegion[1]
@@ -1475,7 +1484,7 @@ export default {
                 name: date3[i],
                 weeks: [],
               };
-              // debugger
+              //
               // 填充周数据
               for (let j = 0; j < 7; j++) {
                 row.weeks.push({
@@ -1494,7 +1503,7 @@ export default {
           that.dishesData("showDatas", recipeCycles, that);
           that.$refs.layershipu.style.top = "300px";
           that.$refs.layershipu.style.left = "300px";
-          // debugger
+          //
           if (that.day == 5) {
             that.$refs.layershipu.style.width = "682px";
           }
@@ -1509,7 +1518,7 @@ export default {
       });
     },
     HidenFoodTips(ev) {
-      //   debugger
+      //
       setTimeout(() => {
         this.$refs.layershipu.style.display = "none";
       }, 200);
@@ -1646,7 +1655,7 @@ export default {
       let that = this;
       //食材相克
       jundgeFood(row).then((result) => {
-        // debugger
+        //
         let foodMutuals = that.foodMutuals;
         let msg = "";
         if (result.data.data.foodMutuals.length > 0) {
@@ -1737,7 +1746,7 @@ export default {
                     parseFloat(___.count) + parseFloat(___.count) * add;
                   this.$set(___, "count", count.toFixed(2));
                 } else {
-                  debugger;
+                  ;
                   Vue.delete(___, "down");
                   Vue.delete(___, "up");
                   // delete ___["down"]
@@ -1826,7 +1835,7 @@ export default {
       this.$refs.child.refreshData();
     },
     resetMeals() {
-      //  debugger
+      //
       this.smartDatas = JSON.parse(localStorage.getItem("mealsDatas"));
       let that = this;
       setTimeout(function () {
@@ -1968,7 +1977,7 @@ export default {
       var that = this;
       this.headers = [];
       setTimeout(function () {
-        // debugger
+        //
         var hd = JSON.parse(JSON.stringify(that.WeekList));
         for (let j = 0; j < hd.length; j++) {
           that.headers.push(hd[j]);
@@ -1992,7 +2001,7 @@ export default {
       let res = [];
       //新增餐点类型
       for (let i = 0; i < date3.length; i++) {
-        // debugger
+        //
         if (!this.hasFoodType(date3[i])) {
           var row = {
             id: this.guid(),
@@ -2067,7 +2076,7 @@ export default {
     },
     // 初始化表格数据(根据id获取远程数据)
     initEmptyData() {
-      // debugger
+      //
       this.datas = [];
       var date3 = JSON.parse(JSON.stringify(this.WeekInfo.foodCatalog));
       for (let i = 0; i < date3.length; i++) {
