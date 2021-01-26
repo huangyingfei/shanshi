@@ -224,7 +224,8 @@ export default {
         totalPages: 3,
         number: 1
       },
-      monthly: ""
+      monthly: "",
+      semesters: ""
     };
   },
   beforeMount() {
@@ -232,6 +233,13 @@ export default {
     this.getToolkit();
   },
   methods: {
+    switchText(mes) {
+      if (mes == 1) {
+        return "是";
+      } else {
+        return "否";
+      }
+    },
     //导出Excel
     importExcel() {
       let urlParams = `?size=${this.m_page.size}&current=${
@@ -240,7 +248,12 @@ export default {
       this.$axios
         .get(`api/blade-food/returnmeallist/page` + urlParams, {})
         .then(res => {
-          this.create = res.data.data.records;
+          this.semesters = res.data.data.records;
+          for (var i = 0; i < this.semesters.length; i++) {
+            this.semesters[i].isRefund = this.switchText(
+              this.semesters[i].isRefund
+            );
+          }
         });
       require.ensure([], () => {
         const { export_json_to_excel } = require("@/excel/export2Excel");
@@ -260,7 +273,7 @@ export default {
           "refundAmount",
           "isRefund"
         ]; // 导出的表头字段名，需要导出表格字段名
-        const list = this.create;
+        const list = this.semesters;
         const data = this.formatJson(filterVal, list);
         export_json_to_excel(tHeader, data, "退膳清单"); // 导出的表格名称
       });

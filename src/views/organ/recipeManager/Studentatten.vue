@@ -326,6 +326,7 @@
           </el-form-item> -->
           <el-form-item label="请假类型" prop="forgreater">
             <el-select
+              @change="forward"
               clearable
               style="width: 250px"
               v-model="ruleForm.forgreater"
@@ -360,6 +361,7 @@
           >
             <el-date-picker
               class="date_picker"
+              :popper-class="'currentDatePickerClass'"
               @change="started()"
               style="width: 180px"
               format="yyyy 年 MM 月 dd 日"
@@ -390,6 +392,7 @@
             style="width: 370px"
           >
             <el-date-picker
+              :popper-class="'currentDatePickerClass'"
               class="date_picker"
               @change="started()"
               style="width: 180px"
@@ -428,7 +431,7 @@
               v-model="ruleForm.between"
             ></el-input>
           </el-form-item>
-          <el-form-item label="病假症状">
+          <el-form-item label="病假症状" v-if="this.enforce == '病假'">
             <el-select
               clearable
               style="width: 250px"
@@ -699,7 +702,8 @@ export default {
       timezone: "",
       timezone1: "",
       under: "",
-      builtinclass: ""
+      builtinclass: "",
+      enforce: ""
     };
   },
   beforeMount() {
@@ -713,11 +717,15 @@ export default {
     this.restaurants = this.loadAll();
   },
   methods: {
+    forward() {
+      this.enforce = this.ruleForm.forgreater;
+      // console.log(this.enforce);
+    },
     switchText(mes) {
       if (mes == 1) {
-        return "是";
+        return "已生效";
       } else {
-        return "否";
+        return "未确认";
       }
     },
     Takeone() {
@@ -782,7 +790,7 @@ export default {
           "source",
           "status"
         ]; // 导出的表头字段名，需要导出表格字段名
-        const list = this.tableData;
+        const list = this.attendance;
         const data = this.formatJson(filterVal, list);
         export_json_to_excel(tHeader, data, "学生出勤管理"); // 导出的表格名称
       });
@@ -906,6 +914,7 @@ export default {
             type: "warning"
           });
           this.ruleForm.weekday = "";
+          this.ruleForm.software = "";
           return;
         } else {
           var afterTime = Date.parse(this.ruleForm.starting.replace(/-/g, "/"));
@@ -1338,8 +1347,5 @@ export default {
 }
 /deep/ .hide .el-upload--picture-card {
   display: none;
-}
-.el-picker-panel__footer .el-button--text .el-picker-panel__link-btn {
-  display: none !important;
 }
 </style>

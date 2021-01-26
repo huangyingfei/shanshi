@@ -344,6 +344,7 @@
             </el-form-item>
             <el-form-item label="出生日期" style="width: 355px" prop="value1">
               <el-date-picker
+                :popper-class="'currentDatePickerClass'"
                 v-model="ruleForm.value1"
                 style="width: 250px"
                 format="yyyy 年 MM 月 dd 日 "
@@ -428,6 +429,7 @@
             >
             </el-date-picker> -->
               <el-date-picker
+                :popper-class="'currentDatePickerClass'"
                 v-model="ruleForm.inductions"
                 style="width: 250px"
                 format="yyyy 年 MM 月 dd 日"
@@ -449,6 +451,7 @@
             >
             </el-date-picker> -->
               <el-date-picker
+                :popper-class="'currentDatePickerClass'"
                 v-model="ruleForm.workin"
                 style="width: 250px"
                 @change="stop()"
@@ -582,6 +585,7 @@
           <el-table-column label="序号" type="index" width="50" align="center">
           </el-table-column>
           <el-table-column
+            width="150"
             prop="jobNumber"
             label="工号"
             align="center"
@@ -600,11 +604,19 @@
             </template>
           </el-table-column>
           <el-table-column
+            width="120"
             prop="birthDate"
             label="出生日期"
             align="center"
-          ></el-table-column>
+          >
+            <template slot-scope="scope">
+              <span>{{
+                new Date(scope.row.birthDate).toLocaleDateString()
+              }}</span>
+            </template>
+          </el-table-column>
           <el-table-column
+            width="150"
             prop="mobile"
             label="手机号"
             align="center"
@@ -615,12 +627,14 @@
             align="center"
           ></el-table-column>
           <el-table-column
+            width="150"
             prop="className"
             label="所在班级"
             align="center"
           ></el-table-column>
 
           <el-table-column
+            width="150"
             prop="entryTime"
             label="入职日期"
             align="center"
@@ -649,7 +663,12 @@
           </el-table-column> -->
 
           <!--操作格-->
-          <el-table-column label="操作" align="center">
+          <el-table-column
+            label="操作"
+            width="150"
+            fixed="right"
+            align="center"
+          >
             <template slot-scope="scope">
               <el-button
                 @click="editorTheme(scope.row, 2)"

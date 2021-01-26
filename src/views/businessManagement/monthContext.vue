@@ -195,6 +195,7 @@
       <calendar
         :leaveDate="leaveDate"
         :leaveDateInfo="leaveDateInfo"
+        :network="network"
         @saveCalendar="saveCalendar"
         @closeCalendar="canceloff"
       ></calendar>
@@ -215,6 +216,7 @@ export default {
     return {
       leaveDate: [],
       leaveDateInfo: [],
+      network: "",
       loadFlag: false, //加载flag
       calendars: false,
       value2: "", //月度
@@ -250,7 +252,8 @@ export default {
         totalPages: 3,
         number: 1
       },
-      monthly: ""
+      monthly: "",
+      histories: ""
     };
   },
   beforeMount() {
@@ -258,6 +261,13 @@ export default {
     this.getToolkit();
   },
   methods: {
+    switchText(mes) {
+      if (mes == 1) {
+        return "是";
+      } else {
+        return "否";
+      }
+    },
     canceloff(data) {
       this.calendars = data;
     },
@@ -287,7 +297,7 @@ export default {
     openDetails(row) {
       console.log(row);
       this.calendars = true;
-
+      this.network = row.isRefund;
       let param = row.returnMealDateList;
       this.secondrefund = row;
       // console.log(calendar);
@@ -475,7 +485,12 @@ export default {
         .then(res => {
           // console.log(res);
 
-          this.tableData = res.data.data.records;
+          this.histories = res.data.data.records;
+          for (let i = 0; i < this.histories.length; i++) {
+            this.histories[i].isRefund = this.switchText(
+              this.histories[i].isRefund
+            );
+          }
         });
       require.ensure([], () => {
         const { export_json_to_excel } = require("@/excel/export2Excel");
@@ -497,7 +512,7 @@ export default {
           "refundAmount",
           "isRefund"
         ]; // 导出的表头字段名，需要导出表格字段名
-        const list = this.tableData;
+        const list = this.histories;
         const data = this.formatJson(filterVal, list);
         export_json_to_excel(tHeader, data, "退膳清单"); // 导出的表格名称
       });

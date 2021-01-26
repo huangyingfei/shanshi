@@ -118,6 +118,7 @@
           type="text"
           style="width: 50%; margin-left: 0"
           @click="saveCalendar"
+          v-if="this.network == 0"
           >确定</el-button
         >
       </div>
@@ -135,12 +136,16 @@ export default {
     },
     leaveDateInfo: {
       type: Array
+    },
+    network: {
+      trpe: Array
     }
   },
   data() {
     return {
       leaveDateCopy: [],
       leaveDateInfoCopy: [],
+      network: "",
       dayArray: [],
       yearNum: 0,
       monthNum: 0,
@@ -151,7 +156,9 @@ export default {
     };
   },
 
-  created() {},
+  created() {
+    // console.log(this.network);
+  },
   watch: {
     leaveDate: {
       handler: function() {
