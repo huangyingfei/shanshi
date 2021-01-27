@@ -52,11 +52,9 @@ router.beforeEach((to, from, next) => {
     }
   } else {
     //判断是否需要认证，没有登录访问去登录页
-    debugger
     if (meta.isAuth === false&&to.name!="404") {
       next()
     } else {
-      debugger
       next('/login')
     }
   }
