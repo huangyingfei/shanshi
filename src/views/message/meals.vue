@@ -1116,6 +1116,7 @@ document.oncontextmenu = function(){return false};
           let foods=[];
           for(let i=0;i<recipeCycles.length;i++){
             if(recipeCycles[i].mealsType+""==that.getmealTypeData(_.name)&&recipeCycles[i].week+""==__.name.slice(4)){
+              __.image=recipeCycles[i].pic
               let recipeConncts=recipeCycles[i].recipeConncts;
               for(let k=0;k<recipeConncts.length;k++){//菜品
                 let food={};
@@ -1191,7 +1192,20 @@ document.oncontextmenu = function(){return false};
                 let recipevals=recipeConncts[k].recipevals;  let children=[];
 
                 for(let j=0;j<recipevals.length;j++){//食材
-                  children.push({id:recipevals[j].foodId,name:recipevals[j].foodName,count:recipevals[j].val})
+                  let nutrientIds=[];
+                  let foodNutritionList=recipevals[j].foodNutritionList;
+                  foodNutritionList.forEach(_=>{
+                    this.nutritionValue.forEach(n=>{
+                      if(n.code==_.nutrientId+""){
+                        nutrientIds.push({id:_.nutrientId,name:n.name, value:_.value})//数值>0即可，此时的value不准确  因为要/100*食部
+                      }
+                    })})
+                  children.push({
+                    id:recipevals[j].foodId,
+                    name:recipevals[j].foodName,
+                    count:recipevals[j].val,
+                    nutrientIds:nutrientIds
+                  })
                 }
                 food.id=recipeConncts[k].dishId;
                 food.name=recipeConncts[k].dishName;
@@ -1235,7 +1249,6 @@ document.oncontextmenu = function(){return false};
             _["red"]=false
           }
         })
-        console.log("this.nutrition",this.nutrition)
         this.power=power
         this.protein=protein
         this.meal=meal
@@ -1619,7 +1632,6 @@ document.oncontextmenu = function(){return false};
             that.foodMutuals=foodMutuals;
 
             this.$message.warning(msg.substring(0,msg.length-1));
-            console.log("that.foodMutuals",that.foodMutuals)
           }
       })
     },
@@ -1686,7 +1698,6 @@ document.oncontextmenu = function(){return false};
             })
           })
         })
-        console.log(this.smartDatas)
         this.smartDatas.forEach(item => {
           this.$set(item, "flag", true);
           item.weeks.forEach(_ => {
@@ -1737,7 +1748,6 @@ document.oncontextmenu = function(){return false};
       localStorage.setItem("smartDatas",JSON.stringify(this.smartDatas))
       this.datas= JSON.parse(localStorage.getItem("smartDatas"))
       this.pointscan = false;
-      console.log(this.score)
       let that=this;
       setTimeout(function () {
         that.$refs.child.getFoodScore();
@@ -1754,7 +1764,6 @@ document.oncontextmenu = function(){return false};
     },
     //清空菜品
     dishClear(){
-      console.log(this.datas)
       this.datas.forEach(_=>{
         _.weeks.forEach(week=>{
           this.$set(week,"foods",[])
@@ -1769,6 +1778,7 @@ document.oncontextmenu = function(){return false};
       this.smartDatas=JSON.parse(localStorage.getItem("mealsDatas"))
       this.pointscan = true;
       this.peipScore=this.score
+      console.log("this.smartDatas",this.smartDatas)
     },
     getmealTypeData(name){
       //
@@ -2005,7 +2015,6 @@ document.oncontextmenu = function(){return false};
         }
         this.datas.push(row);
       }
-      console.log(this.datas)
     },
 
     ///初始化远程数据
