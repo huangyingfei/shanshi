@@ -1,9 +1,227 @@
 <template>
   <basic-container>
     <div>
-      <div>
-        <el-row>
-          <el-col :span="24">
+      <h4>数据看板</h4>
+      <el-row>
+        <el-col :span="6">
+          <label>区域选择</label>
+          <el-cascader
+            :options="cascaderOptions"
+            :props="{ label: 'name', value: 'id' }"
+            :show-all-levels="false"
+            clearable
+            v-model="zfOrgCount.region"
+            @change="cascaderChange"
+          ></el-cascader>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="6"> 机构总量: {{ zfOrgCount.orgCount }}</el-col>
+        <el-col :span="6"> 食材总量: {{ zfOrgCount.foodCount }}</el-col>
+        <el-col :span="6"> 菜品总量: {{ zfOrgCount.dishCount }}</el-col>
+        <el-col :span="6"> 食谱总量: {{ zfOrgCount.recipeCount }}</el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="12">
+          <h4>营养素摄入量分析</h4>
+          <div class="input-box">
+            <label>区域选择</label>
+            <el-cascader
+              :options="cascaderOptions"
+              :props="{ label: 'name', value: 'id' }"
+              :show-all-levels="false"
+              clearable
+              v-model="nutrientData.region"
+              @change="getNutrientLine"
+            ></el-cascader>
+          </div>
+          <div id="nutrientLine" style="width: 100%; height: 340px"></div>
+        </el-col>
+        <el-col :span="12">
+          <h4>病假症状排行</h4>
+          <div>
+            <label>区域选择</label>
+            <el-cascader
+              :options="cascaderOptions1"
+              :props="{ label: 'name', value: 'id' }"
+              :show-all-levels="false"
+              clearable
+              v-model="leaveSymptoms.region"
+              @change="getLeaveSymptomsBar"
+            ></el-cascader>
+          </div>
+          <div id="leaveSymptomsBar" style="width: 100%; height: 300px"></div>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="12">
+          <h4>过敏食材分布图</h4>
+          <div class="input-box">
+            <label>区域选择</label>
+            <el-cascader
+              :options="cascaderOptions"
+              :props="{ label: 'name', value: 'id' }"
+              :show-all-levels="false"
+              clearable
+              v-model="allergyFood.region"
+              @change="getAllergyFoodRadar"
+            ></el-cascader>
+          </div>
+          <div class="input-box">
+            <label>机构选择</label>
+            <el-select
+              v-model="allergyFood.tenantId"
+              filterable
+              clearable
+              placeholder="请输入关键词"
+              @change="getAllergyFoodRadar"
+            >
+              <el-option
+                v-for="item in allergyFood.orgCodeOptions"
+                :key="item.tenantId"
+                :label="item.tenantName"
+                :value="item.tenantId"
+              >
+              </el-option>
+            </el-select>
+          </div>
+          <div id="allergyFoodRadar" style="width: 100%; height: 450px"></div>
+        </el-col>
+        <el-col :span="12">
+          <h4>学生每人每日营养素提取（DRIs）</h4>
+          <div class="input-box">
+            <label>区域选择</label>
+            <el-cascader
+              :options="cascaderOptions"
+              :props="{ label: 'name', value: 'id' }"
+              :show-all-levels="false"
+              clearable
+              v-model="everyDayNutrient.region"
+              @change="getEveryDayNutrientPic"
+            ></el-cascader>
+          </div>
+          <div class="input-box">
+            <label>机构选择</label>
+            <el-select
+              v-model="everyDayNutrient.tenantId"
+              filterable
+              clearable
+              placeholder="请输入关键词"
+              @change="getEveryDayNutrientPic"
+            >
+              <el-option
+                v-for="item in everyDayNutrient.orgCodeOptions"
+                :key="item.tenantId"
+                :label="item.tenantName"
+                :value="item.tenantId"
+              >
+              </el-option>
+            </el-select>
+          </div>
+          <div style="margin-top: 12px; width: 100%">
+            <label>时间</label>
+            <el-date-picker
+              v-model="everyDayNutrient.dateRange"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              type="daterange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              @change="getEveryDayNutrientPic"
+            >
+            </el-date-picker>
+          </div>
+          <div
+            id="everyDayNutrientPic"
+            style="width: 100%; height: 400px"
+          ></div>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="12">
+          <h4>学生每人每日进食量分布</h4>
+          <div class="input-box">
+            <label>区域选择</label>
+            <el-cascader
+              :options="cascaderOptions"
+              :props="{ label: 'name', value: 'id' }"
+              :show-all-levels="false"
+              clearable
+              v-model="everyDayEat.region"
+              @change="getEveryDayEatPic"
+            ></el-cascader>
+          </div>
+          <div class="input-box">
+            <label>机构选择</label>
+            <el-select
+              v-model="everyDayEat.tenantId"
+              filterable
+              clearable
+              placeholder="请输入关键词"
+              @change="getEveryDayEatPic"
+            >
+              <el-option
+                v-for="item in everyDayEat.orgCodeOptions"
+                :key="item.tenantId"
+                :label="item.tenantName"
+                :value="item.tenantId"
+              >
+              </el-option>
+            </el-select>
+          </div>
+          <div style="margin-top: 12px; width: 100%">
+            <label>时间</label>
+            <el-date-picker
+              v-model="everyDayEat.dateRange"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              type="daterange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              @change="getEveryDayEatPic"
+            >
+            </el-date-picker>
+          </div>
+          <div id="everyDayEatPic" style="width: 100%; height: 400px"></div>
+        </el-col>
+        <el-col :span="12">
+          <h4>最受欢迎菜品</h4>
+          <div class="die-healthyt-box">
+            <label>区域选择</label>
+            <el-cascader
+              :options="cascaderOptions"
+              :props="{ label: 'name', value: 'id' }"
+              :show-all-levels="false"
+              clearable
+              v-model="goverDishTotal.region"
+              @change="beforeGetGoverDishTotal"
+            ></el-cascader>
+          </div>
+          <div class="die-healthyt-box">
+            <week dateLabel="时间" @weekChange="getGoverDishTotalWeekChange" />
+          </div>
+          <div style="height: 350px">
+            <infinite-scroll
+              @scrollUp="getGoverDishTotal"
+              :liArray="goverDishTotal.liData"
+              :liType="0"
+              :finished="goverDishTotal.finished"
+            >
+              <template v-slot="scope">
+                <li-row
+                  :dishPic="scope.liData.dishPic"
+                  :dishName="scope.liData.dishName"
+                  :dishCount="scope.liData.dishCount"
+                />
+              </template>
+            </infinite-scroll>
+          </div>
+        </el-col>
+      </el-row>
+      <el-row style="margin-bottom: 20px">
+        <el-col :span="24">
+          <h4>食谱健康指数排行榜</h4>
+          <div>
             <div class="die-healthyt-box">
               <label>区域选择</label>
               <el-cascader
@@ -11,20 +229,21 @@
                 :props="{ label: 'name', value: 'id' }"
                 :show-all-levels="false"
                 clearable
-                v-model="areaId"
+                v-model="goverRecipeTotal.region"
+                @change="beforeGetGoverRecipeTotal"
               ></el-cascader>
             </div>
             <div class="die-healthyt-box">
               <label>机构选择</label>
               <el-select
-                v-model="govForm.tenantId"
+                v-model="goverRecipeTotal.tenantId"
                 filterable
                 clearable
                 placeholder="请输入关键词"
                 @change="beforeGetGoverRecipeTotal"
               >
                 <el-option
-                  v-for="item in tenantIdOptions"
+                  v-for="item in goverRecipeTotal.orgCodeOptions"
                   :key="item.tenantId"
                   :label="item.tenantName"
                   :value="item.tenantId"
@@ -33,294 +252,76 @@
               </el-select>
             </div>
             <div class="die-healthyt-box">
-              <week dateLabel="时间" @weekChange="weekChange" />
+              <week dateLabel="时间" @weekChange="goverRecipeTotalWeekChange" />
             </div>
-            <div class="die-healthyt-box">
-              <el-button type="primary" @click="govInit">查询</el-button>
-            </div>
-          </el-col>
-        </el-row>
-      </div>
-      <div>
-        <el-row>
-          <el-col :span="16">
-            <el-row>
-              <el-col :span="12">
-                <h4>数据看板</h4>
-                <div>
-                  <el-row :gutter="5">
-                    <el-col :span="8">
-                      <div class="item">
-                        <div class="item-icon">
-                          <el-avatar> icon </el-avatar>
-                        </div>
-                        <div class="item-info">
-                          <span>{{ zfOrgCount.orgCount }}</span>
-                          <div>机构总量</div>
-                        </div>
-                      </div>
-                    </el-col>
-                    <el-col :span="8">
-                      <div class="item">
-                        <div class="item-icon">
-                          <el-avatar> icon </el-avatar>
-                        </div>
-                        <div class="item-info">
-                          <span>{{ zfOrgCount.foodCount }}</span>
-                          <div>食材总量</div>
-                        </div>
-                      </div>
-                    </el-col>
-                    <el-col :span="8">
-                      <div class="item">
-                        <div class="item-icon">
-                          <el-avatar> icon </el-avatar>
-                        </div>
-                        <div class="item-info">
-                          <span>{{ zfOrgCount.foodAdd }}</span>
-                          <div>使用食材量</div>
-                        </div>
-                      </div>
-                    </el-col>
-                  </el-row>
-                  <el-row :gutter="5">
-                    <el-col :span="8">
-                      <div class="item">
-                        <div class="item-icon">
-                          <el-avatar> icon </el-avatar>
-                        </div>
-                        <div class="item-info">
-                          <span>{{ zfOrgCount.recipeCount }}</span>
-                          <div>食谱总量</div>
-                        </div>
-                      </div>
-                    </el-col>
-                    <el-col :span="8">
-                      <div class="item">
-                        <div class="item-icon">
-                          <el-avatar> icon </el-avatar>
-                        </div>
-                        <div class="item-info">
-                          <span>{{ zfOrgCount.dishCount }}</span>
-                          <div>菜品总量</div>
-                        </div>
-                      </div>
-                    </el-col>
-                    <el-col :span="8">
-                      <div class="item">
-                        <div class="item-icon">
-                          <el-avatar> icon </el-avatar>
-                        </div>
-                        <div class="item-info">
-                          <span>{{ zfOrgCount.dishAdd }}</span>
-                          <div>使用菜品量</div>
-                        </div>
-                      </div>
-                    </el-col>
-                  </el-row>
-                </div>
-              </el-col>
-              <el-col :span="12">
-                <h4>食谱综合评分</h4>
-                <div
-                  id="recipeScorePie"
-                  style="width: 100%; height: 300px"
-                ></div>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="12">
-                <h4>学生每人每日营养素提取（DRIs）</h4>
-                <div
-                  id="everyDayNutrientPic"
-                  style="width: 100%; height: 300px"
-                ></div>
-              </el-col>
-              <el-col :span="12">
-                <h4>学生每人每日进食量分布</h4>
-                <div
-                  id="everyDayEatPic"
-                  style="width: 100%; height: 300px"
-                ></div>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="12">
-                <h4>过敏食材分布图</h4>
-                <div
-                  id="allergyFoodRadar"
-                  style="width: 100%; height: 300px"
-                ></div>
-              </el-col>
-              <el-col :span="12">
-                <h4>学生出勤率</h4>
-                <div style="text-align: center">
-                  <el-date-picker
-                    v-model="govForm.dateStr"
-                    type="date"
-                    placeholder="选择日期"
-                    value-format="yyyy-MM-dd"
-                    @change="getStudentAttendancePie"
-                  >
-                  </el-date-picker>
-                </div>
-
-                <div
-                  id="studentAttendancePie"
-                  style="width: 100%; height: 300px"
-                ></div>
-              </el-col>
-            </el-row>
-
-            <el-row>
-              <el-col :span="24">
-                <h4>病假症状排行</h4>
-                <div
-                  id="leaveSymptomsBar"
-                  style="width: 100%; height: 300px"
-                ></div>
-              </el-col>
-            </el-row>
-          </el-col>
-          <el-col :span="8">
-            <el-tabs v-model="activeName">
-              <el-tab-pane label="食谱综合评分排行榜" name="first">
-                <div>
-                  <el-switch
-                    style="display: block"
-                    v-model="recipeFlag"
-                    active-color="#13ce66"
-                    inactive-color="#409EFF"
-                    active-text="升序"
-                    inactive-text="降序"
-                    @change="beforeGetGoverRecipeTotal"
-                  >
-                  </el-switch>
-                </div>
-                <div style="width: 100%; height: 1488px; overflow: hidden">
-                  <infinite-scroll
-                    @scrollUp="getGoverRecipeTotal"
-                    :liType="1"
-                    :liArray="goverRecipeTotal.liData"
-                    :finished="goverRecipeTotal.finished"
-                    v-slot="scope"
-                  >
-                    <template>
-                      <school-li-row
-                        @openDialog="protocol"
-                        :logoUrl="scope.liData.logoUrl"
-                        :tenantName="scope.liData.tenantName"
-                        :score="scope.liData.score"
-                        :tenantId="scope.liData.tenantId"
-                        :index="scope.num"
-                      ></school-li-row>
-                    </template>
-                  </infinite-scroll>
-                </div>
-              </el-tab-pane>
-              <el-tab-pane label="最受欢迎菜品" name="second">
-                <keep-alive>
-                  <div>
-                    <div>
-                      <el-switch
-                        style="display: block"
-                        v-model="dishFlag"
-                        active-color="#13ce66"
-                        inactive-color="#409EFF"
-                        active-text="升序"
-                        inactive-text="降序"
-                        @change="beforeGetGoverDishTotal"
-                      >
-                      </el-switch>
-                    </div>
-                    <div style="height: 1488px">
-                      <infinite-scroll
-                        @scrollUp="getGoverDishTotal"
-                        :liArray="goverDishTotal.liData"
-                        :liType="0"
-                        :finished="goverDishTotal.finished"
-                      >
-                        <template v-slot="scope">
-                          <li-row
-                            :dishPic="scope.liData.dishPic"
-                            :dishName="scope.liData.dishName"
-                            :dishCount="scope.liData.dishCount"
-                          />
-                        </template>
-                      </infinite-scroll>
-                    </div>
-                  </div>
-                </keep-alive>
-              </el-tab-pane>
-            </el-tabs>
-          </el-col>
-        </el-row>
-      </div>
-      <div>
-        <el-dialog
-          :visible.sync="dialogVisible"
-          width="80%"
-          :before-close="handleClose"
-          :append-to-body="true"
-        >
-          <gover-recipe-detail :recipeData="recipeData" />
-        </el-dialog>
-      </div>
-      <div style="height: 20px; display: block"></div>
+          </div>
+          <div
+            id="everyDayEatPic"
+            style="width: 100%; height: 500px; overflow: hidden"
+          >
+            <infinite-scroll
+              @scrollUp="getGoverRecipeTotal"
+              :liType="1"
+              :liArray="goverRecipeTotal.liData"
+              :finished="goverRecipeTotal.finished"
+              v-slot="scope"
+            >
+              <template>
+                <school-li-row
+                  @openDialog="protocol"
+                  :logoUrl="scope.liData.logoUrl"
+                  :tenantName="scope.liData.tenantName"
+                  :score="scope.liData.score"
+                  :tenantId="scope.liData.tenantId"
+                  :index="scope.num"
+                ></school-li-row>
+              </template>
+            </infinite-scroll>
+          </div>
+          <!-- <v-calendar /> -->
+        </el-col>
+      </el-row>
+      <el-dialog
+        :visible.sync="dialogVisible"
+        width="80%"
+        :before-close="handleClose"
+        :append-to-body="true"
+      >
+        <gover-recipe-detail :recipeData="recipeData" />
+      </el-dialog>
+      <div style="height: 20px; width: 100%"></div>
     </div>
   </basic-container>
 </template>
 
 <script>
-import infiniteScroll from "./infiniteScroll.vue";
-import LiRow from "./liRow.vue";
-import VCalendar from "../../components/vCalendar.vue";
-import SchoolLiRow from "./schoolLiRow.vue";
-import GoverRecipeDetail from "./goverRecipeDetail.vue";
-import Week from "../../components/week.vue";
-import { dateFormat } from "../../util/date";
-
+import infiniteScroll from "../infiniteScroll.vue";
+import LiRow from "../liRow.vue";
+import SchoolLiRow from "../schoolLiRow.vue";
+import GoverRecipeDetail from "../goverRecipeDetail.vue";
+import Week from "../../../components/week.vue";
 export default {
   components: {
     infiniteScroll,
     LiRow,
-    VCalendar,
     SchoolLiRow,
     GoverRecipeDetail,
     Week,
   },
-  watch: {
-    areaId: function (newval, oldVal) {
-      this.govForm.areaId = newval[2];
-      this.cascaderChange();
-    },
-  },
-
   data() {
     return {
-      activeName: "first",
-      tenantIdOptions: [],
-      areaId: [],
-      dishFlag: true, //最受欢迎菜品升降序
-      recipeFlag: true, //食谱综合评分升降序
-      govForm: {
-        areaId: "", //区域ID
-        tenantId: "", //租户id
-        startTime: "", //必传
-        endTime: "", //必传
-        dateStr: dateFormat(new Date(), "yyyy-MM-dd"),
-      },
-      cascaderOptions: [], //省市区
+      cascaderOptions: [], //病假症状区域值，省市区
+      cascaderOptions1: [], //病假症状区域值，省市
       zfOrgCount: {
-        orgCount: 0, //
+        region: "",
+        orgCount: 0,
         foodCount: 0,
         dishCount: 0,
         recipeCount: 0,
-        foodAdd: 0,
-        dishAdd: 0,
       },
       recipeData: {},
       nutrientData: {
+        region: "",
         legendData: [
           "蛋白质",
           "脂肪", //fat
@@ -350,6 +351,7 @@ export default {
       },
       //病假症状排行数据
       leaveSymptoms: {
+        region: "",
         seriesData: {
           cwNum: [],
           dateStr: [],
@@ -371,11 +373,19 @@ export default {
       },
       //过敏食材分布图数据
       allergyFood: {
+        region: "",
+        tenantId: "",
+        orgCodeOptions: [],
         indicatorData: [],
         seriesData: [],
       },
       //学生每人每日营养素提取（DRIs）
       everyDayNutrient: {
+        region: "",
+        tenantId: "",
+        tenantId: "",
+        dateRange: [],
+        orgCodeOptions: [],
         radarIndicator: [
           { name: "能量" },
           { name: "蛋白质" },
@@ -394,53 +404,55 @@ export default {
       },
       //学生每人每日进食量分布
       everyDayEat: {
+        region: "",
+        tenantId: "",
+        dateRange: [],
         seriesData: [],
         orgCodeOptions: [],
       },
-
       //最受欢迎菜品
       goverDishTotal: {
         finished: false,
         current: 1,
+        region: "",
+        WeekInfo: {
+          stockTimeStr: "", //周期标题
+          startTime: "",
+          endTime: "",
+        },
         liData: [],
       },
-      //食谱综合评分排行榜
+      //食谱健康排行榜
       goverRecipeTotal: {
         finished: false,
         current: 1,
+        region: "",
+        tenantId: "",
+        WeekInfo: {
+          stockTimeStr: "", //周期标题
+          startTime: "",
+          endTime: "",
+        },
         liData: [],
         orgCodeOptions: [],
       },
-      //学生出勤率
-      studentAttendance: {
-        bj: 0,
-        cq: 0,
-        sj: 0,
-      },
-      recipeScore: {
-        bhg: 0,
-        hg: 0,
-        yx: 0,
-      },
+
       dialogVisible: false,
     };
   },
   mounted() {
-    this.govInit();
+    this.getProvinces(2);
+    this.getProvinces(1);
+    this.getAllergyFoodRadar();
+    this.getNutrientLine();
+    this.getZfOrgCount();
+    this.getEveryDayNutrientPic();
+    this.getEveryDayEatPic();
+    this.getLeaveSymptomsBar();
+    // this.getGoverRecipeTotal();
+    // this.getGoverDishTotal();
   },
   methods: {
-    govInit() {
-      this.getProvinces();
-      this.getAllergyFoodRadar();
-      this.getZfOrgCount();
-      this.getEveryDayNutrientPic();
-      this.getEveryDayEatPic();
-      this.getLeaveSymptomsBar();
-      this.beforeGetGoverRecipeTotal();
-      this.beforeGetGoverDishTotal();
-      this.getRecipeScorePie();
-      this.getStudentAttendancePie();
-    },
     //查看食谱的菜谱
     protocol(tenantId) {
       this.dialogVisible = true;
@@ -456,145 +468,48 @@ export default {
         this.recipeData = res.data.data;
       });
     },
+
+    // load() {
+    //   this.loading = true;
+    //   setTimeout(() => {
+    //     this.count += 2;
+    //     this.loading = false;
+    //   }, 2000);
+    // },
     //获取区域选择内容
-    getProvinces() {
+    getProvinces(flag) {
       this.$axios
         .get("api/blade-system/region/getManagerArea", {
           params: {
-            flag: 1,
+            flag: flag,
           },
         })
         .then((res) => {
-          this.cascaderOptions = res.data.data; //省市区
+          if (flag == 1) {
+            this.cascaderOptions = res.data.data; //省市区
+          } else {
+            this.cascaderOptions1 = res.data.data; //病假症状区域值，省市
+          }
         });
     },
     //区域选择值改变
-    cascaderChange() {
+    cascaderChange(e, val) {
+      console.log(e);
+      console.log(val);
+      var areaCode = null;
+      if (val instanceof Array) {
+        areaCode = val.slice(-1)[0];
+      }
       this.axios({
         url: "api/blade-system/region/getTenantListByCode",
         method: "get",
         params: {
-          areaId: this.govForm.areaId,
+          areaCode: areaCode,
         },
       }).then((res) => {
-        this.tenantIdOptions = res.data.data;
+        e.orgCodeOptions = res.data.data;
+        console.log(this.goverRecipeTotal.orgCodeOptions);
       });
-    },
-    //获取学生出勤率
-    getStudentAttendancePie() {
-      this.axios({
-        url: "api/blade-food/report/studentWorkCount",
-        method: "post",
-        data: this.govForm,
-      }).then((res) => {
-        if (res.data.data != null) {
-          this.studentAttendance.bj = res.data.data.bj;
-          this.studentAttendance.cq = res.data.data.cq;
-          this.studentAttendance.sj = res.data.data.sj;
-        }
-        this.studentAttendancePie();
-      });
-    },
-    //获取食谱综合评分
-    getRecipeScorePie() {
-      this.axios({
-        url: "api/blade-food/report/recipeScore",
-        method: "post",
-        data: this.govForm,
-      }).then((res) => {
-        if (res.data.data != null) {
-          this.recipeScore.bhg = res.data.data.bhg;
-          this.recipeScore.hg = res.data.data.hg;
-          this.recipeScore.yx = res.data.data.yx;
-        }
-        this.recipeScorePie();
-      });
-    },
-    //学生出勤率
-    studentAttendancePie() {
-      var chartPie = this.$echarts.init(
-        document.getElementById("studentAttendancePie")
-      );
-
-      // 指定图表的配置项和数据
-      var option = {
-        tooltip: {
-          trigger: "item",
-          formatter: "{b} : {c} ({d}%)",
-        },
-        legend: {
-          // orient: 'vertical',
-          // top: 'middle',
-          bottom: 0,
-          left: "center",
-          data: ["出勤", "事假", "病假"],
-        },
-        series: [
-          {
-            type: "pie",
-            radius: "60%",
-            center: ["50%", "40%"],
-            selectedMode: "single",
-            data: [
-              { value: this.studentAttendance.cq, name: "出勤" },
-              { value: this.studentAttendance.sj, name: "事假" },
-              { value: this.studentAttendance.bj, name: "病假" },
-            ],
-            emphasis: {
-              itemStyle: {
-                shadowBlur: 10,
-                shadowOffsetX: 0,
-                shadowColor: "rgba(0, 0, 0, 0.5)",
-              },
-            },
-          },
-        ],
-      };
-      // 使用刚指定的配置项和数据显示图表。
-      chartPie.setOption(option);
-    },
-    //食谱综合评分
-    recipeScorePie() {
-      var chartPie = this.$echarts.init(
-        document.getElementById("recipeScorePie")
-      );
-
-      // 指定图表的配置项和数据
-      var option = {
-        tooltip: {
-          trigger: "item",
-          formatter: "{b} : {c} ({d}%)",
-        },
-        legend: {
-          // orient: 'vertical',
-          // top: 'middle',
-          bottom: 0,
-          left: "center",
-          data: ["优秀", "合格", "不合格"],
-        },
-        series: [
-          {
-            type: "pie",
-            radius: "60%",
-            center: ["50%", "40%"],
-            selectedMode: "single",
-            data: [
-              { value: this.recipeScore.yx, name: "优秀" },
-              { value: this.recipeScore.hg, name: "合格" },
-              { value: this.recipeScore.bhg, name: "不合格" },
-            ],
-            emphasis: {
-              itemStyle: {
-                shadowBlur: 10,
-                shadowOffsetX: 0,
-                shadowColor: "rgba(0, 0, 0, 0.5)",
-              },
-            },
-          },
-        ],
-      };
-      // 使用刚指定的配置项和数据显示图表。
-      chartPie.setOption(option);
     },
     //营养素摄入量分析
     nutrientLine() {
@@ -708,7 +623,7 @@ export default {
         xAxis: [
           {
             type: "category",
-            data: this.leaveSymptoms.seriesData.dateStr,
+            data: this.leaveSymptoms.seriesData.regionName,
           },
         ],
         yAxis: [
@@ -733,8 +648,7 @@ export default {
         tooltip: {},
         legend: {
           data: ["食材"],
-          left: "center",
-          bottom: 10,
+          left: "35%",
         },
         radar: {
           // shape: 'circle',
@@ -746,8 +660,8 @@ export default {
               padding: [3, 5],
             },
           },
-          radius: "60%",
-          center: ["50%", "50%"],
+          radius: "70%",
+          center: ["40%", "50%"],
           indicator: this.allergyFood.indicatorData,
         },
         series: [
@@ -786,17 +700,18 @@ export default {
         tooltip: {},
         legend: {
           data: ["要求比例", "实际比例"],
-          bottom: 0,
         },
         radar: {
           // shape: 'circle',
           name: {
             textStyle: {
               color: "#000",
+              // backgroundColor: "#999",
+              borderRadius: 3,
+              padding: [3, 5],
             },
           },
-          radius: "60%",
-          center: ["50%", "50%"],
+          radius: "70%",
           indicator: this.everyDayNutrient.radarIndicator,
         },
         series: [
@@ -844,18 +759,20 @@ export default {
         tooltip: {},
         legend: {
           data: ["推荐最大量", "推荐最小量", "实际用量"],
-          left: "center",
-          bottom: 0,
+          left: "25%",
         },
         radar: {
           // shape: 'circle',
           name: {
             textStyle: {
               color: "#000",
+              // backgroundColor: "#999",
+              borderRadius: 3,
+              padding: [3, 5],
             },
           },
-          radius: "60%",
-          center: ["50%", "50%"],
+          radius: "70%",
+          center: ["40%", "50%"],
           indicator: [
             { name: "谷类" },
             { name: "蔬菜" },
@@ -916,12 +833,15 @@ export default {
       chartPie.setOption(option);
     },
     //获取营养素摄入量分析数据
-    //已作废
     getNutrientLine() {
+      var areaCode = null;
+      if (this.nutrientData.region instanceof Array) {
+        areaCode = this.nutrientData.region.slice(-1)[0];
+      }
       this.axios({
         url: "/api/blade-food/report/nutriCount",
         method: "post",
-        data: this.govForm,
+        data: { areaCode: areaCode },
       }).then((res) => {
         res.data.data.forEach((el) => {
           for (let k in el) {
@@ -933,26 +853,40 @@ export default {
     },
     //获取病假症状排行
     getLeaveSymptomsBar() {
+      var areaCode = "";
+      if (this.leaveSymptoms.region instanceof Array) {
+        areaCode = this.leaveSymptoms.region.slice(-1)[0];
+      }
       this.axios({
         url: "/api/blade-food/report/zfBjTypeCount",
-        method: "post",
-        data: this.govForm,
+        method: "get",
+        params: {
+          // areaCode: "1501",
+          areaCode: areaCode,
+        },
       }).then((res) => {
         res.data.data.forEach((el) => {
           for (let k in el) {
             this.leaveSymptoms.seriesData[k].push(el[k]);
           }
         });
-        console.log(this.leaveSymptoms.seriesData);
         this.leaveSymptomsBar();
       });
     },
     //获取过敏食材分布图
     getAllergyFoodRadar() {
+      var areaCode = null;
+      if (this.allergyFood.region instanceof Array) {
+        areaCode = this.allergyFood.region.slice(-1)[0];
+      }
+      this.cascaderChange(this.allergyFood, this.allergyFood.region);
       this.axios({
         url: "/api/blade-food/report/allergyFoodCount",
         method: "post",
-        data: this.govForm,
+        data: {
+          areaCode: areaCode, //区域
+          orgCode: this.allergyFood.orgCode, //机构
+        },
       })
         .then((res) => {
           console.log("getAllergyFoodRadar");
@@ -976,10 +910,24 @@ export default {
     },
     //获取学生每人每日营养素提取
     getEveryDayNutrientPic() {
+      var areaId = null;
+      if (this.everyDayNutrient.region instanceof Array) {
+        areaId = this.everyDayNutrient.region.slice(-1)[0];
+      }
+      this.cascaderChange(this.everyDayNutrient, this.everyDayNutrient.region);
+      if (this.everyDayNutrient.dateRange != null) {
+        var startTime = this.everyDayNutrient.dateRange[0];
+        var endTime = this.everyDayNutrient.dateRange[1];
+      }
       this.axios({
         url: "/api/blade-food/recipe/getStuNutrition",
         method: "get",
-        params: this.govForm,
+        params: {
+          startTime: startTime,
+          endTime: endTime,
+          areaId: areaId,
+          tenantId: this.everyDayNutrient.tenantId,
+        },
       })
         .then((res) => {
           this.everyDayNutrient.seriesData = res.data.data;
@@ -991,16 +939,29 @@ export default {
     },
     //获取学生每人每日进食量分布
     getEveryDayEatPic() {
+      var areaId = null;
+      if (this.everyDayEat.region instanceof Array) {
+        areaId = this.everyDayEat.region.slice(-1)[0];
+      }
+      this.cascaderChange(this.everyDayEat, this.everyDayEat.region);
       this.axios({
         url: "/api/blade-food/recipe/getStuRecipeCal",
         method: "get",
-        params: this.govForm,
+        params: {
+          startTime: this.everyDayEat.dateRange[0],
+          endTime: this.everyDayEat.dateRange[1],
+          areaId: areaId,
+          tenantId: this.everyDayEat.tenantId,
+        },
       }).then((res) => {
         this.everyDayEat.seriesData = res.data.data;
         this.everyDayEatPic();
       });
     },
-    //获取最受欢迎菜品
+    getGoverDishTotalWeekChange(WeekInfo) {
+      this.goverDishTotal.WeekInfo = WeekInfo;
+      this.beforeGetGoverDishTotal();
+    },
     beforeGetGoverDishTotal() {
       this.goverDishTotal.liData = [];
       this.goverDishTotal.current = 1;
@@ -1014,14 +975,19 @@ export default {
       if (this.goverDishTotal.finished) {
         return;
       }
+      var areaId = null;
+      if (this.goverDishTotal.region instanceof Array) {
+        areaId = this.goverDishTotal.region.slice(-1)[0];
+      }
       this.axios({
         url: "/api/blade-food/food/goverDishTotal",
         method: "get",
         params: {
-          ...this.govForm,
+          areaId: areaId,
           current: this.goverDishTotal.current,
           size: 10,
-          flag: this.dishFlag,
+          startTime: this.goverDishTotal.WeekInfo.startTime.substr(0, 10),
+          endTime: this.goverDishTotal.WeekInfo.endTime.substr(0, 10),
         },
       })
         .then((res) => {
@@ -1037,11 +1003,10 @@ export default {
           console.log(err);
         });
     },
-    weekChange(WeekInfo) {
-      this.govForm.startTime = WeekInfo.startTime;
-      this.govForm.endTime = WeekInfo.endTime;
+    goverRecipeTotalWeekChange(WeekInfo) {
+      this.goverRecipeTotal.WeekInfo = WeekInfo;
+      this.beforeGetGoverRecipeTotal();
     },
-    //获取食谱健康排行榜
     beforeGetGoverRecipeTotal() {
       this.goverRecipeTotal.liData = [];
       this.goverRecipeTotal.finished = false;
@@ -1053,14 +1018,26 @@ export default {
       if (this.goverRecipeTotal.finished) {
         return;
       }
+      var areaId = null;
+      console.log(
+        "this.goverRecipeTotal.current" + this.goverRecipeTotal.current
+      );
+      if (this.goverRecipeTotal.region instanceof Array) {
+        areaId = this.goverRecipeTotal.region.slice(-1)[0];
+      }
+      var tenantId = this.goverRecipeTotal.tenantId;
+      console.log(this.goverRecipeTotal.WeekInfo);
+      this.cascaderChange(this.goverRecipeTotal, this.goverRecipeTotal.region);
       this.axios({
         url: "/api/blade-food/food/goverRecipeTotal",
         method: "get",
         params: {
-          ...this.govForm,
+          areaId: areaId,
+          tenantId: tenantId,
           current: this.goverRecipeTotal.current,
           size: 10,
-          flag: this.recipeFlag,
+          startTime: this.goverRecipeTotal.WeekInfo.startTime.substr(0, 10),
+          endTime: this.goverRecipeTotal.WeekInfo.endTime.substr(0, 10),
         },
       }).then((res) => {
         if (res.data.data.records.length < 10) {
@@ -1072,19 +1049,22 @@ export default {
         });
       });
     },
-    //获取数据看板
     getZfOrgCount() {
+      var areaCode = "";
+      if (this.zfOrgCount.region instanceof Array) {
+        areaCode = this.zfOrgCount.region.slice(-1)[0];
+      }
       this.axios({
         url: "/api/blade-food/report/zfOrgCount",
-        method: "post",
-        data: this.govForm,
+        method: "get",
+        params: {
+          areaCode: areaCode,
+        },
       }).then((res) => {
         this.zfOrgCount.orgCount = res.data.data.orgCount;
-        this.zfOrgCount.foodCount = res.data.data.foodCount;
+        this.zfOrgCount.foodCount = res.data.data.foodCoun;
         this.zfOrgCount.dishCount = res.data.data.dishCount;
         this.zfOrgCount.recipeCount = res.data.data.recipeCount;
-        this.zfOrgCount.foodAdd = res.data.data.foodAdd;
-        this.zfOrgCount.dishAdd = res.data.data.dishAdd;
       });
     },
   },
@@ -1105,68 +1085,5 @@ label {
 .die-healthyt-box {
   display: inline-block;
   margin-right: 20px;
-}
-.count-inline-block {
-  display: inline-block;
-  height: 40px;
-}
-.count-inline-block span {
-  font-size: 14px;
-  display: block;
-  line-height: 20px;
-  border-radius: 50%;
-}
-.count-icon {
-  display: inline-block;
-  box-sizing: border-box;
-  text-align: center;
-  color: #fff;
-  background: #c0c4cc;
-  width: 40px;
-  height: 40px;
-  line-height: 40px;
-  font-size: 14px;
-  border-radius: 50%;
-}
-h4 {
-  text-align: center;
-}
-.item {
-  height: 130px;
-  border-radius: 2px;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  display: flex;
-}
-.item .item-icon {
-  width: 50px;
-  height: 130px;
-  color: #fff;
-  text-align: center;
-  line-height: 130px;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  display: flex;
-}
-.item .item-info {
-  background-color: #fff;
-  -webkit-box-flex: 1;
-  -ms-flex: 1;
-  flex: 1;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  font-weight: bold;
-  font-size: 14px;
-  color: #303133;
 }
 </style>

@@ -7,8 +7,8 @@
           v-model="classId"
           :options="options"
           :props="{ value: 'id', disabled: 'edisabled' }"
-          @change="getStudentWork"
           :show-all-levels="false"
+          clearable
         ></el-cascader>
       </el-col>
       <el-col :span="10">
@@ -21,7 +21,6 @@
           start-placeholder="开始日期"
           end-placeholder="结束日期"
           style="width: 100%"
-          @change="getStudentWork"
         >
         </el-date-picker>
       </el-col>
@@ -53,18 +52,51 @@ import { dateFormat } from "@/util/date.js";
 import { exportExcel } from "../../../../api/exportExcel";
 
 export default {
+  watch: {
+    classId: {
+      handler: function (newVal, oldVal) {
+        console.log(newVal);
+        console.log(oldVal);
+        console.log(this.classId);
+        this.leaveForm.classId = "";
+        console.log(newVal);
+        if (newVal.length != 0) {
+          this.leaveForm.classId = newVal.slice(-1)[0];
+        }
+        this.getStudentWork();
+      },
+    },
+    dateRangeValue: {
+      handler: function (newVal, oldVal) {
+        this.leaveForm.startTime = "";
+        this.leaveForm.endTime = "";
+        console.log("clear");
+        console.log(newVal);
+        if (newVal != null) {
+          this.leaveForm.startTime = newVal[0];
+          this.leaveForm.endTime = newVal[1];
+        }
+        this.getStudentWork();
+      },
+    },
+  },
   data() {
     return {
       options: [],
       classId: [""],
       dateRangeValue: [],
       leaveData: [],
+      leaveForm: {
+        startTime: "",
+        endTime: "",
+        classId: "",
+      },
     };
   },
   mounted() {
     this.getclassTree();
     this.dateRangeDefaultValue();
-    this.getStudentWork();
+    // this.getStudentWork();
   },
   methods: {
     dateRangeDefaultValue() {
@@ -89,11 +121,7 @@ export default {
       this.axios({
         url: "/api/blade-food/report/orgStudentWork",
         method: "get",
-        params: {
-          startTime: this.dateRangeValue[0],
-          endTime: this.dateRangeValue[1],
-          classId: this.classId.slice(-1)[0],
-        },
+        params: this.leaveForm,
       }).then((res) => {
         this.leaveData = res.data.data;
       });
@@ -101,12 +129,8 @@ export default {
     studentWorkExport() {
       exportExcel(
         this,
-        {
-          startTime: this.dateRangeValue[0],
-          endTime: this.dateRangeValue[1],
-          classId: this.classId.slice(-1)[0],
-        },
-        "/api/report/orgStudentWorkExport",
+        this.leaveForm,
+        "/api/blade-food/report/orgStudentWorkExport",
         "请假统计"
       );
     },

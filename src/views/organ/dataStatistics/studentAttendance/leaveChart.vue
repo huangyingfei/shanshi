@@ -7,8 +7,8 @@
           v-model="classId"
           :options="options"
           :props="{ value: 'id', disabled: 'edisabled' }"
-          @change="getStudentWork"
           :show-all-levels="false"
+          clearable
         ></el-cascader>
       </el-col>
       <el-col :span="10">
@@ -21,7 +21,6 @@
           start-placeholder="开始日期"
           end-placeholder="结束日期"
           style="width: 100%"
-          @change="getStudentWork"
         >
         </el-date-picker>
       </el-col>
@@ -45,6 +44,28 @@
 <script>
 import { dateFormat } from "@/util/date.js";
 export default {
+  watch: {
+    classId: {
+      handler: function (newVal, oldVal) {
+        this.leaveForm.classId = "";
+        if (newVal.length != 0) {
+          this.leaveForm.classId = newVal.slice(-1)[0];
+        }
+        this.getStudentWork();
+      },
+    },
+    dateRangeValue: {
+      handler: function (newVal, oldVal) {
+        this.leaveForm.startTime = "";
+        this.leaveForm.endTime = "";
+        if (newVal.length != null) {
+          this.leaveForm.startTime = newVal[0];
+          this.leaveForm.endTime = newVal[1];
+        }
+        this.getStudentWork();
+      },
+    },
+  },
   data() {
     return {
       leaveType: {
@@ -89,12 +110,16 @@ export default {
       dateRangeValue: [],
       classId: [""],
       options: [],
+      leaveForm: {
+        startTime: "",
+        endTime: "",
+        classId: "",
+      },
     };
   },
   mounted() {
     this.dateRangeDefaultValue();
     this.getclassTree();
-    this.getStudentWork();
   },
   methods: {
     //默认时间
@@ -109,14 +134,18 @@ export default {
     },
     //获取图表数据
     getStudentWork() {
+      console.log(this.leaveForm.startTime);
+      if (this.leaveForm.startTime == "") {
+        this.$message({
+          message: "请选择时间范围",
+          type: "warning",
+        });
+        return;
+      }
       this.axios({
         url: "/api/blade-food/report/orgStudentWorkDistri",
         method: "get",
-        params: {
-          startTime: this.dateRangeValue[0],
-          endTime: this.dateRangeValue[1],
-          classId: this.classId.slice(-1)[0],
-        },
+        params: this.leaveForm,
       }).then((res) => {
         var result = res.data.data;
         this.leaveType.seriesData = [
@@ -141,8 +170,6 @@ export default {
 
         result.diseaseTrend.forEach((el) => {
           for (let k in el) {
-            console.log(this.leaveSymptoms2);
-            console.log(k);
             if (this.leaveSymptoms2[k] == undefined) {
               this.leaveSymptoms2[k] = [];
             }
@@ -162,7 +189,6 @@ export default {
         method: "get",
       }).then((res) => {
         this.options = res.data.data[0].children;
-        console.log(this.options);
       });
     },
     leaveTypePic() {

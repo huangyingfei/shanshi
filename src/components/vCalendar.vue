@@ -182,6 +182,7 @@ export default {
       } else if (day.type == 3) {
         if (arrayIndex != -1) {
           this.leaveDateCopy.splice(arrayIndex, 1);
+
           this.leaveDateInfoCopy.splice(arrayIndex, 1);
         }
         day.type = 0;
