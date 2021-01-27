@@ -1112,7 +1112,6 @@
           classAlias:this.banjiUpForm.classAlias
         };
         update(row).then(res=>{
-          debugger
           if(res.data.success){
             that.$message({
               type: "success",
@@ -1137,7 +1136,6 @@
               startYear:that.banjiStartYear
             })
             createClass(row).then((res)=>{
-              debugger
               if(res.data.success){
                 that.$message({
                   type: "success",
@@ -1181,7 +1179,7 @@
               }
               row.push({parentId:that.xuejiPid ,className:className,classType:2,grade:grade,startYear:startYear,classStr:classStr,classNum:that.xuejiForm.classes})
               createClass(row).then((res)=>{
-                debugger
+
                 if(res.data.success){
                   that.$message({
                     type: "success",
@@ -1206,7 +1204,7 @@
               }
             })
             createClass(row).then((res)=>{
-              debugger
+
               if(res.data.success){
                 that.$message({
                   type: "success",
@@ -1227,7 +1225,7 @@
       // },
       // updateClass(node, data) {
       //   // if (data.parentId != 0) {
-      //   //   // debugger;
+      //   //   // ;
       //   //   this.outerVisible = true;
       //   //   let classs = this.classes.filter((_) => {
       //   //     return _.type == data.classType;
@@ -1263,7 +1261,7 @@
       // orderClass() {},
       editClass(id,className,classAlias){
         this.banjiUpVisible=true;
-        debugger
+
         this.banjiUpPid=id;
         this.$set( this.banjiUpForm,"className",className)
         this.$set( this.banjiUpForm,"classAlias",classAlias)
@@ -1321,7 +1319,7 @@
           this.xuejiPid=data.pId
         }
         if (classs.type == 3) {
-          debugger
+
           this.banjiVisible=true;
           this.banjiSelect=data.nbSelect;
           this.banjiName=data.classStr;
@@ -1332,7 +1330,7 @@
           this.xueduanVisible=true;
 
         }
-        // // debugger;
+        // // ;
         // this.tclass.classType = classs.type;
         // this.tclass.classPName = classs.pName;
         // this.tclass.classTitle = classs.title;
@@ -1346,7 +1344,7 @@
       },
       // submitClass() {
       //   let row = {};
-      //   // debugger;
+      //   // ;
       //   if (this.tclass.classType == 1) {
       //     row = {
       //       id: this.addValue.id,
@@ -1409,7 +1407,7 @@
       },
       addTreeItem(data, value, type, pId, pName,classStr,startYear) {
 
-        debugger
+
         let tData = [];
         let nbSelect=[];//年级/班级select
         let  year=new Date().getFullYear();
@@ -1623,7 +1621,7 @@
           });
       },
       leaveSchool(scope){
-        // debugger
+        //
         this.leaveVisible = true;
         this.rowId = scope.row.id;
         this.rowName=scope.row.className;
@@ -1660,7 +1658,7 @@
         this.$refs.crud.toggleSelection();
       },
       handleUpdate(row, index, type) {
-        // debugger;
+        // ;
         let rows = [];
         if (type == "2") {
           rows.push({

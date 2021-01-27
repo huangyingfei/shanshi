@@ -580,7 +580,7 @@
     },
     beforeMount() {},
     methods: {sub(){},
-// debugger
+//
       recipeNameShareSearchPub(recipeSelect,isPub,isUse){
           if(recipeSelect){
             this.recipeSelect=recipeSelect;
@@ -631,7 +631,7 @@
               }
             }
             arr.sort()
-            //   debugger
+            //
             let foodCatalog= []
             for(let i=0;i<arr.length;i++){
               foodCatalog.push(that.getmealTypeDataValue(arr[i]))
@@ -904,7 +904,7 @@
                   name: date3[i],
                   weeks: [],
                 };
-                // debugger
+                //
                 // 填充周数据
                 for (let j = 0; j < 7; j++) {
                   row.weeks.push({
@@ -926,7 +926,7 @@
 
             that.$refs.layershipu.style.top='300px';
             that.$refs.layershipu.style.left='300px';
-            // debugger
+            //
             if(that.day==5){
               that.$refs.layershipu.style.width='682px';
             }
@@ -1134,7 +1134,7 @@
         var that = this;
         this.headers = [];
         setTimeout(function () {
-          // debugger
+          //
           var hd = JSON.parse(JSON.stringify(that.WeekList));
           for (let j = 0; j < hd.length; j++) {
             that.headers.push(hd[j]);
@@ -1148,7 +1148,7 @@
         var date3 = JSON.parse(JSON.stringify(this.WeekInfo.foodCatalog));
         //新增餐点类型
         for (let i = 0; i < date3.length; i++) {
-          // debugger
+          //
           if (!this.hasFoodType(date3[i])) {
             var row = {
               id: this.guid(),
@@ -1208,7 +1208,7 @@
       // 初始化表格数据(根据id获取远程数据)
       initEmptyData() {
 
-        // debugger
+        //
         this.datas = [];
         var date3 = JSON.parse(JSON.stringify(this.WeekInfo.foodCatalog));
         for (let i = 0; i < date3.length; i++) {

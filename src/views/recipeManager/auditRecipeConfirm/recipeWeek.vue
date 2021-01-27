@@ -1338,7 +1338,7 @@ export default {
     // 合并单元格
     onTableSpanMethod({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 2) {
-        //     debugger
+        //
         if(row.spans){
           return [row.spans, 1];
         }else{
@@ -1418,7 +1418,7 @@ export default {
     },
     //图片上传成功
     handleAvatarSuccess(data_id, week_id,res, file) {
-      // debugger
+      //
       if (res && res.success) {
         this.datas.forEach((data) => {
           if (data.id === data_id) {

@@ -105,7 +105,6 @@
             if (data.data == null) {
               this.saveOrUpdate = false;//新增
             } else {
-              // debugger
               this.saveOrUpdate = true;
               this.$set( this.ruleForm,"webTitle" , data.data.webTitle);
               this.$set(this.ruleForm,"webLogo", data.data.webLogo);
@@ -125,7 +124,6 @@
 
       },
       saveWeb(done) {
-        // debugger
         var params;
         if (!this.saveOrUpdate) {//新增
           params = {

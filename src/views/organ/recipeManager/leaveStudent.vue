@@ -306,7 +306,7 @@ export default {
       this.onLoad(this.page);
     },
     searchChange(params, done) {
-        // debugger
+        //
         if(params.admissionDate){
           params.admissionDateMin=formateDate(params.admissionDate[0], "yyyy-MM-dd HH:mm:ss")
           params.admissionDateMax=formateDate(params.admissionDate[1], "yyyy-MM-dd HH:mm:ss")

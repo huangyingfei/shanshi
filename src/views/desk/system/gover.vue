@@ -495,7 +495,7 @@ export default {
         callback(new Error("请输入登录账号"));
       }else {
         let user = {};
-        debugger
+
         user["account"] = this.form.account;
         user["id"] = this.form.userId;
         checkInfo(user).then((res) => {
@@ -675,7 +675,7 @@ export default {
             }
 
           })
-            // // // debugger
+            // // //
             // if(type=="edit"){
             //    this.findObject(this.option.group, "account").readonly=true;
             // }
@@ -689,7 +689,7 @@ export default {
       // this.findObject(this.option.group, "account").readonly=false;
     },
      beforeClose(done) {
-       // debugger
+       //
         this.clear();
         this.$refs.crud.tableForm = {};
         done();
@@ -767,7 +767,7 @@ export default {
         page.pageSize,
         Object.assign(params, this.query)
       ).then((res) => {
-        debugger
+
         this.data = res.data.data;
         this.loading = false;
         this.selectionClear();

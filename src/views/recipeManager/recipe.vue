@@ -409,7 +409,6 @@ export default {
     },
     seeRecipeInfo(row) {
       this.dialogListData = row;
-      debugger;
       getDetail(row.id).then((res) => {
         let recipeCycles = res.data.data.recipeCycles;
         let recipeTableData1 = [];
@@ -532,7 +531,7 @@ export default {
         });
     },
     changeInfo(id, type) {
-      // debugger;
+      // ;
       var isPub; //是否公开
       var isRecommend; //是否推荐
       var isUse; //是否收藏

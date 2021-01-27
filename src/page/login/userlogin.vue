@@ -158,7 +158,6 @@ export default {
             text: "登录中,请稍后。。。",
             spinner: "el-icon-loading"
           });
-          debugger
           let that=this;
           this.$store
             .dispatch("LoginByUsername", this.loginForm)

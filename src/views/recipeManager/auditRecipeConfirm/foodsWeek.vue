@@ -1349,7 +1349,7 @@ export default {
     //拖放结束
     drop(ev, id, week) {
       ev.preventDefault();
-      //debugger
+      //
       var node = JSON.parse(JSON.stringify(this.dragnode.node));
       this.appendDragFood(node, id, week);
       this.$emit('jundgeFood',node,id,week);
@@ -1447,7 +1447,7 @@ export default {
               intake.data = data;
               intake.avg = "食谱净量(平均年龄"+data[0].avg+")"
               let nutrition = [];
-           //   debugger
+           //
               that.nutritionValue.forEach(_ => {
                   nutrition.push({code:_.code,
                     name:_.name,
@@ -1461,7 +1461,7 @@ export default {
                     reqPropor:resData.nutritionCalDTOList[_.code].min+"-"+resData.nutritionCalDTOList[_.code].max,
                     grade:resData.nutritionCalDTOList[_.code].grade,point:resData.nutritionCalDTOList[_.code].point})
               })
-              //  debugger
+              //
 
               let power = [];
               that.powerValue.forEach(_ => {
@@ -1603,7 +1603,7 @@ export default {
           });
           if (week.foods != undefined) {
             week.foods.forEach((food) => {
-          //    debugger
+          //
               food.spans = count;
               food.children.forEach((c) => {
                 c.spans = count;
@@ -1627,7 +1627,7 @@ export default {
     // 合并单元格
     onTableSpanMethod({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 2) {
-   //     debugger
+   //
         if(row.spans){
           return [row.spans, 1];
         }else{
@@ -1732,7 +1732,7 @@ export default {
     },
     // 移除
     onRemove(data_id, week_id, food_id,week_name) {
-     // debugger
+     //
       var foods;
       this.datas.forEach((data) => {
         if (data.id === data_id) {
@@ -1780,7 +1780,7 @@ export default {
     },
     //图片上传成功
     handleAvatarSuccess(data_id, week_id,res, file) {
-      debugger
+
       if (res && res.success) {
         this.datas.forEach((data) => {
           if (data.id === data_id) {
@@ -1794,7 +1794,7 @@ export default {
       }
     },
     handleAvatarRemove(data_id, week_id,file){
-      debugger
+
       this.datas.forEach((data) => {
         if (data.id === data_id) {
           data.weeks.forEach((week) => {
@@ -1807,7 +1807,7 @@ export default {
       });
     },
     handlePictureCardPreview(data_id, week_id,file){
-      debugger
+
       this.datas.forEach((data) => {
         if (data.id === data_id) {
           data.weeks.forEach((week) => {

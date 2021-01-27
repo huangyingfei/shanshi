@@ -415,7 +415,7 @@
         </el-card>
       </el-col>
       <el-col :span="19">
-        <div class="foodPanel"  @mouseover="HidenFoodTips($event)">
+        <div class="foodPanel"  @mouseout="HidenFoodTips($event)"  @mouseover="HidenFoodTips($event)">
           <foods-week
             @childfn="parentFn"
             @jundgeFood="jundgeFood"
@@ -1103,6 +1103,11 @@ document.oncontextmenu = function(){return false};
         if(res.data.success){
           let data=res.data.data;
           that.$set(that.WeekInfo,"foodCatalog",JSON.parse(res.data.data.mealTypestrs))
+          that.WeekInfo.weekType=res.data.data.recipeDay
+          that.FixWeek();
+          that.ShowWeekSelect();
+          that.SelectWeek(that.WeekInfo.weekValue)
+          that.$refs.refweekSelect.hidePicker();
           that.AppendFoodType();
           let recipeCycles=res.data.data.recipeCycles;
           setTimeout(function () {
@@ -1799,13 +1804,14 @@ document.oncontextmenu = function(){return false};
     buttonend() {
       let recipeCycles=[];
       let flag=false;
+      debugger
       this.datas.forEach(_=>{
         _.weeks.forEach(__=>{
           __.foods.forEach(___=>{
             if( ___.children){
               let children=[];
               ___.children.forEach(____=>{
-                if(!____.count){
+                if((!____.count)&&parseFloat(____.count)!=0){
                   flag=true;
                 }
                 children.push({
@@ -1813,7 +1819,7 @@ document.oncontextmenu = function(){return false};
                   val:____.count,
                 })
               })
-              if(!___.count){
+              if((!___.count)&&parseFloat(___.count)!=0){
                 flag=true;
               }
               recipeCycles.push({
@@ -1833,7 +1839,6 @@ document.oncontextmenu = function(){return false};
       })
 
       let row={
-        //---
         mealTypestrs:JSON.stringify(this.WeekInfo.foodCatalog),
         recipeName:this.WeekInfo.Weekdetails,
         peopleId:this.WeekInfo.crowd,

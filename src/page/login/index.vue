@@ -95,7 +95,7 @@ export default {
     },
     subCodeLogin(){
       let that=this;
-      debugger
+
       this.$refs.codeLogin.subCodeLogin();
     },
     getTime() {

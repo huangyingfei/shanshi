@@ -113,7 +113,7 @@
                 { required: true, trigger: "blur" ,   message: "请输入姓名", },
               ],
               change:({value,column})=>{
-                 // debugger;
+                 // ;
                  // console.log(this.form)
                 if(value!='' && value!=null){
                   getStudentClass(value).then(res => {
@@ -209,7 +209,7 @@
     methods: {
       openDialog(){
           this.dialog=true;
-          debugger
+
           this.oldFoodIds=this.foodIds;
           this.oldFoodNames=this.form.foodNames2;
           let foodIds=this.foodIds.split(",");
@@ -256,7 +256,7 @@
       cancel(){
         this.dialog = false;
         this.foodIds=this.oldFoodIds;
-        debugger
+
         this.$set(this.form,"foodNames2",this.oldFoodNames);
         let foodIds=this.foodIds.split(",");
         let checkedDataPub=[];
@@ -300,7 +300,7 @@
         return data.foodName.indexOf(value) !== -1;
       },
       handleCheckChange(data, checked, indeterminate) {
-        debugger
+
         if(checked&&!data.foods&&this.foodIds.indexOf(data.id)==-1){
           this.form.foodNames2+=data.foodName+","
           this.$set( this.form,'foodNames2',this.form.foodNames2)
@@ -365,7 +365,7 @@
       if (this.$route.query.id) {
         getDetail(this.$route.query.id).then(res => {
           that.form=res.data.data
-          debugger
+
           that.$set(that.form,"foodNames2",res.data.data.foodNames)
           let foodIds="";
           that.form.foods.forEach(_=>{
@@ -401,7 +401,7 @@
         })
         that.foodDataPub=res.data.data;
         // if (that.$route.query.id) {
-        //   debugger
+        //
         //   setTimeout(function () {
         //     // that.$refs.treePub.setCheckedKeys(that.checkedDataPub)
         //     // that.$refs.treePri.setCheckedKeys(that.checkedDataPri)

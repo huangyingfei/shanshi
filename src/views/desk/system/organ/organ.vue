@@ -691,7 +691,6 @@ export default {
         callback(new Error("请输入登录账号"));
       }else {
         let user = {};
-        debugger
         user["account"] = this.form.account;
         user["id"] = this.form.userId;
         checkInfo(user).then((res) => {
@@ -811,7 +810,6 @@ export default {
         });
     },
     change(){
-      debugger
             if(this.region!=null&&this.region!=""&&this.region!=undefined){
               this.$set(this.form,"tenantAddress","null")
             }
@@ -964,10 +962,9 @@ export default {
             // data["nutrientDisplay"]=data.nutrientDisplay==1?true:false;
             data["startUseTime"]=getDate(data.startUseTime)
             data["expireTime"]=getDate(data.expireTime)
-            debugger
             this.form = data;
           })
-            // debugger
+            //
             // if(type=="edit"){
             //    this.findObject(this.option.group, "account").readonly=true;
             // }
@@ -1056,7 +1053,7 @@ export default {
       };
       if (level == 0) {
         lazyList().then((res) => {
-          // debugger
+          //
           let data = res.data.data;
           data.forEach((e) => {
             list.push({
@@ -1069,7 +1066,7 @@ export default {
       }
       if (level == 1) {
         lazyList(code).then((res) => {
-          // debugger
+          //
           let data = res.data.data;
           data.forEach((e) => {
             list.push({
@@ -1082,7 +1079,7 @@ export default {
         });
       } else if (level == 2) {
         lazyList(code).then((res) => {
-          // debugger
+          //
           let data = res.data.data;
           data.forEach((e) => {
             list.push({

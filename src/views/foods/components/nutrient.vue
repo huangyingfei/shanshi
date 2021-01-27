@@ -28,7 +28,7 @@
     },
     methods: {
       onLoad() {
-        // debugger
+        //
         // list().then((res) => {
         //   this.data = res.data.data;
         // });

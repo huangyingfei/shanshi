@@ -1263,7 +1263,7 @@
       },
       //同步修改高度
       resizeExpendHeight() {
-        debugger
+
         setTimeout(() => {
           //真实高度列表
           var foodTypeList = document.querySelectorAll(".colNoneBorder.is-hidden .meals-foodType");
@@ -1358,7 +1358,7 @@
       //拖放结束
       drop(ev, id, week) {
         ev.preventDefault();
-        debugger
+
         var node = JSON.parse(JSON.stringify(this.dragnode.node));
         this.appendDragFood(node, id, week);
         this.$emit('jundgeFood',node,id,week);
@@ -1444,7 +1444,7 @@
                 })
                 intake.data = data;
                 let nutrition = [];
-                debugger
+
                 that.nutritionValue.forEach(_ => {
                   if(resData.nutritionCalDTOList[_.code].dris==0){
 
@@ -1463,7 +1463,7 @@
                       max:_.max, bz:_.bz,name:_.name,realIntake:resData.nutritionCalDTOList[_.code].realIntake,dris:(resData.nutritionCalDTOList[_.code].realIntake/resData.nutritionCalDTOList[_.code].dris).toFixed(2),realPropor:resData.nutritionCalDTOList[_.code].realPropor,reqPropor:resData.nutritionCalDTOList[_.code].min+"-"+resData.nutritionCalDTOList[_.code].max,grade:resData.nutritionCalDTOList[_.code].grade,point:resData.nutritionCalDTOList[_.code].point})
                   }
                 })
-                //  debugger
+                //
 
                 let power = [];
                 that.powerValue.forEach(_ => {
@@ -1590,7 +1590,7 @@
 
       // 处理数据
       refreshData() {
-        debugger
+
         // 计算食物数量 主要用于合并单元格
         this.datas.forEach((item) => {
           item.weeks.forEach((week) => {
@@ -1603,7 +1603,7 @@
             });
             if (week.foods != undefined) {
               week.foods.forEach((food) => {
-                //    debugger
+                //
                 food.spans = count;
                 food.children.forEach((c) => {
                   c.spans = count;
@@ -1627,7 +1627,7 @@
       // 合并单元格
       onTableSpanMethod({ row, column, rowIndex, columnIndex }) {
         if (columnIndex === 2) {
-          //     debugger
+          //
           if(row.spans){
             return [row.spans, 1];
           }else{
@@ -1731,7 +1731,7 @@
       },
       // 移除
       onRemove(data_id, week_id, food_id,week_name) {
-        // debugger
+        //
         var foods;
         this.datas.forEach((data) => {
           if (data.id === data_id) {
@@ -1778,7 +1778,7 @@
       },
       //图片上传成功
       handleAvatarSuccess(data_id, week_id,res, file) {
-        debugger
+
         if (res && res.success) {
           this.datas.forEach((data) => {
             if (data.id === data_id) {
@@ -1792,7 +1792,7 @@
         }
       },
       handleAvatarRemove(data_id, week_id,file){
-        debugger
+
         this.datas.forEach((data) => {
           if (data.id === data_id) {
             data.weeks.forEach((week) => {
@@ -1805,7 +1805,7 @@
         });
       },
       handlePictureCardPreview(data_id, week_id,file){
-        debugger
+
         this.datas.forEach((data) => {
           if (data.id === data_id) {
             data.weeks.forEach((week) => {

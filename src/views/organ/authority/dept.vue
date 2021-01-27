@@ -214,7 +214,7 @@
         });
       },
       handleAdd(row) {
-        // debugger
+        //
         this.$refs.crud.value.parentId = row.id;
         this.$refs.crud.option.column.filter(item => {
           if (item.prop === "parentId") {

@@ -117,7 +117,6 @@ export default {
                   "age",
 
                   ((new Date().getTime() - v.value.getTime()) / 31536000000).toFixed(2)
-
                 );
               }
             },
@@ -604,7 +603,7 @@ export default {
           },
           {
             label: "学历",
-            prop: "momeEducation",
+            prop: "momEducation",
             type: "select",
             dicData: education,
             span: 8,
@@ -765,7 +764,7 @@ export default {
           },
           {
             label: "姓名",
-            prop: "twoname",
+            prop: "twoName",
             span: 8,
             minlength:0,
             maxlength:10
@@ -1154,7 +1153,7 @@ export default {
         callback(new Error("请先选择班级"));
         this.$set(this.form,"childNo",undefined)
       } else {
-        debugger
+
         if(value<=999999999999999&&value>0){
           let student = {};
           student["classId"] = this.form.classId;
@@ -1204,7 +1203,7 @@ export default {
       }
     },
     fun() {
-      // debugger;
+      // ;
 
       this.$set(
         this.findObject(this.option.column, "leaveClassName"),
@@ -1225,7 +1224,6 @@ export default {
   },
   mounted() {
     if (this.$route.query.id) {
-      // debugger;
       if (this.$route.query.detailFlag) {
         this.option.detail = true;
         if (this.$route.query.addView) {

@@ -1365,7 +1365,7 @@
                 }})
               intake.data=data;
               let nutrition=[];
-            debugger
+
               that.nutritionValue.forEach(_ => {
                 nutrition.push({code:_.code,
                   name:_.name,

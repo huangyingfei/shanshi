@@ -1242,7 +1242,7 @@ export default {
     resizeExpendHeight() {
       setTimeout(() => {
         //真实高度列表
-        debugger
+
       var foodTypeList = document.querySelectorAll(".colNoneBorder.is-hidden .meals-foodType");
       for (var i = 0; i < foodTypeList.length; i++) {
         var pnode = foodTypeList[i].parentNode.parentNode.parentNode;
@@ -1291,7 +1291,7 @@ export default {
     },
 
     expandchange(a, b) {
-      debugger
+
       this.resizeExpendHeight();
     },
     // 根据名称获取mealtype
@@ -1349,7 +1349,7 @@ export default {
     },
     //获取分数
     getFoodScore(){
-      debugger
+
       this.dragnode.node={};
       let day=[0,0,0,0,0,0,0]
       let days=0;
@@ -1393,7 +1393,7 @@ export default {
       }
       foods["recipeVals"]=recipeVals
       foods["days"]=days;
-    //  debugger
+    //
      let types='';
       for(let i=0;i<this.foodCatalog.length;i++){
         types+= that.getmealTypeData(this.foodCatalog[i])+","
@@ -1587,7 +1587,7 @@ export default {
           });
           if (week.foods != undefined) {
             week.foods.forEach((food) => {
-          //    debugger
+          //
               food.spans = count;
               food.children.forEach((c) => {
                 c.spans = count;
@@ -1611,7 +1611,7 @@ export default {
     // 合并单元格
     onTableSpanMethod({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 2) {
-   //     debugger
+   //
         if(row.spans){
           return [row.spans, 1];
         }else{
@@ -1761,7 +1761,7 @@ export default {
     },
     //图片上传成功
     handleAvatarSuccess(data_id, week_id,res, file) {
-      debugger
+
       if (res && res.success) {
         this.datas.forEach((data) => {
           if (data.id === data_id) {
@@ -1775,7 +1775,7 @@ export default {
       }
     },
     handleAvatarRemove(data_id, week_id,file){
-      debugger
+
         this.datas.forEach((data) => {
           if (data.id === data_id) {
             data.weeks.forEach((week) => {
@@ -1788,7 +1788,7 @@ export default {
         });
     },
     handlePictureCardPreview(data_id, week_id,file){
-      debugger
+
       this.datas.forEach((data) => {
         if (data.id === data_id) {
           data.weeks.forEach((week) => {

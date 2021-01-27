@@ -1,5 +1,12 @@
 import request from '@/router/axios';
 
+export const province=()=>{
+  return request({
+    url: '/api/blade-system/region/lazy-list',
+    method: 'get',
+  })
+}
+
 export const tree = (flag) => {
   return request({
     url: '/api/blade-food/class/tree',
@@ -58,7 +65,6 @@ export const getList = (current, size, params,classId) => {
     }
   })
 }
-
 
 export const removeStuId = (rows) => {
   return request({
@@ -135,6 +141,8 @@ export const createClass = (row) => {
     data: row
   })
 }
+
+
 
 
 
