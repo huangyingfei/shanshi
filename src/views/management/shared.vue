@@ -225,6 +225,7 @@
             </el-form-item>
             <el-form-item label="所属区域" style="  width: 350px;  ">
               <el-cascader
+                disabled
                 v-model="valuepark"
                 placeholder="请选择省市区"
                 :options="options"
@@ -335,8 +336,8 @@
             </el-table-column>
           </el-table>
         </div>
-        <div class="worm1">记录</div>
-        <el-timeline>
+        <div class="worm1" v-if="this.agree == 2">记录</div>
+        <el-timeline v-if="this.agree == 2">
           <el-timeline-item :timestamp="this.record.aduitTime" placement="top">
             <el-card>
               <!-- <h4>{{ this.record.tenant_name }}</h4>
@@ -453,6 +454,7 @@ export default {
         }
       ],
       timezone: "", //搜索时间
+      agree: "", //审核状态
       record: {
         tenant_name: "", //机构
         aduit_name: "", //姓名
@@ -509,12 +511,14 @@ export default {
         .get(`api/blade-food/food/detail?id=${this.flour}`, {})
         .then(res => {
           this.inquired = res.data.data;
+          console.log(this.inquired);
           let picture = [];
           if (this.inquired.pic) {
             picture[0] = {
               url: this.inquired.pic
             };
           }
+          this.agree = this.inquired.status; //审核状态
           this.productImgs = picture;
           this.hideUploadEdit = this.productImgs.length >= 1;
 

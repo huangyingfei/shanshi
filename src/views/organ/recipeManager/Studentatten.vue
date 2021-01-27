@@ -431,7 +431,11 @@
               v-model="ruleForm.between"
             ></el-input>
           </el-form-item>
-          <el-form-item label="病假症状" v-if="this.enforce == '病假'">
+          <el-form-item
+            label="病假症状"
+            v-if="this.enforce == '病假'"
+            prop="relieve"
+          >
             <el-select
               clearable
               style="width: 250px"
@@ -590,7 +594,13 @@ export default {
         weekday: [
           { required: true, message: "请填写请假天数", trigger: "blur" }
         ],
-
+        relieve: [
+          {
+            required: true,
+            message: "请选择病假症状",
+            trigger: "blur"
+          }
+        ],
         reason: [
           { required: true, message: "请填写请假事由", trigger: "blur" }
         ],
@@ -703,7 +713,8 @@ export default {
       timezone1: "",
       under: "",
       builtinclass: "",
-      enforce: ""
+      enforce: "",
+      symptoms: true
     };
   },
   beforeMount() {
@@ -719,6 +730,12 @@ export default {
   methods: {
     forward() {
       this.enforce = this.ruleForm.forgreater;
+      //     if (this.ruleForm.forgreater == "病假") {
+      //       this.symptoms = true;
+      //
+      //     } else {
+      //       this.symptoms = false;
+      //     }
       // console.log(this.enforce);
     },
     switchText(mes) {
@@ -1118,9 +1135,6 @@ export default {
               this.getStorage();
               this.notEmpty();
               this.dateTime = false;
-            })
-            .catch(() => {
-              this.$message.error("编辑失败");
             });
         } else {
           this.$message({
