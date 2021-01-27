@@ -976,6 +976,8 @@ export default {
           console.log(res);
           this.obtains();
           this.Addraudit();
+          this.padded();
+          this.editable = 0;
           this.$message({
             message: "保存成功",
             type: "success"

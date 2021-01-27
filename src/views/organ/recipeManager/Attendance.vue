@@ -169,17 +169,27 @@
               </el-table-column>
               <el-table-column prop="deptName" label="部门" align="center">
               </el-table-column>
-              <el-table-column label="请假开始日期" width="150" align="center">
-                <template slot-scope="scope">
+              <el-table-column
+                prop="startTimeStr"
+                label="请假开始日期"
+                width="160"
+                align="center"
+              >
+                <!-- <template slot-scope="scope">
                   <span>{{ scope.row.startTime }}</span>
                   <span>{{ scope.row.startStr }}</span>
-                </template>
+                </template> -->
               </el-table-column>
-              <el-table-column width="150" label="请假结束日期" align="center">
-                <template slot-scope="scope">
+              <el-table-column
+                prop="endTimeStr"
+                width="160"
+                label="请假结束日期"
+                align="center"
+              >
+                <!-- <template slot-scope="scope">
                   <span>{{ scope.row.endTime }}</span>
                   <span>{{ scope.row.endStr }}</span>
-                </template>
+                </template> -->
               </el-table-column>
               <el-table-column prop="leaveType" label="请假类型" align="center">
               </el-table-column>
@@ -723,9 +733,9 @@ export default {
           "职务",
           "部门",
           "请假开始日期",
-          "上下午",
+
           "请假结束日期",
-          "上下午",
+
           "请假类型",
           "请假天数",
           "请假原因",
@@ -737,10 +747,8 @@ export default {
           "teacherName",
           "post",
           "deptName",
-          "startTime",
-          "startStr",
-          "endTime",
-          "endStr",
+          "startTimeStr",
+          "endTimeStr",
           "leaveType",
           "daysOff",
           "reason",
@@ -916,9 +924,6 @@ export default {
               this.getStorage();
               this.notEmpty();
               this.dateTime = false;
-            })
-            .catch(() => {
-              this.$message.error("编辑失败");
             });
         } else {
           this.$message({

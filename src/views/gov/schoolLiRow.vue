@@ -1,30 +1,29 @@
 <template>
   <div class="demo-image__preview">
     <el-row>
-      <el-col :span="1">
-        <span>{{ index }}</span>
+      <el-col :span="2">
+        <span @click="$emit('openDialog', tenantId)">{{ index }}</span>
       </el-col>
-      <el-col :span="5">
-        <el-image style="width: 100px; height: 100px" :src="logoUrl">
+      <el-col :span="8">
+        <el-image
+          style="width: 80px; height: 80px"
+          :src="logoUrl"
+          @click="$emit('openDialog', tenantId)"
+        >
           <div
             slot="error"
             class="image-slot"
-            style="line-height: 100px; text-align: center"
+            style="line-height: 80px; text-align: center"
           >
             <div class="el-image__error">暂无图片</div>
           </div>
         </el-image>
       </el-col>
-      <el-col :span="6">
-        <span>{{ tenantName }}</span>
+      <el-col :span="10">
+        <span @click="$emit('openDialog', tenantId)">{{ tenantName }}</span>
       </el-col>
-      <el-col :span="6">
-        <span>{{ score }}</span>
-      </el-col>
-      <el-col :span="6">
-        <el-button type="text" @click="$emit('openDialog', tenantId)"
-          >查看食谱</el-button
-        >
+      <el-col :span="4">
+        <span @click="$emit('openDialog', tenantId)">{{ score }}</span>
       </el-col>
     </el-row>
   </div>
@@ -61,6 +60,7 @@ export default {
 //   line-height: 100px;
 // }
 .el-col {
-  line-height: 100px;
+  line-height: 80px;
+  font-size: 14px;
 }
 </style>>

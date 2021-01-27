@@ -39,7 +39,7 @@ export default {
           {
             label: "时间",
             prop: "createTime",
-            type: "datetime",
+            type: "date",
             searchSpan: 12,
             searchRange: true,
             search: true,
@@ -86,9 +86,13 @@ export default {
       };
 
       if (this.search.createTime) {
-        params.startTimeStr = dateFormat(this.search.createTime[0]);
-        params.endTimeStr = dateFormat(this.search.createTime[1]);
+        params.startTimeStr = dateFormat(
+          this.search.createTime[0],
+          "yyyy-MM-dd"
+        );
+        params.endTimeStr = dateFormat(this.search.createTime[1], "yyyy-MM-dd");
       }
+      console.log(params);
       this.axios({
         url: "/api/blade-food/recipecomment/list",
         method: "get",

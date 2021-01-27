@@ -69,7 +69,7 @@ export default {
         menu: false,
         column: [
           {
-            label: "年级",
+            label: "学级",
             prop: "startYear",
           },
           {
