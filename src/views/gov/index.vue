@@ -1038,8 +1038,8 @@ export default {
         });
     },
     weekChange(WeekInfo) {
-      this.govForm.startTime = WeekInfo.startTime;
-      this.govForm.endTime = WeekInfo.endTime;
+      this.govForm.startTime = WeekInfo.startTime.substr(0, 10);
+      this.govForm.endTime = WeekInfo.endTime.substr(0, 10);
     },
     //获取食谱健康排行榜
     beforeGetGoverRecipeTotal() {
