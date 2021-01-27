@@ -51,7 +51,7 @@
                 'color-2': day.type == 2,
                 'color-3': day.type == 3,
                 'color-4': day.type == 4,
-                'color-font': day.isNow == 0,
+                'color-font': day.isNow == 0
               }"
               @click="getRvent($event, day)"
               >{{ day.value }}</span
@@ -59,6 +59,7 @@
           </td>
         </tr>
       </table>
+
       <div>
         <div style="display: inline-block; font-size: 14px; margin: 6px">
           <i
@@ -117,6 +118,7 @@
           type="text"
           style="width: 50%; margin-left: 0"
           @click="saveCalendar"
+          v-if="this.network == 0"
           >确定</el-button
         >
       </div>
@@ -130,46 +132,75 @@ import { deepClone } from "@/util/util";
 export default {
   props: {
     leaveDate: {
-      type: Array,
-      default: function () {
-        return [];
-      },
+      type: Array
     },
     leaveDateInfo: {
-      type: Array,
-      default: function () {
-        return [];
-      },
+      type: Array
     },
+    network: {
+      trpe: Array
+    }
   },
   data() {
     return {
       leaveDateCopy: [],
       leaveDateInfoCopy: [],
+      network: "",
       dayArray: [],
       yearNum: 0,
       monthNum: 0,
       dayNum: 0,
+      updated: [], //日期
+      dateRange: [], //全部日期
+      canceloff: false
     };
   },
 
   created() {
-    this.updateCalendar();
+    // console.log(this.network);
   },
-  mounted() {
-    this.leaveDateCopy = deepClone(this.leaveDate);
-    console.log(this.leaveDateCopy);
-    this.leaveDateInfoCopy = deepClone(this.leaveDateInfo);
+  watch: {
+    leaveDate: {
+      handler: function() {
+        this.leaveDateCopy = deepClone(this.leaveDate);
+        this.leaveDateInfoCopy = deepClone(this.leaveDateInfo);
+        console.log(this.leaveDateCopy);
+        console.log(this.leaveDate);
+        console.log(this.leaveDateInfoCopy);
+        console.log(this.leaveDateInfo);
+        this.updateCalendar();
+      },
+      deep: true,
+      immediate: true
+    }
   },
+  // mounted() {
+  //   this.leaveDateCopy = deepClone(this.leaveDate);
+  //   console.log(this.leaveDateCopy);
+  //   this.leaveDateInfoCopy = deepClone(this.leaveDateInfo);
+  //   this.updateCalendar();
+  // },
   methods: {
+    // sonFun(param) {
+    //   let calendar = param;
+    //   // console.log(calendar);
+    //   this.dateRange = calendar;
+    //   let dateParsed = [];
+    //   calendar.forEach((item, index) => {
+    //     dateParsed.push(item.lateDate);
+    //   });
+    //   this.updated = dateParsed;
+    //   console.log(this.updated);
+    // },
     getRvent(val, day) {
       // 1:请假一天，2：请假半天，3：补假 4：请假作废
       var arrayIndex = this.leaveDateCopy.indexOf(day.dateStr);
+      console.log(this.leaveDateInfoCopy);
       var returnMealDate = {
         returnMealListId: this.leaveDateInfoCopy[0].returnMealListId,
         lateDate: day.dateStr,
         type: 3,
-        returnMealListPid: this.leaveDateInfoCopy[0].returnMealListPid,
+        returnMealListPid: this.leaveDateInfoCopy[0].returnMealListPid
       };
       if (day.type == 0) {
         day.type = 3;
@@ -187,7 +218,9 @@ export default {
         }
         day.type = 0;
       }
-      if (arrayIndex != -1 && day.type != 3) {
+      // console.log(day.type);
+      if (arrayIndex != -1 && day.type != 0) {
+        console.log("day.type != 3");
         this.leaveDateInfoCopy[arrayIndex].type = day.type;
       }
       // val.target.style.backgroundColor = "#409EFF";
@@ -203,14 +236,23 @@ export default {
       let val = [];
 
       for (let i = 1; i <= count; i++) {
-        let dateStr = `${year}-${month}-${i} 00:00:00`;
+        let j = i;
+        if (i < 10) {
+          j = "0" + i;
+        }
+        var m = month + 1;
+        if (m < 10) {
+          m = "0" + m;
+        }
+        let dateStr = `${year}-${m}-${j} 00:00:00`;
+        // console.log(dateStr);
         let dateInfo = {
           value: i,
           type: 0,
           dateStr: dateStr,
-          isNow: isNow,
+          isNow: isNow
         };
-        console.log(this.leaveDateCopy);
+        // console.log(this.leaveDateCopy);
         var arrayIndex = this.leaveDateCopy.indexOf(dateStr);
         if (arrayIndex != -1) {
           dateInfo.type = this.leaveDateInfoCopy[arrayIndex].type || 0;
@@ -316,11 +358,12 @@ export default {
     },
     saveCalendar() {
       this.$emit("saveCalendar", this.leaveDateInfoCopy);
+      // console.log(this.leaveDateInfoCopy);
     },
     closeCalendar() {
-      this.$emit("closeCalendar");
-    },
-  },
+      this.$emit("closeCalendar", this.canceloff);
+    }
+  }
 };
 </script>
 

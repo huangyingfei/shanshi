@@ -344,6 +344,7 @@
             prop="starting"
           >
             <el-date-picker
+              :popper-class="'currentDatePickerClass'"
               @change="started()"
               style="width: 180px"
               format="yyyy 年 MM 月 dd 日 "
@@ -374,6 +375,7 @@
             style="width: 370px"
           >
             <el-date-picker
+              :popper-class="'currentDatePickerClass'"
               @change="started()"
               style="width: 180px"
               format="yyyy 年 MM 月 dd 日 "
@@ -452,6 +454,10 @@
             >
               <i class="el-icon-plus"></i>
             </el-upload>
+            <span style="color: #000;font-weight: bold; font-size: 11px"
+              >上传图片不能超过2M 只能是<span style="color:red">JPG PNG</span
+              >格式</span
+            >
             <el-dialog append-to-body :visible.sync="dialogVisible">
               <img width="100%" :src="dialogImageUrl" alt />
             </el-dialog>

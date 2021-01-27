@@ -225,7 +225,7 @@ export default {
   },
   mounted() {
     this.dateRangeDefaultValue();
- 
+
     // setTimeout(() => {
     //   this.extract(); //折线图
     // }, 1000);
@@ -237,15 +237,15 @@ export default {
     // this.fullLength();
   },
   methods: {
-     dateRangeDefaultValue() {
+    dateRangeDefaultValue() {
       const end = new Date();
       const start = new Date();
       start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
       this.value1 = [
         dateFormat(start, "yyyy-MM-dd"),
-        dateFormat(end, "yyyy-MM-dd"),
+        dateFormat(end, "yyyy-MM-dd")
       ];
-         this.searchBtn()
+      this.searchBtn();
     },
     //头部请求
     nsmpsearly() {
@@ -434,7 +434,7 @@ export default {
         color: ["#69A8E8", "#F4D67C", "#F07F77"],
         // 饼图数据
         series: {
-          name: "机构类型分布图",
+          name: "机构类型",
           type: "pie", //echarts图的类型   pie代表饼图
           radius: "70%", //饼图中饼状部分的大小所占整个父元素的百分比
           center: ["50%", "50%"], //整个饼图在整个父元素中的位置
@@ -503,7 +503,7 @@ export default {
         color: ["#69A8E8", "#82B986", "#F4D67C", "#F07F77"],
         // 饼图数据
         series: {
-          name: "学校类型分布图",
+          name: "学校类型",
           type: "pie", //echarts图的类型   pie代表饼图
           radius: "70%", //饼图中饼状部分的大小所占整个父元素的百分比
           center: ["50%", "50%"], //整个饼图在整个父元素中的位置

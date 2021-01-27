@@ -344,6 +344,7 @@
             </el-form-item>
             <el-form-item label="出生日期" style="width: 355px" prop="value1">
               <el-date-picker
+                :popper-class="'currentDatePickerClass'"
                 v-model="ruleForm.value1"
                 style="width: 250px"
                 format="yyyy 年 MM 月 dd 日 "
@@ -428,6 +429,7 @@
             >
             </el-date-picker> -->
               <el-date-picker
+                :popper-class="'currentDatePickerClass'"
                 v-model="ruleForm.inductions"
                 style="width: 250px"
                 format="yyyy 年 MM 月 dd 日"
@@ -449,6 +451,7 @@
             >
             </el-date-picker> -->
               <el-date-picker
+                :popper-class="'currentDatePickerClass'"
                 v-model="ruleForm.workin"
                 style="width: 250px"
                 @change="stop()"
@@ -582,6 +585,7 @@
           <el-table-column label="序号" type="index" width="50" align="center">
           </el-table-column>
           <el-table-column
+            width="150"
             prop="jobNumber"
             label="工号"
             align="center"
@@ -600,11 +604,19 @@
             </template>
           </el-table-column>
           <el-table-column
+            width="120"
             prop="birthDate"
             label="出生日期"
             align="center"
-          ></el-table-column>
+          >
+            <template slot-scope="scope">
+              <span>{{
+                new Date(scope.row.birthDate).toLocaleDateString()
+              }}</span>
+            </template>
+          </el-table-column>
           <el-table-column
+            width="150"
             prop="mobile"
             label="手机号"
             align="center"
@@ -615,12 +627,14 @@
             align="center"
           ></el-table-column>
           <el-table-column
+            width="150"
             prop="className"
             label="所在班级"
             align="center"
           ></el-table-column>
 
           <el-table-column
+            width="150"
             prop="entryTime"
             label="入职日期"
             align="center"
@@ -649,7 +663,12 @@
           </el-table-column> -->
 
           <!--操作格-->
-          <el-table-column label="操作" align="center">
+          <el-table-column
+            label="操作"
+            width="150"
+            fixed="right"
+            align="center"
+          >
             <template slot-scope="scope">
               <el-button
                 @click="editorTheme(scope.row, 2)"
@@ -1180,19 +1199,20 @@ export default {
     cameras(formName) {
       console.log(this.stringClass);
       console.log(this.ruleForm.domain);
-      if (this.ruleForm.domain.length == 1) {
-        this.summing = this.ruleForm.domain[0];
-        console.log(this.summing);
-      }
-      if (this.ruleForm.domain.length == 2) {
-        this.summing = this.ruleForm.domain[1];
-        console.log(this.summing);
-      }
+      // if (this.ruleForm.domain.length == 1) {
+      //   this.summing = this.ruleForm.domain[0];
+      //   console.log(this.summing);
+      // }
+      // if (this.ruleForm.domain.length == 2) {
+      //   this.summing = this.ruleForm.domain[1];
+      //   console.log(this.summing);
+      // }
+      console.log(this.ruleForm.domain);
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.$axios
             .post(`api/blade-food/teacher/save`, {
-              deptId: this.summing,
+              managerDept: [this.ruleForm.domain],
               name: this.ruleForm.name, //姓名
               sex: this.ruleForm.radio, //性别
               pic: this.dialogImageUrl, //图片
@@ -1264,7 +1284,8 @@ export default {
         if (valid) {
           this.$axios
             .post(`api/blade-food/teacher/update`, {
-              id: this.summing,
+              id: this.edits,
+              managerDept: [this.ruleForm.domain],
               name: this.ruleForm.name, //姓名
               sex: this.ruleForm.radio, //性别
               pic: this.dialogImageUrl, //图片
@@ -1406,6 +1427,13 @@ export default {
       } else {
         this.stringClass = [];
       }
+      let police = {
+        class: [row.deptStr]
+      };
+      police.class = [...JSON.parse(police.class[0])];
+      // console.log(police.class);
+      this.ruleForm.domain = police.class[0];
+      console.log(this.ruleForm.domain);
 
       this.ruleForm.thejob = row.jobNumber; //工号
       this.ruleForm.inductions = row.entryTime; //入职日期
@@ -1683,11 +1711,7 @@ export default {
       let parter = "";
       this.$axios
         .get(
-          `api/blade-food/teacher/list?size=${this.m_page.size}&current=${
-            this.m_page.number
-          }&deptId=${""}&jobNumber=${this.workers}&name=${this.username}&post=${
-            this.callback
-          }&stutas=${this.driver}&descs=${this.empty}&ascs=${this.ordered}`,
+          `api/blade-food/teacher/list?size=${this.m_page.size}&current=${this.m_page.number}&deptId=${this.view}&jobNumber=${this.workers}&name=${this.username}&post=${this.callback}&stutas=${this.driver}&descs=${this.empty}&ascs=${this.ordered}`,
           {}
         )
         .then(res => {
@@ -1809,41 +1833,6 @@ export default {
           });
         });
         this.loadClass = fwork;
-        // console.log(this.loadClass);
-        // this.bufs.forEach((item, index) => {
-        //   console.log(item);
-        //   fwork[index] = {
-        //     id: item.id,
-        //     label: item.label
-        //   };
-        //   fwork[index].children = [];
-        //   item.children.forEach((item1, index1) => {
-        //     fwork[index].children[index1] = {
-        //       value: item1.id,
-        //       label: item1.label
-        //     };
-        //     fwork[index].children[index1].children = [];
-        //     item1.children.forEach((item2, index2) => {
-        //       fwork[index].children[index1].children[index2] = {
-        //         value: item2.id,
-        //         label: item2.label
-        //       };
-        //       fwork[index].children[index1].children[index2].children = [];
-        //       if (item2.children) {
-        //         item2.children.forEach((item3, index3) => {
-        //           fwork[index].children[index1].children[index2].children[
-        //             index3
-        //           ] = {
-        //             value: item3.id,
-        //             label: item3.label
-        //           };
-        //         });
-        //       }
-        //     });
-        //   });
-        // });
-        // this.loadClass = fwork;
-        // console.log(this.loadClass);
       });
     },
     hobbiton() {
@@ -1925,20 +1914,22 @@ export default {
     m_handlePageChange(currPage) {
       console.log(currPage);
       this.m_page.number = currPage;
-      if (this.view == 0) {
-        // return;
+      console.log(this.view);
+      if (this.view == "") {
         this.searchType();
       } else {
+        this.searchType();
         this.handleNodeClick();
       }
     },
     m_handleSizeChange(currSize) {
       console.log(currPage);
       this.m_page.size = currSize;
-      if (this.view == 0) {
-        // return;
+      console.log(this.view);
+      if (this.view == "") {
         this.searchType();
       } else {
+        this.searchType();
         this.handleNodeClick();
       }
     },

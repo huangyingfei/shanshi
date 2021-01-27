@@ -1172,7 +1172,8 @@ export default {
             message: "设置成功",
             type: "success"
           });
-          this.Addraudit();
+          data.isUse = 0;
+          // this.Addraudit();
         })
         .catch(() => {
           this.$message.error("设置失败");
@@ -1193,7 +1194,8 @@ export default {
             message: "设置成功",
             type: "success"
           });
-          this.Addraudit();
+          data.isUse = 1;
+          // this.Addraudit();
         })
         .catch(() => {
           this.$message.error("设置失败");
@@ -1213,7 +1215,8 @@ export default {
             message: "设置成功",
             type: "success"
           });
-          this.Addraudit();
+          // this.Addraudit();
+          data.isPub = 1;
         })
         .catch(() => {
           this.$message.error("设置失败");
@@ -1233,7 +1236,8 @@ export default {
             message: "设置成功",
             type: "success"
           });
-          this.Addraudit();
+          // this.Addraudit();
+          data.isPub = 0;
         })
         .catch(() => {
           this.$message.error("设置失败");
