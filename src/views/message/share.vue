@@ -136,9 +136,9 @@
         <el-row :gutter="20">
           <el-col :span="8">食谱名称：{{ dialogListData.recipeName }}</el-col>
           <el-col :span="8">食谱周期：{{ dialogListData.recipeDay }}</el-col>
-          <el-col :span="8"
+          <!-- <el-col :span="8"
             >收藏：{{ dialogListData.isUse == 1 ? "已收藏" : "未收藏" }}</el-col
-          >
+          > -->
         </el-row>
         <el-row :gutter="20">
           <el-col :span="8">创建机构：{{ dialogListData.orgName }}</el-col>
@@ -146,6 +146,18 @@
           <el-col :span="8">创建时间：{{ dialogListData.createTime }}</el-col>
         </el-row>
         <toolbar ref="toolbar"></toolbar>
+        <el-timeline>
+          <el-timeline-item
+            placement="top"
+            v-for="(item, i) in getHealth"
+            :key="i"
+          >
+            <!-- <el-card> -->
+            {{ item.aduitTime }}
+            {{ item.refuseReason }}
+            <!-- </el-card> -->
+          </el-timeline-item>
+        </el-timeline>
       </el-dialog>
     </div>
   </div>
@@ -209,7 +221,8 @@ export default {
           label: "待审核"
         }
       ],
-      timezone: ""
+      timezone: "",
+      recordList: []
     };
   },
   beforeMount() {
@@ -225,7 +238,15 @@ export default {
       console.log(row);
       this.dialogListData = row;
       let term = row.id;
+      this.$axios
+        .get(`/api/blade-food/recipe/detail?id=${term}`, {})
+        .then(res => {
+          // console.log(res);
+          this.getHealth = res.data.data.recipeAudits;
+          console.log(this.getHealth);
+        });
       this.dateTime = true;
+
       this.$nextTick(() => {
         this.$refs.toolbar.overview(term);
       });

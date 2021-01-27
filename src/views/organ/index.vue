@@ -6,7 +6,7 @@
         <span style="margin-right: 10px;margin-left: 15px;  font-size: 14px;"
           >机构选择:</span
         >
-        <el-select v-model="activity" placeholder="请选择">
+        <el-select @change="searchBtn" v-model="activity" placeholder="请选择">
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -15,14 +15,14 @@
           >
           </el-option>
         </el-select>
-        <el-button
+        <!-- <el-button
           style="margin-left: 20px"
           icon="el-icon-search"
           size="medium"
           type="primary"
           @click="searchBtn"
           >查询</el-button
-        >
+        > -->
       </div>
     </div>
     <div class="total">
@@ -310,33 +310,33 @@ export default {
           startAngle: 270,
           indicator: [
             {
-              name: "谷类"
+              name: "谷类(100-150)"
               // max: 300
             },
             {
-              name: "盐"
+              name: "盐(<=3)"
               // max: 300
             },
             {
-              name: "食用油"
+              name: "食用油(20-50)"
               // max: 350
             },
             {
-              name: "乳制品"
+              name: "乳制品(350-500)"
               // max: 300
             },
             {
-              name: "大豆"
+              name: "大豆(10-20)"
               // max: 300
             },
             {
-              name: "畜禽肉类-蛋类-水产品"
+              name: "畜禽肉类-蛋类-水产品(100-125)"
             },
             {
-              name: "水果"
+              name: "水果(150-250)"
             },
             {
-              name: "蔬菜"
+              name: "蔬菜(150-300)"
             }
           ]
         },
