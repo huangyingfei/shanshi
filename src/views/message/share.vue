@@ -145,8 +145,8 @@
           <el-col :span="8">创建人：{{ dialogListData.createName }}</el-col>
           <el-col :span="8">创建时间：{{ dialogListData.createTime }}</el-col>
         </el-row>
-        <toolbar ref="toolbar"></toolbar>
-        <el-timeline>
+        <toolbar ref="recipe"></toolbar>
+        <el-timeline v-if="this.recordList == 2">
           <el-timeline-item
             placement="top"
             v-for="(item, i) in getHealth"
@@ -222,7 +222,8 @@ export default {
         }
       ],
       timezone: "",
-      recordList: []
+      recordList: "",
+      getHealth: []
     };
   },
   beforeMount() {
@@ -237,18 +238,19 @@ export default {
     overview(row) {
       console.log(row);
       this.dialogListData = row;
+      this.recordList = row.status;
+      this.dateTime = true;
       let term = row.id;
+      console.log(term);
       this.$axios
         .get(`/api/blade-food/recipe/detail?id=${term}`, {})
         .then(res => {
-          // console.log(res);
-          this.getHealth = res.data.data.recipeAudits;
-          console.log(this.getHealth);
+          this.channel = res.data.data;
+          this.getHealth = this.channel.recipeAudits;
+          // console.log(this.getHealth);
         });
-      this.dateTime = true;
-
       this.$nextTick(() => {
-        this.$refs.toolbar.overview(term);
+        this.$refs.recipe.overview(term);
       });
     },
     //清空

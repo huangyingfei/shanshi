@@ -1210,7 +1210,7 @@ export default {
           isPub: 1
         })
         .then(res => {
-          console.log(res);
+          // console.log(res);
           this.$message({
             message: "设置成功",
             type: "success"
@@ -1231,7 +1231,7 @@ export default {
           isPub: 0
         })
         .then(res => {
-          console.log(res);
+          // console.log(res);
           this.$message({
             message: "设置成功",
             type: "success"
