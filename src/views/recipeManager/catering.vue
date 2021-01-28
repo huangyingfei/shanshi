@@ -1440,7 +1440,7 @@ export default {
     },
     ShowFood:debounce(function (ev,f) {
       this.ShowFoodTips(ev, f)
-    },1000),
+    },500),
     //食谱跟随显示
     ShowFoodTips(ev, f) {
       var that = this;
