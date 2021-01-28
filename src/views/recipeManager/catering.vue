@@ -326,7 +326,7 @@
                 <li
                   v-for="f in mealListLeft"
                   :key="f.id"
-                  @mouseover="ShowFoodTips($event, f)"
+                  @mouseover="ShowFood($event,f)"
                   @mouseout="HidenFoodTips($event)"
                   style="font-size: 14px"
                 >
@@ -635,6 +635,7 @@
 </template>
 
 <script>
+  import  {debounce} from "@/util/debouncearg"
   import { formateDate } from "@/api/tool/date";
 import nutrition from "@/views/recipeManager/nutrition.vue";
 import foodsWeek from "@/views/recipeManager/foods/components/foodsweek";
@@ -1113,7 +1114,7 @@ export default {
           isUse = "1";
         }
       }
-      mealList(0, isPub, this.recipeNameSharePub, isUse).then((res) => {
+      mealList(0, isPub, this.recipeNameSharePub, isUse,1).then((res) => {
         this.mealListLeft = res.data.data;
       });
     },
@@ -1437,6 +1438,9 @@ export default {
       this.$refs.foodmenudLayer.style.width = "180px";
       this.$refs.foodmenudLayer.style.display = "block";
     },
+    ShowFood:debounce(function (ev,f) {
+      this.ShowFoodTips(ev, f)
+    },1000),
     //食谱跟随显示
     ShowFoodTips(ev, f) {
       var that = this;
@@ -1454,16 +1458,17 @@ export default {
           var mouth = startTime.getMonth() + 1;
           var begin_day = startTime.getDate();
           that.showWeekList = [];
-          let mealsType = [];
-          res.data.data.recipeCycles.forEach((_) => {
-            mealsType.push(_.mealsType);
-          });
-          let arr = Array.from(new Set(mealsType));
-          let foodCatalog = [];
-          for (let i = 0; i < arr.length; i++) {
-            foodCatalog.push(that.getmealTypeDataValue(arr[i]));
-          }
-          that.WeekInfo.showFoodCatalog = foodCatalog;
+          // let mealsType = [];
+          // res.data.data.recipeCycles.forEach((_) => {
+          //   mealsType.push(_.mealsType);
+          // });
+          // let arr = Array.from(new Set(mealsType));
+          // let foodCatalog = [];
+          // for (let i = 0; i < arr.length; i++) {
+          //   foodCatalog.push(that.getmealTypeDataValue(arr[i]));
+          // }
+          // that.WeekInfo.showFoodCatalog = foodCatalog;
+          that.$set(that.WeekInfo, "showFoodCatalog", JSON.parse(res.data.data.mealTypestrs))
           for (let i = 1; i < day + 1; i++) {
             that.showWeekList.push({
               name: "week" + i,
@@ -2421,9 +2426,25 @@ export default {
   overflow-y: scroll;
   height: 280px;
 }
-.meals .foodWeekListHis li {
+
+.meals .foodWeekListHis li  {
   list-style: none;
   margin-bottom: 5px;
+  height: 30px;
+  font-size: 10px!important;
+
+}
+.meals .foodWeekListHis li  span{
+  max-width:165px;
+  min-width: 130px;
+  white-space:nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  float: left;
+}
+.meals .foodWeekListHis li  img{
+  float: right;
 }
 .meals .foodPanel {
   height: calc(100vh - 180px);

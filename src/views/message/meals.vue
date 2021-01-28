@@ -286,14 +286,12 @@
 
                 <ul class="foodWeekListHis">
                   <li v-for="f in mealListLeft" :key="f.id" style="font-size: 14px"
-                      @mouseover="debounce(aaa)" @mouseout="HidenFoodTips($event)">
+                      @mouseover="ShowFood($event,f)" @mouseout="HidenFoodTips($event)">
                     <span>{{f.recipeName}}</span> <img style="width: 20px" @click="mealLoad(f.id,f.recipeName)"
                                                        src="/img/arrow.png" alt/>
                   </li>
                 </ul>
               </el-tab-pane>
-
-
               <!--//个人食谱-->
               <el-tab-pane label="个人食谱" name="second">
                 <div style="margin-top: -5px; padding: 5px">
@@ -326,7 +324,7 @@
                 </div>
 
                 <ul class="foodWeekListHis">
-                  <li v-for="f in peopleMealListLeft" :key="f.id" @mouseover="debounce(aaa)()"
+                  <li v-for="f in peopleMealListLeft" :key="f.id" @mouseover="ShowFood($event,f)"
                       @mouseout="HidenFoodTips($event)" style="font-size: 14px">
                     <span>{{f.recipeName}}</span> <img style="width: 20px" @click="mealLoad(f.id,f.recipeName)"
                                                        src="/img/arrow.png" alt/>
@@ -652,6 +650,7 @@
 
 
 <script>
+  import  {debounce} from "@/util/debouncearg"
   import {formateDate} from "@/api/tool/date";
   import nutrition from "@/views/recipeManager/nutrition.vue";
   import noNumRecipe from "@/views/recipeManager/noNumRecipe.vue";
@@ -1137,7 +1136,7 @@
             isPub = '1';
           }
         }
-        mealList(2, isPub, this.recipeNameSharePri, 1).then(res => {
+        mealList(2, isPub, this.recipeNameSharePri, 1,1).then(res => {
           this.peopleMealListLeft = res.data.data;
         })
       },
@@ -1467,21 +1466,10 @@
         this.$refs.foodmenudLayer.style.width = '180px';
         this.$refs.foodmenudLayer.style.display = "block";
       },
-      debounce(fn, delay = 1000) {
-        let lastFn = null;
-        return function () {
-          if (lastFn) {
-            clearTimeout(lastFn);
-          }
-          lastFn = setTimeout(() => {
-            lastFn = null;
-            fn.call(this);
-          }, delay);
-        }
-      },
-      aaa(){
-       console.log("222")
-      },
+
+      ShowFood:debounce(function (ev,f) {
+        this.ShowFoodTips(ev, f)
+      },1000),
       //食谱跟随显示
       ShowFoodTips(ev, f) {
         var that = this;
@@ -2424,7 +2412,7 @@
     border: 1px solid #ebebeb !important;
     border-radius: 3px !important;
     padding: 0px;
-    height: 400px;
+    height: 500px;
   }
 
   .meals .el-card__body {
@@ -2448,7 +2436,7 @@
   .meals .foodWeekListHis {
     padding: 0 0 0 10px;
     overflow-y: scroll;
-    height: 180px;
+    height: 280px;
   }
 
   .meals .foodWeekListHis li  {

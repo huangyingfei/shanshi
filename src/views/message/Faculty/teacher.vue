@@ -252,7 +252,7 @@
                 </div>
 
                 <ul class="foodWeekListHis">
-                  <li   @mouseover="ShowFoodTips($event,f)"  @mouseout="HidenFoodTips($event)" v-for="f in peopleMealListLeft" :key="f.id"  style="font-size: 14px" >
+                  <li   @mouseover="ShowFood($event,f)"  @mouseout="HidenFoodTips($event)" v-for="f in peopleMealListLeft" :key="f.id"  style="font-size: 14px" >
                     <span >{{f.recipeName}}</span>  <img style="width: 20px" @click="mealLoad(f.id,f.recipeName)" src="/img/arrow.png" alt />
                   </li>
                 </ul>
@@ -389,6 +389,7 @@
 </template>
 
 <script>
+  import  {debounce} from "@/util/debouncearg"
   import { formateDate } from "@/api/tool/date";
   import foodsWeek from "@/views/message/Faculty/foodsweek";
   import showfoodsWeek from "@/views/foods/components/showfoodsweek";
@@ -1141,6 +1142,9 @@
         this.$refs.foodmenudLayer.style.width='180px';
         this.$refs.foodmenudLayer.style.display="block";
       },
+      ShowFood:debounce(function (ev,f) {
+        this.ShowFoodTips(ev, f)
+      },1000),
       //食谱跟随显示
       ShowFoodTips(ev,f){
         var that=this;
@@ -1158,16 +1162,17 @@
             var mouth = startTime.getMonth() + 1;
             var begin_day = startTime.getDate();
             that.showWeekList=[];
-            let mealsType=[];
-            res.data.data.recipeCycles.forEach(_=>{
-              mealsType.push(_.mealsType);
-            })
-            let arr= Array.from(new Set(mealsType));
-            let foodCatalog=[]
-            for(let i=0;i<arr.length;i++){
-              foodCatalog.push(that.getmealTypeDataValue(arr[i]))
-            }
-            that.WeekInfo.showFoodCatalog=foodCatalog;
+            // let mealsType=[];
+            // res.data.data.recipeCycles.forEach(_=>{
+            //   mealsType.push(_.mealsType);
+            // })
+            // let arr= Array.from(new Set(mealsType));
+            // let foodCatalog=[]
+            // for(let i=0;i<arr.length;i++){
+            //   foodCatalog.push(that.getmealTypeDataValue(arr[i]))
+            // }
+            // that.WeekInfo.showFoodCatalog=foodCatalog;
+            that.$set(that.WeekInfo, "showFoodCatalog", JSON.parse(res.data.data.mealTypestrs))
             for(let i=1;i<day+1;i++){
               that.showWeekList.push({
                 name:"week"+i,
@@ -1954,9 +1959,25 @@
     overflow-y: scroll;
     height: 280px;
   }
-  .meals .foodWeekListHis li {
+
+  .meals .foodWeekListHis li  {
     list-style: none;
     margin-bottom: 5px;
+    height: 30px;
+    font-size: 10px!important;
+
+  }
+  .meals .foodWeekListHis li  span{
+    max-width:165px;
+    min-width: 130px;
+    white-space:nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    float: left;
+  }
+  .meals .foodWeekListHis li  img{
+    float: right;
   }
   .meals .foodPanel {
     height: calc(100vh - 180px);
