@@ -14,12 +14,12 @@ export default {
   components: {
     platform,
     creating,
-    govern
+    govern,
   },
   name: "wel",
   data() {
     return {
-      yaml: ""
+      yaml: "",
     };
   },
 
@@ -31,23 +31,17 @@ export default {
     Personal() {
       this.$axios
         .get(`api//blade-system/tenant/getInfoByTenantId `, {})
-        .then(res => {
+        .then((res) => {
           // console.log(res);
           this.markup = res.data.data;
           // console.log(this.markup);
           this.yaml = this.markup.tenantType;
           console.log(this.yaml);
         });
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-.wel {
-  width: 100%;
-  height: 100%;
-  /* background-color: #fff; */
-  margin-bottom: 50px;
-}
 </style>

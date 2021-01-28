@@ -104,19 +104,12 @@ export default {
         params: {
           currentDate: this.currentDate,
         },
-      })
-        .then((res) => {
-          this.$message({
-            message: "升班成功",
-            type: "sucess",
-          });
-        })
-        .catch((err) => {
-          this.$message({
-            message: err,
-            type: "sucess",
-          });
+      }).then((res) => {
+        this.$message({
+          message: "升班成功",
+          type: "sucess",
         });
+      });
     },
     //撤销上次升班
     cancelUpClass() {

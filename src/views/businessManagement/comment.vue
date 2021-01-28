@@ -6,6 +6,7 @@
         :search.sync="search"
         :data="commentData"
         @search-change="searchChange"
+        @search-reset="searchReset"
         :page.sync="page"
         @on-load="onLoad"
         @size-change="sizeChange"
@@ -76,6 +77,10 @@ export default {
 
       this.onLoad();
     },
+    searchReset() {
+      this.page.currentPage = 1;
+      this.onLoad();
+    },
     onLoad(page) {
       this.loading = true;
       console.log(this.search);
@@ -84,8 +89,8 @@ export default {
         current: this.page.currentPage,
         size: this.page.pageSize,
       };
-
-      if (this.search.createTime) {
+      console.log(this.search.createTime);
+      if (this.search.createTime && this.search.createTime.length != 0) {
         params.startTimeStr = dateFormat(
           this.search.createTime[0],
           "yyyy-MM-dd"
