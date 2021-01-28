@@ -355,7 +355,12 @@
       // 合并单元格
       onTableSpanMethod({ row, column, rowIndex, columnIndex }) {
         if (columnIndex === 2) {
-          return [row.spans, 1];
+          //
+          if(row.spans){
+            return [row.spans, 1];
+          }else{
+            return [1,1]
+          }
         }
       },
 
