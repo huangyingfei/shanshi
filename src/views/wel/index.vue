@@ -1,5 +1,5 @@
 <template>
-  <div class="wel">
+  <div class="wel-1">
     <platform v-if="this.yaml == 1"></platform>
     <creating v-if="this.yaml == 2"></creating>
     <govern v-if="this.yaml == 3"></govern>
@@ -44,7 +44,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.wel {
+.wel-1 {
   width: 100% !important;
 }
 </style>
