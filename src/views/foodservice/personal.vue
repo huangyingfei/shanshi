@@ -4,7 +4,6 @@
       <!-- 左边 -->
       <div class="coffee">
         <el-input
-          @change="obtains"
           style="
                 width: 250px;
                 height: 35px;
@@ -698,6 +697,12 @@ export default {
     this.Addraudit(); //树形结构渲染
     this.obtains(); //左边树形结构
     this.Takeone(); //获取token
+  },
+  watch: {
+    filterText(val) {
+      // console.log(this.$refs.tree);
+      this.$refs.tree.filter(val);
+    }
   },
   methods: {
     filterNode(value, data) {

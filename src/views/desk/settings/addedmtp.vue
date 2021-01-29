@@ -31,176 +31,191 @@
         </el-select>
       </el-form-item>
     </el-form>
-    <!-- 标签页 -->
-    <el-tabs v-loading="loadFlag" v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane
-        :label="item.name"
-        :name="item.name"
-        v-for="(item, i) in newProtein.nutritionVos"
-        :key="i"
+    <div class="Protein">
+      <!-- 标签页 -->
+      <el-tabs
+        v-loading="loadFlag"
+        v-model="activeName"
+        @tab-click="handleClick"
       >
-        <el-tabs v-model="activeName2" type="card">
-          <el-tab-pane
-            :name="button.name"
-            :label="button.name"
-            v-for="(button, i) in item.nutritionVos"
-            :key="i"
-          >
-            <ul>
-              <li
-                v-for="(nvo, index) in button.nutritionCoeffientVos"
-                :key="index"
-              >
-                <div class="nialing">{{ nvo.name }}</div>
-                <div v-if="item.sexNum == 2" style="display: inline-block;">
-                  <div class=""></div>
-                  <el-input
-                    v-model="nvo.manMax"
-                    placeholder="请输入内容"
-                    style=" margin-left: 20px; width: 140px;"
-                  ></el-input>
-                  <el-input
-                    v-model="nvo.manMin"
-                    placeholder="请输入内容"
-                    style=" margin-left: 20px; width: 140px;"
-                  ></el-input>
-                  <el-input
-                    v-model="nvo.womanMax"
-                    placeholder="请输入内容"
-                    style=" margin-left: 20px; width: 140px;"
-                  ></el-input>
-                  <el-input
-                    v-model="nvo.resultMin"
-                    placeholder="请输入内容"
-                    style=" margin-left: 20px; width: 140px;"
-                  ></el-input>
-                  <el-input
-                    v-model="nvo.coefficientMax"
-                    placeholder="请输入内容"
-                    style=" margin-left: 20px; width: 140px;"
-                  ></el-input>
-                  <el-input
-                    v-model="nvo.coefficientMin"
-                    placeholder="请输入内容"
-                    style=" margin-left: 20px; width: 140px;"
-                  ></el-input>
-                </div>
-                <div v-if="item.sexNum == 1" style="display: inline-block;">
-                  <el-input
-                    v-model="nvo.resultMax"
-                    placeholder="请输入内容"
-                    style=" margin-left: 20px; width: 140px;"
-                  ></el-input>
-                  <el-input
-                    v-model="nvo.resultMin"
-                    placeholder="请输入内容"
-                    style=" margin-left: 20px; width: 140px;"
-                  ></el-input>
-                  <el-input
-                    v-model="nvo.coefficientMax"
-                    placeholder="请输入内容"
-                    style=" margin-left: 20px; width: 140px;"
-                  ></el-input>
-                  <el-input
-                    v-model="nvo.coefficientMin"
-                    placeholder="请输入内容"
-                    style=" margin-left: 20px; width: 140px;"
-                  ></el-input>
-                </div>
-              </li>
-            </ul>
-          </el-tab-pane>
-        </el-tabs>
-        <div class="accto" v-if="item.sexNum == 2">
-          <div class="titles">人群</div>
-          <div class="glyph">
-            <div class="startup">男性</div>
-            <div class="chart">上限</div>
-            <div class="Item">下限</div>
-          </div>
-          <div class="unset">
-            <div class="startup">女性</div>
-            <div class="chart">上限</div>
-            <div class="Item">下限</div>
-          </div>
-          <div class="rotate">
-            <div class="chart">上限系数</div>
-            <div class="Item">下限系数</div>
-          </div>
-        </div>
-        <div class="actor" v-if="item.sexNum == 1">
-          <div class="effects">人群</div>
-          <div class="kendo">
-            <div class="chart">上限</div>
-            <div class="Item">下限</div>
-          </div>
-          <div class="directory">
-            <div class="chart">上限系数</div>
-            <div class="Item">下限系数</div>
-          </div>
-        </div>
-        <!-- 没有二级菜单 -->
-        <ul v-if="item.nutritionVos.length == 0" class="electric">
-          <li v-for="(nvo, index) in item.nutritionCoeffientVos" :key="index">
-            <div class="nialing">{{ nvo.name }}</div>
-            <div v-if="item.sexNum == 2" style="display: inline-block; ">
-              <el-input
-                v-model="nvo.manMax"
-                placeholder="请输入内容"
-                style=" margin-left: 20px; width: 140px;"
-              ></el-input>
-              <el-input
-                v-model="nvo.manMin"
-                placeholder="请输入内容"
-                style=" margin-left: 20px; width: 140px;"
-              ></el-input>
-              <el-input
-                v-model="nvo.womanMax"
-                placeholder="请输入内容"
-                style=" margin-left: 20px; width: 140px;"
-              ></el-input>
-              <el-input
-                v-model="nvo.womanMin"
-                placeholder="请输入内容"
-                style=" margin-left: 20px; width: 140px;"
-              ></el-input>
-              <el-input
-                v-model="nvo.coefficientMax"
-                placeholder="请输入内容"
-                style=" margin-left: 20px; width: 140px;"
-              ></el-input>
-              <el-input
-                v-model="nvo.coefficientMin"
-                placeholder="请输入内容"
-                style=" margin-left: 20px; width: 140px;"
-              ></el-input>
+        <el-tab-pane
+          :label="item.name"
+          :name="item.name"
+          v-for="(item, i) in newProtein.nutritionVos"
+          :key="i"
+        >
+          <div class="accto" v-if="item.sexNum == 2">
+            <div class="titles">人群</div>
+            <div class="glyph">
+              <div class="startup">男性</div>
+              <div class="chart">上限</div>
+              <div class="Item">下限</div>
             </div>
-            <div v-if="item.sexNum == 1" style="display: inline-block;">
-              <el-input
-                v-model="nvo.resultMax"
-                placeholder="请输入内容"
-                style=" margin-left: 20px; width: 140px;"
-              ></el-input>
-              <el-input
-                v-model="nvo.resultMin"
-                placeholder="请输入内容"
-                style=" margin-left: 20px; width: 140px;"
-              ></el-input>
-              <el-input
-                v-model="nvo.coefficientMax"
-                placeholder="请输入内容"
-                style=" margin-left: 20px; width: 140px;"
-              ></el-input>
-              <el-input
-                v-model="nvo.coefficientMin"
-                placeholder="请输入内容"
-                style=" margin-left: 20px; width: 140px;"
-              ></el-input>
+            <div class="unset">
+              <div class="startup">女性</div>
+              <div class="chart">上限</div>
+              <div class="Item">下限</div>
             </div>
-          </li>
-        </ul>
-      </el-tab-pane>
-    </el-tabs>
+            <div class="rotate">
+              <div class="chart">上限系数</div>
+              <div class="Item">下限系数</div>
+            </div>
+          </div>
+          <div class="actor" v-if="item.sexNum == 1">
+            <div class="effects">人群</div>
+            <div class="kendo">
+              <div class="chart">上限</div>
+              <div class="Item">下限</div>
+            </div>
+            <div class="directory">
+              <div class="chart">上限系数</div>
+              <div class="Item">下限系数</div>
+            </div>
+          </div>
+          <el-tabs v-model="activeName2" type="card">
+            <el-tab-pane
+              :name="button.name"
+              :label="button.name"
+              v-for="(button, i) in item.nutritionVos"
+              :key="i"
+            >
+              <ul>
+                <li
+                  v-for="(nvo, index) in button.nutritionCoeffientVos"
+                  :key="index"
+                >
+                  <div class="nialing">{{ nvo.name }}</div>
+                  <div v-if="item.sexNum == 2" style="display: inline-block;">
+                    <div class=""></div>
+                    <el-input
+                      v-model="nvo.manMax"
+                      placeholder="请输入内容"
+                      style=" margin-left: 20px; width: 140px;"
+                    ></el-input>
+                    <el-input
+                      v-model="nvo.manMin"
+                      placeholder="请输入内容"
+                      style=" margin-left: 20px; width: 140px;"
+                    ></el-input>
+                    <el-input
+                      v-model="nvo.womanMax"
+                      placeholder="请输入内容"
+                      style=" margin-left: 20px; width: 140px;"
+                    ></el-input>
+                    <el-input
+                      v-model="nvo.resultMin"
+                      placeholder="请输入内容"
+                      style=" margin-left: 20px; width: 140px;"
+                    ></el-input>
+                    <el-input
+                      v-model="nvo.coefficientMax"
+                      placeholder="请输入内容"
+                      style=" margin-left: 20px; width: 140px;"
+                    ></el-input>
+                    <el-input
+                      v-model="nvo.coefficientMin"
+                      placeholder="请输入内容"
+                      style=" margin-left: 20px; width: 140px;"
+                    ></el-input>
+                  </div>
+                  <div v-if="item.sexNum == 1" style="display: inline-block;">
+                    <el-input
+                      v-model="nvo.resultMax"
+                      placeholder="请输入内容"
+                      style=" margin-left: 20px; width: 140px;"
+                    ></el-input>
+                    <el-input
+                      v-model="nvo.resultMin"
+                      placeholder="请输入内容"
+                      style=" margin-left: 20px; width: 140px;"
+                    ></el-input>
+                    <el-input
+                      v-model="nvo.coefficientMax"
+                      placeholder="请输入内容"
+                      style=" margin-left: 20px; width: 140px;"
+                    ></el-input>
+                    <el-input
+                      v-model="nvo.coefficientMin"
+                      placeholder="请输入内容"
+                      style=" margin-left: 20px; width: 140px;"
+                    ></el-input>
+                  </div>
+                </li>
+              </ul>
+            </el-tab-pane>
+          </el-tabs>
+
+          <!-- 没有二级菜单 -->
+          <ul v-if="item.nutritionVos.length == 0" class="electric">
+            <li v-for="(nvo, index) in item.nutritionCoeffientVos" :key="index">
+              <div class="nialing">{{ nvo.name }}</div>
+              <div v-if="item.sexNum == 2" style="display: inline-block; ">
+                <el-input
+                  v-model="nvo.manMax"
+                  placeholder="请输入内容"
+                  style=" margin-left: 20px; width: 140px;"
+                ></el-input>
+                <el-input
+                  v-model="nvo.manMin"
+                  placeholder="请输入内容"
+                  style=" margin-left: 20px; width: 140px;"
+                ></el-input>
+                <el-input
+                  v-model="nvo.womanMax"
+                  placeholder="请输入内容"
+                  style=" margin-left: 20px; width: 140px;"
+                ></el-input>
+                <el-input
+                  v-model="nvo.womanMin"
+                  placeholder="请输入内容"
+                  style=" margin-left: 20px; width: 140px;"
+                ></el-input>
+                <el-input
+                  v-model="nvo.coefficientMax"
+                  placeholder="请输入内容"
+                  style=" margin-left: 20px; width: 140px;"
+                ></el-input>
+                <el-input
+                  v-model="nvo.coefficientMin"
+                  placeholder="请输入内容"
+                  style=" margin-left: 20px; width: 140px;"
+                ></el-input>
+              </div>
+              <div v-if="item.sexNum == 1" style="display: inline-block;">
+                <el-input
+                  v-model="nvo.resultMax"
+                  placeholder="请输入内容"
+                  style=" margin-left: 20px; width: 140px;"
+                ></el-input>
+                <el-input
+                  v-model="nvo.resultMin"
+                  placeholder="请输入内容"
+                  style=" margin-left: 20px; width: 140px;"
+                ></el-input>
+                <el-input
+                  v-model="nvo.coefficientMax"
+                  placeholder="请输入内容"
+                  style=" margin-left: 20px; width: 140px;"
+                ></el-input>
+                <el-input
+                  v-model="nvo.coefficientMin"
+                  placeholder="请输入内容"
+                  style=" margin-left: 20px; width: 140px;"
+                ></el-input>
+              </div>
+            </li>
+          </ul>
+        </el-tab-pane>
+      </el-tabs>
+    </div>
+    <div class="Aconfirm">
+      <el-button type="primary" v-if="window" @click="Determines('ruleForm')"
+        >保存</el-button
+      >
+      <el-button type="success" v-else @click="Atom('ruleForm')"
+        >編輯保存</el-button
+      >
+    </div>
   </div>
 </template>
 
@@ -222,9 +237,7 @@ export default {
       Nid: "",
       rules: {
         name: [{ required: true, message: "请输入标准名称", trigger: "blur" }],
-        region: [
-          { required: true, message: "请选择活动区域", trigger: "change" }
-        ]
+        region: [{ required: true, message: "请选择标准", trigger: "change" }]
       },
       newProtein: [], //标签页，
       newclicked: [],
@@ -261,7 +274,19 @@ export default {
     // }
   },
   methods: {
-    handleClick(tab, event) {},
+    handleClick(tab, event) {
+      // console.log(this.newProtein);
+      console.log(tab);
+      this.activeName2 = this.newProtein.nutritionVos[
+        Number(tab.index)
+      ].nutritionVos[0].name;
+
+      // console.log(tab.name);
+      // if (this.newProtein.nutritionVos.nutritionVos) {
+      //   this.activeName2 = this.newProtein.nutritionVos.nutritionVos[0].name;
+      //   console.log(this.activeName2);
+      // }
+    },
 
     confirm() {
       this.loadFlag = true;
@@ -365,7 +390,11 @@ export default {
 }
 .Additiona {
   width: 100%;
-
+  /* overflow-y: auto;
+  overflow-x: hidden; */
+  /* position: absolute;
+  left: 10px;
+  right: 10px; */
   background-color: #fff;
 }
 .current {
@@ -524,8 +553,8 @@ export default {
   /* width: 1100px; */
   width: 100%;
   height: 90px;
-  position: relative;
-  top: 5px;
+  /* position: relative;
+  top: 5px; */
   margin-left: 50px;
 
   color: #b4bbc5;
@@ -593,8 +622,9 @@ export default {
 .actor {
   width: 742px;
   height: 50px;
-  position: relative;
-  top: 5px;
+  /* position: relative;
+  top: 5px; */
+
   margin-left: 50px;
   color: #b4bbc5;
   font-size: 14px;
@@ -625,5 +655,9 @@ export default {
 
   margin-left: 20px;
   float: left;
+}
+.electric {
+  /* margin-top: 60px; */
+  width: 100%;
 }
 </style>

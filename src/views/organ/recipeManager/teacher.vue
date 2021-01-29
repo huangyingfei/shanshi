@@ -35,12 +35,12 @@
             <span v-if="data.view == 0 || data.view == 1">
               {{ node.label }}
             </span>
-            <span
+            <!-- <span
               class="newcastle"
               @click="() => gate(data, 1)"
               v-if="data.view == 3"
               >{{ node.label }}</span
-            >
+            > -->
             <!-- <span>{{ node.label }}</span> -->
             <span>
               <!-- <el-button
@@ -74,13 +74,13 @@
               >
                 编辑子
               </el-button> -->
-              <span
+              <!-- <span
                 class="editorpara"
                 v-if="data.view == 1"
                 @click="() => setDepartment(data, 2)"
               >
                 <img src="/img/bianji1.png" />
-              </span>
+              </span> -->
               <!-- <el-button
                 v-if="data.into == 1"
                 type="text"
@@ -338,7 +338,6 @@
                 clearable
                 v-model="ruleForm.domain"
                 :options="choose"
-                :props="{ checkStrictly: true }"
                 @change="handleChange"
               ></el-cascader>
             </el-form-item>
@@ -743,8 +742,8 @@ export default {
       },
       ruleForm: {
         name: "", //姓名
-        radio: "", //性别
-        marriages: "", //婚姻状况
+        radio: "1", //性别
+        marriages: "1", //婚姻状况
         value1: "", //出生日期
         phones: "", //手机号码
         national: "", //民族
@@ -1777,6 +1776,7 @@ export default {
     //查看详情
     defcustom(data) {
       // console.log(data);
+      // if()
       this.view = data.id;
       console.log(this.view);
       this.loadFlag1 = true;
@@ -1845,15 +1845,15 @@ export default {
             value: item.id,
             label: item.title
           };
-          tosit[index].children = [];
-          if (item.children) {
-            item.children.forEach((item1, index1) => {
-              tosit[index].children[index1] = {
-                value: item1.id,
-                label: item1.title
-              };
-            });
-          }
+          // tosit[index].children = [];
+          // if (item.children) {
+          //   item.children.forEach((item1, index1) => {
+          //     tosit[index].children[index1] = {
+          //       value: item1.id,
+          //       label: item1.title
+          //     };
+          //   });
+          // }
         });
         // console.log(tosit);
         this.choose = tosit;
@@ -1880,30 +1880,30 @@ export default {
           //   id: 123,
           //   label: "新增"
           // });
-          auto[index].children = [];
-          auto[index].children.push({
-            id: 0,
-            label: "+新增",
-            into: 0,
-            view: 3
-          });
-          if (item.children) {
-            item.children.forEach((item1, index1) => {
-              auto[index].children[index1] = {
-                id: item1.id,
-                label: item1.title,
-                into: item1.level,
-                view: 1,
-                tment: 1
-              };
-            });
-            auto[index].children.push({
-              id: 0,
-              label: "+新增",
-              into: 0,
-              view: 3
-            });
-          }
+          // auto[index].children = [];
+          // auto[index].children.push({
+          //   id: 0,
+          //   label: "+新增",
+          //   into: 0,
+          //   view: 3
+          // });
+          // if (item.children) {
+          //   item.children.forEach((item1, index1) => {
+          //     auto[index].children[index1] = {
+          //       id: item1.id,
+          //       label: item1.title,
+          //       into: item1.level,
+          //       view: 1,
+          //       tment: 1
+          //     };
+          //   });
+          //   auto[index].children.push({
+          //     id: 0,
+          //     label: "+新增",
+          //     into: 0,
+          //     view: 3
+          //   });
+          // }
         });
 
         this.data = auto;
