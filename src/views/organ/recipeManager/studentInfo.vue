@@ -2149,7 +2149,7 @@
  .studentInfo .el-form--inline .el-form-item__content{
     flex-grow:2 !important;
   }
- .studentInfo .el-select,.el-input-number, .studentInfo .el-date-editor{
+ .studentInfo .el-select, .studentInfo .el-input-number, .studentInfo .el-date-editor{
   width: 100%!important;
 }
  .r{
