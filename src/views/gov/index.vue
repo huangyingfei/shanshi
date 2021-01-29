@@ -4,7 +4,41 @@
       <div>
         <el-row>
           <el-col :span="24">
-            <div class="die-healthyt-box">
+            <el-form :inline="true" class="demo-form-inline">
+              <el-form-item label="区域选择">
+                <el-cascader
+                  :options="cascaderOptions"
+                  :props="{ label: 'name', value: 'id' }"
+                  :show-all-levels="false"
+                  clearable
+                  v-model="areaId"
+                ></el-cascader>
+              </el-form-item>
+              <el-form-item label="机构选择">
+                <el-select
+                  v-model="govForm.tenantId"
+                  filterable
+                  clearable
+                  placeholder="请输入关键词"
+                  @change="beforeGetGoverRecipeTotal"
+                >
+                  <el-option
+                    v-for="item in tenantIdOptions"
+                    :key="item.tenantId"
+                    :label="item.tenantName"
+                    :value="item.tenantId"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item>
+                <week dateLabel="时间" @weekChange="weekChange" />
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="govInit">查询</el-button>
+              </el-form-item>
+            </el-form>
+            <!-- <div class="die-healthyt-box">
               <label>区域选择</label>
               <el-cascader
                 :options="cascaderOptions"
@@ -37,7 +71,7 @@
             </div>
             <div class="die-healthyt-box">
               <el-button type="primary" @click="govInit">查询</el-button>
-            </div>
+            </div> -->
           </el-col>
         </el-row>
       </div>

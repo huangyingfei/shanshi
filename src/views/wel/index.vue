@@ -44,4 +44,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.wel {
+  width: 100% !important;
+}
 </style>
