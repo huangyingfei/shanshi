@@ -10795,8 +10795,8 @@
   font-size: 13px;
 }
 .el-input--small .el-input__inner {
-  height: 40px;
-  line-height: 40px;
+  height: 32px;
+  line-height: 32px;
 }
 .el-input--small .el-input__icon {
   line-height: 32px;
