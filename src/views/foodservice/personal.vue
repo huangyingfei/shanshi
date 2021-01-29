@@ -1289,8 +1289,9 @@ export default {
           isUse: 0
         })
         .then(res => {
-          this.obtains();
-          console.log(res);
+          // this.obtains();
+          // console.log(res);
+          data.isUse = 0;
           this.$message({
             message: "设置成功",
             type: "success"
@@ -1310,8 +1311,9 @@ export default {
           isUse: 1
         })
         .then(res => {
-          this.obtains();
-          console.log(res);
+          // this.obtains();
+          // console.log(res);
+          data.isUse = 1;
           this.$message({
             message: "设置成功",
             type: "success"
@@ -1331,8 +1333,9 @@ export default {
           isPub: 1
         })
         .then(res => {
-          this.obtains();
-          console.log(res);
+          // this.obtains();
+          // console.log(res);
+          data.isPub = 1;
           this.$message({
             message: "设置成功",
             type: "success"
@@ -1351,8 +1354,9 @@ export default {
           isPub: 0
         })
         .then(res => {
-          this.obtains();
-          console.log(res);
+          // this.obtains();
+          // console.log(res);
+          data.isPub = 0;
           this.$message({
             message: "设置成功",
             type: "success"
