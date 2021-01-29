@@ -78,7 +78,7 @@ export default {
           type: "success",
         });
       });
-    }, 1000),
+    }, 2000),
 
     //每页条数值改变
     handleSizeChange(val) {

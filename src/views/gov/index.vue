@@ -185,7 +185,7 @@
           <el-col :span="8">
             <el-tabs v-model="activeName">
               <el-tab-pane label="食谱综合评分排行榜" name="first">
-                <div>
+                <!-- <div>
                   <el-switch
                     style="display: block"
                     v-model="recipeFlag"
@@ -196,6 +196,27 @@
                     @change="beforeGetGoverRecipeTotal"
                   >
                   </el-switch>
+                </div> -->
+                <div>
+                  <el-row style="text-align: center">
+                    <el-col :span="16"> </el-col>
+                    <el-col :span="8">
+                      <el-button
+                        type="text"
+                        style="padding: 0px"
+                        @click="recipeSortClick"
+                      >
+                        <i
+                          class="el-icon-sort-down el-icon--right"
+                          :class="{
+                            'el-icon-sort-down': isRecipe,
+                            'el-icon-sort-up': !isRecipe,
+                          }"
+                        ></i>
+                        排序
+                      </el-button>
+                    </el-col>
+                  </el-row>
                 </div>
                 <div style="width: 100%; height: 1488px; overflow: hidden">
                   <infinite-scroll
@@ -222,18 +243,27 @@
                 <keep-alive>
                   <div>
                     <div>
-                      <el-switch
-                        style="display: block"
-                        v-model="dishFlag"
-                        active-color="#13ce66"
-                        inactive-color="#409EFF"
-                        active-text="升序"
-                        inactive-text="降序"
-                        @change="beforeGetGoverDishTotal"
-                      >
-                      </el-switch>
+                      <el-row style="text-align: center">
+                        <el-col :span="16"> </el-col>
+                        <el-col :span="8">
+                          <el-button
+                            type="text"
+                            style="padding: 0px"
+                            @click="dishSortClick"
+                          >
+                            <i
+                              class="el-icon-sort-down el-icon--right"
+                              :class="{
+                                'el-icon-sort-down': isDish,
+                                'el-icon-sort-up': !isDish,
+                              }"
+                            ></i>
+                            排序
+                          </el-button>
+                        </el-col>
+                      </el-row>
                     </div>
-                    <div style="height: 1488px">
+                    <div style="height: 1488px; overflow: hidden">
                       <infinite-scroll
                         @scrollUp="getGoverDishTotal"
                         :liArray="goverDishTotal.liData"
@@ -298,6 +328,8 @@ export default {
 
   data() {
     return {
+      isDish: true,
+      isRecipe: true,
       activeName: "first",
       tenantIdOptions: [],
       areaId: [],
@@ -429,6 +461,14 @@ export default {
     this.govInit();
   },
   methods: {
+    recipeSortClick() {
+      this.isRecipe = !this.isRecipe;
+      this.beforeGetGoverRecipeTotal();
+    },
+    dishSortClick() {
+      this.isDish = !this.isDish;
+      this.beforeGetGoverDishTotal();
+    },
     govInit() {
       this.getProvinces();
       this.getAllergyFoodRadar();
@@ -1020,7 +1060,7 @@ export default {
         params: {
           ...this.govForm,
           current: this.goverDishTotal.current,
-          size: 10,
+          size: 20,
           flag: this.dishFlag,
         },
       })
@@ -1028,7 +1068,7 @@ export default {
           res.data.data.records.forEach((element) => {
             this.goverDishTotal.liData.push(element);
           });
-          if (res.data.data.records.length < 10) {
+          if (res.data.data.records.length < 20) {
             this.goverDishTotal.finished = true;
           }
           this.goverDishTotal.current++;
@@ -1059,11 +1099,11 @@ export default {
         params: {
           ...this.govForm,
           current: this.goverRecipeTotal.current,
-          size: 10,
+          size: 20,
           flag: this.recipeFlag,
         },
       }).then((res) => {
-        if (res.data.data.records.length < 10) {
+        if (res.data.data.records.length < 20) {
           this.goverRecipeTotal.finished = true;
         }
         this.goverRecipeTotal.current++;
@@ -1129,7 +1169,6 @@ label {
   border-radius: 50%;
 }
 h4 {
-  text-align: center;
 }
 .item {
   height: 130px;
@@ -1168,5 +1207,15 @@ h4 {
   font-weight: bold;
   font-size: 14px;
   color: #303133;
+}
+.basic-container {
+  width: 100%;
+}
+.el-icon-ascending {
+  width: 32px;
+  height: 32px;
+  line-height: 1;
+  display: inline-block;
+  background-image: url("/svg/ascending.svg");
 }
 </style>

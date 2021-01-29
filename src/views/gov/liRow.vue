@@ -1,6 +1,6 @@
 <template>
   <div class="demo-image__preview">
-    <el-row>
+    <el-row style="text-align: center">
       <el-col :span="8">
         <el-image style="width: 100px; height: 100px" :src="dishPic">
           <div

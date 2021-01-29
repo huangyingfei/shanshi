@@ -894,12 +894,13 @@ export default {
           isUse: 0
         })
         .then(res => {
-          console.log(res);
+          // console.log(res);
+          data.isUse = 0;
           this.$message({
             message: "设置成功",
             type: "success"
           });
-          this.treeDrawing();
+          // this.treeDrawing();
         })
         .catch(() => {
           this.$message.error("设置失败");
@@ -915,12 +916,13 @@ export default {
           isUse: 1
         })
         .then(res => {
-          console.log(res);
+          // console.log(res);
           this.$message({
             message: "设置成功",
             type: "success"
           });
-          this.treeDrawing();
+          // this.treeDrawing();
+          data.isUse = 1;
         })
         .catch(() => {
           this.$message.error("设置失败");

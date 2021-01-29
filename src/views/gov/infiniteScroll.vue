@@ -24,7 +24,9 @@ export default {
     },
   },
   data() {
-    return {};
+    return {
+      timer: null,
+    };
   },
   computed: {},
   mounted() {
@@ -36,16 +38,21 @@ export default {
       // console.log(this.$refs.boxScroll.scrollHeight);
       // console.log(this.$refs.boxScroll.scrollTop);
       // console.log(this.$refs.boxScroll.clientHeight);
-      this.ScrollUp();
-    },
-    ScrollUp() {
-      this.speed = 50;
       var boxScrollHeight = this.$refs.boxScroll.scrollHeight;
       var boxScrollTop = this.$refs.boxScroll.scrollTop;
       var boxClientHeight = this.$refs.boxScroll.clientHeight;
-      if (boxScrollHeight - (boxScrollTop + boxClientHeight) == 0) {
-        console.log("scrollUp");
-        this.$emit("scrollUp", this.liType);
+      if (boxScrollHeight - (boxScrollTop + boxClientHeight) < 500) {
+        this.ScrollUp();
+      }
+    },
+    ScrollUp: function () {
+      if (!this.timer) {
+        console.log("timer");
+        this.timer = setTimeout(() => {
+          console.log("scrollUp");
+          this.$emit("scrollUp", this.liType);
+          this.timer = null;
+        }, 1000);
       }
     },
   },
@@ -59,5 +66,6 @@ export default {
 ul {
   list-style: none;
   padding-left: 2px;
+  margin-top: 0px;
 }
 </style>
