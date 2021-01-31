@@ -1149,14 +1149,18 @@ export default {
 }
 .rights {
   width: 70%;
-  height: 100%;
+  height: 600px;
+     overflow-y: auto;
+      overflow-x: hidden;
   /* background-color: red; */
   margin-left: 10px;
 }
 .monly {
   width: 350px;
-  height: 100%;
+  height: 400px;
+   overflow-y: auto;
   margin-top: 10px;
+      margin-bottom: 60px;
 }
 .import {
   width: 100%;

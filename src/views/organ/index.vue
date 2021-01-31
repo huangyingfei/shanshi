@@ -25,6 +25,7 @@
         > -->
       </div>
     </div>
+  
     <div class="total">
       <div class="mechanism">
         <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
@@ -34,35 +35,35 @@
         </div>
       </div>
       <div class="mechanism">
-        <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
+   
         <div class="nism1">
           <div class="ingredients">男生人数</div>
           <div class="food1">{{ this.newhead.boys }}</div>
         </div>
       </div>
       <div class="mechanism">
-        <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
+
         <div class="nism1">
           <div class="ingredients">女生人数</div>
           <div class="food1">{{ this.newhead.girls }}</div>
         </div>
       </div>
       <div class="mechanism">
-        <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
+  
         <div class="nism1">
           <div class="ingredients">食材总量</div>
           <div class="food1">{{ this.newhead.food }}</div>
         </div>
       </div>
       <div class="mechanism">
-        <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
+
         <div class="nism1">
           <div class="ingredients">菜品总量</div>
           <div class="food1">{{ this.newhead.dish }}</div>
         </div>
       </div>
       <div class="mechanism">
-        <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
+ 
         <div class="nism1">
           <div class="ingredients">食谱总量</div>
           <div class="food1">{{ this.newhead.recipe }}</div>
@@ -72,11 +73,16 @@
     <!-- 排行榜 -->
     <div class="dishes">
       <!-- 菜谱排行榜 -->
-      <div class="variety">
+      <div class="variety" v-if="this.empty==1">
+          <div class="pictures">
+            <img src="../../../public/img/shuj.png" alt="">
+          </div>
+      </div>
+      <div class="variety" v-else>
         <h4 class="welcome">本周最受欢迎菜品</h4>
         <div class="menu1" v-for="(item, i) in double" :key="i">
           <div class="menuimg">
-            <!-- <img :src="item.dishPic" alt /> -->
+        
             <el-image
               style="width: 80px; height: 80px"
               :src="item.dishPic"
@@ -87,7 +93,7 @@
                 class="image-slot"
                 style="width: 80px; height: 80px; text-align: center;  line-height: 80px;"
               >
-                <!-- <i class="el-icon-picture-outline"></i> -->
+             
                 <div class="el-image__error">
                   暂无图片
                 </div>
@@ -167,7 +173,8 @@ export default {
       preRanking: "", //显示隐藏
       storage: "", //下拉框显示隐藏
       activeNames: ["1", "2", "3", "5"],
-      logActiveNames: ["17"]
+      logActiveNames: ["17"],
+      empty:"",
     };
   },
   computed: {
@@ -414,7 +421,12 @@ export default {
       this.$axios.get(`api/blade-food/food/dishTotal` + Dishes).then(res => {
         // console.log(res);
         this.double = res.data.data.records;
-        // console.log(this.double);
+        console.log(this.double);
+        if(this.double.length==0){
+            this.empty=1;     
+        }else{
+            this.empty=2;
+        }
       });
     },
     //本周食谱健康指数排行榜
@@ -527,6 +539,17 @@ export default {
   margin-bottom: 40px;
   overflow-y: auto;
   overflow-x: hidden;
+}
+.pictures{
+  width: 200px;
+  height: 200px;
+  // background-color: red;
+  margin: auto;
+  margin-top: 150px;
+  img{
+    width: 200px;
+    height: 200px;
+  }
 }
 .recipes {
   width: 50%;
