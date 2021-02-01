@@ -9,24 +9,28 @@
         placeholder="请输入内容"
       ></el-input>
       <span style="margin-right: 10px;margin-left: 15px;">审核状态:</span>
-      <el-select v-model="wupload.block" placeholder="请选择">
+      <el-select size="small" v-model="wupload.block" placeholder="请选择">
         <el-option
-          size="mini"
           v-for="item in dirname"
           :key="item.value"
           :label="item.label"
           :value="item.value"
         ></el-option>
       </el-select>
-      <span style="margin-right: 10px;margin-left: 15px;">提交人:</span>
-      <el-input
-        size="small"
-        v-model="wupload.submit"
-        placeholder="请输入内容"
-        style="width:200px;    height: 30px;"
-      ></el-input>
+
       <span style="margin-right: 10px;margin-left: 25px;">选择日期:</span>
       <el-date-picker
+        size="small"
+        v-model="wupload.getDate"
+        format="yyyy 年 MM 月 dd 日"
+        value-format="yyyy-MM-dd"
+        type="daterange"
+        range-separator="至"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期"
+      >
+      </el-date-picker>
+      <!-- <el-date-picker
         size="small"
         v-model="wupload.getDate"
         type="date"
@@ -34,9 +38,18 @@
         style="width:200px;"
         format="yyyy 年 MM 月 dd 日"
         value-format="yyyy-MM-dd"
-      ></el-date-picker>
+      ></el-date-picker> -->
     </div>
     <div class="rounded">
+      <span style="margin-right: 20px;margin-left: 25px;  font-size: 13px;"
+        >提交人:</span
+      >
+      <el-input
+        size="small"
+        v-model="wupload.submit"
+        placeholder="请输入内容"
+        style="width:200px;    height: 30px;"
+      ></el-input>
       <el-button
         @click="searchStr"
         size="small"
@@ -222,6 +235,7 @@ export default {
         }
       ],
       timezone: "",
+      timezone1: "",
       recordList: "",
       getHealth: []
     };
@@ -266,9 +280,11 @@ export default {
     searchStr() {
       // this.dateTime = true;
       if (this.wupload.getDate) {
-        this.timezone = this.wupload.getDate;
+        this.timezone = this.wupload.getDate[0];
+        this.timezone1 = this.wupload.getDate[1];
       } else {
         this.timezone = "";
+        this.timezone1 = "";
       }
       this.getforms();
     },
@@ -278,7 +294,7 @@ export default {
       this.loadFlag = true;
       this.$axios
         .get(
-          `api/blade-food/recipe/openRecipeList?size=${this.m_page.size}&current=${this.m_page.number}&recipeName=${this.wupload.input}&status=${this.wupload.block}&orgName=${this.wupload.submit}$createTimeStr=${this.timezone}`,
+          `api/blade-food/recipe/openRecipeList?size=${this.m_page.size}&current=${this.m_page.number}&recipeName=${this.wupload.input}&status=${this.wupload.block}&orgName=${this.wupload.submit}&createTimeStr=${this.timezone}&createTimeStrEnd=${this.timezone1}`,
           {}
         )
         .then(res => {

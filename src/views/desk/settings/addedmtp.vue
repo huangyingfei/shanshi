@@ -44,35 +44,35 @@
           v-for="(item, i) in newProtein.nutritionVos"
           :key="i"
         >
-          <div class="accto" v-if="item.sexNum == 2">
-            <div class="titles">人群</div>
-            <div class="glyph">
-              <div class="startup">男性</div>
-              <div class="chart">上限</div>
-              <div class="Item">下限</div>
-            </div>
-            <div class="unset">
-              <div class="startup">女性</div>
-              <div class="chart">上限</div>
-              <div class="Item">下限</div>
-            </div>
-            <div class="rotate">
-              <div class="chart">上限系数</div>
-              <div class="Item">下限系数</div>
-            </div>
-          </div>
-          <div class="actor" v-if="item.sexNum == 1">
-            <div class="effects">人群</div>
-            <div class="kendo">
-              <div class="chart">上限</div>
-              <div class="Item">下限</div>
-            </div>
-            <div class="directory">
-              <div class="chart">上限系数</div>
-              <div class="Item">下限系数</div>
-            </div>
-          </div>
           <el-tabs v-model="activeName2" type="card">
+            <div class="accto" v-if="item.sexNum == 2">
+              <div class="titles">人群</div>
+              <div class="glyph">
+                <div class="startup">男性</div>
+                <div class="chart">上限</div>
+                <div class="Item">下限</div>
+              </div>
+              <div class="unset">
+                <div class="startup">女性</div>
+                <div class="chart">上限</div>
+                <div class="Item">下限</div>
+              </div>
+              <div class="rotate">
+                <div class="chart">上限系数</div>
+                <div class="Item">下限系数</div>
+              </div>
+            </div>
+            <div class="actor" v-if="item.sexNum == 1">
+              <div class="effects">人群</div>
+              <div class="kendo">
+                <div class="chart">上限</div>
+                <div class="Item">下限</div>
+              </div>
+              <div class="directory">
+                <div class="chart">上限系数</div>
+                <div class="Item">下限系数</div>
+              </div>
+            </div>
             <el-tab-pane
               :name="button.name"
               :label="button.name"
@@ -103,7 +103,7 @@
                       style=" margin-left: 20px; width: 140px;"
                     ></el-input>
                     <el-input
-                      v-model="nvo.resultMin"
+                      v-model="nvo.womanMin"
                       placeholder="请输入内容"
                       style=" margin-left: 20px; width: 140px;"
                     ></el-input>
@@ -333,7 +333,8 @@ export default {
               nutritionVos: this.newProtein.nutritionVos
             })
             .then(res => {
-              console.log(res);
+              // console.log(res);
+              this.$router.replace("./nutrient");
               this.$message({
                 message: "編輯成功",
                 type: "success"
@@ -362,7 +363,8 @@ export default {
               nutritionVos: this.newProtein.nutritionVos
             })
             .then(res => {
-              console.log(res);
+              // console.log(res);
+              this.$router.replace("./nutrient");
               this.$message({
                 message: "保存成功",
                 type: "success"
@@ -628,6 +630,8 @@ export default {
   margin-left: 50px;
   color: #b4bbc5;
   font-size: 14px;
+  /* position: relative;
+  top: 82px; */
 }
 .effects {
   width: 80px;

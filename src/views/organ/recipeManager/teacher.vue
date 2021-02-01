@@ -1458,7 +1458,8 @@ export default {
             .post(`api/blade-food/teacher/remove` + addid, {})
             .then(res => {
               // console.log(res);
-              this.defcustom();
+              // this.defcustom();
+              this.searchType();
               this.$message.success("删除成功");
             });
         })
@@ -1667,7 +1668,7 @@ export default {
             .get(`api/blade-food/teacherdept/remove` + addid, {})
             .then(res => {
               // console.log(res);
-              this.getStorage();
+
               this.hobbiton();
               this.$message.success("删除成功");
             });
@@ -1748,6 +1749,7 @@ export default {
       // console.log(data);
       // console.log(e.parent.data.id);
       this.view = data.id;
+      console.log(this.view);
       this.Superior = e.parent.data.id; //父级ID
       // console.log(this.Superior);
 

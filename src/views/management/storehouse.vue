@@ -23,8 +23,8 @@
             <!-- 全部(326) -->
             <el-button
               size="mini"
-              :type="2 == display ? 'primary' : 'default'"
-              @click="buttonClick(2)"
+              :type="1 == display ? 'primary' : 'default'"
+              @click="buttonClick(1)"
               >全部</el-button
             >
           </div>
@@ -32,10 +32,16 @@
           <div class="export1">
             <el-button
               size="mini"
-              :type="1 == display ? 'primary' : 'default'"
+              :type="0 == display ? 'primary' : 'default'"
               @click="buttonClick(0)"
               >分享平台</el-button
             >
+            <!-- <el-button
+              size="mini"
+              :type="1 == display ? 'primary' : 'default'"
+              @click="buttonClick(0)"
+              >分享平台</el-button
+            > -->
           </div>
         </div>
         <!-- 全国查找 -->
@@ -418,7 +424,7 @@ export default {
     const data = [];
     return {
       filterText: "",
-      display: "2",
+      display: "1",
       checked: true,
       loadFlag: false, //加载flag
       loadFlag1: false, //公共食材加载
@@ -1150,17 +1156,17 @@ export default {
 .rights {
   width: 70%;
   height: 600px;
-     overflow-y: auto;
-      overflow-x: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   /* background-color: red; */
   margin-left: 10px;
 }
 .monly {
   width: 350px;
   height: 400px;
-   overflow-y: auto;
+  overflow-y: auto;
   margin-top: 10px;
-      margin-bottom: 60px;
+  margin-bottom: 60px;
 }
 .import {
   width: 100%;
