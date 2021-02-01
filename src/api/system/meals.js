@@ -1,16 +1,19 @@
 import request from '@/router/axios';
 
 
-export const mealList = (searchType,isPub,recipeName,isUse,recipeCategory) => {
+export const mealList = (searchType,isPub,recipeName,isUse,recipeCategory,current,size) => {
   return request({
     url: '/api/blade-food/recipe/list',
     method: 'get',
     params: {
+      current,
+      size,
       searchType,
       isPub,
       recipeName,
       isUse,
-      recipeCategory
+      recipeCategory,
+
     }
   })
 }

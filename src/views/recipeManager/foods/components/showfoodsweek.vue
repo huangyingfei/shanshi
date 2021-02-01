@@ -4,7 +4,7 @@
     <div class="title" >{{title}}</div>
     <!-- table-week start   -->
     <el-table class="table-week" style="width: 100%" :data="datas" border fit>
-      <el-table-column align="center" width="80" fixed class-name="col-date3 colNoneBorder" >
+      <el-table-column align="center" width="80" fixed class-name="col-date3 colNoneBorder1" >
         <!--<template slot="header"> 菜品/食物 </template>-->
         <template slot-scope="scope">
           <div v-bind:data="scope.row.name" class="foodType">{{ scope.row.name }}</div>
@@ -259,12 +259,12 @@
       resizeExpendHeight() {
         setTimeout(() => {
           //真实高度列表
-          var foodTypeList = document.querySelectorAll(".colNoneBorder.is-hidden .foodType");
+          var foodTypeList = document.querySelectorAll(".colNoneBorder1.is-hidden .foodType");
           for (var i = 0; i < foodTypeList.length; i++) {
             var pnode = foodTypeList[i].parentNode.parentNode.parentNode;
             if(pnode.className.indexOf("is-leaf")<0)
             {
-              var nodeSelect='.colNoneBorder [data="'+foodTypeList[i].getAttribute("data")+'"]';
+              var nodeSelect='.colNoneBorder1 [data="'+foodTypeList[i].getAttribute("data")+'"]';
               var shownodelist=document.querySelectorAll(nodeSelect);
               for(var j=0;j<shownodelist.length;j++)
               {
@@ -355,7 +355,12 @@
       // 合并单元格
       onTableSpanMethod({ row, column, rowIndex, columnIndex }) {
         if (columnIndex === 2) {
-          return [row.spans, 1];
+          //
+          if(row.spans){
+            return [row.spans, 1];
+          }else{
+            return [1,1]
+          }
         }
       },
 

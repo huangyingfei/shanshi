@@ -332,7 +332,7 @@ export default {
     //编辑
     seecol(row) {
       this.$router.push({
-        path: "./meals",
+        path: "/editMeals",
         query: { userid: row.id }
       });
     },

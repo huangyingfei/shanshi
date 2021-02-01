@@ -10,7 +10,8 @@ export default [
         path: "index",
         name: "首页",
         meta: {
-          i18n: "dashboard"
+          i18n: "dashboard",
+
         },
         component: () =>
           import(/* webpackChunkName: "views" */ "@/views/wel/index")
@@ -163,6 +164,19 @@ export default [
         name: "学生信息",
         component: () =>
           import(/* webpackChunkName: "views" */  "@/views/organ/recipeManager/addStudent")
+      }
+    ]
+  },
+  {
+    path: "/editMeals",
+    component: Layout,
+    redirect: "/editMeals/editMeals",
+    children: [
+      {
+        path: "editMeals",
+        name: "编辑智能配餐",
+        component: () =>
+          import(/* webpackChunkName: "views" */  "@/views/message/meals")
       }
     ]
   },

@@ -1367,6 +1367,7 @@ export default {
       let days=0;
       let foods={}
       let mealTypes=[]
+      debugger
       if(this.startAge) {
         foods["startAge"] = this.startAge;
         foods["endAge"] = this.endAge;

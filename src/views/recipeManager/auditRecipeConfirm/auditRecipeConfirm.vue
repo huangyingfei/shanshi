@@ -281,7 +281,7 @@
 
               <ul class="foodWeekListHis">
                 <li  v-for="f in mealListLeft" :key="f.id"  style="font-size: 14px"   @mouseover="ShowFood($event,f)"  @mouseout="HidenFoodTips($event)">
-                  <span >{{f.recipeName}}</span> <img style="width: 20px" @click="mealLoad(f.id,f.recipeName)" src="/img/arrow.png" alt />
+                  <span >{{f.recipeName}}</span> <img style="width: 20px" @click="mealLoad(f,f.recipeName)" src="/img/arrow.png" alt />
                 </li>
               </ul>
             </el-tab-pane>
@@ -314,7 +314,7 @@
 
               <ul class="foodWeekListHis">
                 <li  v-for="f in peopleMealListLeft" :key="f.id"  style="font-size: 14px" >
-                  <span  @mouseover="ShowFood($event,f)"  @mouseout="HidenFoodTips($event)">{{f.recipeName}}</span>  <img style="width: 20px" @click="mealLoad(f.id,f.recipeName)" src="/img/arrow.png" alt />
+                  <span  @mouseover="ShowFood($event,f)"  @mouseout="HidenFoodTips($event)">{{f.recipeName}}</span>  <img style="width: 20px" @click="mealLoad(f,f.recipeName)" src="/img/arrow.png" alt />
                 </li>
               </ul>
             </el-tab-pane>
@@ -1260,7 +1260,7 @@
       }
     }
     mealList(1,undefined,this.recipeNameSharePub,isUse,1).then(res=>{
-      this.mealListLeft=res.data.data;
+      this.mealListLeft=res.data.data.records;
     })
     },
     recipeNameShareSearchPri(recipeSelectPri,isPub){
@@ -1276,10 +1276,10 @@
         }
       }
         mealList(2,isPub,this.recipeNameSharePri,undefined,1).then(res=>{
-          this.peopleMealListLeft=res.data.data;
+          this.peopleMealListLeft=res.data.data.records;
         })
     },
-    mealLoad(id,name){
+    mealLoad(f,name){
      let that=this;
      if(this.WeekInfo.weekValue){
        this.$confirm("请确定是否导入食谱："+name+"?", "提示", {
@@ -1287,7 +1287,7 @@
          cancelButtonText: "取消",
          type: "warning"
        }).then(()=>{
-         that.inserMeal(id,that)
+         that.inserMeal(f,that)
        })
      }else{
        this.$message({
@@ -1296,22 +1296,19 @@
        });
      }
    },
-    inserMeal(id,that){
-      detail(id).then(res=>{
-        if(res.data.success){
-          let data=res.data.data;
-          that.$set(that.WeekInfo,"foodCatalog",JSON.parse(res.data.data.mealTypestrs))
-          that.WeekInfo.weekType=res.data.data.recipeDay
-          that.FixWeek();
-          that.ShowWeekSelect();
-          that.SelectWeek(that.WeekInfo.weekValue)
-          that.$refs.refweekSelect.hidePicker();
-          that.AppendFoodType();
-          let recipeCycles=res.data.data.recipeCycles;
-          setTimeout(function () {
-            that.insertDishesData("datas",recipeCycles,that);
-          }, 1000);
-        }})
+    inserMeal(f, that) {
+      let data = f.recipeVO;
+      that.$set(that.WeekInfo, "foodCatalog", JSON.parse(data.mealTypestrs))
+      that.WeekInfo.weekType = data.recipeDay
+      that.FixWeek();
+      that.ShowWeekSelect();
+      that.SelectWeek(that.WeekInfo.weekValue)
+      that.$refs.refweekSelect.hidePicker();
+      that.AppendFoodType();
+      let recipeCycles = data.recipeCycles;
+      setTimeout(function () {
+        that.insertDishesData("datas", recipeCycles, that);
+      }, 1000);
     },
     insertDishesData(datas,recipeCycles,that){
       that[datas].forEach(_=>{
@@ -1462,11 +1459,11 @@
     initMealData(){
       //公开
       mealList(1,undefined,undefined,undefined,1).then(res=>{
-        this.mealListLeft=res.data.data;
+        this.mealListLeft=res.data.data.records;
       })
 
       mealList(2,undefined,undefined,undefined,1).then(res=>{
-        this.peopleMealListLeft=res.data.data;
+        this.peopleMealListLeft=res.data.data.records;
       })
     },
     dishShareSearchPub(dishSelectPub,isUse){
@@ -1605,93 +1602,78 @@
       this.ShowFoodTips(ev, f)
     },500),
     //食谱跟随显示
-    ShowFoodTips(ev,f){
-      var that=this;
-      this.curentHoverFood=f;
-      var pose= this.GetAbsoluteLocation(ev.srcElement);
-      pose.absoluteLeft+=ev.srcElement.offsetWidth+30;
-      detail(f.id).then(res=> {
-        if (res.data.success) {
-          that.title=res.data.data.recipeName;
-          that.showDatas=[];
-          let day=res.data.data.recipeDay;
-          this.day=day;
-          let startTime=new Date(res.data.data.startTime);
-          var year = startTime.getFullYear();
-          var mouth = startTime.getMonth() + 1;
-          var begin_day = startTime.getDate();
-          that.showWeekList=[];
-          let mealsType=[];
-          // res.data.data.recipeCycles.forEach(_=>{
-          //   mealsType.push(_.mealsType);
-          // })
-          // let arr= Array.from(new Set(mealsType));
-          // let foodCatalog=[]
-          // for(let i=0;i<arr.length;i++){
-          //   foodCatalog.push(that.getmealTypeDataValue(arr[i]))
-          // }
-          // that.WeekInfo.showFoodCatalog=foodCatalog;
-          that.$set(that.WeekInfo, "showFoodCatalog", JSON.parse(res.data.data.mealTypestrs))
-          for(let i=1;i<day+1;i++){
-            that.showWeekList.push({
-              name:"week"+i,
-              lable:"周"+ that.GetChinesDay(i),
-              date:mouth+"月"+begin_day+"日",
-            })
-            startTime=new Date(startTime.getTime()+1000*60*60*24)
-            var year = startTime.getFullYear();
-            var mouth = startTime.getMonth() + 1;
-            var begin_day = startTime.getDate();
+    ShowFoodTips(ev, f) {
+      var that = this;
+      this.curentHoverFood = f;
+      var pose = this.GetAbsoluteLocation(ev.srcElement);
+      pose.absoluteLeft += ev.srcElement.offsetWidth + 30;
+      that.title = f.recipeVO.recipeName;
+      that.showDatas = [];
+      let day = f.recipeVO.recipeDay;
+      this.day = day;
+      let startTime = new Date(f.recipeVO.startTime);
+      var year = startTime.getFullYear();
+      var mouth = startTime.getMonth() + 1;
+      var begin_day = startTime.getDate();
+      that.showWeekList = [];
+      that.$set(that.WeekInfo, "showFoodCatalog", JSON.parse(f.recipeVO.mealTypestrs))
+      for (let i = 1; i < day + 1; i++) {
+        that.showWeekList.push({
+          name: "week" + i,
+          lable: "周" + that.GetChinesDay(i),
+          date: mouth + "月" + begin_day + "日",
+        })
+        startTime = new Date(startTime.getTime() + 1000 * 60 * 60 * 24)
+        var year = startTime.getFullYear();
+        var mouth = startTime.getMonth() + 1;
+        var begin_day = startTime.getDate();
+      }
+      var hd = JSON.parse(JSON.stringify(that.showWeekList));
+      let header = []
+      for (let j = 0; j < hd.length; j++) {
+        header.push(hd[j]);
+      }
+      that.showHeaders = header;
+      var date3 = JSON.parse(JSON.stringify(that.WeekInfo.showFoodCatalog));
+      //新增餐点类型
+      for (let i = 0; i < date3.length; i++) {
+        if (!that.hasShowFoodType(date3[i])) {
+          var row = {
+            id: that.guid(),
+            pid: that.id,
+            name: date3[i],
+            weeks: [],
+          };
+          //
+          // 填充周数据
+          for (let j = 0; j < 7; j++) {
+            row.weeks.push({
+              id: that.guid(),
+              week: that.showHeaders[j],
+              name: "week" + (j + 1),
+              image: "",
+              // 填充食谱数据
+              foods: [],
+            });
           }
-          var hd = JSON.parse(JSON.stringify(that.showWeekList));
-          let header=[]
-          for (let j = 0; j < hd.length; j++) {
-            header.push(hd[j]);
-          }
-          that.showHeaders=header;
-          var date3 = JSON.parse(JSON.stringify(that.WeekInfo.showFoodCatalog));
-          //新增餐点类型
-          for (let i = 0; i < date3.length; i++) {
-            if (!that.hasShowFoodType(date3[i])) {
-              var row = {
-                id: that.guid(),
-                pid: that.id,
-                name: date3[i],
-                weeks: [],
-              };
-              //
-              // 填充周数据
-              for (let j = 0; j < 7; j++) {
-                row.weeks.push({
-                  id: that.guid(),
-                  week: that.showHeaders[j],
-                  name: "week" + (j + 1),
-                  image: "",
-                  // 填充食谱数据
-                  foods: [],
-                });
-              }
-              that.showDatas.push(row);
-            }
-          }
-          let recipeCycles=res.data.data.recipeCycles;
-          that.dishesData("showDatas",recipeCycles,that);
-          that.$refs.layershipu.style.top='300px';
-          that.$refs.layershipu.style.left='300px';
-         //
-          if(that.day==5){
-            that.$refs.layershipu.style.width='682px';
-          }
-          if(that.day==6){
-            that.$refs.layershipu.style.width='802px';
-          }
-          if(that.day==7){
-            that.$refs.layershipu.style.width='922px';
-          }
-          that.$refs.layershipu.style.display="block";
+          that.showDatas.push(row);
         }
-      })
-
+      }
+      let recipeCycles = f.recipeVO.recipeCycles;
+      that.dishesData("showDatas", recipeCycles, that);
+      that.$refs.layershipu.style.top = '300px';
+      that.$refs.layershipu.style.left = '300px';
+      //
+      if (that.day == 5) {
+        that.$refs.layershipu.style.width = '682px';
+      }
+      if (that.day == 6) {
+        that.$refs.layershipu.style.width = '802px';
+      }
+      if (that.day == 7) {
+        that.$refs.layershipu.style.width = '922px';
+      }
+      that.$refs.layershipu.style.display = "block";
     },
     HidenFoodTips(ev)
     {
