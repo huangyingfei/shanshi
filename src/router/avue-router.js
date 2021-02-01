@@ -128,9 +128,9 @@ RouterPlugin.install = function (vue, router, store, i18n) {
           meta = oMenu[propsDefault.meta] || {};
           // meta中 keepalive 的处理
         meta = Object.assign(meta, (function () {
-          return {
-            $keepAlive: true
-          }
+          // return {
+          //   $keepAlive: true
+          // }
           if (meta.keepAlive === true) {
             return {
               $keepAlive: true
