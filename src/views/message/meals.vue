@@ -325,7 +325,7 @@
                   <!--<el-divider></el-divider>-->
                 </div>
 
-                <ul class="foodWeekListHis" @mouseout="HidenFoodTips($event)" ref="boxScroll2">
+                <ul ref="boxScroll2" class="foodWeekListHis" @mouseout="HidenFoodTips($event)" >
                   <li v-for="f in peopleMealListLeft" :key="f.id" @mouseover="ShowFood($event,f)"
                       @mouseout="HidenFoodTips($event)" style="font-size: 14px">
                     <span>{{f.recipeName}}</span> <img style="width: 20px" @click="mealLoad(f,f.recipeName)"
@@ -689,11 +689,6 @@
       nutrition,
       noNumRecipe,
     },
-
-    beforeDestroy(){
-      this.mealListLeft=[];
-      this.peopleMealListLeft=[]
-    },
     mounted() {
       this.$nextTick(() => {
         this.$refs.boxScroll1.addEventListener("scroll", this.getData);
@@ -1009,7 +1004,8 @@
         var boxScrollHeight = this.$refs.boxScroll2.scrollHeight;
         var boxScrollTop = this.$refs.boxScroll2.scrollTop;
         var boxClientHeight = this.$refs.boxScroll2.clientHeight;
-        if (boxScrollHeight - (boxScrollTop + boxClientHeight) < 500) {
+        console.log(boxScrollHeight,boxScrollTop,boxClientHeight,boxScrollHeight - (boxScrollTop + boxClientHeight))
+        if (boxScrollHeight - (boxScrollTop + boxClientHeight) < 10) {
           this.ScrollUp2();
         }
       },
@@ -1017,7 +1013,7 @@
         let that=this;
         if (!this.timer) {
           console.log("timer");
-          this.timer = setTimeout(() => {
+          this.timer1 = setTimeout(() => {
             if(this.recipefinishedPri){
               return;
             }
@@ -1028,7 +1024,6 @@
               if (this.recipeSelectPri == '3') {
                 isPub = '1';
               }
-              debugger
             mealList(2, isPub, this.recipeNameSharePri, undefined, 1,++this.currentPri,this.sizePri).then(res => {
               res.data.data.records.forEach(_=>{
                 that.peopleMealListLeft.push(_);
@@ -1038,17 +1033,16 @@
                 that.recipefinishedPri=true;
               }
             })
-            this.timer = null;
+            this.timer1 = null;
           }, 1000);
         }
       },
       getData() {
-
-        //  console.log("clientHeight",this.$refs.boxScroll.clientHeight);
         var boxScrollHeight = this.$refs.boxScroll1.scrollHeight;
         var boxScrollTop = this.$refs.boxScroll1.scrollTop;
         var boxClientHeight = this.$refs.boxScroll1.clientHeight;
-        if (boxScrollHeight - (boxScrollTop + boxClientHeight) < 500) {
+        console.log(boxScrollHeight,boxScrollTop,boxClientHeight,boxScrollHeight - (boxScrollTop + boxClientHeight))
+        if (boxScrollHeight - (boxScrollTop + boxClientHeight) < 10) {
           this.ScrollUp();
          }
       },
@@ -1061,7 +1055,7 @@
             if(this.recipefinishedPub){
               return;
             }
-            let isUse='';
+            let isUse;
              if (this.recipeSelectPub == '2') {
                 isUse = '1';
              }
@@ -1230,7 +1224,6 @@
         }
         this.currentPri=1;
         mealList(2, isPub, this.recipeNameSharePri, undefined, 1,this.currentPri,this.sizePri).then(res => {
-          debugger
           this.peopleMealListLeft = res.data.data.records;
         })
       },
@@ -1564,7 +1557,6 @@
       },
 
       ShowFood: debounce(function (ev, f) {
-        debugger
         this.ShowFoodTips(ev, f)
       }, 200),
       //食谱跟随显示

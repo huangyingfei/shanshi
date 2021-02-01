@@ -322,7 +322,7 @@
               <div style="margin-top: 5px; margin-bottom: 2px">
                 <!--<el-divider></el-divider>-->
               </div>
-              <ul class="foodWeekListHis">
+              <ul class="foodWeekListHis" ref="boxScroll1">
                 <li
                   v-for="f in mealListLeft"
                   :key="f.id"
@@ -341,6 +341,7 @@
                     alt
                   />
                 </li>
+                <li v-show="recipefinishedPub" style="text-align: center">无更多数据</li>
               </ul>
             </div>
             <div v-if="showFoodList">
@@ -676,6 +677,9 @@ export default {
     noNumRecipe,
   },
   mounted() {
+    this.$nextTick(() => {
+      this.$refs.boxScroll1.addEventListener("scroll", this.getData);
+    })
     this.initData();
     this.dragFunc("df");
   },
@@ -693,6 +697,10 @@ export default {
   data() {
     const data = [];
     return {
+      //加载更多
+      recipefinishedPub:false,
+      currentPub:1,
+      sizePub:10,
       tableData: [],
       jundgeallergy: false, //过敏
       foodRadio: "1",
@@ -992,6 +1000,51 @@ export default {
     // }
   },
   methods: {
+    getData() {
+      var boxScrollHeight = this.$refs.boxScroll1.scrollHeight;
+      var boxScrollTop = this.$refs.boxScroll1.scrollTop;
+      var boxClientHeight = this.$refs.boxScroll1.clientHeight;
+      console.log(boxScrollHeight,boxScrollTop,boxClientHeight,boxScrollHeight - (boxScrollTop + boxClientHeight))
+      if (boxScrollHeight - (boxScrollTop + boxClientHeight) < 10) {
+        this.ScrollUp();
+      }
+    },
+    ScrollUp: function () {
+      let that=this;
+      if (!this.timer) {
+        console.log("timer");
+        this.timer = setTimeout(() => {
+          //  console.log("scrollUp");
+          if(this.recipefinishedPub){
+            return;
+          }
+          let isUse;
+          let isPub;
+          if (this.recipeSelectPub == '2') {
+            isUse = '1';
+          }
+          if (this.recipeSelect == "2") {
+            isPub = "0";
+          }
+          if (this.recipeSelect == "3") {
+            isPub = "1";
+          }
+          if (this.recipeSelect == "4") {
+            isUse = "1";
+          }
+          mealList(1, isPub, this.recipeNameSharePub, isUse, 1,++this.currentPub,this.sizePub).then(res => {
+            res.data.data.records.forEach(_=>{
+              that.mealListLeft.push(_);
+            })
+            if( that.mealListLeft.length==res.data.data.total)
+            {
+              that.recipefinishedPub=true;
+            }
+          })
+          this.timer = null;
+        }, 1000);
+      }
+    },
     filterNodePub(value, data){
       if (!value) return true;
       return data.label.indexOf(value) !== -1;
@@ -1114,7 +1167,8 @@ export default {
           isUse = "1";
         }
       }
-      mealList(0, isPub, this.recipeNameSharePub, isUse,1).then((res) => {
+      this.currentPub=1;
+      mealList(1, isPub, this.recipeNameSharePub, isUse,1,this.currentPub,this.sizePub).then((res) => {
         this.mealListLeft = res.data.data.records;
       });
     },
@@ -1320,13 +1374,13 @@ export default {
     },
     initMealData() {
       //公开
-      mealList(1, undefined, undefined, undefined, 1).then((res) => {
+      mealList(1, undefined, undefined, undefined, 1,this.currentPub,this.sizePub).then((res) => {
         this.mealListLeft = res.data.data.records;
       });
 
-      mealList(2, undefined, undefined, undefined, 1).then((res) => {
-        this.peopleMealListLeft = res.data.data.records;
-      });
+      // mealList(2, undefined, undefined, undefined, 1).then((res) => {
+      //   this.peopleMealListLeft = res.data.data.records;
+      // });
     },
     dishShareSearchPub(dishSelect, isPrivate, typeTemp) {
       //公共

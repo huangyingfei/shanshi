@@ -262,12 +262,13 @@
                   <!--<el-divider></el-divider>-->
                 </div>
 
-                <ul class="foodWeekListHis">
+                <ul  ref="boxScroll2" class="foodWeekListHis" @mouseout="HidenFoodTips($event)">
                   <li @mouseover="ShowFood($event,f)" @mouseout="HidenFoodTips($event)" v-for="f in peopleMealListLeft"
                       :key="f.id" style="font-size: 14px">
                     <span>{{f.recipeName}}</span> <img style="width: 20px" @click="mealLoad(f,f.recipeName)"
                                                        src="/img/arrow.png" alt/>
                   </li>
+                  <li v-show="recipefinishedPri" style="text-align: center">无更多数据</li>
                 </ul>
               </el-tab-pane>
             </el-tabs>
@@ -447,6 +448,9 @@
       smartfoodsWeek
     },
     mounted() {
+      this.$nextTick(() => {
+        this.$refs.boxScroll2.addEventListener("scroll", this.getData2);
+      })
       this.initData()
 
     },
@@ -468,6 +472,9 @@
 
       const data = [];
       return {
+        recipefinishedPri:false,
+        currentPri:1,
+        sizePri:10,
         tableData: [],
         jundgeallergy: false,//过敏
         foodRadio: '1',
@@ -799,6 +806,43 @@
       }
     },
     methods: {
+      getData2() {
+        var boxScrollHeight = this.$refs.boxScroll2.scrollHeight;
+        var boxScrollTop = this.$refs.boxScroll2.scrollTop;
+        var boxClientHeight = this.$refs.boxScroll2.clientHeight;
+        console.log(boxScrollHeight,boxScrollTop,boxClientHeight,boxScrollHeight - (boxScrollTop + boxClientHeight))
+        if (boxScrollHeight - (boxScrollTop + boxClientHeight) < 10) {
+          this.ScrollUp2();
+        }
+      },
+      ScrollUp2: function () {
+        let that=this;
+        if (!this.timer) {
+          console.log("timer");
+          this.timer1 = setTimeout(() => {
+            if(this.recipefinishedPri){
+              return;
+            }
+            let isPub;
+            if (this.recipeSelectPri == '2') {
+              isPub = '0';
+            }
+            if (this.recipeSelectPri == '3') {
+              isPub = '1';
+            }
+            mealList(2, isPub, this.recipeNameSharePri, undefined, 2,++this.currentPri,this.sizePri).then(res => {
+              res.data.data.records.forEach(_=>{
+                that.peopleMealListLeft.push(_);
+              })
+              if( that.peopleMealListLeft.length==res.data.data.total)
+              {
+                that.recipefinishedPri=true;
+              }
+            })
+            this.timer1 = null;
+          }, 1000);
+        }
+      },
       filterNodePri(value, data) {
         if (!value) return true;
         return data.label.indexOf(value) !== -1;
@@ -864,7 +908,8 @@
             isPub = '1';
           }
         }
-        mealList(2, isPub, this.recipeNameSharePri, undefined, 2).then(res => {
+        this.currentPri=1;
+        mealList(2, isPub, this.recipeNameSharePri, undefined, 2,this.currentPri,this.sizePri).then(res => {
           this.peopleMealListLeft = res.data.data.records;
         })
       },
@@ -1045,7 +1090,7 @@
         //   this.mealListLeft=res.data.data;
         // })
 
-        mealList(2, undefined, undefined, undefined, 2).then(res => {
+        mealList(2, undefined, undefined, undefined, 2,this.currentPri,this.sizePri).then(res => {
           this.peopleMealListLeft = res.data.data.records;
         })
       },

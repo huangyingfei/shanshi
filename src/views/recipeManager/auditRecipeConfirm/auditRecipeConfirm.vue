@@ -279,10 +279,11 @@
                 <!--<el-divider></el-divider>-->
               </div>
 
-              <ul class="foodWeekListHis">
+              <ul  ref="boxScroll1"  class="foodWeekListHis">
                 <li  v-for="f in mealListLeft" :key="f.id"  style="font-size: 14px"   @mouseover="ShowFood($event,f)"  @mouseout="HidenFoodTips($event)">
                   <span >{{f.recipeName}}</span> <img style="width: 20px" @click="mealLoad(f,f.recipeName)" src="/img/arrow.png" alt />
                 </li>
+                <li v-show="recipefinishedPub" style="text-align: center">无更多数据</li>
               </ul>
             </el-tab-pane>
 
@@ -313,9 +314,10 @@
               </div>
 
               <ul class="foodWeekListHis">
-                <li  v-for="f in peopleMealListLeft" :key="f.id"  style="font-size: 14px" >
+                <li   ref="boxScroll2"  v-for="f in peopleMealListLeft" :key="f.id"  style="font-size: 14px" >
                   <span  @mouseover="ShowFood($event,f)"  @mouseout="HidenFoodTips($event)">{{f.recipeName}}</span>  <img style="width: 20px" @click="mealLoad(f,f.recipeName)" src="/img/arrow.png" alt />
                 </li>
+                <li v-show="recipefinishedPri" style="text-align: center">无更多数据</li>
               </ul>
             </el-tab-pane>
           </el-tabs>
@@ -677,6 +679,10 @@
     noNumRecipe,
   },
   mounted(){
+    this.$nextTick(() => {
+      this.$refs.boxScroll1.addEventListener("scroll", this.getData);
+      this.$refs.boxScroll2.addEventListener("scroll", this.getData2);
+    })
     this.dragFunc("df");
     this.auditButtonShow = this.$route.query.doType == 0?true:false
     this.tenantId=this.$route.query.tenantId;
@@ -698,6 +704,12 @@
   },
   data() {
     return {
+      recipefinishedPub:false,
+      recipefinishedPri:false,
+      currentPub:1,
+      sizePub:10,
+      currentPri:1,
+      sizePri:10,
       visible:false,
       tenantId:'',
       auditButtonShow: false,
@@ -998,6 +1010,78 @@
     // }
   },
   methods: {
+    getData2() {
+      var boxScrollHeight = this.$refs.boxScroll2.scrollHeight;
+      var boxScrollTop = this.$refs.boxScroll2.scrollTop;
+      var boxClientHeight = this.$refs.boxScroll2.clientHeight;
+      console.log(boxScrollHeight,boxScrollTop,boxClientHeight,boxScrollHeight - (boxScrollTop + boxClientHeight))
+      if (boxScrollHeight - (boxScrollTop + boxClientHeight) < 10) {
+        this.ScrollUp2();
+      }
+    },
+    ScrollUp2: function () {
+      let that=this;
+      if (!this.timer) {
+        console.log("timer");
+        this.timer1 = setTimeout(() => {
+          if(this.recipefinishedPri){
+            return;
+          }
+          let isPub;
+          if (this.recipeSelectPri == '2') {
+            isPub = '0';
+          }
+          if (this.recipeSelectPri == '3') {
+            isPub = '1';
+          }
+          mealList(2, isPub, this.recipeNameSharePri, undefined, 1,++this.currentPri,this.sizePri).then(res => {
+            res.data.data.records.forEach(_=>{
+              that.peopleMealListLeft.push(_);
+            })
+            if( that.peopleMealListLeft.length==res.data.data.total)
+            {
+              that.recipefinishedPri=true;
+            }
+          })
+          this.timer1 = null;
+        }, 1000);
+      }
+    },
+    getData() {
+      var boxScrollHeight = this.$refs.boxScroll1.scrollHeight;
+      var boxScrollTop = this.$refs.boxScroll1.scrollTop;
+      var boxClientHeight = this.$refs.boxScroll1.clientHeight;
+      console.log(boxScrollHeight,boxScrollTop,boxClientHeight,boxScrollHeight - (boxScrollTop + boxClientHeight))
+      if (boxScrollHeight - (boxScrollTop + boxClientHeight) < 10) {
+        this.ScrollUp();
+      }
+    },
+    ScrollUp: function () {
+      let that=this;
+      if (!this.timer) {
+        console.log("timer");
+        this.timer = setTimeout(() => {
+          //  console.log("scrollUp");
+          if(this.recipefinishedPub){
+            return;
+          }
+          let isUse;
+          if (this.recipeSelectPub == '2') {
+            isUse = '1';
+          }
+          mealList(1, undefined, this.recipeNameSharePub, isUse, 1,++this.currentPub,this.sizePub).then(res => {
+            res.data.data.records.forEach(_=>{
+              that.mealListLeft.push(_);
+            })
+            if( that.mealListLeft.length==res.data.data.total)
+            {
+              that.recipefinishedPub=true;
+            }
+          })
+          this.timer = null;
+        }, 1000);
+      }
+    },
     filterNodePri(value, data){
       if (!value) return true;
       return data.label.indexOf(value) !== -1;
@@ -1259,7 +1343,8 @@
         isUse='1';
       }
     }
-    mealList(1,undefined,this.recipeNameSharePub,isUse,1).then(res=>{
+    this.currentPub=1;
+    mealList(1,undefined,this.recipeNameSharePub,isUse,1,this.currentPub,this.sizePub).then(res=>{
       this.mealListLeft=res.data.data.records;
     })
     },
@@ -1275,7 +1360,8 @@
           isPub='1';
         }
       }
-        mealList(2,isPub,this.recipeNameSharePri,undefined,1).then(res=>{
+      this.currentPri=1;
+        mealList(2,isPub,this.recipeNameSharePri,undefined,1,this.currentPri,this.sizePri).then(res=>{
           this.peopleMealListLeft=res.data.data.records;
         })
     },
@@ -1458,11 +1544,11 @@
     },
     initMealData(){
       //公开
-      mealList(1,undefined,undefined,undefined,1).then(res=>{
+      mealList(1,undefined,undefined,undefined,1,this.currentPub,this.sizePub).then(res=>{
         this.mealListLeft=res.data.data.records;
       })
 
-      mealList(2,undefined,undefined,undefined,1).then(res=>{
+      mealList(2,undefined,undefined,undefined,1,this.currentPri,this.sizePri).then(res=>{
         this.peopleMealListLeft=res.data.data.records;
       })
     },
