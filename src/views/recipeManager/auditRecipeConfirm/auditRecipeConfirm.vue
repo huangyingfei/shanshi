@@ -279,7 +279,7 @@
                 <!--<el-divider></el-divider>-->
               </div>
 
-              <ul  ref="boxScroll1"  class="foodWeekListHis">
+              <ul  ref="boxScroll1"  class="foodWeekListHis"  @mouseout="HidenFoodTips($event)">
                 <li  v-for="f in mealListLeft" :key="f.id"  style="font-size: 14px"   @mouseover="ShowFood($event,f)"  @mouseout="HidenFoodTips($event)">
                   <span >{{f.recipeName}}</span> <img style="width: 20px" @click="mealLoad(f,f.recipeName)" src="/img/arrow.png" alt />
                 </li>
@@ -313,7 +313,7 @@
                 <!--<el-divider></el-divider>-->
               </div>
 
-              <ul class="foodWeekListHis">
+              <ul class="foodWeekListHis"  @mouseout="HidenFoodTips($event)">
                 <li   ref="boxScroll2"  v-for="f in peopleMealListLeft" :key="f.id"  style="font-size: 14px" >
                   <span  @mouseover="ShowFood($event,f)"  @mouseout="HidenFoodTips($event)">{{f.recipeName}}</span>  <img style="width: 20px" @click="mealLoad(f,f.recipeName)" src="/img/arrow.png" alt />
                 </li>

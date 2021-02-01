@@ -322,7 +322,7 @@
               <div style="margin-top: 5px; margin-bottom: 2px">
                 <!--<el-divider></el-divider>-->
               </div>
-              <ul class="foodWeekListHis" ref="boxScroll1">
+              <ul class="foodWeekListHis" ref="boxScroll1"  @mouseout="HidenFoodTips($event)">
                 <li
                   v-for="f in mealListLeft"
                   :key="f.id"
