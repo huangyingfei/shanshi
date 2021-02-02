@@ -355,7 +355,9 @@ export default {
   },
   watch: {
     areaId: function (newval, oldVal) {
-      this.govForm.areaId = newval[2];
+      if (newval instanceof Array) {
+        this.govForm.areaId = newval.slice(-1);
+      }
       this.cascaderChange();
     },
   },
