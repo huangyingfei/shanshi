@@ -1182,21 +1182,23 @@
           let foods=__.foods;
           for(let i=0;i<recipeCycles.length;i++){
 
-            if(recipeCycles[i].mealsType+""==that.getmealTypeData(_.name)&&recipeCycles[i].week+""==__.name.slice(4)){
-              let recipeConncts=recipeCycles[i].recipeConncts;
+            if(recipeCycles[i].mealsType+""==that.getmealTypeData(_.name)&&recipeCycles[i].week+""==__.name.slice(4)) {
+              let recipeConncts = recipeCycles[i].recipeConncts;
+              if (recipeConncts) {
+                for (let k = 0; k < recipeConncts.length; k++) {//菜品
+                  let food = {};
+                  let recipevals = recipeConncts[k].recipevals;
+                  let children = [];
 
-              for(let k=0;k<recipeConncts.length;k++){//菜品
-                let food={};
-                let recipevals=recipeConncts[k].recipevals;  let children=[];
-
-                for(let j=0;j<recipevals.length;j++){//食材
-                  children.push({id:recipevals[j].foodId,name:recipevals[j].foodName,count:recipevals[j].val})
+                  for (let j = 0; j < recipevals.length; j++) {//食材
+                    children.push({id: recipevals[j].foodId, name: recipevals[j].foodName, count: recipevals[j].val})
+                  }
+                  food.id = recipeConncts[k].dishId;
+                  food.name = recipeConncts[k].dishName;
+                  food.count = recipeConncts[k].value;
+                  food.children = children;
+                  foods.push(food)
                 }
-                food.id=recipeConncts[k].dishId;
-                food.name=recipeConncts[k].dishName;
-                food.count=recipeConncts[k].value;
-                food.children=children;
-                foods.push(food)
               }
             }
           }
@@ -1401,32 +1403,36 @@
         _.weeks.forEach(__=>{
           let foods=[];
           for(let i=0;i<recipeCycles.length;i++){
-            if(recipeCycles[i].mealsType+""==that.getmealTypeData(_.name)&&recipeCycles[i].week+""==__.name.slice(4)){
-              let recipeConncts=recipeCycles[i].recipeConncts;
-              for(let k=0;k<recipeConncts.length;k++){//菜品
-                let food={};
-                let recipevals=recipeConncts[k].recipevals;  let children=[];
-                for(let j=0;j<recipevals.length;j++){//食材
-                  let nutrientIds=[];
-                  let foodNutritionList=recipevals[j].foodNutritionList;
-                  foodNutritionList.forEach(_=>{
-                      this.nutritionValue.forEach(n=>{
-                        if(n.code==_.nutrientId+""){
-                          nutrientIds.push({id:_.nutrientId,name:n.name, value:_.value})//数值>0即可，此时的value不准确  因为要/100*食部
+            if(recipeCycles[i].mealsType+""==that.getmealTypeData(_.name)&&recipeCycles[i].week+""==__.name.slice(4)) {
+              let recipeConncts = recipeCycles[i].recipeConncts;
+              if (recipeConncts) {
+                for (let k = 0;  k < recipeConncts.length; k++) {//菜品
+                  let food = {};
+                  let recipevals = recipeConncts[k].recipevals;
+                  let children = [];
+                  for (let j = 0; j < recipevals.length; j++) {//食材
+                    let nutrientIds = [];
+                    let foodNutritionList = recipevals[j].foodNutritionList;
+                    foodNutritionList.forEach(_ => {
+                      this.nutritionValue.forEach(n => {
+                        if (n.code == _.nutrientId + "") {
+                          nutrientIds.push({id: _.nutrientId, name: n.name, value: _.value})//数值>0即可，此时的value不准确  因为要/100*食部
                         }
-                  })})
-                  children.push({
-                    id:recipevals[j].foodId,
-                    name:recipevals[j].foodName,
-                    count:recipevals[j].val,
-                    nutrientIds:nutrientIds
-                  })
+                      })
+                    })
+                    children.push({
+                      id: recipevals[j].foodId,
+                      name: recipevals[j].foodName,
+                      count: recipevals[j].val,
+                      nutrientIds: nutrientIds
+                    })
+                  }
+                  food.id = recipeConncts[k].dishId;
+                  food.name = recipeConncts[k].dishName;
+                  food.count = recipeConncts[k].value;
+                  food.children = children;
+                  foods.push(food)
                 }
-                food.id=recipeConncts[k].dishId;
-                food.name=recipeConncts[k].dishName;
-                food.count=recipeConncts[k].value;
-                food.children=children;
-                foods.push(food)
               }
             }
           }
@@ -1466,35 +1472,39 @@
       that[datas].forEach(_=>{
         _.weeks.forEach(__=>{
           let foods=__.foods;
-          for(let i=0;i<recipeCycles.length;i++){
-            if(recipeCycles[i].mealsType+""==that.getmealTypeData(_.name)&&recipeCycles[i].week+""==__.name.slice(4)){
-              __.image=recipeCycles[i].pic
-              let recipeConncts=recipeCycles[i].recipeConncts;
-              for(let k=0;k<recipeConncts.length;k++){//菜品
-                let food={};
-                let recipevals=recipeConncts[k].recipevals;  let children=[];
+          for(let i=0;i<recipeCycles.length;i++) {
+            if (recipeCycles[i].mealsType + "" == that.getmealTypeData(_.name) && recipeCycles[i].week + "" == __.name.slice(4)) {
+              __.image = recipeCycles[i].pic
+              let recipeConncts = recipeCycles[i].recipeConncts;
+              if (recipeConncts) {
+                for (let k = 0; k < recipeConncts.length; k++) {//菜品
+                  let food = {};
+                  let recipevals = recipeConncts[k].recipevals;
+                  let children = [];
 
-                for(let j=0;j<recipevals.length;j++){//食材
-                  let nutrientIds=[];
-                  let foodNutritionList=recipevals[j].foodNutritionList;
-                  foodNutritionList.forEach(_=>{
-                    this.nutritionValue.forEach(n=>{
-                      if(n.code==_.nutrientId+""){
-                        nutrientIds.push({id:_.nutrientId,name:n.name, value:_.value})//数值>0即可，此时的value不准确  因为要/100*食部
-                      }
-                    })})
-                  children.push({
-                    id:recipevals[j].foodId,
-                    name:recipevals[j].foodName,
-                    count:recipevals[j].val,
-                    nutrientIds:nutrientIds
-                  })
+                  for (let j = 0; j < recipevals.length; j++) {//食材
+                    let nutrientIds = [];
+                    let foodNutritionList = recipevals[j].foodNutritionList;
+                    foodNutritionList.forEach(_ => {
+                      this.nutritionValue.forEach(n => {
+                        if (n.code == _.nutrientId + "") {
+                          nutrientIds.push({id: _.nutrientId, name: n.name, value: _.value})//数值>0即可，此时的value不准确  因为要/100*食部
+                        }
+                      })
+                    })
+                    children.push({
+                      id: recipevals[j].foodId,
+                      name: recipevals[j].foodName,
+                      count: recipevals[j].val,
+                      nutrientIds: nutrientIds
+                    })
+                  }
+                  food.id = recipeConncts[k].dishId;
+                  food.name = recipeConncts[k].dishName;
+                  food.count = recipeConncts[k].value;
+                  food.children = children;
+                  foods.push(food)
                 }
-                food.id=recipeConncts[k].dishId;
-                food.name=recipeConncts[k].dishName;
-                food.count=recipeConncts[k].value;
-                food.children=children;
-                foods.push(food)
               }
             }
           }
