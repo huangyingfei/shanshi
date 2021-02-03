@@ -315,7 +315,7 @@
                   :underline="false"
                   :class="{ recipeColor: recipeSelect == '4' }"
                   @click="recipeNameShareSearchPub('4', undefined, 1)"
-                  >收藏</el-link
+                  >推荐</el-link
                 >
               </div>
 
@@ -810,6 +810,8 @@ export default {
       showFoodList: false,
       recipeSelectPub: "1",
       recipeSelectPri: "1",
+      recipeSelect:'1',
+      dishSelect:'1',
       dishSelectPub: "1",
       dishSelectPri: "1",
       personMenuDishList: [],
@@ -1018,11 +1020,8 @@ export default {
           if(this.recipefinishedPub){
             return;
           }
-          let isUse;
+          let isRecommend;
           let isPub;
-          if (this.recipeSelectPub == '2') {
-            isUse = '1';
-          }
           if (this.recipeSelect == "2") {
             isPub = "0";
           }
@@ -1030,9 +1029,9 @@ export default {
             isPub = "1";
           }
           if (this.recipeSelect == "4") {
-            isUse = "1";
+            isRecommend = "1";
           }
-          mealList(1, isPub, this.recipeNameSharePub, isUse, 1,++this.currentPub,this.sizePub).then(res => {
+          mealList(1, isPub, this.recipeNameSharePub, undefined, 1,isRecommend,++this.currentPub,this.sizePub).then(res => {
             res.data.data.records.forEach(_=>{
               that.mealListLeft.push(_);
             })
@@ -1153,7 +1152,7 @@ export default {
       that.SelectWeek(that.WeekInfo.weekValue);
       that.$refs.refweekSelect.hidePicker();
     },
-    recipeNameShareSearchPub(recipeSelect, isPub, isUse) {
+    recipeNameShareSearchPub(recipeSelect, isPub, isRecommend) {
       if (recipeSelect) {
         this.recipeSelect = recipeSelect;
       } else {
@@ -1164,12 +1163,19 @@ export default {
           isPub = "1";
         }
         if (this.recipeSelect == "4") {
-          isUse = "1";
+          isRecommend = "1";
         }
       }
+      debugger
       this.currentPub=1;
-      mealList(1, isPub, this.recipeNameSharePub, isUse,1,this.currentPub,this.sizePub).then((res) => {
+      this.recipefinishedPub=false
+      this.$set(this,"mealListLeft",[]);
+      mealList(1, isPub, this.recipeNameSharePub, undefined,1,isRecommend,this.currentPub,this.sizePub).then((res) => {
         this.mealListLeft = res.data.data.records;
+        if( this.mealListLeft.length==res.data.data.total)
+        {
+          this.recipefinishedPub=true;
+        }
       });
     },
     mealLoad(f, name) {
@@ -1380,8 +1386,14 @@ export default {
     },
     initMealData() {
       //公开
-      mealList(1, undefined, undefined, undefined, 1,this.currentPub,this.sizePub).then((res) => {
+      this.recipefinishedPub=false
+      this.$set(this,"mealListLeft",[]);
+      mealList(1, undefined, undefined, undefined, 1,undefined,this.currentPub,this.sizePub).then((res) => {
         this.mealListLeft = res.data.data.records;
+        if( this.mealListLeft.length==res.data.data.total)
+        {
+          this.recipefinishedPub=true;
+        }
       });
 
       // mealList(2, undefined, undefined, undefined, 1).then((res) => {

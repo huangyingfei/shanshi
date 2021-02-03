@@ -244,19 +244,19 @@
                     <!--<el-button slot="append" icon="el-icon-search" @click="recipeNameShareSearchPri()"></el-button>-->
                   </el-input>
                 </div>
-                <div style="font-size: 10px;margin:0 10px;display: flex;justify-content: space-between">
-                  <el-link :underline="false" :class="{'recipeColor':recipeSelectPri=='1'}"
-                           @click="recipeNameShareSearchPri('1')">全部
-                  </el-link>
-                  |
-                  <el-link :underline="false" :class="{'recipeColor':recipeSelectPri=='2'}"
-                           @click="recipeNameShareSearchPri('2',0)">公开
-                  </el-link>
-                  |
-                  <el-link :underline="false" :class="{'recipeColor':recipeSelectPri=='3'}"
-                           @click="recipeNameShareSearchPri('3',1)">隐藏
-                  </el-link>
-                </div>
+                <!--<div style="font-size: 10px;margin:0 10px;display: flex;justify-content: space-between">-->
+                  <!--<el-link :underline="false" :class="{'recipeColor':recipeSelectPri=='1'}"-->
+                           <!--@click="recipeNameShareSearchPri('1')">全部-->
+                  <!--</el-link>-->
+                  <!--|-->
+                  <!--<el-link :underline="false" :class="{'recipeColor':recipeSelectPri=='2'}"-->
+                           <!--@click="recipeNameShareSearchPri('2',0)">公开-->
+                  <!--</el-link>-->
+                  <!--|-->
+                  <!--<el-link :underline="false" :class="{'recipeColor':recipeSelectPri=='3'}"-->
+                           <!--@click="recipeNameShareSearchPri('3',1)">隐藏-->
+                  <!--</el-link>-->
+                <!--</div>-->
 
                 <div style="margin-top: 5px; margin-bottom: 2px">
                   <!--<el-divider></el-divider>-->
@@ -823,14 +823,7 @@
             if(this.recipefinishedPri){
               return;
             }
-            let isPub;
-            if (this.recipeSelectPri == '2') {
-              isPub = '0';
-            }
-            if (this.recipeSelectPri == '3') {
-              isPub = '1';
-            }
-            mealList(2, isPub, this.recipeNameSharePri, undefined, 2,++this.currentPri,this.sizePri).then(res => {
+            mealList(2, undefined, this.recipeNameSharePri, undefined, 2,undefined,++this.currentPri,this.sizePri).then(res => {
               res.data.data.records.forEach(_=>{
                 that.peopleMealListLeft.push(_);
               })
@@ -897,20 +890,15 @@
       //   })
       // },
       recipeNameShareSearchPri(recipeSelectPri, isPub) {
-        //
-        if (recipeSelectPri) {
-          this.recipeSelectPri = recipeSelectPri;
-        } else {
-          if (this.recipeSelectPri == '2') {
-            isPub = '0';
-          }
-          if (this.recipeSelectPri == '3') {
-            isPub = '1';
-          }
-        }
+        this.recipefinishedPri=false;
         this.currentPri=1;
-        mealList(2, isPub, this.recipeNameSharePri, undefined, 2,this.currentPri,this.sizePri).then(res => {
+        this.$set(this,"peopleMealListLeft",[]);
+        mealList(2, undefined, this.recipeNameSharePri, undefined, 2,undefined,this.currentPri,this.sizePri).then(res => {
           this.peopleMealListLeft = res.data.data.records;
+          if( this.peopleMealListLeft.length==res.data.data.total)
+          {
+            this.recipefinishedPri=true;
+          }
         })
       },
       mealLoad(f, name) {
@@ -1093,9 +1081,14 @@
         // mealList(1,undefined,undefined,undefined,2).then(res=>{
         //   this.mealListLeft=res.data.data;
         // })
-
-        mealList(2, undefined, undefined, undefined, 2,this.currentPri,this.sizePri).then(res => {
+        this.recipefinishedPri=false;
+        this.$set(this,"peopleMealListLeft",[]);
+        mealList(2, undefined, undefined, undefined, 2,undefined,this.currentPri,this.sizePri).then(res => {
           this.peopleMealListLeft = res.data.data.records;
+          if( this.peopleMealListLeft.length==res.data.data.total)
+          {
+            this.recipefinishedPri=true;
+          }
         })
       },
       dishShareSearchPub(dishSelectPub, isUse) {

@@ -778,6 +778,7 @@
           isPub='1';
         }
       }
+
         mealList(2,isPub,this.recipeNameSharePri).then(res=>{
           this.peopleMealListLeft=res.data.data;
         })

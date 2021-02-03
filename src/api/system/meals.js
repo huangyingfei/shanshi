@@ -1,18 +1,19 @@
 import request from '@/router/axios';
 
 
-export const mealList = (searchType,isPub,recipeName,isUse,recipeCategory,current,size) => {
+export const mealList = (searchType,isPub,recipeName,isUse,recipeCategory,isRecommend,current,size) => {
   return request({
     url: '/api/blade-food/recipe/list',
     method: 'get',
     params: {
       current,
       size,
-      searchType,
-      isPub,
+      searchType, //1公共食谱
+      isPub,//是否公开(0-公开 1-不公开不分享,2-不公开要分享)
       recipeName,
-      isUse,
-      recipeCategory,
+      isUse,//(0-不收藏 1-收藏)
+      recipeCategory,//1-学生食谱 2-教职工食谱
+      isRecommend//推荐0-不推荐 1-推荐
 
     }
   })
