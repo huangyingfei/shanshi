@@ -475,11 +475,12 @@ export default {
     //查看
     seecol(row) {
       this.flour = row.id;
-
-      this.active.length = 0;
+      // this.active.length = 0;
+      this.active = [];
       console.log(row);
       this.seekeys = true;
       this.ruleFormUsers.name = row.foodName; //食材名
+      this.ruleFormUsers.foodFood = row.foodAlias; //别名
       this.ruleFormUsers.ovenFood = row.foodAlias1; //食物别名2
       this.ruleFormUsers.buffer = row.foodReal; //食材真名
       this.ruleFormUsers.fooddata = row.foodType; //食材分类
@@ -489,17 +490,24 @@ export default {
       this.ruleFormUsers.timers = row.weight; //重量
       this.ruleFormUsers.content = row.water; //水分
       this.ruleFormUsers.resource = row.color + ""; //色系
-
-      row.season.split(",").forEach(item => {
-        //所属季节
-        this.active.push(item);
-      });
+      if (row.season) {
+        row.season.split(",").forEach(item => {
+          //所属季节
+          this.active.push(item);
+        });
+      } else {
+        this.active = "";
+      }
       //所属区域
-      let bar = [];
-      row.provinces.split(",").forEach((item, i) => {
-        bar.push([item, row.belongRegion.split(",")[i]]);
-      });
-      this.valuepark = bar;
+      if (row.provinces) {
+        let bar = [];
+        row.provinces.split(",").forEach((item, i) => {
+          bar.push([item, row.belongRegion.split(",")[i]]);
+        });
+        this.valuepark = bar;
+      } else {
+        this.valuepark = [];
+      }
       // row.provinces.split(",").forEach((item, i) => {
       //   this.valuepark.push([item, row.belongRegion.split(",")[i]]);
       // });

@@ -68,9 +68,12 @@
     <!-- 排行榜 -->
     <div class="dishes">
       <!-- 菜谱排行榜 -->
+      <!--  -->
       <div class="variety" v-if="this.empty == 1">
+        <h4 class="welcome">本周最受欢迎菜品</h4>
         <div class="pictures">
-          <img src="../../../public/img/shuj.png" alt="" />
+          <!-- <img src="../../../public/img/shuj.png" alt="" /> -->
+          <p>暂无数据</p>
         </div>
       </div>
       <div class="variety" v-else>
@@ -311,6 +314,7 @@ export default {
           indicator: [
             {
               name: "谷类(100-150)"
+
               // max: 300
             },
             {
@@ -542,6 +546,11 @@ export default {
   img {
     width: 200px;
     height: 200px;
+  }
+  p {
+    font-size: 20px;
+    font-weight: bold;
+    color: #c0c4cc;
   }
 }
 .recipes {

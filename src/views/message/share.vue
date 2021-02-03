@@ -159,6 +159,7 @@
           <el-col :span="8">创建时间：{{ dialogListData.createTime }}</el-col>
         </el-row>
         <toolbar ref="recipe"></toolbar>
+        <div class="worm1" v-if="this.recordList == 2">记录</div>
         <el-timeline v-if="this.recordList == 2">
           <el-timeline-item
             placement="top"
@@ -166,8 +167,9 @@
             :key="i"
           >
             <!-- <el-card> -->
-            {{ item.aduitTime }}
-            {{ item.refuseReason }}
+            <div style="color: #c0c4cc;">{{ item.aduitTime }}</div>
+
+            <span>拒绝理由:</span>{{ item.refuseReason }}
             <!-- </el-card> -->
           </el-timeline-item>
         </el-timeline>
@@ -341,5 +343,13 @@ export default {
   margin-top: 0px;
   margin-right: 0px;
   margin-bottom: 60px;
+}
+.worm1 {
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+  padding-left: 20px;
+  font-size: 16px;
+  font-weight: bold;
 }
 </style>

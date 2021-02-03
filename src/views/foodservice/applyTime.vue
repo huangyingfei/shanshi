@@ -20,15 +20,19 @@
             :value="item.value"
           ></el-option>
         </el-select>
-        <span style="margin-right: 10px;margin-left: 15px;">提交人:</span>
-        <el-input
-          size="small"
-          v-model="editor"
-          placeholder="请输入内容"
-          style="width:190px;    height: 30px;"
-        ></el-input>
+
         <span style="margin-right: 10px;margin-left: 15px;">提交日期:</span>
         <el-date-picker
+          v-model="getDate"
+          format="yyyy 年 MM 月 dd 日"
+          value-format="yyyy-MM-dd"
+          type="daterange"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+        >
+        </el-date-picker>
+        <!-- <el-date-picker
           format="yyyy 年 MM 月 dd 日"
           value-format="yyyy-MM-dd"
           size="small"
@@ -36,8 +40,15 @@
           type="date"
           placeholder="选择日期"
           style="width:180px"
-        ></el-date-picker>
+        ></el-date-picker> -->
         <div>
+          <span style="margin-right: 10px;margin-left: 15px;">提交人:</span>
+          <el-input
+            size="small"
+            v-model="editor"
+            placeholder="请输入内容"
+            style="width:190px;    height: 30px;"
+          ></el-input>
           <el-button
             @click="searchStr"
             size="small"
@@ -394,8 +405,8 @@
               </el-table-column>
             </el-table>
           </div>
-          <!-- <div class="worm1">记录</div>
-          <el-timeline>
+          <div class="worm1" v-if="this.agree == 2">记录</div>
+          <el-timeline v-if="this.agree == 2">
             <el-timeline-item
               :timestamp="this.record.aduitTime"
               placement="top"
@@ -409,12 +420,10 @@
                 </p>
               </el-card>
             </el-timeline-item>
-          </el-timeline> -->
+          </el-timeline>
         </div>
-        <div slot="footer" class="dialog-footer">
-          <div class="cancellation">
-            <el-button @click="seekeys = false">取 消</el-button>
-          </div>
+        <div slot="footer" class="dialog-footer" style="text-align: center">
+          <el-button @click="seekeys = false">取 消</el-button>
         </div>
       </el-dialog>
     </div>
@@ -516,13 +525,15 @@ export default {
         }
       ],
       timezone: "", //提交时间
+      timezone1: "",
       record: {
         tenant_name: "", //机构
         aduit_name: "", //姓名
-        aduitTime: "1231", //时间
-        refuseReason: "222", //拒绝理由
+        aduitTime: "", //时间
+        refuseReason: "", //拒绝理由
         type: "" //状态
-      } //记录
+      }, //记录
+      agree: ""
     };
   },
   beforeMount() {
@@ -547,6 +558,7 @@ export default {
       this.editor = "";
       this.getDate = "";
       this.timezone = "";
+      this.timezone1 = "";
       this.auditing();
     },
     //失去焦点事件
@@ -624,6 +636,7 @@ export default {
       this.seekeys = true;
       console.log(row);
       this.auto = row.id;
+      this.agree = row.status;
       this.$axios
         .get(`api/blade-food/dish/dishDetail?id=${this.auto}`, {})
         .then(res => {
@@ -705,9 +718,11 @@ export default {
       // console.log(this.phoneId); //联系电话
       // console.log(this.mState1); //审核状态
       if (this.getDate) {
-        this.timezone = this.getDate;
+        this.timezone = this.getDate[0];
+        this.timezone1 = this.getDate[1];
       } else {
         this.timezone = "";
+        this.timezone1 = "";
       }
       this.auditing();
     },
@@ -716,7 +731,7 @@ export default {
       this.loadFlag = true;
       this.$axios
         .get(
-          `api/blade-food/dish/appPubDishOrgan?size=${this.m_page.size}&current=${this.m_page.number}&dishName=${this.input}&status=${this.value}&createName=${this.editor}&createTimeStr=${this.getDate}`,
+          `api/blade-food/dish/appPubDishOrgan?size=${this.m_page.size}&current=${this.m_page.number}&dishName=${this.input}&status=${this.value}&createName=${this.editor}&createTimeStr=${this.timezone}&createTimeStrEnd=${this.timezone1}`,
           {}
         )
         .then(res => {
