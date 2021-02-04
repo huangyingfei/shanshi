@@ -115,11 +115,14 @@
           label="提交时间"
           align="center"
         ></el-table-column>
-        <el-table-column
-          prop="updateTime"
-          label="分享时间"
-          align="center"
-        ></el-table-column>
+        <el-table-column prop="updateTime" label="分享时间" align="center">
+          <template slot-scope="scope">
+            <p v-if="scope.row.updateTime == null">
+              {{ scope.row.createTime }}
+            </p>
+            <p v-else>{{ scope.row.updateTime }}</p>
+          </template>
+        </el-table-column>
         <el-table-column label="审核状态" align="center">
           <template slot-scope="scope">
             <el-tag type="danger" v-if="scope.row.status == 0">待审核</el-tag>

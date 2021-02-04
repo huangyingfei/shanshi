@@ -106,11 +106,14 @@
             label="提交时间"
             align="center"
           ></el-table-column>
-          <el-table-column
-            prop="updateTime"
-            label="分享时间"
-            align="center"
-          ></el-table-column>
+          <el-table-column prop="updateTime" label="分享时间" align="center">
+            <template slot-scope="scope">
+              <p v-if="scope.row.updateTime == null">
+                {{ scope.row.createTime }}
+              </p>
+              <p v-else>{{ scope.row.updateTime }}</p>
+            </template>
+          </el-table-column>
           <el-table-column label="审核状态" align="center">
             <template slot-scope="scope">
               <el-tag type="danger" v-if="scope.row.status == 0">待审核</el-tag>
@@ -731,7 +734,7 @@ export default {
       this.loadFlag = true;
       this.$axios
         .get(
-          `api/blade-food/dish/appPubDishOrgan?size=${this.m_page.size}&current=${this.m_page.number}&dishName=${this.input}&status=${this.value}&createName=${this.editor}&createTimeStr=${this.timezone}&createTimeStrEnd=${this.timezone1}`,
+          `api/blade-food/dish/appPubDishOrgan?size=${this.m_page.size}&current=${this.m_page.number}&dishName=${this.input}&status=${this.value}&createName=${this.editor}&createTimeStr=${this.timezone}&endCreateTimeStr=${this.timezone1}`,
           {}
         )
         .then(res => {

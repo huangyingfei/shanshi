@@ -347,7 +347,7 @@ ${this.timezone1}&orgType=${this.keyword.block}&isUse=${this.empty}&isRecommend=
     },
     emptyset() {
       this.keyword.input = "";
-      // this.keyword.getDate = "";
+      this.keyword.getDate = "";
       this.timezone1 = "";
       this.timezone = "";
       this.keyword.value = "";
