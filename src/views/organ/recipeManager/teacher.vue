@@ -187,29 +187,16 @@
         :visible.sync="department"
         :close-on-click-modal="false"
       >
-        <el-form
-          :model="storage"
-          :rules="rules"
-          ref="ruleForm"
-          :inline="true"
-          label-width="105px"
-          class="demo-ruleForm"
-        >
+        <el-form :model="storage" label-width="105px" class="demo-ruleForm">
           <el-form-item label="部门名称" style="width: 355px">
             <el-input
               maxlength="10"
               show-word-limit
               style="width: 250px"
               v-model="storage.name"
-            ></el-input>
+            >
+            </el-input>
           </el-form-item>
-          <!-- <el-form-item label="部门排序" style="width: 355px">
-            <el-input
-              type="number"
-              style="width: 250px"
-              v-model="storage.sorting"
-            ></el-input>
-          </el-form-item> -->
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="department = false">取 消</el-button>
@@ -228,7 +215,7 @@
         </div>
       </el-dialog>
       <!-- 添加子部门弹框 -->
-      <el-dialog
+      <!-- <el-dialog
         title="子部门"
         width="30%"
         append-to-body
@@ -251,12 +238,7 @@
               v-model="acetone.name"
             ></el-input>
           </el-form-item>
-          <!-- <el-form-item label="子部门排序" style="width: 355px">
-              <el-input
-                style="width: 250px"
-                v-model="acetone.sorting"
-              ></el-input>
-            </el-form-item> -->
+       
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="obtained = false">取 消</el-button>
@@ -267,7 +249,7 @@
             >编辑确定</el-button
           >
         </div>
-      </el-dialog>
+      </el-dialog> -->
       <!-- 添加员工弹框 -->
       <el-dialog
         title="添加员工"
@@ -288,14 +270,11 @@
             <el-form-item label="姓名" style="width: 355px" prop="name">
               <el-input style="width: 250px" v-model="ruleForm.name"></el-input>
             </el-form-item>
-            <el-form-item label="性别" style="width: 355px">
-              <el-radio
-                style="margin-left: 30px"
-                v-model="ruleForm.radio"
-                label="1"
-                >男</el-radio
-              >
-              <el-radio v-model="ruleForm.radio" label="2">女</el-radio>
+            <el-form-item label="性别" style="width: 355px;margin-right: 30px">
+              <el-radio-group v-model="ruleForm.radio">
+                <el-radio label="1">男生</el-radio>
+                <el-radio label="2">女生</el-radio>
+              </el-radio-group>
             </el-form-item>
             <el-form-item style="width: 355px" label="图片">
               <el-upload
@@ -323,14 +302,12 @@
                 <img width="100%" :src="dialogImageUrl" alt />
               </el-dialog>
             </el-form-item>
-            <el-form-item style="width: 355px" label="婚姻状况">
-              <el-radio
-                style="margin-left: 30px"
-                v-model="ruleForm.marriages"
-                label="0"
-                >已婚</el-radio
-              >
+            <el-form-item
+              style="width: 355px;margin-right: 30px"
+              label="婚姻状况"
+            >
               <el-radio v-model="ruleForm.marriages" label="1">未婚</el-radio>
+              <el-radio v-model="ruleForm.marriages" label="2">已婚</el-radio>
             </el-form-item>
             <el-form-item style="width: 355px" label="选择部门" prop="domain">
               <el-cascader
@@ -714,6 +691,16 @@ export default {
   },
   data() {
     const data = [];
+    //定义校验方法
+    var validatorPhone = function(rule, value, callback) {
+      if (!value) {
+        callback(new Error("手机号不能为空"));
+      } else if (!/^1\d{10}$/.test(value)) {
+        callback(new Error("手机号格式错误"));
+      } else {
+        callback();
+      }
+    };
     return {
       drawer: false,
       data: JSON.parse(JSON.stringify(data)),
@@ -741,14 +728,13 @@ export default {
         sorting: "" //部门排序
       },
       ruleForm: {
-        name: "", //姓名
-        radio: "1", //性别
-        marriages: "1", //婚姻状况
+        name: "123", //姓名
+        radio: "1",
+        marriages: "2",
         value1: "", //出生日期
         phones: "", //手机号码
         national: "", //民族
         position: "", //职务
-
         thejob: "", //工号
         inductions: "", //入职日期
         workin: "", //参加工作日期
@@ -773,7 +759,7 @@ export default {
       rules: {
         name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
         phones: [
-          { required: true, message: "请输入手机号码", trigger: "blur" }
+          { required: true, validator: validatorPhone, trigger: "blur" }
         ],
         domain: [{ required: true, message: "请选择部门", trigger: "blur" }],
         value1: [
@@ -1563,12 +1549,12 @@ export default {
           // this.acetone.storage = "";
           // console.log(res);
           this.$message({
-            message: "添加成功",
+            message: "编辑成功",
             type: "success"
           });
         })
         .catch(() => {
-          this.$message.error("添加失败");
+          this.$message.error("编辑失败");
         });
     },
     //添加子部门
@@ -1668,9 +1654,10 @@ export default {
             .get(`api/blade-food/teacherdept/remove` + addid, {})
             .then(res => {
               // console.log(res);
-
               this.hobbiton();
+              this.getStorage();
               this.$message.success("删除成功");
+              // this.hobbiton();
             });
         })
         .catch(() => {
@@ -1857,7 +1844,6 @@ export default {
           //   });
           // }
         });
-        // console.log(tosit);
         this.choose = tosit;
       });
     },

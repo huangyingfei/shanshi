@@ -28,6 +28,16 @@
       ></el-input> -->
       <span style="margin-right: 10px;margin-left: 15px;">提交日期:</span>
       <el-date-picker
+        v-model="getDate"
+        format="yyyy 年 MM 月 dd 日"
+        value-format="yyyy-MM-dd"
+        type="daterange"
+        range-separator="至"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期"
+      >
+      </el-date-picker>
+      <!-- <el-date-picker
         format="yyyy 年 MM 月 dd 日"
         value-format="yyyy-MM-dd"
         size="small"
@@ -35,7 +45,7 @@
         type="date"
         placeholder="选择日期"
         style="width:200px"
-      ></el-date-picker>
+      ></el-date-picker> -->
       <div>
         <el-button
           @click="searchStr"
@@ -92,11 +102,14 @@
           label="提交时间"
           align="center"
         ></el-table-column>
-        <el-table-column
-          prop="updateTime"
-          label="分享时间"
-          align="center"
-        ></el-table-column>
+        <el-table-column prop="updateTime" label="分享时间" align="center">
+          <template slot-scope="scope">
+            <p v-if="scope.row.updateTime == null">
+              {{ scope.row.createTime }}
+            </p>
+            <p v-else>{{ scope.row.updateTime }}</p>
+          </template>
+        </el-table-column>
         <el-table-column label="审核状态" align="center">
           <template slot-scope="scope">
             <el-tag type="danger" v-if="scope.row.status == 0">待审核</el-tag>
@@ -454,6 +467,7 @@ export default {
         }
       ],
       timezone: "", //搜索时间
+      timezone1: "",
       agree: "", //审核状态
       record: {
         tenant_name: "", //机构
@@ -594,14 +608,17 @@ export default {
       this.editor = ""; //提交人
       this.getDate = ""; //提交日期
       this.timezone = "";
+      this.timezone1 = "";
       this.auditing();
     },
     //搜索
     searchStr() {
       if (this.getDate) {
-        this.timezone = this.getDate;
+        this.timezone = this.getDate[0];
+        this.timezone1 = this.getDate[1];
       } else {
-        this.getDate = "";
+        this.timezone = "";
+        this.timezone1 = "";
       }
       this.auditing();
     },
@@ -610,7 +627,7 @@ export default {
       this.loadFlag = true;
       this.$axios
         .get(
-          `api/blade-food/food/searchOrgFood?size=${this.m_page.size}&current=${this.m_page.number}&foodName=${this.input}&status=${this.value}&createTime=${this.timezone}`
+          `api/blade-food/food/searchOrgFood?size=${this.m_page.size}&current=${this.m_page.number}&foodName=${this.input}&status=${this.value}&createTimeStartStr=${this.timezone}&createTimeEndStr=${this.timezone1}`
         )
         .then(res => {
           this.loadFlag = false;

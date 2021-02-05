@@ -86,9 +86,13 @@
                     <el-col :span="8">
                       <div class="item">
                         <div class="item-icon">
-                          <el-avatar>
-                            <img src="../../../public/img/jgtotal.png" alt="" />
-                          </el-avatar>
+                          <el-image
+                            style="width:45px;height:45px"
+                            :src="require('../../../public/img/jgtotal.png')"
+                          ></el-image>
+                          <!-- <el-avatar
+                            :src="require('../../../public/img/jgtotal.png')"
+                          ></el-avatar> -->
                         </div>
                         <div class="item-info">
                           <span>{{ zfOrgCount.orgCount }}</span>
@@ -99,9 +103,13 @@
                     <el-col :span="8">
                       <div class="item">
                         <div class="item-icon">
-                          <el-avatar>
+                          <el-image
+                            style="width:45px;height:45px"
+                            :src="require('../../../public/img/sctotal.png')"
+                          ></el-image>
+                          <!-- <el-avatar>
                             <img src="../../../public/img/sctotal.png" alt="" />
-                          </el-avatar>
+                          </el-avatar> -->
                         </div>
                         <div class="item-info">
                           <span>{{ zfOrgCount.foodCount }}</span>
@@ -112,12 +120,10 @@
                     <el-col :span="8">
                       <div class="item">
                         <div class="item-icon">
-                          <el-avatar>
-                            <img
-                              src="../../../public/img/sysctotal.png"
-                              alt=""
-                            />
-                          </el-avatar>
+                          <el-image
+                            style="width:45px;height:45px"
+                            :src="require('../../../public/img/sysctotal.png')"
+                          ></el-image>
                         </div>
                         <div class="item-info">
                           <span>{{ zfOrgCount.foodAdd }}</span>
@@ -130,9 +136,10 @@
                     <el-col :span="8">
                       <div class="item">
                         <div class="item-icon">
-                          <el-avatar>
-                            <img src="../../../public/img/sptotal.png" alt="" />
-                          </el-avatar>
+                          <el-image
+                            style="width:45px;height:45px"
+                            :src="require('../../../public/img/sptotal.png')"
+                          ></el-image>
                         </div>
                         <div class="item-info">
                           <span>{{ zfOrgCount.recipeCount }}</span>
@@ -143,9 +150,10 @@
                     <el-col :span="8">
                       <div class="item">
                         <div class="item-icon">
-                          <el-avatar>
-                            <img src="../../../public/img/cptotal.png" alt="" />
-                          </el-avatar>
+                          <el-image
+                            style="width:45px;height:45px"
+                            :src="require('../../../public/img/cptotal.png')"
+                          ></el-image>
                         </div>
                         <div class="item-info">
                           <span>{{ zfOrgCount.dishCount }}</span>
@@ -156,12 +164,10 @@
                     <el-col :span="8">
                       <div class="item">
                         <div class="item-icon">
-                          <el-avatar>
-                            <img
-                              src="../../../public/img/sycptotal.png"
-                              alt=""
-                            />
-                          </el-avatar>
+                          <el-image
+                            style="width:45px;height:45px"
+                            :src="require('../../../public/img/sycptotal.png')"
+                          ></el-image>
                         </div>
                         <div class="item-info">
                           <span>{{ zfOrgCount.dishAdd }}</span>
@@ -375,6 +381,7 @@ export default {
     areaId: function(newval, oldVal) {
       if (newval instanceof Array) {
         this.govForm.areaId = newval.slice(-1);
+        // console.log(this.govForm.areaId);
       }
       this.cascaderChange();
     }
@@ -564,15 +571,23 @@ export default {
     },
     //区域选择值改变
     cascaderChange() {
-      this.axios({
-        url: "api/blade-system/region/getTenantListByCode",
-        method: "get",
-        params: {
-          areaId: this.govForm.areaId
-        }
-      }).then(res => {
-        this.tenantIdOptions = res.data.data;
-      });
+      this.$axios
+        .get(
+          `api/blade-system/region/getTenantListByCode?areaId=${this.govForm.areaId}`
+        )
+        .then(res => {
+          // console.log(res);
+          this.tenantIdOptions = res.data.data;
+        });
+      // this.axios({
+      //   url: "api/blade-system/region/getTenantListByCode",
+      //   method: "get",
+      //   params: {
+      //     areaId: this.govForm.areaId
+      //   }
+      // }).then(res => {
+      //   this.tenantIdOptions = res.data.data;
+      // });
     },
     //获取学生出勤率
     getStudentAttendancePie() {
