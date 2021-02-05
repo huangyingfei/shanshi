@@ -919,7 +919,9 @@
         }
       },
       inserMeal(f, that) {
-        let data = f.recipeVO;
+        detail(f.id).then(res => {
+          if (res.data.success) {
+         let data = res.data.data;
         that.$set(that.WeekInfo, "foodCatalog", JSON.parse(data.mealTypestrs))
         that.WeekInfo.weekType = data.recipeDay
         that.FixWeek();
@@ -931,6 +933,8 @@
         setTimeout(function () {
           that.insertDishesData("datas", recipeCycles, that);
         }, 1000);
+          }
+        })
       },
       insertDishesData(datas, recipeCycles, that) {
         that[datas].forEach(_ => {
@@ -947,13 +951,15 @@
                     for (let j = 0; j < recipevals.length; j++) {//食材
                       let nutrientIds = [];
                       let foodNutritionList = recipevals[j].foodNutritionList;
-                      foodNutritionList.forEach(_ => {
-                        this.nutritionValue.forEach(n => {
-                          if (n.code == _.nutrientId + "") {
-                            nutrientIds.push({id: _.nutrientId, name: n.name, value: _.value})//数值>0即可，此时的value不准确  因为要/100*食部
-                          }
+                      if(foodNutritionList&&foodNutritionList.length>0) {
+                        foodNutritionList.forEach(_ => {
+                          this.nutritionValue.forEach(n => {
+                            if (n.code == _.nutrientId + "") {
+                              nutrientIds.push({id: _.nutrientId, name: n.name, value: _.value})//数值>0即可，此时的value不准确  因为要/100*食部
+                            }
+                          })
                         })
-                      })
+                      }
                       children.push({
                         id: recipevals[j].foodId,
                         name: recipevals[j].foodName,
@@ -1019,13 +1025,15 @@
                     for (let j = 0; j < recipevals.length; j++) {//食材
                       let nutrientIds = [];
                       let foodNutritionList = recipevals[j].foodNutritionList;
-                      foodNutritionList.forEach(_ => {
-                        this.nutritionValue.forEach(n => {
-                          if (n.code == _.nutrientId + "") {
-                            nutrientIds.push({id: _.nutrientId, name: n.name, value: _.value})//数值>0即可，此时的value不准确  因为要/100*食部
-                          }
+                      if(foodNutritionList&&foodNutritionList.length>0) {
+                        foodNutritionList.forEach(_ => {
+                          this.nutritionValue.forEach(n => {
+                            if (n.code == _.nutrientId + "") {
+                              nutrientIds.push({id: _.nutrientId, name: n.name, value: _.value})//数值>0即可，此时的value不准确  因为要/100*食部
+                            }
+                          })
                         })
-                      })
+                      }
                       children.push({
                         id: recipevals[j].foodId,
                         name: recipevals[j].foodName,

@@ -167,19 +167,19 @@ export default [
       }
     ]
   },
-  {
-    path: "/editMeals",
-    component: Layout,
-    redirect: "/editMeals/editMeals",
-    children: [
-      {
-        path: "editMeals",
-        name: "编辑智能配餐",
-        component: () =>
-          import(/* webpackChunkName: "views" */  "@/views/message/meals")
-      }
-    ]
-  },
+  // {
+  //   path: "/editMeals",
+  //   component: Layout,
+  //   redirect: "/editMeals/editMeals",
+  //   children: [
+  //     {
+  //       path: "editMeals",
+  //       name: "编辑智能配餐",
+  //       component: () =>
+  //         import(/* webpackChunkName: "views" */  "@/views/message/meals")
+  //     }
+  //   ]
+  // },
   {
     path: "/recipeManager",
     component: Layout,

@@ -325,7 +325,7 @@
                   <!--<el-divider></el-divider>-->
                 </div>
 
-                <ul ref="boxScroll2" class="foodWeekListHis" @mouseout="HidenFoodTips($event)" >
+                <ul ref="boxScroll2" class="foodWeekListHis" @mouseout="HidenFoodTips($event)">
                   <li v-for="f in peopleMealListLeft" :key="f.id" @mouseover="ShowFood($event,f)"
                       @mouseout="HidenFoodTips($event)" style="font-size: 14px">
                     <span>{{f.recipeName}}</span> <img style="width: 20px" @click="mealLoad(f,f.recipeName)"
@@ -718,10 +718,10 @@
         jundgeallergy: false,//过敏
         foodRadio: '1',
         isUse: undefined,
-        currentPub:1,
-        sizePub:10,
-        currentPri:1,
-        sizePri:10,
+        currentPub: 1,
+        sizePub: 10,
+        currentPri: 1,
+        sizePri: 10,
         belongRegion: undefined,
         seasonl: undefined,
         belongRegionOption: [],
@@ -824,7 +824,7 @@
         showFoodList: false,
         recipeSelectPub: '1',
         recipeSelectPri: '1',
-        recipeSelect:'1',
+        recipeSelect: '1',
         dishSelectPub: '1',
         dishSelectPri: '1',
         personMenuDishList: [],
@@ -949,8 +949,8 @@
           // {name:"周四食谱",id:"4"}
         ],
         peopleMealListLeft: [],
-        recipefinishedPub:false,
-        recipefinishedPri:false,
+        recipefinishedPub: false,
+        recipefinishedPri: false,
         curentHoverFood: {},
         //拖动的节点
         drogNode: {},
@@ -1005,33 +1005,32 @@
         var boxScrollHeight = this.$refs.boxScroll2.scrollHeight;
         var boxScrollTop = this.$refs.boxScroll2.scrollTop;
         var boxClientHeight = this.$refs.boxScroll2.clientHeight;
-        console.log(boxScrollHeight,boxScrollTop,boxClientHeight,boxScrollHeight - (boxScrollTop + boxClientHeight))
+        console.log(boxScrollHeight, boxScrollTop, boxClientHeight, boxScrollHeight - (boxScrollTop + boxClientHeight))
         if (boxScrollHeight - (boxScrollTop + boxClientHeight) < 10) {
           this.ScrollUp2();
         }
       },
       ScrollUp2: function () {
-        let that=this;
+        let that = this;
         if (!this.timer) {
           console.log("timer");
           this.timer1 = setTimeout(() => {
-            if(this.recipefinishedPri){
+            if (this.recipefinishedPri) {
               return;
             }
-             let isPub;
-              if (this.recipeSelectPri == '2') {
-                isPub = '0';
-              }
-              if (this.recipeSelectPri == '3') {
-                isPub = '1';
-              }
-            mealList(2, isPub, this.recipeNameSharePri, undefined, 1,undefined,++this.currentPri,this.sizePri).then(res => {
-              res.data.data.records.forEach(_=>{
+            let isPub;
+            if (this.recipeSelectPri == '2') {
+              isPub = '0';
+            }
+            if (this.recipeSelectPri == '3') {
+              isPub = '1';
+            }
+            mealList(2, isPub, this.recipeNameSharePri, undefined, 1, undefined, ++this.currentPri, this.sizePri).then(res => {
+              res.data.data.records.forEach(_ => {
                 that.peopleMealListLeft.push(_);
               })
-              if( that.peopleMealListLeft.length==res.data.data.total)
-              {
-                that.recipefinishedPri=true;
+              if (that.peopleMealListLeft.length == res.data.data.total) {
+                that.recipefinishedPri = true;
               }
             })
             this.timer1 = null;
@@ -1042,31 +1041,30 @@
         var boxScrollHeight = this.$refs.boxScroll1.scrollHeight;
         var boxScrollTop = this.$refs.boxScroll1.scrollTop;
         var boxClientHeight = this.$refs.boxScroll1.clientHeight;
-        console.log(boxScrollHeight,boxScrollTop,boxClientHeight,boxScrollHeight - (boxScrollTop + boxClientHeight))
+        console.log(boxScrollHeight, boxScrollTop, boxClientHeight, boxScrollHeight - (boxScrollTop + boxClientHeight))
         if (boxScrollHeight - (boxScrollTop + boxClientHeight) < 10) {
           this.ScrollUp();
-         }
+        }
       },
       ScrollUp: function () {
-        let that=this;
+        let that = this;
         if (!this.timer) {
           console.log("timer");
           this.timer = setTimeout(() => {
-          //  console.log("scrollUp");
-            if(this.recipefinishedPub){
+            //  console.log("scrollUp");
+            if (this.recipefinishedPub) {
               return;
             }
             let isRecommend;
-             if (this.recipeSelectPub == '2') {
-               isRecommend = '1';
-             }
-            mealList(1, undefined, this.recipeNameSharePub, undefined, 1,isRecommend,++this.currentPub,this.sizePub).then(res => {
-              res.data.data.records.forEach(_=>{
+            if (this.recipeSelectPub == '2') {
+              isRecommend = '1';
+            }
+            mealList(1, undefined, this.recipeNameSharePub, undefined, 1, isRecommend, ++this.currentPub, this.sizePub).then(res => {
+              res.data.data.records.forEach(_ => {
                 that.mealListLeft.push(_);
               })
-              if( that.mealListLeft.length==res.data.data.total)
-              {
-                that.recipefinishedPub=true;
+              if (that.mealListLeft.length == res.data.data.total) {
+                that.recipefinishedPub = true;
               }
             })
             this.timer = null;
@@ -1206,14 +1204,13 @@
             isRecommend = '1';
           }
         }
-        this.currentPub=1;
-        this.recipefinishedPub=false
-        this.mealListLeft=[]
-        mealList(1, undefined, this.recipeNameSharePub, undefined, 1,isRecommend,this.currentPub,this.sizePub).then(res => {
+        this.currentPub = 1;
+        this.recipefinishedPub = false
+        this.mealListLeft = []
+        mealList(1, undefined, this.recipeNameSharePub, undefined, 1, isRecommend, this.currentPub, this.sizePub).then(res => {
           this.mealListLeft = res.data.data.records;
-          if( this.mealListLeft.length==res.data.data.total)
-          {
-            this.recipefinishedPub=true;
+          if (this.mealListLeft.length == res.data.data.total) {
+            this.recipefinishedPub = true;
           }
         })
       },
@@ -1229,14 +1226,13 @@
             isPub = '1';
           }
         }
-        this.currentPri=1;
-        this.recipefinishedPri=false
-        this.$set(this,"peopleMealListLeft",[]);
-        mealList(2, isPub, this.recipeNameSharePri, undefined, 1,undefined,this.currentPri,this.sizePri).then(res => {
+        this.currentPri = 1;
+        this.recipefinishedPri = false
+        this.$set(this, "peopleMealListLeft", []);
+        mealList(2, isPub, this.recipeNameSharePri, undefined, 1, undefined, this.currentPri, this.sizePri).then(res => {
           this.peopleMealListLeft = res.data.data.records;
-          if( this.peopleMealListLeft.length==res.data.data.total)
-          {
-            this.recipefinishedPri=true;
+          if (this.peopleMealListLeft.length == res.data.data.total) {
+            this.recipefinishedPri = true;
           }
         })
       },
@@ -1258,18 +1254,22 @@
         }
       },
       inserMeal(f, that) {
-        let data = f.recipeVO;
-        that.$set(that.WeekInfo, "foodCatalog", JSON.parse(data.mealTypestrs))
-        that.WeekInfo.weekType = data.recipeDay
-        that.FixWeek();
-        that.ShowWeekSelect();
-        that.SelectWeek(that.WeekInfo.weekValue)
-        that.$refs.refweekSelect.hidePicker();
-        that.AppendFoodType();
-        let recipeCycles = data.recipeCycles;
-        setTimeout(function () {
-          that.insertDishesData("datas", recipeCycles, that);
-        }, 1000);
+        detail(f.id).then(res => {
+          if (res.data.success) {
+            let data = res.data.data;
+            that.$set(that.WeekInfo, "foodCatalog", JSON.parse(data.mealTypestrs))
+            that.WeekInfo.weekType = data.recipeDay
+            that.FixWeek();
+            that.ShowWeekSelect();
+            that.SelectWeek(that.WeekInfo.weekValue)
+            that.$refs.refweekSelect.hidePicker();
+            that.AppendFoodType();
+            let recipeCycles = data.recipeCycles;
+            setTimeout(function () {
+              that.insertDishesData("datas", recipeCycles, that);
+            }, 1000);
+          }
+        })
       },
       insertDishesData(datas, recipeCycles, that) {
         that[datas].forEach(_ => {
@@ -1279,7 +1279,7 @@
               if (recipeCycles[i].mealsType + "" == that.getmealTypeData(_.name) && recipeCycles[i].week + "" == __.name.slice(4)) {
                 __.image = recipeCycles[i].pic
                 let recipeConncts = recipeCycles[i].recipeConncts;
-                if(recipeConncts) {
+                if (recipeConncts) {
                   for (let k = 0; k < recipeConncts.length; k++) {//菜品
                     let food = {};
                     let recipevals = recipeConncts[k].recipevals;
@@ -1287,13 +1287,15 @@
                     for (let j = 0; j < recipevals.length; j++) {//食材
                       let nutrientIds = [];
                       let foodNutritionList = recipevals[j].foodNutritionList;
-                      foodNutritionList.forEach(_ => {
-                        this.nutritionValue.forEach(n => {
-                          if (n.code == _.nutrientId + "") {
-                            nutrientIds.push({id: _.nutrientId, name: n.name, value: _.value})//数值>0即可，此时的value不准确  因为要/100*食部
-                          }
+                      if(foodNutritionList&&foodNutritionList.length>0) {
+                        foodNutritionList.forEach(_ => {
+                          this.nutritionValue.forEach(n => {
+                            if (n.code == _.nutrientId + "") {
+                              nutrientIds.push({id: _.nutrientId, name: n.name, value: _.value})//数值>0即可，此时的value不准确  因为要/100*食部
+                            }
+                          })
                         })
-                      })
+                      }
                       children.push({
                         id: recipevals[j].foodId,
                         name: recipevals[j].foodName,
@@ -1352,37 +1354,40 @@
               if (recipeCycles[i].mealsType + "" == that.getmealTypeData(_.name) && recipeCycles[i].week + "" == __.name.slice(4)) {
                 __.image = recipeCycles[i].pic
                 let recipeConncts = recipeCycles[i].recipeConncts;
-                if(recipeConncts) {
-                for (let k = 0; k < recipeConncts.length; k++) {//菜品
-                  let food = {};
-                  let recipevals = recipeConncts[k].recipevals;
-                  let children = [];
+                if (recipeConncts) {
+                  for (let k = 0; k < recipeConncts.length; k++) {//菜品
+                    let food = {};
+                    let recipevals = recipeConncts[k].recipevals;
+                    let children = [];
 
-                  for (let j = 0; j < recipevals.length; j++) {//食材
-                    let nutrientIds = [];
-                    let foodNutritionList = recipevals[j].foodNutritionList;
-                    foodNutritionList.forEach(_ => {
-                      this.nutritionValue.forEach(n => {
-                        if (n.code == _.nutrientId + "") {
-                          nutrientIds.push({id: _.nutrientId, name: n.name, value: _.value})//数值>0即可，此时的value不准确  因为要/100*食部
-                        }
+                    for (let j = 0; j < recipevals.length; j++) {//食材
+                      let nutrientIds = [];
+                      let foodNutritionList = recipevals[j].foodNutritionList;
+                      if(foodNutritionList&&foodNutritionList.length>0) {
+                        foodNutritionList.forEach(_ => {
+                          this.nutritionValue.forEach(n => {
+                            if (n.code == _.nutrientId + "") {
+                              nutrientIds.push({id: _.nutrientId, name: n.name, value: _.value})//数值>0即可，此时的value不准确  因为要/100*食部
+                            }
+                          })
+                        })
+                      }
+                      children.push({
+                        id: recipevals[j].foodId,
+                        name: recipevals[j].foodName,
+                        count: recipevals[j].val,
+                        nutrientIds: nutrientIds
                       })
-                    })
-                    children.push({
-                      id: recipevals[j].foodId,
-                      name: recipevals[j].foodName,
-                      count: recipevals[j].val,
-                      nutrientIds: nutrientIds
-                    })
+                    }
+                    food.id = recipeConncts[k].dishId;
+                    food.name = recipeConncts[k].dishName;
+                    food.count = recipeConncts[k].value;
+                    food.children = children;
+                    foods.push(food)
                   }
-                  food.id = recipeConncts[k].dishId;
-                  food.name = recipeConncts[k].dishName;
-                  food.count = recipeConncts[k].value;
-                  food.children = children;
-                  foods.push(food)
                 }
               }
-            }}
+            }
             that.$set(__, "foods", foods);
           })
         })
@@ -1390,7 +1395,7 @@
           that.$refs.child.refreshData();
         }
         if (datas == "showDatas") {
-        //  console.log(that.showDatas)
+          //  console.log(that.showDatas)
           that.$refs.showChild.refreshData();
         }
 
@@ -1433,22 +1438,20 @@
       },
       initMealData() {
         //公开
-        this.recipefinishedPub=false;
-        this.$set(this,"mealListLeft",[]);
-        mealList(1, undefined, undefined, undefined, 1,undefined,this.currentPub,this.sizePub).then(res => {
+        this.recipefinishedPub = false;
+        this.$set(this, "mealListLeft", []);
+        mealList(1, undefined, undefined, undefined, 1, undefined, this.currentPub, this.sizePub).then(res => {
           this.mealListLeft = res.data.data.records;
-          if( this.mealListLeft.length==res.data.data.total)
-          {
-            this.recipefinishedPub=true;
+          if (this.mealListLeft.length == res.data.data.total) {
+            this.recipefinishedPub = true;
           }
         })
-        this.recipefinishedPri=false;
-        this.$set(this,"peopleMealListLeft",[]);
-        mealList(2, undefined, undefined, undefined, 1,undefined,this.currentPri,this.sizePri).then(res => {
+        this.recipefinishedPri = false;
+        this.$set(this, "peopleMealListLeft", []);
+        mealList(2, undefined, undefined, undefined, 1, undefined, this.currentPri, this.sizePri).then(res => {
           this.peopleMealListLeft = res.data.data.records;
-          if( this.peopleMealListLeft.length==res.data.data.total)
-          {
-            this.recipefinishedPri=true;
+          if (this.peopleMealListLeft.length == res.data.data.total) {
+            this.recipefinishedPri = true;
           }
         })
       },
@@ -1728,7 +1731,7 @@
             ev.dataTransfer.setData("Text", JSON.stringify(node.data));
             that.drogNodeStats = true;
             setTimeout(() => {
-             // that.$refs.child.refreshData();
+              // that.$refs.child.refreshData();
               that.$refs.child.resizeExpendHeight();
             }, 100);
           })
@@ -2058,7 +2061,7 @@
                 this.initMealData();
                 this.$router.$avueRouter.closeTag();
                 this.$router.push({
-                  path: "./myecipe"
+                  path: "/message/myecipe"
                 });
               }
             })
@@ -2764,6 +2767,7 @@
     overflow-y: scroll;
     height: 450px;
   }
+
   .detetion-box {
     height: inherit;
     overflow: scroll;
