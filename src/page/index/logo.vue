@@ -92,7 +92,7 @@ export default {
   position: fixed;
   top: 0;
   left: 0;
-  width: 240px;
+  width: 225px;
   height: 64px;
   line-height: 64px;
   // background-color: #20222a;

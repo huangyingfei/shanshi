@@ -19,7 +19,7 @@
   position: fixed;
   left: 0;
   top: 0;
-  width: 240px;
+  width: 225px;
   height: 100%;
   z-index: 1025;
 }
@@ -41,7 +41,7 @@
 }
 
 .avue-header {
-  padding-left: 240px;
+  padding-left: 225px;
   width: 100%;
   background-color: #fff;
   box-sizing: border-box;
@@ -49,10 +49,10 @@
 
 .avue-main {
   position: absolute;
-  left: 240px;
+  left: 225px;
   padding: 0;
   padding-bottom: 20px;
-  width: calc(100% - 240px);
+  width: calc(100% - 225px);
   height: calc(100% - 64px);
   box-sizing: border-box;
   overflow: hidden;
