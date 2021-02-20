@@ -53,7 +53,7 @@
           @click="rowDel(scope.row)"
           >删除
         </el-button>
-        <el-button
+        <!-- <el-button
           type="text"
           icon="el-icon-circle-plus-outline"
           size="small"
@@ -84,7 +84,7 @@
           v-show="scope.row.isRecommend != 0"
           @click="changeInfo(scope.row.id, 4)"
           >取消推荐
-        </el-button>
+        </el-button> -->
         <el-button
           type="text"
           icon="el-icon-circle-plus-outline"
@@ -130,6 +130,7 @@
         <el-col :span="24">
           <el-table
             :data="recipeTableData"
+            v-loading="recipeTableDataLoading"
             border
             style="width: 100%"
             class="recipeTableWeekData"
@@ -167,6 +168,7 @@
 import {
   getList,
   getDetail,
+  getRecipeDetail,
   add,
   update,
   remove,
@@ -179,6 +181,7 @@ export default {
   data() {
     return {
       dialogVisible: false, //弹框打开或者关闭
+      recipeTableDataLoading: true,
       recipeTableData: [],
       form: {},
       query: {},
@@ -200,7 +203,7 @@ export default {
       selectionList: [],
       option: {
         height: "auto",
-        calcHeight: 30,
+        calcHeight: 0,
         tip: false,
         searchShow: true,
         searchMenuSpan: 6,
@@ -210,7 +213,7 @@ export default {
         editBtn: false,
         delBtn: false,
         selection: true,
-        menuWidth: 450,
+        size: "mini",
         columnBtn: false,
         refreshBtn: false,
         dialogHeight: "600",
@@ -409,7 +412,10 @@ export default {
     },
     seeRecipeInfo(row) {
       this.dialogListData = row;
-      getDetail(row.id).then((res) => {
+      this.dialogVisible = true;
+      this.recipeTableDataLoading = true;
+      this.recipeTableData = [];
+      getRecipeDetail(row.id).then((res) => {
         let recipeCycles = res.data.data.recipeCycles;
         let recipeTableData1 = [];
         let recipeTableData = {
@@ -470,15 +476,16 @@ export default {
               var weekNum = "week" + recipeTableData[key][index].week;
 
               // weekData[weekNum].push(recipeTableData[key][index].recipeConncts[0].dishName)
-              weekData[weekNum] +=
-                recipeTableData[key][index].recipeConncts[0].dishName + "\n";
+              recipeTableData[key][index].recipeConncts.forEach((element) => {
+                weekData[weekNum] += element.dishName + "\n";
+              });
             }
             console.log(weekData);
             recipeTableData1.push(weekData);
           }
         }
         this.recipeTableData = recipeTableData1;
-        this.dialogVisible = true;
+        this.recipeTableDataLoading = false;
       });
     },
     rowSave(row, done, loading) {
