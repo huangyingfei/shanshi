@@ -257,7 +257,9 @@ export default {
             search: true,
             display: false,
             minlength:0,
-            maxlength:16
+            maxlength:16,
+            width:100,
+            overHidden: true,
           },
           // {
           //   label: "所属租户",
@@ -271,7 +273,9 @@ export default {
             search: true,
             display: false,
             minlength:0,
-            maxlength:10
+            maxlength:10,
+            width:100,
+            overHidden: true,
           },
 
           {
@@ -280,7 +284,9 @@ export default {
             display: false,
             search: true,
             minlength:0,
-            maxlength:16
+            maxlength:16,
+            width:100,
+            overHidden: true,
           },
           {
             label: "所属角色",
@@ -294,6 +300,8 @@ export default {
               label: "roleName",
               value: "id",
             },
+            width:160,
+            overHidden: true,
           },
           {
             label: "手机号码",
@@ -301,29 +309,51 @@ export default {
             display: false,
             search: true,
             minlength:0,
-            maxlength:11
+            maxlength:11,
+            width:100,
+            overHidden: true,
           },
           {
             label: "电子邮箱",
             prop: "email",
             display: false,
             minlength:0,
-            maxlength:35
+            maxlength:35,
+            width:160,
+            overHidden: true,
           },
           {
             label: "用户性别",
             prop: "sex",
             display: false,
+            dicData: [
+              {
+                label: "男",
+                value: 1,
+              },
+              {
+                label: "女",
+                value: 2,
+              },
+              {
+                label: "未知",
+                value: 3,
+              },
+            ],
           },
           {
             label: "部门",
             prop: "deptName",
             display: false,
+            width:120,
+            overHidden: true,
           },
           {
             label: "岗位",
             prop: "postName",
             display: false,
+            width:120,
+            overHidden: true,
           },
         ],
         group: [

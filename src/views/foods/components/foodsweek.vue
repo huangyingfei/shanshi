@@ -1483,7 +1483,8 @@ export default {
                 _["real"]=parseFloat(_["real"]).toFixed(2)
               })
               that.pcScore=that.score;
-              that.$emit('childfn', Math.floor(that.getData(res.data.data) * 100) / 100,"datas",this.pcScore, intake, nutrition, power, protein, meal);
+              var tenantName=resData.tenantName
+              that.$emit('childfn', Math.floor(that.getData(res.data.data) * 100) / 100,"datas",this.pcScore, intake, nutrition, power, protein, meal,tenantName);
             }
           }else{
             that.$message({
@@ -1611,7 +1612,6 @@ export default {
     // 合并单元格
     onTableSpanMethod({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 2) {
-   //
         if(row.spans){
           return [row.spans, 1];
         }else{

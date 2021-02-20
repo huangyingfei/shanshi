@@ -271,7 +271,7 @@ export default {
             span: 8,
           },
           {
-            label: "身份证类型",
+            label: "证件类型",
             prop: "cardType",
             type: "select",
             dicData: cardType,
@@ -282,7 +282,7 @@ export default {
             },
           },
           {
-            label: "身份证号码",
+            label: "证件号",
             prop: "cardNo",
             span: 8,
             minlength:0,

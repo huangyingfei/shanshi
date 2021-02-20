@@ -197,7 +197,6 @@ export default {
       option: {
         height: "auto",
         calcHeight: 30,
-        align: "center",
         menuAlign: "center",
         tip: false,
         simplePage: true,
@@ -211,7 +210,7 @@ export default {
         viewBtn: true,
         // menuWidth: 400,
         delBtn:false,
-        menuWidth: 350,
+        menuWidth: 200,
         dialogHeight:400,
         columnBtn:false,
         refreshBtn:false,
@@ -222,7 +221,8 @@ export default {
             label: "机构ID",
             prop: "tenantId",
             display: false,
-             width:150
+             width:160,
+             overHidden: true,
           },
           {
             label: "机构名称",
@@ -230,7 +230,9 @@ export default {
             search: true,
             display: false,
             minlength:0,
-            maxlength:16
+            maxlength:16,
+            width:100,
+            overHidden: true,
           },
 
           {
@@ -239,7 +241,9 @@ export default {
             search: true,
             display: false,
             minlength:0,
-            maxlength:16
+            maxlength:16,
+            width:100,
+            overHidden: true,
           },
 
           {
@@ -280,7 +284,9 @@ export default {
             search: true,
             display: false,
             minlength:0,
-            maxlength:16
+            maxlength:16,
+            width:100,
+            overHidden: true,
           },
           {
             label: "联系电话",
@@ -288,26 +294,32 @@ export default {
             search: true,
             display: false,
             minlength:0,
-            maxlength:16
+            maxlength:16,
+            width:100,
+            overHidden: true,
           },
           {
             label: "营养标准",
             prop: "nutrientName",
             display: false,
+            width:160,
+            overHidden: true,
           },
           {
-            label: "开始使用日期",
+            label: "开始日期",
             prop: "startTimeStr",
             type: "datetime",
             display: false,
-            width:100
+            width:100,
+            overHidden: true,
           },
           {
-            label: "结束使用日期",
+            label: "结束日期",
             prop: "endTimeStr",
             type: "datetime",
             display: false,
-            width:100
+            width:100,
+            overHidden: true,
           },
           {
             label: "状态",
@@ -532,12 +544,12 @@ export default {
                 maxlength:255
               },
               {
-                label: "机构logo",
+                label: "机构排名logo",
                 prop: "logoUrl",
                 type: "upload",
                 listType: "picture-img",
                 action: '/api/blade-resource/oss/endpoint/put-file',
-                tip: '只能上传jpg/png的图片，且不超过500kb',
+                tip: '建议上传180 x 180px的图片，具体尺寸需确认下',
                 //  action: '/api/blade-resource/oss/endpoint/put-file',
                 propsHttp: {
                   res: "data",
@@ -550,7 +562,7 @@ export default {
                 type: "upload",
                 listType: "picture-img",
                 action: '/api/blade-resource/oss/endpoint/put-file',
-                tip: '只能上传jpg/png的图片，且不超过500kb',
+                tip: '建议上传180 x 180px的图片，具体尺寸需确认下',
                 //  action: '/api/blade-resource/oss/endpoint/put-file',
                 propsHttp: {
                   res: "data",
@@ -646,7 +658,7 @@ export default {
                 type: "upload",
                 listType: "picture-img",
                 action: '/api/blade-resource/oss/endpoint/put-file',
-                tip: '只能上传jpg/png的图片，且不超过500kb',
+                tip: '建议上传240 x 64px的图片，具体尺寸需确认下',
                 //  action: '/api/blade-resource/oss/endpoint/put-file',
                 propsHttp: {
                   res: "data",

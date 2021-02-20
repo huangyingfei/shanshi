@@ -67,6 +67,23 @@
               action: '/api/blade-resource/oss/endpoint/put-file'
             },
             {
+              label: '机构排名logo',
+              prop: 'organLogo',
+              type: 'upload',
+              listType: 'picture-img',
+              span: 24,
+              propsHttp: {
+                res: 'data',
+                url: 'link',
+              },
+              canvasOption: {
+                text: ' ',
+                ratio: 0.1
+              },
+              tip: '建议上传180 x 180px的图片，具体尺寸需确认下',
+              action: '/api/blade-resource/oss/endpoint/put-file'
+            },
+            {
               label: "开始使用时间",
               prop: "startUseTime",
               type:"date",
@@ -108,6 +125,7 @@
               this.saveOrUpdate = true;
               this.$set( this.ruleForm,"webTitle" , data.data.webTitle);
               this.$set(this.ruleForm,"webLogo", data.data.webLogo);
+              this.$set(this.ruleForm,"organLogo", data.data.organLogo);
               this.$set(this.ruleForm,"id" , data.data.id);
               this.$set(this.ruleForm,"startUseTime",data.data.startUseTime)
               this.$set(this.ruleForm,"endTime",data.data.endTime)
@@ -128,13 +146,15 @@
         if (!this.saveOrUpdate) {//新增
           params = {
             webTitle: this.ruleForm.webTitle,
-            webLogo: this.ruleForm.webLogo
+            webLogo: this.ruleForm.webLogo,
+            organLogo:this.ruleForm.organLogo
           }
         } else {
           params = {
             webTitle: this.ruleForm.webTitle,
             webLogo: this.ruleForm.webLogo,
-            id: this.ruleForm.id
+            id: this.ruleForm.id,
+            organLogo:this.ruleForm.organLogo
           }
         }
         saveWeb(params).then(res => {

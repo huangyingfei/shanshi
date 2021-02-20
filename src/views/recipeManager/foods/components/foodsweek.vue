@@ -1634,7 +1634,6 @@ export default {
     // 合并单元格
     onTableSpanMethod({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 2) {
-   //
         if(row.spans){
           return [row.spans, 1];
         }else{

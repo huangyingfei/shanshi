@@ -132,7 +132,9 @@ export default {
             prop: "className",
             span: 24,
             disabled: true,
-            search: true
+            search: true,
+            width:100,
+            overHidden: true,
           },
           {
             label: "姓名",
@@ -145,7 +147,9 @@ export default {
                 message: "请输入姓名",
                 trigger: "blur"
               }
-            ]
+            ],
+            width:100,
+            overHidden: true,
           },
           {
             label: "食材名称",
@@ -157,7 +161,9 @@ export default {
                 message: "请输入主键",
                 trigger: "blur"
               }
-            ]
+            ],
+            width:320,
+            overHidden: true,
           },
           {
             label: "过敏食材",
@@ -170,7 +176,8 @@ export default {
                 message: "请选择过敏食材",
                 trigger: "blur"
               }
-            ]
+            ],
+
           },
           {
             label: "过敏症状",
@@ -183,7 +190,9 @@ export default {
                 message: "请输入过敏症状",
                 trigger: "blur"
               }
-            ]
+            ],
+            width:320,
+            overHidden: true,
           },
           {
             label: "备注",
@@ -196,7 +205,9 @@ export default {
                 message: "请输入备注",
                 trigger: "blur"
               }
-            ]
+            ],
+            width:320,
+            overHidden: true,
           }
         ]
       },
