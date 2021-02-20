@@ -1,6 +1,7 @@
 <template>
  <basic-container>
 
+<div class="el-fix">
     <el-form
       :model="ruleForm"
       :rules="rules"
@@ -23,8 +24,10 @@
       </el-select>
       <el-button type="primary" @click="upNId">确 认</el-button>
     </el-form>
+</div>
     <!-- 标签页 -->
     <div class="el-contain">
+      <div class="el-fix2">
      <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane v-for="(item, index) in nutritionVos" :key="index"   :label="item.name" :id="item.id">
         <div class="tag-list">
@@ -33,7 +36,9 @@
         </div>
       </el-tab-pane>
     </el-tabs>
-    <table>
+      </div>
+      <div style="height: 100px"></div>
+    <table style="padding-top: 250px">
       <tr v-if="fathNutritionVos.sexNum==2" class="table-title">
         <td></td>
         <td colspan="3">男性</td>
@@ -63,7 +68,7 @@
         <td></td>
         <td>下限系数</td>
       </tr>
-      <tr   v-for="(item, index) in tableData" :key="index" >
+       <tr   v-for="(item, index) in tableData" :key="index" >
         <th class="table-first">{{item.name}}{{isNaN(item.name) ? "" : "岁~"}}</th>
         <td v-if="fathNutritionVos.sexNum==2">
           <el-input disabled v-model="item.manMax"></el-input>
@@ -208,7 +213,22 @@ export default {
 </script>
 
 <style scoped>
+  .el-fix{
+    position: fixed;
+    background: #FFFFFF;
+    width: calc(100% - 309px);
+    z-index: 999;
+    margin-top:-16px;
+    padding-top: 16px;
+  }
+  .el-fix2{
+    position: fixed;
+    width: calc(100% - 349px);
+    background: #FFFFFF;
+    z-index: 999;
+  }
 .el-contain {
+  margin-top: 50px;
   padding-left: 40px;
   padding-bottom: 40px;
 }
