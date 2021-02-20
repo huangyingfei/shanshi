@@ -26,19 +26,19 @@
     <div class="browse">
       <div class="fontify">
         <div class="fontifytxt">浏览量PV</div>
-        <div class="fontifynum">{{ this.browse.extrapv }}</div>
-      </div>
-      <div class="fontify">
-        <div class="fontifytxt">浏览人数UV</div>
         <div class="fontifynum">{{ this.browse.visitorsuv }}</div>
       </div>
       <div class="fontify">
+        <div class="fontifytxt">浏览人数UV</div>
+        <div class="fontifynum">{{ this.browse.extrapv }}</div>
+      </div>
+      <div class="fontify">
         <div class="fontifytxt">总浏览量PV</div>
-        <div class="fontifynum">{{ this.browse.property }}</div>
+        <div class="fontifynum">{{ this.browse.ofcleaning }}</div>
       </div>
       <div class="fontify">
         <div class="fontifytxt">总浏览人数UV</div>
-        <div class="fontifynum">{{ this.browse.ofcleaning }}</div>
+        <div class="fontifynum">{{ this.browse.property }}</div>
       </div>
     </div>
     <div class="linewidth">

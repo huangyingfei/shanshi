@@ -15,7 +15,7 @@
                 <el-button type="primary" plain size="mini">导出</el-button>
                 <el-button type="primary" plain size="mini">加分类</el-button> -->
           <el-button @click="addition(0)" type="primary" size="mini"
-            >加食材</el-button
+            >添加食材</el-button
           >
         </div>
         <div class="whole">
@@ -98,6 +98,8 @@
               :props="defaultProps"
               node-key="id"
               :default-expand-all="false"
+              :default-expanded-keys="[1]"
+              :default-checked-keys="[5]"
               @node-click="handleNodeClick"
               :filter-node-method="filterNode"
               ref="tree"
@@ -446,7 +448,7 @@ export default {
         ],
         fooddata: [
           //食材分类
-          { required: true, message: "请选择食物分类", trigger: "change" }
+          { required: true, message: "请选择食物分类", trigger: "blur" }
         ],
         besaved: [{ required: true, message: "请输入食部", trigger: "blur" }],
         timers: [{ required: true, message: "请输入重量", trigger: "blur" }]
@@ -997,6 +999,7 @@ export default {
           this.data = trees;
         });
     },
+
     ToString() {
       this.$axios
         .get(`api/blade-food/nutrition/tree`, {
@@ -1259,8 +1262,8 @@ export default {
   height: 50px;
   position: fixed;
   bottom: 0px;
-  left: 60%;
-
+  left: 45%;
+  z-index: 999;
   background-color: #fff;
   /* margin-bottom: 50px; */
   /* margin-top: 30px; */

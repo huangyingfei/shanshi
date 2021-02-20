@@ -19,19 +19,7 @@
         end-placeholder="结束日期"
       >
       </el-date-picker>
-      <span style="margin-right: 10px;margin-left: 15px;">机构类型:</span>
-      <el-select v-model="keyword.block" placeholder="请选择">
-        <el-option
-          size="mini"
-          v-for="item in keydown"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        ></el-option>
-      </el-select>
-    </div>
-    <div class="key_end">
-      <span style=" margin-right: 10px;margin-left:0px;">收藏食谱:</span>
+      <span style=" margin-right: 10px;margin-left:15px;">收藏食谱:</span>
       <el-select
         style="width:200px;"
         @change="collection"
@@ -46,7 +34,19 @@
         >
         </el-option>
       </el-select>
-      <span style="margin-left: 15px; margin-right: 15px;">公示食谱:</span>
+      <!-- <span style="margin-right: 10px;margin-left: 15px;">机构类型:</span>
+      <el-select v-model="keyword.block" placeholder="请选择">
+        <el-option
+          size="mini"
+          v-for="item in keydown"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        ></el-option>
+      </el-select> -->
+    </div>
+    <div class="key_end">
+      <span style="margin-left: 0px; margin-right: 10px;">公示食谱:</span>
 
       <el-select style="width:200px;" v-model="blicity" placeholder="请选择">
         <el-option
@@ -110,7 +110,7 @@
         ></el-table-column>
         <el-table-column
           prop="recipeDay"
-          label="食谱周期"
+          label="食谱天数"
           align="center"
         ></el-table-column>
         <el-table-column
@@ -118,15 +118,19 @@
           label="平均年龄"
           align="center"
         ></el-table-column>
-
-        <el-table-column label="机构类型" align="center">
+        <el-table-column
+          prop="score"
+          label="评分"
+          align="center"
+        ></el-table-column>
+        <!-- <el-table-column label="机构类型" align="center">
           <template slot-scope="scope">
             <el-tag v-if="scope.row.orgType == 1">学校</el-tag>
             <el-tag v-else-if="scope.row.orgType == 2">医院</el-tag>
             <el-tag v-else-if="scope.row.orgType == 3">餐饮</el-tag>
             <el-tag v-else-if="scope.row.orgType == 4">其他</el-tag>
           </template>
-        </el-table-column>
+        </el-table-column> -->
 
         <!-- <el-table-column
           prop=""
@@ -136,13 +140,13 @@
 
         <el-table-column
           prop="orgName"
-          label="创建机构"
+          label="分享机构"
           align="center"
         ></el-table-column>
 
         <el-table-column
           prop="createTime"
-          label="创建时间"
+          label="分享时间"
           align="center"
         ></el-table-column>
         <el-table-column label="操作" width="200" align="center">

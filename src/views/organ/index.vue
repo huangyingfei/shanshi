@@ -104,6 +104,12 @@
       <div class="recipes">
         <div v-if="this.preRanking == 2">
           <h4 class="welcome1">本周食谱健康指数排行榜</h4>
+          <!-- <div class="ranking" v-for="(num, i) in listset" :key="i">
+            {{ num }}
+          </div> -->
+          <!-- <div class="ranking1">1</div>
+          <div class="ranking1">1</div> -->
+
           <div class="school1" v-for="(item1, i) in getHealth" :key="i" lazy>
             <div class="schoolimg">
               <el-image style="width: 80px; height: 80px" :src="item1.logoUrl">
@@ -160,6 +166,7 @@ export default {
         dish: "", //菜品总量
         recipe: "" //食谱总量
       },
+      listset: [],
       options: [],
       activity: "",
       double: [],
@@ -434,6 +441,12 @@ export default {
         .then(res => {
           // console.log(res);
           this.getHealth = res.data.data.records;
+          console.log(this.getHealth);
+          for (var i = 1; i <= this.getHealth.length; i++) {
+            this.listset = i;
+            // console.log(this.listset);
+          }
+
           // console.log(this.getHealth);
         });
     },
@@ -618,10 +631,10 @@ export default {
 .ranking {
   width: 30px;
   height: 30px;
-  background: red;
+  // background: red;
   text-align: center;
   line-height: 30px;
-  color: #fff;
+  color: #000;
   float: left;
   margin-top: 15px;
 }
@@ -722,4 +735,10 @@ export default {
   line-height: 60px;
   background-color: #fff;
 }
+// .listed {
+//   width: 50px;
+//   height: 100%;
+//   background-color: red;
+//   float: left;
+// }
 </style>

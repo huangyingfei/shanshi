@@ -756,6 +756,9 @@ export default {
         number: 1
       },
       stringClass: [],
+      stringClass1: [
+        ["1326711402392821762", "1326711753099550721", "1326711916014706690"]
+      ],
       rules: {
         name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
         phones: [
@@ -1472,7 +1475,7 @@ export default {
       this.ruleForm.update = "";
       this.ruleForm.worker = "";
       this.ruleForm.emails = "";
-      this.stringClass = []; //所在年级班级
+      // this.stringClass = []; //所在年级班级
       this.ruleForm.domain = [];
       this.ruleForm.ddeparture = "";
       this.ruleForm.nextstate = "";
@@ -1709,6 +1712,9 @@ export default {
           this.loadFlag1 = false;
           this.tableData = res.data.data.records;
           this.m_page.totalElements = res.data.data.total;
+
+          // this.stringClass = this.stringClass1;
+          // console.log(this.stringClass);
         })
         .catch(() => {
           this.$message.error("查询失败");
@@ -1793,7 +1799,7 @@ export default {
       this.$axios.get(`api/blade-food/class/tree`, {}).then(res => {
         // console.log(res);
         this.bufs = res.data.data;
-        console.log(this.bufs);
+        // console.log(this.bufs);
         let fwork = [];
         this.bufs.forEach(item => {
           item.children.forEach((item1, index1) => {
@@ -1822,6 +1828,7 @@ export default {
           });
         });
         this.loadClass = fwork;
+        console.log(this.loadClass);
       });
     },
     hobbiton() {
