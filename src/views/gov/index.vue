@@ -87,7 +87,7 @@
                       <div class="item">
                         <div class="item-icon">
                           <el-image
-                            style="width:45px;height:45px"
+                            style="width: 45px; height: 45px"
                             :src="require('../../../public/img/jgtotal.png')"
                           ></el-image>
                           <!-- <el-avatar
@@ -104,7 +104,7 @@
                       <div class="item">
                         <div class="item-icon">
                           <el-image
-                            style="width:45px;height:45px"
+                            style="width: 45px; height: 45px"
                             :src="require('../../../public/img/sctotal.png')"
                           ></el-image>
                           <!-- <el-avatar>
@@ -121,7 +121,7 @@
                       <div class="item">
                         <div class="item-icon">
                           <el-image
-                            style="width:45px;height:45px"
+                            style="width: 45px; height: 45px"
                             :src="require('../../../public/img/sysctotal.png')"
                           ></el-image>
                         </div>
@@ -137,7 +137,7 @@
                       <div class="item">
                         <div class="item-icon">
                           <el-image
-                            style="width:45px;height:45px"
+                            style="width: 45px; height: 45px"
                             :src="require('../../../public/img/sptotal.png')"
                           ></el-image>
                         </div>
@@ -151,7 +151,7 @@
                       <div class="item">
                         <div class="item-icon">
                           <el-image
-                            style="width:45px;height:45px"
+                            style="width: 45px; height: 45px"
                             :src="require('../../../public/img/cptotal.png')"
                           ></el-image>
                         </div>
@@ -165,7 +165,7 @@
                       <div class="item">
                         <div class="item-icon">
                           <el-image
-                            style="width:45px;height:45px"
+                            style="width: 45px; height: 45px"
                             :src="require('../../../public/img/sycptotal.png')"
                           ></el-image>
                         </div>
@@ -267,8 +267,8 @@
                         <i
                           class="el-icon-sort-down el-icon--right"
                           :class="{
-                            'el-icon-sort-down': isRecipe,
-                            'el-icon-sort-up': !isRecipe
+                            'el-icon-sort-down': !isRecipe,
+                            'el-icon-sort-up': isRecipe,
                           }"
                         ></i>
                         排序
@@ -312,8 +312,8 @@
                             <i
                               class="el-icon-sort-down el-icon--right"
                               :class="{
-                                'el-icon-sort-down': isDish,
-                                'el-icon-sort-up': !isDish
+                                'el-icon-sort-down': !isDish,
+                                'el-icon-sort-up': isDish,
                               }"
                             ></i>
                             排序
@@ -375,33 +375,31 @@ export default {
     VCalendar,
     SchoolLiRow,
     GoverRecipeDetail,
-    Week
+    Week,
   },
   watch: {
-    areaId: function(newval, oldVal) {
+    areaId: function (newval, oldVal) {
       if (newval instanceof Array) {
         this.govForm.areaId = newval.slice(-1);
         // console.log(this.govForm.areaId);
       }
       this.cascaderChange();
-    }
+    },
   },
 
   data() {
     return {
-      isDish: true,
-      isRecipe: true,
+      isDish: false, //最受欢迎菜品升降序
+      isRecipe: false, //食谱综合评分升降序
       activeName: "first",
       tenantIdOptions: [],
       areaId: [],
-      dishFlag: true, //最受欢迎菜品升降序
-      recipeFlag: true, //食谱综合评分升降序
       govForm: {
         areaId: "", //区域ID
         tenantId: "", //租户id
         startTime: "", //必传
         endTime: "", //必传
-        dateStr: dateFormat(new Date(), "yyyy-MM-dd")
+        dateStr: dateFormat(new Date(), "yyyy-MM-dd"),
       },
       cascaderOptions: [], //省市区
       zfOrgCount: {
@@ -410,7 +408,7 @@ export default {
         dishCount: 0,
         recipeCount: 0,
         foodAdd: 0,
-        dishAdd: 0
+        dishAdd: 0,
       },
       recipeData: {},
       nutrientData: {
@@ -424,7 +422,7 @@ export default {
           "维生素A", //va
           "维生素B1", //vb1
           "维生素B2", //vb2
-          "维生素C" //vc
+          "维生素C", //vc
         ],
         seriesData: {
           ca: [],
@@ -438,8 +436,8 @@ export default {
           vb1: [],
           vb2: [],
           vc: [],
-          zn: []
-        }
+          zn: [],
+        },
       },
       //病假症状排行数据
       leaveSymptoms: {
@@ -459,13 +457,13 @@ export default {
           total: [],
           wsNum: [],
           yhNum: [],
-          ytNum: []
-        }
+          ytNum: [],
+        },
       },
       //过敏食材分布图数据
       allergyFood: {
         indicatorData: [],
-        seriesData: []
+        seriesData: [],
       },
       //学生每人每日营养素提取（DRIs）
       everyDayNutrient: {
@@ -481,41 +479,41 @@ export default {
           { name: "维生素A" },
           { name: "维生素B1" },
           { name: "维生素B2" },
-          { name: "维生素C" }
+          { name: "维生素C" },
         ],
-        seriesData: []
+        seriesData: [],
       },
       //学生每人每日进食量分布
       everyDayEat: {
         seriesData: [],
-        orgCodeOptions: []
+        orgCodeOptions: [],
       },
 
       //最受欢迎菜品
       goverDishTotal: {
         finished: false,
         current: 1,
-        liData: []
+        liData: [],
       },
       //食谱综合评分排行榜
       goverRecipeTotal: {
         finished: false,
         current: 1,
         liData: [],
-        orgCodeOptions: []
+        orgCodeOptions: [],
       },
       //学生出勤率
       studentAttendance: {
         bj: 0,
         cq: 0,
-        sj: 0
+        sj: 0,
       },
       recipeScore: {
         bhg: 0,
         hg: 0,
-        yx: 0
+        yx: 0,
       },
-      dialogVisible: false
+      dialogVisible: false,
     };
   },
   mounted() {
@@ -551,9 +549,9 @@ export default {
         params: {
           tenantId: tenantId,
           startTime: this.goverRecipeTotal.WeekInfo.startTime,
-          endTime: this.goverRecipeTotal.WeekInfo.endTime
-        }
-      }).then(res => {
+          endTime: this.goverRecipeTotal.WeekInfo.endTime,
+        },
+      }).then((res) => {
         this.recipeData = res.data.data;
       });
     },
@@ -562,10 +560,10 @@ export default {
       this.$axios
         .get("api/blade-system/region/getManagerArea", {
           params: {
-            flag: 1
-          }
+            flag: 1,
+          },
         })
-        .then(res => {
+        .then((res) => {
           this.cascaderOptions = res.data.data; //省市区
         });
     },
@@ -575,7 +573,7 @@ export default {
         .get(
           `api/blade-system/region/getTenantListByCode?areaId=${this.govForm.areaId}`
         )
-        .then(res => {
+        .then((res) => {
           // console.log(res);
           this.tenantIdOptions = res.data.data;
         });
@@ -594,8 +592,8 @@ export default {
       this.axios({
         url: "api/blade-food/report/studentWorkCount",
         method: "post",
-        data: this.govForm
-      }).then(res => {
+        data: this.govForm,
+      }).then((res) => {
         if (res.data.data != null) {
           this.studentAttendance.bj = res.data.data.bj;
           this.studentAttendance.cq = res.data.data.cq;
@@ -609,8 +607,8 @@ export default {
       this.axios({
         url: "api/blade-food/report/recipeScore",
         method: "post",
-        data: this.govForm
-      }).then(res => {
+        data: this.govForm,
+      }).then((res) => {
         if (res.data.data != null) {
           this.recipeScore.bhg = res.data.data.bhg;
           this.recipeScore.hg = res.data.data.hg;
@@ -629,14 +627,14 @@ export default {
       var option = {
         tooltip: {
           trigger: "item",
-          formatter: "{b} : {c} ({d}%)"
+          formatter: "{b} : {c} ({d}%)",
         },
         legend: {
           // orient: 'vertical',
           // top: 'middle',
           bottom: 0,
           left: "center",
-          data: ["出勤", "事假", "病假"]
+          data: ["出勤", "事假", "病假"],
         },
         series: [
           {
@@ -644,20 +642,34 @@ export default {
             radius: "60%",
             center: ["50%", "40%"],
             selectedMode: "single",
+            label: {
+              formatter: "{b}: {c}",
+            },
             data: [
               { value: this.studentAttendance.cq, name: "出勤" },
               { value: this.studentAttendance.sj, name: "事假" },
-              { value: this.studentAttendance.bj, name: "病假" }
+              { value: this.studentAttendance.bj, name: "病假" },
             ],
             emphasis: {
               itemStyle: {
                 shadowBlur: 10,
                 shadowOffsetX: 0,
-                shadowColor: "rgba(0, 0, 0, 0.5)"
-              }
-            }
-          }
-        ]
+                shadowColor: "rgba(0, 0, 0, 0.5)",
+              },
+            },
+          },
+        ],
+        color: [
+          "#5470c6",
+          "#91cc75",
+          "#fac858",
+          "#ee6666",
+          "#73c0de",
+          "#3ba272",
+          "#fc8452",
+          "#9a60b4",
+          "#ea7ccc",
+        ],
       };
       // 使用刚指定的配置项和数据显示图表。
       chartPie.setOption(option);
@@ -672,14 +684,14 @@ export default {
       var option = {
         tooltip: {
           trigger: "item",
-          formatter: "{b} : {c} ({d}%)"
+          formatter: "{b} : {c} ({d}%)",
         },
         legend: {
           // orient: 'vertical',
           // top: 'middle',
           bottom: 0,
           left: "center",
-          data: ["优秀", "合格", "不合格"]
+          data: ["优秀", "合格", "不合格"],
         },
         series: [
           {
@@ -687,20 +699,34 @@ export default {
             radius: "60%",
             center: ["50%", "40%"],
             selectedMode: "single",
+            label: {
+              formatter: "{b}: {c}",
+            },
             data: [
               { value: this.recipeScore.yx, name: "优秀" },
               { value: this.recipeScore.hg, name: "合格" },
-              { value: this.recipeScore.bhg, name: "不合格" }
+              { value: this.recipeScore.bhg, name: "不合格" },
             ],
             emphasis: {
               itemStyle: {
                 shadowBlur: 10,
                 shadowOffsetX: 0,
-                shadowColor: "rgba(0, 0, 0, 0.5)"
-              }
-            }
-          }
-        ]
+                shadowColor: "rgba(0, 0, 0, 0.5)",
+              },
+            },
+          },
+        ],
+        color: [
+          "#5470c6",
+          "#91cc75",
+          "#fac858",
+          "#ee6666",
+          "#73c0de",
+          "#3ba272",
+          "#fc8452",
+          "#9a60b4",
+          "#ea7ccc",
+        ],
       };
       // 使用刚指定的配置项和数据显示图表。
       chartPie.setOption(option);
@@ -720,7 +746,7 @@ export default {
         "va",
         "vb1",
         "vb2",
-        "vc"
+        "vc",
       ];
       var seriesData = [];
       for (let i = 0; i < legendDataVal.length; i++) {
@@ -729,7 +755,7 @@ export default {
           type: "bar",
           stack: "蛋白质",
           barWidth: 30,
-          data: this.nutrientData.seriesData[legendDataVal[i]]
+          data: this.nutrientData.seriesData[legendDataVal[i]],
         });
       }
       // 指定图表的配置项和数据
@@ -739,23 +765,23 @@ export default {
           trigger: "axis",
           axisPointer: {
             // 坐标轴指示器，坐标轴触发有效
-            type: "shadow" // 默认为直线，可选为：'line' | 'shadow'
-          }
+            type: "shadow", // 默认为直线，可选为：'line' | 'shadow'
+          },
         },
 
         legend: {
           //设置区分（哪条线属于什么）
-          data: this.nutrientData.legendData
+          data: this.nutrientData.legendData,
         },
         xAxis: {
           //设置x轴
           type: "category",
-          data: this.nutrientData.seriesData.dateStr
+          data: this.nutrientData.seriesData.dateStr,
         },
         yAxis: {
-          type: "value"
+          type: "value",
         },
-        series: seriesData
+        series: seriesData,
       };
 
       // 使用刚指定的配置项和数据显示图表。
@@ -779,7 +805,7 @@ export default {
         { ytNum: "牙疼" },
         { wsNum: "外伤" },
         { yhNum: "咽喉" },
-        { qtNum: "其他" }
+        { qtNum: "其他" },
       ];
       var legendData = [];
       var seriesData = [];
@@ -791,7 +817,7 @@ export default {
             type: "bar",
             stack: "感冒",
             barWidth: 30,
-            data: this.leaveSymptoms.seriesData[k]
+            data: this.leaveSymptoms.seriesData[k],
           });
         }
       }
@@ -802,30 +828,41 @@ export default {
           trigger: "axis",
           axisPointer: {
             // 坐标轴指示器，坐标轴触发有效
-            type: "shadow" // 默认为直线，可选为：'line' | 'shadow'
-          }
+            type: "shadow", // 默认为直线，可选为：'line' | 'shadow'
+          },
         },
         legend: {
-          data: legendData
+          data: legendData,
         },
         grid: {
           left: "3%",
           right: "4%",
           bottom: "3%",
-          containLabel: true
+          containLabel: true,
         },
         xAxis: [
           {
             type: "category",
-            data: this.leaveSymptoms.seriesData.dateStr
-          }
+            data: this.leaveSymptoms.seriesData.dateStr,
+          },
         ],
         yAxis: [
           {
-            type: "value"
-          }
+            type: "value",
+          },
         ],
-        series: seriesData
+        series: seriesData,
+        color: [
+          "#5470c6",
+          "#91cc75",
+          "#fac858",
+          "#ee6666",
+          "#73c0de",
+          "#3ba272",
+          "#fc8452",
+          "#9a60b4",
+          "#ea7ccc",
+        ],
       };
 
       // 使用刚指定的配置项和数据显示图表。
@@ -836,14 +873,15 @@ export default {
       let chartLine = this.$echarts.init(
         document.getElementById("allergyFoodRadar")
       );
-
+      console.log(this.allergyFood.indicatorData);
+      console.log(this.allergyFood.seriesData);
       // 指定图表的配置项和数据
       var option = {
         tooltip: {},
         legend: {
           data: ["食材"],
           left: "center",
-          bottom: 10
+          bottom: 10,
         },
         radar: {
           // shape: 'circle',
@@ -852,12 +890,12 @@ export default {
               color: "#000",
               // backgroundColor: "#999",
               borderRadius: 3,
-              padding: [3, 5]
-            }
+              padding: [3, 5],
+            },
           },
           radius: "60%",
           center: ["50%", "50%"],
-          indicator: this.allergyFood.indicatorData
+          indicator: this.allergyFood.indicatorData,
         },
         series: [
           {
@@ -865,20 +903,31 @@ export default {
             data: [
               {
                 value: this.allergyFood.seriesData,
-                name: "食材"
-              }
+                name: "食材",
+              },
             ],
             lineStyle: {
-              color: "rgba(64, 155, 220, 1)"
+              color: "rgba(64, 155, 220, 1)",
             },
             areaStyle: {
-              color: "rgba(64, 155, 220, 1)"
+              color: "rgba(64, 155, 220, 1)",
             },
             itemStyle: {
-              color: "rgba(64, 155, 220, 1)"
-            }
-          }
-        ]
+              color: "rgba(64, 155, 220, 1)",
+            },
+          },
+        ],
+        color: [
+          "#5470c6",
+          "#91cc75",
+          "#fac858",
+          "#ee6666",
+          "#73c0de",
+          "#3ba272",
+          "#fc8452",
+          "#9a60b4",
+          "#ea7ccc",
+        ],
       };
 
       // 使用刚指定的配置项和数据显示图表。
@@ -895,18 +944,18 @@ export default {
         tooltip: {},
         legend: {
           data: ["要求比例", "实际比例"],
-          bottom: 0
+          bottom: 0,
         },
         radar: {
           // shape: 'circle',
           name: {
             textStyle: {
-              color: "#000"
-            }
+              color: "#000",
+            },
           },
           radius: "60%",
           center: ["50%", "50%"],
-          indicator: this.everyDayNutrient.radarIndicator
+          indicator: this.everyDayNutrient.radarIndicator,
         },
         series: [
           {
@@ -914,13 +963,13 @@ export default {
             data: [
               {
                 value: [80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80],
-                name: "要求比例"
-              }
+                name: "要求比例",
+              },
             ],
             areaStyle: {
-              opacity: 0.4
+              opacity: 0.4,
             },
-            z: 1
+            z: 1,
             // ,
           },
           {
@@ -928,16 +977,27 @@ export default {
             data: [
               {
                 value: this.everyDayNutrient.seriesData,
-                name: "实际比例"
-              }
+                name: "实际比例",
+              },
             ],
             areaStyle: {
-              opacity: 0.4
+              opacity: 0.4,
             },
-            z: 2
+            z: 2,
             // ,
-          }
-        ]
+          },
+        ],
+        color: [
+          "#5470c6",
+          "#91cc75",
+          "#fac858",
+          "#ee6666",
+          "#73c0de",
+          "#3ba272",
+          "#fc8452",
+          "#9a60b4",
+          "#ea7ccc",
+        ],
       };
       // 使用刚指定的配置项和数据显示图表。
       chartPie.setOption(option);
@@ -954,14 +1014,14 @@ export default {
         legend: {
           data: ["推荐最大量", "推荐最小量", "实际用量"],
           left: "center",
-          bottom: 0
+          bottom: 0,
         },
         radar: {
           // shape: 'circle',
           name: {
             textStyle: {
-              color: "#000"
-            }
+              color: "#000",
+            },
           },
           radius: "60%",
           center: ["50%", "50%"],
@@ -973,8 +1033,8 @@ export default {
             { name: "大豆" },
             { name: "食盐" },
             { name: "食用油" },
-            { name: "畜禽肉类-蛋类-水产品" }
-          ]
+            { name: "畜禽肉类-蛋类-水产品" },
+          ],
         },
         series: [
           {
@@ -982,13 +1042,13 @@ export default {
             data: [
               {
                 value: [150, 300, 250, 500, 20, 3, 25, 125],
-                name: "推荐最大量"
-              }
+                name: "推荐最大量",
+              },
             ],
             areaStyle: {
-              opacity: 0.4
+              opacity: 0.4,
             },
-            z: 1
+            z: 1,
             // ,
           },
           {
@@ -996,13 +1056,13 @@ export default {
             data: [
               {
                 value: [100, 150, 150, 350, 10, 0, 20, 100],
-                name: "推荐最小量"
-              }
+                name: "推荐最小量",
+              },
             ],
             areaStyle: {
-              opacity: 0.4
+              opacity: 0.4,
             },
-            z: 2
+            z: 2,
             // ,
           },
           {
@@ -1010,16 +1070,27 @@ export default {
             data: [
               {
                 value: this.everyDayEat.seriesData,
-                name: "实际用量"
-              }
+                name: "实际用量",
+              },
             ],
             areaStyle: {
-              opacity: 0.4
+              opacity: 0.4,
             },
-            z: 3
+            z: 3,
             // ,
-          }
-        ]
+          },
+        ],
+        color: [
+          "#5470c6",
+          "#91cc75",
+          "#fac858",
+          "#ee6666",
+          "#73c0de",
+          "#3ba272",
+          "#fc8452",
+          "#9a60b4",
+          "#ea7ccc",
+        ],
       };
       // 使用刚指定的配置项和数据显示图表。
       chartPie.setOption(option);
@@ -1030,9 +1101,9 @@ export default {
       this.axios({
         url: "/api/blade-food/report/nutriCount",
         method: "post",
-        data: this.govForm
-      }).then(res => {
-        res.data.data.forEach(el => {
+        data: this.govForm,
+      }).then((res) => {
+        res.data.data.forEach((el) => {
           for (let k in el) {
             this.nutrientData.seriesData[k].push(el[k]);
           }
@@ -1045,9 +1116,9 @@ export default {
       this.axios({
         url: "/api/blade-food/report/zfBjTypeCount",
         method: "post",
-        data: this.govForm
-      }).then(res => {
-        res.data.data.forEach(el => {
+        data: this.govForm,
+      }).then((res) => {
+        res.data.data.forEach((el) => {
           for (let k in el) {
             this.leaveSymptoms.seriesData[k].push(el[k]);
           }
@@ -1061,25 +1132,24 @@ export default {
       this.axios({
         url: "/api/blade-food/report/allergyFoodCount",
         method: "post",
-        data: this.govForm
+        data: this.govForm,
       })
-        .then(res => {
+        .then((res) => {
           console.log("getAllergyFoodRadar");
           if (res.data.data.allergyFoodDTOS != null) {
             console.log("getAllergyFoodRadar2");
-            res.data.data.allergyFoodDTOS.forEach(el => {
+            res.data.data.allergyFoodDTOS.forEach((el) => {
               this.allergyFood.indicatorData.push({
-                name: el.foodName
+                name: el.foodName,
               });
               this.allergyFood.seriesData.push(el.num);
             });
             console.log(this.allergyFood.indicatorData);
             console.log(this.allergyFood.seriesData);
           }
-
           this.allergyFoodRadar();
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     },
@@ -1088,13 +1158,13 @@ export default {
       this.axios({
         url: "/api/blade-food/recipe/getStuNutrition",
         method: "get",
-        params: this.govForm
+        params: this.govForm,
       })
-        .then(res => {
+        .then((res) => {
           this.everyDayNutrient.seriesData = res.data.data;
           this.everyDayNutrientPic();
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     },
@@ -1103,8 +1173,8 @@ export default {
       this.axios({
         url: "/api/blade-food/recipe/getStuRecipeCal",
         method: "get",
-        params: this.govForm
-      }).then(res => {
+        params: this.govForm,
+      }).then((res) => {
         this.everyDayEat.seriesData = res.data.data;
         this.everyDayEatPic();
       });
@@ -1130,11 +1200,11 @@ export default {
           ...this.govForm,
           current: this.goverDishTotal.current,
           size: 20,
-          flag: this.dishFlag
-        }
+          flag: this.isDish,
+        },
       })
-        .then(res => {
-          res.data.data.records.forEach(element => {
+        .then((res) => {
+          res.data.data.records.forEach((element) => {
             this.goverDishTotal.liData.push(element);
           });
           if (res.data.data.records.length < 20) {
@@ -1142,7 +1212,7 @@ export default {
           }
           this.goverDishTotal.current++;
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     },
@@ -1169,14 +1239,14 @@ export default {
           ...this.govForm,
           current: this.goverRecipeTotal.current,
           size: 20,
-          flag: this.recipeFlag
-        }
-      }).then(res => {
+          flag: this.isRecipe,
+        },
+      }).then((res) => {
         if (res.data.data.records.length < 20) {
           this.goverRecipeTotal.finished = true;
         }
         this.goverRecipeTotal.current++;
-        res.data.data.records.forEach(element => {
+        res.data.data.records.forEach((element) => {
           this.goverRecipeTotal.liData.push(element);
         });
       });
@@ -1186,8 +1256,8 @@ export default {
       this.axios({
         url: "/api/blade-food/report/zfOrgCount",
         method: "post",
-        data: this.govForm
-      }).then(res => {
+        data: this.govForm,
+      }).then((res) => {
         this.zfOrgCount.orgCount = res.data.data.orgCount;
         this.zfOrgCount.foodCount = res.data.data.foodCount;
         this.zfOrgCount.dishCount = res.data.data.dishCount;
@@ -1195,8 +1265,8 @@ export default {
         this.zfOrgCount.foodAdd = res.data.data.foodAdd;
         this.zfOrgCount.dishAdd = res.data.data.dishAdd;
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

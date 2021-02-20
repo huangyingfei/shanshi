@@ -255,7 +255,7 @@ const user = {
     },
     SET_USER_INFO: (state, userInfo) => {
       if (validatenull(userInfo.avatar)) {
-        userInfo.avatar = "/img/bg/img-logo.png";
+        userInfo.avatar = "/img/touxiang.png";
       }
       state.userInfo = userInfo;
       setStore({name: 'userInfo', content: state.userInfo})

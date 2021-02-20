@@ -21,6 +21,19 @@ export const getDetail = (id) => {
     }
   })
 }
+export const getRecipeDetail = (id) => {
+  return request({
+    url: '/api/blade-food/recipe/recipeDetail',
+    method: 'get',
+    params: {
+      id
+    }
+  })
+}
+
+export function calRecipeDetail(){
+  
+}
 
 
 

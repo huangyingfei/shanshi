@@ -219,6 +219,17 @@ export default {
             data: this.leaveType.seriesData,
           },
         ],
+        color: [
+          "#5470c6",
+          "#91cc75",
+          "#fac858",
+          "#ee6666",
+          "#73c0de",
+          "#3ba272",
+          "#fc8452",
+          "#9a60b4",
+          "#ea7ccc",
+        ],
       };
       // 使用刚指定的配置项和数据显示图表。
       chartPie.setOption(option);
@@ -231,7 +242,7 @@ export default {
       // 指定图表的配置项和数据
       var option = {
         title: {
-          text: "请假类型分布图",
+          text: "病假类型分布图",
           left: "center",
         },
         tooltip: {
@@ -252,6 +263,17 @@ export default {
             selectedMode: "single",
             data: this.leaveSymptoms.seriesData,
           },
+        ],
+        color: [
+          "#5470c6",
+          "#91cc75",
+          "#fac858",
+          "#ee6666",
+          "#73c0de",
+          "#3ba272",
+          "#fc8452",
+          "#9a60b4",
+          "#ea7ccc",
         ],
       };
       // 使用刚指定的配置项和数据显示图表。
@@ -332,6 +354,17 @@ export default {
           type: "value",
         },
         series: seriesData,
+        color: [
+          "#5470c6",
+          "#91cc75",
+          "#fac858",
+          "#ee6666",
+          "#73c0de",
+          "#3ba272",
+          "#fc8452",
+          "#9a60b4",
+          "#ea7ccc",
+        ],
       };
 
       // 使用刚指定的配置项和数据显示图表。
