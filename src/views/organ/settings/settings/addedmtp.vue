@@ -36,9 +36,8 @@
         </div>
       </el-tab-pane>
     </el-tabs>
-      </div>
-      <div style="height: 100px"></div>
-    <table style="padding-top: 250px">
+
+    <table style="width: 100%">
       <tr v-if="fathNutritionVos.sexNum==2" class="table-title">
         <td></td>
         <td colspan="3">男性</td>
@@ -47,59 +46,63 @@
         <td></td>
       </tr>
       <tr  v-if="fathNutritionVos.sexNum==2" class="table-title">
-        <td class="table-first">人群</td>
-        <td>上限</td>
+        <td class="table-first" style="width: 7%">人群</td>
+        <td style="width: 15%">上限</td>
         <td></td>
-        <td>下限</td>
-        <td>上限</td>
+        <td style="width: 15%">下限</td>
+        <td style="width: 15%">上限</td>
         <td></td>
-        <td>下限</td>
+        <td style="width: 15%">下限</td>
 
-        <td>上限系数</td>
+        <td style="width: 15%">上限系数</td>
         <td></td>
-        <td>下限系数</td>
+        <td style="width: 15%"> 下限系数</td>
       </tr>
        <tr  v-if="fathNutritionVos.sexNum==1" class="table-title">
-        <td class="table-first">人群</td>
-        <td>上限</td>
-        <td></td>
-        <td>下限</td>
-        <td>上限系数</td>
-        <td></td>
-        <td>下限系数</td>
-      </tr>
-       <tr   v-for="(item, index) in tableData" :key="index" >
-        <th class="table-first">{{item.name}}{{isNaN(item.name) ? "" : "岁~"}}</th>
-        <td v-if="fathNutritionVos.sexNum==2">
-          <el-input disabled v-model="item.manMax"></el-input>
-        </td>
-        <td v-if="fathNutritionVos.sexNum==2">-</td>
-        <td v-if="fathNutritionVos.sexNum==2">
-          <el-input disabled v-model="item.manMin"></el-input>
-        </td>
-        <td v-if="fathNutritionVos.sexNum==2">
-          <el-input disabled v-model="item.womanMax"></el-input>
-        </td>
-        <td v-if="fathNutritionVos.sexNum==2">-</td>
-        <td v-if="fathNutritionVos.sexNum==2">
-          <el-input disabled v-model="item.womanMin"></el-input>
-        </td>
-         <td v-if="fathNutritionVos.sexNum==1">
-          <el-input disabled v-model="item.resultMin"></el-input>
-        </td>
-        <td v-if="fathNutritionVos.sexNum==1">-</td>
-        <td v-if="fathNutritionVos.sexNum==1">
-          <el-input disabled v-model="item.resultMax"></el-input>
-        </td>
-        <td>
-          <el-input disabled v-model="item.coefficientMax"></el-input>
-        </td>
-        <td>-</td>
-        <td>
-          <el-input disabled v-model="item.coefficientMin"></el-input>
-        </td>
+        <td style="width: 7%" class="table-first">人群</td>
+        <td style="width: 16%">上限</td>
+        <td style="width: 16%">下限</td>
+        <td style="width: 16%">上限系数</td>
+        <td style="width: 16%">下限系数</td>
+         <td ></td>
+         <td></td>
       </tr>
     </table>
+    </div>
+      <div :class="getHeight"></div>
+      <table>
+        <tr   v-for="(item, index) in tableData" :key="index" >
+          <th class="table-first">{{item.name}}{{isNaN(item.name) ? "" : "岁~"}}</th>
+          <td v-if="fathNutritionVos.sexNum==2">
+            <el-input disabled v-model="item.manMax"></el-input>
+          </td>
+          <td v-if="fathNutritionVos.sexNum==2">-</td>
+          <td v-if="fathNutritionVos.sexNum==2">
+            <el-input disabled v-model="item.manMin"></el-input>
+          </td>
+          <td v-if="fathNutritionVos.sexNum==2">
+            <el-input disabled v-model="item.womanMax"></el-input>
+          </td>
+          <td v-if="fathNutritionVos.sexNum==2">-</td>
+          <td v-if="fathNutritionVos.sexNum==2">
+            <el-input disabled v-model="item.womanMin"></el-input>
+          </td>
+          <td v-if="fathNutritionVos.sexNum==1">
+            <el-input disabled v-model="item.resultMin"></el-input>
+          </td>
+          <td v-if="fathNutritionVos.sexNum==1">-</td>
+          <td v-if="fathNutritionVos.sexNum==1">
+            <el-input disabled v-model="item.resultMax"></el-input>
+          </td>
+          <td>
+            <el-input disabled v-model="item.coefficientMax"></el-input>
+          </td>
+          <td>-</td>
+          <td>
+            <el-input disabled v-model="item.coefficientMin"></el-input>
+          </td>
+        </tr>
+      </table>
    </div>
 
  </basic-container>
@@ -117,6 +120,7 @@ export default {
         name: "",
 
       },
+      getHeight:"oneHeight",
       nsValue:'',
       nsOptions:[],
       rules: {
@@ -196,9 +200,18 @@ export default {
         (_) => _.id === id
       )[0].nutritionCoeffientVos;
       console.log(nutritionVos)
+      if(nutritionVos.length==0){
+        this.getHeight="oneHeight"
+      }else{
+        this.getHeight="twoHeight"
+      }
       if(this.tableData.length==0){
          this.$set(nutritionVos[0], "isActive", true);
         this.tableData=nutritionVos[0].nutritionCoeffientVos;
+        if(this.tableData.length==4){
+          this.getHeight="oneHeight"
+        }
+        console.log(this.tableData)
       }
     },
     changeSecond(list, item) {
@@ -213,6 +226,12 @@ export default {
 </script>
 
 <style scoped>
+  .oneHeight{
+    height:130px;
+  }
+  .twoHeight{
+    height:210px;
+  }
   .el-fix{
     position: fixed;
     background: #FFFFFF;
