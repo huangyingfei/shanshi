@@ -17,7 +17,7 @@ export default {
           ratio: 0.1
         },
         action: '/api/blade-resource/oss/endpoint/put-file',
-        tip: '只能上传jpg/png的图片，且不超过500kb',
+        tip: '建议上传180 x 180px的图片，具体尺寸需确认下',
         span: 12,
         row: true,
         prop: 'avatar'
