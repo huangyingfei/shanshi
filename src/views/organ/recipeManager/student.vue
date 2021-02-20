@@ -858,7 +858,7 @@
           index: true,
           indexLabel:'序号',
           selection: true,
-          menuWidth: 300,
+          menuWidth: 200,
           columnBtn:false,
           refreshBtn:false,
           refreshBtn:false,
@@ -883,13 +883,16 @@
               search: true,
               display: false,
               minlength:0,
-              maxlength:10
+              maxlength:10,
+              width:100,
+              overHidden: true,
             },
             {
               label: "班级名称",
               prop: "className",
               display: false,
-              width:100
+              width:100,
+              overHidden: true,
             },
             {
               label: "学号",
@@ -897,7 +900,9 @@
               search: false,
               display: false,
               minlength:0,
-              maxlength:10
+              maxlength:10,
+              width:100,
+              overHidden: true,
             },
             {
               label: "性别",
@@ -920,6 +925,8 @@
               label: "出生日期",
               prop: "birthDate",
               display: false,
+              width:100,
+              overHidden: true,
             },
             {
               label: "年龄",
@@ -932,21 +939,28 @@
               display: false,
               type: "select",
               dicData: nation,
+              overHidden: true,
             },
             {
               label: "户口所在地",
               prop: "location",
               display: false,
+              width:100,
+              overHidden: true,
             },
             {
               label: "档案号",
               prop: "fileNumber",
               display: false,
+              width:100,
+              overHidden: true,
             },
             {
               label: "入园日期",
               prop: "admissionDate",
               display: false,
+              width:100,
+              overHidden: true,
             },
           ],
         },

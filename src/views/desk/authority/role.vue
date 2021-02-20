@@ -58,14 +58,17 @@
                :visible.sync="box"
                width="345px">
       <el-tabs type="border-card">
-        <el-tab-pane label="菜单权限">
+        <el-tab-pane label="菜单权限" >
+          <div class="el-tabs__content-card">
           <el-tree :data="menuGrantList"
                    show-checkbox
                    node-key="id"
                    ref="treeMenu"
                    :default-checked-keys="menuTreeObj"
                    :props="props">
+
           </el-tree>
+          </div>
         </el-tab-pane>
         <!--<el-tab-pane label="数据权限">-->
           <!--<el-tree :data="dataScopeGrantList"-->
@@ -451,6 +454,13 @@
     }
   };
 </script>
+<style>
+  .el-tabs__content-card{
+    overflow: scroll !important;
+    position: relative;
+    height:300px;
+  }
+</style>
 
 
 

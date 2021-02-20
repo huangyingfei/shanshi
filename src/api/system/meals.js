@@ -76,7 +76,7 @@ export const update = (row) => {
 
 export const detail = (id) => {
   return request({
-    url: '/api/blade-food/recipe/detail',
+    url: '/api/blade-food/recipe/recipeDetail',
     method: 'get',
     params:{
       id

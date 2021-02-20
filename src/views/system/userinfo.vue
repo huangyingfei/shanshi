@@ -71,6 +71,9 @@
               email: user.email,
               roleName: user.roleName,
             }
+            if(this.form.avatar==""||this.form.avatar==null){
+              this.form.avatar="/img/touxiang.png"
+            }
           });
         }
       },

@@ -154,7 +154,9 @@ export default {
             search: true,
             display: false,
             minlength:0,
-            maxlength:5
+            maxlength:5,
+            width:100,
+            overHidden: true,
           },
           {
             label: "学号",
@@ -162,7 +164,9 @@ export default {
             search: false,
             display: false,
             minlength:0,
-            maxlength:10
+            maxlength:10,
+            width:100,
+            overHidden: true,
           },
           {
             label: "性别",
@@ -185,6 +189,8 @@ export default {
             label: "出生日期",
             prop: "birthDate",
             display: false,
+            width:100,
+            overHidden: true,
           },
           {
             label: "年龄",
@@ -197,16 +203,22 @@ export default {
             display: false,
             type: "select",
             dicData: nation,
+            width:100,
+            overHidden: true,
           },
           {
             label: "户口所在地",
             prop: "location",
             display: false,
+            width:100,
+            overHidden: true,
           },
           {
             label: "档案号",
             prop: "fileNumber",
             display: false,
+            width:100,
+            overHidden: true,
           },
             {
             label: "状态",
@@ -227,12 +239,16 @@ export default {
             search: true,
             searchRange: true,
             searchSpan: 8,
+            width:100,
+            overHidden: true,
           },
           {
             label: "离校或毕业所在班级",
             prop: "leaveClassName",
             display: false,
-            width:100
+            width:100,
+            overHidden: true,
+
           },
           {
             label: "离毕日期",
@@ -242,12 +258,16 @@ export default {
             searchRange: true,
             searchSpan: 8,
             search: true,
+            width:90,
+
           },
 
           {
             label: "离校原因",
             prop: "reason",
             display: false,
+            width:320,
+            overHidden: true,
           },
         ],
       },

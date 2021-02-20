@@ -347,7 +347,7 @@
                 <div style="margin-top: -5px; padding: 5px">
                   <el-input
                     size="small"
-                    placeholder="请输入内容"
+                    placeholder="请输入菜品名称"
                     v-model="dishSharePub"
                     class="input-with-select"
                   >
@@ -386,7 +386,7 @@
                 <div style="margin-top: -5px; padding: 5px">
                   <el-input
                     size="small"
-                    placeholder="请输入内容"
+                    placeholder="请输入菜品名称"
                     v-model="dishSharePri"
                     class="input-with-select"
                   >
@@ -505,7 +505,7 @@
         :visible.sync="drawer"
         :with-header="false"
       >
-        <show-score :intake="intake" :nutrition="nutrition" :power="power" :meal="meal" :protein="protein"
+        <show-score :intake="intake" :nutrition="nutrition" :power="power" :meal="meal" :protein="protein" :tenantName="tenantName"
                     :startTime="startTimeStr" :endTime="endTimeStr" :score="score"></show-score>
       </el-drawer>
       <!-- 分数弹框 结束-->
@@ -767,6 +767,7 @@
         nutrition: [],
         power: [],
         meal: [],
+        tenantName:"",
         protein: [],
         drawer: false, //分数弹框
         pointscan: false, //智能配餐弹框
@@ -1287,7 +1288,7 @@
                     for (let j = 0; j < recipevals.length; j++) {//食材
                       let nutrientIds = [];
                       let foodNutritionList = recipevals[j].foodNutritionList;
-                      if(foodNutritionList&&foodNutritionList.length>0) {
+                      if (foodNutritionList && foodNutritionList.length > 0) {
                         foodNutritionList.forEach(_ => {
                           this.nutritionValue.forEach(n => {
                             if (n.code == _.nutrientId + "") {
@@ -1363,7 +1364,7 @@
                     for (let j = 0; j < recipevals.length; j++) {//食材
                       let nutrientIds = [];
                       let foodNutritionList = recipevals[j].foodNutritionList;
-                      if(foodNutritionList&&foodNutritionList.length>0) {
+                      if (foodNutritionList && foodNutritionList.length > 0) {
                         foodNutritionList.forEach(_ => {
                           this.nutritionValue.forEach(n => {
                             if (n.code == _.nutrientId + "") {
@@ -1400,7 +1401,7 @@
         }
 
       },
-      parentFn(score, type, pscore, intake, nutrition, power, protein, meal) {
+      parentFn(score, type, pscore, intake, nutrition, power, protein, meal,tenantName) {
         if (type == "smartDatas") {
           this.peipScore = score;
           this.peippcScore = pscore
@@ -1410,7 +1411,7 @@
           this.score = score;
           this.pcScore = pscore
         }
-
+        this.tenantName=tenantName
         this.intake = intake;
         this.nutrition = nutrition
         this.nutrition.forEach(_ => {
@@ -1731,7 +1732,7 @@
             ev.dataTransfer.setData("Text", JSON.stringify(node.data));
             that.drogNodeStats = true;
             setTimeout(() => {
-              // that.$refs.child.refreshData();
+              that.$refs.child.refreshData();
               that.$refs.child.resizeExpendHeight();
             }, 100);
           })

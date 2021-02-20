@@ -283,7 +283,7 @@
                 <div style="margin-top: -5px; padding: 5px">
                   <el-input
                     size="small"
-                    placeholder="请输入内容"
+                    placeholder="请输入菜品名称"
                     v-model="dishSharePub"
                     class="input-with-select"
                   >
@@ -323,7 +323,7 @@
                 <div style="margin-top: -5px; padding: 5px">
                   <el-input
                     size="small"
-                    placeholder="请输入内容"
+                    placeholder="请输入菜品名称"
                     v-model="dishSharePri"
                     class="input-with-select"
                   >

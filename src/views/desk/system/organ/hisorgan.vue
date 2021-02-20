@@ -168,83 +168,99 @@ export default {
             label: "机构ID",
             prop: "tenantId",
             display: false,
+            width:160,
+            overHidden: true,
           },
           {
             label: "机构名称",
             prop: "tenantName",
             search: true,
             display: false,
+            width:100,
+            overHidden: true,
           },
 
-          {
-            label: "用户账号",
-            prop: "account",
-            search: true,
-            display: false,
-          },
-          {
-            label: "账号类型",
-            prop: "accountType",
-            search: true,
-            type: "select",
-            display: false,
-            dicData: [
-              //1-学校 2-医院 3-餐饮 4-其他
-              {
-                label: "学校",
-                value: 1,
-              },
-              {
-                label: "医院",
-                value: 2,
-              },
-              {
-                label: "餐饮",
-                value: 3,
-              },
-              {
-                label: "其他",
-                value: 4,
-              },
-            ],
-          },
-          {
-            label: "机构地址",
-            prop: "tenantAddress",
-            search: true,
-            display: false,
-          },
+          // {
+          //   label: "用户账号",
+          //   prop: "account",
+          //   search: true,
+          //   display: false,
+          //   width:100,
+          //   overHidden: true,
+          // },
+          // {
+          //   label: "账号类型",
+          //   prop: "accountType",
+          //   search: true,
+          //   type: "select",
+          //   display: false,
+          //   dicData: [
+          //     //1-学校 2-医院 3-餐饮 4-其他
+          //     {
+          //       label: "学校",
+          //       value: 1,
+          //     },
+          //     {
+          //       label: "医院",
+          //       value: 2,
+          //     },
+          //     {
+          //       label: "餐饮",
+          //       value: 3,
+          //     },
+          //     {
+          //       label: "其他",
+          //       value: 4,
+          //     },
+          //   ],
+          // },
+          // {
+          //   label: "机构地址",
+          //   prop: "tenantAddress",
+          //   search: true,
+          //   display: false,
+          //   width:100,
+          //   overHidden: true,
+          // },
 
           {
             label: "联系人",
             prop: "linkman",
             search: true,
             display: false,
+            width:100,
+            overHidden: true,
           },
           {
             label: "联系电话",
             prop: "contactNumber",
             search: true,
             display: false,
+            width:100,
+            overHidden: true,
           },
           {
             label: "营养标准",
             prop: "nutrientName",
             display: false,
+            width:160,
+            overHidden: true,
           },
           {
             label: "开始使用日期",
             prop: "startTimeStr",
             type: "date",
             display: false,
-            width:100
+            width:100,
+            overHidden: true,
           },
           {
             label: "结束使用日期",
             prop: "endTimeStr",
             type: "date",
             display: false,
-            width:100
+            width:100,
+            overHidden: true,
           },
           {
             label: "状态",
@@ -434,7 +450,7 @@ export default {
                 type: "upload",
                 listType: "picture-img",
                 action: '/api/blade-resource/oss/endpoint/put-file',
-                tip: '只能上传jpg/png的图片，且不超过500kb',
+                tip: '建议上传180 x 180px的图片，具体尺寸需确认下',
                 //  action: '/api/blade-resource/oss/endpoint/put-file',
                 propsHttp: {
                   res: "data",
@@ -447,7 +463,7 @@ export default {
                 type: "upload",
                 listType: "picture-img",
                 action: '/api/blade-resource/oss/endpoint/put-file',
-                tip: '只能上传jpg/png的图片，且不超过500kb',
+                tip: '建议上传180 x 180px的图片，具体尺寸需确认下',
                 //  action: '/api/blade-resource/oss/endpoint/put-file',
                 propsHttp: {
                   res: "data",
@@ -540,7 +556,7 @@ export default {
                 type: "upload",
                 listType: "picture-img",
                 action: '/api/blade-resource/oss/endpoint/put-file',
-                tip: '只能上传jpg/png的图片，且不超过500kb',
+                tip: '建议上传240 x 64px的图片，具体尺寸需确认下',
                 //  action: '/api/blade-resource/oss/endpoint/put-file',
                 propsHttp: {
                   res: "data",
