@@ -65,6 +65,7 @@
                 v-model="food.stockVal"
                 :controls="false"
                 size="small"
+                :precision="2"
                 @change="handleChange(food)"
               ></el-input-number>
               <span>{{ food.unit }}</span>
