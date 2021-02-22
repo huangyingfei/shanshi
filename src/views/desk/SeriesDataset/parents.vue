@@ -26,19 +26,19 @@
     <div class="browse">
       <div class="fontify">
         <div class="fontifytxt">浏览量PV</div>
-        <div class="fontifynum">{{ this.browse.extrapv }}</div>
-      </div>
-      <div class="fontify">
-        <div class="fontifytxt">浏览人数UV</div>
         <div class="fontifynum">{{ this.browse.visitorsuv }}</div>
       </div>
       <div class="fontify">
+        <div class="fontifytxt">浏览人数UV</div>
+        <div class="fontifynum">{{ this.browse.extrapv }}</div>
+      </div>
+      <div class="fontify">
         <div class="fontifytxt">总浏览量PV</div>
-        <div class="fontifynum">{{ this.browse.property }}</div>
+        <div class="fontifynum">{{ this.browse.ofcleaning }}</div>
       </div>
       <div class="fontify">
         <div class="fontifytxt">总浏览人数UV</div>
-        <div class="fontifynum">{{ this.browse.ofcleaning }}</div>
+        <div class="fontifynum">{{ this.browse.property }}</div>
       </div>
     </div>
     <div class="linewidth">
@@ -47,6 +47,20 @@
 
     <div class="rankings">
       <div class="teamran">浏览排行</div>
+      <div class="chooses">
+        <span style="margin-right: 10px;margin-left: 15px;  font-size: 14px;"
+          >机构选择:</span
+        >
+        <el-select @change="searchBtn" v-model="activity" placeholder="请选择">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </div>
       <div>
         <el-table
           :data="teamranking"
@@ -73,6 +87,9 @@
 export default {
   data() {
     return {
+      options: [],
+      activity: "",
+      value: [],
       loadFlag: false, //加载flag
       page_data: {
         loadTxt: "数据加载中..."
@@ -81,6 +98,7 @@ export default {
         name: "", //机构名称
         number: "" //时间
       },
+
       browse: {
         extrapv: "", //浏览量PV
         visitorsuv: "", //浏览人数UA
@@ -112,6 +130,9 @@ export default {
     this.profileuser();
   },
   methods: {
+    searchBtn() {
+      console.log(this.activity);
+    },
     //访问量统计
     profileuser() {
       this.loadFlag - true;
@@ -289,5 +310,8 @@ export default {
       padding-top: 10px;
     }
   }
+}
+.chooses {
+  margin-bottom: 20px;
 }
 </style>

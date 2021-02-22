@@ -79,7 +79,7 @@
               v-for="(button, i) in item.nutritionVos"
               :key="i"
             >
-              <ul>
+              <ul class="constant">
                 <li
                   v-for="(nvo, index) in button.nutritionCoeffientVos"
                   :key="index"
@@ -662,6 +662,15 @@ export default {
 }
 .electric {
   /* margin-top: 60px; */
-  width: 100%;
+  width: 96%;
+  height: 400px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.constant {
+  width: 96%;
+  height: 400px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 </style>

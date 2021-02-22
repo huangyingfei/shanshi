@@ -19,7 +19,7 @@
             @click="addition(0)"
             type="primary"
             size="mini"
-            >加食材</el-button
+            >添加食材</el-button
           >
         </div>
         <div class="whole">
@@ -56,6 +56,7 @@
         <div class="country">
           <div class="country1">
             <el-cascader
+              placeholder="区域"
               clearable
               v-model="valuepark1"
               :options="options"
@@ -76,7 +77,7 @@
               <el-select
                 @change="disallow()"
                 v-model="before1"
-                placeholder="请选择"
+                placeholder="季节"
               >
                 <el-option
                   v-for="item in before"
@@ -118,6 +119,8 @@
               v-loading="loadFlag"
               :props="defaultProps"
               :default-expand-all="false"
+              :default-expanded-keys="[1]"
+              :default-checked-keys="[5]"
               @node-click="handleNodeClick"
               :filter-node-method="filterNode"
               ref="tree"
@@ -550,7 +553,7 @@ export default {
         ],
         fooddata: [
           //食材分类
-          { required: true, message: "请选择食物分类", trigger: "change" }
+          { required: true, message: "请选择食物分类", trigger: "blur" }
         ],
         besaved: [{ required: true, message: "请输入食部", trigger: "blur" }],
         timers: [{ required: true, message: "请输入重量", trigger: "blur" }]
@@ -1408,7 +1411,7 @@ export default {
   > button {
     position: fixed;
     bottom: 10px;
-    right: 30%;
+    right: 40%;
     margin: 0 auto;
     z-index: 999;
   }

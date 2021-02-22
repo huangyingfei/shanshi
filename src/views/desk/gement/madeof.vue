@@ -175,7 +175,7 @@
     <!-- 审核食材 查看 -->
     <el-dialog
       style="margin-top: 10px!important;"
-      width="1120px"
+      width="1000px"
       title="审核菜品"
       append-to-body
       :visible.sync="seekeys"
@@ -640,7 +640,7 @@
     </el-dialog>
     <el-dialog
       title="查看"
-      width="1120px"
+      width="1000px"
       append-to-body
       :visible.sync="dumpdbtostream"
       :close-on-click-modal="false"
@@ -1034,7 +1034,7 @@
           </el-option>
         </el-select>
         <div class="worm1" v-if="this.agree == 2">记录</div>
-        <el-timeline v-if="this.agree == 2">
+        <el-timeline v-if="this.agree == 2" style="width:700px">
           <el-timeline-item :timestamp="this.record.aduitTime" placement="top">
             <el-card>
               <!-- <h4>{{ this.record.tenant_name }}</h4>
