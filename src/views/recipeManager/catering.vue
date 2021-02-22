@@ -526,6 +526,7 @@
           :protein="protein"
           :startTime="startTimeStr"
           :endTime="endTimeStr"
+          :tenantName="tenantName"
           :score="score"
         ></show-score>
       </el-drawer>
@@ -773,6 +774,7 @@
         nutrition: [],
         power: [],
         meal: [],
+        tenantName:"",
         protein: [],
         drawer: false, //分数弹框
         pointscan: false, //智能配餐弹框
@@ -1188,7 +1190,6 @@
             isRecommend = "1";
           }
         }
-        debugger
         this.currentPub = 1;
         this.recipefinishedPub = false
         this.$set(this, "mealListLeft", []);
@@ -1368,7 +1369,7 @@
         })
         that.$refs.child.refreshData();
       },
-      parentFn(score, type, pscore, intake, nutrition, power, protein, meal) {
+      parentFn(score, type, pscore, intake, nutrition, power, protein, meal,tenantName) {
         if (type == "smartDatas") {
           this.peipScore = score;
           this.peippcScore = pscore;
@@ -1385,7 +1386,8 @@
             parseFloat(this.score) - parseFloat(this.pcScore)
           ).toFixed(2);
         }
-
+        this.tenantName=tenantName
+        debugger
         this.intake = intake;
         this.nutrition = nutrition;
         this.nutrition.forEach((_) => {

@@ -1501,7 +1501,8 @@ export default {
                 })
 
                 that.pcScore = that.score;
-                that.$emit('childfn', Math.floor(that.getData(res.data.data) * 100) / 100, "datas", this.pcScore, intake, nutrition, power, protein, meal);
+                var tenantName=resData.tenantName
+                that.$emit('childfn', Math.floor(that.getData(res.data.data) * 100) / 100, "datas", this.pcScore, intake, nutrition, power, protein, meal,tenantName);
               }
             } else {
               that.$message({
