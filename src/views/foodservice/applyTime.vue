@@ -76,6 +76,8 @@
           max-height="tableHeight"
           :element-loading-text="page_data.loadTxt"
           v-loading="loadFlag"
+          :height="tableHeight"
+          ref="table"
           empty-text="没有数据~"
         >
           <el-table-column
@@ -437,7 +439,7 @@
 export default {
   data() {
     return {
-      tableHeight: 0,
+      tableHeight: 50,
       seekeys: false, //查看弹框
       loadFlag: false, //加载flag
       tmquery: [], //表格
@@ -545,14 +547,19 @@ export default {
     this.Provinces(); //省市区
     this.Protocol(); //营养素含量
   },
-  mounted() {
-    this.$nextTick(() => {
-      this.tableHeight = window.innerHeight - 50;
-      console.log(this.tableHeight);
-      //后面的50：根据需求空出的高度，自行调整
-    });
+  mounted: function() {
+    this.$nextTick(function() {
+      this.tableHeight =
+        window.innerHeight - this.$refs.table.$el.offsetTop - 160;
 
-    // 后面的50：根据需求空出的高度，自行调整
+      // 监听窗口大小变化
+      let self = this;
+      window.onresize = function() {
+        self.tableHeight =
+          window.innerHeight - self.$refs.table.$el.offsetTop - 160;
+      };
+    });
+    //this.$refs.table.$el.offsetTop：表格距离浏览器的高度 //50表示你想要调整的表格距离底部的高度（你可以自己随意调整），因为我们一般都有放分页组件的，所以需要给它留一个高度
   },
   methods: {
     notEmpty() {

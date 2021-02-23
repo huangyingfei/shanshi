@@ -70,10 +70,11 @@
       <el-table
         :data="tmquery"
         border
-        style="width: 100%"
         v-loading="loadFlag"
         :element-loading-text="page_data.loadTxt"
         empty-text="没有数据~"
+        :height="tableHeight"
+        ref="table"
       >
         <el-table-column
           type="index"
@@ -378,6 +379,7 @@
 export default {
   data() {
     return {
+      tableHeight: 50,
       seekeys: false, //查看弹框
       editor: "", //提交人
       input: "",
@@ -484,7 +486,20 @@ export default {
     this.Provinces(); //省市区
     this.Protocol(); //营养素含量
   },
+  mounted: function() {
+    this.$nextTick(function() {
+      this.tableHeight =
+        window.innerHeight - this.$refs.table.$el.offsetTop - 160;
 
+      // 监听窗口大小变化
+      let self = this;
+      window.onresize = function() {
+        self.tableHeight =
+          window.innerHeight - self.$refs.table.$el.offsetTop - 160;
+      };
+    });
+    //this.$refs.table.$el.offsetTop：表格距离浏览器的高度 //50表示你想要调整的表格距离底部的高度（你可以自己随意调整），因为我们一般都有放分页组件的，所以需要给它留一个高度
+  },
   methods: {
     //查看
     seecol(row) {

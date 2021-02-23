@@ -8,6 +8,7 @@
           style="width:270px; margin-left: 9px;"
           placeholder="输入关键字进行查询"
           v-model="filterText"
+          @input="addFilter"
         >
         </el-input>
         <div class="import">
@@ -48,6 +49,7 @@
         <div class="country">
           <div class="country1">
             <el-cascader
+              placeholder="区域"
               clearable
               v-model="valuepark2"
               :options="options"
@@ -561,11 +563,15 @@ export default {
     this.Takeone();
   },
   watch: {
-    filterText(val) {
-      this.$refs.tree.filter(val);
-    }
+    // filterText(val) {
+    //   this.$refs.tree.filter(val);
+    // }
   },
   methods: {
+    addFilter() {
+      // console.log(this.filterText);
+      this.treeDrawing();
+    },
     ofmoisture() {
       if (this.ruleForm.content > 100) {
         // alert("123213");
@@ -652,11 +658,11 @@ export default {
       }
       this.treeDrawing();
     },
-    filterNode(value, data) {
-      if (!value) return true;
-
-      return data.label.indexOf(value) !== -1;
-    },
+    //     filterNode(value, data) {
+    //       if (!value) return true;
+    //
+    //       return data.label.indexOf(value) !== -1;
+    //     },
 
     buttonClick(flat) {
       // console.log(index);

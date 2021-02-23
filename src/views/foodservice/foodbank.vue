@@ -11,6 +11,7 @@
         <div class="country1">
           <el-cascader
             clearable
+            placeholder="区域"
             v-model="valuepark1"
             :options="options"
             @change="gProvinces"

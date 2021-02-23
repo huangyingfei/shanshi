@@ -78,6 +78,8 @@
         style="width: 100%"
         :element-loading-text="page_data.loadTxt"
         v-loading="loadFlag"
+        :height="tableHeight"
+        ref="table"
         empty-text="没有数据~"
       >
         <el-table-column
@@ -865,6 +867,7 @@ export default {
   name: "toolbar",
   data() {
     return {
+      tableHeight: 50,
       increase: false, //拒绝理由弹框
       dsquery: {
         establish: "", //创建机构
@@ -1016,6 +1019,20 @@ export default {
     this.queryLite(); //获取分类
     this.Provinces(); //省市区
     this.Takeone();
+  },
+  mounted: function() {
+    this.$nextTick(function() {
+      this.tableHeight =
+        window.innerHeight - this.$refs.table.$el.offsetTop - 160;
+
+      // 监听窗口大小变化
+      let self = this;
+      window.onresize = function() {
+        self.tableHeight =
+          window.innerHeight - self.$refs.table.$el.offsetTop - 160;
+      };
+    });
+    //this.$refs.table.$el.offsetTop：表格距离浏览器的高度 //50表示你想要调整的表格距离底部的高度（你可以自己随意调整），因为我们一般都有放分页组件的，所以需要给它留一个高度
   },
   methods: {
     ofmoisture() {

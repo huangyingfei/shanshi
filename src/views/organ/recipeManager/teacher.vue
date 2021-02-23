@@ -1494,6 +1494,20 @@ export default {
       //   //   item.childNodes[0].style = "display: none";
       //   // });
       // }, 500);
+      let bar = [];
+      this.loadClass.forEach((item, i) => {
+        // console.log(item);
+        item.children.forEach((item1, j) => {
+          // console.log(item1);
+          if (item1.label == "小班") {
+            item1.children.forEach((item2, k) => {
+              bar[k] = [item.value, item1.value, item2.value];
+            });
+          }
+        });
+      });
+      // console.log(bar);
+      this.stringClass = bar;
     },
     //添加部门
     added(index) {
@@ -1828,7 +1842,7 @@ export default {
           });
         });
         this.loadClass = fwork;
-        console.log(this.loadClass);
+        // console.log(this.loadClass);
         // this.pairlist = this.loadClass[0];
         // console.log(this.pairlist);
       });

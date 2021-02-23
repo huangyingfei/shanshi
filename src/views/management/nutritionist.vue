@@ -28,15 +28,14 @@
       <el-button @click="notEmpty" size="medium" style=" margin-left: 20px; "
         >清空</el-button
       >
-    </div>
-    <!-- 添加食材 -->
-    <div class="cadddr">
       <el-button size="medium" type="primary" @click="addShard(1)"
         >添加相克食材</el-button
       >
-
-      <!-- <el-button size="medium" type="danger" icon="el-icon-delete" style=" margin-left: 20px; ">删除</el-button> -->
     </div>
+    <!-- 添加食材 -->
+    <!-- <div class="cadddr">
+  
+    </div> -->
 
     <div class="address">
       <el-table
@@ -44,8 +43,8 @@
         :data="tableData"
         border
         :element-loading-text="page_data.loadTxt"
-        style="width: 100%"
-        max-height="500"
+        :height="tableHeight"
+        ref="table"
       >
         <el-table-column label="序号" type="index" width="50" align="center">
         </el-table-column>
@@ -255,6 +254,7 @@ export default {
   data() {
     const data = [];
     return {
+      tableHeight: 50,
       data: JSON.parse(JSON.stringify(data)), //树形结构
       filterText: "",
       activeName: "first",
@@ -320,6 +320,20 @@ export default {
     this.generator(); //获取表格数据
   },
   computed: {},
+  mounted: function() {
+    this.$nextTick(function() {
+      this.tableHeight =
+        window.innerHeight - this.$refs.table.$el.offsetTop - 180;
+
+      // 监听窗口大小变化
+      let self = this;
+      window.onresize = function() {
+        self.tableHeight =
+          window.innerHeight - self.$refs.table.$el.offsetTop - 180;
+      };
+    });
+    //this.$refs.table.$el.offsetTop：表格距离浏览器的高度 //50表示你想要调整的表格距离底部的高度（你可以自己随意调整），因为我们一般都有放分页组件的，所以需要给它留一个高度
+  },
   methods: {
     notEmpty() {
       this.input = "";
@@ -574,10 +588,11 @@ export default {
   width: 100%;
   height: 50px;
   float: left;
-  margin-left: 20px;
-  margin-top: 25px;
+  margin-left: 0px;
+  margin-top: 15px;
   /* background-color: #fff; */
   line-height: 50px;
+  font-size: 13px;
   /* background-color: red; */
 }
 .update .el-input {
@@ -585,7 +600,7 @@ export default {
   height: 32px;
 }
 .exact {
-  margin-left: 20px;
+  /* margin-left: 20px; */
   margin-right: 10px;
 }
 .cadddr {

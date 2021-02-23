@@ -8,6 +8,7 @@
           style="width: 290px; margin-left: 11px; margin-top: 20px"
           placeholder="输入关键字进行查询"
           v-model="filterText"
+          @input="addFilter"
         >
         </el-input>
         <div class="import">
@@ -629,12 +630,16 @@ export default {
   },
   created() {},
   watch: {
-    filterText(val) {
-      // console.log(this.$refs.tree);
-      this.$refs.tree.filter(val);
-    }
+    // filterText(val) {
+    //
+    //   this.$refs.tree.filter(val);
+    // }
   },
   methods: {
+    addFilter() {
+      console.log(this.filterText);
+      this.Addraudit();
+    },
     ofmoisture() {
       if (this.ruleForm.content > 100) {
         // alert("123213");
@@ -668,11 +673,11 @@ export default {
       this.display = flat;
       this.Addraudit();
     },
-    filterNode(value, data) {
-      if (!value) return true;
-
-      return data.label.indexOf(value) !== -1;
-    },
+    //     filterNode(value, data) {
+    //       if (!value) return true;
+    //
+    //       return data.label.indexOf(value) !== -1;
+    //     },
     //省市区查询
     gProvinces() {
       // console.log(this.valuepark1[1]);

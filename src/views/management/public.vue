@@ -5,6 +5,7 @@
         style="width:290px; margin-left: 9px;"
         placeholder="输入关键字进行查询"
         v-model="filterText"
+        @input="addFilter"
       >
       </el-input>
       <div class="country">
@@ -325,12 +326,15 @@ export default {
     this.ToString(); //公共
   },
   watch: {
-    filterText(val) {
-      // console.log(this.$refs.tree);
-      this.$refs.tree.filter(val);
-    }
+    //     filterText(val) {
+    //
+    //       this.$refs.tree.filter(val);
+    //     }
   },
   methods: {
+    addFilter() {
+      this.publicDomain();
+    },
     filterNode(value, data) {
       if (!value) return true;
 
@@ -548,19 +552,19 @@ export default {
   border-right: 1px solid #e0e0e0;
 }
 .rights {
-   width: 70%;
+  width: 70%;
   height: 600px;
-     overflow-y: auto;
-      overflow-x: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   /* background-color: red; */
   margin-left: 10px;
 }
 .monly {
- width: 350px;
+  width: 350px;
   height: 400px;
-   overflow-y: auto;
+  overflow-y: auto;
   margin-top: 10px;
-      margin-bottom: 60px;
+  margin-bottom: 60px;
 }
 .import {
   width: 100%;
