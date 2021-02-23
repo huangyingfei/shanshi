@@ -32,7 +32,7 @@
     <el-row style="margin-bottom: 40px;">
       <el-col :span="24"
         ><div>
-          <div id="weekRules" style="width: 100%;height: 400px;"></div></div
+          <div id="weekRules" style="width: 100%;height: 500px;"></div></div
       ></el-col>
     </el-row>
   </div>
@@ -114,7 +114,11 @@ export default {
         barWidth: 50, //柱图 -- 条宽度
         backgroundColor: "#fff", //图得背景色
         xAxis: {
-          data: this.ingredients
+          data: this.ingredients,
+          axisLabel: {
+            interval: 0,
+            rotate: 40
+          }
         },
         yAxis: {},
         series: [
@@ -122,8 +126,9 @@ export default {
             name: "食材",
             type: "bar",
             data: this.numbers,
+            showBackground: true,
             backgroundStyle: {
-              color: "rgba(220, 220, 220, 0.8)"
+              color: "rgba(180, 180, 180, 0.2)"
             },
             itemStyle: {
               normal: {
@@ -132,7 +137,7 @@ export default {
                   show: true, //柱子上显示值
                   position: "top", //值在柱子上方显示
                   textStyle: {
-                    color: "#FD6B71" //值得颜色
+                    color: "#000" //值得颜色
                   }
                 }
               }

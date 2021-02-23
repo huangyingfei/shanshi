@@ -3,32 +3,35 @@
     <!-- 总量 -->
     <div class="total">
       <div class="mechanism">
-        <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
+        <img src="../../../public/img/jgtotal.png" alt />
         <div class="nism1">
           <div class="ingredients">机构总量</div>
           <div class="food1">{{ this.newhead.organ }}</div>
         </div>
       </div>
       <div class="mechanism">
+        <img src="../../../public/img/zftotal.png" alt />
         <div class="nism1">
           <div class="ingredients">政府总量</div>
           <div class="food1">{{ this.newhead.gover }}</div>
         </div>
       </div>
       <div class="mechanism">
+        <img src="../../../public/img/sctotal.png" alt />
         <div class="nism1">
           <div class="ingredients">食材总量</div>
           <div class="food1">{{ this.newhead.food }}</div>
         </div>
       </div>
       <div class="mechanism">
+        <img src="../../../public/img/cptotal.png" alt />
         <div class="nism1">
           <div class="ingredients">菜品总量</div>
           <div class="food1">{{ this.newhead.dish }}</div>
         </div>
       </div>
       <div class="mechanism">
-        <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
+        <img src="../../../public/img/sptotal.png" alt />
         <div class="nism1">
           <div class="ingredients">食谱总量</div>
           <div class="food1">{{ this.newhead.recipe }}</div>
@@ -38,10 +41,12 @@
     <!-- 排行榜 -->
     <div class="dishes">
       <!-- 菜谱排行榜 -->
-      <div class="variety" v-if="this.empty==1">
-          <div class="pictures">
-            <img src="../../../public/img/shuj.png" alt="">
-          </div>
+      <div class="variety" v-if="this.empty == 1">
+        <h4 class="welcome">本周最受欢迎菜品</h4>
+        <div class="pictures">
+          <!-- <img src="../../../public/img/shuj.png" alt="" /> -->
+          <p>暂无数据</p>
+        </div>
       </div>
       <div class="variety" v-else>
         <h4 class="welcome">本周最受欢迎菜品</h4>
@@ -84,7 +89,7 @@
         </div> -->
         <h4 class="welcome1">本周食谱健康指数排行榜</h4>
         <div class="school1" v-for="(item1, i) in getHealth" :key="i">
-          <!-- <div class="ranking">1</div> -->
+          <div class="ranking">{{ item1.list }}</div>
           <div class="schoolimg">
             <!-- <img :src="item1.dishPic" alt /> -->
             <el-image
@@ -145,7 +150,7 @@ export default {
       greater: [],
       activeNames: ["1", "2", "3", "5"],
       logActiveNames: ["17"],
-      empty:""
+      empty: ""
     };
   },
   computed: {
@@ -174,10 +179,10 @@ export default {
         // console.log(res);
         this.double = res.data.data.records;
         // console.log(this.double);
-          if(this.double.length==0){
-            this.empty=1;     
-        }else{
-            this.empty=2;
+        if (this.double.length == 0) {
+          this.empty = 1;
+        } else {
+          this.empty = 2;
         }
       });
     },
@@ -189,6 +194,10 @@ export default {
         .then(res => {
           // console.log(res);
           this.getHealth = res.data.data.records;
+          // console.log(this.getHealth);
+          this.getHealth.forEach((item, i) => {
+            item.list = i + 1;
+          });
           // console.log(this.getHealth);
         });
     },
@@ -256,7 +265,7 @@ export default {
 .dishes {
   width: 100%;
   height: 750px;
-  /* background-color: yellow; */
+  background-color: #fff;
   display: flex;
   margin-top: 5px;
   margin-bottom: 40px;
@@ -268,15 +277,20 @@ export default {
   overflow-x: hidden;
   background-color: #fff;
 }
-.pictures{
+.pictures {
   width: 200px;
   height: 200px;
   // background-color: red;
   margin: auto;
   margin-top: 150px;
-  img{
+  img {
     width: 200px;
     height: 200px;
+  }
+  p {
+    font-size: 20px;
+    font-weight: bold;
+    color: #c0c4cc;
   }
 }
 .recipes {
@@ -344,12 +358,12 @@ export default {
 .ranking {
   width: 30px;
   height: 30px;
-  background: red;
+  // background: red;
   text-align: center;
   line-height: 30px;
-  color: #fff;
+  color: #000;
   float: left;
-  margin-top: 15px;
+  margin-top: 20px;
 }
 .ranking1 {
   width: 30px;

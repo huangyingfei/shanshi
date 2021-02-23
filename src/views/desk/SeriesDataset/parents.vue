@@ -51,7 +51,12 @@
         <span style="margin-right: 10px;margin-left: 15px;  font-size: 14px;"
           >机构选择:</span
         >
-        <el-select @change="searchBtn" v-model="activity" placeholder="请选择">
+        <el-select
+          @change="searchBtn"
+          clearable
+          v-model="activity"
+          placeholder="请选择"
+        >
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -128,10 +133,27 @@ export default {
   },
   beforeMount() {
     this.profileuser();
+    this.fromSearch();
   },
   methods: {
     searchBtn() {
       console.log(this.activity);
+    },
+    fromSearch() {
+      this.$axios
+        .get(`api/blade-system/tenant/getChildTenant`, {})
+        .then(res => {
+          this.rsearch = res.data.data;
+          console.log(this.rsearch);
+          let second = [];
+          this.rsearch.forEach((item, index) => {
+            second.push({
+              value: item.tenantIds,
+              label: item.tenantName
+            });
+          });
+          this.options = second;
+        });
     },
     //访问量统计
     profileuser() {

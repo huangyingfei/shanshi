@@ -120,7 +120,7 @@
               :props="defaultProps"
               :default-expand-all="false"
               :default-expanded-keys="[1]"
-              :default-checked-keys="[5]"
+              :default-checked-keys="[1]"
               @node-click="handleNodeClick"
               :filter-node-method="filterNode"
               ref="tree"
