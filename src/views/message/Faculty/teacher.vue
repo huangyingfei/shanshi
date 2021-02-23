@@ -1501,6 +1501,7 @@
             this.$set(week, "image", "")
           })
         })
+        this.$refs.child.resizeExpendHeight();
       },
       getmealTypeData(name) {
         return this.mealTypeData.filter(_ => {
@@ -1688,6 +1689,7 @@
         });
         setTimeout(function () {
           that.$refs.child.refreshData();
+          that.$refs.child.resizeExpendHeight();
         }, 200)
       },
       hasFoodType(foodTypeName) {
@@ -2030,7 +2032,7 @@
     border: 1px solid #ebebeb !important;
     border-radius: 3px !important;
     padding: 0px;
-    height: 600px;
+    height: calc(100vh - 324px);
   }
 
   .meals .el-card__body {
@@ -2054,7 +2056,7 @@
   .meals .foodWeekListHis {
     padding: 0 0 0 10px;
     overflow-y: scroll;
-    height: 280px;
+    max-height: 280px;
   }
 
   .meals .foodWeekListHis li {
@@ -2080,7 +2082,6 @@
   }
 
   .meals .foodPanel {
-    height: calc(100vh - 180px);
     overflow-y: scroll;
     overflow-x: auto;
   }

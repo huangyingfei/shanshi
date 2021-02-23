@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 0px; height: 1080px;position:relative" class="foodsweek">
+  <div style="padding: 0px; position:relative" class="foodsweek">
     <div
       ref="contextmenuFood"
       id="contextmenuFood"
@@ -30,7 +30,7 @@
     </el-button>
     <!-- <img src="/img/cater/left.png" style="width: 3rem;height: 3rem;position: absolute;left:100px;z-index: 9999;"/>
     <img src="/img/cater/right.png" style="width: 3rem;height: 3rem;position: absolute;right:10px;z-index: 9999;" /> -->
-    <el-table :empty-text="empty" class="table-week" style="width: 100%" :data="datas" border fit :header-cell-style="headerCellStyle" ref="foodWeekTable">
+    <el-table  :max-height="foodWeekHeight" :empty-text="empty" class="table-week" style="width: 100%" :data="datas" border fit :header-cell-style="headerCellStyle" ref="foodWeekTable">
 
       <el-table-column align="center" width="100" fixed class-name="col-date3 colNoneBorder" >
         <template slot="header"> 菜品/食物 </template>
@@ -56,11 +56,9 @@
             </span>
           </div>
           <div class="">
-            <!--<el-checkbox-->
-              <!--label="设置为假期"-->
-              <!--:checked="headers.find((p) => p.name == 'week1').is_vacation"-->
-              <!--@change="onCheck('week1', $event)"-->
-            <!--&gt;</el-checkbox>-->
+            <div class="weekHeader">菜品/食材</div>
+            <div class="weekHeader">用量(g)</div>
+            <div class="weekHeader">图片</div>
           </div>
         </template>
         <template slot-scope="scope">
@@ -79,6 +77,7 @@
               @expand-change="expandchange"
               :data="scope.row.weeks.find((p) => p.name == 'week1').foods"
               row-key="id"
+              :show-header="false"
               :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
               :span-method="onTableSpanMethod"
             >
@@ -87,7 +86,20 @@
                 prop="name"
                 header-align="center"
                 align="left"
-              ></el-table-column>
+              >
+                <template slot-scope="scope">
+                  <!--//食材-->
+                  <span     v-if="!scope.row.children"  :class="{jundgeFoodRedColor:scope.row.redColor}">
+                    <span   v-if="!scope.row.children"  :class="{jundgeFoodOrangeColor:scope.row.orangeColor}">{{ scope.row.name }}</span>
+                   </span>
+                  <!--//菜品-->
+                  <span    v-if="scope.row.children" :class="{jundgeFoodRedColor:scope.row.redColor}">
+                    <span v-if="scope.row.children" :class="{jundgeFoodOrangeColor:scope.row.orangeColor}">
+                    {{ scope.row.name }}
+                    </span>
+                  </span>
+                </template>
+              </el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
                 <template slot-scope="scope1">
                   <div style="display: flex">
@@ -184,13 +196,11 @@
               headers.find((p) => p.name == "week2").date
             }})
           </div>
-          <!--<div class="">-->
-            <!--<el-checkbox-->
-              <!--label="设置为假期"-->
-              <!--:checked="headers.find((p) => p.name == 'week2').is_vacation"-->
-              <!--@change="onCheck('week2', $event)"-->
-            <!--&gt;</el-checkbox>-->
-          <!--</div>-->
+          <div class="">
+            <div class="weekHeader">菜品/食材</div>
+            <div class="weekHeader">用量(g)</div>
+            <div class="weekHeader">图片</div>
+          </div>
         </template>
         <template slot-scope="scope">
           <div
@@ -206,6 +216,7 @@
               style="width: 100%"
               :data="scope.row.weeks.find((p) => p.name == 'week2').foods"
               row-key="id"
+              :show-header="false"
               :empty-text="empty"
               @expand-change="expandchange"
               :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
@@ -216,7 +227,20 @@
                 prop="name"
                 header-align="center"
                 align="left"
-              ></el-table-column>
+              >
+                <template slot-scope="scope">
+                  <!--//食材-->
+                  <span     v-if="!scope.row.children"  :class="{jundgeFoodRedColor:scope.row.redColor}">
+                    <span   v-if="!scope.row.children"  :class="{jundgeFoodOrangeColor:scope.row.orangeColor}">{{ scope.row.name }}</span>
+                   </span>
+                  <!--//菜品-->
+                  <span    v-if="scope.row.children" :class="{jundgeFoodRedColor:scope.row.redColor}">
+                    <span v-if="scope.row.children" :class="{jundgeFoodOrangeColor:scope.row.orangeColor}">
+                    {{ scope.row.name }}
+                    </span>
+                  </span>
+                </template>
+              </el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
                 <template slot-scope="scope1">
                   <div style="display: flex">
@@ -312,13 +336,11 @@
               headers.find((p) => p.name == "week3").date
             }})
           </div>
-          <!--<div class="">-->
-            <!--<el-checkbox-->
-              <!--label="设置为假期"-->
-              <!--:checked="headers.find((p) => p.name == 'week3').is_vacation"-->
-              <!--@change="onCheck('week3', $event)"-->
-            <!--&gt;</el-checkbox>-->
-          <!--</div>-->
+          <div class="">
+            <div class="weekHeader">菜品/食材</div>
+            <div class="weekHeader">用量(g)</div>
+            <div class="weekHeader">图片</div>
+          </div>
         </template>
         <template slot-scope="scope">
           <div
@@ -334,6 +356,7 @@
               style="width: 100%"
               :data="scope.row.weeks.find((p) => p.name == 'week3').foods"
               row-key="id"
+              :show-header="false"
               :empty-text="empty"
               @expand-change="expandchange"
               :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
@@ -344,7 +367,20 @@
                 prop="name"
                 header-align="center"
                 align="left"
-              ></el-table-column>
+              >
+                <template slot-scope="scope">
+                  <!--//食材-->
+                  <span     v-if="!scope.row.children"  :class="{jundgeFoodRedColor:scope.row.redColor}">
+                    <span   v-if="!scope.row.children"  :class="{jundgeFoodOrangeColor:scope.row.orangeColor}">{{ scope.row.name }}</span>
+                   </span>
+                  <!--//菜品-->
+                  <span    v-if="scope.row.children" :class="{jundgeFoodRedColor:scope.row.redColor}">
+                    <span v-if="scope.row.children" :class="{jundgeFoodOrangeColor:scope.row.orangeColor}">
+                    {{ scope.row.name }}
+                    </span>
+                  </span>
+                </template>
+              </el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
                 <template slot-scope="scope1">
                   <div style="display: flex">
@@ -440,13 +476,11 @@
               headers.find((p) => p.name == "week4").date
             }})
           </div>
-          <!--<div class="">-->
-            <!--<el-checkbox-->
-              <!--label="设置为假期"-->
-              <!--:checked="headers.find((p) => p.name == 'week4').is_vacation"-->
-              <!--@change="onCheck('week4', $event)"-->
-            <!--&gt;</el-checkbox>-->
-          <!--</div>-->
+          <div class="">
+            <div class="weekHeader">菜品/食材</div>
+            <div class="weekHeader">用量(g)</div>
+            <div class="weekHeader">图片</div>
+          </div>
         </template>
         <template slot-scope="scope">
           <div
@@ -462,6 +496,7 @@
               style="width: 100%"
               :data="scope.row.weeks.find((p) => p.name == 'week4').foods"
               row-key="id"
+              :show-header="false"
               :empty-text="empty"
                 @expand-change="expandchange"
               :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
@@ -472,7 +507,20 @@
                 prop="name"
                 header-align="center"
                 align="left"
-              ></el-table-column>
+              >
+                <template slot-scope="scope">
+                  <!--//食材-->
+                  <span     v-if="!scope.row.children"  :class="{jundgeFoodRedColor:scope.row.redColor}">
+                    <span   v-if="!scope.row.children"  :class="{jundgeFoodOrangeColor:scope.row.orangeColor}">{{ scope.row.name }}</span>
+                   </span>
+                  <!--//菜品-->
+                  <span    v-if="scope.row.children" :class="{jundgeFoodRedColor:scope.row.redColor}">
+                    <span v-if="scope.row.children" :class="{jundgeFoodOrangeColor:scope.row.orangeColor}">
+                    {{ scope.row.name }}
+                    </span>
+                  </span>
+                </template>
+              </el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
                 <template slot-scope="scope1">
                   <div style="display: flex">
@@ -568,13 +616,11 @@
               headers.find((p) => p.name == "week5").date
             }})
           </div>
-          <!--<div class="">-->
-            <!--<el-checkbox-->
-              <!--label="设置为假期"-->
-              <!--:checked="headers.find((p) => p.name == 'week5').is_vacation"-->
-              <!--@change="onCheck('week5', $event)"-->
-            <!--&gt;</el-checkbox>-->
-          <!--</div>-->
+          <div class="">
+            <div class="weekHeader">菜品/食材</div>
+            <div class="weekHeader">用量(g)</div>
+            <div class="weekHeader">图片</div>
+          </div>
         </template>
         <template slot-scope="scope">
           <div
@@ -590,6 +636,7 @@
               style="width: 100%"
               :data="scope.row.weeks.find((p) => p.name == 'week5').foods"
               row-key="id"
+              :show-header="false"
               :empty-text="empty"
                 @expand-change="expandchange"
               :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
@@ -600,7 +647,20 @@
                 prop="name"
                 header-align="center"
                 align="left"
-              ></el-table-column>
+              >
+                <template slot-scope="scope">
+                  <!--//食材-->
+                  <span     v-if="!scope.row.children"  :class="{jundgeFoodRedColor:scope.row.redColor}">
+                    <span   v-if="!scope.row.children"  :class="{jundgeFoodOrangeColor:scope.row.orangeColor}">{{ scope.row.name }}</span>
+                   </span>
+                  <!--//菜品-->
+                  <span    v-if="scope.row.children" :class="{jundgeFoodRedColor:scope.row.redColor}">
+                    <span v-if="scope.row.children" :class="{jundgeFoodOrangeColor:scope.row.orangeColor}">
+                    {{ scope.row.name }}
+                    </span>
+                  </span>
+                </template>
+              </el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
                 <template slot-scope="scope1">
                   <div style="display: flex">
@@ -696,13 +756,11 @@
               headers.find((p) => p.name == "week6").date
             }})
           </div>
-          <!--<div class="">-->
-            <!--<el-checkbox-->
-              <!--label="设置为假期"-->
-              <!--:checked="headers.find((p) => p.name == 'week6').is_vacation"-->
-              <!--@change="onCheck('week6', $event)"-->
-            <!--&gt;</el-checkbox>-->
-          <!--</div>-->
+          <div class="">
+            <div class="weekHeader">菜品/食材</div>
+            <div class="weekHeader">用量(g)</div>
+            <div class="weekHeader">图片</div>
+          </div>
         </template>
         <template slot-scope="scope">
           <div
@@ -718,6 +776,7 @@
               style="width: 100%"
               :data="scope.row.weeks.find((p) => p.name == 'week6').foods"
               row-key="id"
+              :show-header="false"
               :empty-text="empty"
                 @expand-change="expandchange"
               :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
@@ -728,7 +787,20 @@
                 prop="name"
                 header-align="center"
                 align="left"
-              ></el-table-column>
+              >
+                <template slot-scope="scope">
+                  <!--//食材-->
+                  <span     v-if="!scope.row.children"  :class="{jundgeFoodRedColor:scope.row.redColor}">
+                    <span   v-if="!scope.row.children"  :class="{jundgeFoodOrangeColor:scope.row.orangeColor}">{{ scope.row.name }}</span>
+                   </span>
+                  <!--//菜品-->
+                  <span    v-if="scope.row.children" :class="{jundgeFoodRedColor:scope.row.redColor}">
+                    <span v-if="scope.row.children" :class="{jundgeFoodOrangeColor:scope.row.orangeColor}">
+                    {{ scope.row.name }}
+                    </span>
+                  </span>
+                </template>
+              </el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
                 <template slot-scope="scope1">
                   <div style="display: flex">
@@ -824,13 +896,11 @@
               headers.find((p) => p.name == "week7").date
             }})
           </div>
-          <!--<div class="">-->
-            <!--<el-checkbox-->
-              <!--label="设置为假期"-->
-              <!--:checked="headers.find((p) => p.name == 'week7').is_vacation"-->
-              <!--@change="onCheck('week7', $event)"-->
-            <!--&gt;</el-checkbox>-->
-          <!--</div>-->
+          <div class="">
+            <div class="weekHeader">菜品/食材</div>
+            <div class="weekHeader">用量(g)</div>
+            <div class="weekHeader">图片</div>
+          </div>
         </template>
         <template slot-scope="scope">
           <div
@@ -846,6 +916,7 @@
               style="width: 100%"
               :data="scope.row.weeks.find((p) => p.name == 'week7').foods"
               row-key="id"
+              :show-header="false"
               :empty-text="empty"
                 @expand-change="expandchange"
               :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
@@ -856,7 +927,20 @@
                 prop="name"
                 header-align="center"
                 align="left"
-              ></el-table-column>
+              >
+                <template slot-scope="scope">
+                  <!--//食材-->
+                  <span     v-if="!scope.row.children"  :class="{jundgeFoodRedColor:scope.row.redColor}">
+                    <span   v-if="!scope.row.children"  :class="{jundgeFoodOrangeColor:scope.row.orangeColor}">{{ scope.row.name }}</span>
+                   </span>
+                  <!--//菜品-->
+                  <span    v-if="scope.row.children" :class="{jundgeFoodRedColor:scope.row.redColor}">
+                    <span v-if="scope.row.children" :class="{jundgeFoodOrangeColor:scope.row.orangeColor}">
+                    {{ scope.row.name }}
+                    </span>
+                  </span>
+                </template>
+              </el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
                 <template slot-scope="scope1">
                   <div style="display: flex">
@@ -1145,7 +1229,7 @@ export default {
       ],
       flag:true,
       pcScore:'0',
-
+      foodWeekHeight:430,
     };
   },
   // 计算属性computed,计算的是Name依赖的值,它不能计算在data中已经定义过的变量。
@@ -1157,11 +1241,14 @@ export default {
   mounted() {
     this.init();
     this.getToken()//获取token
-    console.log('this.$refs.foodWeekTable')
-    console.log('this.$refs.foodWeekTable')
+    this.getfoodWeekHeight();
   },
 
   methods: {
+    getfoodWeekHeight() {
+      this.foodWeekHeight = document.body.offsetHeight - 324;
+      console.log(document.body.offsetHeight - 324);
+    },
     toRight(){
       var colNum = this.$refs.foodWeekTable.columns.length-1;
       var nowLeftWidth  = this.$refs.foodWeekTable.bodyWrapper.scrollLeft
@@ -1754,19 +1841,24 @@ export default {
           });
         }
       });
-      console.log(foods)
-      for(let i=0;i<this.foodMutuals.length;i++){
-        for(let j=0;j<foods.children.length;j++){
-          if(this.foodMutuals[i]["data_id"]==data_id&&week_name==this.foodMutuals[i]["week_id"]){
-            if(this.foodMutuals[i]["foodId"]==foods.children[j].id||this.foodMutuals[i]["foodId1"]==foods.children[j].id){
-              this.foodMutuals.splice(i,1)
-            }
-          }
-        }
-      }
+      // console.log(foods)
+      // for(let i=0;i<this.foodMutuals.length;i++){
+      //   for(let j=0;j<foods.children.length;j++){
+      //     if(this.foodMutuals[i]["data_id"]==data_id&&week_name==this.foodMutuals[i]["week_id"]){
+      //       if(this.foodMutuals[i]["foodId"]==foods.children[j].id||this.foodMutuals[i]["foodId1"]==foods.children[j].id){
+      //         this.foodMutuals.splice(i,1)
+      //       }
+      //     }
+      //   }
+      // }
       this.getFoodScore();
       this.refreshData();
       this.resizeExpendHeight();
+      let node={
+        id:'1'
+      }
+      debugger
+      this.$emit("jundgeFood", node, data_id, week_name);
     },
 
     // 上传图片
@@ -1830,6 +1922,7 @@ export default {
 };
 </script>
 <style>
+
   .foodsweek .table-week  .avue-upload-item .el-upload--picture-card ,.foodsweek .el-upload-list--picture-card .el-upload-list__item{
     width: 100px!important;
     height: 100px!important;
@@ -1847,6 +1940,16 @@ export default {
 /* .table-week th {
   background: #f8fbfc !important;
 } */
+.jundgeFoodRedColor{
+  border-bottom: red 1px solid;
+  display: inline-block;
+  height: 25px;
+}
+.jundgeFoodOrangeColor{
+  border-bottom: orange 1px solid;
+  display: inline-block;
+  height: 20px;
+}
 .table-week td {
   padding: 0 !important;
   vertical-align: top !important;
@@ -1897,5 +2000,9 @@ export default {
 .colNoneBorder
 {
   /* border-bottom: 1px solid transparent !important; */
+}
+.weekHeader {
+  display: inline-block;
+  width: 32%;
 }
 </style>

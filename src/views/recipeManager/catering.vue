@@ -503,11 +503,11 @@
           <div class="scores3" style="color: #dd6161">
             <p class="gnus" @click="tfractio">{{score}}<span class="gnus-fen" style="color: #dd6161">分</span></p>
           </div>
-          <div class="scores2">
-            <p class="gnus-fen" style="color: #dd6161;margin-top: 35px"><span>离</span><span class="gnus-hege">合格</span>
-              <br>
-              <span class="gnus-fen" style="color: #dd6161">需提升{{(85-score).toFixed(2)}}分！</span></p>
-          </div>
+          <!--<div class="scores2">-->
+            <!--<p class="gnus-fen" style="color: #dd6161;margin-top: 35px"><span>离</span><span class="gnus-hege">合格</span>-->
+              <!--<br>-->
+              <!--<span class="gnus-fen" style="color: #dd6161">需提升{{(85-score).toFixed(2)}}分！</span></p>-->
+          <!--</div>-->
         </div>
       </div>
       <!-- 分数弹框 -->
@@ -636,13 +636,13 @@
             <div class="scores3" style="color: #dd6161">
               <p class="gnus">{{peipScore}}<span class="gnus-fen" style="color: #dd6161">分</span></p>
             </div>
-            <div class="scores2">
-              <p class="gnus-fen" style="color: #dd6161;margin-top: 35px"><span>离</span><span
-                class="gnus-hege">合格</span>
-                <br>
-                <span class="gnus-fen" style="color: #dd6161">需提升{{(85-score).toFixed(2)}}分！</span>
-              </p>
-            </div>
+            <!--<div class="scores2">-->
+              <!--<p class="gnus-fen" style="color: #dd6161;margin-top: 35px"><span>离</span><span-->
+                <!--class="gnus-hege">合格</span>-->
+                <!--<br>-->
+                <!--<span class="gnus-fen" style="color: #dd6161">需提升{{(85-score).toFixed(2)}}分！</span>-->
+              <!--</p>-->
+            <!--</div>-->
           </div>
         </div>
       </el-dialog>
@@ -1731,7 +1731,7 @@
               if (week.name === wk) {
                 week.foods.forEach((dish) => {
                   dish.children.forEach((food) => {
-                    children.push({foodId: food.id});
+                    children.push({ foodId: food.id });
                   });
                 });
               }
@@ -1744,7 +1744,7 @@
           childrens: children,
         });
         let row = {
-          // peopleId:this.WeekInfo.crowd,
+          peopleId: this.WeekInfo.crowd,
           recipeDay: this.WeekInfo.weekType,
           recipeCycles: recipeCycles,
         };
@@ -1752,6 +1752,7 @@
         //食材相克
         jundgeFood(row).then((result) => {
           //
+          debugger
           let foodMutuals = that.foodMutuals;
           let msg = "";
           if (result.data.data.foodMutuals.length > 0) {
@@ -1776,13 +1777,43 @@
                   msg: result.data.data.msg[i],
                 });
               }
-              msg += result.data.data.msg[i] + ",";
+              msg += result.data.data.msg[i] + "，";
             }
             that.foodMutuals = foodMutuals;
 
             this.$message.warning(msg.substring(0, msg.length - 1));
-            console.log("that.foodMutuals", that.foodMutuals);
+          }else{
+            for(let i=0;i<that.foodMutuals.length;i++){
+              if(that.foodMutuals[i].data_id==id&&that.foodMutuals[i].week_id==wk){
+                that.foodMutuals.splice(i,1);
+              }
+            }
           }
+          that.datas.forEach((data) => {
+            if (data.id === id) {
+              data.weeks.forEach((week) => {
+                if (week.name === wk) {
+                  week.foods.forEach((dish) => {
+                    let flag=false;
+                    dish.children.forEach((food) => {
+                      that.$set(food,"redColor",false)
+                      for(let i=0;i<that.foodMutuals.length;i++) {
+                        if (food.id == that.foodMutuals[i].foodId && that.foodMutuals[i].data_id==id&&foodMutuals[i].week_id==wk) {
+                          that.$set(food, "redColor", true)
+                          flag = true;
+                        }
+                        if (food.id == that.foodMutuals[i].foodId1&& that.foodMutuals[i].data_id==id&&foodMutuals[i].week_id==wk) {
+                          that.$set(food, "redColor", true)
+                          flag = true;
+                        }
+                      }
+                    });
+                    that.$set(dish,"redColor",flag)
+                  });
+                }
+              });
+            }
+          });
         });
       },
       foodmenueDragEnd(a, b, c) {
@@ -1947,6 +1978,7 @@
             this.$set(week, "image", "");
           });
         });
+        this.$refs.child.resizeExpendHeight();
       },
       //智能配平
       wrapscan() {
@@ -2491,7 +2523,7 @@
     border: 1px solid #ebebeb !important;
     border-radius: 3px !important;
     padding: 0px;
-    height: 600px;
+    height: calc(100vh - 324px);
   }
 
   .meals .el-card__body {
@@ -2515,7 +2547,7 @@
   .meals .foodWeekListHis {
     padding: 0 0 0 10px;
     overflow-y: scroll;
-    height: 280px;
+    max-height: 280px;
   }
 
   .meals .foodWeekListHis li {
@@ -2541,7 +2573,6 @@
   }
 
   .meals .foodPanel {
-    height: calc(100vh - 180px);
     overflow-y: scroll;
     overflow-x: auto;
   }
@@ -2561,17 +2592,17 @@
     /* background-color: red; */
     position: absolute;
     top: 60px;
-    right: 45px;
+    right: 60px;
     z-index: 999;
   }
 
   .scores3 {
-    width: 128px;
+    width: 155px;
   }
 
   .scores-same {
-    width: 250px;
-    height: 132px;
+    width: 290px;
+    height: 137px;
     color: #FFFFFF;
     background-size: 100% 100%;
     display: flex;
@@ -2602,7 +2633,7 @@
   }
 
   .gnus {
-    font-size: 30px;
+    font-size: 28px;
     text-align: center;
     font-weight: 600;
     margin-top: 40px;

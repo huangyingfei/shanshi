@@ -83,7 +83,20 @@
                 prop="name"
                 header-align="center"
                 align="left"
-              ></el-table-column>
+              >
+                <template slot-scope="scope">
+                  <!--//食材-->
+                  <span     v-if="!scope.row.children"  :class="{jundgeFoodRedColor:scope.row.redColor}">
+                    <span   v-if="!scope.row.children"  :class="{jundgeFoodOrangeColor:scope.row.orangeColor}">{{ scope.row.name }}</span>
+                   </span>
+                  <!--//菜品-->
+                  <span    v-if="scope.row.children" :class="{jundgeFoodRedColor:scope.row.redColor}">
+                    <span v-if="scope.row.children" :class="{jundgeFoodOrangeColor:scope.row.orangeColor}">
+                    {{ scope.row.name }}
+                    </span>
+                  </span>
+                </template>
+              </el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
                 <template slot-scope="scope1">
                   <div style="display: flex">
@@ -262,7 +275,20 @@
                 prop="name"
                 header-align="center"
                 align="left"
-              ></el-table-column>
+              >
+                <template slot-scope="scope">
+                  <!--//食材-->
+                  <span     v-if="!scope.row.children"  :class="{jundgeFoodRedColor:scope.row.redColor}">
+                    <span   v-if="!scope.row.children"  :class="{jundgeFoodOrangeColor:scope.row.orangeColor}">{{ scope.row.name }}</span>
+                   </span>
+                  <!--//菜品-->
+                  <span    v-if="scope.row.children" :class="{jundgeFoodRedColor:scope.row.redColor}">
+                    <span v-if="scope.row.children" :class="{jundgeFoodOrangeColor:scope.row.orangeColor}">
+                    {{ scope.row.name }}
+                    </span>
+                  </span>
+                </template>
+              </el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
                 <template slot-scope="scope1">
                   <div style="display: flex">
@@ -455,7 +481,20 @@
                 prop="name"
                 header-align="center"
                 align="left"
-              ></el-table-column>
+              >
+                <template slot-scope="scope">
+                  <!--//食材-->
+                  <span     v-if="!scope.row.children"  :class="{jundgeFoodRedColor:scope.row.redColor}">
+                    <span   v-if="!scope.row.children"  :class="{jundgeFoodOrangeColor:scope.row.orangeColor}">{{ scope.row.name }}</span>
+                   </span>
+                  <!--//菜品-->
+                  <span    v-if="scope.row.children" :class="{jundgeFoodRedColor:scope.row.redColor}">
+                    <span v-if="scope.row.children" :class="{jundgeFoodOrangeColor:scope.row.orangeColor}">
+                    {{ scope.row.name }}
+                    </span>
+                  </span>
+                </template>
+              </el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
                 <template slot-scope="scope1">
                   <div style="display: flex">
@@ -648,7 +687,20 @@
                 prop="name"
                 header-align="center"
                 align="left"
-              ></el-table-column>
+              >
+                <template slot-scope="scope">
+                  <!--//食材-->
+                  <span     v-if="!scope.row.children"  :class="{jundgeFoodRedColor:scope.row.redColor}">
+                    <span   v-if="!scope.row.children"  :class="{jundgeFoodOrangeColor:scope.row.orangeColor}">{{ scope.row.name }}</span>
+                   </span>
+                  <!--//菜品-->
+                  <span    v-if="scope.row.children" :class="{jundgeFoodRedColor:scope.row.redColor}">
+                    <span v-if="scope.row.children" :class="{jundgeFoodOrangeColor:scope.row.orangeColor}">
+                    {{ scope.row.name }}
+                    </span>
+                  </span>
+                </template>
+              </el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
                 <template slot-scope="scope1">
                   <div style="display: flex">
@@ -841,7 +893,20 @@
                 prop="name"
                 header-align="center"
                 align="left"
-              ></el-table-column>
+              >
+                <template slot-scope="scope">
+                  <!--//食材-->
+                  <span     v-if="!scope.row.children"  :class="{jundgeFoodRedColor:scope.row.redColor}">
+                    <span   v-if="!scope.row.children"  :class="{jundgeFoodOrangeColor:scope.row.orangeColor}">{{ scope.row.name }}</span>
+                   </span>
+                  <!--//菜品-->
+                  <span    v-if="scope.row.children" :class="{jundgeFoodRedColor:scope.row.redColor}">
+                    <span v-if="scope.row.children" :class="{jundgeFoodOrangeColor:scope.row.orangeColor}">
+                    {{ scope.row.name }}
+                    </span>
+                  </span>
+                </template>
+              </el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
                 <template slot-scope="scope1">
                   <div style="display: flex">
@@ -1034,7 +1099,20 @@
                 prop="name"
                 header-align="center"
                 align="left"
-              ></el-table-column>
+              >
+                <template slot-scope="scope">
+                  <!--//食材-->
+                  <span     v-if="!scope.row.children"  :class="{jundgeFoodRedColor:scope.row.redColor}">
+                    <span   v-if="!scope.row.children"  :class="{jundgeFoodOrangeColor:scope.row.orangeColor}">{{ scope.row.name }}</span>
+                   </span>
+                  <!--//菜品-->
+                  <span    v-if="scope.row.children" :class="{jundgeFoodRedColor:scope.row.redColor}">
+                    <span v-if="scope.row.children" :class="{jundgeFoodOrangeColor:scope.row.orangeColor}">
+                    {{ scope.row.name }}
+                    </span>
+                  </span>
+                </template>
+              </el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
                 <template slot-scope="scope1">
                   <div style="display: flex">
@@ -1227,7 +1305,20 @@
                 prop="name"
                 header-align="center"
                 align="left"
-              ></el-table-column>
+              >
+                <template slot-scope="scope">
+                  <!--//食材-->
+                  <span     v-if="!scope.row.children"  :class="{jundgeFoodRedColor:scope.row.redColor}">
+                    <span   v-if="!scope.row.children"  :class="{jundgeFoodOrangeColor:scope.row.orangeColor}">{{ scope.row.name }}</span>
+                   </span>
+                  <!--//菜品-->
+                  <span    v-if="scope.row.children" :class="{jundgeFoodRedColor:scope.row.redColor}">
+                    <span v-if="scope.row.children" :class="{jundgeFoodOrangeColor:scope.row.orangeColor}">
+                    {{ scope.row.name }}
+                    </span>
+                  </span>
+                </template>
+              </el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
                 <template slot-scope="scope1">
                   <div style="display: flex">
@@ -1845,13 +1936,16 @@ export default {
       var node = JSON.parse(JSON.stringify(this.dragnode.node));
       this.appendDragFood(node, id, week);
       this.$emit("jundgeFood", node, id, week);
+      this.$emit("allergy");
       ev.path.forEach((e) => {
         var cname = e.className;
         if (cname && cname.indexOf("drapIn") >= 0) {
           e.classList.remove("drapInActive");
         }
       });
+
       this.getFoodScore();
+
     },
     //获取分数
     getFoodScore() {
@@ -2316,24 +2410,30 @@ export default {
           });
         }
       });
-      for (let i = 0; i < this.foodMutuals.length; i++) {
-        for (let j = 0; j < foods.children.length; j++) {
-          if (
-            this.foodMutuals[i]["data_id"] == data_id &&
-            week_name == this.foodMutuals[i]["week_id"]
-          ) {
-            if (
-              this.foodMutuals[i]["foodId"] == foods.children[j].id ||
-              this.foodMutuals[i]["foodId1"] == foods.children[j].id
-            ) {
-              this.foodMutuals.splice(i, 1);
-            }
-          }
-        }
-      }
+      // for (let i = 0; i < this.foodMutuals.length; i++) {
+      //   for (let j = 0; j < foods.children.length; j++) {
+      //     if (
+      //       this.foodMutuals[i]["data_id"] == data_id &&
+      //       week_name == this.foodMutuals[i]["week_id"]
+      //     ) {
+      //       if (
+      //         this.foodMutuals[i]["foodId"] == foods.children[j].id ||
+      //         this.foodMutuals[i]["foodId1"] == foods.children[j].id
+      //       ) {
+      //         this.foodMutuals.splice(i, 1);
+      //       }
+      //     }
+      //   }
+      // }
       this.getFoodScore();
       this.refreshData();
       this.resizeExpendHeight();
+      let node={
+        id:'1'
+      }
+      debugger
+      this.$emit("jundgeFood", node, data_id, week_name);
+      this.$emit("allergy");
     },
 
     // 上传图片
@@ -2394,6 +2494,16 @@ export default {
 };
 </script>
 <style>
+  .jundgeFoodRedColor{
+    border-bottom: red 1px solid;
+    display: inline-block;
+    height: 25px;
+  }
+  .jundgeFoodOrangeColor{
+    border-bottom: orange 1px solid;
+    display: inline-block;
+    height: 20px;
+  }
 .foodsweek .table-week th {
   background: #f8fbfc !important;
 }

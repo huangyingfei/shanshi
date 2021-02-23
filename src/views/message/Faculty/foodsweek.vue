@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 0px; height: 1080px;position:relative" class="foodsweek">
+  <div style="padding: 0px; position:relative" class="foodsweek">
     <div
       ref="contextmenuFood"
       id="contextmenuFood"
@@ -28,8 +28,9 @@
                 style="position: absolute;right:10px;top: 5px;z-index: 2;" @click="toRight">
     </el-button>
     <!-- table-week start   -->
-    <el-table  :empty-text="empty" class="table-week" style="width: 100%" :data="datas" border fit :header-cell-style="headerCellStyle" ref="foodWeekTable">
-      <el-table-column align="center" width="100" fixed class-name="col-date3 colNoneBorder" >
+    <el-table   :max-height="foodWeekHeight" :empty-text="empty" class="table-week" style="width: 100%" :data="datas" border fit :header-cell-style="headerCellStyle" ref="foodWeekTable">
+      <el-table-column
+        align="center" width="100" fixed class-name="col-date3 colNoneBorder" >
         <template slot="header"> 菜品/食物 </template>
         <template slot-scope="scope">
           <div v-bind:data="scope.row.name" class="meals-foodType">
@@ -51,6 +52,9 @@
             }})
           </div>
           <div class="">
+            <div class="weekHeader">菜品/食材</div>
+            <div class="weekHeader">用量(g)</div>
+            <div class="weekHeader">图片</div>
             <!--<el-checkbox-->
             <!--label="设置为假期"-->
             <!--:checked="headers.find((p) => p.name == 'week1').is_vacation"-->
@@ -74,15 +78,18 @@
               @expand-change="expandchange"
               :data="scope.row.weeks.find((p) => p.name == 'week1').foods"
               row-key="id"
+              :show-header="false"
               :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
               :span-method="onTableSpanMethod"
             >
               <el-table-column
-                label="食品/食材"
+                label="菜品/食材"
                 prop="name"
                 header-align="center"
                 align="left"
-              ></el-table-column>
+              >
+
+              </el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
                 <template slot-scope="scope1">
                   <div style="display: flex">
@@ -180,13 +187,16 @@
             headers.find((p) => p.name == "week2").date
             }})
           </div>
-          <!--<div class="">-->
-          <!--<el-checkbox-->
-          <!--label="设置为假期"-->
-          <!--:checked="headers.find((p) => p.name == 'week2').is_vacation"-->
-          <!--@change="onCheck('week2', $event)"-->
-          <!--&gt;</el-checkbox>-->
-          <!--</div>-->
+          <div class="">
+            <div class="weekHeader">菜品/食材</div>
+            <div class="weekHeader">用量(g)</div>
+            <div class="weekHeader">图片</div>
+            <!--<el-checkbox-->
+            <!--label="设置为假期"-->
+            <!--:checked="headers.find((p) => p.name == 'week1').is_vacation"-->
+            <!--@change="onCheck('week1', $event)"-->
+            <!--&gt;</el-checkbox>-->
+          </div>
         </template>
         <template slot-scope="scope">
           <div
@@ -202,6 +212,7 @@
               style="width: 100%"
               :data="scope.row.weeks.find((p) => p.name == 'week2').foods"
               row-key="id"
+              :show-header="false"
               :empty-text="empty"
               @expand-change="expandchange"
               :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
@@ -309,13 +320,16 @@
             headers.find((p) => p.name == "week3").date
             }})
           </div>
-          <!--<div class="">-->
-          <!--<el-checkbox-->
-          <!--label="设置为假期"-->
-          <!--:checked="headers.find((p) => p.name == 'week3').is_vacation"-->
-          <!--@change="onCheck('week3', $event)"-->
-          <!--&gt;</el-checkbox>-->
-          <!--</div>-->
+          <div class="">
+            <div class="weekHeader">菜品/食材</div>
+            <div class="weekHeader">用量(g)</div>
+            <div class="weekHeader">图片</div>
+            <!--<el-checkbox-->
+            <!--label="设置为假期"-->
+            <!--:checked="headers.find((p) => p.name == 'week1').is_vacation"-->
+            <!--@change="onCheck('week1', $event)"-->
+            <!--&gt;</el-checkbox>-->
+          </div>
         </template>
         <template slot-scope="scope">
           <div
@@ -331,6 +345,7 @@
               style="width: 100%"
               :data="scope.row.weeks.find((p) => p.name == 'week3').foods"
               row-key="id"
+              :show-header="false"
               :empty-text="empty"
               @expand-change="expandchange"
               :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
@@ -438,13 +453,16 @@
             headers.find((p) => p.name == "week4").date
             }})
           </div>
-          <!--<div class="">-->
-          <!--<el-checkbox-->
-          <!--label="设置为假期"-->
-          <!--:checked="headers.find((p) => p.name == 'week4').is_vacation"-->
-          <!--@change="onCheck('week4', $event)"-->
-          <!--&gt;</el-checkbox>-->
-          <!--</div>-->
+          <div class="">
+            <div class="weekHeader">菜品/食材</div>
+            <div class="weekHeader">用量(g)</div>
+            <div class="weekHeader">图片</div>
+            <!--<el-checkbox-->
+            <!--label="设置为假期"-->
+            <!--:checked="headers.find((p) => p.name == 'week1').is_vacation"-->
+            <!--@change="onCheck('week1', $event)"-->
+            <!--&gt;</el-checkbox>-->
+          </div>
         </template>
         <template slot-scope="scope">
           <div
@@ -460,6 +478,7 @@
               style="width: 100%"
               :data="scope.row.weeks.find((p) => p.name == 'week4').foods"
               row-key="id"
+              :show-header="false"
               :empty-text="empty"
               @expand-change="expandchange"
               :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
@@ -567,13 +586,16 @@
             headers.find((p) => p.name == "week5").date
             }})
           </div>
-          <!--<div class="">-->
-          <!--<el-checkbox-->
-          <!--label="设置为假期"-->
-          <!--:checked="headers.find((p) => p.name == 'week5').is_vacation"-->
-          <!--@change="onCheck('week5', $event)"-->
-          <!--&gt;</el-checkbox>-->
-          <!--</div>-->
+          <div class="">
+            <div class="weekHeader">菜品/食材</div>
+            <div class="weekHeader">用量(g)</div>
+            <div class="weekHeader">图片</div>
+            <!--<el-checkbox-->
+            <!--label="设置为假期"-->
+            <!--:checked="headers.find((p) => p.name == 'week1').is_vacation"-->
+            <!--@change="onCheck('week1', $event)"-->
+            <!--&gt;</el-checkbox>-->
+          </div>
         </template>
         <template slot-scope="scope">
           <div
@@ -589,6 +611,7 @@
               style="width: 100%"
               :data="scope.row.weeks.find((p) => p.name == 'week5').foods"
               row-key="id"
+              :show-header="false"
               :empty-text="empty"
               @expand-change="expandchange"
               :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
@@ -696,13 +719,16 @@
             headers.find((p) => p.name == "week6").date
             }})
           </div>
-          <!--<div class="">-->
-          <!--<el-checkbox-->
-          <!--label="设置为假期"-->
-          <!--:checked="headers.find((p) => p.name == 'week6').is_vacation"-->
-          <!--@change="onCheck('week6', $event)"-->
-          <!--&gt;</el-checkbox>-->
-          <!--</div>-->
+          <div class="">
+            <div class="weekHeader">菜品/食材</div>
+            <div class="weekHeader">用量(g)</div>
+            <div class="weekHeader">图片</div>
+            <!--<el-checkbox-->
+            <!--label="设置为假期"-->
+            <!--:checked="headers.find((p) => p.name == 'week1').is_vacation"-->
+            <!--@change="onCheck('week1', $event)"-->
+            <!--&gt;</el-checkbox>-->
+          </div>
         </template>
         <template slot-scope="scope">
           <div
@@ -718,6 +744,7 @@
               style="width: 100%"
               :data="scope.row.weeks.find((p) => p.name == 'week6').foods"
               row-key="id"
+              :show-header="false"
               :empty-text="empty"
               @expand-change="expandchange"
               :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
@@ -824,13 +851,16 @@
             headers.find((p) => p.name == "week7").date
             }})
           </div>
-          <!--<div class="">-->
-          <!--<el-checkbox-->
-          <!--label="设置为假期"-->
-          <!--:checked="headers.find((p) => p.name == 'week7').is_vacation"-->
-          <!--@change="onCheck('week7', $event)"-->
-          <!--&gt;</el-checkbox>-->
-          <!--</div>-->
+          <div class="">
+            <div class="weekHeader">菜品/食材</div>
+            <div class="weekHeader">用量(g)</div>
+            <div class="weekHeader">图片</div>
+            <!--<el-checkbox-->
+            <!--label="设置为假期"-->
+            <!--:checked="headers.find((p) => p.name == 'week1').is_vacation"-->
+            <!--@change="onCheck('week1', $event)"-->
+            <!--&gt;</el-checkbox>-->
+          </div>
         </template>
         <template slot-scope="scope">
           <div
@@ -846,6 +876,7 @@
               style="width: 100%"
               :data="scope.row.weeks.find((p) => p.name == 'week7').foods"
               row-key="id"
+              :show-header="false"
               :empty-text="empty"
               @expand-change="expandchange"
               :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
@@ -1140,7 +1171,8 @@
             name:"晚点",
             value:"6"
           }
-        ]
+        ],
+        foodWeekHeight: 430,
       };
     },
     // 计算属性computed,计算的是Name依赖的值,它不能计算在data中已经定义过的变量。
@@ -1168,9 +1200,14 @@
     mounted() {
       this.init();
       this.getToken()//获取token
+      this.getfoodWeekHeight();
     },
 
     methods: {
+      getfoodWeekHeight() {
+        this.foodWeekHeight = document.body.offsetHeight - 324;
+        console.log(document.body.offsetHeight - 324);
+      },
       toRight(){
         var colNum = this.$refs.foodWeekTable.columns.length-1;
         var nowLeftWidth  = this.$refs.foodWeekTable.bodyWrapper.scrollLeft
@@ -1885,5 +1922,9 @@
   .colNoneBorder
   {
     /* border-bottom: 1px solid transparent !important; */
+  }
+  .weekHeader {
+    display: inline-block;
+    width: 32%;
   }
 </style>

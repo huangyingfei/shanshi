@@ -1,7 +1,7 @@
 <template>
   <div style="padding-left:25px;height: 1080px;width: 80%">
     <!-- table-week start   -->
-    <el-table class="table-week" style="width:100%" :data="smartDatas" border fit>
+    <el-table class="table-week" style="width:100%" :data="smartDatas" border fit :empty-text="empty">
       <el-table-column align="center" width="100" fixed class-name="col-date3 colNoneBorder" >
         <template slot="header"> 菜品/食物 </template>
         <template slot-scope="scope">
@@ -43,6 +43,8 @@
               @expand-change="expandchange"
               :data="scope.row.weeks.find((p) => p.name == 'week1').foods"
               row-key="id"
+              :empty-text="empty"
+              :show-header="false"
               :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
               :span-method="onTableSpanMethod"
             >
@@ -196,6 +198,8 @@
               style="width: 120%"
               :data="scope.row.weeks.find((p) => p.name == 'week2').foods"
               row-key="id"
+              :empty-text="empty"
+              :show-header="false"
               @expand-change="expandchange"
               :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
               :span-method="onTableSpanMethod"
@@ -340,6 +344,8 @@
               style="width: 100%"
               :data="scope.row.weeks.find((p) => p.name == 'week3').foods"
               row-key="id"
+              :empty-text="empty"
+              :show-header="false"
               @expand-change="expandchange"
               :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
               :span-method="onTableSpanMethod"
@@ -482,6 +488,8 @@
               style="width: 100%"
               :data="scope.row.weeks.find((p) => p.name == 'week4').foods"
               row-key="id"
+              :empty-text="empty"
+              :show-header="false"
               @expand-change="expandchange"
               :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
               :span-method="onTableSpanMethod"
@@ -624,6 +632,8 @@
               style="width: 100%"
               :data="scope.row.weeks.find((p) => p.name == 'week5').foods"
               row-key="id"
+              :empty-text="empty"
+              :show-header="false"
               @expand-change="expandchange"
               :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
               :span-method="onTableSpanMethod"
@@ -766,6 +776,8 @@
               style="width: 100%"
               :data="scope.row.weeks.find((p) => p.name == 'week6').foods"
               row-key="id"
+              :empty-text="empty"
+              :show-header="false"
               @expand-change="expandchange"
               :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
               :span-method="onTableSpanMethod"
@@ -908,6 +920,8 @@
               style="width: 100%"
               :data="scope.row.weeks.find((p) => p.name == 'week7').foods"
               row-key="id"
+              :empty-text="empty"
+              :show-header="false"
               @expand-change="expandchange"
               :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
               :span-method="onTableSpanMethod"
@@ -1063,6 +1077,7 @@
     },
     data() {
       return {
+        empty: " ",
         intakeValue:[
           {
             name:"谷类",

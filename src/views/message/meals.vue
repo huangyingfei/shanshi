@@ -195,8 +195,17 @@
               <el-button
                 style="margin-left: 10px"
                 size="medium"
-                @click="allergy()"
+                @click="allergy1()"
+                v-if="tableData.length==0"
                 >过敏
+              </el-button>
+              <el-button
+                style="margin-left: 10px"
+                size="medium"
+                @click="allergy1()"
+                type="primary"
+                v-if="tableData.length>0"
+              >过敏
               </el-button>
 
               <el-popover placement="right" width="300" trigger="click">
@@ -614,6 +623,7 @@
             <foods-week
               @childfn="parentFn"
               @jundgeFood="jundgeFood"
+              @allergy="allergy"
               :headers="headers"
               :datas="datas"
               days="5"
@@ -652,15 +662,15 @@
               {{ score }}<span class="gnus-fen" style="color: #dd6161">分</span>
             </p>
           </div>
-          <div class="scores2">
-            <p class="gnus-fen" style="color: #dd6161; margin-top: 35px">
-              <span>离</span><span class="gnus-hege">合格</span>
-              <br />
-              <span class="gnus-fen" style="color: #dd6161"
-                >需提升{{ (85 - score).toFixed(2) }}分！</span
-              >
-            </p>
-          </div>
+          <!--<div class="scores2">-->
+            <!--<p class="gnus-fen" style="color: #dd6161; margin-top: 35px">-->
+              <!--<span>离</span><span class="gnus-hege">合格</span>-->
+              <!--<br />-->
+              <!--<span class="gnus-fen" style="color: #dd6161"-->
+                <!--&gt;需提升{{ (85 - score).toFixed(2) }}分！</span-->
+              <!--&gt;-->
+            <!--</p>-->
+          <!--</div>-->
         </div>
       </div>
       <!-- 分数弹框 -->
@@ -802,15 +812,15 @@
                 }}<span class="gnus-fen" style="color: #dd6161">分</span>
               </p>
             </div>
-            <div class="scores2">
-              <p class="gnus-fen" style="color: #dd6161; margin-top: 35px">
-                <span>离</span><span class="gnus-hege">合格</span>
-                <br />
-                <span class="gnus-fen" style="color: #dd6161"
-                  >需提升{{ (85 - score).toFixed(2) }}分！</span
-                >
-              </p>
-            </div>
+            <!--<div class="scores2">-->
+              <!--<p class="gnus-fen" style="color: #dd6161; margin-top: 35px">-->
+                <!--<span>离</span><span class="gnus-hege">合格</span>-->
+                <!--<br />-->
+                <!--<span class="gnus-fen" style="color: #dd6161"-->
+                  <!--&gt;需提升{{ (85 - score).toFixed(2) }}分！</span-->
+                <!--&gt;-->
+              <!--</p>-->
+            <!--</div>-->
           </div>
         </div>
       </el-dialog>
@@ -2067,9 +2077,13 @@ export default {
       }
     },
     //过敏
-    allergy() {
+    allergy1(){
       this.jundgeallergy = true;
+      this.allergy();
+   },
+    allergy() {
       let recipeCycles = [];
+      let that =this;
       this.datas.forEach((data) => {
         data.weeks.forEach((week) => {
           week.foods.forEach((food) => {
@@ -2092,8 +2106,30 @@ export default {
         recipeCycles: recipeCycles,
       };
       jundgeAllergy(row).then((res) => {
-        this.tableData = res.data.data.foods;
+        that.$set(that,"tableData",res.data.data.foods);
+
+          that.datas.forEach((data) => {
+              data.weeks.forEach((week) => {
+                  week.foods.forEach((dish) => {
+                    let flag=false;
+                    dish.children.forEach((food) => {
+                      that.$set(food, "orangeColor", false)
+                      for(let i=0;i<that.tableData.length;i++) {
+                        if (food.id == that.tableData[i].foodId) {
+                          that.$set(food, "orangeColor", true)
+                          flag = true;
+                        }
+                      }
+                    });
+                    that.$set(dish,"orangeColor",flag)
+                  });
+              });
+          });
+
+        console.log("this.datas",this.datas)
       });
+
+
     },
     jundgeFood(res, id, wk) {
       if (!res.id) return;
@@ -2128,6 +2164,7 @@ export default {
       //食材相克
       jundgeFood(row).then((result) => {
         //
+        debugger
         let foodMutuals = that.foodMutuals;
         let msg = "";
         if (result.data.data.foodMutuals.length > 0) {
@@ -2157,7 +2194,38 @@ export default {
           that.foodMutuals = foodMutuals;
 
           this.$message.warning(msg.substring(0, msg.length - 1));
+        }else{
+          for(let i=0;i<that.foodMutuals.length;i++){
+            if(that.foodMutuals[i].data_id==id&&that.foodMutuals[i].week_id==wk){
+              that.foodMutuals.splice(i,1);
+            }
+          }
         }
+        that.datas.forEach((data) => {
+          if (data.id === id) {
+            data.weeks.forEach((week) => {
+              if (week.name === wk) {
+                week.foods.forEach((dish) => {
+                  let flag=false;
+                  dish.children.forEach((food) => {
+                    that.$set(food,"redColor",false)
+                    for(let i=0;i<that.foodMutuals.length;i++) {
+                      if (food.id == that.foodMutuals[i].foodId && that.foodMutuals[i].data_id==id&&foodMutuals[i].week_id==wk) {
+                        that.$set(food, "redColor", true)
+                        flag = true;
+                      }
+                      if (food.id == that.foodMutuals[i].foodId1&& that.foodMutuals[i].data_id==id&&foodMutuals[i].week_id==wk) {
+                        that.$set(food, "redColor", true)
+                        flag = true;
+                      }
+                    }
+                  });
+                  that.$set(dish,"redColor",flag)
+                });
+              }
+            });
+          }
+        });
       });
     },
     foodmenueDragEnd(a, b, c) {
@@ -2318,6 +2386,7 @@ export default {
           this.$set(week, "image", "");
         });
       });
+      this.$refs.child.resizeExpendHeight();
     },
     //智能配平
     wrapscan() {
@@ -2939,17 +3008,17 @@ export default {
   /* background-color: red; */
   position: absolute;
   top: 60px;
-  right: 45px;
+  right: 60px;
   z-index: 999;
 }
 
 .scores3 {
-  width: 128px;
+  width: 155px;
 }
 
 .scores-same {
-  width: 250px;
-  height: 132px;
+  width: 290px;
+  height: 137px;
   color: #ffffff;
   background-size: 100% 100%;
   display: flex;
@@ -2980,7 +3049,7 @@ export default {
 }
 
 .gnus {
-  font-size: 30px;
+  font-size: 28px;
   text-align: center;
   font-weight: 600;
   margin-top: 40px;

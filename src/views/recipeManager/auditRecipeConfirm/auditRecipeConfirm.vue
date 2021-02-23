@@ -195,7 +195,19 @@
               </el-button
               >
 
-              <el-button style="margin-left: 10px" size="medium" @click="allergy()"
+              <el-button
+                style="margin-left: 10px"
+                size="medium"
+                @click="allergy1()"
+                v-if="tableData.length==0"
+              >过敏
+              </el-button>
+              <el-button
+                style="margin-left: 10px"
+                size="medium"
+                @click="allergy1()"
+                type="primary"
+                v-if="tableData.length>0"
               >过敏
               </el-button>
 
@@ -471,6 +483,7 @@
             <foods-week
               @childfn="parentFn"
               @jundgeFood="jundgeFood"
+              @allergy="allergy"
               :headers="headers"
               :datas="datas"
               days="5"
@@ -535,11 +548,11 @@
           <div class="scores3" style="color: #dd6161">
             <p class="gnus" @click="tfractio">{{score}}<span class="gnus-fen" style="color: #dd6161">分</span></p>
           </div>
-          <div class="scores2">
-            <p class="gnus-fen" style="color: #dd6161;margin-top: 35px"><span>离</span><span class="gnus-hege">合格</span>
-              <br>
-              <span class="gnus-fen" style="color: #dd6161">需提升{{(85-score).toFixed(2)}}分！</span></p>
-          </div>
+          <!--<div class="scores2">-->
+            <!--<p class="gnus-fen" style="color: #dd6161;margin-top: 35px"><span>离</span><span class="gnus-hege">合格</span>-->
+              <!--<br>-->
+              <!--<span class="gnus-fen" style="color: #dd6161">需提升{{(85-score).toFixed(2)}}分！</span></p>-->
+          <!--</div>-->
         </div>
 
       </div>
@@ -551,6 +564,7 @@
         :with-header="false"
       >
         <show-score :intake="intake" :nutrition="nutrition" :power="power" :meal="meal" :protein="protein"
+                    :tenantName="tenantName"
                     :startTime="startTimeStr" :endTime="endTimeStr" :score="score"></show-score>
       </el-drawer>
       <!-- 分数弹框 结束-->
@@ -632,13 +646,13 @@
             <div class="scores3" style="color: #dd6161">
               <p class="gnus">{{peipScore}}<span class="gnus-fen" style="color: #dd6161">分</span></p>
             </div>
-            <div class="scores2">
-              <p class="gnus-fen" style="color: #dd6161;margin-top: 35px"><span>离</span><span
-                class="gnus-hege">合格</span>
-                <br>
-                <span class="gnus-fen" style="color: #dd6161">需提升{{(85-score).toFixed(2)}}分！</span>
-              </p>
-            </div>
+            <!--<div class="scores2">-->
+              <!--<p class="gnus-fen" style="color: #dd6161;margin-top: 35px"><span>离</span><span-->
+                <!--class="gnus-hege">合格</span>-->
+                <!--<br>-->
+                <!--<span class="gnus-fen" style="color: #dd6161">需提升{{(85-score).toFixed(2)}}分！</span>-->
+              <!--</p>-->
+            <!--</div>-->
           </div>
         </div>
       </el-dialog>
@@ -754,6 +768,7 @@
     },
     data() {
       return {
+        tenantName: "",
         recipefinishedPub: false,
         recipefinishedPri: false,
         currentPub: 1,
@@ -1481,7 +1496,7 @@
                     for (let j = 0; j < recipevals.length; j++) {//食材
                       let nutrientIds = [];
                       let foodNutritionList = recipevals[j].foodNutritionList;
-                      if(foodNutritionList&&foodNutritionList.length>0) {
+                      if (foodNutritionList && foodNutritionList.length > 0) {
                         foodNutritionList.forEach(_ => {
                           this.nutritionValue.forEach(n => {
                             if (n.code == _.nutrientId + "") {
@@ -1490,7 +1505,7 @@
                           })
                         })
                       }
-                      } if(foodNutritionList&&foodNutritionList.length>0) {
+
                       children.push({
                         id: recipevals[j].foodId,
                         name: recipevals[j].foodName,
@@ -1586,7 +1601,7 @@
         })
         that.$refs.child.refreshData();
       },
-      parentFn(score, type, pscore, intake, nutrition, power, protein, meal) {
+      parentFn(score, type, pscore, intake, nutrition, power, protein, meal,tenantName) {
         if (type == "smartDatas") {
           this.peipScore = score;
           this.peippcScore = pscore
@@ -1599,7 +1614,7 @@
           this.pcScore = pscore
           this.scxjSc = (parseFloat(this.score) - parseFloat(this.pcScore)).toFixed(2)
         }
-
+        this.tenantName = tenantName;
         this.intake = intake;
         this.nutrition = nutrition
         this.nutrition.forEach(_ => {
@@ -1930,33 +1945,58 @@
 
       },
       //过敏
-      allergy() {
+      allergy1(){
         this.jundgeallergy = true;
+        this.allergy();
+      },
+      allergy() {
         let recipeCycles = [];
-        this.datas.forEach(data => {
-          data.weeks.forEach(week => {
-            week.foods.forEach(food => {
-              let childrens = []
-              food.children.forEach(_ => {
-                childrens.push({foodId: _.id})
-              })
+        let that =this;
+        this.datas.forEach((data) => {
+          data.weeks.forEach((week) => {
+            week.foods.forEach((food) => {
+              let childrens = [];
+              food.children.forEach((_) => {
+                childrens.push({ foodId: _.id });
+              });
               recipeCycles.push({
                 week: week.name.slice(4),
                 mealsType: this.getmealTypeData(data.name),
                 dishName: food.name,
-                childrens: childrens
-              })
-            })
-          })
-        })
+                childrens: childrens,
+              });
+            });
+          });
+        });
         let row = {
           peopleId: this.WeekInfo.crowd,
           recipeDay: this.WeekInfo.weekType,
-          recipeCycles: recipeCycles
-        }
-        jundgeAllergy(row).then(res => {
-          this.tableData = res.data.data.foods
-        })
+          recipeCycles: recipeCycles,
+        };
+        jundgeAllergy(row).then((res) => {
+          that.$set(that,"tableData",res.data.data.foods);
+
+          that.datas.forEach((data) => {
+            data.weeks.forEach((week) => {
+              week.foods.forEach((dish) => {
+                let flag=false;
+                dish.children.forEach((food) => {
+                  that.$set(food, "orangeColor", false)
+                  for(let i=0;i<that.tableData.length;i++) {
+                    if (food.id == that.tableData[i].foodId) {
+                      that.$set(food, "orangeColor", true)
+                      flag = true;
+                    }
+                  }
+                });
+                that.$set(dish,"orangeColor",flag)
+              });
+            });
+          });
+
+          console.log("this.datas",this.datas)
+        });
+
 
       },
       jundgeFood(res, id, wk) {
@@ -1969,52 +2009,92 @@
             name = data.name;
             data.weeks.forEach((week) => {
               if (week.name === wk) {
-                week.foods.forEach(dish => {
-                  dish.children.forEach(food => {
-                    children.push({foodId: food.id})
-                  })
-                })
+                week.foods.forEach((dish) => {
+                  dish.children.forEach((food) => {
+                    children.push({ foodId: food.id });
+                  });
+                });
               }
             });
           }
         });
-        recipeCycles.push({week: wk.slice(4), mealsType: this.getmealTypeData(name), childrens: children})
+        recipeCycles.push({
+          week: wk.slice(4),
+          mealsType: this.getmealTypeData(name),
+          childrens: children,
+        });
         let row = {
           peopleId: this.WeekInfo.crowd,
           recipeDay: this.WeekInfo.weekType,
-          recipeCycles: recipeCycles
-        }
+          recipeCycles: recipeCycles,
+        };
         let that = this;
         //食材相克
-        jundgeFood(row).then(result => {
+        jundgeFood(row).then((result) => {
           //
+          debugger
           let foodMutuals = that.foodMutuals;
-          let msg = ""
+          let msg = "";
           if (result.data.data.foodMutuals.length > 0) {
             for (let i = 0; i < result.data.data.foodMutuals.length; i++) {
               let flag = false;
-              that.foodMutuals.forEach(_ => {
-                if (_["data_id"] == id && _["week_id"] == wk && (_["foodId"] == result.data.data.foodMutuals[i].foodId && _["foodId1"] == result.data.data.foodMutuals[i].foodId1)) {
+              that.foodMutuals.forEach((_) => {
+                if (
+                  _["data_id"] == id &&
+                  _["week_id"] == wk &&
+                  _["foodId"] == result.data.data.foodMutuals[i].foodId &&
+                  _["foodId1"] == result.data.data.foodMutuals[i].foodId1
+                ) {
                   flag = true;
                 }
-              })
+              });
               if (!flag) {
                 foodMutuals.push({
                   data_id: id,
                   week_id: wk,
                   foodId: result.data.data.foodMutuals[i].foodId,
                   foodId1: result.data.data.foodMutuals[i].foodId1,
-                  msg: result.data.data.msg[i]
-                })
+                  msg: result.data.data.msg[i],
+                });
               }
               msg += result.data.data.msg[i] + "，";
             }
             that.foodMutuals = foodMutuals;
 
             this.$message.warning(msg.substring(0, msg.length - 1));
-            console.log("that.foodMutuals", that.foodMutuals)
+          }else{
+            for(let i=0;i<that.foodMutuals.length;i++){
+              if(that.foodMutuals[i].data_id==id&&that.foodMutuals[i].week_id==wk){
+                that.foodMutuals.splice(i,1);
+              }
+            }
           }
-        })
+          that.datas.forEach((data) => {
+            if (data.id === id) {
+              data.weeks.forEach((week) => {
+                if (week.name === wk) {
+                  week.foods.forEach((dish) => {
+                    let flag=false;
+                    dish.children.forEach((food) => {
+                      that.$set(food,"redColor",false)
+                      for(let i=0;i<that.foodMutuals.length;i++) {
+                        if (food.id == that.foodMutuals[i].foodId && that.foodMutuals[i].data_id==id&&foodMutuals[i].week_id==wk) {
+                          that.$set(food, "redColor", true)
+                          flag = true;
+                        }
+                        if (food.id == that.foodMutuals[i].foodId1&& that.foodMutuals[i].data_id==id&&foodMutuals[i].week_id==wk) {
+                          that.$set(food, "redColor", true)
+                          flag = true;
+                        }
+                      }
+                    });
+                    that.$set(dish,"redColor",flag)
+                  });
+                }
+              });
+            }
+          });
+        });
       },
       foodmenueDragEnd(a, b, c) {
         this.drogNodeStats = false;
@@ -2155,6 +2235,7 @@
             this.$set(week, "image", "")
           })
         })
+        this.$refs.child.resizeExpendHeight();
       },
       //智能配平
       wrapscan() {
@@ -2347,7 +2428,6 @@
           this.datas.splice(e, 1);
         });
         setTimeout(function () {
-          that.$refs.child.getFoodScore();
           that.$refs.child.refreshData();
           that.$refs.child.resizeExpendHeight();
         }, 200)
@@ -2698,7 +2778,7 @@
     border: 1px solid #ebebeb !important;
     border-radius: 3px !important;
     padding: 0px;
-    height: 500px;
+    height: calc(100vh - 324px);
   }
 
   .meals .el-card__body {
@@ -2722,7 +2802,7 @@
   .meals .foodWeekListHis {
     padding: 0 0 0 10px;
     overflow-y: scroll;
-    height: 280px;
+    max-height: 280px;
   }
 
   .meals .foodWeekListHis li {
@@ -2767,17 +2847,17 @@
     /* background-color: red; */
     position: absolute;
     top: 90px;
-    right: 30px;
+    right: 50px;
     z-index: 999;
   }
 
   .scores3 {
-    width: 128px;
+    width: 155px;
   }
 
   .scores-same {
-    width: 250px;
-    height: 132px;
+    width: 290px;
+    height: 137px;
     color: #FFFFFF;
     background-size: 100% 100%;
     display: flex;
@@ -2808,7 +2888,7 @@
   }
 
   .gnus {
-    font-size: 30px;
+    font-size: 28px;
     text-align: center;
     font-weight: 600;
     margin-top: 40px;
