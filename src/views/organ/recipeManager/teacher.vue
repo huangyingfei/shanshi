@@ -1829,6 +1829,8 @@ export default {
         });
         this.loadClass = fwork;
         console.log(this.loadClass);
+        // this.pairlist = this.loadClass[0];
+        // console.log(this.pairlist);
       });
     },
     hobbiton() {

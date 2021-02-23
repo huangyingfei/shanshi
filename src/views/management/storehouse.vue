@@ -94,12 +94,12 @@
             <p></p>
             <el-tree
               :data="data"
+              node-key="id"
               v-loading="loadFlag"
               :props="defaultProps"
-              node-key="id"
               :default-expand-all="false"
               :default-expanded-keys="[1]"
-              :default-checked-keys="[5]"
+              :default-checked-keys="[1]"
               @node-click="handleNodeClick"
               :filter-node-method="filterNode"
               ref="tree"
@@ -421,6 +421,7 @@
 </template>
 
 <script>
+let id = 1000;
 export default {
   data() {
     const data = [];
@@ -430,6 +431,10 @@ export default {
       checked: true,
       loadFlag: false, //加载flag
       loadFlag1: false, //公共食材加载
+      defaultProps: {
+        children: "children",
+        label: "label"
+      },
       data: JSON.parse(JSON.stringify(data)), //树形结构
       dialogImageUrl: "", //图片
       imgLimit: 1, //文件个数

@@ -108,9 +108,10 @@
             {{ num }}
           </div> -->
           <!-- <div class="ranking1">1</div>
-          <div class="ranking1">1</div> -->
+          -->
 
           <div class="school1" v-for="(item1, i) in getHealth" :key="i" lazy>
+            <div class="ranking">{{ item1.list }}</div>
             <div class="schoolimg">
               <el-image style="width: 80px; height: 80px" :src="item1.logoUrl">
                 <div
@@ -441,12 +442,17 @@ export default {
         .then(res => {
           // console.log(res);
           this.getHealth = res.data.data.records;
-          console.log(this.getHealth);
-          for (var i = 1; i <= this.getHealth.length; i++) {
-            this.listset = i;
-            // console.log(this.listset);
-          }
-
+          // console.log(this.getHealth);
+          //     for (var i = 1; i <= this.getHealth.length; i++) {
+          //       this.listset = i;
+          //
+          //     }
+          let sorting = [];
+          this.getHealth.forEach((item, index) => {
+            // console.log(item);
+            item.list = index + 1;
+          });
+          // console.log(this.getHealth);
           // console.log(this.getHealth);
         });
     },
