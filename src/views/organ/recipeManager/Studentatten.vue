@@ -147,8 +147,10 @@
               :data="tableData"
               v-loading="loadFlag"
               border
-              style="width: 100%"
               :element-loading-text="page_data.loadTxt"
+              :height="tableHeight"
+              ref="table"
+              empty-text="没有数据~"
             >
               <el-table-column
                 label="序号"
@@ -540,6 +542,7 @@ import XLSX from "xlsx";
 export default {
   data() {
     return {
+      tableHeight: 50,
       headerObj: {
         "Blade-Auth": ""
       }, //上传图片请求头
@@ -726,6 +729,18 @@ export default {
   watch: {},
   mounted() {
     this.restaurants = this.loadAll();
+    this.$nextTick(function() {
+      this.tableHeight =
+        window.innerHeight - this.$refs.table.$el.offsetTop - 200;
+
+      // 监听窗口大小变化
+      let self = this;
+      window.onresize = function() {
+        self.tableHeight =
+          window.innerHeight - self.$refs.table.$el.offsetTop - 200;
+      };
+    });
+    //this.$refs.table.$el.offsetTop：表格距离浏览器的高度 //50表示你想要调整的表格距离底部的高度（你可以自己随意调整），因为我们一般都有放分页组件的，所以需要给它留一个高度
   },
   methods: {
     forward() {

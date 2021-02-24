@@ -16,10 +16,10 @@
           <!-- <el-button type="primary" plain size="mini">导入</el-button>
               <el-button type="primary" plain size="mini">导出</el-button> -->
           <el-button @click="increasevalue(1)" type="primary" size="mini"
-            >加分类</el-button
+            >添加分类</el-button
           >
           <el-button @click="padded(0)" type="primary" size="mini"
-            >加菜品</el-button
+            >添加菜品</el-button
           >
         </div>
         <div class="whole">
@@ -55,6 +55,7 @@
           <div class="country1">
             <el-cascader
               clearable
+              placeholder="区域"
               v-model="valuepark1"
               :options="options"
               @change="gProvinces()"

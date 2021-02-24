@@ -78,9 +78,9 @@
           </el-table-column>
           <el-table-column prop="tenantName" label="机构" align="center">
           </el-table-column>
-          <el-table-column prop="peopleCount" label="浏览量PV" align="center">
+          <el-table-column prop="lookCount" label="浏览量PV" align="center">
           </el-table-column>
-          <el-table-column prop="lookCount" label="浏览人数UV" align="center">
+          <el-table-column prop="peopleCount" label="浏览人数UV" align="center">
           </el-table-column>
         </el-table>
       </div>
@@ -138,22 +138,28 @@ export default {
   methods: {
     searchBtn() {
       console.log(this.activity);
+      this.$axios
+        .post(`api/blade-food/report/visitAnalyse`, {
+          tenantId: this.activity
+        })
+        .then(res => {
+          // console.log(res);
+          this.teamranking = res.data.data.visitLogVOList;
+        });
     },
     fromSearch() {
-      this.$axios
-        .get(`api/blade-system/tenant/getChildTenant`, {})
-        .then(res => {
-          this.rsearch = res.data.data;
-          console.log(this.rsearch);
-          let second = [];
-          this.rsearch.forEach((item, index) => {
-            second.push({
-              value: item.tenantIds,
-              label: item.tenantName
-            });
+      this.$axios.get(`api/blade-system/tenant/getAllOrg`, {}).then(res => {
+        this.rsearch = res.data.data;
+        console.log(this.rsearch);
+        let second = [];
+        this.rsearch.forEach((item, index) => {
+          second.push({
+            value: item.tenantId,
+            label: item.tenantName
           });
-          this.options = second;
         });
+        this.options = second;
+      });
     },
     //访问量统计
     profileuser() {
@@ -179,8 +185,8 @@ export default {
         this.updated = recent;
         this.fontify = ring;
         this.instanceof = offset;
-        this.teamranking = this.offers.visitLogVOList;
-        console.log(this.teamranking);
+        // this.teamranking = this.offers.visitLogVOList;
+        // console.log(this.teamranking);
         this.extract();
         // console.log(recent);
       });

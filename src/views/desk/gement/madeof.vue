@@ -79,6 +79,8 @@
         style="width: 100%;height:100%"
         v-loading="loadFlag"
         empty-text="没有数据~"
+        :height="tableHeight"
+        ref="table"
       >
         <el-table-column
           type="index"
@@ -1061,6 +1063,7 @@ export default {
   name: "toolbar",
   data() {
     return {
+      tableHeight: 50,
       increase: false, //拒绝理由弹框
       dateTime: false, //弹出框
       dumpdbtostream: false, //查看弹出框
@@ -1227,7 +1230,20 @@ export default {
     this.Addraudit(); //树形结构渲染
     this.Takeone();
   },
+  mounted: function() {
+    this.$nextTick(function() {
+      this.tableHeight =
+        window.innerHeight - this.$refs.table.$el.offsetTop - 160;
 
+      // 监听窗口大小变化
+      let self = this;
+      window.onresize = function() {
+        self.tableHeight =
+          window.innerHeight - self.$refs.table.$el.offsetTop - 160;
+      };
+    });
+    //this.$refs.table.$el.offsetTop：表格距离浏览器的高度 //50表示你想要调整的表格距离底部的高度（你可以自己随意调整），因为我们一般都有放分页组件的，所以需要给它留一个高度
+  },
   methods: {
     filterNode1(value, data1) {
       // console.log(data1);

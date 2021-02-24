@@ -171,6 +171,7 @@ export default {
       timezone: "",
       timezone1: "", //时间搜索
       Numbers: [], //数量
+      trendtype: [], //日活统计线
       setDate: [], //日期
       mappings: {
         school: "", //学校
@@ -185,47 +186,15 @@ export default {
       }
     };
   },
-  created() {
-    // let d = new Date();
-    // let year1, month1, day1;
-    // [year1, month1, day1] = [d.getFullYear(), d.getMonth(), d.getDate()];
-    // let date1 = new Date(year1, month1, day1, 7);
-    // // console.log(date1);
-    // function checkTime(i) {
-    //   if (i < 10) {
-    //     i = "0" + i;
-    //   }
-    //   return i;
-    // }
-    // var date = new Date(date1);
-    // this.date_value =
-    //   date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
-    // console.log(this.date_value);
-    // this.value1.push(this.date_value);
-    // //前一天设定的日期时间
-    // let year2, month2, day2;
-    // d.setTime(d.getTime() - 3600 * 1000 * 24 * 7);
-    // [year2, month2, day2] = [d.getFullYear(), d.getMonth(), d.getDate()];
-    // // var date1 = new Date(date1);
-    // let date2 = new Date(year2, month2, day2, 7);
-    // var calendar = new Date(date2);
-    // this.week =
-    //   calendar.getFullYear() +
-    //   "-" +
-    //   (calendar.getMonth() + 1) +
-    //   "-" +
-    //   calendar.getDate();
-    // console.log(this.week);
-    // this.value1.unshift(this.week);
-  },
+  created() {},
   beforeMount() {
     this.nsmpsearly();
-    this.Statistics();
+
     this.multimap();
   },
   mounted() {
     this.dateRangeDefaultValue();
-
+    this.Statistics();
     // setTimeout(() => {
     //   this.extract(); //折线图
     // }, 1000);
@@ -245,7 +214,9 @@ export default {
         dateFormat(start, "yyyy-MM-dd"),
         dateFormat(end, "yyyy-MM-dd")
       ];
-      this.searchBtn();
+      this.timezone = this.value1[0];
+      this.timezone1 = this.value1[1];
+      // this.searchBtn();
     },
     //头部请求
     nsmpsearly() {
@@ -276,18 +247,34 @@ export default {
         .then(res => {
           // console.log(res);
           this.quantity = res.data.data;
+          // this.quantity = Array.from(this.quantity);
           console.log(this.quantity);
-          let number = [];
+          // console.log(typeof this.quantity);
+          let number = []; //机构数量
           let validate = []; //日期
-          this.quantity.forEach((item, index) => {
-            console.log(item);
-            number.push(item.orgNum);
+          let trendLink = []; //日活统计线
+          this.trend = this.quantity.loginNumTrend;
+          this.trend1 = this.quantity.reportVOList;
+          this.trend.forEach((item, i) => {
+            // console.log(item.dateStr);
             validate.push(item.dateStr);
+            trendLink.push(item.loginNum);
           });
+          this.trend.forEach((item1, k) => {
+            // console.log(item1.dateStr);
+            number.push(item1.orgNum);
+          });
+          // this.quantity.loginNumTrend.forEach((item, index) => {
+          //   console.log(item);
+          //   number.push(item.orgNum);
+          //   validate.push(item.dateStr);
+          // });
           this.Numbers = number;
           console.log(number);
           this.setDate = validate;
           console.log(this.setDate);
+          this.trendtype = trendLink;
+          console.log(this.trendtype);
           this.extract("chartLineBox"); //折线图
         });
       // this.$nextTick(function() {
@@ -328,14 +315,15 @@ export default {
 
         legend: {
           //设置区分（哪条线属于什么）
-          data: ["计数"]
+          data: ["机构数量", "日活统计线"]
         },
-        color: ["#2A8FF7"], //设置区分（每条线是什么颜色，和 legend 一一对应）
+        color: ["#2A8FF7", "#5AC35C"], //设置区分（每条线是什么颜色，和 legend 一一对应）
         xAxis: {
           //设置x轴
           type: "category",
           boundaryGap: false, //坐标轴两边不留白
           data: this.setDate,
+          // data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
 
           name: "日期", //X轴 name
           nameTextStyle: {
@@ -367,8 +355,9 @@ export default {
         },
         series: [
           {
-            name: "计数",
+            name: "机构数量",
             data: this.Numbers,
+
             type: "line", // 类型为折线图
             lineStyle: {
               // 线条样式 => 必须使用normal属性
@@ -376,17 +365,17 @@ export default {
                 color: "#2A8FF7"
               }
             }
+          },
+          {
+            name: "日活统计线",
+            data: this.trendtype,
+            type: "line",
+            lineStyle: {
+              normal: {
+                color: "#5AC35C"
+              }
+            }
           }
-          // {
-          //   name: "学生成绩",
-          //   data: [48, 25, 50, 80, 70, 11, 30],
-          //   type: "line",
-          //   lineStyle: {
-          //     normal: {
-          //       color: "#FA6F53"
-          //     }
-          //   }
-          // }
         ]
       };
 

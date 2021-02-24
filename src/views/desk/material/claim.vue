@@ -30,9 +30,6 @@
       <el-button size="medium" @click="notEmpty" style=" margin-left: 20px; "
         >清空</el-button
       >
-    </div>
-    <!-- 添加食材 -->
-    <div class="cadddr">
       <el-button
         icon="el-icon-plus"
         size="medium"
@@ -40,17 +37,20 @@
         @click="addShard(1)"
         >添加相克食材</el-button
       >
-
-      <!-- <el-button size="medium" type="danger" icon="el-icon-delete" style=" margin-left: 20px; ">删除</el-button> -->
     </div>
+    <!-- 添加食材 -->
+    <!-- <div class="cadddr">
+     <el-button size="medium" type="danger" icon="el-icon-delete" style=" margin-left: 20px; ">删除</el-button> 
+    </div> -->
 
     <div class="wrapper">
       <el-table
-        max-height="tableHeight"
         v-loading="loadFlag1"
         :data="tableData"
         border
         :element-loading-text="page_data.loadTxt"
+        :height="tableHeight"
+        ref="table"
       >
         <el-table-column label="序号" type="index" width="50" align="center">
         </el-table-column>
@@ -237,7 +237,7 @@ export default {
   data() {
     const data = [];
     return {
-      tableHeight: 0,
+      tableHeight: 50,
       filterText: "",
       data: JSON.parse(JSON.stringify(data)), //树形结构
       dateTime: false,
@@ -304,12 +304,19 @@ export default {
       this.$refs.tree.filter(val);
     }
   },
-  mounted() {
-    this.$nextTick(() => {
-      this.tableHeight = window.innerHeight - 50;
-      console.log(this.tableHeight);
-      //后面的50：根据需求空出的高度，自行调整
+  mounted: function() {
+    this.$nextTick(function() {
+      this.tableHeight =
+        window.innerHeight - this.$refs.table.$el.offsetTop - 160;
+
+      // 监听窗口大小变化
+      let self = this;
+      window.onresize = function() {
+        self.tableHeight =
+          window.innerHeight - self.$refs.table.$el.offsetTop - 160;
+      };
     });
+    //this.$refs.table.$el.offsetTop：表格距离浏览器的高度 //50表示你想要调整的表格距离底部的高度（你可以自己随意调整），因为我们一般都有放分页组件的，所以需要给它留一个高度
   },
 
   methods: {
