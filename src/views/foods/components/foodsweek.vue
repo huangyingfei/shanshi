@@ -86,13 +86,26 @@
               >
                 <template slot-scope="scope">
                   <!--//食材-->
-                  <span     v-if="!scope.row.children"  :class="{jundgeFoodRedColor:scope.row.redColor}">
-                    <span   v-if="!scope.row.children"  :class="{jundgeFoodOrangeColor:scope.row.orangeColor}">{{ scope.row.name }}</span>
-                   </span>
+                  <span
+                    v-if="!scope.row.children"
+                    :class="{ jundgeFoodRedColor: scope.row.redColor }"
+                  >
+                    <span
+                      v-if="!scope.row.children"
+                      :class="{ jundgeFoodOrangeColor: scope.row.orangeColor }"
+                      >{{ scope.row.name }}</span
+                    >
+                  </span>
                   <!--//菜品-->
-                  <span    v-if="scope.row.children" :class="{jundgeFoodRedColor:scope.row.redColor}">
-                    <span v-if="scope.row.children" :class="{jundgeFoodOrangeColor:scope.row.orangeColor}">
-                    {{ scope.row.name }}
+                  <span
+                    v-if="scope.row.children"
+                    :class="{ jundgeFoodRedColor: scope.row.redColor }"
+                  >
+                    <span
+                      v-if="scope.row.children"
+                      :class="{ jundgeFoodOrangeColor: scope.row.orangeColor }"
+                    >
+                      {{ scope.row.name }}
                     </span>
                   </span>
                 </template>
@@ -278,13 +291,26 @@
               >
                 <template slot-scope="scope">
                   <!--//食材-->
-                  <span     v-if="!scope.row.children"  :class="{jundgeFoodRedColor:scope.row.redColor}">
-                    <span   v-if="!scope.row.children"  :class="{jundgeFoodOrangeColor:scope.row.orangeColor}">{{ scope.row.name }}</span>
-                   </span>
+                  <span
+                    v-if="!scope.row.children"
+                    :class="{ jundgeFoodRedColor: scope.row.redColor }"
+                  >
+                    <span
+                      v-if="!scope.row.children"
+                      :class="{ jundgeFoodOrangeColor: scope.row.orangeColor }"
+                      >{{ scope.row.name }}</span
+                    >
+                  </span>
                   <!--//菜品-->
-                  <span    v-if="scope.row.children" :class="{jundgeFoodRedColor:scope.row.redColor}">
-                    <span v-if="scope.row.children" :class="{jundgeFoodOrangeColor:scope.row.orangeColor}">
-                    {{ scope.row.name }}
+                  <span
+                    v-if="scope.row.children"
+                    :class="{ jundgeFoodRedColor: scope.row.redColor }"
+                  >
+                    <span
+                      v-if="scope.row.children"
+                      :class="{ jundgeFoodOrangeColor: scope.row.orangeColor }"
+                    >
+                      {{ scope.row.name }}
                     </span>
                   </span>
                 </template>
@@ -484,13 +510,26 @@
               >
                 <template slot-scope="scope">
                   <!--//食材-->
-                  <span     v-if="!scope.row.children"  :class="{jundgeFoodRedColor:scope.row.redColor}">
-                    <span   v-if="!scope.row.children"  :class="{jundgeFoodOrangeColor:scope.row.orangeColor}">{{ scope.row.name }}</span>
-                   </span>
+                  <span
+                    v-if="!scope.row.children"
+                    :class="{ jundgeFoodRedColor: scope.row.redColor }"
+                  >
+                    <span
+                      v-if="!scope.row.children"
+                      :class="{ jundgeFoodOrangeColor: scope.row.orangeColor }"
+                      >{{ scope.row.name }}</span
+                    >
+                  </span>
                   <!--//菜品-->
-                  <span    v-if="scope.row.children" :class="{jundgeFoodRedColor:scope.row.redColor}">
-                    <span v-if="scope.row.children" :class="{jundgeFoodOrangeColor:scope.row.orangeColor}">
-                    {{ scope.row.name }}
+                  <span
+                    v-if="scope.row.children"
+                    :class="{ jundgeFoodRedColor: scope.row.redColor }"
+                  >
+                    <span
+                      v-if="scope.row.children"
+                      :class="{ jundgeFoodOrangeColor: scope.row.orangeColor }"
+                    >
+                      {{ scope.row.name }}
                     </span>
                   </span>
                 </template>
@@ -690,13 +729,26 @@
               >
                 <template slot-scope="scope">
                   <!--//食材-->
-                  <span     v-if="!scope.row.children"  :class="{jundgeFoodRedColor:scope.row.redColor}">
-                    <span   v-if="!scope.row.children"  :class="{jundgeFoodOrangeColor:scope.row.orangeColor}">{{ scope.row.name }}</span>
-                   </span>
+                  <span
+                    v-if="!scope.row.children"
+                    :class="{ jundgeFoodRedColor: scope.row.redColor }"
+                  >
+                    <span
+                      v-if="!scope.row.children"
+                      :class="{ jundgeFoodOrangeColor: scope.row.orangeColor }"
+                      >{{ scope.row.name }}</span
+                    >
+                  </span>
                   <!--//菜品-->
-                  <span    v-if="scope.row.children" :class="{jundgeFoodRedColor:scope.row.redColor}">
-                    <span v-if="scope.row.children" :class="{jundgeFoodOrangeColor:scope.row.orangeColor}">
-                    {{ scope.row.name }}
+                  <span
+                    v-if="scope.row.children"
+                    :class="{ jundgeFoodRedColor: scope.row.redColor }"
+                  >
+                    <span
+                      v-if="scope.row.children"
+                      :class="{ jundgeFoodOrangeColor: scope.row.orangeColor }"
+                    >
+                      {{ scope.row.name }}
                     </span>
                   </span>
                 </template>
@@ -896,13 +948,26 @@
               >
                 <template slot-scope="scope">
                   <!--//食材-->
-                  <span     v-if="!scope.row.children"  :class="{jundgeFoodRedColor:scope.row.redColor}">
-                    <span   v-if="!scope.row.children"  :class="{jundgeFoodOrangeColor:scope.row.orangeColor}">{{ scope.row.name }}</span>
-                   </span>
+                  <span
+                    v-if="!scope.row.children"
+                    :class="{ jundgeFoodRedColor: scope.row.redColor }"
+                  >
+                    <span
+                      v-if="!scope.row.children"
+                      :class="{ jundgeFoodOrangeColor: scope.row.orangeColor }"
+                      >{{ scope.row.name }}</span
+                    >
+                  </span>
                   <!--//菜品-->
-                  <span    v-if="scope.row.children" :class="{jundgeFoodRedColor:scope.row.redColor}">
-                    <span v-if="scope.row.children" :class="{jundgeFoodOrangeColor:scope.row.orangeColor}">
-                    {{ scope.row.name }}
+                  <span
+                    v-if="scope.row.children"
+                    :class="{ jundgeFoodRedColor: scope.row.redColor }"
+                  >
+                    <span
+                      v-if="scope.row.children"
+                      :class="{ jundgeFoodOrangeColor: scope.row.orangeColor }"
+                    >
+                      {{ scope.row.name }}
                     </span>
                   </span>
                 </template>
@@ -1102,13 +1167,26 @@
               >
                 <template slot-scope="scope">
                   <!--//食材-->
-                  <span     v-if="!scope.row.children"  :class="{jundgeFoodRedColor:scope.row.redColor}">
-                    <span   v-if="!scope.row.children"  :class="{jundgeFoodOrangeColor:scope.row.orangeColor}">{{ scope.row.name }}</span>
-                   </span>
+                  <span
+                    v-if="!scope.row.children"
+                    :class="{ jundgeFoodRedColor: scope.row.redColor }"
+                  >
+                    <span
+                      v-if="!scope.row.children"
+                      :class="{ jundgeFoodOrangeColor: scope.row.orangeColor }"
+                      >{{ scope.row.name }}</span
+                    >
+                  </span>
                   <!--//菜品-->
-                  <span    v-if="scope.row.children" :class="{jundgeFoodRedColor:scope.row.redColor}">
-                    <span v-if="scope.row.children" :class="{jundgeFoodOrangeColor:scope.row.orangeColor}">
-                    {{ scope.row.name }}
+                  <span
+                    v-if="scope.row.children"
+                    :class="{ jundgeFoodRedColor: scope.row.redColor }"
+                  >
+                    <span
+                      v-if="scope.row.children"
+                      :class="{ jundgeFoodOrangeColor: scope.row.orangeColor }"
+                    >
+                      {{ scope.row.name }}
                     </span>
                   </span>
                 </template>
@@ -1308,13 +1386,26 @@
               >
                 <template slot-scope="scope">
                   <!--//食材-->
-                  <span     v-if="!scope.row.children"  :class="{jundgeFoodRedColor:scope.row.redColor}">
-                    <span   v-if="!scope.row.children"  :class="{jundgeFoodOrangeColor:scope.row.orangeColor}">{{ scope.row.name }}</span>
-                   </span>
+                  <span
+                    v-if="!scope.row.children"
+                    :class="{ jundgeFoodRedColor: scope.row.redColor }"
+                  >
+                    <span
+                      v-if="!scope.row.children"
+                      :class="{ jundgeFoodOrangeColor: scope.row.orangeColor }"
+                      >{{ scope.row.name }}</span
+                    >
+                  </span>
                   <!--//菜品-->
-                  <span    v-if="scope.row.children" :class="{jundgeFoodRedColor:scope.row.redColor}">
-                    <span v-if="scope.row.children" :class="{jundgeFoodOrangeColor:scope.row.orangeColor}">
-                    {{ scope.row.name }}
+                  <span
+                    v-if="scope.row.children"
+                    :class="{ jundgeFoodRedColor: scope.row.redColor }"
+                  >
+                    <span
+                      v-if="scope.row.children"
+                      :class="{ jundgeFoodOrangeColor: scope.row.orangeColor }"
+                    >
+                      {{ scope.row.name }}
                     </span>
                   </span>
                 </template>
@@ -1491,6 +1582,9 @@ export default {
     foodsChoice,
   },
   props: {
+    topShow: {
+      type: Boolean,
+    },
     // 表格头部
     headers: [],
     // 表格数据
@@ -1694,18 +1788,24 @@ export default {
   // 计算属性computed,计算的是Name依赖的值,它不能计算在data中已经定义过的变量。
   computed: {},
   // 当属性的值发生变化时，就会调用对应属性的方法，方法里面的形参对应的是属性的新值和旧值
-  watch: {},
+  watch: {
+    topShow: function () {
+      this.getfoodWeekHeight();
+    },
+  },
   // 组件第一次加载
   mounted() {
     this.init();
     this.getToken(); //获取token
     this.getfoodWeekHeight();
   },
-
   methods: {
     getfoodWeekHeight() {
-      this.foodWeekHeight = document.body.offsetHeight - 324;
-      console.log(document.body.offsetHeight - 324);
+      var h = 215;
+      if (this.topShow) {
+        h = 324;
+      }
+      this.foodWeekHeight = document.body.offsetHeight - h;
     },
     toRight() {
       var colNum = this.$refs.foodWeekTable.columns.length - 1;
@@ -1945,7 +2045,6 @@ export default {
       });
 
       this.getFoodScore();
-
     },
     //获取分数
     getFoodScore() {
@@ -2000,130 +2099,132 @@ export default {
       foods["types"] = types;
 
       if (foods.recipeVals.length > 0) {
-        calRecipe(foods).then((res) => {
-          if (res.data.success) {
-            let resData = res.data.data;
-            if (resData.nutritionCalDTOList) {
-              let intake = {};
-              let data = [];
-              intake.mealSelect =
-                "推荐范围(" + resData.recipeCalDTOList.gl.mealSelect + "%)";
+        calRecipe(foods)
+          .then((res) => {
+            if (res.data.success) {
+              let resData = res.data.data;
+              if (resData.nutritionCalDTOList) {
+                let intake = {};
+                let data = [];
+                intake.mealSelect =
+                  "推荐范围(" + resData.recipeCalDTOList.gl.mealSelect + "%)";
 
-              that.intakeValue.forEach((_) => {
-                if (_.code == "sl" || _.code == "jg") {
-                  data.push({
-                    name: _.name,
-                    range: "适量",
-                    jl: parseFloat(resData.recipeCalDTOList[_.code].jl).toFixed(
-                      2
-                    ),
-                    grade: "OK",
-                    point: 0,
-                    avg: resData.recipeCalDTOList[_.code].avg,
-                  });
-                } else {
-                  data.push({
-                    name: _.name,
-                    range:
-                      resData.recipeCalDTOList[_.code].rang_min +
-                      "-" +
-                      resData.recipeCalDTOList[_.code].rang_max +
-                      "(" +
-                      resData.recipeCalDTOList[_.code].recomRangMin +
-                      "-" +
-                      resData.recipeCalDTOList[_.code].recomRangMax +
-                      ")",
-                    jl: parseFloat(resData.recipeCalDTOList[_.code].jl).toFixed(
-                      2
-                    ),
-                    grade: resData.recipeCalDTOList[_.code].grade,
-                    point: resData.recipeCalDTOList[_.code].point,
-                    avg: resData.recipeCalDTOList[_.code].avg,
-                  });
-                }
-              });
-              intake.data = data;
-              intake.avg = "食谱净量(平均年龄" + data[0].avg + ")";
-              let nutrition = [];
-              that.nutritionValue.forEach((_) => {
-                nutrition.push({
-                  code: _.code,
-                  name: _.name,
-                  bz: _.bz,
-                  min: _.min,
-                  max: _.max,
-                  realIntake: resData.nutritionCalDTOList[_.code].realIntake,
-                  dris: resData.nutritionCalDTOList[_.code].realPropor,
-                  dris2: resData.nutritionCalDTOList[_.code].dris,
-                  realPropor: resData.nutritionCalDTOList[_.code].realPropor,
-                  reqPropor:
-                    resData.nutritionCalDTOList[_.code].min +
-                    "-" +
-                    resData.nutritionCalDTOList[_.code].max,
-                  grade: resData.nutritionCalDTOList[_.code].grade,
-                  point: resData.nutritionCalDTOList[_.code].point,
+                that.intakeValue.forEach((_) => {
+                  if (_.code == "sl" || _.code == "jg") {
+                    data.push({
+                      name: _.name,
+                      range: "适量",
+                      jl: parseFloat(
+                        resData.recipeCalDTOList[_.code].jl
+                      ).toFixed(2),
+                      grade: "OK",
+                      point: 0,
+                      avg: resData.recipeCalDTOList[_.code].avg,
+                    });
+                  } else {
+                    data.push({
+                      name: _.name,
+                      range:
+                        resData.recipeCalDTOList[_.code].rang_min +
+                        "-" +
+                        resData.recipeCalDTOList[_.code].rang_max +
+                        "(" +
+                        resData.recipeCalDTOList[_.code].recomRangMin +
+                        "-" +
+                        resData.recipeCalDTOList[_.code].recomRangMax +
+                        ")",
+                      jl: parseFloat(
+                        resData.recipeCalDTOList[_.code].jl
+                      ).toFixed(2),
+                      grade: resData.recipeCalDTOList[_.code].grade,
+                      point: resData.recipeCalDTOList[_.code].point,
+                      avg: resData.recipeCalDTOList[_.code].avg,
+                    });
+                  }
                 });
-              });
-
-              let power = [];
-              that.powerValue.forEach((_) => {
-                power.push({
-                  name: _.name,
-                  req:
-                    resData.powerCalDTOList[_.code].min +
-                    "-" +
-                    resData.powerCalDTOList[_.code].max,
-                  real: resData.powerCalDTOList[_.code].real,
-                  grade: resData.powerCalDTOList[_.code].grade,
-                  point: resData.powerCalDTOList[_.code].point.toFixed(2),
+                intake.data = data;
+                intake.avg = "食谱净量(平均年龄" + data[0].avg + ")";
+                let nutrition = [];
+                that.nutritionValue.forEach((_) => {
+                  nutrition.push({
+                    code: _.code,
+                    name: _.name,
+                    bz: _.bz,
+                    min: _.min,
+                    max: _.max,
+                    realIntake: resData.nutritionCalDTOList[_.code].realIntake,
+                    dris: resData.nutritionCalDTOList[_.code].realPropor,
+                    dris2: resData.nutritionCalDTOList[_.code].dris,
+                    realPropor: resData.nutritionCalDTOList[_.code].realPropor,
+                    reqPropor:
+                      resData.nutritionCalDTOList[_.code].min +
+                      "-" +
+                      resData.nutritionCalDTOList[_.code].max,
+                    grade: resData.nutritionCalDTOList[_.code].grade,
+                    point: resData.nutritionCalDTOList[_.code].point,
+                  });
                 });
-              });
 
-              let protein = [];
-              protein = resData.proteinCalDTOList;
-              let sum = 0;
-              resData.proteinCalDTOList.forEach((_) => {
-                sum += parseFloat(_.real);
+                let power = [];
+                that.powerValue.forEach((_) => {
+                  power.push({
+                    name: _.name,
+                    req:
+                      resData.powerCalDTOList[_.code].min +
+                      "-" +
+                      resData.powerCalDTOList[_.code].max,
+                    real: resData.powerCalDTOList[_.code].real,
+                    grade: resData.powerCalDTOList[_.code].grade,
+                    point: resData.powerCalDTOList[_.code].point.toFixed(2),
+                  });
+                });
+
+                let protein = [];
+                protein = resData.proteinCalDTOList;
+                let sum = 0;
+                resData.proteinCalDTOList.forEach((_) => {
+                  sum += parseFloat(_.real);
+                });
+                protein.forEach((_) => {
+                  _["realSum"] = parseFloat(sum).toFixed(2);
+                  _["req"] = ">=" + _.min;
+                  _["real"] = _.real.toFixed(2);
+                  if (parseFloat(_.min) <= parseFloat(sum)) {
+                    _["grade"] = "ok";
+                    _["point"] = "0";
+                  } else {
+                    _["grade"] = "不足";
+                    _["point"] = ((10 / _.min) * (_.min - sum)).toFixed(2);
+                  }
+                });
+                let meal = [];
+                meal = resData.mealTypeCalDTOList;
+                meal.forEach((_) => {
+                  _["real"] = parseFloat(_["real"]).toFixed(2);
+                });
+                that.pcScore = that.score;
+                var tenantName = resData.tenantName;
+                that.$emit(
+                  "childfn",
+                  Math.floor(that.getData(res.data.data) * 100) / 100,
+                  "datas",
+                  this.pcScore,
+                  intake,
+                  nutrition,
+                  power,
+                  protein,
+                  meal,
+                  tenantName
+                );
+              }
+            } else {
+              that.$message({
+                message: "食材营养素数据不全",
+                type: "info",
               });
-              protein.forEach((_) => {
-                _["realSum"] = parseFloat(sum).toFixed(2);
-                _["req"] = ">=" + _.min;
-                _["real"] = _.real.toFixed(2);
-                if (parseFloat(_.min) <= parseFloat(sum)) {
-                  _["grade"] = "ok";
-                  _["point"] = "0";
-                } else {
-                  _["grade"] = "不足";
-                  _["point"] = ((10 / _.min) * (_.min - sum)).toFixed(2);
-                }
-              });
-              let meal = [];
-              meal = resData.mealTypeCalDTOList;
-              meal.forEach((_) => {
-                _["real"] = parseFloat(_["real"]).toFixed(2);
-              });
-              that.pcScore = that.score;
-              var tenantName = resData.tenantName;
-              that.$emit(
-                "childfn",
-                Math.floor(that.getData(res.data.data) * 100) / 100,
-                "datas",
-                this.pcScore,
-                intake,
-                nutrition,
-                power,
-                protein,
-                meal,
-                tenantName
-              );
             }
-          } else {
-            that.$message({
-              message: "食材营养素数据不全",
-              type: "info",
-            });
-          }
-        });
+          })
+          .catch();
       } else {
         this.pcScore = this.score;
         that.$emit("childfn", 0, "datas", this.pcScore, [], [], [], [], []);
@@ -2428,10 +2529,10 @@ export default {
       this.getFoodScore();
       this.refreshData();
       this.resizeExpendHeight();
-      let node={
-        id:'1'
-      }
-      debugger
+      let node = {
+        id: "1",
+      };
+      debugger;
       this.$emit("jundgeFood");
       this.$emit("allergy");
     },
@@ -2494,16 +2595,16 @@ export default {
 };
 </script>
 <style>
-  .jundgeFoodRedColor{
-    border-bottom: red 1px solid;
-    display: inline-block;
-    height: 25px;
-  }
-  .jundgeFoodOrangeColor{
-    border-bottom: orange 1px solid;
-    display: inline-block;
-    height: 20px;
-  }
+.jundgeFoodRedColor {
+  border-bottom: red 1px solid;
+  display: inline-block;
+  height: 25px;
+}
+.jundgeFoodOrangeColor {
+  border-bottom: orange 1px solid;
+  display: inline-block;
+  height: 20px;
+}
 .foodsweek .table-week th {
   background: #f8fbfc !important;
 }
