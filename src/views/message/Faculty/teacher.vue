@@ -47,7 +47,8 @@
       >
         <nutrient :nutritionValue="nutritionValue"></nutrient>
       </div>
-
+      <el-collapse-transition>
+        <div v-show="topShow">
       <el-row :gutter="20" style="padding: 0px; margin-top: 5px">
         <el-col :span="24">
           <el-form :gutter="10" :inline="true" :model="formInline">
@@ -120,7 +121,8 @@
           </el-form>
         </el-col>
       </el-row>
-
+        </div>
+      </el-collapse-transition>
       <el-row :gutter="20" style="padding: 0px">
         <el-col :span="24">
           <el-divider></el-divider>
@@ -171,6 +173,9 @@
               >带量食谱
               </el-button
               >
+              <el-button type="text" @click="topShow = !topShow">{{
+                topShow ? "收起" : "展开"
+                }}</el-button>
             </el-form-item>
           </el-form>
         </el-col>
@@ -184,7 +189,7 @@
 
       <el-row :gutter="20" style="padding: 0px; margin-top: 0px">
         <el-col :span="5">
-          <el-card class="box-car" shadow="never">
+          <el-card class="box-car" shadow="never" :class="[topShow ? 'box-car' : 'box-car1']">
             <div class="clearfix panel_head">
               <el-button-group>
                 <el-button size="small" :class="{'showFoodListColor':!showFoodList}" @click="showFoodList = false"
@@ -262,7 +267,7 @@
                   <!--<el-divider></el-divider>-->
                 </div>
 
-                <ul  ref="boxScroll2" class="foodWeekListHis" @mouseout="HidenFoodTips($event)">
+                <ul :class="[topShow ? 'foodWeekListHis2' : 'foodWeekListHis1']"  ref="boxScroll2" class="foodWeekListHis" @mouseout="HidenFoodTips($event)">
                   <li @mouseover="ShowFood($event,f)" @mouseout="HidenFoodTips($event)" v-for="f in peopleMealListLeft"
                       :key="f.id" style="font-size: 14px">
                     <span>{{f.recipeName}}</span> <img style="width: 20px" @click="mealLoad(f,f.recipeName)"
@@ -405,6 +410,7 @@
               :dragnode="drogNode"
               ref="child"
               :foodMutuals="foodMutuals"
+              :topShow="topShow"
             >
             </foods-week>
           </div>
@@ -472,6 +478,7 @@
 
       const data = [];
       return {
+        topShow: true,
         recipefinishedPri:false,
         currentPri:1,
         sizePri:10,
@@ -2012,6 +2019,7 @@
   /*}*/
   .meals .el-form-item {
     margin-bottom: 0px;
+    margin-right: 20px;
   }
 
   .meals .el-divider {
@@ -2052,7 +2060,12 @@
     border-bottom-left-radius: 0px;
     margin-bottom: 1px;
   }
-
+  .meals .foodWeekListHis1 {
+    height: 330px;
+  }
+  .meals .foodWeekListHis2 {
+    height: 230px;
+  }
   .meals .foodWeekListHis {
     padding: 0 0 0 10px;
     overflow-y: scroll;
@@ -2238,7 +2251,7 @@
   }
 
   .meals .el-checkbox {
-    width: 35px;
+    margin-right: 10px;
   }
 
   .select-item {

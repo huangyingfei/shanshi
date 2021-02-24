@@ -30,7 +30,7 @@
     </el-button>
     <!-- <img src="/img/cater/left.png" style="width: 3rem;height: 3rem;position: absolute;left:100px;z-index: 9999;"/>
     <img src="/img/cater/right.png" style="width: 3rem;height: 3rem;position: absolute;right:10px;z-index: 9999;" /> -->
-    <el-table  :max-height="foodWeekHeight" :empty-text="empty" class="table-week" style="width: 100%;overflow:auto!important;" :data="datas" border fit :header-cell-style="headerCellStyle" ref="foodWeekTable">
+    <el-table  :empty-text="empty" class="table-week" style="width: 100%;overflow:auto!important;" :data="datas" border fit :header-cell-style="headerCellStyle" ref="foodWeekTable">
 
       <el-table-column align="center" width="100" fixed class-name="col-date3 colNoneBorder" >
         <template slot="header"> 菜品/食物 </template>
