@@ -5,10 +5,52 @@
   width: 100%;
   height: 100%;
   margin: 0 auto;
-  background-image: url("/img/bg/bg.jpg");
+  // background-image: url("/img/bg/bg.jpg");
+  background-color: #eff5f5;
   background-size: 100% 100%;
 }
-
+.booktitle {
+  width: 100%;
+  height: 60px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #fff;
+  .headSet {
+    width: 500px;
+    height: 60px;
+    float: left;
+    margin-left: 15%;
+  }
+  .booktitleimg {
+    width: 60px;
+    height: 60px;
+    // background-color: red;
+    float: left;
+    img {
+      width: 40px;
+      height: 40px;
+      margin-top: 10px;
+      margin-left: 10px;
+    }
+  }
+  .booktitletitle {
+    // margin-top: 10px;
+    // text-align: center;
+    // margin-left: 15%;
+    color: #000;
+    font-size: 20px;
+    letter-spacing: 2px;
+    float: left;
+    // line-height: 50px;
+    // height: 50px;
+    // width: 500px;
+    // font-weight: 300;
+    // letter-spacing: 2px;
+    // font-size: 25px;
+    // background-color: red;
+  }
+}
 .login-weaper {
   margin: 0 auto;
   width: 1000px;
@@ -32,7 +74,7 @@
   border-bottom-left-radius: 5px;
   justify-content: center;
   flex-direction: column;
-  background-color: #409EFF;
+  background-color: #fff;
   color: #fff;
   float: left;
   width: 50%;
@@ -56,12 +98,17 @@
 }
 
 .login-left .title {
-  margin-top: 60px;
+  margin-top: 10px;
   text-align: center;
   color: #fff;
   font-weight: 300;
   letter-spacing: 2px;
   font-size: 25px;
+}
+.bannermapped {
+  width: 100%;
+  height: 500px;
+  // background-color: red;
 }
 
 .login-border {
@@ -101,7 +148,7 @@
 .login-menu {
   margin-top: 40px;
   width: 100%;
-  text-align: center;
+  // text-align: center;
 
   a {
     color: #999;
@@ -113,12 +160,12 @@
 .login-submit {
   width: 100%;
   height: 45px;
-  border: 1px solid #409EFF;
+  border: 1px solid #409eff;
   background: none;
   font-size: 18px;
   letter-spacing: 2px;
   font-weight: 300;
-  color: #409EFF;
+  color: #409eff;
   cursor: pointer;
   margin-top: 30px;
   font-family: "neo";
@@ -180,5 +227,5 @@
   line-height: 38px;
   text-indent: 5px;
   text-align: center;
-  cursor:pointer!important;
+  cursor: pointer !important;
 }

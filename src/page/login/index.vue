@@ -1,11 +1,31 @@
 <template>
   <div class="login-container" @keyup.enter.native="handleLogin">
     <top-color v-show="false"></top-color>
+    <div class="booktitle">
+      <div class="headSet">
+        <div class="booktitleimg">
+          <img src="../../../public/img/logoicon.png" alt />
+        </div>
+        <p class="booktitletitle">{{ $t("login.info") }}</p>
+      </div>
+    </div>
     <div class="login-weaper animated bounceInDown">
       <div class="login-left">
-        <div class="login-time">{{ time }}</div>
-        <img class="img" src="/img/logo1.png" alt />
-        <p class="title">{{ $t("login.info") }}</p>
+        <!-- <div class="login-time">{{ time }}</div> -->
+        <div class="bannermapped">
+          <el-carousel height="500px" width="100%" :interval="3000">
+            <el-carousel-item v-for="(item, i) in imgList" :key="i">
+              <img
+                :src="item.src"
+                style="height: 100%; width: 100%"
+                alt="图片丢失了"
+              />
+            </el-carousel-item>
+          </el-carousel>
+        </div>
+        <!-- <img class="img" src="/img/logo1.png" alt /> -->
+
+        <!-- <p class="title">{{ $t("login.info") }}</p> -->
       </div>
       <div class="login-border">
         <div class="login-main">
@@ -18,10 +38,12 @@
           <thirdLogin v-else-if="activeName === 'third'"></thirdLogin>
           <div class="login-menu">
             <!--<a href="#" @click.stop="activeName = 'user'">{{-->
-              <!--$t("login.userLogin")-->
+            <!--$t("login.userLogin")-->
             <!--}}</a>-->
-            <a href="#" @click.stop="dialogVisible=true;">{{ $t('login.phoneLogin') }}</a>
-             <!--<a href="#" @click.stop="activeName='third'">{{ $t('login.thirdLogin') }}</a> -->
+            <a href="#" @click.stop="dialogVisible = true">{{
+              $t("login.phoneLogin")
+            }}</a>
+            <!--<a href="#" @click.stop="activeName='third'">{{ $t('login.thirdLogin') }}</a> -->
           </div>
         </div>
       </div>
@@ -29,16 +51,16 @@
     <el-dialog
       title="找回密码"
       :visible.sync="dialogVisible"
-      width="30%"   :close-on-click-modal="false"
-      :before-close="cancel">
-      <codeLogin ref="codeLogin"  @cancel="cancel"></codeLogin>
+      width="30%"
+      :close-on-click-modal="false"
+      :before-close="cancel"
+    >
+      <codeLogin ref="codeLogin" @cancel="cancel"></codeLogin>
       <span slot="footer" class="dialog-footer">
-    <el-button @click="cancel">取 消</el-button>
-    <el-button type="primary" @click="subCodeLogin" >确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" @click="subCodeLogin">确 定</el-button>
       </span>
     </el-dialog>
-
-
   </div>
 </template>
 <script>
@@ -63,7 +85,7 @@ export default {
   },
   data() {
     return {
-      dialogVisible:false,
+      dialogVisible: false,
       time: "",
       activeName: "user",
       socialForm: {
@@ -71,7 +93,21 @@ export default {
         source: "",
         code: "",
         state: ""
-      }
+      },
+      imgList: [
+        {
+          src: require("../../../public/img/1.png")
+        },
+        {
+          src: require("../../../public/img/2.png")
+        },
+        {
+          src: require("../../../public/img/3.png")
+        },
+        {
+          src: require("../../../public/img/4.png")
+        }
+      ]
     };
   },
   watch: {
@@ -89,12 +125,12 @@ export default {
   },
   props: [],
   methods: {
-    cancel(){
+    cancel() {
       this.dialogVisible = false;
       this.$refs.codeLogin.empty();
     },
-    subCodeLogin(){
-      let that=this;
+    subCodeLogin() {
+      let that = this;
 
       this.$refs.codeLogin.subCodeLogin();
     },
