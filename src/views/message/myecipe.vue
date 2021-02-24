@@ -1,14 +1,14 @@
 <template>
   <div class="unsaved">
     <div class="header">
-      <span style=" margin-right: 10px;margin-left: 25px;">食谱名称:</span>
+      <span style="margin-right: 10px; margin-left: 25px">食谱名称:</span>
       <el-input
-        style="width:200px;"
+        style="width: 200px"
         size="small"
         v-model="wupload.input"
         placeholder="请输入内容"
       ></el-input>
-      <span style="margin-right: 10px;margin-left: 25px;">选择日期:</span>
+      <span style="margin-right: 10px; margin-left: 25px">选择日期:</span>
       <!-- <el-date-picker
         size="small"
         v-model="wupload.getDate"
@@ -44,7 +44,7 @@
         size="small"
         icon="el-icon-search"
         type="primary"
-        style=" margin-left: 20px; margin-top: 20px; "
+        style="margin-left: 20px; margin-top: 20px"
         >搜索</el-button
       >
       <el-button
@@ -52,14 +52,14 @@
         size="small"
         icon="el-icon-delete"
         type="primary"
-        style=" margin-left: 20px; margin-top: 20px; "
+        style="margin-left: 20px; margin-top: 20px"
         >清空</el-button
       >
     </div>
     <div class="prepall">
-      <span style=" margin-right: 10px;margin-left: 25px;">收藏食谱:</span>
+      <span style="margin-right: 10px; margin-left: 25px">收藏食谱:</span>
       <el-select
-        style="width:200px;"
+        style="width: 200px"
         @change="collection"
         v-model="empty"
         placeholder="请选择收藏食谱"
@@ -72,9 +72,9 @@
         >
         </el-option>
       </el-select>
-      <span style="margin-left: 25px; margin-right: 10px;">分享食谱:</span>
+      <span style="margin-left: 25px; margin-right: 10px">分享食谱:</span>
       <el-select
-        style="width:200px;"
+        style="width: 200px"
         @change="geospatial"
         v-model="callback"
         placeholder="请选择分享食谱"
@@ -87,10 +87,10 @@
         >
         </el-option>
       </el-select>
-      <span style="margin-left: 25px; margin-right: 15px;">公示食谱:</span>
+      <span style="margin-left: 25px; margin-right: 15px">公示食谱:</span>
 
       <el-select
-        style="width:200px;"
+        style="width: 200px"
         @change="titlesearch"
         v-model="blicity"
         placeholder="请选择"
@@ -124,6 +124,7 @@
           prop="recipeName"
           label="食谱名称"
           align="center"
+          width="200"
         ></el-table-column>
         <el-table-column
           prop="recipeDay"
@@ -162,6 +163,7 @@
           prop="createTime"
           label="创建时间"
           align="center"
+          width="150"
         ></el-table-column>
         <el-table-column label="操作" width="200" align="center">
           <template slot-scope="scope">
@@ -241,70 +243,70 @@ import toolbar from "../PublicLicense/sharing";
 
 export default {
   components: {
-    toolbar
+    toolbar,
   },
   data() {
     return {
       loadFlag: false, //加载flag
       dateTime: false, //弹框
       page_data: {
-        loadTxt: "请求列表中"
+        loadTxt: "请求列表中",
       },
       wupload: {
         input: "",
         getDate: "", //选择日期
-        block: ""
+        block: "",
       },
       m_page: {
         sizes: [10, 20, 40, 50, 100], //每页最大显示数
         size: 10,
         totalElements: 0,
         totalPages: 3,
-        number: 1
+        number: 1,
       },
 
       options: [
         {
           value: "",
-          label: "全部"
+          label: "全部",
         },
         {
           value: "0",
-          label: "不收藏"
+          label: "不收藏",
         },
         {
           value: "1",
-          label: "收藏"
-        }
+          label: "收藏",
+        },
       ],
       empty: "",
       shared: [
         {
           value: "",
-          label: "全部"
+          label: "全部",
         },
         {
           value: "1",
-          label: "不分享到平台"
+          label: "不分享到平台",
         },
         {
           value: "0",
-          label: "分享到平台"
-        }
+          label: "分享到平台",
+        },
       ],
       publicity: [
         {
           value: "",
-          label: "全部"
+          label: "全部",
         },
         {
           value: "1",
-          label: "已公示"
+          label: "已公示",
         },
         {
           value: "0",
-          label: "未公示"
-        }
+          label: "未公示",
+        },
       ],
       blicity: "",
 
@@ -313,7 +315,7 @@ export default {
       keydown: [],
       radio: 3,
       timezone: "",
-      timezone1: ""
+      timezone1: "",
     };
   },
   beforeMount() {
@@ -333,7 +335,7 @@ export default {
     seecol(row) {
       this.$router.push({
         path: "/message/meals",
-        query: { userid: row.id }
+        query: { userid: row.id },
       });
     },
     //删除删除
@@ -341,12 +343,12 @@ export default {
       this.$confirm("确认删除该食谱？", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
         .then(() => {
           this.$axios
             .get(`api/blade-food/recipe/remove?ids=${row.id}`, {})
-            .then(res => {
+            .then((res) => {
               this.$message.success("删除成功");
               this.generator();
             });
@@ -354,7 +356,7 @@ export default {
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消删除"
+            message: "已取消删除",
           });
         });
     },
@@ -364,11 +366,11 @@ export default {
       let params = `?id=${row.id}&isUse=${1}`;
       this.$axios
         .get(`api/blade-food/recipe/changeInfo${params}`, {})
-        .then(res => {
+        .then((res) => {
           // console.log(res);
           this.$message({
             message: "设置成功",
-            type: "success"
+            type: "success",
           });
           this.generator();
         });
@@ -378,11 +380,11 @@ export default {
       let params = `?id=${row.id}&isUse=${0}`;
       this.$axios
         .get(`api/blade-food/recipe/changeInfo${params}`, {})
-        .then(res => {
+        .then((res) => {
           // console.log(res);
           this.$message({
             message: "设置成功",
-            type: "success"
+            type: "success",
           });
           this.generator();
         });
@@ -392,11 +394,11 @@ export default {
       let params = `?id=${row.id}&isBoard=${1}`;
       this.$axios
         .get(`api/blade-food/recipe/changeInfo${params}`, {})
-        .then(res => {
+        .then((res) => {
           // console.log(res);
           this.$message({
             message: "设置成功",
-            type: "success"
+            type: "success",
           });
           this.generator();
         });
@@ -406,11 +408,11 @@ export default {
       let params = `?id=${row.id}&isBoard=${0}`;
       this.$axios
         .get(`api/blade-food/recipe/changeInfo${params}`, {})
-        .then(res => {
+        .then((res) => {
           // console.log(res);
           this.$message({
             message: "设置成功",
-            type: "success"
+            type: "success",
           });
           this.generator();
         });
@@ -470,7 +472,7 @@ export default {
 ${this.timezone1}`,
           {}
         )
-        .then(res => {
+        .then((res) => {
           this.loadFlag = false;
           // console.log(res);
           this.modeforms = res.data.data.records;
@@ -485,8 +487,8 @@ ${this.timezone1}`,
     m_handleSizeChange(currSize) {
       this.m_page.size = currSize;
       this.generator();
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -513,9 +515,9 @@ ${this.timezone1}`,
   margin-top: 25px;
 }
 /*.inform {*/
-  /*width: 100%;*/
-  /*margin-top: 30px;*/
-  /*margin-bottom: 50px;*/
+/*width: 100%;*/
+/*margin-top: 30px;*/
+/*margin-bottom: 50px;*/
 /*}*/
 .pagingClass {
   text-align: right;

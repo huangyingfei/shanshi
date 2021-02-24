@@ -75,6 +75,7 @@ export default {
             label: "食谱名称",
             prop: "recipeName",
             search: true,
+            width: 200,
           },
           {
             label: "食谱周期",
@@ -99,6 +100,7 @@ export default {
             label: "提交时间",
             prop: "createTime",
             type: "date",
+            width: 140,
             format: "yyyy-MM-dd hh:mm:ss",
             valueFormat: "yyyy-MM-dd hh:mm:ss",
           },
