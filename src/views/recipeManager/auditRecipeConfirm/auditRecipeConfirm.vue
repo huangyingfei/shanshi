@@ -283,7 +283,7 @@
                 <div style="margin-top: -5px; padding:5px">
                   <el-input
                     size="small"
-                    placeholder="请输入内容"
+                    placeholder="请输入食谱名称"
                     v-model="recipeNameSharePub"
                     class="input-with-select"
                     @change="recipeNameShareSearchPub()">
@@ -319,7 +319,7 @@
                 <div style="margin-top: -5px; padding: 5px">
                   <el-input
                     size="small"
-                    placeholder="请输入内容"
+                    placeholder="请输入食谱名称"
                     v-model="recipeNameSharePri"
                     class="input-with-select"
                     @change="recipeNameShareSearchPri()"
@@ -597,7 +597,7 @@
             <span style="padding-right: 10px; padding-left: 30px">起始值(%)</span>
             <el-input disabled
                       style="width: 140px"
-                      placeholder="请输入内容"
+                      placeholder="起始值"
                       v-model="node.nowValue"
                       clearable
             >

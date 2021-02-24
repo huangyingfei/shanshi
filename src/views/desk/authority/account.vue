@@ -232,8 +232,8 @@ export default {
       // },
       option: {
         height: "auto",
-        calcHeight: 80,
         tip: false,
+        align: "center",
         searchShow: true,
         searchMenuSpan: 6,
         border: true,
@@ -310,7 +310,7 @@ export default {
             search: true,
             minlength:0,
             maxlength:11,
-            width:100,
+            width:120,
             overHidden: true,
           },
           {

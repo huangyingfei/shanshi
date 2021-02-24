@@ -160,7 +160,6 @@ export default {
         tip: false,
         columnBtn:false,
         refreshBtn:false,
-        calcHeight: 30,
         searchShow: true,
         searchMenuSpan: 6,
         tree: true,
@@ -169,7 +168,7 @@ export default {
         indexLabel:'序号',
         selection: true,
         viewBtn: true,
-        menuWidth: 200,
+        menuWidth: 300,
         dialogHeight:400,
         dialogWidth:900,
 
@@ -220,7 +219,7 @@ export default {
             display: false,
             minlength:0,
             maxlength:16,
-            width:100,
+            width:120,
             overHidden: true,
           },
            {

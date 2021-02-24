@@ -232,7 +232,6 @@ export default {
       // },
       option: {
         height: "auto",
-        calcHeight: 80,
         tip: false,
         columnBtn:false,
         refreshBtn:false,
@@ -309,7 +308,7 @@ export default {
             search: true,
             minlength:0,
             maxlength:11,
-            width:100,
+            width:120,
             overHidden: true,
           },
           {

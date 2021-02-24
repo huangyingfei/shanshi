@@ -133,13 +133,13 @@
               </el-button>
             </template>
             <template slot-scope="scope" slot="menu">
-              <el-button
-                type="text"
-                icon="el-icon-view"
-                size="small"
-                @click.stop="handleView(scope.row)"
-              >查看
-              </el-button>
+              <!--<el-button-->
+                <!--type="text"-->
+                <!--icon="el-icon-view"-->
+                <!--size="small"-->
+                <!--@click.stop="handleView(scope.row)"-->
+              <!--&gt;查看-->
+              <!--</el-button>-->
               <el-button
                 type="text"
                 icon="el-icon-edit"
@@ -147,13 +147,13 @@
                 @click.stop="handleEdit(scope.row)"
               >编辑
               </el-button>
-              <el-button
-                type="text"
-                icon="el-icon-edit"
-                size="small"
-                @click.stop="rowDel(scope.row)"
-              >删除
-              </el-button>
+              <!--<el-button-->
+                <!--type="text"-->
+                <!--icon="el-icon-edit"-->
+                <!--size="small"-->
+                <!--@click.stop="rowDel(scope.row)"-->
+              <!--&gt;删除-->
+              <!--</el-button>-->
               <el-button
                 type="text"
                 icon="el-icon-edit"
@@ -850,7 +850,7 @@
         },
         option: {
           height: "auto",
-          calcHeight: 80,
+          calcHeight: 65,
           tip: false,
           searchShow: true,
           searchMenuSpan: 6,
