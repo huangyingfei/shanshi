@@ -225,6 +225,7 @@ export default {
             label: "食谱名称",
             prop: "recipeName",
             search: true,
+            width: 200,
             rules: [
               {
                 required: true,
