@@ -133,7 +133,6 @@
         option: {
           height: "auto",
           tip: false,
-          calcHeight: 30,
           searchShow: true,
           searchMenuSpan: 6,
           tree: true,

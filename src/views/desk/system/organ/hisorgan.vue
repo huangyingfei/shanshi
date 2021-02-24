@@ -142,7 +142,6 @@ export default {
       option: {
         height: "auto",
         align: "center",
-        calcHeight: 30,
         menuAlign: "center",
         tip: false,
         simplePage: true,
@@ -156,7 +155,7 @@ export default {
         indexLabel:'序号',
         selection: false,
         viewBtn: true,
-        menuWidth: 200,
+        menuWidth: 100,
         addBtn:false,
         delBtn:false,
         editBtn:false,
@@ -236,7 +235,7 @@ export default {
             prop: "contactNumber",
             search: true,
             display: false,
-            width:100,
+            width:120,
             overHidden: true,
           },
           {
@@ -280,9 +279,10 @@ export default {
             ],
           },
           {
-            label: "距离到期天数/预期天数",
-            prop: "endays",
+            label: "距离到期天数/逾期天数",
+            prop: "endayStr",
             display: false,
+            width:130,
           },
         ],
         group: [

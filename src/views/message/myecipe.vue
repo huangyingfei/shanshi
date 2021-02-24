@@ -512,11 +512,11 @@ ${this.timezone1}`,
   height: 50px;
   margin-top: 25px;
 }
-.inform {
-  width: 100%;
-  margin-top: 30px;
-  margin-bottom: 50px;
-}
+/*.inform {*/
+  /*width: 100%;*/
+  /*margin-top: 30px;*/
+  /*margin-bottom: 50px;*/
+/*}*/
 .pagingClass {
   text-align: right;
   /* margin: 20px 0; */

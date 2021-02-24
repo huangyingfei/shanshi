@@ -288,7 +288,7 @@
               <div style="margin-top: 0px; padding: 5px">
                 <el-input
                   size="small"
-                  placeholder="请输入内容"
+                  placeholder="请输入食谱名称"
                   v-model="recipeNameSharePub"
                   class="input-with-select"
                   @change="recipeNameShareSearchPub()"
@@ -570,7 +570,7 @@
             <el-input
               disabled
               style="width: 140px"
-              placeholder="请输入内容"
+              placeholder="起始值"
               v-model="node.nowValue"
               clearable
             >

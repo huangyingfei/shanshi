@@ -236,7 +236,7 @@
                 <div style="margin-top: -5px; padding: 5px">
                   <el-input
                     size="small"
-                    placeholder="请输入内容"
+                    placeholder="请输入食谱名称"
                     v-model="recipeNameSharePri"
                     class="input-with-select"
                     @change="recipeNameShareSearchPri()"

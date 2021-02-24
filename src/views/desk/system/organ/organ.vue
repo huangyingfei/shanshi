@@ -196,9 +196,9 @@ export default {
       },
       option: {
         height: "auto",
-        calcHeight: 30,
         menuAlign: "center",
         tip: false,
+        align: "center",
         simplePage: true,
         searchShow: true,
         searchMenuSpan: 6,
@@ -295,7 +295,7 @@ export default {
             display: false,
             minlength:0,
             maxlength:16,
-            width:100,
+            width:120,
             overHidden: true,
           },
           {
@@ -340,9 +340,10 @@ export default {
             ],
           },
           {
-            label: "距离到期天数/预期天数",
-            prop: "endays",
+            label: "距离到期天数/逾期天数",
+            prop: "endayStr",
             display: false,
+            width:130,
           },
         ],
         group: [
