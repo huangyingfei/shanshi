@@ -24,7 +24,7 @@
           :datas="showDatas"
           days="5"
           :title="title"
-
+          ref="showChild"
         >
         </showfoods-week>
       </div>
@@ -1527,6 +1527,8 @@
         })
         that.$refs.child.getFoodScore();
         that.$refs.child.refreshData();
+        that.jundgeFood()
+        that.allergy()
       },
       mealDetail(id, that) {//根据id查询菜品详情
         detail(id).then(res => {
@@ -1600,6 +1602,15 @@
           })
         })
         that.$refs.child.refreshData();
+        if (datas == "datas") {
+          that.$refs.child.refreshData();
+          that.jundgeFood()
+          that.allergy()
+        }
+        if (datas == "showDatas") {
+          //  console.log(that.showDatas)
+          that.$refs.showChild.refreshData();
+        }
       },
       parentFn(score, type, pscore, intake, nutrition, power, protein, meal,tenantName) {
         if (type == "smartDatas") {
@@ -1999,100 +2010,83 @@
 
 
       },
-      jundgeFood(res, id, wk) {
-        if (!res.id) return;
-        let recipeCycles = [];
-        let children = [];
+      jundgeFood() {
         let name = "";
+        let row=[];
+        console.log("this.datas",this.datas)
         this.datas.forEach((data) => {
-          if (data.id === id) {
-            name = data.name;
-            data.weeks.forEach((week) => {
-              if (week.name === wk) {
-                week.foods.forEach((dish) => {
-                  dish.children.forEach((food) => {
-                    children.push({ foodId: food.id });
-                  });
-                });
-              }
+
+          name = data.name;
+          data.weeks.forEach((week) => {
+            let recipeCycles = [];
+            let children = [];
+            week.foods.forEach((dish) => {
+              dish.children.forEach((food) => {
+                children.push({ foodId: food.id });
+              });
             });
-          }
+            if(children.length>0) {
+              recipeCycles.push({
+                week: week.name.slice(4),
+                mealsType: this.getmealTypeData(name),
+                childrens: children,
+              });
+              row.push({
+                peopleId: this.WeekInfo.crowd,
+                recipeDay: this.WeekInfo.weekType,
+                recipeCycles: recipeCycles,
+              });
+            }
+          });
         });
-        recipeCycles.push({
-          week: wk.slice(4),
-          mealsType: this.getmealTypeData(name),
-          childrens: children,
-        });
-        let row = {
-          peopleId: this.WeekInfo.crowd,
-          recipeDay: this.WeekInfo.weekType,
-          recipeCycles: recipeCycles,
-        };
         let that = this;
         //食材相克
         jundgeFood(row).then((result) => {
           //
-          debugger
-          let foodMutuals = that.foodMutuals;
+          let foodMutuals = [];
           let msg = "";
           if (result.data.data.foodMutuals.length > 0) {
             for (let i = 0; i < result.data.data.foodMutuals.length; i++) {
-              let flag = false;
-              that.foodMutuals.forEach((_) => {
-                if (
-                  _["data_id"] == id &&
-                  _["week_id"] == wk &&
-                  _["foodId"] == result.data.data.foodMutuals[i].foodId &&
-                  _["foodId1"] == result.data.data.foodMutuals[i].foodId1
-                ) {
-                  flag = true;
-                }
+              foodMutuals.push({
+                mealType: result.data.data.foodMutuals[i].mealType,
+                week: result.data.data.foodMutuals[i].week,
+                foodId: result.data.data.foodMutuals[i].foodId,
+                foodId1: result.data.data.foodMutuals[i].foodId1,
+                msg: result.data.data.msg[i],
               });
-              if (!flag) {
-                foodMutuals.push({
-                  data_id: id,
-                  week_id: wk,
-                  foodId: result.data.data.foodMutuals[i].foodId,
-                  foodId1: result.data.data.foodMutuals[i].foodId1,
-                  msg: result.data.data.msg[i],
-                });
-              }
               msg += result.data.data.msg[i] + "，";
             }
             that.foodMutuals = foodMutuals;
 
             this.$message.warning(msg.substring(0, msg.length - 1));
           }else{
-            for(let i=0;i<that.foodMutuals.length;i++){
-              if(that.foodMutuals[i].data_id==id&&that.foodMutuals[i].week_id==wk){
-                that.foodMutuals.splice(i,1);
-              }
-            }
+            that.foodMutuals=[]
           }
           that.datas.forEach((data) => {
-            if (data.id === id) {
-              data.weeks.forEach((week) => {
-                if (week.name === wk) {
-                  week.foods.forEach((dish) => {
-                    let flag=false;
-                    dish.children.forEach((food) => {
-                      that.$set(food,"redColor",false)
-                      for(let i=0;i<that.foodMutuals.length;i++) {
-                        if (food.id == that.foodMutuals[i].foodId && that.foodMutuals[i].data_id==id&&foodMutuals[i].week_id==wk) {
-                          that.$set(food, "redColor", true)
-                          flag = true;
-                        }
-                        if (food.id == that.foodMutuals[i].foodId1&& that.foodMutuals[i].data_id==id&&foodMutuals[i].week_id==wk) {
-                          that.$set(food, "redColor", true)
-                          flag = true;
-                        }
-                      }
-                    });
-                    that.$set(dish,"redColor",flag)
-                  });
-                }
+            // if (data.id === id) {
+            data.weeks.forEach((week) => {
+              // if (week.name === wk) {
+              week.foods.forEach((dish) => {
+                let flag=false;
+                dish.children.forEach((food) => {
+                  that.$set(food,"redColor",false)
+                  for(let i=0;i<that.foodMutuals.length;i++) {
+
+                    if (food.id == that.foodMutuals[i].foodId && that.foodMutuals[i].mealType+""==this.getmealTypeData(data.name)&&"week"+that.foodMutuals[i].week==week.name) {
+                      that.$set(food, "redColor", true)
+                      flag = true;
+                    }
+                    if (food.id == that.foodMutuals[i].foodId1&& that.foodMutuals[i].mealType+""==this.getmealTypeData(data.name)&&"week"+that.foodMutuals[i].week==week.name) {
+                      that.$set(food, "redColor", true)
+                      flag = true;
+                    }
+                  }
+                });
+                that.$set(dish,"redColor",flag)
               });
-            }
+              // }
+            });
+            //  }
           });
         });
       },
@@ -2852,12 +2846,12 @@
   }
 
   .scores3 {
-    width: 155px;
+    width: 130px;
   }
 
   .scores-same {
-    width: 290px;
-    height: 137px;
+    width: 230px;
+    height: 108px;
     color: #FFFFFF;
     background-size: 100% 100%;
     display: flex;
@@ -2888,10 +2882,10 @@
   }
 
   .gnus {
-    font-size: 28px;
+    font-size: 24px;
     text-align: center;
     font-weight: 600;
-    margin-top: 40px;
+    margin-top: 35px;
   }
 
   .gnus-fen {

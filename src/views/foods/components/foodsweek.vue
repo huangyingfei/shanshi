@@ -1935,7 +1935,7 @@ export default {
       ev.preventDefault();
       var node = JSON.parse(JSON.stringify(this.dragnode.node));
       this.appendDragFood(node, id, week);
-      this.$emit("jundgeFood", node, id, week);
+      this.$emit("jundgeFood");
       this.$emit("allergy");
       ev.path.forEach((e) => {
         var cname = e.className;
@@ -2432,7 +2432,7 @@ export default {
         id:'1'
       }
       debugger
-      this.$emit("jundgeFood", node, data_id, week_name);
+      this.$emit("jundgeFood");
       this.$emit("allergy");
     },
 
