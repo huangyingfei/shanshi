@@ -19,7 +19,7 @@
         background-color="#fff" text-color="#000000"
       >
         <template slot="title">
-          <img :src="'/img/menuLogo/'+item[iconKey]" style="margin-right: 5px;" v-if="item[iconKey]!='none'"/>
+          <img :src="'/img/menuLogo/'+item[iconKey]" style="margin-right: 5px; width: 24px" v-if="item[iconKey]!='none'"/>
           <!--<i :class="item[iconKey]"></i>-->
           <span slot="title" :class="{'el-menu--display':collapse && first}">{{generateTitle(item)}}</span>
         </template>

@@ -401,8 +401,9 @@ export default {
                 maxlength:255
               },
               {
-                label: "机构logo",
+                label: "机构排名logo",
                 prop: "logoUrl",
+                labelWidth:120,
                 type: "upload",
                 listType: "picture-img",
                 action: '/api/blade-resource/oss/endpoint/put-file',

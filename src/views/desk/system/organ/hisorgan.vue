@@ -246,7 +246,7 @@ export default {
             overHidden: true,
           },
           {
-            label: "开始使用日期",
+            label: "开始日期",
             prop: "startTimeStr",
             type: "date",
             display: false,
@@ -254,7 +254,7 @@ export default {
             overHidden: true,
           },
           {
-            label: "结束使用日期",
+            label: "结束日期",
             prop: "endTimeStr",
             type: "date",
             display: false,
@@ -445,7 +445,8 @@ export default {
                 prop: "remark",
               },
               {
-                label: "机构logo",
+                label: "机构排名logo",
+                labelWidth:120,
                 prop: "logoUrl",
                 type: "upload",
                 listType: "picture-img",
@@ -530,13 +531,13 @@ export default {
             icon: "el-icon-s-order",
             column: [
               {
-                label: "开始使用日期",
+                label: "开始日期",
                 prop: "startUseTime",
                 type: "date",
                 rules: [{required: true, validator: validateStartTime, trigger: 'blur'}]
               },
               {
-                label: "结束使用日期",
+                label: "结束日期",
                 prop: "expireTime",
                 type: "date",
                 rules: [{required: true, validator: validateEndTime, trigger: 'blur'}]

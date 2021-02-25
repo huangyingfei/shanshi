@@ -631,13 +631,13 @@ export default {
             icon: "el-icon-s-order",
             column: [
               {
-                label: "开始使用日期",
+                label: "开始日期",
                 prop: "startUseTime",
                 type: "date",
                 rules: [{required: true, validator: validateStartTime, trigger: 'blur'}]
               },
               {
-                label: "结束使用日期",
+                label: "结束日期",
                 prop: "expireTime",
                 type: "date",
                 rules: [{required: true, validator: validateEndTime, trigger: 'blur'}]
