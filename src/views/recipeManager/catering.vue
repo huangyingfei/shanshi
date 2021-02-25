@@ -225,6 +225,7 @@
                   size="medium"
                   v-if="foodMutuals.length > 0"
                   type="primary"
+                  class="judegRed"
                 >
                   不宜同食
                 </el-button
@@ -2484,6 +2485,7 @@
   };
 </script>
 <style>
+
   .meals .el-drawer__open .el-drawer.rtl {
     width: 50% !important;
     overflow-y: scroll;
@@ -2492,6 +2494,14 @@
 
 
 <style scoped>
+  .judegRed{
+    background-color:red;
+    border-color:red;
+  }
+  .judegRed:focus, .judegRed:hover{
+    background-color: #e35656;
+    border-color:#e35656;
+  }
   .item-allergy {
     min-height: 100px;
     max-height: 250px;

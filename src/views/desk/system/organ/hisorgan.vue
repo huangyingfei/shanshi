@@ -450,7 +450,7 @@ export default {
                 type: "upload",
                 listType: "picture-img",
                 action: '/api/blade-resource/oss/endpoint/put-file',
-                tip: '建议上传180 x 180px的图片，具体尺寸需确认下',
+                tip: '建议上传180 x 180px的图片',
                 //  action: '/api/blade-resource/oss/endpoint/put-file',
                 propsHttp: {
                   res: "data",
@@ -463,7 +463,7 @@ export default {
                 type: "upload",
                 listType: "picture-img",
                 action: '/api/blade-resource/oss/endpoint/put-file',
-                tip: '建议上传180 x 180px的图片，具体尺寸需确认下',
+                tip: '建议上传180 x 180px的图片',
                 //  action: '/api/blade-resource/oss/endpoint/put-file',
                 propsHttp: {
                   res: "data",
@@ -556,7 +556,7 @@ export default {
                 type: "upload",
                 listType: "picture-img",
                 action: '/api/blade-resource/oss/endpoint/put-file',
-                tip: '建议上传240 x 64px的图片，具体尺寸需确认下',
+                tip: '建议上传225 x 64px的图片',
                 //  action: '/api/blade-resource/oss/endpoint/put-file',
                 propsHttp: {
                   res: "data",

@@ -207,7 +207,7 @@
                 size="medium"
                 @click="allergy1()"
                 type="primary"
-                v-if="tableData.length>0"
+                v-if="tableData.length>0"  class="judegRed"
               >过敏
               </el-button>
 
@@ -226,7 +226,7 @@
                 </el-button>
                 <!--<button  slot="reference" > 不宜同食</button>-->
                 <el-button slot="reference" style="margin-left: 10px" size="medium" v-if="foodMutuals.length>0"
-                           type="primary"
+                           type="primary"  class="judegRed"
                 > 不宜同食
                 </el-button>
               </el-popover>
@@ -1983,6 +1983,7 @@
           peopleId: this.WeekInfo.crowd,
           recipeDay: this.WeekInfo.weekType,
           recipeCycles: recipeCycles,
+          tenantId:this.tenantId,
         };
         jundgeAllergy(row).then((res) => {
           that.$set(that,"tableData",res.data.data.foods);
@@ -2736,7 +2737,14 @@
 
 
 <style scoped>
-
+  .judegRed{
+    background-color:red;
+    border-color:red;
+  }
+  .judegRed:focus, .judegRed:hover{
+    background-color: #e35656;
+    border-color:#e35656;
+  }
   .item-allergy {
     min-height: 100px;
     max-height: 250px;

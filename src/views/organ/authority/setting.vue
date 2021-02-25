@@ -63,7 +63,7 @@
                 text: ' ',
                 ratio: 0.1
               },
-              tip: '建议上传240 x 64px的图片，具体尺寸需确认下',
+              tip: '建议上传225 x 64px的图片',
               action: '/api/blade-resource/oss/endpoint/put-file'
             },
             {
@@ -80,7 +80,7 @@
                 text: ' ',
                 ratio: 0.1
               },
-              tip: '建议上传180 x 180px的图片，具体尺寸需确认下',
+              tip: '建议上传180 x 180px的图片',
               action: '/api/blade-resource/oss/endpoint/put-file'
             },
             {
