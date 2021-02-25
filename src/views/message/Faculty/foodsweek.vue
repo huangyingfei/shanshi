@@ -995,6 +995,9 @@
       foodsChoice,
     },
     props: {
+      topShow: {
+        type: Boolean,
+      },
       // 表格头部
       headers: [],
       // 表格数据
@@ -1177,6 +1180,11 @@
     },
     // 计算属性computed,计算的是Name依赖的值,它不能计算在data中已经定义过的变量。
     computed: {},
+    watch: {
+      topShow: function () {
+        this.getfoodWeekHeight();
+      },
+    },
     // 当属性的值发生变化时，就会调用对应属性的方法，方法里面的形参对应的是属性的新值和旧值
     // watch: {
     //   'datas':{
@@ -1205,8 +1213,11 @@
 
     methods: {
       getfoodWeekHeight() {
-        this.foodWeekHeight = document.body.offsetHeight - 324;
-        console.log(document.body.offsetHeight - 324);
+        var h = 215;
+        if (this.topShow) {
+          h = 324;
+        }
+        this.foodWeekHeight = document.body.offsetHeight - h;
       },
       toRight(){
         var colNum = this.$refs.foodWeekTable.columns.length-1;
@@ -1398,7 +1409,7 @@
 
         var node = JSON.parse(JSON.stringify(this.dragnode.node));
         this.appendDragFood(node, id, week);
-        this.$emit('jundgeFood',node,id,week);
+        // this.$emit('jundgeFood',node,id,week);
         ev.path.forEach((e) => {
           var cname = e.className;
           if (cname && cname.indexOf("drapIn") >= 0) {

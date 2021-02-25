@@ -47,7 +47,8 @@
       >
         <nutrient :nutritionValue="nutritionValue"></nutrient>
       </div>
-
+      <el-collapse-transition>
+        <div v-show="topShow">
       <el-row :gutter="20" style="padding: 0px; margin-top: 5px">
         <el-col :span="24">
           <el-form :gutter="10" :inline="true" :model="formInline">
@@ -125,12 +126,8 @@
           </el-form>
         </el-col>
       </el-row>
-
-      <el-row :gutter="20" style="padding: 0px">
-        <el-col :span="24">
           <el-divider></el-divider>
-        </el-col>
-      </el-row>
+
 
       <el-row :gutter="20">
         <el-col :span="24">
@@ -149,27 +146,37 @@
               </el-checkbox-group>
             </el-form-item>
 
-            <el-form-item>
+            <el-form-item label="公开">
               <el-switch
-                style="margin-left: 10px"
                 v-model="WeekInfo.isPub"
-                inactive-text="公开"
               >
               </el-switch>
-
+            </el-form-item>
+              <el-form-item  label="推荐">
               <el-switch
-                style="margin-left: 10px"
                 v-model="WeekInfo.isRecommend"
-                inactive-text="推荐"
+              >
+              </el-switch>
+              </el-form-item>
+            <el-form-item label="收藏">
+              <el-switch
+                v-model="WeekInfo.isUse"
               >
               </el-switch>
 
-              <el-switch
-                style="margin-left: 10px"
-                v-model="WeekInfo.isUse"
-                inactive-text="收藏"
-              >
-              </el-switch>
+            </el-form-item>
+          </el-form>
+        </el-col>
+      </el-row>
+          <el-divider></el-divider>
+        </div>
+      </el-collapse-transition>
+      <el-row :gutter="20">
+        <el-col :span="24">
+          <el-form :gutter="10" :inline="true" :model="WeekInfo">
+
+
+            <el-form-item>
 
               <el-button
                 @click="wrapscan"
@@ -218,6 +225,7 @@
                   size="medium"
                   v-if="foodMutuals.length > 0"
                   type="primary"
+                  class="judegRed"
                 >
                   不宜同食
                 </el-button
@@ -252,11 +260,13 @@
               >
                 <img src="/img/baobiao.png" width="10px"/> 不带量食谱
               </el-button>
+              <el-button type="text" @click="topShow = !topShow">{{
+                topShow ? "收起" : "展开"
+                }}</el-button>
             </el-form-item>
           </el-form>
         </el-col>
       </el-row>
-
       <el-row :gutter="20" style="padding: 0px">
         <el-col :span="24">
           <el-divider></el-divider>
@@ -264,7 +274,7 @@
       </el-row>
       <el-row :gutter="20" style="padding: 0px; margin-top: 0px">
         <el-col :span="5">
-          <el-card class="box-car" shadow="never">
+          <el-card :class="[topShow ? 'box-car' : 'box-car1']" shadow="never">
             <div class="clearfix panel_head">
               <el-button-group>
                 <el-button
@@ -339,7 +349,7 @@
               <div style="margin-top: 5px; margin-bottom: 2px">
                 <!--<el-divider></el-divider>-->
               </div>
-              <ul class="foodWeekListHis" ref="boxScroll1" @mouseout="HidenFoodTips($event)">
+              <ul class="foodWeekListHis" ref="boxScroll1" @mouseout="HidenFoodTips($event)"  :class="[topShow ? 'foodWeekListHis2' : 'foodWeekListHis1']">
                 <li
                   v-for="f in mealListLeft"
                   :key="f.id"
@@ -482,6 +492,7 @@
               :foodMutuals="foodMutuals"
               :dragnode="drogNode"
               ref="child"
+              :topShow="topShow"
             >
             </foods-week>
           </div>
@@ -720,6 +731,7 @@
     data() {
       const data = [];
       return {
+        topShow: true,
         //加载更多
         recipefinishedPub: false,
         currentPub: 1,
@@ -2473,6 +2485,7 @@
   };
 </script>
 <style>
+
   .meals .el-drawer__open .el-drawer.rtl {
     width: 50% !important;
     overflow-y: scroll;
@@ -2481,6 +2494,14 @@
 
 
 <style scoped>
+  .judegRed{
+    background-color:red;
+    border-color:red;
+  }
+  .judegRed:focus, .judegRed:hover{
+    background-color: #e35656;
+    border-color:#e35656;
+  }
   .item-allergy {
     min-height: 100px;
     max-height: 250px;
@@ -2496,6 +2517,7 @@
   /*}*/
   .meals .el-form-item {
     margin-bottom: 0px;
+    margin-right: 20px;
   }
 
   .meals .el-divider {
@@ -2536,7 +2558,17 @@
     border-bottom-left-radius: 0px;
     margin-bottom: 1px;
   }
+  .meals .foodWeekListHis {
+    padding: 0 0 0 10px;
+    overflow-y: scroll;
+  }
 
+  .meals .foodWeekListHis1 {
+    height: 330px;
+  }
+  .meals .foodWeekListHis2 {
+    height: 230px;
+  }
   .meals .foodWeekListHis {
     padding: 0 0 0 10px;
     overflow-y: scroll;
@@ -2726,7 +2758,7 @@
   }
 
   .meals .el-checkbox {
-    width: 35px;
+    margin-right: 10px;
   }
 
   .select-item {

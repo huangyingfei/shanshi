@@ -26,7 +26,7 @@ export const getSpecialPeopleList = (tenantId) => {
 //获取食谱数据
 export const detail = (id) => {
   return request({
-    url: '/api/blade-food/recipe/detail',
+    url: '/api/blade-food/recipe/recipeDetail',
     method: 'get',
     params:{
       id
@@ -52,7 +52,7 @@ export const auditRecipe = (params) => {
     data: {
       ...params,
       // id: params.id,      //食谱主键
-      // status: params.status,       //1-审核通过 2-不通过 
+      // status: params.status,       //1-审核通过 2-不通过
       // refuseReason: params.refuseReason //拒绝原因
     }
   })

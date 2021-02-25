@@ -1047,6 +1047,9 @@ export default {
     foodsChoice,
   },
   props: {
+    topShow: {
+      type: Boolean,
+    },
     // 表格头部
     headers: [],
     // 表格数据
@@ -1236,6 +1239,9 @@ export default {
   computed: {},
   // 当属性的值发生变化时，就会调用对应属性的方法，方法里面的形参对应的是属性的新值和旧值
   watch: {
+    topShow: function () {
+      this.getfoodWeekHeight();
+    },
   },
   // 组件第一次加载
   mounted() {
@@ -1246,8 +1252,11 @@ export default {
 
   methods: {
     getfoodWeekHeight() {
-      this.foodWeekHeight = document.body.offsetHeight - 324;
-      console.log(document.body.offsetHeight - 324);
+      var h = 215;
+      if (this.topShow) {
+        h = 324;
+      }
+      this.foodWeekHeight = document.body.offsetHeight - h;
     },
     toRight(){
       var colNum = this.$refs.foodWeekTable.columns.length-1;

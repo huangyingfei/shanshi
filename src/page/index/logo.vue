@@ -7,7 +7,7 @@
       <template v-if="!keyCollapse">
         <div class="avue-logo_title" key="1">
           <!-- <img class="logoicon" src="/img/logoicon.png" alt /> -->
-          <img :src="webLogo" alt />
+          <img :src="webLogo" alt  style="width: 225px"/>
           <!--<span class="logoicon">-->
             <!--<img src="/img/huayuanlogo2.png" alt />-->
           <!--</span>-->
