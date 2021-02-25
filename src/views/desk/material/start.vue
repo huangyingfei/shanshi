@@ -1410,7 +1410,12 @@ export default {
   // height: 50px;
   // background-color: red;
   /* float: left; */
-  position: relative;
+  width: 50%;
+  height: 50px;
+  background-color: #fff;
+  position: fixed;
+  bottom: 10px;
+  z-index: 999;
   /* bottom: 0; */
   /* left: 0; */
   > button {

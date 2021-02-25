@@ -53,11 +53,7 @@
         <div class="menu1" v-for="(item, i) in double" :key="i">
           <div class="menuimg">
             <!-- <img :src="item.dishPic" alt /> -->
-            <el-image
-              style="width: 80px; height: 80px"
-              :src="item.dishPic"
-              lazy
-            >
+            <el-image style="width: 80px; height: 80px" :src="item.dishPic">
               <div
                 slot="error"
                 class="image-slot"
@@ -88,15 +84,11 @@
           </el-select>
         </div> -->
         <h4 class="welcome1">本周食谱健康指数排行榜</h4>
-        <div class="school1" v-for="(item1, i) in getHealth" :key="i">
+        <div class="school1" v-for="(item1, i) in getHealth" :key="i" lazy>
           <div class="ranking">{{ item1.list }}</div>
           <div class="schoolimg">
             <!-- <img :src="item1.dishPic" alt /> -->
-            <el-image
-              style="width: 80px; height: 80px"
-              :src="item1.dishPic"
-              lazy
-            >
+            <el-image style="width: 80px; height: 80px" :src="item1.logoUrl">
               <div
                 slot="error"
                 class="image-slot"
@@ -178,7 +170,7 @@ export default {
       this.$axios.get(`api/blade-food/food/dishTotal` + urlParams).then(res => {
         // console.log(res);
         this.double = res.data.data.records;
-        // console.log(this.double);
+        console.log(this.double);
         if (this.double.length == 0) {
           this.empty = 1;
         } else {

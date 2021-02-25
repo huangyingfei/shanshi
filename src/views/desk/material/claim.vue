@@ -607,7 +607,7 @@ export default {
   background-color: #fff;
   margin-top: 0px;
   margin-right: 0px;
-  margin-bottom: 60px;
+  margin-bottom: 40px;
 }
 .rolling {
   width: 100%;

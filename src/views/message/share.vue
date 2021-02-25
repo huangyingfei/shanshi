@@ -75,6 +75,8 @@
         :element-loading-text="page_data.loadTxt"
         style="width: 100%"
         v-loading="loadFlag"
+        :height="tableHeight"
+        ref="table"
         empty-text="没有数据~"
       >
         <el-table-column
@@ -103,6 +105,7 @@
           prop="createTime"
           label="提交时间"
           align="center"
+          width="180"
         ></el-table-column>
 
         <el-table-column label="审批状态" align="center">
@@ -186,6 +189,7 @@ export default {
   },
   data() {
     return {
+      tableHeight: 50,
       transmitData: "123",
       dateTime: false, //弹框
       loadFlag: false, //加载flag
@@ -241,6 +245,20 @@ export default {
       recordList: "",
       getHealth: []
     };
+  },
+  mounted: function() {
+    this.$nextTick(function() {
+      this.tableHeight =
+        window.innerHeight - this.$refs.table.$el.offsetTop - 110;
+
+      // 监听窗口大小变化
+      let self = this;
+      window.onresize = function() {
+        self.tableHeight =
+          window.innerHeight - self.$refs.table.$el.offsetTop - 110;
+      };
+    });
+    //this.$refs.table.$el.offsetTop：表格距离浏览器的高度 //50表示你想要调整的表格距离底部的高度（你可以自己随意调整），因为我们一般都有放分页组件的，所以需要给它留一个高度
   },
   beforeMount() {
     this.getforms();
@@ -342,7 +360,7 @@ export default {
   background-color: #fff;
   margin-top: 0px;
   margin-right: 0px;
-  margin-bottom: 60px;
+  margin-bottom: 40px;
 }
 .worm1 {
   width: 100%;

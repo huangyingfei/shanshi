@@ -86,16 +86,13 @@
         <h4 class="welcome">本周最受欢迎菜品</h4>
         <div class="menu1" v-for="(item, i) in double" :key="i">
           <div class="menuimg">
-            <el-image
-              style="width: 80px; height: 80px"
-              :src="item.dishPic"
-              lazy
-            >
+            <el-image style="width: 80px; height: 80px" :src="item.dishPic">
               <div
                 slot="error"
                 class="image-slot"
                 style="width: 80px; height: 80px; text-align: center;  line-height: 80px;"
               >
+                <!-- <i class="el-icon-picture-outline"></i> -->
                 <div class="el-image__error">
                   暂无图片
                 </div>
@@ -421,14 +418,15 @@ export default {
       this.$axios
         .get(`api/blade-food/food/getTotalByTenant` + urlParams)
         .then(res => {
-          console.log(res);
+          // console.log(res);
           this.newhead = res.data.data;
           // console.log(this.newhead);
         });
     },
     //本周最受欢迎菜品
     welcomeUser() {
-      let Dishes = `?size=${500}&current=${1}&tenantId=${this.activity}`;
+      // &tenantId=${this.activity}
+      let Dishes = `?size=${500}&current=${1}`;
       this.$axios.get(`api/blade-food/food/dishTotal` + Dishes).then(res => {
         // console.log(res);
         this.double = res.data.data.records;

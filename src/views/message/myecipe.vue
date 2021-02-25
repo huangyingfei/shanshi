@@ -112,6 +112,8 @@
         :element-loading-text="page_data.loadTxt"
         style="width: 100%"
         v-loading="loadFlag"
+        :height="tableHeight"
+        ref="table"
         empty-text="没有数据~"
       >
         <el-table-column
@@ -124,48 +126,55 @@
           prop="recipeName"
           label="食谱名称"
           align="center"
-          width="200"
+          width="250"
+          show-overflow-tooltip
         ></el-table-column>
         <el-table-column
           prop="recipeDay"
           label="食谱周期"
           align="center"
+          width="80"
         ></el-table-column>
         <el-table-column
           prop="peopleName"
           label="人群名称"
           align="center"
+          width="100"
         ></el-table-column>
 
         <el-table-column
           prop="avgAge"
           label="平均年龄"
           align="center"
+          width="80"
         ></el-table-column>
         <el-table-column
           prop="score"
           label="评分"
           align="center"
+          width="80"
         ></el-table-column>
         <el-table-column
           prop="proportion"
           label="男女比例"
           align="center"
+          width="100"
         ></el-table-column>
 
         <el-table-column
           prop="orgName"
           label="创建人"
           align="center"
+          width="100"
         ></el-table-column>
 
         <el-table-column
           prop="createTime"
           label="创建时间"
           align="center"
-          width="150"
+          width="180"
         ></el-table-column>
-        <el-table-column label="操作" width="200" align="center">
+        <el-table-column fixed="right" label="操作" width="240" align="center">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="protocol(scope.row)"
               >查看</el-button
@@ -243,70 +252,71 @@ import toolbar from "../PublicLicense/sharing";
 
 export default {
   components: {
-    toolbar,
+    toolbar
   },
   data() {
     return {
+      tableHeight: 50,
       loadFlag: false, //加载flag
       dateTime: false, //弹框
       page_data: {
-        loadTxt: "请求列表中",
+        loadTxt: "请求列表中"
       },
       wupload: {
         input: "",
         getDate: "", //选择日期
-        block: "",
+        block: ""
       },
       m_page: {
         sizes: [10, 20, 40, 50, 100], //每页最大显示数
         size: 10,
         totalElements: 0,
         totalPages: 3,
-        number: 1,
+        number: 1
       },
 
       options: [
         {
           value: "",
-          label: "全部",
+          label: "全部"
         },
         {
           value: "0",
-          label: "不收藏",
+          label: "不收藏"
         },
         {
           value: "1",
-          label: "收藏",
-        },
+          label: "收藏"
+        }
       ],
       empty: "",
       shared: [
         {
           value: "",
-          label: "全部",
+          label: "全部"
         },
         {
           value: "1",
-          label: "不分享到平台",
+          label: "不分享到平台"
         },
         {
           value: "0",
-          label: "分享到平台",
-        },
+          label: "分享到平台"
+        }
       ],
       publicity: [
         {
           value: "",
-          label: "全部",
+          label: "全部"
         },
         {
           value: "1",
-          label: "已公示",
+          label: "已公示"
         },
         {
           value: "0",
-          label: "未公示",
-        },
+          label: "未公示"
+        }
       ],
       blicity: "",
 
@@ -315,11 +325,25 @@ export default {
       keydown: [],
       radio: 3,
       timezone: "",
-      timezone1: "",
+      timezone1: ""
     };
   },
   beforeMount() {
     this.generator();
+  },
+  mounted: function() {
+    this.$nextTick(function() {
+      this.tableHeight =
+        window.innerHeight - this.$refs.table.$el.offsetTop - 110;
+
+      // 监听窗口大小变化
+      let self = this;
+      window.onresize = function() {
+        self.tableHeight =
+          window.innerHeight - self.$refs.table.$el.offsetTop - 110;
+      };
+    });
+    //this.$refs.table.$el.offsetTop：表格距离浏览器的高度 //50表示你想要调整的表格距离底部的高度（你可以自己随意调整），因为我们一般都有放分页组件的，所以需要给它留一个高度
   },
   methods: {
     //查看
@@ -335,7 +359,7 @@ export default {
     seecol(row) {
       this.$router.push({
         path: "/message/meals",
-        query: { userid: row.id },
+        query: { userid: row.id }
       });
     },
     //删除删除
@@ -343,12 +367,12 @@ export default {
       this.$confirm("确认删除该食谱？", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning",
+        type: "warning"
       })
         .then(() => {
           this.$axios
             .get(`api/blade-food/recipe/remove?ids=${row.id}`, {})
-            .then((res) => {
+            .then(res => {
               this.$message.success("删除成功");
               this.generator();
             });
@@ -356,7 +380,7 @@ export default {
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消删除",
+            message: "已取消删除"
           });
         });
     },
@@ -366,11 +390,11 @@ export default {
       let params = `?id=${row.id}&isUse=${1}`;
       this.$axios
         .get(`api/blade-food/recipe/changeInfo${params}`, {})
-        .then((res) => {
+        .then(res => {
           // console.log(res);
           this.$message({
             message: "设置成功",
-            type: "success",
+            type: "success"
           });
           this.generator();
         });
@@ -380,11 +404,11 @@ export default {
       let params = `?id=${row.id}&isUse=${0}`;
       this.$axios
         .get(`api/blade-food/recipe/changeInfo${params}`, {})
-        .then((res) => {
+        .then(res => {
           // console.log(res);
           this.$message({
             message: "设置成功",
-            type: "success",
+            type: "success"
           });
           this.generator();
         });
@@ -394,11 +418,11 @@ export default {
       let params = `?id=${row.id}&isBoard=${1}`;
       this.$axios
         .get(`api/blade-food/recipe/changeInfo${params}`, {})
-        .then((res) => {
+        .then(res => {
           // console.log(res);
           this.$message({
             message: "设置成功",
-            type: "success",
+            type: "success"
           });
           this.generator();
         });
@@ -408,11 +432,11 @@ export default {
       let params = `?id=${row.id}&isBoard=${0}`;
       this.$axios
         .get(`api/blade-food/recipe/changeInfo${params}`, {})
-        .then((res) => {
+        .then(res => {
           // console.log(res);
           this.$message({
             message: "设置成功",
-            type: "success",
+            type: "success"
           });
           this.generator();
         });
@@ -472,7 +496,7 @@ export default {
 ${this.timezone1}`,
           {}
         )
-        .then((res) => {
+        .then(res => {
           this.loadFlag = false;
           // console.log(res);
           this.modeforms = res.data.data.records;
@@ -487,8 +511,8 @@ ${this.timezone1}`,
     m_handleSizeChange(currSize) {
       this.m_page.size = currSize;
       this.generator();
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -525,6 +549,6 @@ ${this.timezone1}`,
   background-color: #fff;
   margin-top: 0px;
   margin-right: 0px;
-  margin-bottom: 60px;
+  margin-bottom: 30px;
 }
 </style>

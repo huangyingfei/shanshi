@@ -209,12 +209,14 @@
       </el-tabs>
     </div>
     <div class="Aconfirm">
-      <el-button type="primary" v-if="window" @click="Determines('ruleForm')"
-        >保存</el-button
-      >
-      <el-button type="success" v-else @click="Atom('ruleForm')"
-        >編輯保存</el-button
-      >
+      <div class="Aconfirmbutton">
+        <el-button type="primary" v-if="window" @click="Determines('ruleForm')"
+          >保存</el-button
+        >
+        <el-button type="success" v-else @click="Atom('ruleForm')"
+          >編輯保存</el-button
+        >
+      </div>
     </div>
   </div>
 </template>
@@ -513,10 +515,17 @@ export default {
 .Aconfirm {
   width: 100%;
   margin-top: 20px;
+  height: 40px;
   position: fixed;
   background-color: #fff;
   bottom: 5px;
   text-align: center;
+}
+.Aconfirmbutton {
+  width: 100px;
+  height: 40px;
+
+  margin-left: 36%;
 }
 .Protein {
   width: 100%;

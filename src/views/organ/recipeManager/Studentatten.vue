@@ -224,9 +224,19 @@
                 align="center"
               >
               </el-table-column>
-              <el-table-column prop="source" label="来源" align="center">
+              <el-table-column
+                prop="source"
+                width="120"
+                label="来源"
+                align="center"
+              >
               </el-table-column>
-              <el-table-column label="状态" align="center">
+              <el-table-column
+                fixed="right"
+                label="状态"
+                width="100"
+                align="center"
+              >
                 <template slot-scope="scope">
                   <el-tag type="danger" v-if="scope.row.status == 0"
                     >未确认</el-tag
@@ -731,13 +741,13 @@ export default {
     this.restaurants = this.loadAll();
     this.$nextTick(function() {
       this.tableHeight =
-        window.innerHeight - this.$refs.table.$el.offsetTop - 200;
+        window.innerHeight - this.$refs.table.$el.offsetTop - 270;
 
       // 监听窗口大小变化
       let self = this;
       window.onresize = function() {
         self.tableHeight =
-          window.innerHeight - self.$refs.table.$el.offsetTop - 200;
+          window.innerHeight - self.$refs.table.$el.offsetTop - 270;
       };
     });
     //this.$refs.table.$el.offsetTop：表格距离浏览器的高度 //50表示你想要调整的表格距离底部的高度（你可以自己随意调整），因为我们一般都有放分页组件的，所以需要给它留一个高度
@@ -1341,10 +1351,10 @@ export default {
 
 <style lang="scss" scoped>
 // 动态给远程下拉框设置样式
-.popperClassName {
-  display: none !important;
-  position: static !important;
-}
+// .popperClassName {
+//   display: none !important;
+//   position: static !important;
+// }
 .teachers {
   width: 100%;
   height: 100%;
@@ -1368,7 +1378,7 @@ export default {
   background-color: #fff;
   margin-top: 0px;
   margin-right: 0px;
-  margin-bottom: 60px;
+  margin-bottom: 30px;
 }
 .newbie {
   height: 100px;

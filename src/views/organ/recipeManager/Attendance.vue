@@ -153,7 +153,8 @@
               :element-loading-text="page_data.loadTxt"
               :data="tableData"
               border
-              style="width: 100%"
+              :height="tableHeight"
+              ref="table"
             >
               <el-table-column
                 label="序号"
@@ -499,6 +500,7 @@ import XLSX from "xlsx";
 export default {
   data() {
     return {
+      tableHeight: 50,
       headerObj: {
         "Blade-Auth": ""
       }, //上传图片请求头
@@ -681,6 +683,17 @@ export default {
     this.Takeone();
   },
   mounted() {
+    this.$nextTick(function() {
+      this.tableHeight =
+        window.innerHeight - this.$refs.table.$el.offsetTop - 280;
+
+      // 监听窗口大小变化
+      let self = this;
+      window.onresize = function() {
+        self.tableHeight =
+          window.innerHeight - self.$refs.table.$el.offsetTop - 280;
+      };
+    });
     this.restaurants = this.loadAll();
   },
   methods: {
@@ -1209,7 +1222,7 @@ export default {
   background-color: #fff;
   margin-top: 0px;
   margin-right: 0px;
-  margin-bottom: 60px;
+  margin-bottom: 40px;
 }
 .newbie {
   height: 100px;
