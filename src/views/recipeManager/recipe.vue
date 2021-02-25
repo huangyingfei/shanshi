@@ -26,7 +26,6 @@
           size="small"
           icon="el-icon-delete"
           plain
-          v-if="permission.post_delete"
           @click="handleDelete"
           >删 除
         </el-button>
