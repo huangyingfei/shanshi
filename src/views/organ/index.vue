@@ -28,37 +28,43 @@
 
     <div class="total">
       <div class="mechanism">
-        <!-- <img src="http://www.huangyingfei.cn/img/123.jpg" alt /> -->
+        <img src="../../../public/img/yuansuo.png" alt />
         <div class="nism1">
           <div class="ingredients">园所人数</div>
+
           <div class="food1">{{ this.newhead.ysrs }}</div>
         </div>
       </div>
       <div class="mechanism">
+        <img src="../../../public/img/schoolboy.png" alt />
         <div class="nism1">
           <div class="ingredients">男生人数</div>
           <div class="food1">{{ this.newhead.boys }}</div>
         </div>
       </div>
       <div class="mechanism">
+        <img src="../../../public/img/girlstudent.png" alt />
         <div class="nism1">
           <div class="ingredients">女生人数</div>
           <div class="food1">{{ this.newhead.girls }}</div>
         </div>
       </div>
       <div class="mechanism">
+        <img src="../../../public/img/sctotal.png" alt />
         <div class="nism1">
           <div class="ingredients">食材总量</div>
           <div class="food1">{{ this.newhead.food }}</div>
         </div>
       </div>
       <div class="mechanism">
+        <img src="../../../public/img/cptotal.png" alt />
         <div class="nism1">
           <div class="ingredients">菜品总量</div>
           <div class="food1">{{ this.newhead.dish }}</div>
         </div>
       </div>
       <div class="mechanism">
+        <img src="../../../public/img/sptotal.png" alt />
         <div class="nism1">
           <div class="ingredients">食谱总量</div>
           <div class="food1">{{ this.newhead.recipe }}</div>

@@ -123,6 +123,11 @@
           label="评分"
           align="center"
         ></el-table-column>
+        <el-table-column
+          prop="mealTypes"
+          label="餐别组合"
+          align="center"
+        ></el-table-column>
         <!-- <el-table-column label="机构类型" align="center">
           <template slot-scope="scope">
             <el-tag v-if="scope.row.orgType == 1">学校</el-tag>
