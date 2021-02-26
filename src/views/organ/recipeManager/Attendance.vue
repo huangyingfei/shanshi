@@ -164,17 +164,35 @@
               >
               </el-table-column>
 
-              <el-table-column prop="teacherName" label="姓名" align="center">
+              <el-table-column
+                prop="teacherName"
+                width="150"
+                show-overflow-tooltip
+                label="姓名"
+                align="center"
+              >
               </el-table-column>
-              <el-table-column prop="post" label="职务" align="center">
+              <el-table-column
+                prop="post"
+                width="100"
+                label="职务"
+                align="center"
+              >
               </el-table-column>
-              <el-table-column prop="deptName" label="部门" align="center">
+              <el-table-column
+                width="150"
+                show-overflow-tooltip
+                prop="deptName"
+                label="部门"
+                align="center"
+              >
               </el-table-column>
               <el-table-column
                 prop="startTimeStr"
                 label="请假开始日期"
-                width="160"
+                width="200"
                 align="center"
+                show-overflow-tooltip
               >
                 <!-- <template slot-scope="scope">
                   <span>{{ scope.row.startTime }}</span>
@@ -183,37 +201,56 @@
               </el-table-column>
               <el-table-column
                 prop="endTimeStr"
-                width="160"
+                width="200"
                 label="请假结束日期"
                 align="center"
+                show-overflow-tooltip
               >
                 <!-- <template slot-scope="scope">
                   <span>{{ scope.row.endTime }}</span>
                   <span>{{ scope.row.endStr }}</span>
                 </template> -->
               </el-table-column>
-              <el-table-column prop="leaveType" label="请假类型" align="center">
-              </el-table-column>
-              <el-table-column prop="daysOff" label="请假天数" align="center">
+              <el-table-column
+                width="100"
+                prop="leaveType"
+                label="请假类型"
+                align="center"
+              >
               </el-table-column>
               <el-table-column
-                width="150"
+                width="80"
+                prop="daysOff"
+                label="请假天数"
+                align="center"
+              >
+              </el-table-column>
+              <el-table-column
+                width="200"
                 prop="reason"
                 label="请假原因"
                 align="center"
+                show-overflow-tooltip
               >
               </el-table-column>
               <el-table-column
                 prop="applyTime"
-                width="150"
+                width="200"
                 label="申请日期"
+                align="center"
+                show-overflow-tooltip
+              >
+              </el-table-column>
+              <el-table-column
+                width="100"
+                show-overflow-tooltip
+                prop="createBy"
+                label="创建人"
                 align="center"
               >
               </el-table-column>
-              <el-table-column prop="createBy" label="创建人" align="center">
-              </el-table-column>
               <el-table-column
-                width="150"
+                width="200"
                 prop="createTime"
                 label="创建日期"
                 align="center"

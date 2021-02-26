@@ -140,6 +140,7 @@
           label="人群名称"
           align="center"
           width="100"
+          show-overflow-tooltip
         ></el-table-column>
 
         <el-table-column
@@ -166,13 +167,14 @@
           label="创建人"
           align="center"
           width="100"
+          show-overflow-tooltip
         ></el-table-column>
 
         <el-table-column
           prop="createTime"
           label="创建时间"
           align="center"
-          width="180"
+          width="200"
         ></el-table-column>
         <el-table-column fixed="right" label="操作" width="240" align="center">
           <template slot-scope="scope">

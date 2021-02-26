@@ -100,7 +100,8 @@ export default {
       teamranking: [], //浏览排行
       updated: [], //日期
       fontify: [], //浏览量
-      instanceof: [] //总人数
+      instanceof: [], //总人数
+      activity: ""
     };
   },
   mounted() {
@@ -110,8 +111,20 @@ export default {
   },
   beforeMount() {
     this.profileuser();
+    this.searchBtn();
   },
   methods: {
+    searchBtn() {
+      // console.log(this.activity);
+      this.$axios
+        .post(`api/blade-food/report/visitAnalyse`, {
+          tenantId: this.activity
+        })
+        .then(res => {
+          // console.log(res);
+          this.teamranking = res.data.data.visitLogVOList;
+        });
+    },
     //访问量统计
     profileuser() {
       this.loadFlag - true;
@@ -136,8 +149,8 @@ export default {
         this.updated = recent;
         this.fontify = ring;
         this.instanceof = offset;
-        this.teamranking = this.offers.visitLogVOList;
-        console.log(this.teamranking);
+        // this.teamranking = this.offers.visitLogVOList;
+        // console.log(this.teamranking);
         this.extract();
         // console.log(recent);
       });

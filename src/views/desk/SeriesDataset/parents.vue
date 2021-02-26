@@ -134,6 +134,7 @@ export default {
   beforeMount() {
     this.profileuser();
     this.fromSearch();
+    this.searchBtn();
   },
   methods: {
     searchBtn() {
@@ -180,7 +181,7 @@ export default {
         this.offers.visitLogVOs.forEach((item, index) => {
           recent.push(item.dateStr);
           ring.push(item.lookCount);
-          offset.push(item.peopleCount);
+          offset.push(item.num);
         });
         this.updated = recent;
         this.fontify = ring;
