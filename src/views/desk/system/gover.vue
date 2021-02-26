@@ -400,19 +400,19 @@ export default {
                 minlength:0,
                 maxlength:255
               },
-              {
-                label: "机构排名logo",
-                prop: "logoUrl",
-                labelWidth:120,
-                type: "upload",
-                listType: "picture-img",
-                action: '/api/blade-resource/oss/endpoint/put-file',
-                tip: '建议上传180 x 180px的图片',
-                propsHttp: {
-                  res: "data",
-                  url: "link",
-                },
-              },
+              // {
+              //   label: "机构排名logo",
+              //   prop: "logoUrl",
+              //   labelWidth:120,
+              //   type: "upload",
+              //   listType: "picture-img",
+              //   action: '/api/blade-resource/oss/endpoint/put-file',
+              //   tip: '建议上传180 x 180px的图片',
+              //   propsHttp: {
+              //     res: "data",
+              //     url: "link",
+              //   },
+              // },
               {
                 label: "头像",
                 prop: "avatar",
