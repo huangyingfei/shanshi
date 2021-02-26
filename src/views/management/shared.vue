@@ -86,6 +86,7 @@
           prop="foodName"
           label="食材名称"
           align="center"
+          width="180"
         ></el-table-column>
         <el-table-column
           prop="foodTypeName"
@@ -102,8 +103,14 @@
           prop="createTime"
           label="提交时间"
           align="center"
+          width="180"
         ></el-table-column>
-        <el-table-column prop="updateTime" label="分享时间" align="center">
+        <el-table-column
+          width="180"
+          prop="updateTime"
+          label="分享时间"
+          align="center"
+        >
           <template slot-scope="scope">
             <p v-if="scope.row.updateTime == null">
               {{ scope.row.createTime }}
@@ -797,7 +804,7 @@ export default {
   background-color: #fff;
   margin-top: 0px;
   margin-right: 0px;
-  margin-bottom: 60px;
+  margin-bottom: 40px;
 }
 /deep/ .hide .el-upload--picture-card {
   display: none;

@@ -380,7 +380,7 @@ export default {
   watch: {
     areaId: function (newval, oldVal) {
       if (newval instanceof Array) {
-        this.govForm.areaId = newval.slice(-1);
+        this.govForm.areaId = newval.slice(-1)[0];
         // console.log(this.govForm.areaId);
       }
       this.cascaderChange();

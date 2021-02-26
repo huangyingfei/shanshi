@@ -224,7 +224,8 @@ export default {
             label: "食谱名称",
             prop: "recipeName",
             search: true,
-            width: 200,
+            width: 180,
+            overHidden: true,
             rules: [
               {
                 required: true,
@@ -250,6 +251,7 @@ export default {
             prop: "isUse",
             type: "select",
             search: true,
+            width: 65,
             dicData: [
               {
                 label: "全部",
@@ -276,6 +278,7 @@ export default {
             prop: "isPub",
             type: "select",
             search: true,
+            width: 65,
             dicData: [
               {
                 label: "全部",
@@ -346,6 +349,7 @@ export default {
           {
             label: "创建人",
             prop: "createName",
+            width: 70,
             // span: 24,
             minRows: 6,
           },
@@ -353,9 +357,8 @@ export default {
             label: "创建时间",
             prop: "createTime",
             type: "date",
-            width: 140,
+            width: 150,
             // span: 24,
-            minRows: 6,
             search: true,
             searchRange: true,
             display: false,

@@ -622,7 +622,7 @@ export default {
   /* margin: 20px 0; */
   margin-top: 20px;
   margin-right: 40px;
-  margin-bottom: 60px;
+  margin-bottom: 40px;
 }
 .rolling {
   width: 100%;

@@ -91,33 +91,46 @@
           prop="foodName"
           label="食材名称"
           align="center"
+          width="200"
+          show-overflow-tooltip
         ></el-table-column>
         <el-table-column
           prop="foodTypeName"
           label="分类"
           align="center"
+          width="110"
         ></el-table-column>
         <el-table-column
           prop="orgName"
           label="创建机构"
           align="center"
+          width="130"
+          show-overflow-tooltip
         ></el-table-column>
         <el-table-column
           prop="createName"
           label="提交人"
+          width="100"
           align="center"
         ></el-table-column>
         <el-table-column
           prop="mobile"
           label="联系电话"
+          width="120"
           align="center"
         ></el-table-column>
         <el-table-column
           prop="createTime"
           label="提交时间"
           align="center"
+          width="180"
         ></el-table-column>
-        <el-table-column prop="updateTime" label="分享时间" align="center">
+        <el-table-column
+          width="180"
+          prop="updateTime"
+          label="分享时间"
+          align="center"
+        >
           <template slot-scope="scope">
             <p v-if="scope.row.updateTime == null">
               {{ scope.row.createTime }}
@@ -125,7 +138,7 @@
             <p v-else>{{ scope.row.updateTime }}</p>
           </template>
         </el-table-column>
-        <el-table-column label="审核状态" align="center">
+        <el-table-column fixed="right" label="审核状态" align="center">
           <template slot-scope="scope">
             <el-tag type="danger" v-if="scope.row.status == 0">待审核</el-tag>
             <el-tag v-else-if="scope.row.status == 3">无需审核</el-tag>
@@ -148,7 +161,7 @@
           </template>
         </el-table-column>
         <!--操作格-->
-        <el-table-column label="操作" align="center" width="200">
+        <el-table-column fixed="right" label="操作" align="center" width="100">
           <template slot-scope="scope">
             <el-button
               v-if="scope.row.status != 0"
@@ -1820,7 +1833,7 @@ export default {
   background-color: #fff;
   margin-top: 0px;
   margin-right: 0px;
-  margin-bottom: 60px;
+  margin-bottom: 40px;
 }
 
 /deep/ .hide .el-upload--picture-card {

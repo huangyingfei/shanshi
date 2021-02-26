@@ -369,13 +369,19 @@
               </el-select>
             </el-form-item>
             <el-form-item label="所在年级/班级" style="width: 355px">
-              <el-cascader
+              <!-- <el-cascader
                 style="width: 250px"
                 clearable
                 v-model="stringClass"
                 :options="loadClass"
                 :props="{ multiple: true, checkStrictly: true }"
                 @change="handleChange"
+              ></el-cascader> -->
+              <el-cascader
+                v-model="stringClass"
+                :options="loadClass"
+                :props="{ multiple: true }"
+                clearable
               ></el-cascader>
             </el-form-item>
             <el-form-item label="工号" style="width: 355px" prop="thejob">
@@ -557,6 +563,8 @@
           :data="tableData"
           border
           style="width: 100%"
+          :height="tableHeight"
+          ref="table"
         >
           <el-table-column label="序号" type="index" width="50" align="center">
           </el-table-column>
@@ -702,6 +710,7 @@ export default {
       }
     };
     return {
+      tableHeight: 50,
       drawer: false,
       data: JSON.parse(JSON.stringify(data)),
       loadFlag: false, //加载flag
@@ -1169,6 +1178,20 @@ export default {
     this.hobbiton();
     // this.Autoresponder();
   },
+  mounted: function() {
+    this.$nextTick(function() {
+      this.tableHeight =
+        window.innerHeight - this.$refs.table.$el.offsetTop - 160;
+
+      // 监听窗口大小变化
+      let self = this;
+      window.onresize = function() {
+        self.tableHeight =
+          window.innerHeight - self.$refs.table.$el.offsetTop - 160;
+      };
+    });
+    //this.$refs.table.$el.offsetTop：表格距离浏览器的高度 //50表示你想要调整的表格距离底部的高度（你可以自己随意调整），因为我们一般都有放分页组件的，所以需要给它留一个高度
+  },
   methods: {
     handleChange(value) {
       console.log(value);
@@ -1494,20 +1517,22 @@ export default {
       //   //   item.childNodes[0].style = "display: none";
       //   // });
       // }, 500);
-      let bar = [];
-      this.loadClass.forEach((item, i) => {
-        // console.log(item);
-        item.children.forEach((item1, j) => {
-          // console.log(item1);
-          if (item1.label == "小班") {
-            item1.children.forEach((item2, k) => {
-              bar[k] = [item.value, item1.value, item2.value];
-            });
-          }
-        });
-      });
+
+      //默认选择小班所有班级
+      //       let bar = [];
+      //       this.loadClass.forEach((item, i) => {
+      //
+      //         item.children.forEach((item1, j) => {
+      //
+      //           if (item1.label == "小班") {
+      //             item1.children.forEach((item2, k) => {
+      //               bar[k] = [item.value, item1.value, item2.value];
+      //             });
+      //           }
+      //         });
+      //       });
       // console.log(bar);
-      this.stringClass = bar;
+      // this.stringClass = bar;
     },
     //添加部门
     added(index) {
@@ -2078,7 +2103,7 @@ export default {
   background-color: #fff;
   margin-top: 0px;
   margin-right: 0px;
-  margin-bottom: 60px;
+  margin-bottom: 40px;
 }
 .newcastle {
   width: 70px;

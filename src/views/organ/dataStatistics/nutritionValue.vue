@@ -25,13 +25,17 @@
     <el-row>
       <el-col :span="24"
         ><div class="students">
-          <div id="main" style="width:100% ;height:500px;"></div></div
-      ></el-col>
+          <div id="main" :style="{ width: '100%', height: '500px' }"></div>
+        </div>
+      </el-col>
     </el-row>
     <el-row>
       <el-col :span="24"
         ><div class="students1">
-          <div id="schoolis" style="width:100% ;height:500px;"></div></div
+          <div
+            id="schoolis"
+            :style="{ width: '100%', height: '500px' }"
+          ></div></div
       ></el-col>
     </el-row>
   </div>
