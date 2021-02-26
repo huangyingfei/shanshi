@@ -449,16 +449,16 @@ export default {
       rectangle: "",
 
       rules: {
-        name: [{ required: true, message: "请输入食材名", trigger: "blur" }],
+        name: [{ required: true, message: "请输入食材名", trigger: "change" }],
         buffer: [
-          { required: true, message: "请输入食材真名", trigger: "blur" }
+          { required: true, message: "请输入食材真名", trigger: "change" }
         ],
         fooddata: [
           //食材分类
-          { required: true, message: "请选择食物分类", trigger: "blur" }
+          { required: true, message: "请选择食物分类", trigger: "change" }
         ],
-        besaved: [{ required: true, message: "请输入食部", trigger: "blur" }],
-        timers: [{ required: true, message: "请输入重量", trigger: "blur" }]
+        besaved: [{ required: true, message: "请输入食部", trigger: "change" }],
+        timers: [{ required: true, message: "请输入重量", trigger: "change" }]
       },
       ruleForm: {
         //个人食材库

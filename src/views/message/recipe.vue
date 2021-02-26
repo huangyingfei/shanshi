@@ -95,6 +95,8 @@
         border
         style="width: 100%"
         v-loading="loadFlag"
+        :height="tableHeight"
+        ref="table"
         empty-text="没有数据~"
       >
         <el-table-column
@@ -107,6 +109,8 @@
           prop="recipeName"
           label="食谱名称"
           align="center"
+          width="250"
+          show-overflow-tooltip
         ></el-table-column>
         <el-table-column
           prop="recipeDay"
@@ -118,11 +122,11 @@
           label="平均年龄"
           align="center"
         ></el-table-column>
-        <el-table-column
+        <!-- <el-table-column
           prop="score"
           label="评分"
           align="center"
-        ></el-table-column>
+        ></el-table-column> -->
         <el-table-column
           prop="mealTypes"
           label="餐别组合"
@@ -153,6 +157,7 @@
           prop="createTime"
           label="分享时间"
           align="center"
+          width="180"
         ></el-table-column>
         <el-table-column label="操作" width="200" align="center">
           <template slot-scope="scope">
@@ -205,6 +210,7 @@ export default {
   },
   data() {
     return {
+      tableHeight: 50,
       keyword: {
         input: "",
         getDate: "",
@@ -294,6 +300,20 @@ export default {
   // }
   beforeMount() {
     this.generator();
+  },
+  mounted: function() {
+    this.$nextTick(function() {
+      this.tableHeight =
+        window.innerHeight - this.$refs.table.$el.offsetTop - 110;
+
+      // 监听窗口大小变化
+      let self = this;
+      window.onresize = function() {
+        self.tableHeight =
+          window.innerHeight - self.$refs.table.$el.offsetTop - 110;
+      };
+    });
+    //this.$refs.table.$el.offsetTop：表格距离浏览器的高度 //50表示你想要调整的表格距离底部的高度（你可以自己随意调整），因为我们一般都有放分页组件的，所以需要给它留一个高度
   },
   methods: {
     //不收藏
@@ -415,6 +435,6 @@ ${this.timezone1}&orgType=${this.keyword.block}&isUse=${this.empty}&isRecommend=
   background-color: #fff;
   margin-top: 0px;
   margin-right: 0px;
-  margin-bottom: 60px;
+  margin-bottom: 40px;
 }
 </style>

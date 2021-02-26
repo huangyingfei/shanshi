@@ -92,33 +92,45 @@
           prop="dishName"
           label="菜品名称"
           align="center"
+          width="200"
+          show-overflow-tooltip
         ></el-table-column>
         <el-table-column
           prop="dishTypeName"
           label="分类"
           align="center"
+          width="100"
         ></el-table-column>
         <el-table-column
           prop="orgName"
           label="创建机构"
           align="center"
+          width="130"
         ></el-table-column>
         <el-table-column
           prop="createName"
           label="提交人"
           align="center"
+          width="130"
         ></el-table-column>
         <el-table-column
           prop="mobile"
           label="联系电话"
           align="center"
+          width="120"
         ></el-table-column>
         <el-table-column
           prop="createTime"
           label="提交时间"
           align="center"
+          width="180"
         ></el-table-column>
-        <el-table-column prop="updateTime" label="分享时间" align="center">
+        <el-table-column
+          width="180"
+          prop="updateTime"
+          label="分享时间"
+          align="center"
+        >
           <template slot-scope="scope">
             <p v-if="scope.row.updateTime == null">
               {{ scope.row.createTime }}
@@ -126,7 +138,12 @@
             <p v-else>{{ scope.row.updateTime }}</p>
           </template>
         </el-table-column>
-        <el-table-column label="审核状态" align="center">
+        <el-table-column
+          width="120"
+          fixed="right"
+          label="审核状态"
+          align="center"
+        >
           <template slot-scope="scope">
             <el-tag type="danger" v-if="scope.row.status == 0">待审核</el-tag>
             <el-tag v-else-if="scope.row.status == 3">无需审核</el-tag>
@@ -139,7 +156,7 @@
           </template>
         </el-table-column>
         <!--操作格-->
-        <el-table-column label="操作" align="center">
+        <el-table-column fixed="right" label="操作" align="center" width="100">
           <template slot-scope="scope">
             <el-button
               v-if="scope.row.status !== 0"
@@ -177,7 +194,7 @@
     <!-- 审核食材 查看 -->
     <el-dialog
       style="margin-top: 10px!important;"
-      width="1000px"
+      width="940px"
       title="审核菜品"
       append-to-body
       :visible.sync="seekeys"
@@ -642,7 +659,7 @@
     </el-dialog>
     <el-dialog
       title="查看"
-      width="1000px"
+      width="940px"
       append-to-body
       :visible.sync="dumpdbtostream"
       :close-on-click-modal="false"
@@ -2044,13 +2061,13 @@ export default {
   /* background-color: red; */
 }
 .tmp_rcheck {
-  width: 1100px;
+  width: 930px;
   height: 400px;
   overflow-y: auto;
   overflow-x: hidden;
 }
 .seecr {
-  width: 400px;
+  width: 310px;
   height: 30px;
   line-height: 30px;
   /* background-color: yellow; */
@@ -2108,7 +2125,7 @@ export default {
   background-color: #fff;
   margin-top: 0px;
   margin-right: 0px;
-  margin-bottom: 60px;
+  margin-bottom: 30px;
 }
 .rolling {
   width: 100%;
