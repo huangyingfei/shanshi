@@ -5,7 +5,9 @@
         <recipes-report> </recipes-report>
       </el-tab-pane>
       <el-tab-pane label="营养统计" name="second">
-        <nutrition></nutrition>
+        <div v-if="activeName == 'second'">
+          <nutrition></nutrition>
+        </div>
       </el-tab-pane>
     </el-tabs>
   </basic-container>

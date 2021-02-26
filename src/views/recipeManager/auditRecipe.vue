@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="matchingadd">
     <basic-container>
       <avue-crud
         :data="data"
@@ -75,7 +75,8 @@ export default {
             label: "食谱名称",
             prop: "recipeName",
             search: true,
-            width: 200
+            width: 200,
+            overHidden: true
           },
           {
             label: "食谱周期",
@@ -204,4 +205,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.matchingadd .avue-crud__menu {
+  display: none;
+}
+</style>
