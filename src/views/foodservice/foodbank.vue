@@ -324,7 +324,7 @@ export default {
       before: [
         {
           value: "",
-          label: "全部"
+          label: "全部季节"
         },
         {
           value: "1",
@@ -708,7 +708,7 @@ export default {
   margin-left: 10px;
 }
 .country2 {
-  width: 90px;
+  width: 105px;
   float: left;
   margin-left: 10px;
 }

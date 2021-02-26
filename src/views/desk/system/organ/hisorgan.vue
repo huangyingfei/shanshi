@@ -1,5 +1,5 @@
 <template>
-  <basic-container>
+  <basic-container class="hisorgan">
 
     <avue-crud
       :option="option"
@@ -155,7 +155,7 @@ export default {
         indexLabel:'序号',
         selection: false,
         viewBtn: true,
-        menuWidth: 100,
+        menuWidth: 150,
         addBtn:false,
         delBtn:false,
         editBtn:false,
@@ -944,6 +944,11 @@ export default {
   },
 };
 </script>
+<style>
+  .hisorgan .avue-crud__menu{
+   display: none;
+  }
+</style>
 
 
 

@@ -562,14 +562,13 @@
           v-loading="loadFlag1"
           :data="tableData"
           border
-          style="width: 100%"
           :height="tableHeight"
           ref="table"
         >
           <el-table-column label="序号" type="index" width="50" align="center">
           </el-table-column>
           <el-table-column
-            width="150"
+            width="100"
             prop="jobNumber"
             label="工号"
             align="center"
@@ -577,9 +576,17 @@
           <el-table-column
             prop="name"
             label="姓名"
+            width="200"
+            show-overflow-tooltip
             align="center"
           ></el-table-column>
-          <el-table-column prop="sex" label="性别" align="center">
+          <el-table-column
+            prop="sex"
+            label="性别"
+            align="center"
+            width="80"
+            show-overflow-tooltip
+          >
             <template slot-scope="scope">
               <p v-if="scope.row.sex == 1">男</p>
               <p v-else-if="scope.row.sex == 2">
@@ -588,7 +595,8 @@
             </template>
           </el-table-column>
           <el-table-column
-            width="120"
+            width="200"
+            show-overflow-tooltip
             prop="birthDate"
             label="出生日期"
             align="center"
@@ -600,12 +608,13 @@
             </template>
           </el-table-column>
           <el-table-column
-            width="150"
+            width="200"
             prop="mobile"
             label="手机号"
             align="center"
           ></el-table-column>
           <el-table-column
+            width="100"
             prop="post"
             label="职务"
             align="center"
@@ -615,15 +624,21 @@
             prop="className"
             label="所在班级"
             align="center"
+            show-overflow-tooltip
           ></el-table-column>
 
           <el-table-column
-            width="150"
+            width="200"
             prop="entryTime"
             label="入职日期"
             align="center"
           ></el-table-column>
-          <el-table-column prop="stutas" label="当前状态" align="center">
+          <el-table-column
+            width="100"
+            prop="stutas"
+            label="当前状态"
+            align="center"
+          >
             <template slot-scope="scope">
               <p v-if="scope.row.stutas == 1">在职</p>
               <p v-else-if="scope.row.stutas == 2">

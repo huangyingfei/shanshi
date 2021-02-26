@@ -157,7 +157,7 @@
           prop="createTime"
           label="分享时间"
           align="center"
-          width="180"
+          width="200"
         ></el-table-column>
         <el-table-column label="操作" width="200" align="center">
           <template slot-scope="scope">

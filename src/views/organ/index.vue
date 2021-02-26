@@ -229,13 +229,14 @@ export default {
         },
         tooltip: {}, //提示层
         legend: {
-          data: ["name1"]
+          data: ["实际比列", "要求比例"],
+          bottom: 0
         },
         radar: {
           name: {
             textStyle: {
-              color: "#fff", //字体颜色
-              backgroundColor: "#999", //背景色
+              color: "#000", //字体颜色
+              // backgroundColor: "#999", //背景色
               borderRadius: 3, //圆角
               padding: [3, 5] //padding
             }
@@ -286,11 +287,17 @@ export default {
             data: [
               {
                 value: this.greater,
-                name: "实际比列"
+                name: "实际比列",
+                areaStyle: {
+                  opacity: 0.4
+                }
               },
               {
                 value: [80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80],
-                name: "要求比例"
+                name: "要求比例",
+                areaStyle: {
+                  opacity: 0.4
+                }
               }
             ]
           }
@@ -308,13 +315,15 @@ export default {
         },
         tooltip: {}, //提示层
         legend: {
-          data: ["name1"]
+          data: ["实际用量", "推荐最小量", "推荐最大量"],
+          left: "center",
+          bottom: 0
         },
         radar: {
           name: {
             textStyle: {
-              color: "#fff", //字体颜色
-              backgroundColor: "#999", //背景色
+              color: "#000", //字体颜色
+              // backgroundColor: "#999", //背景色
               borderRadius: 3, //圆角
               padding: [3, 5] //padding
             }
@@ -362,15 +371,27 @@ export default {
             data: [
               {
                 value: this.today,
-                name: "实际用量"
+                name: "实际用量",
+                areaStyle: {
+                  opacity: 0.4
+                },
+                z: 1
               },
               {
                 value: [100, 100, 100, 100, 100, 100, 100, 100],
-                name: "推荐最小量"
+                name: "推荐最小量",
+                areaStyle: {
+                  opacity: 0.4
+                },
+                z: 2
               },
               {
                 value: [300, 300, 300, 300, 300, 300, 300, 300],
-                name: "推荐最大量"
+                name: "推荐最大量",
+                areaStyle: {
+                  opacity: 0.4
+                },
+                z: 3
               }
             ]
           }

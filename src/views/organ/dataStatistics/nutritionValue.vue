@@ -126,12 +126,15 @@ export default {
           textAlign: "left"
         },
         tooltip: {}, //提示层
-
+        legend: {
+          data: ["实际比列", "要求比例"],
+          bottom: 0
+        },
         radar: {
           name: {
             textStyle: {
-              color: "#fff", //字体颜色
-              backgroundColor: "#999", //背景色
+              color: "#000", //字体颜色
+              // backgroundColor: "#999", //背景色
               borderRadius: 3, //圆角
               padding: [3, 5] //padding
             }
@@ -185,11 +188,17 @@ export default {
             data: [
               {
                 value: this.nutrients,
-                name: "儿童每人每日营养素提取（DRls）"
+                name: "实际比列",
+                areaStyle: {
+                  opacity: 0.4
+                }
               },
               {
                 value: [80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80],
-                name: "要求比例"
+                name: "要求比例",
+                areaStyle: {
+                  opacity: 0.4
+                }
               }
             ]
           }
@@ -209,7 +218,9 @@ export default {
         },
         tooltip: {}, //提示层
         legend: {
-          data: ["name1"]
+          data: ["实际用量", "推荐最小量", "推荐最大量"],
+          left: "center",
+          bottom: 0
         },
         radar: {
           name: {
@@ -257,12 +268,32 @@ export default {
             data: [
               {
                 value: this.binge,
-                name: "儿童每人每日进食量"
+                name: "实际用量",
+                areaStyle: {
+                  opacity: 0.4
+                }
               },
               {
-                value: [80, 80, 80, 80, 80, 80, 80, 80],
-                name: "推荐最大量"
+                value: [100, 100, 100, 100, 100, 100, 100, 100],
+                name: "推荐最小量",
+                areaStyle: {
+                  opacity: 0.4
+                }
+              },
+              {
+                value: [300, 300, 300, 300, 300, 300, 300, 300],
+                name: "推荐最大量",
+                areaStyle: {
+                  opacity: 0.4
+                }
               }
+              //               {
+              //                 value: [80, 80, 80, 80, 80, 80, 80, 80],
+              //                 name: "推荐最大量",  areaStyle: {
+              //                   opacity: 0.4
+              //                 },
+              //
+              //               }
             ]
           }
         ]
@@ -294,6 +325,6 @@ export default {
 .students1 {
   width: 100%;
   height: 500px;
-  margin-bottom: 50px;
+  margin-bottom: 100px;
 }
 </style>

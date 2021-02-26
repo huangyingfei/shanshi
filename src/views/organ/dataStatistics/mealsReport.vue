@@ -18,7 +18,7 @@ export default {
   components: { RecipesReport, nutrition },
   data() {
     return {
-      activeName: "second"
+      activeName: "first"
     };
   },
   methods: {
