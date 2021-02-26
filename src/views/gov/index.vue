@@ -543,13 +543,14 @@ export default {
     //查看食谱的菜谱
     protocol(tenantId) {
       this.dialogVisible = true;
+      console.log(this.goverRecipeTotal);
       this.axios({
         url: "api/blade-food/recipe/goverRecipeDetail",
         method: "get",
         params: {
           tenantId: tenantId,
-          startTime: this.goverRecipeTotal.WeekInfo.startTime,
-          endTime: this.goverRecipeTotal.WeekInfo.endTime,
+          startTime: this.govForm.startTime,
+          endTime: this.govForm.endTime,
         },
       }).then((res) => {
         this.recipeData = res.data.data;
