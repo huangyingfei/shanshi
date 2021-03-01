@@ -7,6 +7,7 @@
           border
           style="width: 100%"
           class="recipeTableWeekData"
+          v-loading="isRecipeData"
         >
           <el-table-column prop="mealsType" label="" width="100px">
           </el-table-column>
@@ -34,6 +35,9 @@ export default {
   props: {
     recipeData: {
       type: Object,
+    },
+    isRecipeData: {
+      type: Boolean,
     },
   },
   data() {

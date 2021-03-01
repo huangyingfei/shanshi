@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="matchingadd">
     <basic-container>
       <avue-crud
         :data="data"
@@ -55,7 +55,7 @@ export default {
       query: {},
       page: {
         pageSize: 20,
-        pagerCount: 5,
+        pagerCount: 5
       },
       option: {
         index: true,
@@ -76,69 +76,73 @@ export default {
             prop: "recipeName",
             search: true,
             width: 200,
+            overHidden: true
           },
           {
             label: "食谱周期",
-            prop: "recipeDay",
+            prop: "recipeDay"
           },
           {
             label: "创建机构",
             prop: "orgName",
             search: true,
+            width: 200
           },
           {
             label: "提交人",
             prop: "createName",
-            search: true,
+            search: true
           },
           {
             label: "联系电话",
             prop: "mobile",
             search: true,
+            width: 200
           },
           {
             label: "提交时间",
             prop: "createTime",
             type: "date",
-            width: 140,
+            width: 200,
             format: "yyyy-MM-dd hh:mm:ss",
-            valueFormat: "yyyy-MM-dd hh:mm:ss",
+            valueFormat: "yyyy-MM-dd hh:mm:ss"
           },
           {
             label: "营养评分",
-            prop: "nutritionScore",
+            prop: "score",
+            width: 150
           },
           {
             label: "审核状态",
             prop: "status",
             search: true,
             type: "select",
-
+            width: 150,
             slot: true,
             dicData: [
               {
-                label: "全部",
+                label: "全部"
               },
               {
                 label: "待审核",
-                value: 0,
+                value: 0
               },
               {
                 label: "审核通过",
-                value: 1,
+                value: 1
               },
               {
                 label: "审核不通过",
-                value: 2,
+                value: 2
               },
               {
                 label: "无需审核",
-                value: 3,
-              },
-            ],
-          },
-        ],
-      },
+                value: 3
+              }
+            ]
+          }
+        ]
+      }
     };
   },
   methods: {
@@ -148,8 +152,8 @@ export default {
         query: {
           userid: row.id,
           tenantId: row.tenantId,
-          doType: doType,
-        },
+          doType: doType
+        }
       });
     },
     searchReset() {
@@ -189,17 +193,20 @@ export default {
     onLoad() {
       this.loading = true;
       getList(this.page.currentPage, this.page.pageSize, this.query).then(
-        (res) => {
+        res => {
           const data = res.data.data;
           this.page.total = data.total;
           this.data = data.records;
           this.loading = false;
         }
       );
-    },
-  },
+    }
+  }
 };
 </script>
 
-<style >
+<style>
+.matchingadd .avue-crud__menu {
+  display: none;
+}
 </style>

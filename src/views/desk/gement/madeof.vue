@@ -99,34 +99,37 @@
           prop="dishTypeName"
           label="分类"
           align="center"
-          width="100"
+          width="150"
+          show-overflow-tooltip
         ></el-table-column>
         <el-table-column
           prop="orgName"
           label="创建机构"
           align="center"
-          width="130"
+          width="150"
+          show-overflow-tooltip
         ></el-table-column>
         <el-table-column
           prop="createName"
           label="提交人"
           align="center"
           width="130"
+          show-overflow-tooltip
         ></el-table-column>
         <el-table-column
           prop="mobile"
           label="联系电话"
           align="center"
-          width="120"
+          width="150"
         ></el-table-column>
         <el-table-column
           prop="createTime"
           label="提交时间"
           align="center"
-          width="180"
+          width="200"
         ></el-table-column>
         <el-table-column
-          width="180"
+          width="200"
           prop="updateTime"
           label="分享时间"
           align="center"
@@ -194,7 +197,7 @@
     <!-- 审核食材 查看 -->
     <el-dialog
       style="margin-top: 10px!important;"
-      width="940px"
+      width="850px"
       title="审核菜品"
       append-to-body
       :visible.sync="seekeys"
@@ -375,7 +378,7 @@
               border
               v-loading="loadFlag1"
               show-summary
-              style="width: 70%"
+              style="width: 95%"
               :summary-method="getSummaries"
             >
               <el-table-column
@@ -526,7 +529,7 @@
           <div class="saveas">
             <el-table
               :data="mailto"
-              style="width: 70%;margin-bottom: 20px;"
+              style="width: 80%;margin-bottom: 20px;"
               row-key="id"
               border
               max-height="400"
@@ -659,7 +662,7 @@
     </el-dialog>
     <el-dialog
       title="查看"
-      width="940px"
+      width="850px"
       append-to-body
       :visible.sync="dumpdbtostream"
       :close-on-click-modal="false"
@@ -840,7 +843,7 @@
               border
               v-loading="loadFlag1"
               show-summary
-              style="width: 70%"
+              style="width: 90%"
               :summary-method="getSummaries"
             >
               <el-table-column
@@ -991,7 +994,7 @@
             <el-table
               :data="mailto"
               max-height="400"
-              style="width: 70%;margin-bottom: 20px;"
+              style="width: 80%;margin-bottom: 20px;"
               row-key="id"
               border
               :default-expand-all="true"
@@ -2061,20 +2064,21 @@ export default {
   /* background-color: red; */
 }
 .tmp_rcheck {
-  width: 930px;
+  width: 830px;
+
   height: 400px;
   overflow-y: auto;
   overflow-x: hidden;
 }
 .seecr {
-  width: 310px;
+  width: 300px;
   height: 30px;
   line-height: 30px;
   /* background-color: yellow; */
   float: left;
 }
 .seecr1 {
-  width: 300px;
+  width: 200px;
   height: 30px;
   line-height: 30px;
   /* background-color: yellow; */

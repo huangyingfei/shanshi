@@ -351,7 +351,10 @@
           :before-close="handleClose"
           :append-to-body="true"
         >
-          <gover-recipe-detail :recipeData="recipeData" />
+          <gover-recipe-detail
+            :recipeData="recipeData"
+            :isRecipeData="isRecipeData"
+          />
         </el-dialog>
       </div>
       <div style="height: 20px; display: block"></div>
@@ -391,6 +394,7 @@ export default {
     return {
       isDish: false, //最受欢迎菜品升降序
       isRecipe: false, //食谱综合评分升降序
+      isRecipeData: true, //弹出框数据查询是否完成
       activeName: "first",
       tenantIdOptions: [],
       areaId: [],
@@ -543,16 +547,19 @@ export default {
     //查看食谱的菜谱
     protocol(tenantId) {
       this.dialogVisible = true;
+      this.isRecipeData = true;
+      console.log(this.goverRecipeTotal);
       this.axios({
         url: "api/blade-food/recipe/goverRecipeDetail",
         method: "get",
         params: {
           tenantId: tenantId,
-          startTime: this.goverRecipeTotal.WeekInfo.startTime,
-          endTime: this.goverRecipeTotal.WeekInfo.endTime,
+          startTime: this.govForm.startTime,
+          endTime: this.govForm.endTime,
         },
       }).then((res) => {
         this.recipeData = res.data.data;
+        this.isRecipeData = false;
       });
     },
     //获取区域选择内容

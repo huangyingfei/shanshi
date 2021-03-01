@@ -160,20 +160,28 @@
               >
               </el-table-column>
 
-              <el-table-column prop="studentName" label="姓名" align="center">
+              <el-table-column
+                prop="studentName"
+                label="姓名"
+                align="center"
+                width="150"
+                show-overflow-tooltip
+              >
               </el-table-column>
               <el-table-column
-                width="100"
+                width="150"
                 prop="className"
                 label="班级"
                 align="center"
+                show-overflow-tooltip
               >
               </el-table-column>
               <el-table-column
                 prop="startTimeStr"
-                width="160"
+                width="200"
                 label="请假开始日期"
                 align="center"
+                show-overflow-tooltip
               >
                 <!-- <template slot-scope="scope">
                   <span>{{ scope.row.startTime }}</span>
@@ -182,16 +190,22 @@
               </el-table-column>
               <el-table-column
                 prop="endTimeStr"
-                width="160"
+                width="200"
                 label="请假结束日期"
                 align="center"
+                show-overflow-tooltip
               >
                 <!-- <template slot-scope="scope">
                   <span>{{ scope.row.endTime }}</span>
                   <span>{{ scope.row.endStr }}</span>
                 </template> -->
               </el-table-column>
-              <el-table-column prop="leaveType" label="请假类型" align="center">
+              <el-table-column
+                prop="leaveType"
+                width="100"
+                label="请假类型"
+                align="center"
+              >
                 <!-- <template slot-scope="scope">
                   <p v-if="scope.row.leaveType == 1">事假</p>
                   <p v-else-if="scope.row.leaveType == 2">
@@ -199,29 +213,43 @@
                   </p>
                 </template> -->
               </el-table-column>
-              <el-table-column prop="daysOff" label="请假天数" align="center">
+              <el-table-column
+                prop="daysOff"
+                width="100"
+                label="请假天数"
+                align="center"
+              >
               </el-table-column>
               <el-table-column
-                width="100"
+                width="200"
                 prop="reason"
                 label="请假原因"
                 align="center"
+                show-overflow-tooltip
               >
               </el-table-column>
               <el-table-column
-                width="150"
+                width="200"
                 prop="applyTime"
                 label="申请日期"
                 align="center"
+                show-overflow-tooltip
               >
               </el-table-column>
-              <el-table-column prop="createBy" label="创建人" align="center">
+              <el-table-column
+                width="100"
+                prop="createBy"
+                label="创建人"
+                align="center"
+                show-overflow-tooltip
+              >
               </el-table-column>
               <el-table-column
-                width="150"
+                width="200"
                 prop="createTime"
                 label="创建日期"
                 align="center"
+                show-overflow-tooltip
               >
               </el-table-column>
               <el-table-column

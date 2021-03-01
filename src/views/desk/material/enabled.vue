@@ -85,6 +85,7 @@
         <el-table-column
           type="index"
           label="序号"
+          width="60"
           align="center"
         ></el-table-column>
         <el-table-column
@@ -98,7 +99,8 @@
           prop="foodTypeName"
           label="分类"
           align="center"
-          width="110"
+          width="130"
+          show-overflow-tooltip
         ></el-table-column>
         <el-table-column
           prop="orgName"
@@ -112,21 +114,22 @@
           label="提交人"
           width="100"
           align="center"
+          show-overflow-tooltip
         ></el-table-column>
         <el-table-column
           prop="mobile"
           label="联系电话"
-          width="120"
+          width="150"
           align="center"
         ></el-table-column>
         <el-table-column
           prop="createTime"
           label="提交时间"
           align="center"
-          width="180"
+          width="200"
         ></el-table-column>
         <el-table-column
-          width="180"
+          width="200"
           prop="updateTime"
           label="分享时间"
           align="center"
@@ -138,7 +141,12 @@
             <p v-else>{{ scope.row.updateTime }}</p>
           </template>
         </el-table-column>
-        <el-table-column fixed="right" label="审核状态" align="center">
+        <el-table-column
+          fixed="right"
+          label="审核状态"
+          align="center"
+          width="120"
+        >
           <template slot-scope="scope">
             <el-tag type="danger" v-if="scope.row.status == 0">待审核</el-tag>
             <el-tag v-else-if="scope.row.status == 3">无需审核</el-tag>

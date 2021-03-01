@@ -82,8 +82,9 @@
         :data="modeforms"
         border
         :element-loading-text="page_data.loadTxt"
-        style="width: 100%"
         v-loading="loadFlag"
+        :height="tableHeight"
+        ref="table"
         empty-text="没有数据~"
       >
         <el-table-column
@@ -96,37 +97,46 @@
           prop="recipeName"
           label="食谱名称"
           align="center"
+          width="250"
+          show-overflow-tooltip
         ></el-table-column>
         <el-table-column
           prop="recipeDay"
           label="食谱周期"
           align="center"
+          width="80"
         ></el-table-column>
 
         <el-table-column
           prop="avgAge"
           label="平均年龄"
           align="center"
+          width="80"
         ></el-table-column>
 
         <el-table-column
           prop="proportion"
           label="男女比例"
           align="center"
+          width="100"
         ></el-table-column>
 
         <el-table-column
           prop="orgName"
           label="创建人"
           align="center"
+          width="100"
+          show-overflow-tooltip
         ></el-table-column>
 
         <el-table-column
           prop="createTime"
           label="创建时间"
           align="center"
+          width="200"
+          show-overflow-tooltip
         ></el-table-column>
-        <el-table-column label="操作" width="200" align="center">
+        <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="seecol(scope.row)"
               >编辑</el-button
@@ -187,6 +197,7 @@
 export default {
   data() {
     return {
+      tableHeight: 50,
       loadFlag: false, //加载flag
       page_data: {
         loadTxt: "请求列表中"
@@ -257,6 +268,20 @@ export default {
   },
   beforeMount() {
     this.generator();
+  },
+  mounted: function() {
+    this.$nextTick(function() {
+      this.tableHeight =
+        window.innerHeight - this.$refs.table.$el.offsetTop - 140;
+
+      // 监听窗口大小变化
+      let self = this;
+      window.onresize = function() {
+        self.tableHeight =
+          window.innerHeight - self.$refs.table.$el.offsetTop - 140;
+      };
+    });
+    //this.$refs.table.$el.offsetTop：表格距离浏览器的高度 //50表示你想要调整的表格距离底部的高度（你可以自己随意调整），因为我们一般都有放分页组件的，所以需要给它留一个高度
   },
   methods: {
     //编辑
@@ -402,9 +427,9 @@ export default {
 </script>
 
 <style scoped>
-.avue-view {
+/* .avue-view {
   padding: 0 0px !important;
-}
+} */
 .unsaved {
   width: 101%;
   /* height: 700px; */
@@ -429,6 +454,6 @@ export default {
 .inform {
   width: 100%;
   margin-top: 30px;
-  margin-bottom: 50px;
+  margin-bottom: 30px;
 }
 </style>

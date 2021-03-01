@@ -90,25 +90,36 @@
             prop="dishName"
             label="菜品名称"
             align="center"
+            width="200"
+            show-overflow-tooltip
           ></el-table-column>
           <el-table-column
             prop="dishTypeName"
             label="分类"
             width="100"
             align="center"
+            show-overflow-tooltip
           ></el-table-column>
           <el-table-column
             prop="createName"
             label="提交人"
             align="center"
+            width="150"
+            show-overflow-tooltip
           ></el-table-column>
 
           <el-table-column
             prop="createTime"
             label="提交时间"
             align="center"
+            width="200"
           ></el-table-column>
-          <el-table-column prop="updateTime" label="分享时间" align="center">
+          <el-table-column
+            prop="updateTime"
+            width="200"
+            label="分享时间"
+            align="center"
+          >
             <template slot-scope="scope">
               <p v-if="scope.row.updateTime == null">
                 {{ scope.row.createTime }}
@@ -116,7 +127,7 @@
               <p v-else>{{ scope.row.updateTime }}</p>
             </template>
           </el-table-column>
-          <el-table-column label="审核状态" align="center">
+          <el-table-column label="审核状态" align="center" width="120">
             <template slot-scope="scope">
               <el-tag type="danger" v-if="scope.row.status == 0">待审核</el-tag>
               <el-tag v-else-if="scope.row.status == 3">无需审核</el-tag>
