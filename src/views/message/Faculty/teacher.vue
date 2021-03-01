@@ -268,9 +268,9 @@
                 </div>
 
                 <ul :class="[topShow ? 'foodWeekListHis2' : 'foodWeekListHis1']"  ref="boxScroll2" class="foodWeekListHis" @mouseout="HidenFoodTips($event)">
-                  <li @mouseover="ShowFood($event,f)" @mouseout="HidenFoodTips($event)" v-for="f in peopleMealListLeft"
+                  <li v-for="f in peopleMealListLeft"
                       :key="f.id" style="font-size: 14px">
-                    <span>{{f.recipeName}}</span> <img style="width: 20px" @click="mealLoad(f,f.recipeName)"
+                    <span @mouseover="ShowFood($event,f)" @mouseout="HidenFoodTips($event)" >{{f.recipeName}}</span> <img style="width: 20px" @click="mealLoad(f,f.recipeName)"
                                                        src="/img/arrow.png" alt/>
                   </li>
                   <li v-show="recipefinishedPri" style="text-align: center">无更多数据</li>
@@ -399,7 +399,7 @@
           </el-card>
         </el-col>
         <el-col :span="19">
-          <div class="foodPanel" @mouseout="HidenFoodTips($event)" @mouseover="HidenFoodTips($event)">
+          <div   v-loading="loading"  element-loading-text="您的食谱正在配置中，请耐心等待" class="foodPanel" @mouseout="HidenFoodTips($event)" @mouseover="HidenFoodTips($event)">
             <foods-week
               @childfn="parentFn"
               @jundgeFood="jundgeFood"
@@ -481,7 +481,7 @@
         topShow: true,
         recipefinishedPri:false,
         currentPri:1,
-        sizePri:10,
+        sizePri:20,
         tableData: [],
         jundgeallergy: false,//过敏
         foodRadio: '1',
@@ -555,6 +555,7 @@
           },
         ],
         WeekInfo: {
+          loading:false,
           shareTell: false,
           collection: false,
           sharePlant: false,
@@ -916,6 +917,7 @@
             cancelButtonText: "取消",
             type: "warning"
           }).then(() => {
+            that.loading=true;
             that.inserMeal(f, that)
           })
         } else {
@@ -939,6 +941,7 @@
         let recipeCycles = data.recipeCycles;
         setTimeout(function () {
           that.insertDishesData("datas", recipeCycles, that);
+          that.loading=false;
         }, 1000);
           }
         })
@@ -992,6 +995,7 @@
       //修改的时候加载
       //根据id查询菜品详情
       mealDetail(id, that) {//根据id查询菜品详情
+        that.loading=true;
         detail(id).then(res => {
           if (res.data.success) {
             let data = res.data.data;
@@ -1010,6 +1014,7 @@
             // that.WeekInfo.sharePlant=data.isPub==0?true:false
             setTimeout(function () {
               that.dishesData("datas", recipeCycles, that);
+              that.loading=false;
             }, 1000);
           }
         })
@@ -2043,6 +2048,12 @@
     height: calc(100vh - 324px);
   }
 
+  .meals .box-car1 {
+    border: 1px solid #ebebeb !important;
+    border-radius: 3px !important;
+    padding: 0px;
+    height: calc(100vh - 220px);
+  }
   .meals .el-card__body {
     padding: 0px !important;
   }
@@ -2061,15 +2072,15 @@
     margin-bottom: 1px;
   }
   .meals .foodWeekListHis1 {
-    height: 330px;
+    height: calc(100vh - 380px);
   }
+
   .meals .foodWeekListHis2 {
-    height: 230px;
+    height: calc(100vh - 480px);
   }
   .meals .foodWeekListHis {
     padding: 0 0 0 10px;
     overflow-y: scroll;
-    max-height: 280px;
   }
 
   .meals .foodWeekListHis li {

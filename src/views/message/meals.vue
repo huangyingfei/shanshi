@@ -343,10 +343,10 @@
                     v-for="f in mealListLeft"
                     :key="f.id"
                     style="font-size: 14px"
-                    @mouseover="ShowFood($event, f)"
-                    @mouseout="HidenFoodTips($event)"
+
                   >
-                    <span>{{ f.recipeName }}</span>
+                    <span  @mouseover="ShowFood($event, f)"
+                           @mouseout="HidenFoodTips($event)">{{ f.recipeName }}</span>
                     <img
                       style="width: 20px"
                       @click="mealLoad(f, f.recipeName)"
@@ -419,11 +419,11 @@
                   <li
                     v-for="f in peopleMealListLeft"
                     :key="f.id"
-                    @mouseover="ShowFood($event, f)"
-                    @mouseout="HidenFoodTips($event)"
+
                     style="font-size: 14px"
                   >
-                    <span>{{ f.recipeName }}</span>
+                    <span  @mouseover="ShowFood($event, f)"
+                           @mouseout="HidenFoodTips($event)">{{ f.recipeName }}</span>
                     <img
                       style="width: 20px"
                       @click="mealLoad(f, f.recipeName)"
@@ -605,8 +605,8 @@
           </el-card>
         </el-col>
         <el-col :span="19">
-          <div
-            class="foodPanel"
+          <div   v-loading="loading"  element-loading-text="您的食谱正在配置中，请耐心等待"
+                 class="foodPanel"
             @mouseout="HidenFoodTips($event)"
             @mouseover="HidenFoodTips($event)"
           >
@@ -916,15 +916,16 @@ export default {
   data() {
     const data = [];
     return {
+      loading:false,
       topShow: true,
       tableData: [],
       jundgeallergy: false, //过敏
       foodRadio: "1",
       isUse: undefined,
       currentPub: 1,
-      sizePub: 10,
+      sizePub: 20,
       currentPri: 1,
-      sizePri: 10,
+      sizePri: 20,
       belongRegion: undefined,
       seasonl: undefined,
       belongRegionOption: [],
@@ -1267,6 +1268,9 @@ export default {
         boxClientHeight,
         boxScrollHeight - (boxScrollTop + boxClientHeight)
       );
+      console.log(boxScrollHeight)
+      console.log(boxScrollTop)
+      console.log(boxClientHeight)
       if (boxScrollHeight - (boxScrollTop + boxClientHeight) < 10) {
         this.ScrollUp();
       }
@@ -1499,6 +1503,7 @@ export default {
           cancelButtonText: "取消",
           type: "warning",
         }).then(() => {
+          that.loading=true;
           that.inserMeal(f, that);
         });
       } else {
@@ -1526,6 +1531,7 @@ export default {
           let recipeCycles = data.recipeCycles;
           setTimeout(function () {
             that.insertDishesData("datas", recipeCycles, that);
+            that.loading=false;
           }, 1000);
         }
       });
@@ -1592,6 +1598,7 @@ export default {
     //修改的时候加载
     //根据id查询菜品详情
     mealDetail(id, that) {
+      that.loading=true;
       detail(id).then((res) => {
         if (res.data.success) {
           let data = res.data.data;
@@ -1619,6 +1626,7 @@ export default {
           setTimeout(function () {
             that.dishesData("datas", recipeCycles, that);
             that.$refs.child.getFoodScore();
+            that.loading=false;
           }, 1000);
         }
       });
@@ -2968,10 +2976,10 @@ export default {
 }
 
 .meals .foodWeekListHis1 {
-  height: 330px;
+  height: calc(100vh - 400px);
 }
 .meals .foodWeekListHis2 {
-  height: 230px;
+  height: calc(100vh - 500px);
 }
 
 .meals .foodWeekListHis li {

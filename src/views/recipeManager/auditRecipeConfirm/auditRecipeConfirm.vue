@@ -304,9 +304,9 @@
                 </div>
 
                 <ul ref="boxScroll1" class="foodWeekListHis" @mouseout="HidenFoodTips($event)">
-                  <li v-for="f in mealListLeft" :key="f.id" style="font-size: 14px" @mouseover="ShowFood($event,f)"
-                      @mouseout="HidenFoodTips($event)">
-                    <span>{{f.recipeName}}</span> <img style="width: 20px" @click="mealLoad(f,f.recipeName)"
+                  <li v-for="f in mealListLeft" :key="f.id" style="font-size: 14px" >
+                    <span @mouseover="ShowFood($event,f)"
+                          @mouseout="HidenFoodTips($event)">{{f.recipeName}}</span> <img style="width: 20px" @click="mealLoad(f,f.recipeName)"
                                                        src="/img/arrow.png" alt/>
                   </li>
                   <li v-show="recipefinishedPub" style="text-align: center">无更多数据</li>
@@ -478,7 +478,7 @@
           </el-card>
         </el-col>
         <el-col :span="19">
-          <div class="foodPanel" @mouseout="HidenFoodTips($event)" @mouseover="HidenFoodTips($event)"
+          <div  v-loading="loading"  element-loading-text="您的食谱正在配置中，请耐心等待"  class="foodPanel" @mouseout="HidenFoodTips($event)" @mouseover="HidenFoodTips($event)"
                style="height:50vh;overflow:auto">
             <foods-week
               @childfn="parentFn"
@@ -772,9 +772,9 @@
         recipefinishedPub: false,
         recipefinishedPri: false,
         currentPub: 1,
-        sizePub: 10,
+        sizePub: 20,
         currentPri: 1,
-        sizePri: 10,
+        sizePri: 20,
         visible: false,
         tenantId: '',
         auditButtonShow: false,
@@ -998,6 +998,7 @@
             max: 250,
           },
         ],
+        loading:false,
         foodMutuals: [],
         node: {
           nowCode: '101',
@@ -1454,6 +1455,7 @@
             cancelButtonText: "取消",
             type: "warning"
           }).then(() => {
+            that.loading=true;
             that.inserMeal(f, that)
           })
         } else {
@@ -1477,6 +1479,7 @@
             let recipeCycles = data.recipeCycles;
             setTimeout(function () {
               that.insertDishesData("datas", recipeCycles, that);
+              that.loading=false;
             }, 1000);
           }
         })
@@ -1531,6 +1534,7 @@
         that.allergy()
       },
       mealDetail(id, that) {//根据id查询菜品详情
+        that.loading=true;
         detail(id).then(res => {
           if (res.data.success) {
             let data = res.data.data;
@@ -1551,6 +1555,7 @@
             setTimeout(function () {
               that.dishesData("datas", recipeCycles, that);
               that.$refs.child.getFoodScore();
+              that.loading=false;
             }, 1000);
           }
         })

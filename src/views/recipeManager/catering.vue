@@ -49,125 +49,125 @@
       </div>
       <el-collapse-transition>
         <div v-show="topShow">
-      <el-row :gutter="20" style="padding: 0px; margin-top: 5px">
-        <el-col :span="24">
-          <el-form :gutter="10" :inline="true" :model="formInline">
-            <el-form-item>
-              <el-input
-                placeholder="请选择周期"
-                v-model="WeekInfo.WeekTtitle"
-                class="input-with-select"
-                style="width: 350px"
-                suffix-icon="el-icon-date"
-              >
-                <el-select
-                  style="width: 120px"
-                  v-model="WeekInfo.weekType"
-                  slot="prepend"
-                  value-key="请选择周期"
-                  placeholder="周长设置"
-                  @change="selectWeekType"
-                >
-                  <el-option label="5天一周" value="5"></el-option>
-                  <el-option label="6天一周" value="6"></el-option>
-                  <el-option label="7天一周" value="7"></el-option>
-                </el-select>
-              </el-input>
+          <el-row :gutter="20" style="padding: 0px; margin-top: 5px">
+            <el-col :span="24">
+              <el-form :gutter="10" :inline="true" :model="formInline">
+                <el-form-item>
+                  <el-input
+                    placeholder="请选择周期"
+                    v-model="WeekInfo.WeekTtitle"
+                    class="input-with-select"
+                    style="width: 350px"
+                    suffix-icon="el-icon-date"
+                  >
+                    <el-select
+                      style="width: 120px"
+                      v-model="WeekInfo.weekType"
+                      slot="prepend"
+                      value-key="请选择周期"
+                      placeholder="周长设置"
+                      @change="selectWeekType"
+                    >
+                      <el-option label="5天一周" value="5"></el-option>
+                      <el-option label="6天一周" value="6"></el-option>
+                      <el-option label="7天一周" value="7"></el-option>
+                    </el-select>
+                  </el-input>
 
-              <el-date-picker
-                v-model="WeekInfo.weekValue"
-                type="week"
-                format="yyyy-MM"
-                :picker-options="{ firstDayOfWeek: 1 }"
-                @focus="FixWeek"
-                placeholder="选择时间"
-                name="WeekSelect"
-                @change="SelectWeek1"
-                style="
+                  <el-date-picker
+                    v-model="WeekInfo.weekValue"
+                    type="week"
+                    format="yyyy-MM"
+                    :picker-options="{ firstDayOfWeek: 1 }"
+                    @focus="FixWeek"
+                    placeholder="选择时间"
+                    name="WeekSelect"
+                    @change="SelectWeek1"
+                    style="
                   width: 230px;
                   opacity: 0;
                   position: absolute;
                   left: 120px;
                   top: -10px;
                 "
-                clear-icon=""
-                ref="refweekSelect"
-              >
-              </el-date-picker>
-            </el-form-item>
-            <el-form-item label="餐谱名称">
-              <el-input
-                v-model="WeekInfo.Weekdetails"
-                style="width: 300px"
-              ></el-input>
-            </el-form-item>
-            <el-form-item label="手工输入人群平均年龄">
-              <el-input-number
-                size="small"
-                @change="selectAge"
-                style="width: 110px"
-                v-model="WeekInfo.startAge"
-                controls-position="right"
-                :min="1"
-                :max="100"
-              ></el-input-number>
-              <!-- - -->
-              <!--<el-input-number size="small"  @change="selectAge"  style="width: 110px" v-model="WeekInfo.endAge" controls-position="right"  :min="1" :max="100"></el-input-number>-->
-            </el-form-item>
-            <!--<el-form-item label="选择人群">-->
+                    clear-icon=""
+                    ref="refweekSelect"
+                  >
+                  </el-date-picker>
+                </el-form-item>
+                <el-form-item label="餐谱名称">
+                  <el-input
+                    v-model="WeekInfo.Weekdetails"
+                    style="width: 300px"
+                  ></el-input>
+                </el-form-item>
+                <el-form-item label="手工输入人群平均年龄">
+                  <el-input-number
+                    size="small"
+                    @change="selectAge"
+                    style="width: 110px"
+                    v-model="WeekInfo.startAge"
+                    controls-position="right"
+                    :min="1"
+                    :max="100"
+                  ></el-input-number>
+                  <!-- - -->
+                  <!--<el-input-number size="small"  @change="selectAge"  style="width: 110px" v-model="WeekInfo.endAge" controls-position="right"  :min="1" :max="100"></el-input-number>-->
+                </el-form-item>
+                <!--<el-form-item label="选择人群">-->
 
-            <!--<el-select v-model="WeekInfo.crowd" placeholder="选择人群"  class="crow-item" @change="mealsTypeById" >-->
-            <!--<el-option  v-for="(item ,index) in crowdData" :label="item.peopleName" :value="item.id" :key="item.id"></el-option>-->
-            <!--</el-select>-->
-            <!--</el-form-item>-->
-            <!-- <el-form-item style="  margin-left: 30px;">
-            <div class="scores">123123</div>
-          </el-form-item> -->
-          </el-form>
-        </el-col>
-      </el-row>
+                <!--<el-select v-model="WeekInfo.crowd" placeholder="选择人群"  class="crow-item" @change="mealsTypeById" >-->
+                <!--<el-option  v-for="(item ,index) in crowdData" :label="item.peopleName" :value="item.id" :key="item.id"></el-option>-->
+                <!--</el-select>-->
+                <!--</el-form-item>-->
+                <!-- <el-form-item style="  margin-left: 30px;">
+                <div class="scores">123123</div>
+              </el-form-item> -->
+              </el-form>
+            </el-col>
+          </el-row>
           <el-divider></el-divider>
 
 
-      <el-row :gutter="20">
-        <el-col :span="24">
-          <el-form :gutter="10" :inline="true" :model="WeekInfo">
-            <el-form-item label="餐点设置">
-              <el-checkbox-group
-                v-model="WeekInfo.foodCatalog"
-                @change="AppendFoodType"
-              >
-                <el-checkbox label="早餐" name="早餐"></el-checkbox>
-                <el-checkbox label="早点" name="早点"></el-checkbox>
-                <el-checkbox label="午餐" name="午餐"></el-checkbox>
-                <el-checkbox label="午点" name="午点"></el-checkbox>
-                <el-checkbox label="晚餐" name="晚餐"></el-checkbox>
-                <el-checkbox label="晚点" name="晚点"></el-checkbox>
-              </el-checkbox-group>
-            </el-form-item>
+          <el-row :gutter="20">
+            <el-col :span="24">
+              <el-form :gutter="10" :inline="true" :model="WeekInfo">
+                <el-form-item label="餐点设置">
+                  <el-checkbox-group
+                    v-model="WeekInfo.foodCatalog"
+                    @change="AppendFoodType"
+                  >
+                    <el-checkbox label="早餐" name="早餐"></el-checkbox>
+                    <el-checkbox label="早点" name="早点"></el-checkbox>
+                    <el-checkbox label="午餐" name="午餐"></el-checkbox>
+                    <el-checkbox label="午点" name="午点"></el-checkbox>
+                    <el-checkbox label="晚餐" name="晚餐"></el-checkbox>
+                    <el-checkbox label="晚点" name="晚点"></el-checkbox>
+                  </el-checkbox-group>
+                </el-form-item>
 
-            <el-form-item label="公开">
-              <el-switch
-                v-model="WeekInfo.isPub"
-              >
-              </el-switch>
-            </el-form-item>
-              <el-form-item  label="推荐">
-              <el-switch
-                v-model="WeekInfo.isRecommend"
-              >
-              </el-switch>
-              </el-form-item>
-            <el-form-item label="收藏">
-              <el-switch
-                v-model="WeekInfo.isUse"
-              >
-              </el-switch>
+                <el-form-item label="公开">
+                  <el-switch
+                    v-model="WeekInfo.isPub"
+                  >
+                  </el-switch>
+                </el-form-item>
+                <el-form-item label="推荐">
+                  <el-switch
+                    v-model="WeekInfo.isRecommend"
+                  >
+                  </el-switch>
+                </el-form-item>
+                <el-form-item label="收藏">
+                  <el-switch
+                    v-model="WeekInfo.isUse"
+                  >
+                  </el-switch>
 
-            </el-form-item>
-          </el-form>
-        </el-col>
-      </el-row>
+                </el-form-item>
+              </el-form>
+            </el-col>
+          </el-row>
           <el-divider></el-divider>
         </div>
       </el-collapse-transition>
@@ -262,17 +262,19 @@
               </el-button>
               <el-button type="text" @click="topShow = !topShow">{{
                 topShow ? "收起" : "展开"
-                }}</el-button>
+                }}
+              </el-button>
             </el-form-item>
           </el-form>
         </el-col>
       </el-row>
-      <el-row :gutter="20" style="padding: 0px">
-        <el-col :span="24">
-          <el-divider></el-divider>
-        </el-col>
-      </el-row>
-      <el-row :gutter="20" style="padding: 0px; margin-top: 0px">
+      <!--<el-row :gutter="20" style="padding: 0px">-->
+      <!--<el-col :span="24">-->
+      <!--<el-divider></el-divider>-->
+      <!--</el-col>-->
+      <!--</el-row>-->
+      <el-row :gutter="20" style="padding: 0px; margin-top: 0px" @mouseover="HidenFoodTips($event)"
+              @mouseout="HidenFoodTips($event)">
         <el-col :span="5">
           <el-card :class="[topShow ? 'box-car' : 'box-car1']" shadow="never">
             <div class="clearfix panel_head">
@@ -294,8 +296,8 @@
               </el-button-group>
             </div>
 
-            <div v-if="!showFoodList">
-              <div style="margin-top: 0px; padding: 5px">
+            <div v-if="!showFoodList" >
+              <div style="margin-top: -5px; padding: 5px">
                 <el-input
                   size="small"
                   placeholder="请输入食谱名称"
@@ -310,7 +312,7 @@
                   font-size: 10px;
                   margin: 0 10px;
                   display: flex;
-                  justify-content: space-between;
+                  justify-content: space-around;
                 "
               >
                 <el-link
@@ -349,16 +351,18 @@
               <div style="margin-top: 5px; margin-bottom: 2px">
                 <!--<el-divider></el-divider>-->
               </div>
-              <ul class="foodWeekListHis" ref="boxScroll1" @mouseout="HidenFoodTips($event)"  :class="[topShow ? 'foodWeekListHis2' : 'foodWeekListHis1']">
+              <ul class="foodWeekListHis"
+                  ref="boxScroll1"
+                  @mouseout="HidenFoodTips($event)"
+                  :class="[topShow ? 'foodWeekListHis2' : 'foodWeekListHis1']">
                 <li
                   v-for="f in mealListLeft"
                   :key="f.id"
-                  @mouseover="ShowFood($event,f)"
-                  @mouseout="HidenFoodTips($event)"
                   style="font-size: 14px"
                 >
                   <span
-
+                    @mouseover="ShowFood($event,f)"
+                    @mouseout="HidenFoodTips($event)"
                   >{{ f.recipeName }}</span
                   >
                   <img
@@ -478,7 +482,7 @@
           </el-card>
         </el-col>
         <el-col :span="19">
-          <div class="foodPanel" @mouseout="HidenFoodTips($event)" @mouseover="HidenFoodTips($event)">
+          <div    v-loading="loading"  element-loading-text="您的食谱正在配置中，请耐心等待"  class="foodPanel" @mouseout="HidenFoodTips($event)" @mouseover="HidenFoodTips($event)">
             <foods-week
               :foodCatalog="WeekInfo.foodCatalog"
               @childfn="parentFn"
@@ -516,9 +520,9 @@
             <p class="gnus" @click="tfractio">{{score}}<span class="gnus-fen" style="color: #dd6161">分</span></p>
           </div>
           <!--<div class="scores2">-->
-            <!--<p class="gnus-fen" style="color: #dd6161;margin-top: 35px"><span>离</span><span class="gnus-hege">合格</span>-->
-              <!--<br>-->
-              <!--<span class="gnus-fen" style="color: #dd6161">需提升{{(85-score).toFixed(2)}}分！</span></p>-->
+          <!--<p class="gnus-fen" style="color: #dd6161;margin-top: 35px"><span>离</span><span class="gnus-hege">合格</span>-->
+          <!--<br>-->
+          <!--<span class="gnus-fen" style="color: #dd6161">需提升{{(85-score).toFixed(2)}}分！</span></p>-->
           <!--</div>-->
         </div>
       </div>
@@ -649,11 +653,11 @@
               <p class="gnus">{{peipScore}}<span class="gnus-fen" style="color: #dd6161">分</span></p>
             </div>
             <!--<div class="scores2">-->
-              <!--<p class="gnus-fen" style="color: #dd6161;margin-top: 35px"><span>离</span><span-->
-                <!--class="gnus-hege">合格</span>-->
-                <!--<br>-->
-                <!--<span class="gnus-fen" style="color: #dd6161">需提升{{(85-score).toFixed(2)}}分！</span>-->
-              <!--</p>-->
+            <!--<p class="gnus-fen" style="color: #dd6161;margin-top: 35px"><span>离</span><span-->
+            <!--class="gnus-hege">合格</span>-->
+            <!--<br>-->
+            <!--<span class="gnus-fen" style="color: #dd6161">需提升{{(85-score).toFixed(2)}}分！</span>-->
+            <!--</p>-->
             <!--</div>-->
           </div>
         </div>
@@ -735,7 +739,7 @@
         //加载更多
         recipefinishedPub: false,
         currentPub: 1,
-        sizePub: 10,
+        sizePub: 20,
         tableData: [],
         jundgeallergy: false, //过敏
         foodRadio: "1",
@@ -787,7 +791,7 @@
         nutrition: [],
         power: [],
         meal: [],
-        tenantName:"",
+        tenantName: "",
         protein: [],
         drawer: false, //分数弹框
         pointscan: false, //智能配餐弹框
@@ -963,6 +967,7 @@
             max: 250,
           },
         ],
+        loading:false,
         foodMutuals: [],
         node: {
           nowCode: "101",
@@ -1221,7 +1226,9 @@
             cancelButtonText: "取消",
             type: "warning",
           }).then(() => {
+            that.loading=true;
             that.inserMeal(f, that);
+
           });
         } else {
           this.$message({
@@ -1244,6 +1251,7 @@
             let recipeCycles = data.recipeCycles;
             setTimeout(function () {
               that.insertDishesData("datas", recipeCycles, that);
+              that.loading=false;
             }, 1000);
           }
         })
@@ -1304,6 +1312,7 @@
       },
       mealDetail(id, that) {
         //根据id查询菜品详情
+        that.loading=true;
         detail(id).then((res) => {
           if (res.data.success) {
             let data = res.data.data;
@@ -1330,7 +1339,9 @@
             setTimeout(function () {
               that.dishesData("datas", recipeCycles, that);
               that.$refs.child.getFoodScore();
+              that.loading=false;
             }, 1000);
+
           }
         });
       },
@@ -1353,7 +1364,7 @@
                     for (let j = 0; j < recipevals.length; j++) {//食材
                       let nutrientIds = [];
                       let foodNutritionList = recipevals[j].foodNutritionList;
-                      if(foodNutritionList&&foodNutritionList.length>0) {
+                      if (foodNutritionList && foodNutritionList.length > 0) {
                         foodNutritionList.forEach(_ => {
                           this.nutritionValue.forEach(n => {
                             if (n.code == _.nutrientId + "") {
@@ -1390,7 +1401,7 @@
           that.$refs.showChild.refreshData();
         }
       },
-      parentFn(score, type, pscore, intake, nutrition, power, protein, meal,tenantName) {
+      parentFn(score, type, pscore, intake, nutrition, power, protein, meal, tenantName) {
         if (type == "smartDatas") {
           this.peipScore = score;
           this.peippcScore = pscore;
@@ -1407,7 +1418,7 @@
             parseFloat(this.score) - parseFloat(this.pcScore)
           ).toFixed(2);
         }
-        this.tenantName=tenantName
+        this.tenantName = tenantName
         debugger
         this.intake = intake;
         this.nutrition = nutrition;
@@ -1742,8 +1753,8 @@
       // },
       jundgeFood() {
         let name = "";
-        let row=[];
-        console.log("this.datas",this.datas)
+        let row = [];
+        console.log("this.datas", this.datas)
         this.datas.forEach((data) => {
 
           name = data.name;
@@ -1752,10 +1763,10 @@
             let children = [];
             week.foods.forEach((dish) => {
               dish.children.forEach((food) => {
-                children.push({ foodId: food.id });
+                children.push({foodId: food.id});
               });
             });
-            if(children.length>0) {
+            if (children.length > 0) {
               recipeCycles.push({
                 week: week.name.slice(4),
                 mealsType: this.getmealTypeData(name),
@@ -1790,30 +1801,30 @@
             that.foodMutuals = foodMutuals;
 
             this.$message.warning(msg.substring(0, msg.length - 1));
-          }else{
-            that.foodMutuals=[]
+          } else {
+            that.foodMutuals = []
           }
           that.datas.forEach((data) => {
             // if (data.id === id) {
             data.weeks.forEach((week) => {
               // if (week.name === wk) {
               week.foods.forEach((dish) => {
-                let flag=false;
+                let flag = false;
                 dish.children.forEach((food) => {
-                  that.$set(food,"redColor",false)
-                  for(let i=0;i<that.foodMutuals.length;i++) {
+                  that.$set(food, "redColor", false)
+                  for (let i = 0; i < that.foodMutuals.length; i++) {
                     debugger
-                    if (food.id == that.foodMutuals[i].foodId && that.foodMutuals[i].mealType+""==this.getmealTypeData(data.name)&&"week"+that.foodMutuals[i].week==week.name) {
+                    if (food.id == that.foodMutuals[i].foodId && that.foodMutuals[i].mealType + "" == this.getmealTypeData(data.name) && "week" + that.foodMutuals[i].week == week.name) {
                       that.$set(food, "redColor", true)
                       flag = true;
                     }
-                    if (food.id == that.foodMutuals[i].foodId1&& that.foodMutuals[i].mealType+""==this.getmealTypeData(data.name)&&"week"+that.foodMutuals[i].week==week.name) {
+                    if (food.id == that.foodMutuals[i].foodId1 && that.foodMutuals[i].mealType + "" == this.getmealTypeData(data.name) && "week" + that.foodMutuals[i].week == week.name) {
                       that.$set(food, "redColor", true)
                       flag = true;
                     }
                   }
                 });
-                that.$set(dish,"redColor",flag)
+                that.$set(dish, "redColor", flag)
               });
               // }
             });
@@ -2494,14 +2505,16 @@
 
 
 <style scoped>
-  .judegRed{
-    background-color:red;
-    border-color:red;
+  .judegRed {
+    background-color: red;
+    border-color: red;
   }
-  .judegRed:focus, .judegRed:hover{
+
+  .judegRed:focus, .judegRed:hover {
     background-color: #e35656;
-    border-color:#e35656;
+    border-color: #e35656;
   }
+
   .item-allergy {
     min-height: 100px;
     max-height: 250px;
@@ -2541,6 +2554,13 @@
     height: calc(100vh - 324px);
   }
 
+  .meals .box-car1 {
+    border: 1px solid #ebebeb !important;
+    border-radius: 3px !important;
+    padding: 0px;
+    height: calc(100vh - 220px);
+  }
+
   .meals .el-card__body {
     padding: 0px !important;
   }
@@ -2558,21 +2578,18 @@
     border-bottom-left-radius: 0px;
     margin-bottom: 1px;
   }
+
   .meals .foodWeekListHis {
     padding: 0 0 0 10px;
     overflow-y: scroll;
   }
 
   .meals .foodWeekListHis1 {
-    height: 330px;
+    height: calc(100vh - 380px);
   }
+
   .meals .foodWeekListHis2 {
-    height: 230px;
-  }
-  .meals .foodWeekListHis {
-    padding: 0 0 0 10px;
-    overflow-y: scroll;
-    max-height: 280px;
+    height: calc(100vh - 480px);
   }
 
   .meals .foodWeekListHis li {
@@ -2597,10 +2614,10 @@
     float: right;
   }
 
-  .meals .foodPanel {
-    overflow-y: scroll;
-    overflow-x: auto;
-  }
+  /*.meals .foodPanel {*/
+  /*overflow-y: scroll;*/
+  /*overflow-x: auto;*/
+  /*}*/
 
   .meals .foodrate {
     width: 100%;
