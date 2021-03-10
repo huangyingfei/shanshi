@@ -128,7 +128,7 @@ export default {
     //访问量统计
     profileuser() {
       this.loadFlag - true;
-      this.$axios.get(`api/blade-food/report/visitCount`, {}).then(res => {
+      this.$axios.get(`api/blade-food/report/orgVisitCount`, {}).then(res => {
         // console.log(res);
         this.loadFlag = false;
         this.offers = res.data.data;
