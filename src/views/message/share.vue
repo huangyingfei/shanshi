@@ -275,17 +275,16 @@ export default {
       this.recordList = row.status;
       this.dateTime = true;
       let term = row.id;
-      console.log(term);
+      // console.log(term);
       this.$axios
         .get(`/api/blade-food/recipe/detail?id=${term}`, {})
         .then(res => {
           this.channel = res.data.data;
           this.getHealth = this.channel.recipeAudits;
-          // console.log(this.getHealth);
+          this.$nextTick(() => {
+            this.$refs.recipe.overview(term);
+          });
         });
-      this.$nextTick(() => {
-        this.$refs.recipe.overview(term);
-      });
     },
     //清空
     notEmpty() {
