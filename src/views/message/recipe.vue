@@ -83,10 +83,27 @@
       :close-on-click-modal="false"
     >
       <toolbar ref="toolb"></toolbar>
-      <div slot="footer" class="dialog-footer">
+      <!-- <el-table
+        :data="recipeTableData"
+        v-loading="loadFlag1"
+        element-loading-text="拼命加载中"
+        border
+        style="width: 100%"
+      >
+        <el-table-column prop="mealsType" label="" width="100px">
+        </el-table-column>
+        <el-table-column prop="week1" label="周一"> </el-table-column>
+        <el-table-column prop="week2" label="周二"> </el-table-column>
+        <el-table-column prop="week3" label="周三"> </el-table-column>
+        <el-table-column prop="week4" label="周四"> </el-table-column>
+        <el-table-column prop="week5" label="周五"> </el-table-column>
+        <el-table-column prop="week6" label="周六"> </el-table-column>
+        <el-table-column prop="week7" label="周日"> </el-table-column>
+      </el-table> -->
+      <!-- <div slot="footer" class="dialog-footer" >
         <el-button @click="dateTime = false">取 消</el-button>
-        <el-button @click="setlist('ruleForm')" type="primary">确 定</el-button>
-      </div>
+        <el-button @click="dateTime = false" type="primary">确 定</el-button>
+      </div> -->
     </el-dialog>
     <div class="inform">
       <el-table
@@ -229,6 +246,7 @@ export default {
 
       modeforms: [], //表格数据
       loadFlag: false,
+      loadFlag1: false,
       page_data: {
         loadTxt: "请求列表中"
       },
@@ -292,7 +310,9 @@ export default {
       blicity: "", //是否推荐
       empty: "",
       timezone: "",
-      timezone1: ""
+      timezone1: "",
+      foundStr: [],
+      recipeTableData: []
     };
   },
   // mounted() {
@@ -392,6 +412,88 @@ ${this.timezone1}&orgType=${this.keyword.block}&isUse=${this.empty}&isRecommend=
       this.$nextTick(() => {
         this.$refs.toolb.overview(term);
       });
+
+      //       this.loadFlag1 = true;
+      //       this.recipeTableData = [];
+      //       this.$axios
+      //         .get(`/api/blade-food/recipe/recipeDetail?id=${term}`, {})
+      //         .then(res => {
+      //           let recipeCycles = res.data.data.recipeCycles;
+      //           console.log(recipeCycles);
+      //           let recipeTableData1 = [];
+      //           let recipeTableData = {
+      //             mealsType1: [],
+      //             mealsType2: [],
+      //             mealsType3: [],
+      //             mealsType4: [],
+      //             mealsType5: [],
+      //             mealsType6: []
+      //           };
+      //           for (let i in recipeCycles) {
+      //             let mealsTypeNum = recipeCycles[i].mealsType;
+      //             switch (mealsTypeNum) {
+      //               case 1:
+      //                 recipeTableData.mealsType1.push(recipeCycles[i]);
+      //                 break;
+      //               case 2:
+      //                 recipeTableData.mealsType2.push(recipeCycles[i]);
+      //                 break;
+      //               case 3:
+      //                 recipeTableData.mealsType3.push(recipeCycles[i]);
+      //                 break;
+      //               case 4:
+      //                 recipeTableData.mealsType4.push(recipeCycles[i]);
+      //                 break;
+      //               case 5:
+      //                 recipeTableData.mealsType5.push(recipeCycles[i]);
+      //                 break;
+      //               case 6:
+      //                 recipeTableData.mealsType6.push(recipeCycles[i]);
+      //                 break;
+      //               default:
+      //                 break;
+      //             }
+      //           }
+      //           var mealsTypeObj = {
+      //             mealsType1: "早餐",
+      //             mealsType2: "早点",
+      //             mealsType3: "午餐",
+      //             mealsType4: "午点",
+      //             mealsType5: "晚餐",
+      //             mealsType6: "晚点"
+      //           };
+      //           for (let key in recipeTableData) {
+      //             var weekData = {
+      //               mealsType: mealsTypeObj[key],
+      //               week1: "",
+      //               week2: "",
+      //               week3: "",
+      //               week4: "",
+      //               week5: "",
+      //               week6: "",
+      //               week7: ""
+      //             };
+      //
+      //             if (recipeTableData[key].length > 0) {
+      //               for (
+      //                 let index = 0;
+      //                 index < recipeTableData[key].length;
+      //                 index++
+      //               ) {
+      //                 var weekNum = "week" + recipeTableData[key][index].week;
+      //
+      //                 // weekData[weekNum].push(recipeTableData[key][index].recipeConncts[0].dishName)
+      //                 recipeTableData[key][index].recipeConncts.forEach(element => {
+      //                   weekData[weekNum] += element.dishName + "\n";
+      //                 });
+      //               }
+      //               console.log(weekData);
+      //               recipeTableData1.push(weekData);
+      //             }
+      //           }
+      //           this.recipeTableData = recipeTableData1;
+      //           this.loadFlag1 = false;
+      //         });
     },
     //页码
     m_handlePageChange(currPage) {
