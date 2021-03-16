@@ -2675,7 +2675,7 @@
   }
 
   .gnus {
-    font-size: 24px;
+    font-size: 20px;
     text-align: center;
     font-weight: 600;
     margin-top: 35px;
