@@ -1150,8 +1150,8 @@ export default {
     //查看
     seecol(row, index) {
       this.according = index;
-      console.log(index);
-      // console.log(row);
+      // console.log(index);
+      console.log(row);
       this.examine.desc1 = "";
       // this.valuepark.length = 0;
       this.active = [];
@@ -1166,7 +1166,7 @@ export default {
         .then(res => {
           // console.log(res);
           this.subquery = res.data.data;
-          console.log(this.subquery);
+          // console.log(this.subquery);
           this.menu = this.subquery.foodTypeName;
           this.flour = this.subquery.id; //ID
           this.agree = this.subquery.status; //审核状态
@@ -1474,7 +1474,7 @@ export default {
     },
     //审核
     Directory(row, index) {
-      console.log(index);
+      // console.log(index);
       this.menu = "";
       this.according = index;
       this.examine.desc1 = "";
@@ -1482,8 +1482,9 @@ export default {
       // this.valuepark.length = 0;
       // this.active.length = 0;
       this.seekeys = true;
-      // console.log(row);
+      console.log(row);
       let design = `?id=${row.id}`;
+      console.log(design);
       this.$axios
         .get(`api/blade-food/food/detail` + design, {
           headers: {
@@ -1493,7 +1494,7 @@ export default {
         .then(res => {
           // console.log(res);
           this.subquery = res.data.data;
-          console.log(this.subquery);
+          // console.log(this.subquery);
           this.flour = this.subquery.id; //ID
           this.agree = this.subquery.status; //审核状态
           this.dsquery.establish = this.subquery.orgName; //创建机构

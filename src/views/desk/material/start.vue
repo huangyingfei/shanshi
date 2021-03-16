@@ -808,6 +808,7 @@ export default {
                 type: "success"
               });
               this.Addraudit();
+              // this.addition();
             })
             .catch(() => {
               this.$message.error("保存失败");

@@ -17,10 +17,12 @@
   left: 0;
   background-color: #fff;
   .headSet {
-    width: 500px;
+    margin: 0 auto;
+    width: 1000px;
     height: 60px;
-    float: left;
-    margin-left: 15%;
+
+    // float: left;
+    // margin-left: 15%;
   }
   .booktitleimg {
     width: 60px;
@@ -54,7 +56,7 @@
 .login-weaper {
   margin: 0 auto;
   width: 1000px;
-  box-shadow: -4px 5px 10px rgba(0, 0, 0, 0.4);
+  // box-shadow: -4px 5px 10px rgba(0, 0, 0, 0.1);
 
   .el-input-group__append {
     border: none;
