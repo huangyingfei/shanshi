@@ -65,42 +65,41 @@
   .color{
     display: flex;
     justify-content: space-between;
-    width: 150px;
+    width: 220px;
     font-size: 8px;
     color: #FFFFFF;
   }
 
 .red{
-  width: 70px;
+  width: 33%;
   height: 16px;
   text-align: center;
   vertical-align: middle;
   background-color: red;
 }
 .green{
-  width: 70px;
+  width: 33%;
   height: 16px;
   text-align: center;
   vertical-align: middle;
   background-color: green;
 }
 .orange{
-  width: 70px;
+  width: 33%;
   height: 16px;
   text-align: center;
   vertical-align: middle;
   background-color: orange;
 }
   .item-blo {
-    padding-left: 10px;
     display: flex;
-    width: 210px;
+    width: 220px;
     font-size: 12px;
     font-weight: bold;
     justify-content: start;
   }
   .item-blo span{
-    width: 60px;
+    width: 33%;
     text-align: left;
     line-height: 25px;
   }

@@ -1432,8 +1432,8 @@
             that.$emit('childfn', 0, "smartDatas", that.peippcScore, [], [], [], [], []);
           }
         }else{
-          that.$message({
-            message: "食材营养素数据不全",
+          this.$message({
+            message: "年龄未填写",
             type: "info"
           });
         }

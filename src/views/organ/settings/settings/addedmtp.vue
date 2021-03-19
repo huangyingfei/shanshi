@@ -46,20 +46,20 @@
         <td></td>
       </tr>
       <tr  v-if="fathNutritionVos.sexNum==2" class="table-title">
-        <td class="table-first" style="width: 7%">人群</td>
-        <td style="width: 15%">上限</td>
+        <td class="table-first" style="width: 12%">人群年龄</td>
+        <td style="width: 12%">上限</td>
         <td></td>
-        <td style="width: 15%">下限</td>
-        <td style="width: 15%">上限</td>
+        <td style="width: 12%">下限</td>
+        <td style="width: 12%">上限</td>
         <td></td>
-        <td style="width: 15%">下限</td>
+        <td style="width: 12%">下限</td>
 
-        <td style="width: 15%">上限系数</td>
+        <td style="width: 12%">上限系数</td>
         <td></td>
-        <td style="width: 15%"> 下限系数</td>
+        <td style="width: 12%"> 下限系数</td>
       </tr>
        <tr  v-if="fathNutritionVos.sexNum==1" class="table-title">
-        <td style="width: 7%" class="table-first">人群</td>
+        <td style="width: 15%" class="table-first">人群年龄</td>
         <td style="width: 16%">上限</td>
         <td style="width: 16%">下限</td>
         <td style="width: 16%">上限系数</td>
@@ -72,7 +72,7 @@
       <div :class="getHeight"></div>
       <table>
         <tr   v-for="(item, index) in tableData" :key="index" >
-          <th class="table-first">{{item.name}}{{isNaN(item.name) ? "" : "岁~"}}</th>
+          <th class="table-first">{{item.name}}</th>
           <td v-if="fathNutritionVos.sexNum==2">
             <el-input disabled v-model="item.manMax"></el-input>
           </td>
@@ -268,7 +268,7 @@ table tr{
   height: 50px;
 }
 table .table-first {
-  width: 85px;
+  width: 150px;
   text-align: left;
   font-weight: normal;
 }

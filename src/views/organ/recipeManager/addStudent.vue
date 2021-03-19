@@ -324,7 +324,6 @@ export default {
             },
             span: 8,
           },
-
           {
             label: "家庭电话",
             prop: "mobile",

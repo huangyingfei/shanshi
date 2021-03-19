@@ -507,17 +507,20 @@
       <div id="df" class="scores">
         <div v-if="parseFloat(score)>=90" class="scores-same scores-youxiu">
           <div class="scores3">
-            <p class="gnus" @click="tfractio">{{score}}<span class="gnus-fen">分</span></p>
+            <p class="gnus" @click="tfractio">{ {{ (score+"").split(".")[0]  }}<span class="gnus-fen"> .{{ (score+"").split(".")[1]  }}分</span></p>
           </div>
         </div>
         <div v-if="parseFloat(score)<90&&parseFloat(score)>=85" class="scores-same scores-hege">
           <div class="scores3">
-            <p class="gnus" @click="tfractio">{{score}}<span class="gnus-fen">分</span></p>
+            <p class="gnus" @click="tfractio"> {{ (score+"").split(".")[0]  }}<span class="gnus-fen"> .{{ (score+"").split(".")[1]  }}分</span></p>
           </div>
         </div>
         <div v-if="parseFloat(score)<85" class="scores-same scores-buhege">
-          <div class="scores3" style="color: #dd6161">
-            <p class="gnus" @click="tfractio">{{score}}<span class="gnus-fen" style="color: #dd6161">分</span></p>
+          <div class="scores3" style="color: #dd6161" v-if="parseFloat(score)==0">
+            <p class="gnus" @click="tfractio">{{ (score+"").split(".")[0]  }}<span class="gnus-fen" style="color: #dd6161"> {{ (score+"").split(".")[1]  }}分</span></p>
+          </div>
+          <div class="scores3" style="color: #dd6161" v-if="parseFloat(score)>0">
+            <p class="gnus" @click="tfractio">{{ (score+"").split(".")[0]  }}<span class="gnus-fen" style="color: #dd6161"> .{{ (score+"").split(".")[1]  }}分</span></p>
           </div>
           <!--<div class="scores2">-->
           <!--<p class="gnus-fen" style="color: #dd6161;margin-top: 35px"><span>离</span><span class="gnus-hege">合格</span>-->
@@ -640,17 +643,20 @@
         <div class="scores">
           <div v-if="parseFloat(peipScore)>=90" class="scores-same scores-youxiu">
             <div class="scores3">
-              <p class="gnus">{{peipScore}}<span class="gnus-fen">分</span></p>
+              <p class="gnus">{{ (peipScore+"").split(".")[0] }}<span class="gnus-fen">.{{ (peipScore+"").split(".")[1] }}分</span></p>
             </div>
           </div>
           <div v-if="parseFloat(peipScore)<90&&parseFloat(peipScore)>=85" class="scores-same scores-hege">
             <div class="scores3">
-              <p class="gnus">{{peipScore}}<span class="gnus-fen">分</span></p>
+              <p class="gnus">{{ (peipScore+"").split(".")[0] }}<span class="gnus-fen">.{{ (peipScore+"").split(".")[1] }}分</span></p>
             </div>
           </div>
           <div v-if="parseFloat(peipScore)<85" class="scores-same scores-buhege">
-            <div class="scores3" style="color: #dd6161">
-              <p class="gnus">{{peipScore}}<span class="gnus-fen" style="color: #dd6161">分</span></p>
+            <div class="scores3" style="color: #dd6161" v-if="parseFloat(peipScore)==0">
+              <p class="gnus">{{ (peipScore+"").split(".")[0] }}<span class="gnus-fen" style="color: #dd6161">{{ (peipScore+"").split(".")[1] }}分</span></p>
+            </div>
+            <div class="scores3" style="color: #dd6161" v-if="parseFloat(peipScore)>0">
+              <p class="gnus">{{ (peipScore+"").split(".")[0] }}<span class="gnus-fen" style="color: #dd6161">.{{ (peipScore+"").split(".")[1] }}分</span></p>
             </div>
             <!--<div class="scores2">-->
             <!--<p class="gnus-fen" style="color: #dd6161;margin-top: 35px"><span>离</span><span-->
@@ -1405,7 +1411,6 @@
         if (type == "smartDatas") {
           this.peipScore = score;
           this.peippcScore = pscore;
-          ;
           this.ppscxjSc = (
             parseFloat(this.peipScore) - parseFloat(this.peippcScore)
           ).toFixed(2);
@@ -1419,7 +1424,9 @@
           ).toFixed(2);
         }
         this.tenantName = tenantName
-        debugger
+        this.score = parseFloat(this.score).toFixed(2);
+        this.peipScore= parseFloat(this.peipScore).toFixed(2)
+        console.log(this.peipScore)
         this.intake = intake;
         this.nutrition = nutrition;
         this.nutrition.forEach((_) => {

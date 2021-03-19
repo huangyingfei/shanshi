@@ -633,7 +633,7 @@
         <div v-if="parseFloat(score) >= 90" class="scores-same scores-youxiu">
           <div class="scores3">
             <p class="gnus" @click="tfractio">
-              {{ score }}<span class="gnus-fen">分</span>
+              {{ (score+"").split(".")[0] }}<span class="gnus-fen">.{{ (score+"").split(".")[1] }}分</span>
             </p>
           </div>
         </div>
@@ -643,14 +643,17 @@
         >
           <div class="scores3">
             <p class="gnus" @click="tfractio">
-              {{ score }}<span class="gnus-fen">分</span>
+              {{ (score+"").split(".")[0]  }} <span class="gnus-fen">.{{ (score+"").split(".")[1] }}分</span>
             </p>
           </div>
         </div>
         <div v-if="parseFloat(score) < 85" class="scores-same scores-buhege">
           <div class="scores3" style="color: #dd6161">
-            <p class="gnus" @click="tfractio">
-              {{ score }}<span class="gnus-fen" style="color: #dd6161">分</span>
+            <p class="gnus" @click="tfractio" v-if="parseFloat(score)==0">
+              {{  (score+"").split(".")[0]  }}<span class="gnus-fen" style="color: #dd6161">{{ (score+"").split(".")[1] }}分</span>
+            </p>
+            <p class="gnus" @click="tfractio" v-if="parseFloat(score)>0">
+              {{  (score+"").split(".")[0]  }}<span class="gnus-fen" style="color: #dd6161">.{{ (score+"").split(".")[1] }}分</span>
             </p>
           </div>
           <!--<div class="scores2">-->
@@ -779,7 +782,7 @@
           >
             <div class="scores3">
               <p class="gnus">
-                {{ peipScore }}<span class="gnus-fen">分</span>
+                {{ (peipScore+"").split(".")[0] }}<span class="gnus-fen">.{{ (peipScore+"").split(".")[1] }}分</span>
               </p>
             </div>
           </div>
@@ -789,7 +792,7 @@
           >
             <div class="scores3">
               <p class="gnus">
-                {{ peipScore }}<span class="gnus-fen">分</span>
+                {{ (peipScore+"").split(".")[0] }}<span class="gnus-fen">.{{ (peipScore+"").split(".")[1] }}分</span>
               </p>
             </div>
           </div>
@@ -798,9 +801,11 @@
             class="scores-same scores-buhege"
           >
             <div class="scores3" style="color: #dd6161">
-              <p class="gnus">
-                {{ peipScore
-                }}<span class="gnus-fen" style="color: #dd6161">分</span>
+              <p class="gnus" v-if="parseFloat(peipScore)==0">
+                {{ (peipScore+"").split(".")[0] }}<span class="gnus-fen" style="color: #dd6161">{{ (peipScore+"").split(".")[1] }}分</span>
+              </p>
+              <p class="gnus" v-if="parseFloat(peipScore)>0">
+                {{ (peipScore+"").split(".")[0] }}<span class="gnus-fen" style="color: #dd6161">.{{ (peipScore+"").split(".")[1] }}分</span>
               </p>
             </div>
             <!--<div class="scores2">-->
@@ -1433,7 +1438,7 @@ export default {
         that.$refs.refweekSelect.hidePicker();
         that.rebuildTable();
         setTimeout(function () {
-          that.$refs.child.getFoodScore();
+         // that.$refs.child.getFoodScore();
         }, 200);
       });
     },
@@ -1715,6 +1720,9 @@ export default {
         this.score = score;
         this.pcScore = pscore;
       }
+      this.score = parseFloat(this.score).toFixed(2);
+      this.peipScore= parseFloat(this.peipScore).toFixed(2)
+      console.log(this.peipScore)
       this.tenantName = tenantName;
       this.intake = intake;
       this.nutrition = nutrition;

@@ -163,7 +163,7 @@ export default [
         path: "addStudent",
         name: "学生信息",
         component: () =>
-          import(/* webpackChunkName: "views" */  "@/views/organ/recipeManager/addStudent")
+          import(/* webpackChunkName: "views" */  "@/views/organ/recipeManager/studentInfo")
       }
     ]
   },

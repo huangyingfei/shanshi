@@ -72,7 +72,7 @@
           icon="el-icon-circle-plus-outline"
           size="small"
           @click.stop="handleAdd(scope.row, scope.index)"
-          >新增子项
+          >新增机构
         </el-button>
           <el-button
           type="text"
