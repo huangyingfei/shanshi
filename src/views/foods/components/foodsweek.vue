@@ -3,14 +3,26 @@
     <el-button
       icon="el-icon-arrow-left"
       circle
-      style="position: absolute; left: 105px; top: 5px; z-index: 2"
+      style="
+        position: absolute;
+        left: 105px;
+        top: 14px;
+        z-index: 2;
+        opacity: 0.8;
+      "
       @click="toLeft"
     >
     </el-button>
     <el-button
       icon="el-icon-arrow-right"
       circle
-      style="position: absolute; right: 10px; top: 5px; z-index: 2"
+      style="
+        position: absolute;
+        right: 10px;
+        top: 14px;
+        z-index: 2;
+        opacity: 0.8;
+      "
       @click="toRight"
     >
     </el-button>
@@ -23,6 +35,7 @@
       :max-height="foodWeekHeight"
       border
       fit
+      stripe
       :header-cell-style="headerCellStyle"
       ref="foodWeekTable"
     >
@@ -1836,7 +1849,7 @@ export default {
     },
     headerCellStyle({ row, colunm, rowIndex, columnIndex }) {
       var backgroundImage = [
-        { background: "#f8fbfc !important" },
+        { background: "#FFFFFF !important" },
         {
           background:
             'url("/img/cater/mon.png") 20% 50% no-repeat, linear-gradient(90deg, #FFFAEC 0%,#FDD36D 100%)!important',
@@ -1882,7 +1895,7 @@ export default {
         case "早餐":
           backgroundImage = {
             background:
-              'url("/img/cater/food1.png") no-repeat center!important',
+              '#FFFFFF url("/img/cater/food1.png") no-repeat center!important',
             display: "block",
             height: "24px",
           };
@@ -2618,7 +2631,7 @@ export default {
 }
 .foodsweek .table-week .col-date3 {
   vertical-align: middle !important;
-  background: #f8fbfc !important;
+  background: #ffffff !important;
 }
 
 .foodsweek .table-foods th {
