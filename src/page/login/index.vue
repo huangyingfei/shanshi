@@ -13,7 +13,7 @@
       <div class="login-left">
         <!-- <div class="login-time">{{ time }}</div> -->
         <div class="bannermapped">
-          <el-carousel height="500px" width="100%" :interval="3000">
+          <el-carousel height="500px" width="100%" :interval="6000">
             <el-carousel-item v-for="(item, i) in imgList" :key="i">
               <img
                 :src="item.src"
@@ -96,10 +96,10 @@ export default {
       },
       imgList: [
         {
-          src: require("../../../public/img/1.png")
+          src: require("../../../public/img/2.png")
         },
         {
-          src: require("../../../public/img/2.png")
+          src: require("../../../public/img/1.png")
         },
         {
           src: require("../../../public/img/3.png")

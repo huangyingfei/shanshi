@@ -158,7 +158,8 @@
               align="center"
             >
             </el-table-column>
-            <el-table-column prop="isRefund" label="是否退费" align="center">
+
+            <el-table-column prop="isRefund" label="是否已退费" align="center">
               <template slot-scope="scope">
                 <el-radio-group
                   v-model="scope.row.isRefund"
@@ -261,13 +262,6 @@ export default {
     this.getToolkit();
   },
   methods: {
-    switchText(mes) {
-      if (mes == 1) {
-        return "是";
-      } else {
-        return "否";
-      }
-    },
     canceloff(data) {
       this.calendars = data;
     },
@@ -475,11 +469,27 @@ export default {
         this.loadClass = fwork;
       });
     },
+    switchText(mes) {
+      if (mes == 1) {
+        return "是";
+      } else {
+        return "否";
+      }
+    },
+    // IsLeapMonth(month) {
+    //   if (month == 1) {
+    //     return this.histories.monthy + "2";
+    //   } else {
+    //     return "";
+    //   }
+    // },
     //导入Excel
     importExcel() {
       let urlParams = `?size=${this.m_page.size}&current=${
         this.m_page.number
-      }&type=${0}`;
+      }&type=${0}&monthy=${this.value2}&classId=${this.monthly}&studentName=${
+        this.name
+      }&isRefund=${this.state}`;
       this.$axios
         .get(`api/blade-food/returnmeallist/page` + urlParams, {})
         .then(res => {
@@ -491,7 +501,11 @@ export default {
               this.histories[i].isRefund
             );
           }
+          this.export2Excel();
         });
+    },
+    //导入Excel
+    export2Excel() {
       require.ensure([], () => {
         const { export_json_to_excel } = require("@/excel/export2Excel");
         const tHeader = [
@@ -501,7 +515,7 @@ export default {
           "累计天数",
           "连续天数",
           "退膳金额(元)",
-          "是否退费"
+          "是否已退费"
         ]; //导出表头信息
         const filterVal = [
           "monthy",

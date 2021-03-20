@@ -142,7 +142,8 @@
               align="center"
             >
             </el-table-column>
-            <el-table-column prop="isRefund" label="是否退费" align="center">
+
+            <el-table-column prop="isRefund" label="是否已退费" align="center">
               <template slot-scope="scope">
                 <el-radio-group
                   v-model="scope.row.isRefund"

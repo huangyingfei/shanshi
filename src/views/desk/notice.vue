@@ -5,35 +5,35 @@
       <div class="mechanism">
         <img src="../../../public/img/jgtotal.png" alt />
         <div class="nism1">
-          <div class="ingredients">机构总量</div>
+          <div class="ingredients">机构</div>
           <div class="food1">{{ this.newhead.organ }}</div>
         </div>
       </div>
       <div class="mechanism">
         <img src="../../../public/img/zftotal.png" alt />
         <div class="nism1">
-          <div class="ingredients">政府总量</div>
+          <div class="ingredients">政府</div>
           <div class="food1">{{ this.newhead.gover }}</div>
         </div>
       </div>
       <div class="mechanism">
         <img src="../../../public/img/sctotal.png" alt />
         <div class="nism1">
-          <div class="ingredients">食材总量</div>
+          <div class="ingredients">食材</div>
           <div class="food1">{{ this.newhead.food }}</div>
         </div>
       </div>
       <div class="mechanism">
         <img src="../../../public/img/cptotal.png" alt />
         <div class="nism1">
-          <div class="ingredients">菜品总量</div>
+          <div class="ingredients">菜品</div>
           <div class="food1">{{ this.newhead.dish }}</div>
         </div>
       </div>
       <div class="mechanism">
         <img src="../../../public/img/sptotal.png" alt />
         <div class="nism1">
-          <div class="ingredients">食谱总量</div>
+          <div class="ingredients">食谱</div>
           <div class="food1">{{ this.newhead.recipe }}</div>
         </div>
       </div>
@@ -50,25 +50,25 @@
       </div>
       <div class="variety" v-else>
         <h4 class="welcome">本周最受欢迎菜品</h4>
-        <div class="menu1" v-for="(item, i) in double" :key="i">
-          <div class="menuimg">
-            <!-- <img :src="item.dishPic" alt /> -->
-            <el-image style="width: 80px; height: 80px" :src="item.dishPic">
-              <div
-                slot="error"
-                class="image-slot"
-                style="width: 80px; height: 80px; text-align: center;  line-height: 80px;"
-              >
-                <!-- <i class="el-icon-picture-outline"></i> -->
-                <div class="el-image__error">
-                  暂无图片
+        <el-row>
+          <el-col :span="12" v-for="(item, i) in double" :key="i">
+            <div class="menuimg">
+              <el-image style="width: 80px; height: 80px" :src="item.dishPic">
+                <div
+                  slot="error"
+                  class="image-slot"
+                  style="width: 80px; height: 80px; text-align: center;  line-height: 80px;"
+                >
+                  <div class="el-image__error">
+                    暂无图片
+                  </div>
                 </div>
-              </div>
-            </el-image>
-          </div>
-          <div class="menutext">{{ item.dishName }}</div>
-          <div class="menunum">{{ item.dishCount }}</div>
-        </div>
+              </el-image>
+            </div>
+            <div class="menutext">{{ item.dishName }}</div>
+            <div class="menunum">{{ item.dishCount }}</div>
+          </el-col>
+        </el-row>
       </div>
       <!-- 健康指数排行榜 -->
       <div class="recipes">
@@ -263,8 +263,8 @@ export default {
   margin-bottom: 40px;
 }
 .variety {
-  width: 50%;
-  height: 700px;
+  width: 60%;
+  height: 750px;
   overflow-y: auto;
   overflow-x: hidden;
   background-color: #fff;
@@ -286,7 +286,7 @@ export default {
   }
 }
 .recipes {
-  width: 50%;
+  width: 40%;
   height: 700px;
   overflow-y: auto;
   overflow-x: hidden;
@@ -325,7 +325,7 @@ export default {
 }
 .menutext {
   float: left;
-  width: 100px;
+  width: 120px;
   height: 80px;
   line-height: 80px;
   margin-left: 20px;
@@ -333,7 +333,7 @@ export default {
 }
 .menunum {
   float: right;
-  width: 100px;
+  width: 50px;
   height: 80px;
   line-height: 80px;
   font-size: 14px;
