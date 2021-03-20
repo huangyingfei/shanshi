@@ -329,7 +329,7 @@
       </el-row>
     </div>
     <el-dialog
-      width="60%"
+      width="850px"
       :title="this.titlebar"
       append-to-body
       :visible.sync="dateTime"

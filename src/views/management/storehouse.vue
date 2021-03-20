@@ -406,7 +406,7 @@
     <div class="base">
       <el-button
         :disabled="this.edients == 0"
-        v-if="this.gavatorta == 1"
+        v-if="this.gavatorta == 1 || this.edients == 0"
         type="primary"
         @click="saved('ruleForm')"
         >编辑保存</el-button
@@ -821,14 +821,14 @@ export default {
         this.gavatorta = data.view;
         this.edients = data.isPub;
         this.active = [];
-        console.log(data);
+        // console.log(data);
         this.flour = data.id;
         this.$axios
           .get(`api/blade-food/food/detail?id=${this.flour}`, {})
           .then(res => {
             // console.log(res);
             this.inquired = res.data.data;
-            console.log(this.inquired);
+            // console.log(this.inquired);
 
             this.ruleForm.name = this.inquired.foodName; //食材名
             this.ruleForm.foodFood = this.inquired.foodAlias; //食物别名1

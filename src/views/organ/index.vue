@@ -30,7 +30,7 @@
       <div class="mechanism">
         <img src="../../../public/img/yuansuo.png" alt />
         <div class="nism1">
-          <div class="ingredients">园所人数</div>
+          <div class="ingredients">园所</div>
 
           <div class="food1">{{ this.newhead.ysrs }}</div>
         </div>
@@ -38,35 +38,35 @@
       <div class="mechanism">
         <img src="../../../public/img/schoolboy.png" alt />
         <div class="nism1">
-          <div class="ingredients">男生人数</div>
+          <div class="ingredients">男生</div>
           <div class="food1">{{ this.newhead.boys }}</div>
         </div>
       </div>
       <div class="mechanism">
         <img src="../../../public/img/girlstudent.png" alt />
         <div class="nism1">
-          <div class="ingredients">女生人数</div>
+          <div class="ingredients">女生</div>
           <div class="food1">{{ this.newhead.girls }}</div>
         </div>
       </div>
       <div class="mechanism">
         <img src="../../../public/img/sctotal.png" alt />
         <div class="nism1">
-          <div class="ingredients">食材总量</div>
+          <div class="ingredients">食材</div>
           <div class="food1">{{ this.newhead.food }}</div>
         </div>
       </div>
       <div class="mechanism">
         <img src="../../../public/img/cptotal.png" alt />
         <div class="nism1">
-          <div class="ingredients">菜品总量</div>
+          <div class="ingredients">菜品</div>
           <div class="food1">{{ this.newhead.dish }}</div>
         </div>
       </div>
       <div class="mechanism">
         <img src="../../../public/img/sptotal.png" alt />
         <div class="nism1">
-          <div class="ingredients">食谱总量</div>
+          <div class="ingredients">食谱</div>
           <div class="food1">{{ this.newhead.recipe }}</div>
         </div>
       </div>
@@ -78,13 +78,12 @@
       <div class="variety" v-if="this.empty == 1">
         <h4 class="welcome">本周最受欢迎菜品</h4>
         <div class="pictures">
-          <!-- <img src="../../../public/img/shuj.png" alt="" /> -->
           <p>暂无数据</p>
         </div>
       </div>
       <div class="variety" v-else>
         <h4 class="welcome">本周最受欢迎菜品</h4>
-        <div class="menu1" v-for="(item, i) in double" :key="i">
+        <!-- <div class="menu1" v-for="(item, i) in double" :key="i">
           <div class="menuimg">
             <el-image style="width: 80px; height: 80px" :src="item.dishPic">
               <div
@@ -92,7 +91,6 @@
                 class="image-slot"
                 style="width: 80px; height: 80px; text-align: center;  line-height: 80px;"
               >
-                <!-- <i class="el-icon-picture-outline"></i> -->
                 <div class="el-image__error">
                   暂无图片
                 </div>
@@ -101,7 +99,26 @@
           </div>
           <div class="menutext">{{ item.dishName }}</div>
           <div class="menunum">{{ item.dishCount }}</div>
-        </div>
+        </div> -->
+        <el-row>
+          <el-col :span="12" v-for="(item, i) in double" :key="i">
+            <div class="menuimg">
+              <el-image style="width: 80px; height: 80px" :src="item.dishPic">
+                <div
+                  slot="error"
+                  class="image-slot"
+                  style="width: 80px; height: 80px; text-align: center;  line-height: 80px;"
+                >
+                  <div class="el-image__error">
+                    暂无图片
+                  </div>
+                </div>
+              </el-image>
+            </div>
+            <div class="menutext">{{ item.dishName }}</div>
+            <div class="menunum">{{ item.dishCount }}</div>
+          </el-col>
+        </el-row>
       </div>
       <!-- 健康指数排行榜 -->
       <div class="recipes">
@@ -473,7 +490,8 @@ export default {
       this.$axios.get(`api/blade-food/food/dishTotal` + Dishes).then(res => {
         // console.log(res);
         this.double = res.data.data.records;
-        console.log(this.double);
+        // console.log(this.double);
+
         if (this.double.length == 0) {
           this.empty = 1;
         } else {
@@ -597,8 +615,8 @@ export default {
   margin-bottom: 40px;
 }
 .variety {
-  width: 50%;
-  height: 700px;
+  width: 60%;
+  height: 750px;
   margin-bottom: 40px;
   overflow-y: auto;
   overflow-x: hidden;
@@ -620,7 +638,7 @@ export default {
   }
 }
 .recipes {
-  width: 50%;
+  width: 40%;
   height: 750px;
   overflow-y: auto;
   overflow-x: hidden;
@@ -659,7 +677,7 @@ export default {
 }
 .menutext {
   float: left;
-  width: 100px;
+  width: 120px;
   height: 80px;
   line-height: 80px;
   margin-left: 20px;
@@ -667,7 +685,7 @@ export default {
 }
 .menunum {
   float: right;
-  width: 100px;
+  width: 50px;
   height: 80px;
   line-height: 80px;
   font-size: 14px;

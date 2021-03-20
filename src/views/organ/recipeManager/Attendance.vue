@@ -86,14 +86,14 @@
               size="medium"
               >导出</el-button
             >
-            <el-button
+            <!-- <el-button
               style="margin-left: 20px"
               icon="el-icon-upload"
               @click="osimport"
               type="primary"
               size="medium"
               >导入</el-button
-            >
+            > -->
           </div></el-col
         >
       </el-row>
@@ -300,7 +300,7 @@
       </el-row>
     </div>
     <el-dialog
-      width="60%"
+      width="850px"
       :title="this.titlebar"
       append-to-body
       :visible.sync="dateTime"

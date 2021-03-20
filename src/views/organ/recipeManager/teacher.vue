@@ -110,6 +110,47 @@
         </el-tree>
       </div>
     </div>
+    <el-dialog
+      title="导入教职工"
+      width="30%"
+      append-to-body
+      :visible.sync="ioimport"
+      :close-on-click-modal="false"
+    >
+      <div>
+        <span>① 下载导入模板</span>
+        <el-button
+          style="margin-left: 20px"
+          type="primary"
+          size="medium"
+          @click="exportExcel"
+          >下载模板</el-button
+        >
+      </div>
+      <div class="newbie">
+        <el-upload
+          class="upload-demo"
+          action="api/blade-food/teacher/import-user"
+          :headers="headerObj"
+          accept=".xlsx"
+          :data="requesting"
+          :on-preview="handlePreview"
+          :before-remove="beforeRemove"
+          multiple
+          :limit="1"
+          :on-exceed="handleExceed"
+          :file-list="fileList"
+          :before-upload="beforeUpload"
+          :on-success="handleSuccess"
+          :on-error="handleError"
+        >
+          <span>② 上传导入文件</span>
+          <el-button size="medium" type="primary" style="margin-left: 20px"
+            >点击上传</el-button
+          >
+        </el-upload>
+      </div>
+    </el-dialog>
     <div class="consults">
       <div class="header">
         <!-- <span style="margin-right: 10px">关键字:</span>
@@ -253,7 +294,7 @@
       <!-- 添加员工弹框 -->
       <el-dialog
         title="添加员工"
-        width="60%"
+        width="850px"
         append-to-body
         :visible.sync="dateTime"
         :close-on-click-modal="false"
@@ -548,6 +589,14 @@
           @click="addition(1)"
           >添加员工</el-button
         >
+        <el-button
+          style="margin-left: 20px"
+          size="medium"
+          type="primary"
+          icon="el-icon-upload"
+          @click="osimport"
+          >导入</el-button
+        >
         <!-- <el-button
           icon="el-icon-download"
           style="margin-left: 20px"
@@ -725,8 +774,10 @@ export default {
       }
     };
     return {
+      ioimport: false,
       tableHeight: 50,
       drawer: false,
+      fileList: [],
       data: JSON.parse(JSON.stringify(data)),
       loadFlag: false, //加载flag
       loadFlag1: false, //加载flag
@@ -741,6 +792,10 @@ export default {
       headerObj: {
         "Blade-Auth": ""
       }, //上传图片请求头
+      requesting: {
+        file: "teacher.xls",
+        isCovered: 0
+      },
       acetone: {
         id: "", //ID
         name: "", //子部门名称
@@ -1208,6 +1263,20 @@ export default {
     //this.$refs.table.$el.offsetTop：表格距离浏览器的高度 //50表示你想要调整的表格距离底部的高度（你可以自己随意调整），因为我们一般都有放分页组件的，所以需要给它留一个高度
   },
   methods: {
+    mimeHeader() {
+      this.$axios
+        .post(`api/blade-food/teacher/import-user`, {
+          file: "teacher.xls",
+          isCovered: 0
+        })
+        .then(res => {
+          console.log(res);
+        });
+    },
+    osimport() {
+      this.ioimport = true;
+      this.fileList = [];
+    },
     handleChange(value) {
       console.log(value);
     },
@@ -1216,6 +1285,7 @@ export default {
     Takeone() {
       let str = JSON.parse(localStorage.getItem("saber-token"));
       this.headerObj["Blade-Auth"] = `bearer ${str.content}`;
+      // this.requesting["Blade-Auth"] = `bearer ${str.content}`;
       // console.log(this.headerObj);
     },
     resetForm(formName) {
@@ -1961,6 +2031,27 @@ export default {
         console.log(auto);
       });
     },
+    //下载模板
+    exportExcel() {
+      this.$axios
+        .get(`api/blade-food/teacher/export-template`, {
+          responseType: "blob"
+        })
+        .then(res => {
+          console.log(res);
+          var blob = new Blob([res.data], {
+            type: "application/octet-stream"
+          }); //type这里表示xlsx类型
+
+          var downloadElement = document.createElement("a");
+          var href = window.URL.createObjectURL(blob); //创建下载的链接
+          downloadElement.href = href;
+          downloadElement.download = "教职工管理模板.xlsx"; //下载后文件名
+          document.body.appendChild(downloadElement);
+          downloadElement.click(); //点击下载
+          document.body.removeChild(downloadElement); //下载完成移除元素
+        });
+    },
     //页码
     m_handlePageChange(currPage) {
       console.log(currPage);
@@ -2014,6 +2105,7 @@ export default {
       // this.imageUrl = res.data.link;
       console.log(this.dialogImageUrl);
     },
+
     beforeAvatarUpload(file) {
       // const isJPG = file.type === "image/jpeg";
       const isLt2M = file.size / 1024 / 1024 < 2;
@@ -2025,6 +2117,26 @@ export default {
         this.$message.error("上传图片大小不能超过 2MB!");
       }
       return isLt2M;
+    },
+    beforeUpload(file) {
+      let extension = file.name.substring(file.name.lastIndexOf(".") + 1);
+      let size = file.size / 1024 / 1024;
+      if (extension !== "xlsx") {
+        this.$message.warning("只能上传后缀是.xlsx的文件");
+      }
+      if (size > 10) {
+        this.$message.warning("文件大小不得超过10M");
+      }
+    },
+    // 文件上传成功
+    handleSuccess(res, file, fileList) {
+      this.$message.success("文件上传成功");
+      this.ioimport = false;
+      this.getStorage();
+    },
+    // 文件上传失败
+    handleError(err, file, fileList) {
+      this.$message.error("文件上传失败");
     }
   }
 };
@@ -2147,5 +2259,9 @@ export default {
     width: 15px;
     height: 15px;
   }
+}
+.newbie {
+  height: 100px;
+  margin-top: 20px;
 }
 </style>
