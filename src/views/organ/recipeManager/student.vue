@@ -42,11 +42,15 @@
                     <span    v-if="!data.addBtn && data.classType == 2">{{
                       data.label
                     }}</span>
-                    <el-tooltip    :content="data.classAlias" placement="bottom" effect="light">
+                    <el-tooltip    v-if="data.classAlias!=null"  :content="data.classAlias" placement="bottom" effect="light">
                     <span    v-if="!data.addBtn && data.classType == 3">{{
                       data.label
                     }}</span>
                     </el-tooltip>
+
+                    <span    v-if="!data.addBtn && data.classType == 3&&data.classAlias==null">{{
+                      data.label
+                    }}</span>
                     <span
                       class="ant-tree-node-content-wrapper-addItem"
                       v-if="data.addBtn"
@@ -1780,48 +1784,48 @@
 </script>
 <style>
 
-  .student-contain  .item-ck  ,.item-ck-xj{
+  .student-contain  .item-ck  ,  .student-contain  .item-ck-xj{
     margin-top: 30px;
     margin-left: 50px;
   }
-  .item-ck-bj{
+  .student-contain .item-ck-bj{
     width: 200px;
     float: left;
   }
-  .item-ck-title{
+  .student-contain .item-ck-title{
     margin-right: 10px;
   }
-  .item-samewidth{
+  .student-contain .item-samewidth{
     width: 110px;
     display: block;
     float: left;
     text-align: right;
   }
-  .item-ck .item-title{
+  .student-contain .item-ck .item-title{
     margin-left: 100px;
     font-size: 12px;
     line-height: 20px;
     color: rgba(13,0,19,.56);
     margin-top: 10px;
   }
-  .item-ck   .item-class{
+  .student-contain  .item-ck   .item-class{
     margin-left: 100px;
   }
-  .item-ck   .item-class .item-class-title{
+  .student-contain  .item-ck   .item-class .item-class-title{
     line-height: 40px;
     border-bottom: 1px solid #e8e8e8;
   }
-  .item-ck   .item-class  .item-class-content{
+  .student-contain  .item-ck   .item-class  .item-class-content{
     margin-left: 100px;
     line-height: 50px;
   }
   .student-contain .item-ck .el-checkbox{
     width: 80px;
   }
-  .student-contain .item-ck  .el-form-item__label, .student-contain .item-ck-xj  .el-form-item__label{
+  .student-contain .item-ck  .el-form-item__label, .student-contain .student-contain .item-ck-xj  .el-form-item__label{
     width: 100px!important;
   }
-  .item-ck .el-checkbox-group{
+  .student-contain .item-ck .el-checkbox-group{
     margin-left: 100px;
 
   }
@@ -1853,7 +1857,7 @@
     font-size: 14px;
   }
 
-  .item-ck .el-select{
+  .student-contain  .item-ck .el-select{
     width:100px;
   }
 

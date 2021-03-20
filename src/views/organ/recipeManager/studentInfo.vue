@@ -5,7 +5,7 @@
     <el-row>
       <el-col :span="8">
         <el-form-item label="班级"   prop="classId">
-        <select-tree  :options="options" v-model="student.classId"  @getClassById="getClassById"  :props="defaultProps" />
+        <select-tree  ref="selectTreeId"  :options="options" v-model="student.classId"  @getClassById="getClassById"  :props="defaultProps" />
         </el-form-item>
 
       </el-col>
@@ -162,7 +162,7 @@
       </el-col>
 
       <el-col :span="8">
-        <el-form-item label="身份证类型">
+        <el-form-item label="证件类型">
           <el-select v-model="student.cardType" placeholder="请选择">
             <el-option
               v-for="item in cardType"
@@ -175,8 +175,8 @@
 
       </el-col>
       <el-col :span="8">
-        <el-form-item label="身份证号码">
-          <el-input v-model="student.cardNo"   placeholder="请输入身份证号码"></el-input>
+        <el-form-item label="证件号码" prop="cardNo">
+          <el-input v-model="student.cardNo"    placeholder="请输入证件号码"></el-input>
         </el-form-item>
       </el-col>
     </el-row>
@@ -339,7 +339,7 @@
       </el-col>
 
       <el-col :span="8">
-        <el-form-item label="身份证类型">
+        <el-form-item label="证件类型">
           <el-select v-model="student.fatherCardType" placeholder="请选择">
             <el-option
               v-for="item in cardType"
@@ -352,8 +352,8 @@
 
       </el-col>
       <el-col :span="8">
-        <el-form-item label="身份证号码">
-          <el-input v-model="student.fatherCardNo"   placeholder="请输入身份证号码"></el-input>
+        <el-form-item label="证件号码" prop="fatherCardNo">
+          <el-input v-model="student.fatherCardNo"   placeholder="请输入证件号码"></el-input>
         </el-form-item>
       </el-col>
     </el-row>
@@ -445,7 +445,7 @@
       </el-col>
 
       <el-col :span="8">
-        <el-form-item label="身份证类型">
+        <el-form-item label="证件类型">
           <el-select v-model="student.momCardType" placeholder="请选择">
             <el-option
               v-for="item in cardType"
@@ -458,8 +458,8 @@
 
       </el-col>
       <el-col :span="8">
-        <el-form-item label="身份证号码">
-          <el-input v-model="student.momCardNo"   placeholder="请输入身份证号码"></el-input>
+        <el-form-item label="证件号码" prop="momCardNo">
+          <el-input v-model="student.momCardNo"   placeholder="请输入证件号码"></el-input>
         </el-form-item>
       </el-col>
     </el-row>
@@ -556,7 +556,7 @@
         </el-form-item>
       </el-col>
       <el-col :span="8">
-        <el-form-item label="身份证类型">
+        <el-form-item label="证件类型">
           <el-select v-model="student.oneCardType" placeholder="请选择">
             <el-option
               v-for="item in cardType"
@@ -569,8 +569,8 @@
 
       </el-col>
       <el-col :span="8">
-        <el-form-item label="身份证号码">
-          <el-input v-model="student.oneCardNo"   placeholder="请输入身份证号码"></el-input>
+        <el-form-item label="证件号码" prop="oneCardNo">
+          <el-input v-model="student.oneCardNo"   placeholder="请输入证件号码"></el-input>
         </el-form-item>
       </el-col>
     </el-row>
@@ -707,7 +707,7 @@
         </el-form-item>
       </el-col>
       <el-col :span="8">
-        <el-form-item label="身份证类型">
+        <el-form-item label="证件类型">
           <el-select v-model="student.twoCardType" placeholder="请选择">
             <el-option
               v-for="item in cardType"
@@ -720,8 +720,8 @@
 
       </el-col>
       <el-col :span="8">
-        <el-form-item label="身份证号码">
-          <el-input v-model="student.twoCardNo"   placeholder="请输入身份证号码"></el-input>
+        <el-form-item label="证件号码" prop="twoCardNo">
+          <el-input v-model="student.twoCardNo"   placeholder="请输入证件号码"></el-input>
         </el-form-item>
       </el-col>
     </el-row>
@@ -1019,7 +1019,13 @@
           name:[{required: true, validator: this.validateName, trigger: "blur"}],
           sex:[{required: true,  validator: this.validateSex, trigger: "change"}],
           birthDate:[{required: true,  validator: this.validateBirthDate, trigger: "change"}],
+          cardNo:[{validator: this.validateCardNo, trigger: "change"}],
+          fatherCardNo:[{validator: this.validateFatherCardNo, trigger: "change"}],
+          momCardNo:[{validator: this.validateMomCardNo, trigger: "change"}],
+          oneCardNo:[{validator: this.validateOneCardNo, trigger: "change"}],
+          twoCardNo:[{validator: this.validateTwoCardNo, trigger: "change"}],
         },
+        className:"",
         // 默认选中值
         student: {
           id:'',
@@ -1983,6 +1989,11 @@
       //
       tree().then(res=>{
         that.options=res.data.data;
+        if(that.$route.query.selectClassId){
+          that.$set(that.student,"classId",that.$route.query.selectClassId)
+          debugger
+          that.getClassById(that.$route.query.selectClassId)
+        }
       })
       province().then(res=>{
         that.province=res.data.data;
@@ -2004,7 +2015,6 @@
           console.log(res.data.data)
           that.student = res.data.data;
           setTimeout(()=>{
-            debugger
             that.computeAge()
           },200)
           if (that.student.province) {
@@ -2015,9 +2025,7 @@
       } else {
         that.leaveFlag=false;
       }
-      if(that.$route.query.selectClassId){
-        that.$set(this.student,"classId",this.$route.query.selectClassId+"")
-      }
+
     },
     methods: {
       submit() {
@@ -2103,6 +2111,51 @@
         if (this.student.birthDate == ""||this.student.birthDate==undefined) {
           callback(new Error("请输入出生日期"));
         } else {
+          callback();
+        }
+      },
+       validateCardNo(rule, value, callback){
+        debugger
+        if (this.student.cardNo.length!=18&&this.student.cardNo!=0) {
+          callback(new Error("请输入18位证件号码"));
+        }
+        else {
+          callback();
+        }
+      },
+      validateFatherCardNo(rule, value, callback){
+        debugger
+        if (this.student.fatherCardNo.length!=18&&this.student.fatherCardNo!=0) {
+          callback(new Error("请输入18位证件号码"));
+        }
+        else {
+          callback();
+        }
+      },
+      validateMomCardNo(rule, value, callback){
+        debugger
+        if (this.student.momCardNo.length!=18&&this.student.momCardNo!=0) {
+          callback(new Error("请输入18位证件号码"));
+        }
+        else {
+          callback();
+        }
+      },
+      validateOneCardNo(rule, value, callback){
+        debugger
+        if (this.student.oneCardNo.length!=18&&this.student.oneCardNo!=0) {
+          callback(new Error("请输入18位证件号码"));
+        }
+        else {
+          callback();
+        }
+      },
+      validateTwoCardNo(rule, value, callback){
+        debugger
+        if (this.student.twoCardNo.length!=18&&this.student.twoCardNo!=0) {
+          callback(new Error("请输入18位证件号码"));
+        }
+        else {
           callback();
         }
       },

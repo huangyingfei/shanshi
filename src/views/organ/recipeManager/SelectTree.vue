@@ -67,6 +67,7 @@
           children: 'children',
         }),
       },
+
     },
     // 设置绑定参数
     // model: {
@@ -95,6 +96,7 @@
         this.$refs.tree.filter(val);
       },
       value(val) {
+        debugger
         this.labelModel = this.queryTree(this.data, val);
       },
     },
@@ -123,7 +125,6 @@
     },
     methods: {
       clear(){
-        debugger
         this.$set(this,"valueModel" ,"");
         this.$emit('getClassById',this.valueModel);
       },
@@ -132,10 +133,11 @@
         if(node.classType==3) {
           this.$set(this,"labelModel" ,node[this.props.label]);
           this.$set(this,"valueModel" ,node[this.props.value]);
+          this.$emit('getClassById',this.valueModel);
+          this.filterText='';
+          this.onCloseTree();
         }
-        this.$emit('getClassById',this.valueModel);
-        this.filterText='';
-        this.onCloseTree();
+
       },
       // 偏平数组转化为树状层级结构
       switchTree() {

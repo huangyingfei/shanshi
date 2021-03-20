@@ -61,6 +61,7 @@
                width="345px">
       <el-tabs type="border-card">
         <el-tab-pane label="菜单权限">
+          <div class="el-tabs__content-card">
           <el-tree :data="menuGrantList"
                    show-checkbox
                    node-key="id"
@@ -68,6 +69,7 @@
                    :default-checked-keys="menuTreeObj"
                    :props="props">
           </el-tree>
+          </div>
         </el-tab-pane>
 
       </el-tabs>
@@ -448,6 +450,11 @@
 
   .box .el-scrollbar__wrap {
     overflow: scroll;
+  }
+  .el-tabs__content-card{
+    overflow: scroll !important;
+    position: relative;
+    height:300px;
   }
 
 </style>
