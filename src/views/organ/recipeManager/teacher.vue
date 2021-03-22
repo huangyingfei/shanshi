@@ -1523,14 +1523,19 @@ export default {
       } else {
         this.stringClass = [];
       }
-      let police = {
-        class: [row.deptStr]
-      };
-      police.class = [...JSON.parse(police.class[0])];
-      // console.log(police.class);
-      this.ruleForm.domain = police.class[0];
-      console.log(this.ruleForm.domain);
-
+      if (row.deptId) {
+        //         let police = {
+        //           class: [row.deptStr]
+        //         };
+        //         police.class = [...JSON.parse(police.class[0])];
+        //
+        //         this.ruleForm.domain = police.class[0];
+        //         console.log(this.ruleForm.domain);
+        this.ruleForm.domain = row.deptId;
+        console.log(this.ruleForm.domain);
+      } else {
+        this.ruleForm.domain = [];
+      }
       this.ruleForm.thejob = row.jobNumber; //工号
       this.ruleForm.inductions = row.entryTime; //入职日期
       this.ruleForm.workin = row.workTime; //参加工作日期

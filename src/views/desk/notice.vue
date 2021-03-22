@@ -12,7 +12,7 @@
       <div class="mechanism">
         <img src="../../../public/img/zftotal.png" alt />
         <div class="nism1">
-          <div class="ingredients">政府</div>
+          <div class="ingredients">监管</div>
           <div class="food1">{{ this.newhead.gover }}</div>
         </div>
       </div>
@@ -263,7 +263,7 @@ export default {
   margin-bottom: 40px;
 }
 .variety {
-  width: 60%;
+  width: 55%;
   height: 750px;
   overflow-y: auto;
   overflow-x: hidden;
@@ -286,7 +286,7 @@ export default {
   }
 }
 .recipes {
-  width: 40%;
+  width: 45%;
   height: 700px;
   overflow-y: auto;
   overflow-x: hidden;

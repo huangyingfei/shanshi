@@ -615,7 +615,7 @@ export default {
   margin-bottom: 40px;
 }
 .variety {
-  width: 60%;
+  width: 55%;
   height: 750px;
   margin-bottom: 40px;
   overflow-y: auto;
@@ -638,7 +638,7 @@ export default {
   }
 }
 .recipes {
-  width: 40%;
+  width: 45%;
   height: 750px;
   overflow-y: auto;
   overflow-x: hidden;
