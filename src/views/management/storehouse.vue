@@ -406,7 +406,7 @@
     <div class="base">
       <el-button
         :disabled="this.edients == 0"
-        v-if="this.gavatorta == 1 || this.edients == 0"
+        v-if="this.gavatorta == 1 && this.edients != 0"
         type="primary"
         @click="saved('ruleForm')"
         >编辑保存</el-button

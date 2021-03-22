@@ -147,11 +147,9 @@
                 >
               </template>
             </el-table-column>
-            <el-table-column prop="conFate" label="连续天数" align="center">
-              <!-- <template slot-scope="scope">
-                <span>{{ scope.row.conFate }}</span>
-              </template> -->
-            </el-table-column>
+            <!-- <el-table-column prop="conFate" label="连续天数" align="center">
+             
+            </el-table-column> -->
             <el-table-column
               prop="refundAmount"
               label="退膳金额（元）"
@@ -501,7 +499,11 @@ export default {
               this.histories[i].isRefund
             );
           }
-          this.export2Excel();
+          // for()
+          // for (let k in this.histories) {
+          //   console.log(this.histories[k]);
+          // }
+          // this.export2Excel();
         });
     },
     //导入Excel

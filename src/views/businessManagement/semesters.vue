@@ -255,7 +255,11 @@ export default {
               this.semesters[i].isRefund
             );
           }
+          this.export2Excel();
         });
+    },
+    //导入Excel
+    export2Excel() {
       require.ensure([], () => {
         const { export_json_to_excel } = require("@/excel/export2Excel");
         const tHeader = [

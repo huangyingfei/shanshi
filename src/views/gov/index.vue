@@ -96,7 +96,7 @@
                         </div>
                         <div class="item-info">
                           <span>{{ zfOrgCount.orgCount }}</span>
-                          <div>机构总量</div>
+                          <div>机构</div>
                         </div>
                       </div>
                     </el-col>
@@ -113,7 +113,7 @@
                         </div>
                         <div class="item-info">
                           <span>{{ zfOrgCount.foodCount }}</span>
-                          <div>食材总量</div>
+                          <div>食材</div>
                         </div>
                       </div>
                     </el-col>
@@ -127,7 +127,7 @@
                         </div>
                         <div class="item-info">
                           <span>{{ zfOrgCount.foodAdd }}</span>
-                          <div>使用食材量</div>
+                          <div>使用食材</div>
                         </div>
                       </div>
                     </el-col>
@@ -143,7 +143,7 @@
                         </div>
                         <div class="item-info">
                           <span>{{ zfOrgCount.recipeCount }}</span>
-                          <div>食谱总量</div>
+                          <div>食谱</div>
                         </div>
                       </div>
                     </el-col>
@@ -157,7 +157,7 @@
                         </div>
                         <div class="item-info">
                           <span>{{ zfOrgCount.dishCount }}</span>
-                          <div>菜品总量</div>
+                          <div>菜品</div>
                         </div>
                       </div>
                     </el-col>
@@ -171,7 +171,7 @@
                         </div>
                         <div class="item-info">
                           <span>{{ zfOrgCount.dishAdd }}</span>
-                          <div>使用菜品量</div>
+                          <div>使用菜品</div>
                         </div>
                       </div>
                     </el-col>
