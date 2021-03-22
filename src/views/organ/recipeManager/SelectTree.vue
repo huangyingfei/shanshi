@@ -212,7 +212,7 @@
   };
 </script>
 
-<style>
+<style scoped>
   .el-input.el-input--suffix {
     cursor: pointer;
     overflow: hidden;

@@ -11,7 +11,7 @@
       </el-col>
       <el-col :span="8">
         <el-form-item label="学号"  prop="childNo">
-          <el-input-number  :controls="false"  v-model="student.childNo" controls-position="right"  :min="1" :max="1000000000000000"></el-input-number>
+          <el-input-number   :controls="false"  v-model="student.childNo" controls-position="right"  :min="1" :max="1000000000000000"></el-input-number>
         </el-form-item>
       </el-col>
       <el-col :span="8">
@@ -211,7 +211,7 @@
         <el-form-item label="接种所在省">
           <el-select v-model="student.vaccinationProvince" placeholder="请选择">
             <el-option
-              v-for="item in vaccinationProvince"
+              v-for="item in province"
               :key="item.code"
               :label="item.name"
               :value="item.code">
@@ -363,9 +363,9 @@
           <el-select v-model="student.fatherLocation" placeholder="请选择">
             <el-option
               v-for="item in location"
-              :key="item.label"
+              :key="item.value"
               :label="item.label"
-              :value="item.label">
+              :value="item.value">
             </el-option>
           </el-select>
         </el-form-item>
@@ -469,9 +469,9 @@
           <el-select v-model="student.momLocation" placeholder="请选择">
             <el-option
               v-for="item in location"
-              :key="item.label"
+              :key="item.value"
               :label="item.label"
-              :value="item.label">
+              :value="item.value">
             </el-option>
           </el-select>
         </el-form-item>
@@ -1192,27 +1192,27 @@
         location:[
           {
             label: "本片",
-            value: 1
+            value: "1"
           },
           {
             label: "本区外片",
-            value: 2
+            value: "2"
           },
           {
             label: "本市外区",
-            value: 3
+            value: "3"
           },
           {
             label: "外埠",
-            value: 4
+            value: "4"
           },
           {
             label: "外籍",
-            value: 5
+            value: "5"
           },
           {
             label: "港澳台",
-            value: 6
+            value: "6"
           },
         ],
         nation: [
@@ -1912,51 +1912,51 @@
         childRelation:[
         {
           label: "父亲",
-          value: "1"
+          value: 1
         },
         {
           label: "母亲",
-          value: "2"
+          value: 2
         },
         {
           label: "继父或养母",
-          value: "3"
+          value: 3
         },
         {
           label: "继母或养母",
-          value: "4"
+          value: 4
         },
         {
           label: "祖父",
-          value: "5"
+          value: 5
         },
         {
           label: "祖母",
-          value: "6"
+          value: 6
         },
         {
           label: "外祖父",
-          value: "7"
+          value: 7
         },
         {
           label: "外祖母",
-          value: "8"
+          value: 8
         },
         {
           label: "哥哥",
-          value: "9"
+          value: 9
         },
         {
           label: "姐姐",
-          value: "10"
+          value: 10
         },
         {
           label: "其他亲属",
-          value: "11"
+          value: 11
         },
         {
           label: "非亲属",
-          value: "12"
+          value: 12
         },
 
       ],
@@ -1987,18 +1987,18 @@
     mounted(){
       let that=this;
       //
+      province().then(res=>{
+        that.$set(that,"vaccinationProvince",res.data.data);
+        that.$set(that,"province",res.data.data);
+      })
       tree().then(res=>{
         that.options=res.data.data;
         if(that.$route.query.selectClassId){
           that.$set(that.student,"classId",that.$route.query.selectClassId)
-          debugger
           that.getClassById(that.$route.query.selectClassId)
         }
       })
-      province().then(res=>{
-        that.province=res.data.data;
-        that.vaccinationProvince=res.data.data;
-      })
+
       this.$set(this.student,"childNo",undefined)
       this.$set(this.student,"age",undefined)
 
@@ -2020,6 +2020,9 @@
           if (that.student.province) {
             that.$set(that.student, "province", that.student.province + "");
           }
+          if (that.student.vaccinationProvince) {
+            that.$set(that.student, "vaccinationProvince", that.student.vaccinationProvince + "");
+          }
           that.$set(this.student, "educationalCircles", that.student.educationalCircles + "");
         });
       } else {
@@ -2030,6 +2033,7 @@
     methods: {
       submit() {
         let that=this;
+        debugger
         this.$refs.student.validate(function (valid ) {
           if (valid) {
             if (that.$route.query.id) {
@@ -2053,7 +2057,8 @@
                 }
               });
             }
-          }})
+          }
+        })
       },
         validateChildNo(rule, value, callback) {
         //
@@ -2115,8 +2120,7 @@
         }
       },
        validateCardNo(rule, value, callback){
-        debugger
-        if (this.student.cardNo.length!=18&&this.student.cardNo!=0) {
+        if (this.student.cardNo&&this.student.cardNo.length!=18&&this.student.cardNo!=0) {
           callback(new Error("请输入18位证件号码"));
         }
         else {
@@ -2124,8 +2128,7 @@
         }
       },
       validateFatherCardNo(rule, value, callback){
-        debugger
-        if (this.student.fatherCardNo.length!=18&&this.student.fatherCardNo!=0) {
+        if (this.student.fatherCardNo&&this.student.fatherCardNo.length!=18&&this.student.fatherCardNo!=0) {
           callback(new Error("请输入18位证件号码"));
         }
         else {
@@ -2133,8 +2136,7 @@
         }
       },
       validateMomCardNo(rule, value, callback){
-        debugger
-        if (this.student.momCardNo.length!=18&&this.student.momCardNo!=0) {
+        if (this.student.momCardNo&&this.student.momCardNo.length!=18&&this.student.momCardNo!=0) {
           callback(new Error("请输入18位证件号码"));
         }
         else {
@@ -2142,8 +2144,7 @@
         }
       },
       validateOneCardNo(rule, value, callback){
-        debugger
-        if (this.student.oneCardNo.length!=18&&this.student.oneCardNo!=0) {
+        if (this.student.oneCardNo&&this.student.oneCardNo.length!=18&&this.student.oneCardNo!=0) {
           callback(new Error("请输入18位证件号码"));
         }
         else {
@@ -2151,8 +2152,7 @@
         }
       },
       validateTwoCardNo(rule, value, callback){
-        debugger
-        if (this.student.twoCardNo.length!=18&&this.student.twoCardNo!=0) {
+        if (this.student.twoCardNo&&this.student.twoCardNo.length!=18&&this.student.twoCardNo!=0) {
           callback(new Error("请输入18位证件号码"));
         }
         else {
@@ -2194,6 +2194,9 @@
   };
 </script>
 <style>
+  .studentInfo .el-input-number.is-without-controls .el-input__inner,.studentInfo .el-input.is-disabled .el-input__inner{
+    text-align: left;
+  }
  .studentInfo .el-form--inline .el-form-item{
     display: flex !important;
     justify-content:flex-start;
