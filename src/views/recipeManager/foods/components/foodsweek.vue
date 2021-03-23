@@ -30,7 +30,7 @@
         left: 105px;
         top: 14px;
         z-index: 2;
-        opacity: 0.8;
+        opacity: 0.6;
       "
       @click="toLeft"
     >
@@ -43,7 +43,7 @@
         right: 10px;
         top: 14px;
         z-index: 2;
-        opacity: 0.8;
+        opacity: 0.6;
       "
       @click="toRight"
     >
@@ -1888,39 +1888,39 @@ export default {
       var backgroundImage = [
         { background: "#FFFFFF !important" },
         {
-          background:
-            'url("/img/cater/mon.png") 20% 50% no-repeat, linear-gradient(90deg, #FFFAEC 0%,#FDD36D 100%)!important',
+          background: 'url("/img/cater/mon1.png") no-repeat!important',
           color: "#DA9501!important",
+          "background-size": "100% 100%!important",
         },
         {
-          background:
-            'url("/img/cater/tue.png") 20% 50% no-repeat, linear-gradient(90deg, #FFFAEC 0%,#FDD36D 100%)!important',
+          background: 'url("/img/cater/tue1.png") no-repeat!important',
           color: "#DA9501!important",
+          "background-size": "100% 100%!important",
         },
         {
-          background:
-            'url("/img/cater/wed.png") 20% 50% no-repeat, linear-gradient(90deg, #FFFAEC 0%,#FDD36D 100%)!important',
+          background: 'url("/img/cater/wed1.png") no-repeat!important',
           color: "#DA9501!important",
+          "background-size": "100% 100%!important",
         },
         {
-          background:
-            'url("/img/cater/thu.png") 20% 50% no-repeat, linear-gradient(90deg, #FFFAEC 0%,#FDD36D 100%)!important',
+          background: 'url("/img/cater/thu1.png") no-repeat!important',
           color: "#DA9501!important",
+          "background-size": "100% 100%!important",
         },
         {
-          background:
-            'url("/img/cater/fri.png") 20% 50% no-repeat, linear-gradient(90deg, #FFFAEC 0%,#FDD36D 100%)!important',
+          background: 'url("/img/cater/fri1.png") no-repeat!important',
           color: "#DA9501!important",
+          "background-size": "100% 100%!important",
         },
         {
-          background:
-            'url("/img/cater/sat.png") 20% 50% no-repeat, linear-gradient(90deg, #FFFAEC 0%,#FDD36D 100%)!important',
+          background: 'url("/img/cater/sat1.png") no-repeat!important',
           color: "#DA9501!important",
+          "background-size": "100% 100%!important",
         },
         {
-          background:
-            'url("/img/cater/sun.png") 20% 50% no-repeat, linear-gradient(90deg, #FFFAEC 0%,#FDD36D 100%)!important',
+          background: 'url("/img/cater/sun1.png") no-repeat!important',
           color: "#DA9501!important",
+          "background-size": "100% 100%!important",
         },
       ];
 
