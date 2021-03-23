@@ -201,10 +201,11 @@ export default {
         (_) => _.id === id
       )[0].nutritionCoeffientVos;
       this.nutritionVos.forEach(_=>{
-        if(_.id==id){
+        if(_.id==id&&nutritionVos.length>0){
           _.titleLabel=nutritionVos[0].titleLabel
         }
       })
+      debugger
       console.log(nutritionVos)
       if(nutritionVos.length==0){
         this.getHeight="oneHeight"
