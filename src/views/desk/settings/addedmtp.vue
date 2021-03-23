@@ -45,8 +45,12 @@
           :key="i"
         >
           <el-tabs v-model="activeName2" type="card">
+            <div class="prompt">
+              {{ item.titleLabel }}
+            </div>
+
             <div class="accto" v-if="item.sexNum == 2">
-              <div class="titles">人群</div>
+              <div class="titles">人群年龄</div>
               <div class="glyph">
                 <div class="startup">男性</div>
                 <div class="chart">上限</div>
@@ -58,27 +62,32 @@
                 <div class="Item">下限</div>
               </div>
               <div class="rotate">
-                <div class="chart">上限系数</div>
+                <div class="chart1">上限系数</div>
                 <div class="Item">下限系数</div>
               </div>
             </div>
+
             <div class="actor" v-if="item.sexNum == 1">
-              <div class="effects">人群</div>
+              <div class="effects">人群年龄</div>
               <div class="kendo">
-                <div class="chart">上限</div>
-                <div class="Item">下限</div>
+                <div class="charter">上限</div>
+                <div class="Itemer">下限</div>
               </div>
               <div class="directory">
-                <div class="chart">上限系数</div>
-                <div class="Item">下限系数</div>
+                <div class="charter">上限系数</div>
+                <div class="Itemer">下限系数</div>
               </div>
             </div>
+
             <el-tab-pane
               :name="button.name"
               :label="button.name"
               v-for="(button, i) in item.nutritionVos"
               :key="i"
             >
+              <div class="prompt1">
+                {{ button.titleLabel }}
+              </div>
               <ul class="constant">
                 <li
                   v-for="(nvo, index) in button.nutritionCoeffientVos"
@@ -90,54 +99,54 @@
                     <el-input
                       v-model="nvo.manMax"
                       placeholder="请输入内容"
-                      style=" margin-left: 20px; width: 140px;"
+                      style=" margin-left: 20px; width: 120px;"
                     ></el-input>
                     <el-input
                       v-model="nvo.manMin"
                       placeholder="请输入内容"
-                      style=" margin-left: 20px; width: 140px;"
+                      style=" margin-left: 20px;width: 120px;"
                     ></el-input>
                     <el-input
                       v-model="nvo.womanMax"
                       placeholder="请输入内容"
-                      style=" margin-left: 20px; width: 140px;"
+                      style=" margin-left: 20px;width: 120px;"
                     ></el-input>
                     <el-input
                       v-model="nvo.womanMin"
                       placeholder="请输入内容"
-                      style=" margin-left: 20px; width: 140px;"
+                      style=" margin-left: 20px; width: 120px;"
                     ></el-input>
                     <el-input
                       v-model="nvo.coefficientMax"
                       placeholder="请输入内容"
-                      style=" margin-left: 20px; width: 140px;"
+                      style=" margin-left: 20px; width: 120px;"
                     ></el-input>
                     <el-input
                       v-model="nvo.coefficientMin"
                       placeholder="请输入内容"
-                      style=" margin-left: 20px; width: 140px;"
+                      style=" margin-left: 20px; width: 120px;"
                     ></el-input>
                   </div>
                   <div v-if="item.sexNum == 1" style="display: inline-block;">
                     <el-input
                       v-model="nvo.resultMax"
                       placeholder="请输入内容"
-                      style=" margin-left: 20px; width: 140px;"
+                      style=" margin-left: 20px; width:100px;"
                     ></el-input>
                     <el-input
                       v-model="nvo.resultMin"
                       placeholder="请输入内容"
-                      style=" margin-left: 20px; width: 140px;"
+                      style=" margin-left: 20px; width:100px;"
                     ></el-input>
                     <el-input
                       v-model="nvo.coefficientMax"
                       placeholder="请输入内容"
-                      style=" margin-left: 20px; width: 140px;"
+                      style=" margin-left: 20px; width:100px;"
                     ></el-input>
                     <el-input
                       v-model="nvo.coefficientMin"
                       placeholder="请输入内容"
-                      style=" margin-left: 20px; width: 140px;"
+                      style=" margin-left: 20px; width:100px;"
                     ></el-input>
                   </div>
                 </li>
@@ -153,54 +162,54 @@
                 <el-input
                   v-model="nvo.manMax"
                   placeholder="请输入内容"
-                  style=" margin-left: 20px; width: 140px;"
+                  style=" margin-left: 20px; width: 125px;"
                 ></el-input>
                 <el-input
                   v-model="nvo.manMin"
                   placeholder="请输入内容"
-                  style=" margin-left: 20px; width: 140px;"
+                  style=" margin-left: 20px; width: 125px;"
                 ></el-input>
                 <el-input
                   v-model="nvo.womanMax"
                   placeholder="请输入内容"
-                  style=" margin-left: 20px; width: 140px;"
+                  style=" margin-left: 20px; width: 125px;"
                 ></el-input>
                 <el-input
                   v-model="nvo.womanMin"
                   placeholder="请输入内容"
-                  style=" margin-left: 20px; width: 140px;"
+                  style=" margin-left: 20px; width: 125px;"
                 ></el-input>
                 <el-input
                   v-model="nvo.coefficientMax"
                   placeholder="请输入内容"
-                  style=" margin-left: 20px; width: 140px;"
+                  style=" margin-left: 20px; width:125px;"
                 ></el-input>
                 <el-input
                   v-model="nvo.coefficientMin"
                   placeholder="请输入内容"
-                  style=" margin-left: 20px; width: 140px;"
+                  style=" margin-left: 20px; width:125px;"
                 ></el-input>
               </div>
               <div v-if="item.sexNum == 1" style="display: inline-block;">
                 <el-input
                   v-model="nvo.resultMax"
                   placeholder="请输入内容"
-                  style=" margin-left: 20px; width: 140px;"
+                  style=" margin-left: 20px; width: 100px;"
                 ></el-input>
                 <el-input
                   v-model="nvo.resultMin"
                   placeholder="请输入内容"
-                  style=" margin-left: 20px; width: 140px;"
+                  style=" margin-left: 20px; width: 100px;"
                 ></el-input>
                 <el-input
                   v-model="nvo.coefficientMax"
                   placeholder="请输入内容"
-                  style=" margin-left: 20px; width: 140px;"
+                  style=" margin-left: 20px; width: 100px;"
                 ></el-input>
                 <el-input
                   v-model="nvo.coefficientMin"
                   placeholder="请输入内容"
-                  style=" margin-left: 20px; width: 140px;"
+                  style=" margin-left: 20px; width: 100px;"
                 ></el-input>
               </div>
             </li>
@@ -551,7 +560,7 @@ export default {
 }
 .nialing {
   /* color: #b4bbc5; */
-  width: 100px;
+  width: 160px;
   height: 40px;
   text-align: center;
   /* float: left; */
@@ -559,6 +568,23 @@ export default {
   margin-top: 20px;
   /* background-color: red; */
   display: inline-block;
+}
+.prompt {
+  width: 500px;
+  height: 20px;
+  margin-left: 0px;
+  color: red;
+  font-size: 14px;
+}
+.prompt1 {
+  width: 500px;
+  height: 20px;
+  margin-left: 0px;
+  color: red;
+  font-size: 14px;
+  position: absolute;
+  top: 0;
+  left: 10px;
 }
 .accto {
   /* width: 1100px; */
@@ -568,12 +594,12 @@ export default {
   top: 5px; */
   margin-left: 50px;
 
-  color: #b4bbc5;
+  color: #000;
   font-size: 14px;
   z-index: 999;
 }
 .titles {
-  width: 80px;
+  width: 125px;
   height: 50px;
   line-height: 50px;
   margin-top: 31px;
@@ -597,6 +623,25 @@ export default {
   float: left;
   margin-left: 20px;
 }
+.charter {
+  width: 110px;
+  height: 50px;
+
+  float: left;
+}
+.chart1 {
+  width: 80px;
+  height: 50px;
+
+  float: left;
+  /* margin-left: 20px; */
+}
+.Itemer {
+  width: 109px;
+  height: 50px;
+
+  float: left;
+}
 .Item {
   width: 100px;
   height: 50px;
@@ -610,7 +655,7 @@ export default {
   height: 83px;
   line-height: 50px;
   text-align: center;
-  margin-left: 20px;
+  /* margin-left: 20px; */
   float: left;
 }
 .rotate {
@@ -619,7 +664,7 @@ export default {
   height: 50px;
   line-height: 50px;
   text-align: center;
-  margin-left: 20px;
+  /* margin-left: 20px; */
   float: left;
   margin-top: 31px;
 }
@@ -637,13 +682,14 @@ export default {
   top: 5px; */
 
   margin-left: 50px;
-  color: #b4bbc5;
+  /* color: #b4bbc5; */
+  color: #000;
   font-size: 14px;
   /* position: relative;
   top: 82px; */
 }
 .effects {
-  width: 80px;
+  width: 120px;
   height: 50px;
   line-height: 50px;
 
@@ -652,16 +698,15 @@ export default {
   float: left;
 }
 .kendo {
-  width: 300px;
+  width: 220px;
   height: 50px;
   text-align: center;
   line-height: 50px;
-
-  margin-left: 30px;
+  margin-left: 48px;
   float: left;
 }
 .directory {
-  width: 300px;
+  width: 220px;
   height: 50px;
   text-align: center;
   line-height: 50px;

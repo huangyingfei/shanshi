@@ -512,7 +512,7 @@
           </el-form-item>
         </el-form>
       </div>
-      <div slot="footer" class="dialog-footer" style="text-align: center;">
+      <div slot="footer" class="dialog-footer" style="">
         <el-button @click="ratycancel('ruleForm')">取 消</el-button>
         <!-- <el-button @click="resetForm('ruleForm')">重置</el-button> -->
         <el-button

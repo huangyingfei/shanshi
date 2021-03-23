@@ -252,7 +252,8 @@ export default {
         number: 1
       },
       monthly: "",
-      histories: ""
+      histories: [],
+      cutoff: ""
     };
   },
   beforeMount() {
@@ -499,11 +500,22 @@ export default {
               this.histories[i].isRefund
             );
           }
+          var validate = [];
+          this.histories.forEach((item, i) => {
+            validate[i] = [];
+            for (let k in item) {
+              if (k.indexOf("day") !== -1 && item[k] > 0) {
+                validate[i].push(k.slice(3) + "号");
+              }
+            }
+            item.Proofs = validate[i].join(",");
+          });
+          // console.log(this.histories);
           // for()
           // for (let k in this.histories) {
           //   console.log(this.histories[k]);
           // }
-          // this.export2Excel();
+          this.export2Excel();
         });
     },
     //导入Excel
@@ -515,18 +527,18 @@ export default {
           "班级",
           "姓名",
           "累计天数",
-          "连续天数",
           "退膳金额(元)",
-          "是否已退费"
+          "是否已退费",
+          `${this.histories.monthy}+1号`
         ]; //导出表头信息
         const filterVal = [
           "monthy",
           "className",
           "studentName",
           "fate",
-          "conFate",
           "refundAmount",
-          "isRefund"
+          "isRefund",
+          "Proofs"
         ]; // 导出的表头字段名，需要导出表格字段名
         const list = this.histories;
         const data = this.formatJson(filterVal, list);

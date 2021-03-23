@@ -627,7 +627,7 @@
           </el-timeline>
         </div>
       </div>
-      <div slot="footer" class="dialog-footer" style=" text-align: center;">
+      <div slot="footer" class="dialog-footer" style="">
         <el-button @click="seekeys = false">取 消</el-button>
         <el-button type="primary" @click="restore()" v-if="this.nbottoms == 2">
           拒 绝</el-button
@@ -1071,7 +1071,7 @@
           </el-timeline-item>
         </el-timeline>
       </div>
-      <div slot="footer" class="dialog-footer" style="text-align: center">
+      <div slot="footer" class="dialog-footer" style="">
         <el-button @click="dumpdbtostream = false">取 消</el-button>
       </div>
     </el-dialog>

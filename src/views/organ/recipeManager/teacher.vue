@@ -348,7 +348,7 @@
               label="婚姻状况"
             >
               <el-radio v-model="ruleForm.marriages" label="1">未婚</el-radio>
-              <el-radio v-model="ruleForm.marriages" label="2">已婚</el-radio>
+              <el-radio v-model="ruleForm.marriages" label="0">已婚</el-radio>
             </el-form-item>
             <el-form-item style="width: 355px" label="选择部门" prop="domain">
               <el-cascader
@@ -546,7 +546,7 @@
             </el-form-item>
           </el-form>
         </div>
-        <div slot="footer" class="dialog-footer" style="text-align: center;">
+        <div slot="footer" class="dialog-footer" style="">
           <el-button @click="dateTime = false">取 消</el-button>
           <!-- <el-button @click="resetForm('ruleForm')">重置</el-button> -->
           <el-button
@@ -1538,7 +1538,13 @@ export default {
       }
       this.ruleForm.thejob = row.jobNumber; //工号
       this.ruleForm.inductions = row.entryTime; //入职日期
-      this.ruleForm.workin = row.workTime; //参加工作日期
+      if (row.workTime != null) {
+        this.ruleForm.workin = row.workTime; //参加工作日期
+        this.stop();
+      } else {
+        this.ruleForm.workin = "";
+      }
+
       this.ruleForm.update = row.cardNo; //证件号码
       this.ruleForm.worker = row.workUnit; //工作单位
       this.ruleForm.emails = row.email; //邮箱

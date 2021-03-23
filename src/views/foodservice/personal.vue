@@ -530,7 +530,7 @@
     <div class="autosave">
       <el-button
         :disabled="this.edients == 0"
-        v-if="this.editable == 1"
+        v-if="this.editable == 1 && this.edients != 0"
         @click="saveItem"
         type="primary"
         >编辑保存</el-button
