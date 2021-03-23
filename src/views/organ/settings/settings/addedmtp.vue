@@ -31,9 +31,10 @@
      <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane v-for="(item, index) in nutritionVos" :key="index"   :label="item.name" :id="item.id">
         <div class="tag-list">
-          <el-tag :type="i.isActive ? 'success' : 'info'" @click="changeSecond(item.nutritionVos, i)"
+          <el-tag :type="i.isActive ? 'success' : 'info'" @click="changeSecond(item.nutritionVos, i,item.id)"
             style="margin-right: 20px;" v-for="(i, iIndex) in item.nutritionVos" :key="iIndex">{{i.name}}</el-tag>
         </div>
+        <div style="font-size: 10px;color: red">{{item.titleLabel}}</div>
       </el-tab-pane>
     </el-tabs>
 
@@ -199,6 +200,11 @@ export default {
       this.tableData = this.nutritionVos.filter(
         (_) => _.id === id
       )[0].nutritionCoeffientVos;
+      this.nutritionVos.forEach(_=>{
+        if(_.id==id){
+          _.titleLabel=nutritionVos[0].titleLabel
+        }
+      })
       console.log(nutritionVos)
       if(nutritionVos.length==0){
         this.getHeight="oneHeight"
@@ -214,7 +220,12 @@ export default {
         console.log(this.tableData)
       }
     },
-    changeSecond(list, item) {
+    changeSecond(list, item,id) {
+      this.nutritionVos.forEach(_=>{
+          if(_.id==id){
+            _.titleLabel=item.titleLabel
+          }
+      })
       list.forEach((_) => this.$set(_, "isActive", false));
       this.$set(item, "isActive", true);
       this.tableData = list.filter(
@@ -227,10 +238,10 @@ export default {
 
 <style scoped>
   .oneHeight{
-    height:130px;
+    height:150px;
   }
   .twoHeight{
-    height:210px;
+    height:215px;
   }
   .el-fix{
     position: fixed;

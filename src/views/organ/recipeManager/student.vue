@@ -759,6 +759,7 @@
         banjiVisible:false,
         leaveData:{},
         leaveOption:{
+          menuPosition:"right",
           column:[
             {
               label:'离校原因',

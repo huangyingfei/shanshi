@@ -17,7 +17,7 @@
       :style="`min-width: ${treeWidth}`"
       :data="data"
       :props="props"
-      :expand-on-click-node="false"
+      :expand-on-click-node="true"
       :filter-node-method="filterNode"
       :default-expand-all="false"
       @node-click="onClickNode">
