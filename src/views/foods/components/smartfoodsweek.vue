@@ -1,7 +1,7 @@
 <template>
   <div style="padding-left:25px;height: 1080px;width: 80%">
     <!-- table-week start   -->
-    <el-table class="table-week" style="width:100%" :data="smartDatas" border fit :empty-text="empty">
+    <el-table class="table-week" style="width:100%" :data="smartDatas" border fit :empty-text="empty"   v-loading="loading2"  element-loading-text="您的食谱正在配平中，请耐心等待">
       <el-table-column align="center" width="100" fixed class-name="col-date3 colNoneBorder" >
         <template slot="header"> 菜品/食物 </template>
         <template slot-scope="scope">
@@ -1054,6 +1054,7 @@
       foodsChoice,
     },
     props: {
+      loading2:false,
       // 表格头部
       headers: [],
       // 表格数据

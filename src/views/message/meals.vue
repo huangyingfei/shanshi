@@ -696,6 +696,7 @@
         :fullscreen="true"
         :visible.sync="pointscan"
         width="600px"
+        :before-close="handleClose"
       >
         <div class="header">
           <div class="headerTime">
@@ -762,6 +763,7 @@
           <nutrient-with-color :nutrition="nutrition"></nutrient-with-color>
 
           <smartfoods-week
+            :loading2="loading2"
             @childfn="parentFn"
             :headers="headers"
             :smartDatas="smartDatas"
@@ -886,6 +888,7 @@ import nutrientWithColor from "@/views/foods/components/nutrientwithcolor";
 import showScore from "@/views/foods/components/showscore";
 import smartfoodsWeek from "@/views/foods/components/smartfoodsweek";
 import { detailByPeopleId } from "@/api/system/special";
+import {upScore} from "@/api/system/meals"
 
 export default {
   components: {
@@ -921,6 +924,7 @@ export default {
   data() {
     const data = [];
     return {
+      loading2:false,
       loading:false,
       topShow: true,
       tableData: [],
@@ -2251,98 +2255,203 @@ export default {
     },
     startTrim() {
       if (this.node.exceptValue) {
-        let that = this;
+        //localStorage.setItem("oldData", JSON.stringify(this.smartDatas));
 
-        this.smartDatas.forEach((week) => {
-          week.weeks.forEach((_) => {
-            _.foods.forEach((__) => {
-              __.children.forEach((___) => {
-                let flag = false;
-                ___.nutrientIds.forEach((n) => {
-                  if (n.id == that.node.nowCode) {
-                    if (n.value != "0") {
-                      flag = true;
-                    }
-                  }
-                });
-                if (flag) {
-                  let add =
-                    (parseFloat(that.node.exceptValue) -
-                      parseFloat(that.node.nowValue)) /
-                    parseFloat(that.node.nowValue);
-                  if (add > 0) {
-                    this.$set(___, "up", (add * parseFloat(100)).toFixed(2));
-                    delete ___["down"];
-                  } else if (add < 0) {
-                    this.$set(
-                      ___,
-                      "down",
-                      Math.abs((add * parseFloat(100)).toFixed(2))
-                    );
-                    delete ___["up"];
-                  } else {
-                    delete ___["down"];
-                    delete ___["up"];
-                  }
-                  let count =
-                    parseFloat(___.count) + parseFloat(___.count) * add;
-                  this.$set(___, "count", count.toFixed(2));
-                } else {
-                  //
-                  Vue.delete(___, "down");
-                  Vue.delete(___, "up");
-                  // delete ___["down"]
-                  // delete ___["up"]
-                  // this.$set(___, "count", ___.count);
-                }
-              });
-            });
-          });
-        });
-        this.smartDatas.forEach((item) => {
-          this.$set(item, "flag", true);
-          item.weeks.forEach((_) => {
-            _.foods.forEach((__) => {
-              let count = 0;
-              __.children.forEach((___) => {
-                count += parseFloat(___.count ? ___.count : 0);
-              });
-              if (parseFloat(__.count) > parseFloat(count)) {
-                //下降
-                this.$set(
-                  __,
-                  "down",
-                  Math.abs(
-                    (
-                      ((parseFloat(count) - parseFloat(__.count)) /
-                        parseFloat(__.count)) *
-                      100
-                    ).toFixed(2)
-                  )
-                );
-                delete __["up"];
-              } else if (parseFloat(__.count) < parseFloat(count)) {
-                //上升
-                this.$set(
-                  __,
-                  "up",
-                  (
-                    ((parseFloat(count) - parseFloat(__.count)) /
-                      parseFloat(__.count)) *
-                    100
-                  ).toFixed(2)
-                );
-                delete __["down"];
-              } else {
-                delete __["down"];
-                delete __["up"];
+        let day=[0,0,0,0,0,0,0]
+        let days=0;
+        let foods={}
+        let mealTypes=[]
+        foods["peopleId"]=this.WeekInfo.crowd;
+        let recipeVals=[];
+        var that=this;
+        this.smartDatas.forEach(_=>{
+          let index=0
+          _.weeks.forEach(__=>{
+            __.foods.forEach(___=>{
+              if( ___.children){
+                day[index]+=1;
+                mealTypes.push(that.getmealTypeData(_.name));
+                ___.children.forEach(____=>{
+                  recipeVals.push({
+                    foodId:____.id,
+                    val:____.count?____.count:0,
+                    mealType:that.getmealTypeData(_.name),
+                    week:__.name.slice(4)
+                  })
+                })
               }
-              this.$set(__, "count", count.toFixed(2));
+            })
+            index++;
+          })
+        })
+        if(mealTypes.length>0){
+          let obj=Array.from(new Set(mealTypes))
+          let resultObj="";
+          for(let i=0;i<obj.length;i++){
+            resultObj+=obj[i]+","
+          }
+          foods["mealTypes"]=resultObj.substring(0,resultObj.length-1)
+        }
+        for(let i=0;i<day.length;i++){
+          if(day[i]>0){
+            days++;
+          }
+        }
+        foods["recipeVals"]=recipeVals
+        foods["days"]=days;
+        let types='';
+        for(let i=0;i<this.WeekInfo.foodCatalog.length;i++){
+          types+= that.getmealTypeData(this.WeekInfo.foodCatalog[i])+","
+        }
+        foods["types"]=types;
+        foods["goal"]=this.node.nowCode
+        foods["upRatio"]= (parseFloat(that.node.exceptValue) - parseFloat(that.node.nowValue)) / parseFloat(that.node.nowValue);
+        this.loading2=true;
+        upScore(foods).then(res=>{
+          if(res.data.success){
+            let resData=res.data.data;
+            let recipeVals=resData.recipeVals;
+            var m = new Map();
+            for(let k=0;k<recipeVals.length;k++){
+              m.set(recipeVals[k].foodId+recipeVals[k].mealType+recipeVals[k].week,recipeVals[k])
+            }
+            this.smartDatas.forEach((item) => {
+              debugger
+              item.weeks.forEach((_) => {
+                _.foods.forEach((__) => {
+                  let count = 0;
+                  __.children.forEach((___) => {
+                    var key=___.id +that.getmealTypeData(item.name)+_.name.slice(4);
+                    debugger
+                    if((m.get(key)!=null)){
+                      if(parseFloat(___.count)>parseFloat(m.get(key).val)){
+                        this.$set(___, "down", Math.abs((((parseFloat(m.get(key).val) - parseFloat(___.count)) / parseFloat(___.count)) * 100).toFixed(2)));
+                        delete ___["up"];
+                        this.$set(___, "count", m.get(key).val.toFixed(2));
+                      }
+                      else if(parseFloat(___.count)<parseFloat(m.get(key).val)){
+                        this.$set(___, "up", Math.abs((((parseFloat(m.get(key).val) - parseFloat(___.count)) / parseFloat(___.count)) * 100).toFixed(2)));
+                        delete ___["down"];
+                        this.$set(___, "count", m.get(key).val.toFixed(2));
+                      }else{
+                        delete ___["down"];
+                        delete ___["up"];
+                        this.$set(___, "count", m.get(key).val.toFixed(2));
+                      }
+                    }
+                    count += parseFloat(___.count ? ___.count : 0)
+                  });
+                  if (parseFloat(__.count) > parseFloat(count)) {
+                    //下降
+                    this.$set(__, "down", Math.abs((((parseFloat(count) - parseFloat(__.count)) / parseFloat(__.count)) * 100).toFixed(2)));
+                    delete __["up"];
+                  } else if (parseFloat(__.count) < parseFloat(count)) {
+                    //上升
+                    this.$set(__, "up", (((parseFloat(count) - parseFloat(__.count)) / parseFloat(__.count)) * 100).toFixed(2));
+                    delete __["down"];
+                  } else {
+                    delete __["down"];
+                    delete __["up"];
+                  }
+                  this.$set(__, "count", count.toFixed(2));
+                });
+              });
             });
-          });
-        });
+            console.log("this.smartDatas",this.smartDatas);
+            this.loading2=false;
+            this.$refs.child2.getFoodScoreSmart();
+          }
+        })
+        // this.smartDatas.forEach((week) => {
+        //   week.weeks.forEach((_) => {
+        //     _.foods.forEach((__) => {
+        //       __.children.forEach((___) => {
+        //         let flag = false;
+        //         ___.nutrientIds.forEach((n) => {
+        //           if (n.id == that.node.nowCode) {
+        //             if (n.value != "0") {
+        //               flag = true;
+        //             }
+        //           }
+        //         });
+        //         if (flag) {
+        //           let add =
+        //             (parseFloat(that.node.exceptValue) -
+        //               parseFloat(that.node.nowValue)) /
+        //             parseFloat(that.node.nowValue);
+        //           if (add > 0) {
+        //             this.$set(___, "up", (add * parseFloat(100)).toFixed(2));
+        //             delete ___["down"];
+        //           } else if (add < 0) {
+        //             this.$set(
+        //               ___,
+        //               "down",
+        //               Math.abs((add * parseFloat(100)).toFixed(2))
+        //             );
+        //             delete ___["up"];
+        //           } else {
+        //             delete ___["down"];
+        //             delete ___["up"];
+        //           }
+        //           let count =
+        //             parseFloat(___.count) + parseFloat(___.count) * add;
+        //           this.$set(___, "count", count.toFixed(2));
+        //         } else {
+        //           //
+        //           Vue.delete(___, "down");
+        //           Vue.delete(___, "up");
+        //           // delete ___["down"]
+        //           // delete ___["up"]
+        //           // this.$set(___, "count", ___.count);
+        //         }
+        //       });
+        //     });
+        //   });
+        // });
+        // this.smartDatas.forEach((item) => {
+        //   this.$set(item, "flag", true);
+        //   item.weeks.forEach((_) => {
+        //     _.foods.forEach((__) => {
+        //       let count = 0;
+        //       __.children.forEach((___) => {
+        //         count += parseFloat(___.count ? ___.count : 0);
+        //       });
+        //       if (parseFloat(__.count) > parseFloat(count)) {
+        //         //下降
+        //         this.$set(
+        //           __,
+        //           "down",
+        //           Math.abs(
+        //             (
+        //               ((parseFloat(count) - parseFloat(__.count)) /
+        //                 parseFloat(__.count)) *
+        //               100
+        //             ).toFixed(2)
+        //           )
+        //         );
+        //         delete __["up"];
+        //       } else if (parseFloat(__.count) < parseFloat(count)) {
+        //         //上升
+        //         this.$set(
+        //           __,
+        //           "up",
+        //           (
+        //             ((parseFloat(count) - parseFloat(__.count)) /
+        //               parseFloat(__.count)) *
+        //             100
+        //           ).toFixed(2)
+        //         );
+        //         delete __["down"];
+        //       } else {
+        //         delete __["down"];
+        //         delete __["up"];
+        //       }
+        //       this.$set(__, "count", count.toFixed(2));
+        //     });
+        //   });
+        // });
 
-        this.$refs.child2.getFoodScoreSmart();
+
       } else {
         this.$message({
           message: "期望值不可为空",
@@ -2380,6 +2489,14 @@ export default {
       setTimeout(function () {
         that.$refs.child2.getFoodScoreSmart();
       }, 200);
+    },
+    handleClose(){
+      this.smartDatas = JSON.parse(localStorage.getItem("mealsDatas"));
+      let that = this;
+      setTimeout(function () {
+        that.$refs.child2.getFoodScoreSmart();
+      }, 200);
+      this.pointscan = false;
     },
     //清空菜品
     dishClear() {

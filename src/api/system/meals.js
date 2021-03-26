@@ -58,6 +58,13 @@ export const calRecipe = (recipe) => {
     data:recipe
   })
 }
+export const upScore = (recipe) => {
+  return request({
+    url: '/api/blade-food/recipe/upScore',
+    method: 'post',
+    data:recipe
+  })
+}
 
 export const save = (row) => {
   return request({
