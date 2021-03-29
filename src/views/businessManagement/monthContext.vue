@@ -1,9 +1,9 @@
 <template>
   <div>
-    <el-row style="margin-top: 20px;font-size:14px">
+    <el-row style="margin-top: 20px; font-size: 14px">
       <el-col :span="6"
         ><div>
-          <span style="margin-right: 20px;margin-left:20px">月度</span>
+          <span style="margin-right: 20px; margin-left: 20px">月度</span>
           <!-- <el-date-picker
             style="width: 170px"
             size="small "
@@ -51,7 +51,7 @@
             size="small "
             v-model="state"
             placeholder="请选择"
-            style="width:150px"
+            style="width: 150px"
           >
             <el-option
               v-for="item in options"
@@ -71,7 +71,7 @@
             size="small"
             icon="el-icon-search"
             type="primary"
-            style=" margin-left: 20px;margin-top: 10px;  "
+            style="margin-left: 20px; margin-top: 10px"
             >搜索</el-button
           >
           <el-button
@@ -79,11 +79,11 @@
             size="small"
             icon="el-icon-delete"
             type="primary"
-            style=" margin-left: 20px; margin-top: 10px; "
+            style="margin-left: 20px; margin-top: 10px"
             >清空</el-button
           >
           <el-button
-            style="margin-left: 20px;margin-top: 10px;"
+            style="margin-left: 20px; margin-top: 10px"
             type="primary"
             size="small"
             icon="el-icon-download"
@@ -92,7 +92,7 @@
           >
           <el-button
             v-if="this.cancelon == 2"
-            style="margin-left: 20px;margin-top: 10px;"
+            style="margin-left: 20px; margin-top: 10px"
             type="primary"
             size="small"
             @click="refundRow"
@@ -100,7 +100,7 @@
           >
           <el-button
             v-if="this.cancelon == 2"
-            style="margin-left: 20px;margin-top: 10px;"
+            style="margin-left: 20px; margin-top: 10px"
             type="primary"
             size="small"
             @click="ratyrefund"
@@ -141,7 +141,7 @@
                 <el-tag
                   type="success"
                   @click="openDetails(scope.row)"
-                  style="cursor:pointer"
+                  style="cursor: pointer"
                 >
                   {{ scope.row.fate }}</el-tag
                 >
@@ -209,7 +209,7 @@ import FileSaver from "file-saver";
 import XLSX from "xlsx";
 export default {
   components: {
-    calendar
+    calendar,
   },
   data() {
     return {
@@ -229,16 +229,16 @@ export default {
       options: [
         {
           value: "",
-          label: "全部"
+          label: "全部",
         },
         {
           value: "1",
-          label: "是"
+          label: "是",
         },
         {
           value: "0",
-          label: "否"
-        }
+          label: "否",
+        },
       ],
       cancelon: "1",
       tableData: [], //按月
@@ -249,11 +249,11 @@ export default {
         size: 10,
         totalElements: 0,
         totalPages: 3,
-        number: 1
+        number: 1,
       },
       monthly: "",
       histories: [],
-      cutoff: ""
+      cutoff: "",
     };
   },
   beforeMount() {
@@ -271,10 +271,10 @@ export default {
       console.log(this.secondrefund);
       this.$axios
         .post(`api/blade-food/returnmeallist/updateRMLDate`, this.secondrefund)
-        .then(res => {
+        .then((res) => {
           this.$message({
             message: "保存成功",
-            type: "success"
+            type: "success",
           });
           this.getStorage();
           this.calendars = false;
@@ -316,11 +316,11 @@ export default {
         let addid = `?ids=${force}`;
         this.$axios
           .post(`api/blade-food/returnmeallist/refund` + addid, {})
-          .then(res => {
+          .then((res) => {
             //   console.log(res);
             this.$message({
               message: "退费成功",
-              type: "success"
+              type: "success",
             });
             this.getStorage();
           })
@@ -332,10 +332,10 @@ export default {
         let addid = `?ids=${force}`;
         this.$axios
           .post(`api/blade-food/returnmeallist/cancelRefund` + addid, {})
-          .then(res => {
+          .then((res) => {
             this.$message({
               message: "取消成功",
-              type: "success"
+              type: "success",
             });
             this.getStorage();
           })
@@ -377,7 +377,7 @@ export default {
       }&isRefund=${this.state}`;
       this.$axios
         .get(`api/blade-food/returnmeallist/page` + urlParams, {})
-        .then(res => {
+        .then((res) => {
           // console.log(res);
           this.loadFlag = false;
           this.tableData = res.data.data.records;
@@ -398,11 +398,11 @@ export default {
       let addid = `?ids=${invoice}`;
       this.$axios
         .post(`api/blade-food/returnmeallist/refund` + addid, {})
-        .then(res => {
+        .then((res) => {
           //   console.log(res);
           this.$message({
             message: "退费成功",
-            type: "success"
+            type: "success",
           });
           this.getStorage();
         })
@@ -421,11 +421,11 @@ export default {
       let addid = `?ids=${invoice}`;
       this.$axios
         .post(`api/blade-food/returnmeallist/cancelRefund` + addid, {})
-        .then(res => {
+        .then((res) => {
           //   console.log(res);
           this.$message({
             message: "取消成功",
-            type: "success"
+            type: "success",
           });
           this.getStorage();
         })
@@ -435,22 +435,22 @@ export default {
     },
     //获取班级
     getToolkit() {
-      this.$axios.get(`api/blade-food/class/tree`, {}).then(res => {
+      this.$axios.get(`api/blade-food/class/tree`, {}).then((res) => {
         this.bufs = res.data.data;
         // console.log(this.bufs);
         let fwork = [];
-        this.bufs.forEach(item => {
+        this.bufs.forEach((item) => {
           //   console.log(item);
           item.children.forEach((item1, index1) => {
             fwork[index1] = {
               value: item1.id,
-              label: item1.label
+              label: item1.label,
             };
             fwork[index1].children = [];
             item1.children.forEach((item2, index2) => {
               fwork[index1].children[index2] = {
                 value: item2.id,
-                label: item2.label
+                label: item2.label,
               };
               fwork[index1].children[index2].children = [];
               if (item2.children) {
@@ -458,7 +458,7 @@ export default {
                   // console.log(item3),
                   fwork[index1].children[index2].children[index3] = {
                     value: item3.id,
-                    label: item3.label
+                    label: item3.label,
                   };
                 });
               }
@@ -491,7 +491,7 @@ export default {
       }&isRefund=${this.state}`;
       this.$axios
         .get(`api/blade-food/returnmeallist/page` + urlParams, {})
-        .then(res => {
+        .then((res) => {
           // console.log(res);
 
           this.histories = res.data.data.records;
@@ -529,8 +529,10 @@ export default {
           "累计天数",
           "退膳金额(元)",
           "是否已退费",
-          `${this.histories.monthy}+1号`
-        ]; //导出表头信息
+        ];
+
+        console.log(tHeader);
+        //导出表头信息
         const filterVal = [
           "monthy",
           "className",
@@ -538,8 +540,11 @@ export default {
           "fate",
           "refundAmount",
           "isRefund",
-          "Proofs"
-        ]; // 导出的表头字段名，需要导出表格字段名
+        ];
+        for (let i = 1; i <= 31; i++) {
+          tHeader.push(`${i}号`);
+          filterVal.push(`day${i}`);
+        } // 导出的表头字段名，需要导出表格字段名
         const list = this.histories;
         const data = this.formatJson(filterVal, list);
         export_json_to_excel(tHeader, data, "退膳清单"); // 导出的表格名称
@@ -547,7 +552,7 @@ export default {
     },
     //格式转换
     formatJson(filterVal, jsonData) {
-      return jsonData.map(v => filterVal.map(j => v[j]));
+      return jsonData.map((v) => filterVal.map((j) => v[j]));
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
@@ -564,8 +569,8 @@ export default {
     m_handleSizeChange(currSize) {
       this.m_page.size = currSize;
       this.getStorage();
-    }
-  }
+    },
+  },
 };
 </script>
 
