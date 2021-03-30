@@ -1,8 +1,8 @@
 <template>
   <div>
     <h4 v-if="titleFlag">周期：{{WeekTtitle}}</h4>
-    <div class="color"><span class="red">不足</span><span class="green">适量</span><span class="orange">过量</span></div>
-    <div class="item-blo font">
+    <div class="color" style="margin-top: -10px"><span class="red">不足</span><span class="green">适量</span><span class="orange">过量</span></div>
+    <div class="item-blo font" style="margin-top: 10px">
       <span>营养素</span>
       <span v-if="titleFlag">含量</span>
       <span>DRIs%</span>
@@ -97,21 +97,21 @@
     font-size: 12px;
     font-weight: bold;
     justify-content: start;
+
   }
   .item-blo span{
     width: 33%;
-    text-align: left;
+    text-align: center;
     line-height: 25px;
   }
   .item-blo span:nth-child(3){
     width: 70px;
     text-align: left;
   }
-  .font{
-    color: #ccc;
+  .font span{
+    text-align: center!important;
   }
   .item-mid {
-    margin-top: 10px;
     text-align: center;
     font-size: 12px;
   }
