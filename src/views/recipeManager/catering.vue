@@ -552,10 +552,13 @@
       <!-- 分数弹框 结束-->
       <nutrition :WeekInfo="WeekInfo" ref="nutritionChild"/>
       <!-- 智能配平弹框 -->
+
+
       <el-dialog
         title="食谱配平"
         append-to-body
         :fullscreen="true"
+
         :visible.sync="pointscan"
         width="600px"
         :before-close="handleClose"
@@ -624,7 +627,6 @@
         <!-- 表格 -->
         <div class="onblur">
           <nutrient-with-color :nutrition="nutrition"></nutrient-with-color>
-
           <smartfoods-week
             :loading2="loading2"
             @childfn="parentFn"
@@ -670,11 +672,13 @@
           </div>
         </div>
       </el-dialog>
+
       <noNumRecipe
         :datas="datas"
         :recipeDay="WeekInfo.weekType"
         ref="children2"
       >
+
       </noNumRecipe>
 
     </div>
@@ -922,7 +926,7 @@
             max: 160,
           },
           {
-            name: "纳",
+            name: "钠",
             code: "204",
             value: "0",
             bz: "80%-135%",
@@ -2099,13 +2103,14 @@
           that.$refs.child2.getFoodScoreSmart();
         }, 200);
       },
+
       handleClose(){
+        this.pointscan = false;
         this.smartDatas = JSON.parse(localStorage.getItem("mealsDatas"));
         let that = this;
         setTimeout(function () {
           that.$refs.child2.getFoodScoreSmart();
         }, 200);
-        this.pointscan = false;
       },
 
       //清空菜品
@@ -2124,9 +2129,13 @@
         this.ncodeChange();
         localStorage.setItem("mealsDatas", JSON.stringify(this.datas));
         this.smartDatas = JSON.parse(localStorage.getItem("mealsDatas"));
+        console.log("this.smartDatas-----",this.smartDatas)
+        // this.$nextTick(() => {
+        //   this.$refs.child2.init();
+        // })
         this.pointscan = true;
         this.peipScore = this.score;
-        this.ppscxjSc = "0";
+        // this.ppscxjSc = "0";
       },
       getmealTypeData(name) {
         return this.mealTypeData.filter((_) => {

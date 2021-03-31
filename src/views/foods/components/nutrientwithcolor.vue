@@ -9,7 +9,7 @@
       <span  v-if="!titleFlag">标准</span>
     </div>
     <div class="item-mid">
-    <span v-for="(item,index) in nutrition" :class="{'item-blo':true,'bgred':item.red,'bggreen':item.green,'bgorange':item.orange}">
+    <span v-for="(item,index) in nutrition" :key="index"  :class="{'item-blo':true,'bgred':item.red,'bggreen':item.green,'bgorange':item.orange}">
 
       <span>{{ item.name }}</span>
       <span v-if="titleFlag">{{item.realIntake}}</span>

@@ -1036,7 +1036,7 @@ export default {
           name:"钙",
           code:"201"
         },{
-          name:"纳",
+          name:"钠",
           code:"204"
         },{
           name:"铁",
