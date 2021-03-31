@@ -2,8 +2,8 @@
   <div class="wel">
     <!-- 总量 -->
     <div class="research">
-      <div class="chooser" v-if="this.storage == 2">
-        <span style="margin-right: 10px;margin-left: 15px;  font-size: 14px;"
+      <div class="chooser" v-if="storage == 2">
+        <span style="margin-right: 10px; margin-left: 15px; font-size: 14px"
           >机构选择:</span
         >
         <el-select @change="searchBtn" v-model="activity" placeholder="请选择">
@@ -107,11 +107,14 @@
                 <div
                   slot="error"
                   class="image-slot"
-                  style="width: 80px; height: 80px; text-align: center;  line-height: 80px;"
+                  style="
+                    width: 80px;
+                    height: 80px;
+                    text-align: center;
+                    line-height: 80px;
+                  "
                 >
-                  <div class="el-image__error">
-                    暂无图片
-                  </div>
+                  <div class="el-image__error">暂无图片</div>
                 </div>
               </el-image>
             </div>
@@ -137,12 +140,15 @@
                 <div
                   slot="error"
                   class="image-slot"
-                  style="width: 80px; height: 80px; text-align: center;  line-height: 80px;"
+                  style="
+                    width: 80px;
+                    height: 80px;
+                    text-align: center;
+                    line-height: 80px;
+                  "
                 >
                   <!-- <i class="el-icon-picture-outline"></i> -->
-                  <div class="el-image__error">
-                    暂无图片
-                  </div>
+                  <div class="el-image__error">暂无图片</div>
                 </div>
               </el-image>
             </div>
@@ -185,7 +191,7 @@ export default {
         girls: "", //女生人数
         food: "", //食材总量
         dish: "", //菜品总量
-        recipe: "" //食谱总量
+        recipe: "", //食谱总量
       },
       listset: [],
       options: [],
@@ -198,11 +204,11 @@ export default {
       storage: "", //下拉框显示隐藏
       activeNames: ["1", "2", "3", "5"],
       logActiveNames: ["17"],
-      empty: ""
+      empty: "",
     };
   },
   computed: {
-    ...mapGetters(["userInfo"])
+    ...mapGetters(["userInfo"]),
   },
 
   beforeMount() {
@@ -242,12 +248,12 @@ export default {
         title: {
           text: "儿童每人每日营养素提取（DRls）",
 
-          textAlign: "left"
+          textAlign: "left",
         },
         tooltip: {}, //提示层
         legend: {
           data: ["实际比列", "要求比例"],
-          bottom: 0
+          bottom: 0,
         },
         radar: {
           name: {
@@ -255,47 +261,47 @@ export default {
               color: "#000", //字体颜色
               // backgroundColor: "#999", //背景色
               borderRadius: 3, //圆角
-              padding: [3, 5] //padding
-            }
+              padding: [3, 5], //padding
+            },
           },
           center: ["50%", "50%"],
           radius: "60%",
           startAngle: 270,
           indicator: [
             {
-              name: "能量"
+              name: "能量",
             },
             {
-              name: "钠"
+              name: "钠",
             },
             {
-              name: "铁"
+              name: "铁",
             },
             {
-              name: "锌"
+              name: "锌",
             },
             {
-              name: "钙"
+              name: "钙",
             },
             {
-              name: "维生素C"
+              name: "维生素C",
             },
             {
-              name: "维生素B2"
+              name: "维生素B2",
             },
             {
-              name: "维生素B1"
+              name: "维生素B1",
             },
             {
-              name: "维生素A"
+              name: "维生素A",
             },
             {
-              name: "脂肪"
+              name: "脂肪",
             },
             {
-              name: "蛋白质"
-            }
-          ]
+              name: "蛋白质",
+            },
+          ],
         },
         series: [
           {
@@ -306,18 +312,18 @@ export default {
                 value: this.greater,
                 name: "实际比列",
                 areaStyle: {
-                  opacity: 0.4
-                }
+                  opacity: 0.4,
+                },
               },
               {
                 value: [80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80],
                 name: "要求比例",
                 areaStyle: {
-                  opacity: 0.4
-                }
-              }
-            ]
-          }
+                  opacity: 0.4,
+                },
+              },
+            ],
+          },
         ],
         color: [
           "#5470c6",
@@ -328,8 +334,8 @@ export default {
           "#3ba272",
           "#fc8452",
           "#9a60b4",
-          "#ea7ccc"
-        ]
+          "#ea7ccc",
+        ],
       };
       charts.setOption(option);
     },
@@ -339,13 +345,13 @@ export default {
         title: {
           text: "儿童每人每日进食量",
 
-          textAlign: "left"
+          textAlign: "left",
         },
         tooltip: {}, //提示层
         legend: {
           data: ["实际用量", "推荐最小量", "推荐最大量"],
           left: "center",
-          bottom: 0
+          bottom: 0,
         },
         radar: {
           name: {
@@ -353,44 +359,44 @@ export default {
               color: "#000", //字体颜色
               // backgroundColor: "#999", //背景色
               borderRadius: 3, //圆角
-              padding: [3, 5] //padding
-            }
+              padding: [3, 5], //padding
+            },
           },
           center: ["50%", "50%"],
           radius: "60%",
           startAngle: 270,
           indicator: [
             {
-              name: "谷类(100-150)"
+              name: "谷类(100-150)",
 
               // max: 300
             },
             {
-              name: "盐(<=3)"
+              name: "盐(<=3)",
               // max: 300
             },
             {
-              name: "食用油(20-50)"
+              name: "食用油(20-50)",
               // max: 350
             },
             {
-              name: "乳制品(350-500)"
+              name: "乳制品(350-500)",
               // max: 300
             },
             {
-              name: "大豆(10-20)"
+              name: "大豆(10-20)",
               // max: 300
             },
             {
-              name: "畜禽肉类-蛋类-水产品(100-125)"
+              name: "畜禽肉类-蛋类-水产品(100-125)",
             },
             {
-              name: "水果(150-250)"
+              name: "水果(150-250)",
             },
             {
-              name: "蔬菜(150-300)"
-            }
-          ]
+              name: "蔬菜(150-300)",
+            },
+          ],
         },
         series: [
           {
@@ -401,28 +407,28 @@ export default {
                 value: this.today,
                 name: "实际用量",
                 areaStyle: {
-                  opacity: 0.4
+                  opacity: 0.4,
                 },
-                z: 1
+                z: 1,
               },
               {
                 value: [100, 100, 100, 100, 100, 100, 100, 100],
                 name: "推荐最小量",
                 areaStyle: {
-                  opacity: 0.4
+                  opacity: 0.4,
                 },
-                z: 2
+                z: 2,
               },
               {
                 value: [300, 300, 300, 300, 300, 300, 300, 300],
                 name: "推荐最大量",
                 areaStyle: {
-                  opacity: 0.4
+                  opacity: 0.4,
                 },
-                z: 3
-              }
-            ]
-          }
+                z: 3,
+              },
+            ],
+          },
         ],
         color: [
           "#5470c6",
@@ -433,8 +439,8 @@ export default {
           "#3ba272",
           "#fc8452",
           "#9a60b4",
-          "#ea7ccc"
-        ]
+          "#ea7ccc",
+        ],
       };
       charts.setOption(option);
       // console.log(this.double);
@@ -442,15 +448,15 @@ export default {
     fromSearch() {
       this.$axios
         .get(`api/blade-system/tenant/getChildTenant`, {})
-        .then(res => {
+        .then((res) => {
           // console.log(res);
           this.rsearch = res.data.data;
           // console.log(this.rsearch);
           let second = [];
-          this.rsearch.forEach(item => {
+          this.rsearch.forEach((item) => {
             second.push({
               value: item.tenantIds,
-              label: item.tenantName
+              label: item.tenantName,
             });
           });
           this.options = second;
@@ -477,7 +483,7 @@ export default {
       let urlParams = `?tenantId=${this.activity}`;
       this.$axios
         .get(`api/blade-food/food/getTotalByTenant` + urlParams)
-        .then(res => {
+        .then((res) => {
           // console.log(res);
           this.newhead = res.data.data;
           // console.log(this.newhead);
@@ -487,7 +493,7 @@ export default {
     welcomeUser() {
       // &tenantId=${this.activity}
       let Dishes = `?size=${500}&current=${1}`;
-      this.$axios.get(`api/blade-food/food/dishTotal` + Dishes).then(res => {
+      this.$axios.get(`api/blade-food/food/dishTotal` + Dishes).then((res) => {
         // console.log(res);
         this.double = res.data.data.records;
         // console.log(this.double);
@@ -504,7 +510,7 @@ export default {
       let rankings = `?size=${500}&current=${1}&?tenantId=${this.activity}`;
       this.$axios
         .get(`api/blade-food/food/recipeTotal` + rankings)
-        .then(res => {
+        .then((res) => {
           // console.log(res);
           this.getHealth = res.data.data.records;
           // console.log(this.getHealth);
@@ -526,7 +532,7 @@ export default {
       let sorted = `?tenantId=${this.activity}`;
       this.$axios
         .get(`api/blade-food/recipe/getChildRecipeCal` + sorted, {})
-        .then(res => {
+        .then((res) => {
           // console.log(res);
           this.today = res.data.data;
           this.drawPie();
@@ -537,7 +543,7 @@ export default {
       let sorted = `?tenantId=${this.activity}`;
       this.$axios
         .get(`api/blade-food/recipe/getChildNutritionCal` + sorted, {})
-        .then(res => {
+        .then((res) => {
           this.greater = res.data.data;
           // console.log(this.greater);
           this.extract();
@@ -545,8 +551,8 @@ export default {
     },
     handleChange(val) {
       window.console.log(val);
-    }
-  }
+    },
+  },
 };
 </script>
 
