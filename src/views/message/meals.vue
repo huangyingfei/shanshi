@@ -3115,7 +3115,7 @@ export default {
 }
 
 .meals .foodWeekListHis li span {
-  max-width: 130px;
+  max-width: 115px;
   min-width: 80px;
   white-space: nowrap;
   overflow: hidden;
