@@ -686,7 +686,7 @@
             min: 80,
             max: 160,
           }, {
-            name: "纳",
+            name: "钠",
             code: "204",
             value: '0',
             bz: "80%-135%",
@@ -2092,8 +2092,8 @@
   }
 
   .meals .foodWeekListHis li span {
-    max-width: 165px;
-    min-width: 130px;
+    max-width: 115px;
+    min-width: 80px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

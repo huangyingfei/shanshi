@@ -43,7 +43,7 @@
               style="width: 100%"
               @expand-change="expandchange"
               :data="scope.row.weeks.find((p) => p.name == 'week1').foods"
-              row-key="id"
+
               :show-header="false"
               :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
               :span-method="onTableSpanMethod"
@@ -198,7 +198,7 @@
               class="table-foods"
               style="width: 120%"
               :data="scope.row.weeks.find((p) => p.name == 'week2').foods"
-              row-key="id"
+
               :show-header="false"
               @expand-change="expandchange"
               :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
@@ -343,7 +343,7 @@
               class="table-foods"
               style="width: 100%"
               :data="scope.row.weeks.find((p) => p.name == 'week3').foods"
-              row-key="id"
+
               :empty-text="empty"
               :show-header="false"
               @expand-change="expandchange"
@@ -487,7 +487,7 @@
               class="table-foods"
               style="width: 100%"
               :data="scope.row.weeks.find((p) => p.name == 'week4').foods"
-              row-key="id"
+
               :empty-text="empty"
               :show-header="false"
               @expand-change="expandchange"
@@ -631,7 +631,7 @@
               class="table-foods"
               style="width: 100%"
               :data="scope.row.weeks.find((p) => p.name == 'week5').foods"
-              row-key="id"
+
               :empty-text="empty"
               :show-header="false"
               @expand-change="expandchange"
@@ -775,7 +775,7 @@
               class="table-foods"
               style="width: 100%"
               :data="scope.row.weeks.find((p) => p.name == 'week6').foods"
-              row-key="id"
+
               :empty-text="empty"
               :show-header="false"
               @expand-change="expandchange"
@@ -919,7 +919,7 @@
               class="table-foods"
               style="width: 100%"
               :data="scope.row.weeks.find((p) => p.name == 'week7').foods"
-              row-key="id"
+
               :empty-text="empty"
               :show-header="false"
               @expand-change="expandchange"

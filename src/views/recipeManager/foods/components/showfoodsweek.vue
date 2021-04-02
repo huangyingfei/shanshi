@@ -26,7 +26,7 @@
         </template>
         <template slot-scope="scope">
           <div class="drapIn" >
-            <div v-for="(item ,index) in scope.row.weeks.find((p) => p.name == 'week1').foods">
+            <div v-for="(item ,index) in scope.row.weeks.find((p) => p.name == 'week1').foods" :key="'week1'+item.id+item.count">
               <span>{{item.name}}</span>
             </div>
           </div>
@@ -49,7 +49,7 @@
         </template>
         <template slot-scope="scope">
           <div class="drapIn" >
-            <div v-for="(item ,index) in scope.row.weeks.find((p) => p.name == 'week2').foods">
+            <div v-for="(item ,index) in scope.row.weeks.find((p) => p.name == 'week2').foods" :key="'week2'+item.id+item.count">
               <span>{{item.name}}</span>
             </div>
           </div>
@@ -78,7 +78,7 @@
         </template>
         <template slot-scope="scope">
           <div class="drapIn" >
-            <div v-for="(item ,index) in scope.row.weeks.find((p) => p.name == 'week3').foods">
+            <div v-for="(item ,index) in scope.row.weeks.find((p) => p.name == 'week3').foods" :key="'week3'+item.id+item.count">
               <span>{{item.name}}</span>
             </div>
           </div>
@@ -101,7 +101,7 @@
         </template>
         <template slot-scope="scope">
           <div class="drapIn" >
-            <div v-for="(item ,index) in scope.row.weeks.find((p) => p.name == 'week4').foods">
+            <div v-for="(item ,index) in scope.row.weeks.find((p) => p.name == 'week4').foods" :key="'week4'+item.id+item.count">
               <span>{{item.name}}</span>
             </div>
           </div>
@@ -124,7 +124,7 @@
         </template>
         <template slot-scope="scope">
           <div class="drapIn" >
-            <div v-for="(item ,index) in scope.row.weeks.find((p) => p.name == 'week5').foods">
+            <div v-for="(item ,index) in scope.row.weeks.find((p) => p.name == 'week5').foods" :key="'week5'+item.id+item.count">
               <span>{{item.name}}</span>
             </div>
           </div>
@@ -147,7 +147,7 @@
         </template>
         <template slot-scope="scope">
           <div class="drapIn" >
-            <div v-for="(item ,index) in scope.row.weeks.find((p) => p.name == 'week6').foods">
+            <div v-for="(item ,index) in scope.row.weeks.find((p) => p.name == 'week6').foods" :key="'week6'+item.id+item.count">
               <span>{{item.name}}</span>
             </div>
           </div>
@@ -170,7 +170,7 @@
         </template>
         <template slot-scope="scope">
           <div class="drapIn" >
-            <div v-for="(item ,index) in scope.row.weeks.find((p) => p.name == 'week7').foods">
+            <div v-for="(item ,index) in scope.row.weeks.find((p) => p.name == 'week7').foods" :key="'week7'+item.id+item.count">
               <span>{{item.name}}</span>
             </div>
           </div>
@@ -248,6 +248,9 @@
     // 当属性的值发生变化时，就会调用对应属性的方法，方法里面的形参对应的是属性的新值和旧值
     watch: {
 
+    },
+    beforeCreate(){
+      debugger
     },
     // 组件第一次加载
     mounted() {

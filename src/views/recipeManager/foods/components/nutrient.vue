@@ -5,7 +5,7 @@
       <span>含量</span>
     </div>
     <div class="item-mid">
-    <span v-for="(item,index) in nutritionValue" class="item-blo">
+    <span v-for="(item,index) in nutritionValue" :key="index" class="item-blo">
       <span>{{ item.name }}</span>
       <span>{{ item.value==0?0:item.value.toFixed(2) }}</span>
     </span>

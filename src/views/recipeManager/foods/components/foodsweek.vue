@@ -1732,7 +1732,7 @@ export default {
           max: 160,
         },
         {
-          name: "纳",
+          name: "钠",
           code: "204",
           value: "0",
           bz: "80%-135%",

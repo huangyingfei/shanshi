@@ -496,7 +496,7 @@
             code:"201",
             value:'0'
           },{
-            name:"纳",
+            name:"钠",
             code:"204",
             value:'0'
           },{
