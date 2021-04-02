@@ -474,8 +474,6 @@ export default {
         radarIndicator: [
           { name: "能量" },
           { name: "蛋白质" },
-          { name: "脂肪" },
-          { name: "碳水化合物" },
           { name: "钙" },
           { name: "钠" },
           { name: "铁" },
@@ -950,7 +948,7 @@ export default {
       var option = {
         tooltip: {},
         legend: {
-          data: ["要求比例", "实际比例"],
+          data: ["最小要求比例", "最大要求比例", "实际比例"],
           bottom: 0,
         },
         radar: {
@@ -966,18 +964,31 @@ export default {
         },
         series: [
           {
-            type: "radar", // 类型为饼图
+            type: "radar",
             data: [
               {
-                value: [80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80],
-                name: "要求比例",
+                value: [80, 80, 80, 80, 80, 80, 80, 80, 80, 80],
+                name: "最小要求比例",
+                areaStyle: {
+                  opacity: 0.4,
+                },
               },
             ],
-            areaStyle: {
-              opacity: 0.4,
-            },
+            z: 2,
+          },
+          {
+            name: "儿童每人每日营养素提取（DRls）",
+            type: "radar",
+            data: [
+              {
+                value: [120, 150, 160, 135, 160, 160, 180, 250, 250, 250],
+                name: "最大要求比例",
+                areaStyle: {
+                  opacity: 0.4,
+                },
+              },
+            ],
             z: 1,
-            // ,
           },
           {
             type: "radar", // 类型为饼图
@@ -990,7 +1001,7 @@ export default {
             areaStyle: {
               opacity: 0.4,
             },
-            z: 2,
+            z: 3,
             // ,
           },
         ],
@@ -1314,8 +1325,8 @@ label {
   font-size: 14px;
   border-radius: 50%;
 }
-h4 {
-}
+/* h4 {
+} */
 .item {
   height: 130px;
   border-radius: 2px;
