@@ -259,7 +259,7 @@
       </el-row>
 
       <el-row :gutter="20" style="padding: 0px; margin-top: 0px; height:52vh;overflow:hidden">
-        <el-col :span="5">
+        <el-col style="width: 200px">
           <el-card class="box-car" shadow="never">
             <div class="clearfix panel_head">
               <el-button-group>
@@ -306,7 +306,7 @@
                 <ul ref="boxScroll1" class="foodWeekListHis" @mouseout="HidenFoodTips($event)">
                   <li v-for="f in mealListLeft" :key="f.id" style="font-size: 14px" >
                     <span @mouseover="ShowFood($event,f)"
-                          @mouseout="HidenFoodTips($event)">{{f.recipeName}}</span> <img style="width: 20px" @click="mealLoad(f,f.recipeName)"
+                          @mouseout="HidenFoodTips($event)">{{f.recipeName}}</span> <img style="width: 16px" @click="mealLoad(f,f.recipeName)"
                                                        src="/img/arrow.png" alt/>
                   </li>
                   <li v-show="recipefinishedPub" style="text-align: center">无更多数据</li>
@@ -348,7 +348,7 @@
                 <ul class="foodWeekListHis" @mouseout="HidenFoodTips($event)">
                   <li ref="boxScroll2" v-for="f in peopleMealListLeft" :key="f.id" style="font-size: 14px">
                     <span @mouseover="ShowFood($event,f)" @mouseout="HidenFoodTips($event)">{{f.recipeName}}</span> <img
-                    style="width: 20px" @click="mealLoad(f,f.recipeName)" src="/img/arrow.png" alt/>
+                    style="width: 16px" @click="mealLoad(f,f.recipeName)" src="/img/arrow.png" alt/>
                   </li>
                   <li v-show="recipefinishedPri" style="text-align: center">无更多数据</li>
                 </ul>

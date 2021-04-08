@@ -267,7 +267,7 @@
         @mouseover="HidenFoodTips($event)"
         @mouseout="HidenFoodTips($event)"
       >
-        <el-col :span="5">
+        <el-col style="width: 200px">
           <el-card :class="[topShow ? 'box-car' : 'box-car1']" shadow="never">
             <div class="clearfix panel_head">
               <el-button-group>
@@ -348,7 +348,7 @@
                     <span  @mouseover="ShowFood($event, f)"
                            @mouseout="HidenFoodTips($event)">{{ f.recipeName }}</span>
                     <img
-                      style="width: 20px"
+                      style="width: 16px"
                       @click="mealLoad(f, f.recipeName)"
                       src="/img/arrow.png"
                       alt
@@ -425,7 +425,7 @@
                     <span  @mouseover="ShowFood($event, f)"
                            @mouseout="HidenFoodTips($event)">{{ f.recipeName }}</span>
                     <img
-                      style="width: 20px"
+                      style="width: 16px"
                       @click="mealLoad(f, f.recipeName)"
                       src="/img/arrow.png"
                       alt
