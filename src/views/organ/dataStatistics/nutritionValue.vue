@@ -5,7 +5,7 @@
         <week @weekChange="weekChange"></week>
       </el-col>
       <el-col :span="10">
-        <span style="margin-right: 10px;margin-left: 15px;">食谱报表:</span>
+        <span style="margin-right: 10px; margin-left: 15px">食谱报表:</span>
         <el-select
           v-model="recipeId"
           placeholder="请选择"
@@ -51,15 +51,15 @@ export default {
       options: [
         {
           value: "选项1",
-          label: "黄金糕"
-        }
+          label: "黄金糕",
+        },
       ],
       value: "",
       strtotime: [],
       recipeOptions: [],
       recipeId: "",
       nutrients: [], //每日营养素
-      binge: []
+      binge: [],
     };
   },
   mounted() {},
@@ -72,9 +72,13 @@ export default {
           `/api/blade-food/recipe/getChildNutritionByRecipeId` + urlParams,
           {}
         )
-        .then(res => {
+        .then((res) => {
           //   console.log(res);
-          this.nutrients = res.data.data;
+          var nutrients = res.data.data;
+          if (nutrients instanceof Array) {
+            nutrients.splice(2, 2);
+            this.nutrients = nutrients;
+          }
           this.getPie();
         });
     },
@@ -87,7 +91,7 @@ export default {
           `/api/blade-food/recipe/getChildRecipeCalByRecipeId` + urlParams,
           {}
         )
-        .then(res => {
+        .then((res) => {
           // console.log(res);
           this.binge = res.data.data;
           this.gradschools();
@@ -99,9 +103,9 @@ export default {
       this.axios({
         method: "get",
         url: "/api/blade-food/recipe/recipelist",
-        params: { startTime: WeekInfo.startTime, endTime: WeekInfo.endTime }
+        params: { startTime: WeekInfo.startTime, endTime: WeekInfo.endTime },
       })
-        .then(res => {
+        .then((res) => {
           this.recipeOptions = res.data.data;
           if (res.data.data) {
             this.recipeId = res.data.data[0].id;
@@ -112,7 +116,7 @@ export default {
           this.extractvalue();
           this.creating();
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     },
@@ -123,12 +127,12 @@ export default {
         title: {
           text: "儿童每人每日营养素提取（DRls)",
 
-          textAlign: "left"
+          textAlign: "left",
         },
         tooltip: {}, //提示层
         legend: {
-          data: ["实际比列", "要求比例"],
-          bottom: 0
+          data: ["实际比列", "最小要求比例", "最大要求比例"],
+          bottom: 0,
         },
         radar: {
           name: {
@@ -136,50 +140,44 @@ export default {
               color: "#000", //字体颜色
               // backgroundColor: "#999", //背景色
               borderRadius: 3, //圆角
-              padding: [3, 5] //padding
-            }
+              padding: [3, 5], //padding
+            },
           },
           center: ["50%", "50%"],
           radius: "60%",
           startAngle: 270,
           indicator: [
             {
-              name: "能量"
+              name: "能量",
             },
             {
-              name: "蛋白质"
+              name: "蛋白质",
             },
             {
-              name: "脂肪"
+              name: "钙",
             },
             {
-              name: "碳水化合物"
+              name: "钠",
             },
             {
-              name: "钙"
+              name: "铁",
             },
             {
-              name: "钠"
+              name: "锌",
             },
             {
-              name: "铁"
+              name: "维生素A",
             },
             {
-              name: "锌"
+              name: "维生素B1",
             },
             {
-              name: "维生素A"
+              name: "维生素B2",
             },
             {
-              name: "维生素B1"
+              name: "维生素C",
             },
-            {
-              name: "维生素B2"
-            },
-            {
-              name: "维生素C"
-            }
-          ]
+          ],
         },
         series: [
           {
@@ -190,18 +188,38 @@ export default {
                 value: this.nutrients,
                 name: "实际比列",
                 areaStyle: {
-                  opacity: 0.4
-                }
+                  opacity: 0.4,
+                },
               },
+            ],
+          },
+          {
+            type: "radar",
+            data: [
               {
-                value: [80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80],
-                name: "要求比例",
+                value: [80, 80, 80, 80, 80, 80, 80, 80, 80, 80],
+                name: "最小要求比例",
                 areaStyle: {
-                  opacity: 0.4
-                }
-              }
-            ]
-          }
+                  opacity: 0.4,
+                },
+              },
+            ],
+            z: 2,
+          },
+          {
+            name: "儿童每人每日营养素提取（DRls）",
+            type: "radar",
+            data: [
+              {
+                value: [120, 150, 160, 135, 160, 160, 180, 250, 250, 250],
+                name: "最大要求比例",
+                areaStyle: {
+                  opacity: 0.4,
+                },
+              },
+            ],
+            z: 1,
+          },
         ],
         color: [
           "#5470c6",
@@ -212,8 +230,8 @@ export default {
           "#3ba272",
           "#fc8452",
           "#9a60b4",
-          "#ea7ccc"
-        ]
+          "#ea7ccc",
+        ],
       };
       myChart.setOption(option);
       // console.log(this.double);
@@ -225,13 +243,13 @@ export default {
         title: {
           text: "儿童每人每日进食量",
 
-          textAlign: "left"
+          textAlign: "left",
         },
         tooltip: {}, //提示层
         legend: {
           data: ["实际用量", "推荐最小量", "推荐最大量"],
           left: "center",
-          bottom: 0
+          bottom: 0,
         },
         radar: {
           name: {
@@ -239,38 +257,38 @@ export default {
               color: "#fff", //字体颜色
               backgroundColor: "#999", //背景色
               borderRadius: 3, //圆角
-              padding: [3, 5] //padding
-            }
+              padding: [3, 5], //padding
+            },
           },
           center: ["50%", "50%"],
           radius: "60%",
           startAngle: 270,
           indicator: [
             {
-              name: "谷类(g)"
+              name: "谷类(g)",
             },
             {
-              name: "蔬菜(g)"
+              name: "蔬菜(g)",
             },
             {
-              name: " 水果(g)"
+              name: " 水果(g)",
             },
             {
-              name: "乳制品(g)"
+              name: "乳制品(g)",
             },
             {
-              name: " 大豆(g)"
+              name: " 大豆(g)",
             },
             {
-              name: " 食盐(g)"
+              name: " 食盐(g)",
             },
             {
-              name: "食用油(g)"
+              name: "食用油(g)",
             },
             {
-              name: " 畜禽肉类-蛋类-水产品(g)"
-            }
-          ]
+              name: " 畜禽肉类-蛋类-水产品(g)",
+            },
+          ],
         },
         series: [
           {
@@ -281,23 +299,23 @@ export default {
                 value: this.binge,
                 name: "实际用量",
                 areaStyle: {
-                  opacity: 0.4
-                }
+                  opacity: 0.4,
+                },
               },
               {
                 value: [100, 100, 100, 100, 100, 100, 100, 100],
                 name: "推荐最小量",
                 areaStyle: {
-                  opacity: 0.4
-                }
+                  opacity: 0.4,
+                },
               },
               {
                 value: [300, 300, 300, 300, 300, 300, 300, 300],
                 name: "推荐最大量",
                 areaStyle: {
-                  opacity: 0.4
-                }
-              }
+                  opacity: 0.4,
+                },
+              },
               //               {
               //                 value: [80, 80, 80, 80, 80, 80, 80, 80],
               //                 name: "推荐最大量",  areaStyle: {
@@ -305,8 +323,8 @@ export default {
               //                 },
               //
               //               }
-            ]
-          }
+            ],
+          },
         ],
         color: [
           "#5470c6",
@@ -317,13 +335,13 @@ export default {
           "#3ba272",
           "#fc8452",
           "#9a60b4",
-          "#ea7ccc"
-        ]
+          "#ea7ccc",
+        ],
       };
       // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -2,8 +2,8 @@
   <div class="wel">
     <!-- 总量 -->
     <div class="research">
-      <div class="chooser" v-if="this.storage == 2">
-        <span style="margin-right: 10px;margin-left: 15px;  font-size: 14px;"
+      <div class="chooser" v-if="storage == 2">
+        <span style="margin-right: 10px; margin-left: 15px; font-size: 14px"
           >机构选择:</span
         >
         <el-select @change="searchBtn" v-model="activity" placeholder="请选择">
@@ -27,14 +27,14 @@
     </div>
 
     <div class="total">
-      <div class="mechanism">
+      <!-- <div class="mechanism">
         <img src="../../../public/img/yuansuo.png" alt />
         <div class="nism1">
           <div class="ingredients">园所</div>
 
           <div class="food1">{{ this.newhead.ysrs }}</div>
         </div>
-      </div>
+      </div> -->
       <div class="mechanism">
         <img src="../../../public/img/schoolboy.png" alt />
         <div class="nism1">
@@ -81,7 +81,7 @@
           <p>暂无数据</p>
         </div>
       </div>
-      <div class="variety" v-else>
+      <div v-else style="width: 55%">
         <h4 class="welcome">本周最受欢迎菜品</h4>
         <!-- <div class="menu1" v-for="(item, i) in double" :key="i">
           <div class="menuimg">
@@ -100,54 +100,88 @@
           <div class="menutext">{{ item.dishName }}</div>
           <div class="menunum">{{ item.dishCount }}</div>
         </div> -->
-        <el-row>
-          <el-col :span="12" v-for="(item, i) in double" :key="i">
-            <div class="menuimg">
-              <el-image style="width: 80px; height: 80px" :src="item.dishPic">
-                <div
-                  slot="error"
-                  class="image-slot"
-                  style="width: 80px; height: 80px; text-align: center;  line-height: 80px;"
-                >
-                  <div class="el-image__error">
-                    暂无图片
+        <div style="width: 50%; display: inline-block">
+          <div style="display: flex; align-items: center; font-weight: bold">
+            <div class="ranking"></div>
+            <div class="menuimg1">图片</div>
+            <div class="menutext">菜品名称</div>
+            <div class="menunum">使用次数</div>
+          </div>
+        </div>
+        <div style="width: 50%; display: inline-block">
+          <div style="display: flex; align-items: center; font-weight: bold">
+            <div class="ranking"></div>
+            <div class="menuimg1">图片</div>
+            <div class="menutext">菜品名称</div>
+            <div class="menunum">使用次数</div>
+          </div>
+        </div>
+        <div class="variety">
+          <div
+            v-for="(item, i) in double"
+            :key="i"
+            style="width: 50%; display: inline-block; margin-top: 20px"
+          >
+            <div style="display: flex; align-items: center">
+              <div :style="getColor(i)" class="ranking">{{ i + 1 }}</div>
+              <div class="menuimg">
+                <el-image style="width: 80px; height: 80px" :src="item.dishPic">
+                  <div
+                    slot="error"
+                    class="image-slot"
+                    style="
+                      width: 80px;
+                      height: 80px;
+                      text-align: center;
+                      line-height: 80px;
+                    "
+                  >
+                    <div class="el-image__error">暂无图片</div>
                   </div>
-                </div>
-              </el-image>
+                </el-image>
+              </div>
+              <div class="menutext">{{ item.dishName }}</div>
+              <div class="menunum">{{ item.dishCount }}</div>
             </div>
-            <div class="menutext">{{ item.dishName }}</div>
-            <div class="menunum">{{ item.dishCount }}</div>
-          </el-col>
-        </el-row>
+          </div>
+        </div>
       </div>
       <!-- 健康指数排行榜 -->
-      <div class="recipes">
+      <div style="width: 45%">
         <div v-if="this.preRanking == 2">
           <h4 class="welcome1">本周食谱健康指数排行榜</h4>
-          <!-- <div class="ranking" v-for="(num, i) in listset" :key="i">
-            {{ num }}
-          </div> -->
-          <!-- <div class="ranking1">1</div>
-          -->
-
-          <div class="school1" v-for="(item1, i) in getHealth" :key="i" lazy>
-            <div class="ranking">{{ item1.list }}</div>
-            <div class="schoolimg">
-              <el-image style="width: 80px; height: 80px" :src="item1.logoUrl">
-                <div
-                  slot="error"
-                  class="image-slot"
-                  style="width: 80px; height: 80px; text-align: center;  line-height: 80px;"
+          <div class="school1" style="font-weight: bold">
+            <div class="ranking"></div>
+            <div class="schoolimg"></div>
+            <div class="schooltxt">园所名称</div>
+            <div class="schoolnum">食谱得分</div>
+          </div>
+          <div class="recipes">
+            <div class="school1" v-for="(item1, i) in getHealth" :key="i" lazy>
+              <div class="ranking" :style="getColor(i)">{{ item1.list }}</div>
+              <div class="schoolimg">
+                <el-image
+                  style="width: 80px; height: 80px"
+                  :src="item1.logoUrl"
                 >
-                  <!-- <i class="el-icon-picture-outline"></i> -->
-                  <div class="el-image__error">
-                    暂无图片
+                  <div
+                    slot="error"
+                    class="image-slot"
+                    style="
+                      width: 80px;
+                      height: 80px;
+                      text-align: center;
+                      line-height: 80px;
+                    "
+                  >
+                    <!-- <i class="el-icon-picture-outline"></i> -->
+                    <div class="el-image__error">暂无图片</div>
                   </div>
-                </div>
-              </el-image>
+                </el-image>
+              </div>
+              <div class="schooltxt">{{ item1.tenantName }}</div>
+              <div class="schoolnum">{{ item1.score }}</div>
             </div>
-            <div class="schooltxt">{{ item1.tenantName }}</div>
-            <div class="schoolnum">{{ item1.score }}</div>
           </div>
         </div>
         <!-- !echarts图标! -->
@@ -185,7 +219,7 @@ export default {
         girls: "", //女生人数
         food: "", //食材总量
         dish: "", //菜品总量
-        recipe: "" //食谱总量
+        recipe: "", //食谱总量
       },
       listset: [],
       options: [],
@@ -198,11 +232,11 @@ export default {
       storage: "", //下拉框显示隐藏
       activeNames: ["1", "2", "3", "5"],
       logActiveNames: ["17"],
-      empty: ""
+      empty: "",
     };
   },
   computed: {
-    ...mapGetters(["userInfo"])
+    ...mapGetters(["userInfo"]),
   },
 
   beforeMount() {
@@ -215,6 +249,14 @@ export default {
     // this.drawPie();
   },
   methods: {
+    getColor(i) {
+      var colorArray = ["#f70f0f", "#f37a34", "#f5aa3c", "#C0C4CC"];
+      if (i < 3) {
+        return `background: ${colorArray[i]}`;
+      } else {
+        return `background: ${colorArray[3]}`;
+      }
+    },
     searchBtn() {
       console.log(this.activity);
       // console.log(this.options[0].value);
@@ -242,12 +284,12 @@ export default {
         title: {
           text: "儿童每人每日营养素提取（DRls）",
 
-          textAlign: "left"
+          textAlign: "left",
         },
         tooltip: {}, //提示层
         legend: {
-          data: ["实际比列", "要求比例"],
-          bottom: 0
+          data: ["实际比列", "最小要求比例", "最大要求比例"],
+          bottom: 0,
         },
         radar: {
           name: {
@@ -255,69 +297,86 @@ export default {
               color: "#000", //字体颜色
               // backgroundColor: "#999", //背景色
               borderRadius: 3, //圆角
-              padding: [3, 5] //padding
-            }
+              padding: [3, 5], //padding
+            },
           },
           center: ["50%", "50%"],
           radius: "60%",
           startAngle: 270,
           indicator: [
             {
-              name: "能量"
+              name: "能量",
             },
             {
-              name: "钠"
+              name: "蛋白质",
             },
             {
-              name: "铁"
+              name: "钙",
             },
             {
-              name: "锌"
+              name: "钠",
             },
             {
-              name: "钙"
+              name: "铁",
             },
             {
-              name: "维生素C"
+              name: "锌",
             },
             {
-              name: "维生素B2"
+              name: "维生素A",
             },
             {
-              name: "维生素B1"
+              name: "维生素B1",
             },
             {
-              name: "维生素A"
+              name: "维生素B2",
             },
             {
-              name: "脂肪"
+              name: "维生素C",
             },
-            {
-              name: "蛋白质"
-            }
-          ]
+          ],
         },
         series: [
           {
-            name: "儿童每人每日营养素提取（DRls）",
             type: "radar",
             data: [
               {
                 value: this.greater,
                 name: "实际比列",
                 areaStyle: {
-                  opacity: 0.4
-                }
+                  opacity: 0.4,
+                },
               },
+            ],
+            z: 3,
+          },
+          {
+            type: "radar",
+            data: [
               {
-                value: [80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80],
-                name: "要求比例",
+                value: [80, 80, 80, 80, 80, 80, 80, 80, 80, 80],
+                name: "最小要求比例",
                 areaStyle: {
-                  opacity: 0.4
-                }
-              }
-            ]
-          }
+                  opacity: 0.4,
+                },
+              },
+            ],
+            z: 2,
+          },
+          {
+            name: "儿童每人每日营养素提取（DRls）",
+            type: "radar",
+            data: [
+              {
+                value: [120, 150, 160, 135, 160, 160, 180, 250, 250, 250],
+                name: "最大要求比例",
+                areaStyle: {
+                  opacity: 0.4,
+                },
+              },
+            ],
+            z: 1,
+          },
         ],
         color: [
           "#5470c6",
@@ -328,8 +387,8 @@ export default {
           "#3ba272",
           "#fc8452",
           "#9a60b4",
-          "#ea7ccc"
-        ]
+          "#ea7ccc",
+        ],
       };
       charts.setOption(option);
     },
@@ -339,13 +398,13 @@ export default {
         title: {
           text: "儿童每人每日进食量",
 
-          textAlign: "left"
+          textAlign: "left",
         },
         tooltip: {}, //提示层
         legend: {
           data: ["实际用量", "推荐最小量", "推荐最大量"],
           left: "center",
-          bottom: 0
+          bottom: 0,
         },
         radar: {
           name: {
@@ -353,44 +412,44 @@ export default {
               color: "#000", //字体颜色
               // backgroundColor: "#999", //背景色
               borderRadius: 3, //圆角
-              padding: [3, 5] //padding
-            }
+              padding: [3, 5], //padding
+            },
           },
           center: ["50%", "50%"],
           radius: "60%",
           startAngle: 270,
           indicator: [
             {
-              name: "谷类(100-150)"
+              name: "谷类(100-150)",
 
               // max: 300
             },
             {
-              name: "盐(<=3)"
+              name: "蔬菜(150-300)",
+            },
+            {
+              name: "水果(150-250)",
+            },
+            {
+              name: "乳制品(350-500)",
               // max: 300
             },
             {
-              name: "食用油(20-50)"
+              name: "大豆(10-20)",
+              // max: 300
+            },
+            {
+              name: "盐(<=3)",
+              // max: 300
+            },
+            {
+              name: "食用油(20-50)",
               // max: 350
             },
             {
-              name: "乳制品(350-500)"
-              // max: 300
+              name: "畜禽肉类-蛋类-水产品(100-125)",
             },
-            {
-              name: "大豆(10-20)"
-              // max: 300
-            },
-            {
-              name: "畜禽肉类-蛋类-水产品(100-125)"
-            },
-            {
-              name: "水果(150-250)"
-            },
-            {
-              name: "蔬菜(150-300)"
-            }
-          ]
+          ],
         },
         series: [
           {
@@ -401,28 +460,28 @@ export default {
                 value: this.today,
                 name: "实际用量",
                 areaStyle: {
-                  opacity: 0.4
+                  opacity: 0.4,
                 },
-                z: 1
+                z: 3,
               },
               {
                 value: [100, 100, 100, 100, 100, 100, 100, 100],
                 name: "推荐最小量",
                 areaStyle: {
-                  opacity: 0.4
+                  opacity: 0.4,
                 },
-                z: 2
+                z: 2,
               },
               {
                 value: [300, 300, 300, 300, 300, 300, 300, 300],
                 name: "推荐最大量",
                 areaStyle: {
-                  opacity: 0.4
+                  opacity: 0.4,
                 },
-                z: 3
-              }
-            ]
-          }
+                z: 1,
+              },
+            ],
+          },
         ],
         color: [
           "#5470c6",
@@ -433,8 +492,8 @@ export default {
           "#3ba272",
           "#fc8452",
           "#9a60b4",
-          "#ea7ccc"
-        ]
+          "#ea7ccc",
+        ],
       };
       charts.setOption(option);
       // console.log(this.double);
@@ -442,15 +501,15 @@ export default {
     fromSearch() {
       this.$axios
         .get(`api/blade-system/tenant/getChildTenant`, {})
-        .then(res => {
+        .then((res) => {
           // console.log(res);
           this.rsearch = res.data.data;
           // console.log(this.rsearch);
           let second = [];
-          this.rsearch.forEach(item => {
+          this.rsearch.forEach((item) => {
             second.push({
               value: item.tenantIds,
-              label: item.tenantName
+              label: item.tenantName,
             });
           });
           this.options = second;
@@ -477,7 +536,7 @@ export default {
       let urlParams = `?tenantId=${this.activity}`;
       this.$axios
         .get(`api/blade-food/food/getTotalByTenant` + urlParams)
-        .then(res => {
+        .then((res) => {
           // console.log(res);
           this.newhead = res.data.data;
           // console.log(this.newhead);
@@ -487,7 +546,7 @@ export default {
     welcomeUser() {
       // &tenantId=${this.activity}
       let Dishes = `?size=${500}&current=${1}`;
-      this.$axios.get(`api/blade-food/food/dishTotal` + Dishes).then(res => {
+      this.$axios.get(`api/blade-food/food/dishTotal` + Dishes).then((res) => {
         // console.log(res);
         this.double = res.data.data.records;
         // console.log(this.double);
@@ -504,7 +563,7 @@ export default {
       let rankings = `?size=${500}&current=${1}&?tenantId=${this.activity}`;
       this.$axios
         .get(`api/blade-food/food/recipeTotal` + rankings)
-        .then(res => {
+        .then((res) => {
           // console.log(res);
           this.getHealth = res.data.data.records;
           // console.log(this.getHealth);
@@ -526,7 +585,7 @@ export default {
       let sorted = `?tenantId=${this.activity}`;
       this.$axios
         .get(`api/blade-food/recipe/getChildRecipeCal` + sorted, {})
-        .then(res => {
+        .then((res) => {
           // console.log(res);
           this.today = res.data.data;
           this.drawPie();
@@ -537,16 +596,20 @@ export default {
       let sorted = `?tenantId=${this.activity}`;
       this.$axios
         .get(`api/blade-food/recipe/getChildNutritionCal` + sorted, {})
-        .then(res => {
-          this.greater = res.data.data;
+        .then((res) => {
+          var greater = res.data.data;
+          if (greater instanceof Array) {
+            greater.splice(2, 2);
+            this.greater = greater;
+          }
           // console.log(this.greater);
           this.extract();
         });
     },
     handleChange(val) {
       window.console.log(val);
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -555,7 +618,7 @@ export default {
   width: 100%;
   height: 100%;
   /* background-color: #fff; */
-  margin-bottom: 50px;
+  // margin-bottom: 50px;
 }
 .el-font-size {
   font-size: 14px;
@@ -607,20 +670,15 @@ export default {
 }
 .dishes {
   width: 100%;
-  height: 790px;
+  height: calc(100vh - 255px);
   /* background-color: yellow; */
   background-color: #fff;
   display: flex;
   margin-top: 5px;
-  margin-bottom: 40px;
+  // margin-bottom: 40px;
+  overflow-y: hidden;
 }
-.variety {
-  width: 55%;
-  height: 750px;
-  margin-bottom: 40px;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
+
 .pictures {
   width: 200px;
   height: 200px;
@@ -637,13 +695,18 @@ export default {
     color: #c0c4cc;
   }
 }
+.variety {
+  height: calc(100vh - 350px);
+  // margin-bottom: 40px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
 .recipes {
-  width: 45%;
-  height: 750px;
+  height: calc(100vh - 350px);
   overflow-y: auto;
   overflow-x: hidden;
   // background-color: #fff;
-  margin-bottom: 40px;
+  // margin-bottom: 40px;
 }
 .welcome {
   margin-left: 20px;
@@ -651,6 +714,7 @@ export default {
 }
 .welcome1 {
   margin-top: 21px;
+  margin-left: 20px;
 }
 .menu {
   width: 100%;
@@ -671,6 +735,11 @@ export default {
   margin-left: 20px;
   float: left;
 }
+.menuimg1 {
+  width: 80px;
+  background-color: #fff;
+  margin-left: 20px;
+}
 .menuimg img {
   width: 80px;
   height: 80px;
@@ -678,16 +747,10 @@ export default {
 .menutext {
   float: left;
   width: 120px;
-  height: 80px;
-  line-height: 80px;
   margin-left: 20px;
   font-size: 14px;
 }
 .menunum {
-  float: right;
-  width: 50px;
-  height: 80px;
-  line-height: 80px;
   font-size: 14px;
 }
 .school {
@@ -695,24 +758,22 @@ export default {
   height: 60px;
 }
 .school1 {
+  display: flex;
+  align-items: center;
   width: 100%;
-  height: 90px;
   margin-top: 20px;
 }
 .ranking {
-  width: 30px;
-  height: 30px;
-  // background: red;
+  width: 25px;
+  height: 25px;
+  margin-left: 20px;
   text-align: center;
-  line-height: 30px;
-  color: #000;
-  float: left;
-  margin-top: 15px;
+  color: #fff;
 }
 .ranking1 {
   width: 30px;
   height: 30px;
-  background: #f18546;
+  background: #f70f0f;
   text-align: center;
   line-height: 30px;
   color: #fff;
@@ -751,7 +812,6 @@ export default {
 }
 .schoolimg {
   width: 80px;
-  height: 80px;
   background-color: #fff;
   float: left;
   margin-left: 30px;
@@ -762,18 +822,13 @@ export default {
   height: 50px;
 }
 .schooltxt {
-  width: 200px;
-  height: 80px;
-  line-height: 80px;
+  width: 180px;
   margin-left: 20px;
   float: left;
   font-size: 14px;
 }
 .schoolnum {
-  float: right;
   width: 100px;
-  height: 80px;
-  line-height: 80px;
   text-align: center;
   font-size: 14px;
 }

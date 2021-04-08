@@ -167,7 +167,7 @@
           style="width: 100px"
           size="small"
         ></el-input>
-        <span style="margin-left: 10px;margin-right: 10px">姓名:</span>
+        <span style="margin-left: 10px; margin-right: 10px">姓名:</span>
         <el-input
           v-model="username"
           placeholder="请输入内容"
@@ -311,7 +311,7 @@
             <el-form-item label="姓名" style="width: 355px" prop="name">
               <el-input style="width: 250px" v-model="ruleForm.name"></el-input>
             </el-form-item>
-            <el-form-item label="性别" style="width: 355px;margin-right: 30px">
+            <el-form-item label="性别" style="width: 355px; margin-right: 30px">
               <el-radio-group v-model="ruleForm.radio">
                 <el-radio label="1">男生</el-radio>
                 <el-radio label="2">女生</el-radio>
@@ -336,7 +336,7 @@
                 <!-- <img v-if="dialogImageUrl" :src="dialogImageUrl" class="avatar" /> -->
                 <i class="el-icon-plus"></i>
               </el-upload>
-              <span style="color:#e0e0e0;  font-size: 11px;"
+              <span style="color: #e0e0e0; font-size: 11px"
                 >上传图片不能超过2M 只能是JPG PNG格式</span
               >
               <el-dialog append-to-body :visible.sync="dialogVisible">
@@ -344,7 +344,7 @@
               </el-dialog>
             </el-form-item>
             <el-form-item
-              style="width: 355px;margin-right: 30px"
+              style="width: 355px; margin-right: 30px"
               label="婚姻状况"
             >
               <el-radio v-model="ruleForm.marriages" label="1">未婚</el-radio>
@@ -638,9 +638,7 @@
           >
             <template slot-scope="scope">
               <p v-if="scope.row.sex == 1">男</p>
-              <p v-else-if="scope.row.sex == 2">
-                女
-              </p>
+              <p v-else-if="scope.row.sex == 2">女</p>
             </template>
           </el-table-column>
           <el-table-column
@@ -690,15 +688,9 @@
           >
             <template slot-scope="scope">
               <p v-if="scope.row.stutas == 1">在职</p>
-              <p v-else-if="scope.row.stutas == 2">
-                离职
-              </p>
-              <p v-else-if="scope.row.stutas == 3">
-                停职
-              </p>
-              <p v-else-if="scope.row.status == 4">
-                退休
-              </p>
+              <p v-else-if="scope.row.stutas == 2">离职</p>
+              <p v-else-if="scope.row.stutas == 3">停职</p>
+              <p v-else-if="scope.row.status == 4">退休</p>
             </template>
           </el-table-column>
           <!-- <el-table-column label="是否有效" width="120" align="center">
@@ -759,12 +751,12 @@
 import student from "./getIsUsers";
 export default {
   components: {
-    student
+    student,
   },
   data() {
     const data = [];
     //定义校验方法
-    var validatorPhone = function(rule, value, callback) {
+    var validatorPhone = function (rule, value, callback) {
       if (!value) {
         callback(new Error("手机号不能为空"));
       } else if (!/^1\d{10}$/.test(value)) {
@@ -790,21 +782,21 @@ export default {
       productImgs: [],
       dialogVisible: false,
       headerObj: {
-        "Blade-Auth": ""
+        "Blade-Auth": "",
       }, //上传图片请求头
       requesting: {
         file: "teacher.xls",
-        isCovered: 0
+        isCovered: 0,
       },
       acetone: {
         id: "", //ID
         name: "", //子部门名称
-        sorting: "" //部门排序
+        sorting: "", //部门排序
       },
       storage: {
         id: "",
         name: "", //部门名称
-        sorting: "" //部门排序
+        sorting: "", //部门排序
       },
       ruleForm: {
         name: "123", //姓名
@@ -825,34 +817,34 @@ export default {
         nextstate: "", //状态更新日期
         desc: "",
         resource: "",
-        domain: [] //选择部门
+        domain: [], //选择部门
       },
       m_page: {
         sizes: [10, 20, 40, 50, 100], //每页最大显示数
         size: 10,
         totalElements: 0,
         totalPages: 3,
-        number: 1
+        number: 1,
       },
       stringClass: [],
       stringClass1: [
-        ["1326711402392821762", "1326711753099550721", "1326711916014706690"]
+        ["1326711402392821762", "1326711753099550721", "1326711916014706690"],
       ],
       rules: {
         name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
         phones: [
-          { required: true, validator: validatorPhone, trigger: "blur" }
+          { required: true, validator: validatorPhone, trigger: "blur" },
         ],
         domain: [{ required: true, message: "请选择部门", trigger: "blur" }],
         value1: [
-          { required: true, message: "请选择出生日期", trigger: "blur" }
+          { required: true, message: "请选择出生日期", trigger: "blur" },
         ],
 
         position: [{ required: true, message: "请选择职务", trigger: "blur" }],
         inductions: [
-          { required: true, message: "请选择入职日期", trigger: "blur" }
+          { required: true, message: "请选择入职日期", trigger: "blur" },
         ],
-        thejob: [{ required: true, message: "工号不能为空", trigger: "blur" }]
+        thejob: [{ required: true, message: "工号不能为空", trigger: "blur" }],
       },
       tableData: [],
       choose: [], //选择部门
@@ -860,21 +852,21 @@ export default {
       emailslist: [
         //当前状态
         {
+          value: "0",
+          label: "在职",
+        },
+        {
           value: "1",
-          label: "在职"
+          label: "离职",
         },
         {
           value: "2",
-          label: "离职"
+          label: "停职",
         },
         {
           value: "3",
-          label: "停职"
+          label: "退休",
         },
-        {
-          value: "4",
-          label: "退休"
-        }
       ],
       loadClass: [
         //
@@ -883,346 +875,346 @@ export default {
         //职务
         {
           value: "园长",
-          label: "园长"
+          label: "园长",
         },
         {
           value: "副园长",
-          label: "副园长"
+          label: "副园长",
         },
         {
           value: "保健园",
-          label: "保健园"
+          label: "保健园",
         },
         {
           value: "老师",
-          label: "老师"
+          label: "老师",
         },
         {
           value: "保教主任",
-          label: "保教主任"
+          label: "保教主任",
         },
         {
           value: "保育员",
-          label: "保育员"
+          label: "保育员",
         },
         {
           value: "年级组长",
-          label: "年级组长"
+          label: "年级组长",
         },
         {
           value: "教研组长",
-          label: "教研组长"
+          label: "教研组长",
         },
         {
           value: "后勤主任",
-          label: "后勤主任"
+          label: "后勤主任",
         },
         {
           value: "炊事员",
-          label: "炊事员"
+          label: "炊事员",
         },
         {
           value: "保洁",
-          label: "保洁"
+          label: "保洁",
         },
         {
           value: "保安",
-          label: "保安"
+          label: "保安",
         },
         {
           value: "财务",
-          label: "财务"
+          label: "财务",
         },
         {
           value: "跟车老师",
-          label: "跟车老师"
+          label: "跟车老师",
         },
         {
           value: "办公司人员",
-          label: "办公司人员"
+          label: "办公司人员",
         },
         {
           value: "办事员",
-          label: "办事员"
+          label: "办事员",
         },
         {
           value: "其他",
-          label: "其他"
-        }
+          label: "其他",
+        },
       ],
       college: [
         {
           label: "汉族",
-          value: 1
+          value: 1,
         },
         {
           label: "满族",
-          value: 2
+          value: 2,
         },
         {
           label: "蒙古族",
-          value: 3
+          value: 3,
         },
         {
           label: "回族",
-          value: 4
+          value: 4,
         },
         {
           label: "藏族",
-          value: 5
+          value: 5,
         },
         {
           label: "维吾尔族",
-          value: 6
+          value: 6,
         },
         {
           label: "苗族",
-          value: 7
+          value: 7,
         },
         {
           label: "彝族",
-          value: 8
+          value: 8,
         },
         {
           label: "壮族",
-          value: 9
+          value: 9,
         },
         {
           label: "布依族",
-          value: 10
+          value: 10,
         },
         {
           label: "侗族",
-          value: 11
+          value: 11,
         },
         {
           label: "瑶族",
-          value: 12
+          value: 12,
         },
         {
           label: "白族",
-          value: 13
+          value: 13,
         },
         {
           label: "土家族",
-          value: 14
+          value: 14,
         },
         {
           label: "哈尼族",
-          value: 15
+          value: 15,
         },
         {
           label: "哈萨克族",
-          value: 16
+          value: 16,
         },
         {
           label: "傣族",
-          value: 17
+          value: 17,
         },
         {
           label: "黎族",
-          value: 18
+          value: 18,
         },
         {
           label: "傈僳族",
-          value: 19
+          value: 19,
         },
         {
           label: "佤族",
-          value: 20
+          value: 20,
         },
         {
           label: "畲族",
-          value: 21
+          value: 21,
         },
         {
           label: "高山族",
-          value: 22
+          value: 22,
         },
         {
           label: "拉祜族",
-          value: 23
+          value: 23,
         },
         {
           label: "水族",
-          value: 24
+          value: 24,
         },
         {
           label: "东乡族",
-          value: 25
+          value: 25,
         },
         {
           label: "纳西族",
-          value: 26
+          value: 26,
         },
         {
           label: "景颇族",
-          value: 27
+          value: 27,
         },
         {
           label: "柯尔克孜族",
-          value: 28
+          value: 28,
         },
         {
           label: "土族",
-          value: 29
+          value: 29,
         },
         {
           label: "达斡尔族",
-          value: 30
+          value: 30,
         },
         {
           label: "仫佬族",
-          value: 31
+          value: 31,
         },
         {
           label: "羌族",
-          value: 32
+          value: 32,
         },
         {
           label: "布朗族",
-          value: 33
+          value: 33,
         },
         {
           label: "撒拉族",
-          value: 34
+          value: 34,
         },
         {
           label: "毛南族",
-          value: 35
+          value: 35,
         },
         {
           label: "仡佬族",
-          value: 36
+          value: 36,
         },
         {
           label: "锡伯族",
-          value: 37
+          value: 37,
         },
         {
           label: "阿昌族",
-          value: 38
+          value: 38,
         },
         {
           label: "普米族",
-          value: 39
+          value: 39,
         },
         {
           label: "朝鲜族",
-          value: 40
+          value: 40,
         },
         {
           label: "塔吉克族",
-          value: 41
+          value: 41,
         },
         {
           label: "怒族",
-          value: 42
+          value: 42,
         },
         {
           label: "乌孜别克族",
-          value: 43
+          value: 43,
         },
         {
           label: "俄罗斯族",
-          value: 44
+          value: 44,
         },
         {
           label: "鄂温克族",
-          value: 45
+          value: 45,
         },
         {
           label: "德昂族",
-          value: 46
+          value: 46,
         },
         {
           label: "保安族",
-          value: 47
+          value: 47,
         },
         {
           label: "裕固族",
-          value: 48
+          value: 48,
         },
         {
           label: "京族",
-          value: 49
+          value: 49,
         },
         {
           label: "塔塔尔族",
-          value: 50
+          value: 50,
         },
         {
           label: "独龙族",
-          value: 51
+          value: 51,
         },
         {
           label: "鄂伦春族",
-          value: 52
+          value: 52,
         },
         {
           label: "赫哲族",
-          value: 53
+          value: 53,
         },
         {
           label: "门巴族",
-          value: 54
+          value: 54,
         },
         {
           label: "珞巴族",
-          value: 55
+          value: 55,
         },
         {
           label: "基诺族",
-          value: 56
-        }
+          value: 56,
+        },
       ],
       prompt: [
         {
           value: "选项1",
-          label: "黄金糕"
+          label: "黄金糕",
         },
         {
           value: "选项2",
-          label: "双皮奶"
+          label: "双皮奶",
         },
         {
           value: "选项3",
-          label: "蚵仔煎"
-        }
+          label: "蚵仔煎",
+        },
       ],
       callback: "", //职务搜索
       mState: [
         {
           value: "",
-          label: "全部"
+          label: "全部",
         },
         {
           value: "1",
-          label: "在职"
+          label: "在职",
         },
         {
           value: "2",
-          label: "离职"
+          label: "离职",
         },
         {
           value: "3",
-          label: "停职"
+          label: "停职",
         },
         {
           value: "4",
-          label: "退休"
-        }
+          label: "退休",
+        },
       ],
       driver: "", //当前状态
       number: [
         {
           value: "1",
-          label: "升序"
+          label: "升序",
         },
         {
           value: "2",
-          label: "降序"
-        }
+          label: "降序",
+        },
       ],
       working: "",
       workers: "", //工号搜索
@@ -1237,7 +1229,7 @@ export default {
       empty: "", //升序
       ordered: "", //降序
       Superior: "",
-      summing: ""
+      summing: "",
     };
   },
   beforeMount() {
@@ -1248,14 +1240,14 @@ export default {
     this.hobbiton();
     // this.Autoresponder();
   },
-  mounted: function() {
-    this.$nextTick(function() {
+  mounted: function () {
+    this.$nextTick(function () {
       this.tableHeight =
         window.innerHeight - this.$refs.table.$el.offsetTop - 160;
 
       // 监听窗口大小变化
       let self = this;
-      window.onresize = function() {
+      window.onresize = function () {
         self.tableHeight =
           window.innerHeight - self.$refs.table.$el.offsetTop - 160;
       };
@@ -1267,9 +1259,9 @@ export default {
       this.$axios
         .post(`api/blade-food/teacher/import-user`, {
           file: "teacher.xls",
-          isCovered: 0
+          isCovered: 0,
         })
-        .then(res => {
+        .then((res) => {
           console.log(res);
         });
     },
@@ -1304,7 +1296,7 @@ export default {
       //   console.log(this.summing);
       // }
       console.log(this.ruleForm.domain);
-      this.$refs[formName].validate(valid => {
+      this.$refs[formName].validate((valid) => {
         if (valid) {
           this.$axios
             .post(`api/blade-food/teacher/save`, {
@@ -1325,19 +1317,19 @@ export default {
               workUnit: this.ruleForm.worker, //工作单位
               email: this.ruleForm.emails, //邮箱
               stutas: this.ruleForm.ddeparture, //当前状态
-              changeDate: this.ruleForm.nextstate //状态变更日期
+              changeDate: this.ruleForm.nextstate, //状态变更日期
             })
-            .then(res => {
+            .then((res) => {
               // console.log(res);
               this.dateTime = false;
               this.$message({
                 message: "添加成功",
-                type: "success"
+                type: "success",
               });
               this.loadFlag1 = true;
               this.$axios
                 .get(`api/blade-food/teacher/list?deptId=${this.view}`, {})
-                .then(res => {
+                .then((res) => {
                   // console.log(res);
                   // this.store = res.data.data.records;
                   // console.log(this.store);
@@ -1360,7 +1352,7 @@ export default {
           // console.log("error submit!!");
           this.$message({
             message: "信息未填全",
-            type: "warning"
+            type: "warning",
           });
           return false;
         }
@@ -1376,7 +1368,7 @@ export default {
         this.summing = this.ruleForm.domain[1];
         console.log(this.summing);
       }
-      this.$refs[formName].validate(valid => {
+      this.$refs[formName].validate((valid) => {
         if (valid) {
           this.$axios
             .post(`api/blade-food/teacher/update`, {
@@ -1398,21 +1390,21 @@ export default {
               workUnit: this.ruleForm.worker, //工作单位
               email: this.ruleForm.emails, //邮箱
               stutas: this.ruleForm.ddeparture, //当前状态
-              changeDate: this.ruleForm.nextstate //状态变更日期
+              changeDate: this.ruleForm.nextstate, //状态变更日期
             })
-            .then(res => {
+            .then((res) => {
               console.log(res);
 
               this.$message({
                 message: "编辑成功",
-                type: "success"
+                type: "success",
               });
 
               this.dateTime = false;
               this.loadFlag1 = true;
               this.$axios
                 .get(`api/blade-food/teacher/list?deptId=${this.view}`, {})
-                .then(res => {
+                .then((res) => {
                   // console.log(res);
                   // this.store = res.data.data.records;
                   // console.log(this.store);
@@ -1434,7 +1426,7 @@ export default {
           // console.log("error submit!!");
           this.$message({
             message: "信息未填全",
-            type: "warning"
+            type: "warning",
           });
           return false;
         }
@@ -1492,7 +1484,7 @@ export default {
       let picture = [];
       if (row.pic) {
         picture[0] = {
-          url: row.pic
+          url: row.pic,
         };
       }
       this.productImgs = picture;
@@ -1515,7 +1507,7 @@ export default {
       // console.log(row.classStr);
       if (row.classStr) {
         let elseclass = {
-          class: [row.classStr]
+          class: [row.classStr],
         };
         elseclass.class = [...JSON.parse(elseclass.class[0])];
         this.stringClass = elseclass.class;
@@ -1559,12 +1551,12 @@ export default {
       this.$confirm("确认删除该部门?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
         .then(() => {
           this.$axios
             .post(`api/blade-food/teacher/remove` + addid, {})
-            .then(res => {
+            .then((res) => {
               // console.log(res);
               // this.defcustom();
               this.searchType();
@@ -1574,7 +1566,7 @@ export default {
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消删除"
+            message: "已取消删除",
           });
         });
     },
@@ -1676,10 +1668,10 @@ export default {
         .post(`api/blade-food/teacherdept/submit`, {
           parentId: this.Superior, //上级ID
           id: this.acetone.id, //子部门ID
-          deptName: this.acetone.name //部门名称
+          deptName: this.acetone.name, //部门名称
           // level: this.acetone.sorting //部门排序
         })
-        .then(res => {
+        .then((res) => {
           this.getStorage();
           this.hobbiton();
           this.obtained = false;
@@ -1688,7 +1680,7 @@ export default {
           // console.log(res);
           this.$message({
             message: "编辑成功",
-            type: "success"
+            type: "success",
           });
         })
         .catch(() => {
@@ -1701,10 +1693,10 @@ export default {
         this.$axios
           .post(`api/blade-food/teacherdept/submit`, {
             parentId: this.Superior, //上级ID
-            deptName: this.acetone.name //部门名称
+            deptName: this.acetone.name, //部门名称
             // level: this.acetone.sorting //部门排序
           })
-          .then(res => {
+          .then((res) => {
             this.getStorage();
             this.hobbiton();
             this.obtained = false;
@@ -1713,7 +1705,7 @@ export default {
             // console.log(res);
             this.$message({
               message: "添加成功",
-              type: "success"
+              type: "success",
             });
           })
           .catch(() => {
@@ -1729,10 +1721,10 @@ export default {
         this.$axios
           .post(`api/blade-food/teacherdept/submit`, {
             id: this.storage.id, //部门ID
-            deptName: this.storage.name //部门名称
+            deptName: this.storage.name, //部门名称
             // level: this.storage.sorting //部门排序
           })
-          .then(res => {
+          .then((res) => {
             this.getStorage();
             this.hobbiton();
             this.department = false;
@@ -1741,7 +1733,7 @@ export default {
             // console.log(res);
             this.$message({
               message: "添加成功",
-              type: "success"
+              type: "success",
             });
           })
           .catch(() => {
@@ -1756,10 +1748,10 @@ export default {
       if (this.storage.name != "") {
         this.$axios
           .post(`api/blade-food/teacherdept/submit`, {
-            deptName: this.storage.name //部门名称
+            deptName: this.storage.name, //部门名称
             // level: this.storage.sorting //部门排序
           })
-          .then(res => {
+          .then((res) => {
             this.getStorage();
             this.hobbiton();
             this.department = false;
@@ -1768,7 +1760,7 @@ export default {
             // console.log(res);
             this.$message({
               message: "添加成功",
-              type: "success"
+              type: "success",
             });
           })
           .catch(() => {
@@ -1785,12 +1777,12 @@ export default {
       this.$confirm("确认删除该部门?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
         .then(() => {
           this.$axios
             .get(`api/blade-food/teacherdept/remove` + addid, {})
-            .then(res => {
+            .then((res) => {
               // console.log(res);
               this.hobbiton();
               this.getStorage();
@@ -1801,7 +1793,7 @@ export default {
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消删除"
+            message: "已取消删除",
           });
         });
     },
@@ -1839,7 +1831,7 @@ export default {
           `api/blade-food/teacher/list?size=${this.m_page.size}&current=${this.m_page.number}&deptId=${this.view}&jobNumber=${this.workers}&name=${this.username}&post=${this.callback}&stutas=${this.driver}&descs=${this.empty}&ascs=${this.ordered}`,
           {}
         )
-        .then(res => {
+        .then((res) => {
           // this.$message({
           //   message: "查询成功",
           //   type: "success"
@@ -1859,7 +1851,7 @@ export default {
       this.loadFlag1 = true;
       this.$axios
         .get(`api/blade-food/teacher/list?deptId=${this.view}`, {})
-        .then(res => {
+        .then((res) => {
           console.log(res);
 
           this.loadFlag1 = false;
@@ -1892,7 +1884,7 @@ export default {
             `api/blade-food/teacher/list?deptId=${this.view}&size=${this.m_page.size}&current=${this.m_page.number}`,
             {}
           )
-          .then(res => {
+          .then((res) => {
             this.loadFlag1 = false;
             console.log(res);
             this.tableData = res.data.data.records;
@@ -1912,13 +1904,13 @@ export default {
       this.loadFlag1 = true;
       this.$axios
         .get(`api/blade-food/teacher/list?deptId=${this.view}`, {})
-        .then(res => {
+        .then((res) => {
           // console.log(res);
           // this.store = res.data.data.records;
           // console.log(this.store);
           this.$message({
             message: "查询成功",
-            type: "success"
+            type: "success",
           });
           this.loadFlag1 = false;
           this.tableData = res.data.data.records;
@@ -1931,23 +1923,23 @@ export default {
 
     //获取所属班级
     getToolkit() {
-      this.$axios.get(`api/blade-food/class/tree`, {}).then(res => {
+      this.$axios.get(`api/blade-food/class/tree`, {}).then((res) => {
         // console.log(res);
         this.bufs = res.data.data;
         // console.log(this.bufs);
         let fwork = [];
-        this.bufs.forEach(item => {
+        this.bufs.forEach((item) => {
           item.children.forEach((item1, index1) => {
             // console.log(item1);
             fwork[index1] = {
               value: item1.id,
-              label: item1.label
+              label: item1.label,
             };
             fwork[index1].children = [];
             item1.children.forEach((item2, index2) => {
               fwork[index1].children[index2] = {
                 value: item2.id,
-                label: item2.label
+                label: item2.label,
               };
               fwork[index1].children[index2].children = [];
               if (item2.children) {
@@ -1955,7 +1947,7 @@ export default {
                   // console.log(item3),
                   fwork[index1].children[index2].children[index3] = {
                     value: item3.id,
-                    label: item3.label
+                    label: item3.label,
                   };
                 });
               }
@@ -1969,14 +1961,14 @@ export default {
       });
     },
     hobbiton() {
-      this.$axios.get(`api/blade-food/teacherdept/tree`, {}).then(res => {
+      this.$axios.get(`api/blade-food/teacherdept/tree`, {}).then((res) => {
         // console.log(res);
         this.inToronto = res.data.data;
         let tosit = [];
         this.inToronto.forEach((item, index) => {
           tosit[index] = {
             value: item.id,
-            label: item.title
+            label: item.title,
           };
           // tosit[index].children = [];
           // if (item.children) {
@@ -1994,7 +1986,7 @@ export default {
     //获取部门树形结构
     getStorage() {
       this.loadFlag = true;
-      this.$axios.get(`api/blade-food/teacherdept/tree`).then(res => {
+      this.$axios.get(`api/blade-food/teacherdept/tree`).then((res) => {
         this.loadFlag = false;
         this.factors = res.data.data;
         // console.log(this.factors);
@@ -2006,7 +1998,7 @@ export default {
             label: item.title,
             into: item.level,
             view: 0,
-            tment: 0
+            tment: 0,
           };
           // auto.push({
           //   id: 123,
@@ -2046,12 +2038,12 @@ export default {
     exportExcel() {
       this.$axios
         .get(`api/blade-food/teacher/export-template`, {
-          responseType: "blob"
+          responseType: "blob",
         })
-        .then(res => {
+        .then((res) => {
           console.log(res);
           var blob = new Blob([res.data], {
-            type: "application/octet-stream"
+            type: "application/octet-stream",
           }); //type这里表示xlsx类型
 
           var downloadElement = document.createElement("a");
@@ -2148,8 +2140,8 @@ export default {
     // 文件上传失败
     handleError(err, file, fileList) {
       this.$message.error("文件上传失败");
-    }
-  }
+    },
+  },
 };
 </script>
 
