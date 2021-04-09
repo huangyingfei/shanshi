@@ -834,8 +834,10 @@ export default {
 }
 .daychart {
   width: 100%;
+
   // height: 600px;
-  height: 100%;
+  height: calc(100vh - 275px);
+  overflow-y: auto;
   background-color: #fff;
   margin-top: 10px;
 }
