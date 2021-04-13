@@ -2101,7 +2101,7 @@ export default {
       let days = 0;
       let foods = {};
       let mealTypes = [];
-      debugger;
+      //debugger;
       if (this.startAge) {
         foods["startAge"] = this.startAge;
         foods["endAge"] = this.endAge;
@@ -2585,7 +2585,7 @@ export default {
       let node = {
         id: "1",
       };
-      debugger;
+     // debugger;
       this.$emit("jundgeFood");
     },
 

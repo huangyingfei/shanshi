@@ -205,7 +205,7 @@ export default {
           _.titleLabel=nutritionVos[0].titleLabel
         }
       })
-      debugger
+    //  debugger
       console.log(nutritionVos)
       if(nutritionVos.length==0){
         this.getHeight="oneHeight"

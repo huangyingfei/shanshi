@@ -2582,7 +2582,7 @@ export default {
       let node = {
         id: "1",
       };
-      debugger;
+   //   debugger;
       this.$emit("jundgeFood");
       this.$emit("allergy");
     },

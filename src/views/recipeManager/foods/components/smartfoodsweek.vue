@@ -1185,10 +1185,10 @@
     },
     // 组件第一次加载
     beforeCreate(){
-      debugger
+     // debugger
     },
     mounted() {
-      debugger
+      //debugger
        this.init();
     },
 
