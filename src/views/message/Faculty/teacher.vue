@@ -188,7 +188,7 @@
       </el-row>
 
       <el-row :gutter="20" style="padding: 0px; margin-top: 0px">
-        <el-col :span="5">
+        <el-col style="width: 200px">
           <el-card class="box-car" shadow="never" :class="[topShow ? 'box-car' : 'box-car1']">
             <div class="clearfix panel_head">
               <el-button-group>
@@ -270,7 +270,7 @@
                 <ul :class="[topShow ? 'foodWeekListHis2' : 'foodWeekListHis1']"  ref="boxScroll2" class="foodWeekListHis" @mouseout="HidenFoodTips($event)">
                   <li v-for="f in peopleMealListLeft"
                       :key="f.id" style="font-size: 14px">
-                    <span @mouseover="ShowFood($event,f)" @mouseout="HidenFoodTips($event)" >{{f.recipeName}}</span> <img style="width: 20px" @click="mealLoad(f,f.recipeName)"
+                    <span @mouseover="ShowFood($event,f)" @mouseout="HidenFoodTips($event)" >{{f.recipeName}}</span> <img style="width: 16px" @click="mealLoad(f,f.recipeName)"
                                                        src="/img/arrow.png" alt/>
                   </li>
                   <li v-show="recipefinishedPri" style="text-align: center">无更多数据</li>

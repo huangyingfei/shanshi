@@ -267,7 +267,7 @@
         @mouseover="HidenFoodTips($event)"
         @mouseout="HidenFoodTips($event)"
       >
-        <el-col :span="5">
+        <el-col style="width: 200px">
           <el-card :class="[topShow ? 'box-car' : 'box-car1']" shadow="never">
             <div class="clearfix panel_head">
               <el-button-group>
@@ -348,7 +348,7 @@
                     <span  @mouseover="ShowFood($event, f)"
                            @mouseout="HidenFoodTips($event)">{{ f.recipeName }}</span>
                     <img
-                      style="width: 20px"
+                      style="width: 16px"
                       @click="mealLoad(f, f.recipeName)"
                       src="/img/arrow.png"
                       alt
@@ -425,7 +425,7 @@
                     <span  @mouseover="ShowFood($event, f)"
                            @mouseout="HidenFoodTips($event)">{{ f.recipeName }}</span>
                     <img
-                      style="width: 20px"
+                      style="width: 16px"
                       @click="mealLoad(f, f.recipeName)"
                       src="/img/arrow.png"
                       alt
@@ -2177,7 +2177,7 @@ export default {
       //食材相克
       jundgeFood(row).then((result) => {
         //
-        debugger;
+     //   debugger;
         let foodMutuals = [];
         let msg = "";
         if (result.data.data.foodMutuals.length > 0) {
@@ -2273,6 +2273,7 @@ export default {
                 mealTypes.push(that.getmealTypeData(_.name));
                 ___.children.forEach(____=>{
                   recipeVals.push({
+                    dishId:___.id,
                     foodId:____.id,
                     val:____.count?____.count:0,
                     mealType:that.getmealTypeData(_.name),
@@ -2313,41 +2314,41 @@ export default {
             let recipeVals=resData.recipeVals;
             var m = new Map();
             for(let k=0;k<recipeVals.length;k++){
-              m.set(recipeVals[k].foodId+recipeVals[k].mealType+recipeVals[k].week,recipeVals[k])
+              m.set(recipeVals[k].dishId+recipeVals[k].foodId+recipeVals[k].mealType+recipeVals[k].week,recipeVals[k].val)
             }
             this.smartDatas.forEach((item) => {
-              debugger
               item.weeks.forEach((_) => {
                 _.foods.forEach((__) => {
                   let count = 0;
                   __.children.forEach((___) => {
-                    var key=___.id +that.getmealTypeData(item.name)+_.name.slice(4);
-                    debugger
+                    var key=__.id+___.id +that.getmealTypeData(item.name)+_.name.slice(4);
                     if((m.get(key)!=null)){
-                      if(parseFloat(___.count)>parseFloat(m.get(key).val)){
-                        this.$set(___, "down", Math.abs((((parseFloat(m.get(key).val) - parseFloat(___.count)) / parseFloat(___.count)) * 100).toFixed(2)));
+                      // debugger
+                      if(parseFloat(___.count)>parseFloat(m.get(key))){
+                        debugger
+                        this.$set(___, "down", Math.abs((((parseFloat(m.get(key)) - parseFloat(___.count)) / 100) * 100).toFixed(2)));
                         delete ___["up"];
-                        this.$set(___, "count", m.get(key).val.toFixed(2));
+                        this.$set(___, "count", m.get(key).toFixed(2));
                       }
-                      else if(parseFloat(___.count)<parseFloat(m.get(key).val)){
-                        this.$set(___, "up", Math.abs((((parseFloat(m.get(key).val) - parseFloat(___.count)) / parseFloat(___.count)) * 100).toFixed(2)));
+                      else if(parseFloat(___.count)<parseFloat(m.get(key))){
+                        this.$set(___, "up", Math.abs((((parseFloat(m.get(key)) - parseFloat(___.count)) / 100) * 100).toFixed(2)));
                         delete ___["down"];
-                        this.$set(___, "count", m.get(key).val.toFixed(2));
+                        this.$set(___, "count", m.get(key).toFixed(2));
                       }else{
                         delete ___["down"];
                         delete ___["up"];
-                        this.$set(___, "count", m.get(key).val.toFixed(2));
+                        this.$set(___, "count", m.get(key).toFixed(2));
                       }
                     }
                     count += parseFloat(___.count ? ___.count : 0)
                   });
                   if (parseFloat(__.count) > parseFloat(count)) {
                     //下降
-                    this.$set(__, "down", Math.abs((((parseFloat(count) - parseFloat(__.count)) / parseFloat(__.count)) * 100).toFixed(2)));
+                    this.$set(__, "down", Math.abs((((parseFloat(count) - parseFloat(__.count)) / 100) * 100).toFixed(2)));
                     delete __["up"];
                   } else if (parseFloat(__.count) < parseFloat(count)) {
                     //上升
-                    this.$set(__, "up", (((parseFloat(count) - parseFloat(__.count)) / parseFloat(__.count)) * 100).toFixed(2));
+                    this.$set(__, "up", (((parseFloat(count) - parseFloat(__.count)) / 100) * 100).toFixed(2));
                     delete __["down"];
                   } else {
                     delete __["down"];
@@ -2515,6 +2516,7 @@ export default {
       this.smartDatas = JSON.parse(localStorage.getItem("mealsDatas"));
       this.pointscan = true;
       this.peipScore = this.score;
+      this.$refs.child2.resizeExpendHeight();
       //console.log("this.smartDatas", this.smartDatas)
     },
     getmealTypeData(name) {

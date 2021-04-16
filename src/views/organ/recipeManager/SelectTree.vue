@@ -96,7 +96,7 @@
         this.$refs.tree.filter(val);
       },
       value(val) {
-        debugger
+      //  debugger
         this.labelModel = this.queryTree(this.data, val);
       },
     },

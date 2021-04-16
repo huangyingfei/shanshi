@@ -2033,7 +2033,7 @@
     methods: {
       submit() {
         let that=this;
-        debugger
+      //  debugger
         this.$refs.student.validate(function (valid ) {
           if (valid) {
             if (that.$route.query.id) {

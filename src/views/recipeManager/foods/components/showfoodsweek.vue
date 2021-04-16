@@ -250,7 +250,7 @@
 
     },
     beforeCreate(){
-      debugger
+     // debugger
     },
     // 组件第一次加载
     mounted() {
