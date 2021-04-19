@@ -1917,7 +1917,8 @@
           }
           foods["types"]=types;
           foods["goal"]=this.node.nowCode
-          foods["upRatio"]= (parseFloat(that.node.exceptValue) - parseFloat(that.node.nowValue)) / parseFloat(that.node.nowValue);
+          foods["upRatio"]= (parseFloat(that.node.exceptValue) - parseFloat(that.node.nowValue)) / 100;
+          foods["upPer"]= (parseFloat(that.node.exceptValue) - parseFloat(that.node.nowValue)) / parseFloat(that.node.nowValue);
           this.loading2=true;
           upScore(foods).then(res=>{
             if(res.data.success){
@@ -1937,12 +1938,12 @@
                          // debugger
                           if(parseFloat(___.count)>parseFloat(m.get(key))){
                             debugger
-                            this.$set(___, "down", Math.abs((((parseFloat(m.get(key)) - parseFloat(___.count)) / 100) * 100).toFixed(2)));
+                            this.$set(___, "down", Math.abs((((parseFloat(m.get(key)) - parseFloat(___.count)) / parseFloat(___.count)) * 100).toFixed(2)));
                             delete ___["up"];
                             this.$set(___, "count", m.get(key).toFixed(2));
                           }
                           else if(parseFloat(___.count)<parseFloat(m.get(key))){
-                            this.$set(___, "up", Math.abs((((parseFloat(m.get(key)) - parseFloat(___.count)) / 100) * 100).toFixed(2)));
+                            this.$set(___, "up", Math.abs((((parseFloat(m.get(key)) - parseFloat(___.count)) / parseFloat(___.count)) * 100).toFixed(2)));
                             delete ___["down"];
                             this.$set(___, "count", m.get(key).toFixed(2));
                           }else{
@@ -1955,11 +1956,11 @@
                     });
                     if (parseFloat(__.count) > parseFloat(count)) {
                       //下降
-                      this.$set(__, "down", Math.abs((((parseFloat(count) - parseFloat(__.count)) / 100) * 100).toFixed(2)));
+                      this.$set(__, "down", Math.abs((((parseFloat(count) - parseFloat(__.count)) / parseFloat(__.count)) * 100).toFixed(2)));
                       delete __["up"];
                     } else if (parseFloat(__.count) < parseFloat(count)) {
                       //上升
-                      this.$set(__, "up", (((parseFloat(count) - parseFloat(__.count)) / 100) * 100).toFixed(2));
+                      this.$set(__, "up", (((parseFloat(count) - parseFloat(__.count)) / parseFloat(__.count)) * 100).toFixed(2));
                       delete __["down"];
                     } else {
                       delete __["down"];

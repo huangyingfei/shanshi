@@ -47,7 +47,7 @@
         <td></td>
       </tr>
       <tr  v-if="fathNutritionVos.sexNum==2" class="table-title">
-        <td class="table-first" style="width: 12%">人群年龄</td>
+        <td class="table-first" >人群年龄</td>
         <td style="width: 12%">上限</td>
         <td></td>
         <td style="width: 12%">下限</td>
@@ -60,46 +60,56 @@
         <td style="width: 12%"> 下限系数</td>
       </tr>
        <tr  v-if="fathNutritionVos.sexNum==1" class="table-title">
-        <td style="width: 15%" class="table-first">人群年龄</td>
-        <td style="width: 16%">上限</td>
-        <td style="width: 16%">下限</td>
-        <td style="width: 16%">上限系数</td>
-        <td style="width: 16%">下限系数</td>
+        <td class="table-first">人群年龄</td>
+        <td style="width: 20%">上限</td>
+         <td></td>
+        <td style="width: 20%">下限</td>
+        <td style="width: 20%">上限系数</td>
+         <td></td>
+        <td style="width: 20%">下限系数</td>
          <td ></td>
          <td></td>
       </tr>
     </table>
     </div>
-      <div :class="getHeight"></div>
-      <table>
+      <div :class="getHeight" ></div>
+      <table  width="100%">
         <tr   v-for="(item, index) in tableData" :key="index" >
-          <th class="table-first">{{item.name}}</th>
-          <td v-if="fathNutritionVos.sexNum==2">
+          <td class="table-first">{{item.name}}</td>
+          <td  style="width: 12%" v-if="fathNutritionVos.sexNum==2">
             <el-input disabled v-model="item.manMax"></el-input>
           </td>
-          <td v-if="fathNutritionVos.sexNum==2">-</td>
-          <td v-if="fathNutritionVos.sexNum==2">
+          <td   v-if="fathNutritionVos.sexNum==2">-</td>
+          <td style="width: 12%" v-if="fathNutritionVos.sexNum==2">
             <el-input disabled v-model="item.manMin"></el-input>
           </td>
-          <td v-if="fathNutritionVos.sexNum==2">
+          <td style="width: 12%" v-if="fathNutritionVos.sexNum==2">
             <el-input disabled v-model="item.womanMax"></el-input>
           </td>
           <td v-if="fathNutritionVos.sexNum==2">-</td>
-          <td v-if="fathNutritionVos.sexNum==2">
+          <td style="width: 12%" v-if="fathNutritionVos.sexNum==2">
             <el-input disabled v-model="item.womanMin"></el-input>
           </td>
-          <td v-if="fathNutritionVos.sexNum==1">
+          <td style="width: 12%"  v-if="fathNutritionVos.sexNum==2">
+            <el-input disabled v-model="item.coefficientMax"></el-input>
+          </td>
+          <td v-if="fathNutritionVos.sexNum==2">-</td>
+          <td style="width: 12%"  v-if="fathNutritionVos.sexNum==2">
+            <el-input disabled v-model="item.coefficientMin"></el-input>
+          </td>
+
+          <td style="width: 20%" v-if="fathNutritionVos.sexNum==1">
             <el-input disabled v-model="item.resultMin"></el-input>
           </td>
           <td v-if="fathNutritionVos.sexNum==1">-</td>
-          <td v-if="fathNutritionVos.sexNum==1">
+          <td style="width: 20%" v-if="fathNutritionVos.sexNum==1">
             <el-input disabled v-model="item.resultMax"></el-input>
           </td>
-          <td>
+          <td style="width: 20%" v-if="fathNutritionVos.sexNum==1">
             <el-input disabled v-model="item.coefficientMax"></el-input>
           </td>
-          <td>-</td>
-          <td>
+          <td v-if="fathNutritionVos.sexNum==1">-</td>
+          <td style="width: 20%" v-if="fathNutritionVos.sexNum==1">
             <el-input disabled v-model="item.coefficientMin"></el-input>
           </td>
         </tr>
@@ -242,7 +252,7 @@ export default {
     height:150px;
   }
   .twoHeight{
-    height:215px;
+    height:220px;
   }
   .el-fix{
     position: fixed;
@@ -253,8 +263,8 @@ export default {
     padding-top: 16px;
   }
   .el-fix2{
-    position: fixed;
-    width: calc(100% - 349px);
+    position:absolute;
+    width: calc(100% - 125px);
     background: #FFFFFF;
     z-index: 999;
   }

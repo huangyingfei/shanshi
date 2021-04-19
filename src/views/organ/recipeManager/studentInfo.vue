@@ -2210,6 +2210,7 @@
  .studentInfo .el-select, .studentInfo .el-input-number, .studentInfo .el-date-editor{
   width: 100%!important;
 }
+
  .r{
    position:fixed;
    height: 60px;
