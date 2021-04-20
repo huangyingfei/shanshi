@@ -43,7 +43,7 @@
               style="width: 100%"
               @expand-change="expandchange"
               :data="scope.row.weeks.find((p) => p.name == 'week1').foods"
-
+              row-key="id"
               :show-header="false"
               :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
               :span-method="onTableSpanMethod"
@@ -56,6 +56,7 @@
                 width="120"
               ></el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
+
                 <template slot-scope="scope1">
                   <div style="display: flex">
                     <el-input
@@ -87,22 +88,10 @@
                     <span class="arrow-down" v-if="scope1.row.down"><img src="/img/arrowdown.png" width="20px" height="20px"/>
                       <span>{{scope1.row.down}}%</span>
                     </span>
-                    <!--<div style="width: 35px; text-algin: center">-->
-                      <!--&lt;!&ndash;<el-link&ndash;&gt;-->
-                        <!--&lt;!&ndash;v-if="scope1.row.children"&ndash;&gt;-->
-                        <!--&lt;!&ndash;type="primary"&ndash;&gt;-->
-                        <!--&lt;!&ndash;@click="&ndash;&gt;-->
-                          <!--&lt;!&ndash;onRemove(&ndash;&gt;-->
-                            <!--&lt;!&ndash;scope.row.id,&ndash;&gt;-->
-                            <!--&lt;!&ndash;scope.row.weeks.find((p) => p.name == 'week1').id,&ndash;&gt;-->
-                            <!--&lt;!&ndash;scope1.row.id&ndash;&gt;-->
-                          <!--&lt;!&ndash;)&ndash;&gt;-->
-                        <!--&lt;!&ndash;"&ndash;&gt;-->
-                      <!--&lt;!&ndash;&gt;移除</el-link&ndash;&gt;-->
-                      <!--&lt;!&ndash;&gt;&ndash;&gt;-->
-                    <!--</div>-->
                   </div>
                 </template>
+
+
               </el-table-column>
               <!--<el-table-column label="图片" align="center">-->
                 <!--<template slot-scope="scope1">-->
@@ -198,7 +187,7 @@
               class="table-foods"
               style="width: 120%"
               :data="scope.row.weeks.find((p) => p.name == 'week2').foods"
-
+              row-key="id"
               :show-header="false"
               @expand-change="expandchange"
               :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
@@ -343,7 +332,7 @@
               class="table-foods"
               style="width: 100%"
               :data="scope.row.weeks.find((p) => p.name == 'week3').foods"
-
+              row-key="id"
               :empty-text="empty"
               :show-header="false"
               @expand-change="expandchange"
@@ -487,7 +476,7 @@
               class="table-foods"
               style="width: 100%"
               :data="scope.row.weeks.find((p) => p.name == 'week4').foods"
-
+              row-key="id"
               :empty-text="empty"
               :show-header="false"
               @expand-change="expandchange"
@@ -631,7 +620,7 @@
               class="table-foods"
               style="width: 100%"
               :data="scope.row.weeks.find((p) => p.name == 'week5').foods"
-
+              row-key="id"
               :empty-text="empty"
               :show-header="false"
               @expand-change="expandchange"
@@ -775,7 +764,7 @@
               class="table-foods"
               style="width: 100%"
               :data="scope.row.weeks.find((p) => p.name == 'week6').foods"
-
+              row-key="id"
               :empty-text="empty"
               :show-header="false"
               @expand-change="expandchange"
@@ -919,7 +908,7 @@
               class="table-foods"
               style="width: 100%"
               :data="scope.row.weeks.find((p) => p.name == 'week7').foods"
-
+              row-key="id"
               :empty-text="empty"
               :show-header="false"
               @expand-change="expandchange"

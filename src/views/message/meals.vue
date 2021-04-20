@@ -2517,8 +2517,9 @@ export default {
       this.smartDatas = JSON.parse(localStorage.getItem("mealsDatas"));
       this.pointscan = true;
       this.peipScore = this.score;
-      this.$refs.child2.resizeExpendHeight();
-      //console.log("this.smartDatas", this.smartDatas)
+      console.log("this.smartDatas", this.smartDatas)
+     // this.$refs.child2.resizeExpendHeight();
+
     },
     getmealTypeData(name) {
       //

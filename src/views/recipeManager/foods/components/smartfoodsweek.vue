@@ -21,11 +21,7 @@
             }})
           </div>
           <div class="">
-            <!--<el-checkbox-->
-            <!--label="设置为假期"-->
-            <!--:checked="headers.find((p) => p.name == 'week1').is_vacation"-->
-            <!--@change="onCheck('week1', $event)"-->
-            <!--&gt;</el-checkbox>-->
+
           </div>
         </template>
         <template slot-scope="scope">
@@ -42,14 +38,14 @@
               style="width: 100%"
               @expand-change="expandchange"
               :data="scope.row.weeks.find((p) => p.name == 'week1').foods"
-
+              row-key="id"
               :empty-text="empty"
               :show-header="false"
               :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
               :span-method="onTableSpanMethod"
             >
               <el-table-column
-                label="食品/食材"
+                label="菜品/食材"
                 prop="name"
                 header-align="center"
                 align="left"
@@ -57,6 +53,7 @@
               ></el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
                 <template slot-scope="scope1">
+
                   <div style="display: flex">
                     <el-input
                       style="flex: 1"
@@ -102,6 +99,7 @@
                     <!--&lt;!&ndash;&gt;&ndash;&gt;-->
                     <!--</div>-->
                   </div>
+
                 </template>
               </el-table-column>
               <!--<el-table-column label="图片" align="center">-->
@@ -199,6 +197,7 @@
               :data="scope.row.weeks.find((p) => p.name == 'week2').foods"
               :empty-text="empty"
               :show-header="false"
+              row-key="id"
               @expand-change="expandchange"
               :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
               :span-method="onTableSpanMethod"
@@ -342,7 +341,7 @@
               class="table-foods"
               style="width: 100%"
               :data="scope.row.weeks.find((p) => p.name == 'week3').foods"
-
+              row-key="id"
               :empty-text="empty"
               :show-header="false"
               @expand-change="expandchange"
@@ -486,7 +485,7 @@
               class="table-foods"
               style="width: 100%"
               :data="scope.row.weeks.find((p) => p.name == 'week4').foods"
-
+              row-key="id"
               :empty-text="empty"
               :show-header="false"
               @expand-change="expandchange"
@@ -630,7 +629,7 @@
               class="table-foods"
               style="width: 100%"
               :data="scope.row.weeks.find((p) => p.name == 'week5').foods"
-
+              row-key="id"
               :empty-text="empty"
               :show-header="false"
               @expand-change="expandchange"
@@ -774,7 +773,7 @@
               class="table-foods"
               style="width: 100%"
               :data="scope.row.weeks.find((p) => p.name == 'week6').foods"
-
+              row-key="id"
               :empty-text="empty"
               :show-header="false"
               @expand-change="expandchange"
@@ -918,7 +917,7 @@
               class="table-foods"
               style="width: 100%"
               :data="scope.row.weeks.find((p) => p.name == 'week7').foods"
-
+              row-key="id"
               :empty-text="empty"
               :show-header="false"
               @expand-change="expandchange"
