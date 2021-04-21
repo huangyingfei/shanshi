@@ -149,6 +149,7 @@
               </el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
                 <template slot-scope="scope1">
+
                   <div style="display: flex">
                     <!--//食材-->
                     <el-input
@@ -195,6 +196,7 @@
                       >
                     </div>
                   </div>
+
                 </template>
               </el-table-column>
               <el-table-column label="图片" align="center">
