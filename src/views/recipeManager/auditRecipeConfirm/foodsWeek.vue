@@ -1836,10 +1836,12 @@ export default {
   // 当属性的值发生变化时，就会调用对应属性的方法，方法里面的形参对应的是属性的新值和旧值
   watch: {},
   // 组件第一次加载
+  created() {
+    this.getfoodWeekHeight();
+  },
   mounted() {
     this.init();
     this.getToken(); //获取token
-    this.getfoodWeekHeight();
     console.log("this.$refs.foodWeekTable");
     console.log("this.$refs.foodWeekTable");
   },
@@ -2578,7 +2580,7 @@ export default {
       let node = {
         id: "1",
       };
-     // debugger;
+      // debugger;
       this.$emit("jundgeFood");
       this.$emit("allergy");
     },

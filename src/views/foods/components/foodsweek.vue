@@ -1805,12 +1805,20 @@ export default {
     topShow: function () {
       this.getfoodWeekHeight();
     },
+    foodWeekHeight: function (newVal, oldVal) {
+      console.log("newVal", newVal);
+      console.log("oldVal", oldVal);
+    },
   },
+
   // 组件第一次加载
+  created() {
+    this.getfoodWeekHeight();
+  },
+
   mounted() {
     this.init();
     this.getToken(); //获取token
-    this.getfoodWeekHeight();
   },
   methods: {
     getfoodWeekHeight() {
@@ -1819,6 +1827,7 @@ export default {
         h = 324;
       }
       this.foodWeekHeight = document.body.offsetHeight - h;
+      console.log(this.foodWeekHeight);
     },
     toRight() {
       var colNum = this.$refs.foodWeekTable.columns.length - 1;
@@ -2006,6 +2015,7 @@ export default {
               var tpnode = shownodelist[j].parentNode.parentNode;
               if (tpnode.className.indexOf("is-hidden") < 0) {
                 tpnode.style.height = pnode.offsetHeight + "px";
+                console.log("tpnode.style.height", tpnode.style.height);
               }
             }
           }
@@ -2582,7 +2592,7 @@ export default {
       let node = {
         id: "1",
       };
-   //   debugger;
+      //   debugger;
       this.$emit("jundgeFood");
       this.$emit("allergy");
     },

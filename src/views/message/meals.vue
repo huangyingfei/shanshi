@@ -216,12 +216,11 @@
                 <!--<button  slot="reference" > 不宜同食</button>-->
                 <el-button
                   slot="reference"
-                  style="margin-left: 10px;"
+                  style="margin-left: 10px"
                   size="medium"
                   v-if="foodMutuals.length > 0"
                   class="judegRed"
                   type="primary"
-
                 >
                   不宜同食
                 </el-button>
@@ -267,7 +266,7 @@
         @mouseover="HidenFoodTips($event)"
         @mouseout="HidenFoodTips($event)"
       >
-        <el-col style="width: 200px">
+        <el-col span="4">
           <el-card :class="[topShow ? 'box-car' : 'box-car1']" shadow="never">
             <div class="clearfix panel_head">
               <el-button-group>
@@ -343,10 +342,12 @@
                     v-for="f in mealListLeft"
                     :key="f.id"
                     style="font-size: 14px"
-
                   >
-                    <span  @mouseover="ShowFood($event, f)"
-                           @mouseout="HidenFoodTips($event)">{{ f.recipeName }}</span>
+                    <span
+                      @mouseover="ShowFood($event, f)"
+                      @mouseout="HidenFoodTips($event)"
+                      >{{ f.recipeName }}</span
+                    >
                     <img
                       style="width: 16px"
                       @click="mealLoad(f, f.recipeName)"
@@ -419,11 +420,13 @@
                   <li
                     v-for="f in peopleMealListLeft"
                     :key="f.id"
-
                     style="font-size: 14px"
                   >
-                    <span  @mouseover="ShowFood($event, f)"
-                           @mouseout="HidenFoodTips($event)">{{ f.recipeName }}</span>
+                    <span
+                      @mouseover="ShowFood($event, f)"
+                      @mouseout="HidenFoodTips($event)"
+                      >{{ f.recipeName }}</span
+                    >
                     <img
                       style="width: 16px"
                       @click="mealLoad(f, f.recipeName)"
@@ -604,9 +607,11 @@
             </el-tabs>
           </el-card>
         </el-col>
-        <el-col :span="19">
-          <div   v-loading="loading"  element-loading-text="您的食谱正在配置中，请耐心等待"
-                 class="foodPanel"
+        <el-col :span="20">
+          <div
+            v-loading="loading"
+            element-loading-text="您的食谱正在配置中，请耐心等待"
+            class="foodPanel"
             @mouseout="HidenFoodTips($event)"
             @mouseover="HidenFoodTips($event)"
           >
@@ -633,7 +638,10 @@
         <div v-if="parseFloat(score) >= 90" class="scores-same scores-youxiu">
           <div class="scores3">
             <p class="gnus" @click="tfractio">
-              {{ (score+"").split(".")[0] }}<span class="gnus-fen">.{{ (score+"").split(".")[1] }}分</span>
+              {{ (score + "").split(".")[0]
+              }}<span class="gnus-fen"
+                >.{{ (score + "").split(".")[1] }}分</span
+              >
             </p>
           </div>
         </div>
@@ -643,17 +651,24 @@
         >
           <div class="scores3">
             <p class="gnus" @click="tfractio">
-              {{ (score+"").split(".")[0]  }} <span class="gnus-fen">.{{ (score+"").split(".")[1] }}分</span>
+              {{ (score + "").split(".")[0] }}
+              <span class="gnus-fen">.{{ (score + "").split(".")[1] }}分</span>
             </p>
           </div>
         </div>
         <div v-if="parseFloat(score) < 85" class="scores-same scores-buhege">
           <div class="scores3" style="color: #dd6161">
-            <p class="gnus" @click="tfractio" v-if="parseFloat(score)==0">
-              {{  (score+"").split(".")[0]  }}<span class="gnus-fen" style="color: #dd6161">{{ (score+"").split(".")[1] }}分</span>
+            <p class="gnus" @click="tfractio" v-if="parseFloat(score) == 0">
+              {{ (score + "").split(".")[0]
+              }}<span class="gnus-fen" style="color: #dd6161"
+                >{{ (score + "").split(".")[1] }}分</span
+              >
             </p>
-            <p class="gnus" @click="tfractio" v-if="parseFloat(score)>0">
-              {{  (score+"").split(".")[0]  }}<span class="gnus-fen" style="color: #dd6161">.{{ (score+"").split(".")[1] }}分</span>
+            <p class="gnus" @click="tfractio" v-if="parseFloat(score) > 0">
+              {{ (score + "").split(".")[0]
+              }}<span class="gnus-fen" style="color: #dd6161"
+                >.{{ (score + "").split(".")[1] }}分</span
+              >
             </p>
           </div>
           <!--<div class="scores2">-->
@@ -784,7 +799,10 @@
           >
             <div class="scores3">
               <p class="gnus">
-                {{ (peipScore+"").split(".")[0] }}<span class="gnus-fen">.{{ (peipScore+"").split(".")[1] }}分</span>
+                {{ (peipScore + "").split(".")[0]
+                }}<span class="gnus-fen"
+                  >.{{ (peipScore + "").split(".")[1] }}分</span
+                >
               </p>
             </div>
           </div>
@@ -794,7 +812,10 @@
           >
             <div class="scores3">
               <p class="gnus">
-                {{ (peipScore+"").split(".")[0] }}<span class="gnus-fen">.{{ (peipScore+"").split(".")[1] }}分</span>
+                {{ (peipScore + "").split(".")[0]
+                }}<span class="gnus-fen"
+                  >.{{ (peipScore + "").split(".")[1] }}分</span
+                >
               </p>
             </div>
           </div>
@@ -803,11 +824,17 @@
             class="scores-same scores-buhege"
           >
             <div class="scores3" style="color: #dd6161">
-              <p class="gnus" v-if="parseFloat(peipScore)==0">
-                {{ (peipScore+"").split(".")[0] }}<span class="gnus-fen" style="color: #dd6161">{{ (peipScore+"").split(".")[1] }}分</span>
+              <p class="gnus" v-if="parseFloat(peipScore) == 0">
+                {{ (peipScore + "").split(".")[0]
+                }}<span class="gnus-fen" style="color: #dd6161"
+                  >{{ (peipScore + "").split(".")[1] }}分</span
+                >
               </p>
-              <p class="gnus" v-if="parseFloat(peipScore)>0">
-                {{ (peipScore+"").split(".")[0] }}<span class="gnus-fen" style="color: #dd6161">.{{ (peipScore+"").split(".")[1] }}分</span>
+              <p class="gnus" v-if="parseFloat(peipScore) > 0">
+                {{ (peipScore + "").split(".")[0]
+                }}<span class="gnus-fen" style="color: #dd6161"
+                  >.{{ (peipScore + "").split(".")[1] }}分</span
+                >
               </p>
             </div>
             <!--<div class="scores2">-->
@@ -888,7 +915,7 @@ import nutrientWithColor from "@/views/foods/components/nutrientwithcolor";
 import showScore from "@/views/foods/components/showscore";
 import smartfoodsWeek from "@/views/foods/components/smartfoodsweek";
 import { detailByPeopleId } from "@/api/system/special";
-import {upScore} from "@/api/system/meals"
+import { upScore } from "@/api/system/meals";
 
 export default {
   components: {
@@ -924,8 +951,8 @@ export default {
   data() {
     const data = [];
     return {
-      loading2:false,
-      loading:false,
+      loading2: false,
+      loading: false,
       topShow: true,
       tableData: [],
       jundgeallergy: false, //过敏
@@ -1277,9 +1304,9 @@ export default {
         boxClientHeight,
         boxScrollHeight - (boxScrollTop + boxClientHeight)
       );
-      console.log(boxScrollHeight)
-      console.log(boxScrollTop)
-      console.log(boxClientHeight)
+      console.log(boxScrollHeight);
+      console.log(boxScrollTop);
+      console.log(boxClientHeight);
       if (boxScrollHeight - (boxScrollTop + boxClientHeight) < 10) {
         this.ScrollUp();
       }
@@ -1442,7 +1469,7 @@ export default {
         that.$refs.refweekSelect.hidePicker();
         that.rebuildTable();
         setTimeout(function () {
-         // that.$refs.child.getFoodScore();
+          // that.$refs.child.getFoodScore();
         }, 200);
       });
     },
@@ -1512,7 +1539,7 @@ export default {
           cancelButtonText: "取消",
           type: "warning",
         }).then(() => {
-          that.loading=true;
+          that.loading = true;
           that.inserMeal(f, that);
         });
       } else {
@@ -1540,7 +1567,7 @@ export default {
           let recipeCycles = data.recipeCycles;
           setTimeout(function () {
             that.insertDishesData("datas", recipeCycles, that);
-            that.loading=false;
+            that.loading = false;
           }, 1000);
         }
       });
@@ -1607,7 +1634,7 @@ export default {
     //修改的时候加载
     //根据id查询菜品详情
     mealDetail(id, that) {
-      that.loading=true;
+      that.loading = true;
       detail(id).then((res) => {
         if (res.data.success) {
           let data = res.data.data;
@@ -1635,7 +1662,7 @@ export default {
           setTimeout(function () {
             that.dishesData("datas", recipeCycles, that);
             that.$refs.child.getFoodScore();
-            that.loading=false;
+            that.loading = false;
           }, 1000);
         }
       });
@@ -1725,8 +1752,8 @@ export default {
         this.pcScore = pscore;
       }
       this.score = parseFloat(this.score).toFixed(2);
-      this.peipScore= parseFloat(this.peipScore).toFixed(2)
-      console.log(this.peipScore)
+      this.peipScore = parseFloat(this.peipScore).toFixed(2);
+      console.log(this.peipScore);
       this.tenantName = tenantName;
       this.intake = intake;
       this.nutrition = nutrition;
@@ -2177,7 +2204,7 @@ export default {
       //食材相克
       jundgeFood(row).then((result) => {
         //
-     //   debugger;
+        //   debugger;
         let foodMutuals = [];
         let msg = "";
         if (result.data.data.foodMutuals.length > 0) {
@@ -2257,99 +2284,154 @@ export default {
       if (this.node.exceptValue) {
         //localStorage.setItem("oldData", JSON.stringify(this.smartDatas));
 
-        let day=[0,0,0,0,0,0,0]
-        let days=0;
-        let foods={}
-        let mealTypes=[]
-        foods["peopleId"]=this.WeekInfo.crowd;
-        let recipeVals=[];
-        var that=this;
-        this.smartDatas.forEach(_=>{
-          let index=0
-          _.weeks.forEach(__=>{
-            __.foods.forEach(___=>{
-              if( ___.children){
-                day[index]+=1;
+        let day = [0, 0, 0, 0, 0, 0, 0];
+        let days = 0;
+        let foods = {};
+        let mealTypes = [];
+        foods["peopleId"] = this.WeekInfo.crowd;
+        let recipeVals = [];
+        var that = this;
+        this.smartDatas.forEach((_) => {
+          let index = 0;
+          _.weeks.forEach((__) => {
+            __.foods.forEach((___) => {
+              if (___.children) {
+                day[index] += 1;
                 mealTypes.push(that.getmealTypeData(_.name));
-                ___.children.forEach(____=>{
+                ___.children.forEach((____) => {
                   recipeVals.push({
-                    dishId:___.id,
-                    foodId:____.id,
-                    val:____.count?____.count:0,
-                    mealType:that.getmealTypeData(_.name),
-                    week:__.name.slice(4)
-                  })
-                })
+                    dishId: ___.id,
+                    foodId: ____.id,
+                    val: ____.count ? ____.count : 0,
+                    mealType: that.getmealTypeData(_.name),
+                    week: __.name.slice(4),
+                  });
+                });
               }
-            })
+            });
             index++;
-          })
-        })
-        if(mealTypes.length>0){
-          let obj=Array.from(new Set(mealTypes))
-          let resultObj="";
-          for(let i=0;i<obj.length;i++){
-            resultObj+=obj[i]+","
+          });
+        });
+        if (mealTypes.length > 0) {
+          let obj = Array.from(new Set(mealTypes));
+          let resultObj = "";
+          for (let i = 0; i < obj.length; i++) {
+            resultObj += obj[i] + ",";
           }
-          foods["mealTypes"]=resultObj.substring(0,resultObj.length-1)
+          foods["mealTypes"] = resultObj.substring(0, resultObj.length - 1);
         }
-        for(let i=0;i<day.length;i++){
-          if(day[i]>0){
+        for (let i = 0; i < day.length; i++) {
+          if (day[i] > 0) {
             days++;
           }
         }
-        foods["recipeVals"]=recipeVals
-        foods["days"]=days;
-        let types='';
-        for(let i=0;i<this.WeekInfo.foodCatalog.length;i++){
-          types+= that.getmealTypeData(this.WeekInfo.foodCatalog[i])+","
+        foods["recipeVals"] = recipeVals;
+        foods["days"] = days;
+        let types = "";
+        for (let i = 0; i < this.WeekInfo.foodCatalog.length; i++) {
+          types += that.getmealTypeData(this.WeekInfo.foodCatalog[i]) + ",";
         }
-        foods["types"]=types;
-        foods["goal"]=this.node.nowCode
-        foods["upRatio"]= (parseFloat(that.node.exceptValue) - parseFloat(that.node.nowValue)) / 100;
-        foods["upPer"]= (parseFloat(that.node.exceptValue) - parseFloat(that.node.nowValue)) / parseFloat(that.node.nowValue);
-        this.loading2=true;
-        upScore(foods).then(res=>{
-          if(res.data.success){
-            let resData=res.data.data;
-            let recipeVals=resData.recipeVals;
+        foods["types"] = types;
+        foods["goal"] = this.node.nowCode;
+        foods["upRatio"] =
+          (parseFloat(that.node.exceptValue) - parseFloat(that.node.nowValue)) /
+          100;
+        foods["upPer"] =
+          (parseFloat(that.node.exceptValue) - parseFloat(that.node.nowValue)) /
+          parseFloat(that.node.nowValue);
+        this.loading2 = true;
+        upScore(foods).then((res) => {
+          if (res.data.success) {
+            let resData = res.data.data;
+            let recipeVals = resData.recipeVals;
             var m = new Map();
-            for(let k=0;k<recipeVals.length;k++){
-              m.set(recipeVals[k].dishId+recipeVals[k].foodId+recipeVals[k].mealType+recipeVals[k].week,recipeVals[k].val)
+            for (let k = 0; k < recipeVals.length; k++) {
+              m.set(
+                recipeVals[k].dishId +
+                  recipeVals[k].foodId +
+                  recipeVals[k].mealType +
+                  recipeVals[k].week,
+                recipeVals[k].val
+              );
             }
             this.smartDatas.forEach((item) => {
               item.weeks.forEach((_) => {
                 _.foods.forEach((__) => {
                   let count = 0;
                   __.children.forEach((___) => {
-                    var key=__.id+___.id +that.getmealTypeData(item.name)+_.name.slice(4);
-                    if((m.get(key)!=null)){
+                    var key =
+                      __.id +
+                      ___.id +
+                      that.getmealTypeData(item.name) +
+                      _.name.slice(4);
+                    if (m.get(key) != null) {
                       // debugger
-                      if(parseFloat(___.count)>parseFloat(m.get(key))){
-                        debugger
-                        this.$set(___, "down", Math.abs((((parseFloat(m.get(key)) - parseFloat(___.count)) / parseFloat(___.count)) * 100).toFixed(2)));
+                      if (parseFloat(___.count) > parseFloat(m.get(key))) {
+                        debugger;
+                        this.$set(
+                          ___,
+                          "down",
+                          Math.abs(
+                            (
+                              ((parseFloat(m.get(key)) -
+                                parseFloat(___.count)) /
+                                parseFloat(___.count)) *
+                              100
+                            ).toFixed(2)
+                          )
+                        );
                         delete ___["up"];
                         this.$set(___, "count", m.get(key).toFixed(2));
-                      }
-                      else if(parseFloat(___.count)<parseFloat(m.get(key))){
-                        this.$set(___, "up", Math.abs((((parseFloat(m.get(key)) - parseFloat(___.count)) / parseFloat(___.count)) * 100).toFixed(2)));
+                      } else if (
+                        parseFloat(___.count) < parseFloat(m.get(key))
+                      ) {
+                        this.$set(
+                          ___,
+                          "up",
+                          Math.abs(
+                            (
+                              ((parseFloat(m.get(key)) -
+                                parseFloat(___.count)) /
+                                parseFloat(___.count)) *
+                              100
+                            ).toFixed(2)
+                          )
+                        );
                         delete ___["down"];
                         this.$set(___, "count", m.get(key).toFixed(2));
-                      }else{
+                      } else {
                         delete ___["down"];
                         delete ___["up"];
                         this.$set(___, "count", m.get(key).toFixed(2));
                       }
                     }
-                    count += parseFloat(___.count ? ___.count : 0)
+                    count += parseFloat(___.count ? ___.count : 0);
                   });
                   if (parseFloat(__.count) > parseFloat(count)) {
                     //下降
-                    this.$set(__, "down", Math.abs((((parseFloat(count) - parseFloat(__.count)) / parseFloat(__.count)) * 100).toFixed(2)));
+                    this.$set(
+                      __,
+                      "down",
+                      Math.abs(
+                        (
+                          ((parseFloat(count) - parseFloat(__.count)) /
+                            parseFloat(__.count)) *
+                          100
+                        ).toFixed(2)
+                      )
+                    );
                     delete __["up"];
                   } else if (parseFloat(__.count) < parseFloat(count)) {
                     //上升
-                    this.$set(__, "up", (((parseFloat(count) - parseFloat(__.count)) / parseFloat(__.count)) * 100).toFixed(2));
+                    this.$set(
+                      __,
+                      "up",
+                      (
+                        ((parseFloat(count) - parseFloat(__.count)) /
+                          parseFloat(__.count)) *
+                        100
+                      ).toFixed(2)
+                    );
                     delete __["down"];
                   } else {
                     delete __["down"];
@@ -2359,11 +2441,11 @@ export default {
                 });
               });
             });
-            console.log("this.smartDatas",this.smartDatas);
-            this.loading2=false;
+            console.log("this.smartDatas", this.smartDatas);
+            this.loading2 = false;
             this.$refs.child2.getFoodScoreSmart();
           }
-        })
+        });
         // this.smartDatas.forEach((week) => {
         //   week.weeks.forEach((_) => {
         //     _.foods.forEach((__) => {
@@ -2452,8 +2534,6 @@ export default {
         //     });
         //   });
         // });
-
-
       } else {
         this.$message({
           message: "期望值不可为空",
@@ -2492,7 +2572,7 @@ export default {
         that.$refs.child2.getFoodScoreSmart();
       }, 200);
     },
-    handleClose(){
+    handleClose() {
       this.smartDatas = JSON.parse(localStorage.getItem("mealsDatas"));
       let that = this;
       setTimeout(function () {
@@ -2517,9 +2597,8 @@ export default {
       this.smartDatas = JSON.parse(localStorage.getItem("mealsDatas"));
       this.pointscan = true;
       this.peipScore = this.score;
-      console.log("this.smartDatas", this.smartDatas)
-     // this.$refs.child2.resizeExpendHeight();
-
+      console.log("this.smartDatas", this.smartDatas);
+      // this.$refs.child2.resizeExpendHeight();
     },
     getmealTypeData(name) {
       //
@@ -3028,13 +3107,14 @@ export default {
 
 
 <style scoped>
-.judegRed{
-  background-color:red;
-  border-color:red;
+.judegRed {
+  background-color: red;
+  border-color: red;
 }
-.judegRed:focus, .judegRed:hover{
+.judegRed:focus,
+.judegRed:hover {
   background-color: #e35656;
-  border-color:#e35656;
+  border-color: #e35656;
 }
 .item-allergy {
   min-height: 100px;

@@ -1706,10 +1706,12 @@ export default {
   //   }
   // },
   // 组件第一次加载
+  created() {
+    this.getfoodWeekHeight();
+  },
   mounted() {
     this.init();
     this.getToken(); //获取token
-    this.getfoodWeekHeight();
   },
 
   methods: {

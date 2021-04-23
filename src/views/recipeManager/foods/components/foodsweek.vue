@@ -149,7 +149,6 @@
               </el-table-column>
               <el-table-column label="用量(g)" prop="count" align="center">
                 <template slot-scope="scope1">
-
                   <div style="display: flex">
                     <!--//食材-->
                     <el-input
@@ -196,7 +195,6 @@
                       >
                     </div>
                   </div>
-
                 </template>
               </el-table-column>
               <el-table-column label="图片" align="center">
@@ -1844,11 +1842,13 @@ export default {
       this.getfoodWeekHeight();
     },
   },
+  created() {
+    this.getfoodWeekHeight();
+  },
   // 组件第一次加载
   mounted() {
     this.init();
     this.getToken(); //获取token
-    this.getfoodWeekHeight();
   },
 
   methods: {
@@ -2587,7 +2587,7 @@ export default {
       let node = {
         id: "1",
       };
-     // debugger;
+      // debugger;
       this.$emit("jundgeFood");
     },
 
