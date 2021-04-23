@@ -75,7 +75,7 @@
     <div class="dishes">
       <!-- 菜谱排行榜 -->
       <!--  -->
-      <div class="variety" v-if="this.empty == 1">
+      <div class="variety" v-if="this.empty == 1" style="width: 55%">
         <h4 class="welcome">本周最受欢迎菜品</h4>
         <div class="pictures">
           <p>暂无数据</p>
