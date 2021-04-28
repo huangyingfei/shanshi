@@ -71,5 +71,8 @@ export default {
   > .el-button--text:first-child {
   display: none;
 }
+.test{
+  
+}
 
 </style>
