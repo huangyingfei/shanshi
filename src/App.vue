@@ -34,7 +34,7 @@ export default {
   color: #fff !important;
 }
 .el-dropdown {
-  color: #fff !important;
+  color: #fff   !important;
 }
 .custom-tree-node {
   flex: 1;
@@ -71,4 +71,5 @@ export default {
   > .el-button--text:first-child {
   display: none;
 }
+
 </style>
