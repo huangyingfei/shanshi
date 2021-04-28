@@ -1391,7 +1391,9 @@ export default {
         }
       }
 
+     let mealTypesArray = [];
       this.datas.forEach((_) => {
+         mealTypesArray.push(this.getmealTypeData(_.name));
         _.weeks.forEach((__) => {
           __.foods.forEach((___) => {
             let mealTypes = {};
@@ -1413,6 +1415,15 @@ export default {
           });
         });
       });
+        if (mealTypesArray.length > 0) {
+          let obj = Array.from(new Set(mealTypesArray));
+          let resultObj = "";
+          for (let i = 0; i < obj.length; i++) {
+            resultObj += obj[i] + ",";
+          }
+          foods["mealTypes"] = resultObj.substring(0, resultObj.length - 1);
+        }
+
       foods.days = sum(day);
       return foods;
     },
@@ -2233,7 +2244,7 @@ export default {
               dish.children.forEach((food) => {
                 that.$set(food, "redColor", false);
                 for (let i = 0; i < that.foodMutuals.length; i++) {
-                  debugger;
+                  //debugger;
                   if (
                     food.id == that.foodMutuals[i].foodId &&
                     that.foodMutuals[i].mealType + "" ==
@@ -2367,7 +2378,7 @@ export default {
                     if (m.get(key) != null) {
                       // debugger
                       if (parseFloat(___.count) > parseFloat(m.get(key))) {
-                        debugger;
+                     //   debugger;
                         this.$set(
                           ___,
                           "down",

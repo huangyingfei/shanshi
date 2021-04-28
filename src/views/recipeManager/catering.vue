@@ -1197,8 +1197,9 @@ export default {
           return arr[0] + sum(arr.slice(1));
         }
       }
-
+      let mealTypesArray = [];
       this.datas.forEach((_) => {
+         mealTypesArray.push(this.getmealTypeData(_.name));
         _.weeks.forEach((__) => {
           __.foods.forEach((___) => {
             let mealTypes = {};
@@ -1220,6 +1221,14 @@ export default {
           });
         });
       });
+        if (mealTypesArray.length > 0) {
+          let obj = Array.from(new Set(mealTypesArray));
+          let resultObj = "";
+          for (let i = 0; i < obj.length; i++) {
+            resultObj += obj[i] + ",";
+          }
+          foods["mealTypes"] = resultObj.substring(0, resultObj.length - 1);
+        }
       foods.days = sum(day);
       return foods;
     },
