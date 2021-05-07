@@ -2507,6 +2507,7 @@ export default {
       setTimeout(function () {
         that.$refs.child.refreshData();
         that.$refs.child.resizeExpendHeight();
+        that.$refs.child.getFoodScore();
       }, 200);
     },
 

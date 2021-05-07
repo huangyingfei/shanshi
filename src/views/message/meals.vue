@@ -661,7 +661,7 @@
             <p class="gnus" @click="tfractio" v-if="parseFloat(score) == 0">
               {{ (score + "").split(".")[0]
               }}<span class="gnus-fen" style="color: #dd6161"
-                >{{ (score + "").split(".")[1] }}分</span
+                >.{{ (score + "").split(".")[1] }}分</span
               >
             </p>
             <p class="gnus" @click="tfractio" v-if="parseFloat(score) > 0">
@@ -2802,6 +2802,7 @@ export default {
         // that.$refs.child.getFoodScore();
         that.$refs.child.refreshData();
         that.$refs.child.resizeExpendHeight();
+        that.$refs.child.getFoodScore();
       }, 200);
     },
 
