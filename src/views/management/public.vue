@@ -23,7 +23,7 @@
             <el-select
               @change="disallow()"
               v-model="before1"
-              placeholder="请选择"
+              placeholder="请选择1"
             >
               <el-option
                 v-for="item in before"
@@ -332,6 +332,12 @@ export default {
     //     }
   },
   methods: {
+    commonly(){
+       this.publicDomain();
+    },
+    disallow(){
+      this.publicDomain();
+    },
     addFilter() {
       this.publicDomain();
     },
