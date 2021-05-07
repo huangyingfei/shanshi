@@ -460,7 +460,7 @@
         </el-col>
         <el-col :span="20">
           <div
-            v-loading="loading"
+            v-loading="loadingt"
             element-loading-text="您的食谱正在配置中，请耐心等待"
             class="foodPanel"
             @mouseout="HidenFoodTips($event)"
@@ -614,7 +614,7 @@ export default {
         },
       ],
       WeekInfo: {
-        loading: false,
+        loadingt: false,
         shareTell: false,
         collection: false,
         sharePlant: false,
@@ -998,7 +998,7 @@ export default {
           cancelButtonText: "取消",
           type: "warning",
         }).then(() => {
-          that.loading = true;
+          that.loadingt = true;
           that.inserMeal(f, that);
         });
       } else {
@@ -1024,10 +1024,14 @@ export default {
           that.$refs.refweekSelect.hidePicker();
           that.AppendFoodType();
           let recipeCycles = data.recipeCycles;
-          setTimeout(function () {
+          setTimeout(()=> {
             that.insertDishesData("datas", recipeCycles, that);
-            that.loading = false;
-          }, 1000);
+            that.loadingt = false;
+            debugger
+          }, 800);
+           setTimeout(()=>{
+            that.loadingt = false;
+          },200,that);
         }
       });
     },
@@ -1090,7 +1094,7 @@ export default {
     //根据id查询菜品详情
     mealDetail(id, that) {
       //根据id查询菜品详情
-      that.loading = true;
+      that.loadingt = true;
       detail(id).then((res) => {
         if (res.data.success) {
           let data = res.data.data;
@@ -1115,10 +1119,13 @@ export default {
           that.WeekInfo.shareTell = data.isBoard == "1" ? true : false;
           that.WeekInfo.collection = data.isUse == 1 ? true : false;
           // that.WeekInfo.sharePlant=data.isPub==0?true:false
-          setTimeout(function () {
+          setTimeout(()=>{
             that.dishesData("datas", recipeCycles, that);
-            that.loading = false;
-          }, 1000);
+            that.loadingt = false;
+          }, 800);
+           setTimeout(()=>{
+            that.loadingt = false;
+          },200);
         }
       });
     },
@@ -1177,7 +1184,9 @@ export default {
           that.$set(__, "foods", foods);
         });
       });
+      that.loadingt = false;
       that.$refs.child.refreshData();
+      debugger
     },
     parentFn(score, intake, nutrition, power, protein, meal) {
       this.score = score;
@@ -1852,7 +1861,7 @@ export default {
       setTimeout(function () {
         that.$refs.child.refreshData();
         that.$refs.child.resizeExpendHeight();
-        that.$refs.child.getFoodScore();
+        // that.$refs.child.getFoodScore();
       }, 200);
     },
     hasFoodType(foodTypeName) {
@@ -1940,7 +1949,7 @@ export default {
       if (weekSelect == undefined) return;
 
       if (weekSelect[0].getAttribute("isFixWeek") != undefined) return;
-
+debugger
       setTimeout(function () {
         var zs = document.createElement("th");
         zs.innerText = "周次";
