@@ -2120,6 +2120,7 @@ export default {
             }
 
             if (alldday[i].className.indexOf("next-month") >= 0) {
+              m = mouth + 1;
               if (mouth == 12) {
                 y = year + 1;
                 m = 1;

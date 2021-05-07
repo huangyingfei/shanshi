@@ -1199,7 +1199,7 @@ export default {
       }
       let mealTypesArray = [];
       this.datas.forEach((_) => {
-         mealTypesArray.push(this.getmealTypeData(_.name));
+        mealTypesArray.push(this.getmealTypeData(_.name));
         _.weeks.forEach((__) => {
           __.foods.forEach((___) => {
             let mealTypes = {};
@@ -1221,14 +1221,14 @@ export default {
           });
         });
       });
-        if (mealTypesArray.length > 0) {
-          let obj = Array.from(new Set(mealTypesArray));
-          let resultObj = "";
-          for (let i = 0; i < obj.length; i++) {
-            resultObj += obj[i] + ",";
-          }
-          foods["mealTypes"] = resultObj.substring(0, resultObj.length - 1);
+      if (mealTypesArray.length > 0) {
+        let obj = Array.from(new Set(mealTypesArray));
+        let resultObj = "";
+        for (let i = 0; i < obj.length; i++) {
+          resultObj += obj[i] + ",";
         }
+        foods["mealTypes"] = resultObj.substring(0, resultObj.length - 1);
+      }
       foods.days = sum(day);
       return foods;
     },
@@ -2782,6 +2782,7 @@ export default {
             }
 
             if (alldday[i].className.indexOf("next-month") >= 0) {
+              m = mouth + 1;
               if (mouth == 12) {
                 y = year + 1;
                 m = 1;
