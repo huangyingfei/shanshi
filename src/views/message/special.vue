@@ -349,6 +349,7 @@
         // this.$set( this.specialForm,"proportion",undefined)
       },
       addPeople(){
+        this.$set(this.findObject(this.option.column, "people"),"display",true)
         this.$set(this.findObject(this.option.column, "peopleName"),"disabled",false)
         this.empty();
         this.initData();
