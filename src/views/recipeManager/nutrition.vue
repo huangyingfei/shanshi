@@ -672,7 +672,7 @@ import axios from "@/router/axios";
 import { formateDate } from "@/api/tool/date";
 
 export default {
-  props: ["WeekInfo"],
+  props: ["WeekInfo",'startTime','endTime'],
   data() {
     return {
       nutritionDialogVisible: false,
@@ -698,17 +698,17 @@ export default {
       return this.WeekInfo.weekType === "7";
     },
     dateRange: function () {
-      let dayNum = parseInt(this.WeekInfo.weekType, 10);
-      var startDate = formateDate(
-        new Date(this.WeekInfo.weekValue),
-        "yyyy-MM-dd"
-      );
-      var endDateMillisec =
-        new Date(this.WeekInfo.weekValue).getTime() +
-        1000 * 60 * 60 * 24 * dayNum;
-      var endDate = new Date(endDateMillisec);
-      endDate = formateDate(endDate, "yyyy-MM-dd");
-      return startDate + "~" + endDate;
+      // let dayNum = parseInt(this.WeekInfo.weekType, 10);
+      // var startDate = formateDate(
+      //   new Date(this.WeekInfo.weekValue),
+      //   "yyyy-MM-dd"
+      // );
+      // var endDateMillisec =
+      //   new Date(this.WeekInfo.weekValue).getTime() +
+      //   1000 * 60 * 60 * 24 * dayNum;
+      // var endDate = new Date(endDateMillisec);
+      // endDate = formateDate(endDate, "yyyy-MM-dd");
+      return this.startTime + "~" + this.endTime;
     },
   },
   methods: {

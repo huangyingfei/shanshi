@@ -1017,7 +1017,7 @@ export default {
             "foodCatalog",
             JSON.parse(data.mealTypestrs)
           );
-          that.WeekInfo.weekType = data.recipeDay;
+          // that.WeekInfo.weekType = data.recipeDay;
           that.FixWeek();
           that.ShowWeekSelect();
           that.SelectWeek(that.WeekInfo.weekValue);

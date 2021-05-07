@@ -562,7 +562,8 @@
         ></show-score>
       </el-drawer>
       <!-- 分数弹框 结束-->
-      <nutrition :WeekInfo="WeekInfo" ref="nutritionChild" />
+      <nutrition :WeekInfo="WeekInfo" ref="nutritionChild" :startTime="startTimeStr"
+          :endTime="endTimeStr" />
       <!-- 智能配平弹框 -->
 
       <el-dialog
@@ -1338,7 +1339,7 @@ export default {
             "foodCatalog",
             JSON.parse(data.mealTypestrs)
           );
-          that.WeekInfo.weekType = data.recipeDay;
+       //   that.WeekInfo.weekType = data.recipeDay;
           that.FixWeek();
           that.ShowWeekSelect();
           that.SelectWeek(that.WeekInfo.weekValue);
