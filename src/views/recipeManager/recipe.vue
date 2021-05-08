@@ -329,7 +329,7 @@ export default {
           {
             label: "创建机构",
             prop: "orgName",
-            search: true,
+          
           },
           {
             label: "食谱类别",
