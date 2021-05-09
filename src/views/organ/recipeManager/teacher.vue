@@ -189,7 +189,7 @@
           >
           </el-option>
         </el-select>
-        <span style="margin-right: 10px; margin-left: 15px">当前状态:</span>
+        <!-- <span style="margin-right: 10px; margin-left: 15px">当前状态:</span>
         <el-select
           style="width: 100px; height: 30px"
           v-model="driver"
@@ -203,8 +203,8 @@
             style="width: 100px"
           >
           </el-option>
-        </el-select>
-        <span style="margin-right: 10px; margin-left: 15px">工号排序:</span>
+        </el-select> -->
+        <!-- <span style="margin-right: 10px; margin-left: 15px">工号排序:</span>
         <el-select
           style="width: 100px; height: 30px"
           v-model="working"
@@ -218,7 +218,7 @@
             style="width: 100px"
           >
           </el-option>
-        </el-select>
+        </el-select> -->
       </div>
       <!-- 添加部门弹框 -->
       <el-dialog

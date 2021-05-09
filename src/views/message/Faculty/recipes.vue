@@ -36,9 +36,9 @@
         >清空</el-button
       >
     </div>
-    <div class="prepall">
-      <span style=" margin-right: 10px;margin-left: 25px;">收藏食谱</span>
-      <el-select
+    <!-- <div class="prepall"> -->
+      <!-- <span style=" margin-right: 10px;margin-left: 25px;">收藏食谱</span> -->
+      <!-- <el-select
         @change="collection"
         v-model="empty"
         placeholder="请选择收藏食谱"
@@ -50,8 +50,8 @@
           :value="item.value"
         >
         </el-option>
-      </el-select>
-      <span style="margin-left: 25px; margin-right: 15px;">分享食谱</span>
+      </el-select> -->
+      <!-- <span style="margin-left: 25px; margin-right: 15px;">分享食谱</span>
       <el-select
         @change="geospatial"
         v-model="callback"
@@ -64,8 +64,8 @@
           :value="item.value"
         >
         </el-option>
-      </el-select>
-      <span style="margin-left: 25px; margin-right: 15px;">公示食谱</span>
+      </el-select> -->
+      <!-- <span style="margin-left: 25px; margin-right: 15px;">公示食谱</span>
       <el-select @change="titlesearch" v-model="blicity" placeholder="请选择">
         <el-option
           v-for="item in publicity"
@@ -74,8 +74,8 @@
           :value="item.value"
         >
         </el-option>
-      </el-select>
-    </div>
+      </el-select> -->
+   <!-- </div> -->
 
     <div class="inform">
       <el-table
@@ -396,6 +396,7 @@ export default {
       this.wupload.input = "";
       this.wupload.getDate = "";
       this.wupload.block = "";
+       this.generator();
     },
     //获取列表
     generator() {
