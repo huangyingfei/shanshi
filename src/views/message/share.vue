@@ -96,7 +96,7 @@
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="orgName"
+          prop="createName"
           label="提交人"
           align="center"
         ></el-table-column>
@@ -258,7 +258,7 @@ export default {
           window.innerHeight - self.$refs.table.$el.offsetTop - 110;
       };
     });
-    //this.$refs.table.$el.offsetTop：表格距离浏览器的高度 //50表示你想要调整的表格距离底部的高度（你可以自己随意调整），因为我们一般都有放分页组件的，所以需要给它留一个高度
+   // this.$refs.table.$el.offsetTop：表格距离浏览器的高度 //50表示你想要调整的表格距离底部的高度（你可以自己随意调整），因为我们一般都有放分页组件的，所以需要给它留一个高度
   },
   beforeMount() {
     this.getforms();
@@ -313,7 +313,7 @@ export default {
       this.loadFlag = true;
       this.$axios
         .get(
-          `api/blade-food/recipe/openRecipeList?size=${this.m_page.size}&current=${this.m_page.number}&recipeName=${this.wupload.input}&status=${this.wupload.block}&orgName=${this.wupload.submit}&createTimeStr=${this.timezone}&createTimeStrEnd=${this.timezone1}`,
+          `api/blade-food/recipe/openRecipeList?size=${this.m_page.size}&current=${this.m_page.number}&recipeName=${this.wupload.input}&status=${this.wupload.block}&createName=${this.wupload.submit}&createTimeStr=${this.timezone}&createTimeStrEnd=${this.timezone1}`,
           {}
         )
         .then(res => {

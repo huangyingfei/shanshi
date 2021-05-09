@@ -204,7 +204,7 @@ export default {
 
       options: [
         {
-          value: "0",
+          value: "",
           label: "全部"
         },
         {
@@ -212,7 +212,7 @@ export default {
           label: "是"
         },
         {
-          value: "2",
+          value: "0",
           label: "否"
         }
       ],

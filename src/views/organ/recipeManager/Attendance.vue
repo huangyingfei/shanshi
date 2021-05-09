@@ -997,7 +997,7 @@ export default {
           // console.log(this.dateEnd);
           this.bonus = this.dateEnd.id;
           // console.log(this.bonus);
-          this.agree = this.dateEnd.studentId; //姓名ID
+          this.agree = this.dateEnd.teacherId; //姓名ID
           this.ruleForm.state = this.dateEnd.stuStr;
           this.ruleForm.position = this.dateEnd.post;
           if (this.dateEnd.classStr) {

@@ -78,9 +78,9 @@
           </el-table-column>
           <el-table-column prop="tenantName" label="机构" align="center">
           </el-table-column>
-          <el-table-column prop="lookCount" label="浏览量PV" align="center">
+          <el-table-column prop="lookCount" label="浏览人数UV" align="center">
           </el-table-column>
-          <el-table-column prop="peopleCount" label="浏览人数UV" align="center">
+          <el-table-column prop="peopleCount" label="浏览量PV" align="center">
           </el-table-column>
         </el-table>
       </div>

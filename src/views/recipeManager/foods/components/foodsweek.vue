@@ -2097,7 +2097,7 @@ export default {
       this.getFoodScore();
     },
     //获取分数
-    getFoodScore() {
+    getFoodScore(flag) {
       this.dragnode.node = {};
       let day = [0, 0, 0, 0, 0, 0, 0];
       let days = 0;
@@ -2282,7 +2282,7 @@ export default {
           this.pcScore = this.score;
           that.$emit("childfn", 0, "datas", this.pcScore, [], [], [], [], []);
         }
-      } else {
+      } else if(!flag) {
         this.$message({
           type: "info",
           message: "请输入年龄!",

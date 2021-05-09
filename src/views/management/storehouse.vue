@@ -792,12 +792,14 @@ export default {
             })
             .then(res => {
               console.log(res);
-              this.treeDrawing();
-              // this.addition();
               this.$message({
                 message: "保存成功",
                 type: "success"
               });
+              this.treeDrawing();
+               this.addition();
+              this.gavatorta = 0
+              
             })
             .catch(() => {
               this.$message.error("保存失败");

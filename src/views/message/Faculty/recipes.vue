@@ -8,7 +8,7 @@
         v-model="wupload.input"
         placeholder="请输入内容"
       ></el-input>
-      <span style="margin-right: 10px;margin-left: 25px;">选择日期:</span>
+      <!-- <span style="margin-right: 10px;margin-left: 25px;">选择日期:</span>
       <el-date-picker
         size="small"
         v-model="wupload.getDate"
@@ -17,7 +17,7 @@
         style="width:200px;"
         format="yyyy 年 MM 月 dd 日"
         value-format="yyyy-MM-dd"
-      ></el-date-picker>
+      ></el-date-picker> -->
 
       <el-button
         @click="searchStr"
@@ -107,7 +107,7 @@
           width="80"
         ></el-table-column>
 
-        <el-table-column
+        <!-- <el-table-column
           prop="avgAge"
           label="平均年龄"
           align="center"
@@ -119,7 +119,7 @@
           label="男女比例"
           align="center"
           width="100"
-        ></el-table-column>
+        ></el-table-column> -->
 
         <el-table-column
           prop="orgName"
@@ -258,7 +258,7 @@ export default {
           label: "未公示食谱"
         }
       ],
-      blicity: "",
+      blicity:"",
 
       callback: "",
       modeforms: [], //表格数据

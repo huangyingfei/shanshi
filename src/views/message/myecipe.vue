@@ -338,7 +338,7 @@ export default {
       this.tableHeight =
         window.innerHeight - this.$refs.table.$el.offsetTop - 110;
 
-      // 监听窗口大小变化
+      //监听窗口大小变化
       let self = this;
       window.onresize = function() {
         self.tableHeight =

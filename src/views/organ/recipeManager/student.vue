@@ -342,7 +342,7 @@
         ref="xuejiForm"
         :model="xuejiForm"
         label-width="0">
-        <el-form-item prop="className" v-if="!showYear"  class="item-ck-xj"  label="所在年级:">
+        <el-form-item prop="className" v-if="!showYear" label-width="100"  class="item-ck-xj"  label="所在年级:">
           <div >
             <el-select   v-model="xuejiForm.className" placeholder="请选择">
               <el-option
@@ -355,7 +355,7 @@
             </el-select>
           </div>
         </el-form-item>
-        <el-form-item prop="startYear"  v-if="showYear"  class="item-ck-xj"  label="入学年份:">
+        <el-form-item prop="startYear"  v-if="showYear"  label-width="100"  class="item-ck-xj"  label="入学年份:">
           <div >
             <el-select   v-model="xuejiForm.startYear" placeholder="请选择">
               <el-option
@@ -368,7 +368,7 @@
             </el-select>
           </div>
         </el-form-item>
-        <el-form-item    class="item-ck-xj"   prop="classes"  label="班级数量:">
+        <el-form-item    class="item-ck-xj"  label-width="100"  prop="classes"  label="班级数量:">
           <div>
             <el-select v-model="xuejiForm.classes" placeholder="请选择">
               <el-option

@@ -415,19 +415,29 @@ export default {
             this.ruleForm1.name = this.handler.dishName; //菜品名字
             this.ruleForm1.fooddata = this.handler.dishTypeName; //菜品分类
             // this.value2.push(this.handler.season); //季节
+             if (this.handler.season) {
             this.handler.season.split(",").forEach(item => {
               this.value2.push(item);
             });
+            } else {
+            this.value1 = [];
+          }
+          
             this.ruleForm1.region = this.handler.function; //特点
             this.ruleForm1.desc = this.handler.remark; //做法
-            if (this.handler.provinces) {
+           if (this.handler.provinces) {
               let bar = [];
               this.handler.provinces.split(",").forEach((item, i) => {
-                //所属区域
-                console.log(item);
-                bar.push([item, this.handler.belongRegion.split(",")[i]]);
+                if (item == this.handler.belongRegion.split(",")[i]) {
+                  bar.push([item]);
+                } else {
+                  bar.push([item, this.handler.belongRegion.split(",")[i]]);
+                }
               });
               this.valuepark1 = bar;
+              // console.log(this.valuepark);
+            } else {
+              this.valuepark1 = [];
             }
 
             this.rectangle = this.handler.pic;
@@ -463,12 +473,14 @@ export default {
     //全部常用查询
     commonly() {
       console.log(this.really1);
-      this.obtains();
+   //   this.obtains();
+      this.professional();
     },
     //春夏秋冬查询
     disallow() {
       console.log(this.before1);
-      this.obtains();
+   //   this.obtains();
+      this.professional();
     },
     //省市区查询
     gProvinces() {

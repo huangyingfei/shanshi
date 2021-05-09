@@ -666,21 +666,22 @@
             label="职务"
             align="center"
           ></el-table-column>
-          <el-table-column
+          <!-- <el-table-column
             width="150"
             prop="className"
             label="所在班级"
             align="center"
             show-overflow-tooltip
-          ></el-table-column>
+          ></el-table-column> -->
 
           <el-table-column
             width="200"
             prop="entryTime"
             label="入职日期"
             align="center"
-          ></el-table-column>
-          <el-table-column
+          >
+          </el-table-column>
+          <!-- <el-table-column
             width="100"
             prop="stutas"
             label="当前状态"
@@ -692,7 +693,7 @@
               <p v-else-if="scope.row.stutas == 3">停职</p>
               <p v-else-if="scope.row.status == 4">退休</p>
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <!-- <el-table-column label="是否有效" width="120" align="center">
             <template slot-scope="scope">
               <p class="stop" v-if="scope.row.isActive == 0">是</p>

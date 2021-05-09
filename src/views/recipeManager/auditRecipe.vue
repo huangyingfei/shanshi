@@ -9,6 +9,7 @@
         @on-load="onLoad"
         @search-change="searchChange"
         @size-change="sizeChange"
+          @search-reset="searchReset"
         @current-change="currentChange"
         @refresh-change="refreshChange"
       >

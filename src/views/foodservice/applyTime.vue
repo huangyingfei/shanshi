@@ -523,10 +523,10 @@ export default {
           value: "2",
           label: "审核不通过"
         },
-        {
-          value: "3",
-          label: "无需审核"
-        }
+        // {
+        //   value: "3",
+        //   label: "无需审核"
+        // }
       ],
       officeonce: [
         //菜品所含信息
