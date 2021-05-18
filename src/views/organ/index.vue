@@ -282,7 +282,7 @@ export default {
       let charts = this.$echarts.init(document.getElementById("mynutrient"));
       var option = {
         title: {
-          text: "儿童每人每日营养素提取（DRls）",
+          text: "每人每日营养素提取（DRls）",
 
           textAlign: "left",
         },
@@ -396,7 +396,7 @@ export default {
       let charts = this.$echarts.init(document.getElementById("leiDaTu"));
       var option = {
         title: {
-          text: "儿童每人每日进食量",
+          text: "每人每日进食量",
 
           textAlign: "left",
         },

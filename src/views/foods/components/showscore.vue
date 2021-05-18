@@ -4,7 +4,7 @@
     <span>机构名称：{{tenantName}}</span><br/>
     <span>日期：{{startTime}}-{{endTime}}  </span>    <span> 总评分（优秀分数90分）：{{score}}</span>
     <hr></hr>
-    <h4>  一、平均每人进食量  《中国学龄前儿童平衡膳食宝塔》</h4>
+    <h4>  一、平均每人进食量</h4>
     <el-table
       :data="intake.data"
       style="width: 100%">
