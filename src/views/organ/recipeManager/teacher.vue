@@ -434,8 +434,7 @@
             </el-form-item>
             <el-form-item style="width: 355px">
               <span style="font-size: 12px"
-                >若为年级组长、保教主任、老师、保育员时需选择
-                所在年级/班级</span
+                >若为年级组长、班主任时需选择 所在年级/班级</span
               >
             </el-form-item>
             <el-form-item
@@ -1286,7 +1285,7 @@ export default {
     },
     //添加员工
     cameras(formName) {
-      debugger
+      debugger;
       console.log(this.stringClass);
       console.log(this.ruleForm.domain);
       // if (this.ruleForm.domain.length == 1) {
@@ -1507,16 +1506,15 @@ export default {
       // let classifiers = [];
 
       // console.log(row.classStr);
-      debugger
+      debugger;
       if (row.classStr) {
         // let elseclass = {
         //   class: [row.classStr],
         // };
         // elseclass.class = [...JSON.parse(elseclass.class[0])];
         // this.stringClass = elseclass.class;
-        this.stringClass=JSON.parse(row.classStr)
+        this.stringClass = JSON.parse(row.classStr);
         console.log(this.stringClass);
-
       } else {
         this.stringClass = [];
       }
@@ -1529,7 +1527,7 @@ export default {
         //         this.ruleForm.domain = police.class[0];
         //         console.log(this.ruleForm.domain);
         let a = [...JSON.parse(row.deptStr)];
-        this.ruleForm.domain=a[0]
+        this.ruleForm.domain = a[0];
         console.log(this.ruleForm.domain);
       } else {
         this.ruleForm.domain = [];
@@ -1578,7 +1576,7 @@ export default {
     },
     //添加员工弹框
     addition(index1) {
-      this.stringClass=[];
+      this.stringClass = [];
       this.ruleForm.name = "";
       this.ruleForm.radio = "";
       this.ruleForm.marriages = "";

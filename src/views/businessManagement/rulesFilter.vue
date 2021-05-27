@@ -6,11 +6,11 @@
           <span class="exact">伙食费:</span>
 
           <el-input
-            style="width:180px; margin-left: 20px;"
+            style="width: 180px; margin-left: 20px"
             v-model="formsearch.foodturn"
             placeholder="请输入内容"
           ></el-input>
-          <span style=" margin-left: 10px;">元/天</span>
+          <span style="margin-left: 10px">元/天</span>
         </div></el-col
       >
       <el-col :span="8">
@@ -18,11 +18,11 @@
           <span class="exact">应退伙食费:</span>
 
           <el-input
-            style="width:180px; margin-left: 20px;"
+            style="width: 180px; margin-left: 20px"
             v-model="formsearch.refunded"
             placeholder="请输入内容"
           ></el-input>
-          <span style=" margin-left: 10px;">元/天</span>
+          <span style="margin-left: 10px">元/天</span>
         </div>
       </el-col>
     </el-row>
@@ -32,7 +32,7 @@
         <div class="amount">
           <div class="choose">退费条件选择</div>
           <div class="refunded">
-            <span style="">停课、中途入园、离园退费标准：</span>
+            <span style="">停课、中途入校、离校退费标准：</span>
             <el-radio v-model="refunds" label="1">按伙食费退</el-radio>
             <el-radio v-model="refunds" label="2">按应退金额退</el-radio>
             <el-radio v-model="refunds" label="3">不退费</el-radio>
@@ -45,13 +45,13 @@
                 >自然月中累计缺勤天数满</el-radio
               >
               <el-input
-                style="width:100px; margin-right: 10px;"
+                style="width: 100px; margin-right: 10px"
                 v-model="daysoticks"
                 placeholder="请输入内容"
               ></el-input
               >天，<span>即可退累计缺勤减</span
               ><el-input
-                style="width:100px; margin-left: 10px;"
+                style="width: 100px; margin-left: 10px"
                 v-model="rightcost"
                 placeholder="请输入内容"
               ></el-input
@@ -60,12 +60,12 @@
             <div class="creations">
               <el-radio v-model="runway" label="2">连续缺勤天数满</el-radio>
               <el-input
-                style="width:100px; margin-right: 10px;"
+                style="width: 100px; margin-right: 10px"
                 v-model="semi"
                 placeholder="请输入内容"
               ></el-input
               >天，即可退累计缺勤减<el-input
-                style="width:100px; margin-left: 10px;"
+                style="width: 100px; margin-left: 10px"
                 v-model="failed"
                 placeholder="请输入内容"
               ></el-input
@@ -76,19 +76,19 @@
                 >自然月中累计的“连续”缺勤天数满</el-radio
               >
               <el-input
-                style="width:100px; margin-right: 10px;"
+                style="width: 100px; margin-right: 10px"
                 v-model="natural"
                 placeholder="请输入内容"
               ></el-input
               >天并且连续缺勤天数满
               <el-input
-                style="width:100px; margin-right: 10px;"
+                style="width: 100px; margin-right: 10px"
                 v-model="naturals"
                 placeholder="请输入内容"
               ></el-input
               >天，即可退累计的（连续缺勤减
               <el-input
-                style="width:100px; margin-right: 10px;"
+                style="width: 100px; margin-right: 10px"
                 v-model="naturalhair"
                 placeholder="请输入内容"
               ></el-input
@@ -120,7 +120,7 @@ export default {
     return {
       formsearch: {
         foodturn: "",
-        refunded: "" //应退伙食费
+        refunded: "", //应退伙食费
       },
       rulescan: "", //ID
       refunds: "1",
@@ -131,7 +131,7 @@ export default {
       failed: "",
       natural: "", //自然月
       naturals: "", //
-      naturalhair: "" //
+      naturalhair: "", //
     };
   },
   beforeMount() {
@@ -155,7 +155,7 @@ export default {
         obj = {
           param5: this.natural,
           param6: this.naturals,
-          param7: this.naturalhair
+          param7: this.naturalhair,
         };
       }
       this.$axios
@@ -165,18 +165,18 @@ export default {
           returnFee: this.formsearch.refunded, //应退伙食费
           type: this.refunds, //标准
           calType: this.runway, //计算方式
-          ...obj
+          ...obj,
         })
-        .then(res => {
+        .then((res) => {
           this.$message({
             message: "保存成功",
-            type: "success"
+            type: "success",
           });
           this.getRules();
         });
     },
     getRules() {
-      this.$axios.get(`api/blade-food/returnmeal/detail`, {}).then(res => {
+      this.$axios.get(`api/blade-food/returnmeal/detail`, {}).then((res) => {
         // console.log(res);
         this.scheduler = res.data.data;
         // console.log(this.scheduler);
@@ -193,8 +193,8 @@ export default {
         this.naturals = this.scheduler.param6;
         this.naturalhair = this.scheduler.param7;
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

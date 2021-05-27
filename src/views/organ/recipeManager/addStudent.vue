@@ -1,9 +1,8 @@
 <template>
-  <basic-container  id="addStudent">
-    <avue-form  :option="option" v-model="form" @submit="submit" @error="error">
+  <basic-container id="addStudent">
+    <avue-form :option="option" v-model="form" @submit="submit" @error="error">
       <template slot="menuForm">
-        <el-button icon="el-icon-back"
-                   @click="handleBack()">返 回</el-button>
+        <el-button icon="el-icon-back" @click="handleBack()">返 回</el-button>
       </template>
     </avue-form>
   </basic-container>
@@ -45,7 +44,7 @@ export default {
         title1: "母亲档案信息",
         title2: "第一监护人信息",
         title3: "第二监护人信息",
-        title4: "幼儿其他信息",
+        title4: "学生其他信息",
       },
       option: {
         detail: false,
@@ -60,8 +59,8 @@ export default {
                 trigger: "blur",
               },
             ],
-            minlength:0,
-            maxlength:10,
+            minlength: 0,
+            maxlength: 10,
             span: 8,
           },
           {
@@ -107,8 +106,10 @@ export default {
                   this.form,
                   "age",
 
-                  ((new Date().getTime() - date.getTime()) / 31536000000).toFixed(2)
-
+                  (
+                    (new Date().getTime() - date.getTime()) /
+                    31536000000
+                  ).toFixed(2)
                 );
               }
               if (v.value && v.value != "" && typeof v.value != "string") {
@@ -116,7 +117,10 @@ export default {
                   this.form,
                   "age",
 
-                  ((new Date().getTime() - v.value.getTime()) / 31536000000).toFixed(2)
+                  (
+                    (new Date().getTime() - v.value.getTime()) /
+                    31536000000
+                  ).toFixed(2)
                 );
               }
             },
@@ -134,8 +138,8 @@ export default {
             dicData: nation,
             span: 8,
             props: {
-              label: 'label',
-              value: 'label'
+              label: "label",
+              value: "label",
             },
           },
           {
@@ -145,8 +149,8 @@ export default {
             dicData: location,
             span: 8,
             props: {
-              label: 'label',
-              value: 'label'
+              label: "label",
+              value: "label",
             },
           },
           {
@@ -163,7 +167,7 @@ export default {
             ],
             change: (row) => {
               if (row.value && row.value != "") {
-                  this.getById(row);
+                this.getById(row);
               }
             },
             props: {
@@ -176,7 +180,7 @@ export default {
           {
             label: "学号",
             prop: "childNo",
-            type:"number",
+            type: "number",
             rules: [
               {
                 required: true,
@@ -190,12 +194,12 @@ export default {
             label: "档案号",
             prop: "fileNumber",
             span: 8,
-            minlength:0,
-            maxlength:16
+            minlength: 0,
+            maxlength: 16,
           },
 
           {
-            label: "入园日期",
+            label: "入校日期",
             prop: "admissionDate",
             type: "date",
             span: 8,
@@ -228,8 +232,8 @@ export default {
             span: 8,
             dicData: nationality,
             props: {
-              label: 'label',
-              value: 'label'
+              label: "label",
+              value: "label",
             },
           },
           {
@@ -247,8 +251,8 @@ export default {
             label: "现住址",
             prop: "address",
             span: 8,
-            minlength:0,
-            maxlength:255
+            minlength: 0,
+            maxlength: 255,
           },
           {
             label: "户口类型",
@@ -265,8 +269,8 @@ export default {
               },
             ],
             props: {
-              label: 'label',
-              value: 'label'
+              label: "label",
+              value: "label",
             },
             span: 8,
           },
@@ -277,24 +281,24 @@ export default {
             dicData: cardType,
             span: 8,
             props: {
-              label: 'label',
-              value: 'label'
+              label: "label",
+              value: "label",
             },
           },
           {
             label: "证件号",
             prop: "cardNo",
             span: 8,
-            minlength:0,
-            maxlength:18
+            minlength: 0,
+            maxlength: 18,
           },
 
           {
             label: "户口地址",
             prop: "accountAddress",
             span: 16,
-            minlength:0,
-            maxlength:255
+            minlength: 0,
+            maxlength: 255,
           },
           {
             label: "过敏",
@@ -310,8 +314,8 @@ export default {
             label: "疾病史",
             prop: "diseaseHistory",
             span: 16,
-            minlength:0,
-            maxlength:255
+            minlength: 0,
+            maxlength: 255,
           },
           {
             label: "接种所在省",
@@ -328,16 +332,16 @@ export default {
             label: "家庭电话",
             prop: "mobile",
             span: 8,
-            minlength:0,
-            maxlength:16
+            minlength: 0,
+            maxlength: 16,
           },
 
           {
             label: "联系电话",
             prop: "tel",
             span: 8,
-            minlength:0,
-            maxlength:16
+            minlength: 0,
+            maxlength: 16,
           },
 
           {
@@ -389,8 +393,8 @@ export default {
             label: "离校原因",
             prop: "reason",
             span: 8,
-            minlength:0,
-            maxlength:255
+            minlength: 0,
+            maxlength: 255,
           },
 
           {
@@ -404,16 +408,16 @@ export default {
             label: "姓名",
             prop: "fatherName",
             span: 8,
-            minlength:0,
-            maxlength:10
+            minlength: 0,
+            maxlength: 10,
           },
 
           {
             label: "手机号",
             prop: "fatherTel",
             span: 8,
-            minlength:0,
-            maxlength:11
+            minlength: 0,
+            maxlength: 11,
           },
           {
             label: "民族",
@@ -422,8 +426,8 @@ export default {
             dicData: nation,
             span: 8,
             props: {
-              label: 'label',
-              value: 'label'
+              label: "label",
+              value: "label",
             },
           },
           {
@@ -433,8 +437,8 @@ export default {
             span: 8,
             dicData: nationality,
             props: {
-              label: 'label',
-              value: 'label'
+              label: "label",
+              value: "label",
             },
           },
           {
@@ -444,16 +448,16 @@ export default {
             span: 8,
             dicData: cardType,
             props: {
-              label: 'label',
-              value: 'label'
+              label: "label",
+              value: "label",
             },
           },
           {
             label: "身份证号码",
             prop: "fatherCardNo",
             span: 8,
-            minlength:0,
-            maxlength:18
+            minlength: 0,
+            maxlength: 18,
           },
           {
             label: "户口所在地",
@@ -462,8 +466,8 @@ export default {
             dicData: location,
             span: 8,
             props: {
-              label: 'label',
-              value: 'label'
+              label: "label",
+              value: "label",
             },
           },
           {
@@ -482,16 +486,16 @@ export default {
               },
             ],
             props: {
-              label: 'label',
-              value: 'label'
+              label: "label",
+              value: "label",
             },
           },
           {
             label: "工作单位",
             prop: "fatherWorkunit",
             span: 8,
-            minlength:0,
-            maxlength:255
+            minlength: 0,
+            maxlength: 255,
           },
           {
             label: "学历",
@@ -511,16 +515,16 @@ export default {
             label: "姓名",
             prop: "momName",
             span: 8,
-            minlength:0,
-            maxlength:10
+            minlength: 0,
+            maxlength: 10,
           },
 
           {
             label: "手机号",
             prop: "momTel",
             span: 8,
-            minlength:0,
-            maxlength:11
+            minlength: 0,
+            maxlength: 11,
           },
           {
             label: "民族",
@@ -529,8 +533,8 @@ export default {
             dicData: nation,
             span: 8,
             props: {
-              label: 'label',
-              value: 'label'
+              label: "label",
+              value: "label",
             },
           },
           {
@@ -540,8 +544,8 @@ export default {
             span: 8,
             dicData: nationality,
             props: {
-              label: 'label',
-              value: 'label'
+              label: "label",
+              value: "label",
             },
           },
           {
@@ -551,16 +555,16 @@ export default {
             span: 8,
             dicData: cardType,
             props: {
-              label: 'label',
-              value: 'label'
+              label: "label",
+              value: "label",
             },
           },
           {
             label: "身份证号码",
             prop: "momCardNo",
             span: 8,
-            minlength:0,
-            maxlength:18
+            minlength: 0,
+            maxlength: 18,
           },
           {
             label: "户口所在地",
@@ -569,8 +573,8 @@ export default {
             dicData: location,
             span: 8,
             props: {
-              label: 'label',
-              value: 'label'
+              label: "label",
+              value: "label",
             },
           },
           {
@@ -589,16 +593,16 @@ export default {
               },
             ],
             props: {
-              label: 'label',
-              value: 'label'
+              label: "label",
+              value: "label",
             },
           },
           {
             label: "工作单位",
             prop: "momWorkunit",
             span: 8,
-            minlength:0,
-            maxlength:255
+            minlength: 0,
+            maxlength: 255,
           },
           {
             label: "学历",
@@ -618,8 +622,8 @@ export default {
             label: "姓名",
             prop: "oneName",
             span: 8,
-            minlength:0,
-            maxlength:10
+            minlength: 0,
+            maxlength: 10,
           },
           {
             label: "与孩子关系",
@@ -652,8 +656,8 @@ export default {
 
             dicData: nationality,
             props: {
-              label: 'label',
-              value: 'label'
+              label: "label",
+              value: "label",
             },
           },
           {
@@ -663,16 +667,16 @@ export default {
             span: 8,
             dicData: cardType,
             props: {
-              label: 'label',
-              value: 'label'
+              label: "label",
+              value: "label",
             },
           },
           {
             label: "身份证号码",
             prop: "oneCardNo",
             span: 8,
-            minlength:0,
-            maxlength:18
+            minlength: 0,
+            maxlength: 18,
           },
           {
             label: "民族",
@@ -681,8 +685,8 @@ export default {
             dicData: nation,
             span: 8,
             props: {
-              label: 'label',
-              value: 'label'
+              label: "label",
+              value: "label",
             },
           },
           {
@@ -690,14 +694,13 @@ export default {
             prop: "oneBirthDate",
             type: "date",
             span: 8,
-
           },
           {
             label: "联系地址",
             prop: "oneAddress",
             span: 8,
-            minlength:0,
-            maxlength:255
+            minlength: 0,
+            maxlength: 255,
           },
           {
             label: "学历",
@@ -710,38 +713,37 @@ export default {
             label: "工作单位",
             prop: "oneWorkunit",
             span: 8,
-            minlength:0,
-            maxlength:255
+            minlength: 0,
+            maxlength: 255,
           },
           {
             label: "职务",
             prop: "oneJob",
             span: 8,
-            minlength:0,
-            maxlength:16
+            minlength: 0,
+            maxlength: 16,
           },
 
           {
             label: "联系电话",
             prop: "oneMobile",
             span: 8,
-            minlength:0,
-            maxlength:16
+            minlength: 0,
+            maxlength: 16,
           },
           {
             label: "手机号",
             prop: "oneTel",
             span: 8,
-            minlength:0,
-            maxlength:11
+            minlength: 0,
+            maxlength: 11,
           },
           {
             label: "电子信箱",
             prop: "oneEmail",
             span: 8,
-            minlength:0,
-            maxlength:35
-
+            minlength: 0,
+            maxlength: 35,
           },
           {
             label: "法定监护人",
@@ -765,8 +767,8 @@ export default {
             label: "姓名",
             prop: "twoName",
             span: 8,
-            minlength:0,
-            maxlength:10
+            minlength: 0,
+            maxlength: 10,
           },
           {
             label: "与孩子关系",
@@ -798,8 +800,8 @@ export default {
             span: 8,
             dicData: nationality,
             props: {
-              label: 'label',
-              value: 'label'
+              label: "label",
+              value: "label",
             },
           },
           {
@@ -809,16 +811,16 @@ export default {
             span: 8,
             dicData: cardType,
             props: {
-              label: 'label',
-              value: 'label'
+              label: "label",
+              value: "label",
             },
           },
           {
             label: "身份证号码",
             prop: "twoCardNo",
             span: 8,
-            minlength:0,
-            maxlength:18
+            minlength: 0,
+            maxlength: 18,
           },
           {
             label: "民族",
@@ -827,8 +829,8 @@ export default {
             dicData: nation,
             span: 8,
             props: {
-              label: 'label',
-              value: 'label'
+              label: "label",
+              value: "label",
             },
           },
           {
@@ -841,8 +843,8 @@ export default {
             label: "联系地址",
             prop: "twoAddress",
             span: 8,
-            minlength:0,
-            maxlength:255
+            minlength: 0,
+            maxlength: 255,
           },
           {
             label: "学历",
@@ -855,37 +857,37 @@ export default {
             label: "工作单位",
             prop: "twoWorkunit",
             span: 8,
-            minlength:0,
-            maxlength:255
+            minlength: 0,
+            maxlength: 255,
           },
           {
             label: "职务",
             prop: "twoJob",
             span: 8,
-            minlength:0,
-            maxlength:16
+            minlength: 0,
+            maxlength: 16,
           },
 
           {
             label: "联系电话",
             prop: "twoMobile",
             span: 8,
-            minlength:0,
-            maxlength:16
+            minlength: 0,
+            maxlength: 16,
           },
           {
             label: "手机号",
             prop: "twoTel",
             span: 8,
-            minlength:0,
-            maxlength:11
+            minlength: 0,
+            maxlength: 11,
           },
           {
             label: "电子信箱",
             prop: "twoEmail",
             span: 8,
-            minlength:0,
-            maxlength:35
+            minlength: 0,
+            maxlength: 35,
           },
           {
             label: "法定监护人",
@@ -908,22 +910,22 @@ export default {
             label: "户籍管理",
             prop: "domicleControl",
             span: 8,
-            minlength:0,
-            maxlength:16
+            minlength: 0,
+            maxlength: 16,
           },
           {
             label: "出生地",
             prop: "birthPlace",
             span: 8,
-            minlength:0,
-            maxlength:16
+            minlength: 0,
+            maxlength: 16,
           },
           {
             label: "籍贯",
             prop: "nativePlace",
             span: 8,
-            minlength:0,
-            maxlength:16
+            minlength: 0,
+            maxlength: 16,
           },
           {
             label: "港澳台侨胞",
@@ -1094,15 +1096,15 @@ export default {
             label: "其他联系人",
             prop: "otherPeople",
             span: 8,
-            minlength:0,
-            maxlength:16
+            minlength: 0,
+            maxlength: 16,
           },
           {
             label: "其他人电话",
             prop: "otherMobile",
             span: 8,
-            minlength:0,
-            maxlength:16
+            minlength: 0,
+            maxlength: 16,
           },
           {
             label: "寄宿生",
@@ -1124,19 +1126,19 @@ export default {
             label: "备注",
             prop: "remark",
             span: 16,
-            minlength:0,
-            maxlength:255
+            minlength: 0,
+            maxlength: 255,
           },
         ],
       },
     };
   },
   methods: {
-    handleBack(){
+    handleBack() {
       this.$router.push({ path: "/organ/recipeManager/student" });
       this.$router.$avueRouter.closeTag();
     },
-    getById(row){
+    getById(row) {
       getById(row.value + "").then((res) => {
         this.$set(this.form, "classSection", res.data.data.pparentName);
         if (!this.$route.query.id) {
@@ -1145,15 +1147,14 @@ export default {
       });
     },
     validateChildNo(rule, value, callback) {
-      if (value === ""||value=="undefined"||!value) {
+      if (value === "" || value == "undefined" || !value) {
         callback(new Error("请输入学号"));
-        this.$set(this.form,"childNo",undefined)
+        this.$set(this.form, "childNo", undefined);
       } else if (this.form.classId === "") {
         callback(new Error("请先选择班级"));
-        this.$set(this.form,"childNo",undefined)
+        this.$set(this.form, "childNo", undefined);
       } else {
-
-        if(value<=999999999999999&&value>0){
+        if (value <= 999999999999999 && value > 0) {
           let student = {};
           student["classId"] = this.form.classId;
           student["childNo"] = value;
@@ -1164,12 +1165,12 @@ export default {
               callback();
             } else {
               flag = false;
-              this.$set(this.form,"childNo",undefined)
+              this.$set(this.form, "childNo", undefined);
               callback(new Error("学号重复"));
             }
           });
-        }else{
-          this.$set(this.form,"childNo",undefined)
+        } else {
+          this.$set(this.form, "childNo", undefined);
           callback(new Error("学号需要在15位数以内且是正数"));
         }
       }
@@ -1256,21 +1257,21 @@ export default {
         false
       );
     }
-    if(this.$route.query.selectClassId){
-      this.$set(this.form,"classId",this.$route.query.selectClassId+"")
+    if (this.$route.query.selectClassId) {
+      this.$set(this.form, "classId", this.$route.query.selectClassId + "");
     }
   },
 };
 </script>
 
 <style>
-  #addStudent .avue-form__menu{
-    position: fixed !important;
-    bottom: 0;
-    right:0;
-    background-color: #FFFFFF;
-    margin-bottom: 0px;
-    margin-right: 17px;
-    width: calc(100% - 270px)
-  }
+#addStudent .avue-form__menu {
+  position: fixed !important;
+  bottom: 0;
+  right: 0;
+  background-color: #ffffff;
+  margin-bottom: 0px;
+  margin-right: 17px;
+  width: calc(100% - 270px);
+}
 </style>

@@ -7,14 +7,14 @@
             <span class="exact">姓名:</span>
 
             <el-input
-              style="width:180px; margin-left: 20px;"
+              style="width: 180px; margin-left: 20px"
               v-model="formsearch.name"
               placeholder="请输入内容"
             ></el-input></div
         ></el-col>
         <el-col :span="10"
           ><div>
-            <span style="margin-right: 10px;margin-left: 15px;">请假日期:</span>
+            <span style="margin-right: 10px; margin-left: 15px">请假日期:</span>
             <el-date-picker
               v-model="formsearch.getDate"
               format="yyyy 年 MM 月 dd 日"
@@ -28,7 +28,7 @@
         ></el-col>
         <el-col :span="6"
           ><div>
-            <span style="margin-right: 10px;">职务:</span>
+            <span style="margin-right: 10px">职务:</span>
             <el-select
               clearable
               style="width: 180px; height: 30px"
@@ -46,7 +46,7 @@
             </el-select></div
         ></el-col>
       </el-row>
-      <el-row style="  padding-top: 10px;">
+      <el-row style="padding-top: 10px">
         <el-col :span="24"
           ><div>
             <el-button
@@ -371,7 +371,7 @@
           </el-form-item>
           <el-form-item style="width: 370px">
             <span style="font-size: 12px"
-              >若为年级组长、保教主任、老师、保育员时需选择 所在年级/班级</span
+              >若为年级组长、班主任时需选择 所在年级/班级</span
             >
           </el-form-item>
           <el-form-item label="请假申请日期">
@@ -502,8 +502,8 @@
             >
               <i class="el-icon-plus"></i>
             </el-upload>
-            <span style="color: #000;font-weight: bold; font-size: 11px"
-              >上传图片不能超过2M 只能是<span style="color:red">JPG PNG</span
+            <span style="color: #000; font-weight: bold; font-size: 11px"
+              >上传图片不能超过2M 只能是<span style="color: red">JPG PNG</span
               >格式</span
             >
             <el-dialog append-to-body :visible.sync="dialogVisible">
@@ -539,7 +539,7 @@ export default {
     return {
       tableHeight: 50,
       headerObj: {
-        "Blade-Auth": ""
+        "Blade-Auth": "",
       }, //上传图片请求头
       dialogImageUrl: "", //图片
       imgLimit: 1, //文件个数
@@ -559,7 +559,7 @@ export default {
       formsearch: {
         name: "",
         getDate: "",
-        position: ""
+        position: "",
       },
       ruleForm: {
         state: "",
@@ -571,29 +571,31 @@ export default {
         software: "", //结束
         weekday: "", //请假天数
         reason: "", //请假事由
-        newnotes: "" //备注
+        newnotes: "", //备注
       },
       rules: {
         state: [{ required: true, message: "请输入姓名", trigger: "change" }],
         position: [{ required: true, message: "请选择职务", trigger: "blur" }],
         forgreater: [
-          { required: true, message: "请选择请假类型", trigger: "blur" }
+          { required: true, message: "请选择请假类型", trigger: "blur" },
         ],
         starting: [
-          { required: true, message: "请选择请假开始日期", trigger: "blur" }
+          { required: true, message: "请选择请假开始日期", trigger: "blur" },
         ],
         software: [
-          { required: true, message: "请选择请假结束日期", trigger: "blur" }
+          { required: true, message: "请选择请假结束日期", trigger: "blur" },
         ],
         weekday: [
-          { required: true, message: "请填写请假天数", trigger: "blur" }
+          { required: true, message: "请填写请假天数", trigger: "blur" },
         ],
-        reason: [{ required: true, message: "请填写请假事由", trigger: "blur" }]
+        reason: [
+          { required: true, message: "请填写请假事由", trigger: "blur" },
+        ],
       },
       dateTime: false,
       loadFlag: false, //加载flag
       page_data: {
-        loadTxt: "数据加载中..."
+        loadTxt: "数据加载中...",
       },
       tableData: [],
       stringClass: [], //所在年级
@@ -603,115 +605,115 @@ export default {
         size: 10,
         totalElements: 0,
         totalPages: 3,
-        number: 1
+        number: 1,
       },
       engine: "上午",
       minute: [
         {
           value: "上午",
-          label: "上午"
+          label: "上午",
         },
         {
           value: "下午",
-          label: "下午"
-        }
+          label: "下午",
+        },
       ],
       dauphine: "下午",
       rolling: [
         {
           value: "上午",
-          label: "上午"
+          label: "上午",
         },
         {
           value: "下午",
-          label: "下午"
-        }
+          label: "下午",
+        },
       ],
       comfortable: [
         {
           value: "事假",
-          label: "事假"
+          label: "事假",
         },
         {
           value: "病假",
-          label: "病假"
-        }
+          label: "病假",
+        },
       ],
       vposition: [
         //职务
         {
           value: "园长",
-          label: "园长"
+          label: "园长",
         },
         {
           value: "副园长",
-          label: "副园长"
+          label: "副园长",
         },
         {
           value: "保健园",
-          label: "保健园"
+          label: "保健园",
         },
         {
           value: "老师",
-          label: "老师"
+          label: "老师",
         },
         {
           value: "保教主任",
-          label: "保教主任"
+          label: "保教主任",
         },
         {
           value: "保育员",
-          label: "保育员"
+          label: "保育员",
         },
         {
           value: "年级组长",
-          label: "年级组长"
+          label: "年级组长",
         },
         {
           value: "教研组长",
-          label: "教研组长"
+          label: "教研组长",
         },
         {
           value: "后勤主任",
-          label: "后勤主任"
+          label: "后勤主任",
         },
         {
           value: "炊事员",
-          label: "炊事员"
+          label: "炊事员",
         },
         {
           value: "保洁",
-          label: "保洁"
+          label: "保洁",
         },
         {
           value: "保安",
-          label: "保安"
+          label: "保安",
         },
         {
           value: "财务",
-          label: "财务"
+          label: "财务",
         },
         {
           value: "跟车老师",
-          label: "跟车老师"
+          label: "跟车老师",
         },
         {
           value: "办公司人员",
-          label: "办公司人员"
+          label: "办公司人员",
         },
         {
           value: "办事员",
-          label: "办事员"
+          label: "办事员",
         },
         {
           value: "其他",
-          label: "其他"
-        }
+          label: "其他",
+        },
       ],
       under: "",
       bonus: "", //编辑ID
       timezone: "",
-      timezone1: ""
+      timezone1: "",
     };
   },
   beforeMount() {
@@ -720,13 +722,13 @@ export default {
     this.Takeone();
   },
   mounted() {
-    this.$nextTick(function() {
+    this.$nextTick(function () {
       this.tableHeight =
         window.innerHeight - this.$refs.table.$el.offsetTop - 280;
 
       // 监听窗口大小变化
       let self = this;
-      window.onresize = function() {
+      window.onresize = function () {
         self.tableHeight =
           window.innerHeight - self.$refs.table.$el.offsetTop - 280;
       };
@@ -748,12 +750,12 @@ export default {
     exportExcel() {
       this.$axios
         .get(`api/blade-food/teacherleave/export-template`, {
-          responseType: "blob"
+          responseType: "blob",
         })
-        .then(res => {
+        .then((res) => {
           console.log(res);
           var blob = new Blob([res.data], {
-            type: "application/octet-stream"
+            type: "application/octet-stream",
           }); //type这里表示xlsx类型
 
           var downloadElement = document.createElement("a");
@@ -770,7 +772,7 @@ export default {
       let urlParams = `?size=${this.m_page.size}&current=${this.m_page.number}&teacherName=${this.formsearch.name}&startTimeStr=${this.timezone}&endTimeStr=${this.timezone1}&post=${this.formsearch.position}`;
       this.$axios
         .get(`api/blade-food/teacherleave/page` + urlParams)
-        .then(res => {
+        .then((res) => {
           // console.log(res);
           // this.loadFlag = false;
           this.tableData = res.data.data.records;
@@ -791,7 +793,7 @@ export default {
           "请假原因",
           "申请日期",
           "创建人",
-          "创建日期"
+          "创建日期",
         ]; //导出表头信息
         const filterVal = [
           "teacherName",
@@ -804,7 +806,7 @@ export default {
           "reason",
           "applyTime",
           "createBy",
-          "createTime"
+          "createTime",
         ]; // 导出的表头字段名，需要导出表格字段名
         const list = this.tableData;
         const data = this.formatJson(filterVal, list);
@@ -813,7 +815,7 @@ export default {
     },
     //格式转换
     formatJson(filterVal, jsonData) {
-      return jsonData.map(v => filterVal.map(j => v[j]));
+      return jsonData.map((v) => filterVal.map((j) => v[j]));
     },
 
     loadAll() {
@@ -830,7 +832,7 @@ export default {
         let params = `?name=${queryString}`;
         this.$axios
           .get(`api/blade-food/teacherleave/stuSearch` + params, {})
-          .then(res => {
+          .then((res) => {
             //   console.log(res);
             this.students = res.data.data;
 
@@ -842,7 +844,7 @@ export default {
                 id: item.id,
                 value: item.stuStr,
                 classStr: item.classStr,
-                post: item.post
+                post: item.post,
               });
               console.log(this.restaurants);
             });
@@ -851,7 +853,7 @@ export default {
       }, 500);
     },
     createStateFilter(queryString) {
-      return state => {
+      return (state) => {
         return (
           state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
         );
@@ -865,7 +867,7 @@ export default {
       console.log(this.ruleForm.position);
       if (item.classStr) {
         let elseclass = {
-          class: [item.classStr]
+          class: [item.classStr],
         };
         elseclass.class = [...JSON.parse(elseclass.class[0])];
         this.stringClass = elseclass.class;
@@ -878,7 +880,7 @@ export default {
         if (this.ruleForm.software < this.ruleForm.starting) {
           this.$message({
             message: "结束时间不能小于开始时间",
-            type: "warning"
+            type: "warning",
           });
           this.ruleForm.weekday = "";
           return;
@@ -945,7 +947,7 @@ export default {
     },
     //编辑保存
     editorPara(formName) {
-      this.$refs[formName].validate(valid => {
+      this.$refs[formName].validate((valid) => {
         if (valid) {
           // alert("123123!");
           this.$axios
@@ -963,13 +965,13 @@ export default {
               daysOff: this.ruleForm.weekday, //请假天数
               reason: this.ruleForm.reason, //事由
               remark: this.ruleForm.newnotes, //备注
-              enclosure: this.dialogImageUrl
+              enclosure: this.dialogImageUrl,
             })
-            .then(res => {
+            .then((res) => {
               // console.log(res);
               this.$message({
                 message: "编辑成功",
-                type: "success"
+                type: "success",
               });
               this.getStorage();
               this.notEmpty();
@@ -978,7 +980,7 @@ export default {
         } else {
           this.$message({
             message: "信息未填全",
-            type: "warning"
+            type: "warning",
           });
           return false;
         }
@@ -992,7 +994,7 @@ export default {
       this.sort = row.id;
       this.$axios
         .get(`api/blade-food/teacherleave/detail?id=${this.sort}`, {})
-        .then(res => {
+        .then((res) => {
           this.dateEnd = res.data.data;
           // console.log(this.dateEnd);
           this.bonus = this.dateEnd.id;
@@ -1002,7 +1004,7 @@ export default {
           this.ruleForm.position = this.dateEnd.post;
           if (this.dateEnd.classStr) {
             let elseclass = {
-              class: [this.dateEnd.classStr]
+              class: [this.dateEnd.classStr],
             };
             elseclass.class = [...JSON.parse(elseclass.class[0])];
             this.stringClass = elseclass.class;
@@ -1021,7 +1023,7 @@ export default {
           let picture = [];
           if (this.dateEnd.enclosure) {
             picture[0] = {
-              url: this.dateEnd.enclosure
+              url: this.dateEnd.enclosure,
             };
           }
           this.productImgs = picture;
@@ -1057,7 +1059,7 @@ export default {
       let urlParams = `?size=${this.m_page.size}&current=${this.m_page.number}&teacherName=${this.formsearch.name}&startTimeStr=${this.timezone}&endTimeStr=${this.timezone1}&post=${this.formsearch.position}`;
       this.$axios
         .get(`api/blade-food/teacherleave/page` + urlParams)
-        .then(res => {
+        .then((res) => {
           // console.log(res);
           this.loadFlag = false;
           this.tableData = res.data.data.records;
@@ -1066,7 +1068,7 @@ export default {
     },
     //保存
     cameras(formName) {
-      this.$refs[formName].validate(valid => {
+      this.$refs[formName].validate((valid) => {
         if (valid) {
           // alert("123123!");
           this.$axios
@@ -1083,13 +1085,13 @@ export default {
               daysOff: this.ruleForm.weekday, //请假天数
               reason: this.ruleForm.reason, //事由
               remark: this.ruleForm.newnotes, //备注
-              enclosure: this.dialogImageUrl //附件
+              enclosure: this.dialogImageUrl, //附件
             })
-            .then(res => {
+            .then((res) => {
               // console.log(res);
               this.$message({
                 message: "保存成功",
-                type: "success"
+                type: "success",
               });
               this.getStorage();
               this.dateTime = false;
@@ -1100,7 +1102,7 @@ export default {
         } else {
           this.$message({
             message: "信息未填全",
-            type: "warning"
+            type: "warning",
           });
           return false;
         }
@@ -1113,12 +1115,12 @@ export default {
       this.$confirm("确定删除吗?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
         .then(() => {
           this.$axios
             .post(`api/blade-food/teacherleave/remove?ids=${this.term}`, {})
-            .then(res => {
+            .then((res) => {
               // console.log(res);
               this.getStorage();
               this.$message.success("删除成功");
@@ -1127,7 +1129,7 @@ export default {
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消删除"
+            message: "已取消删除",
           });
         });
     },
@@ -1197,23 +1199,23 @@ export default {
     },
     //获取所属班级
     getToolkit() {
-      this.$axios.get(`api/blade-food/class/tree`, {}).then(res => {
+      this.$axios.get(`api/blade-food/class/tree`, {}).then((res) => {
         // console.log(res);
         this.bufs = res.data.data;
         console.log(this.bufs);
         let fwork = [];
-        this.bufs.forEach(item => {
+        this.bufs.forEach((item) => {
           item.children.forEach((item1, index1) => {
             // console.log(item1);
             fwork[index1] = {
               value: item1.id,
-              label: item1.label
+              label: item1.label,
             };
             fwork[index1].children = [];
             item1.children.forEach((item2, index2) => {
               fwork[index1].children[index2] = {
                 value: item2.id,
-                label: item2.label
+                label: item2.label,
               };
               fwork[index1].children[index2].children = [];
               if (item2.children) {
@@ -1221,7 +1223,7 @@ export default {
                   // console.log(item3),
                   fwork[index1].children[index2].children[index3] = {
                     value: item3.id,
-                    label: item3.label
+                    label: item3.label,
                   };
                 });
               }
@@ -1231,8 +1233,8 @@ export default {
         this.loadClass = fwork;
         console.log(this.loadClass);
       });
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

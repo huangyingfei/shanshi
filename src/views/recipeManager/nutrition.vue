@@ -390,7 +390,7 @@
           <el-row>
             <el-col :span="24">
               <span
-                >二.营养素摄入量：(要求日托儿童每人每日各种营养素摄入量达到DRIs的80%以上，全托儿童能量和蛋白质达到DRIs的90%以上，其他营养素达到80%以上)</span
+                >二.营养素摄入量：(要求日托学生每人每日各种营养素摄入量达到DRIs的80%以上，全托学生能量和蛋白质达到DRIs的90%以上，其他营养素达到80%以上)</span
               >
             </el-col>
           </el-row>
@@ -672,7 +672,7 @@ import axios from "@/router/axios";
 import { formateDate } from "@/api/tool/date";
 
 export default {
-  props: ["WeekInfo",'startTime','endTime'],
+  props: ["WeekInfo", "startTime", "endTime"],
   data() {
     return {
       nutritionDialogVisible: false,

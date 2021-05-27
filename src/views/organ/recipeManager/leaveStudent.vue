@@ -33,9 +33,9 @@
           icon="el-icon-view"
           size="small"
           @click.stop="handleReset(scope.row)"
-        >恢复
+          >恢复
         </el-button>
-           <el-button
+        <el-button
           type="text"
           icon="el-icon-view"
           size="small"
@@ -52,28 +52,40 @@
       </template>
     </avue-crud>
 
-    <el-dialog title="请选择班级"  class="resetClass"
-               append-to-body
-               :visible.sync="resetBox"
-               width="555px">
-      <avue-form  :option="stuOption" v-model="stuForm" @submit="recoverStudent" @error="error">
+    <el-dialog
+      title="请选择班级"
+      class="resetClass"
+      append-to-body
+      :visible.sync="resetBox"
+      width="555px"
+    >
+      <avue-form
+        :option="stuOption"
+        v-model="stuForm"
+        @submit="recoverStudent"
+        @error="error"
+      >
       </avue-form>
     </el-dialog>
   </basic-container>
 </template>
 
 <script>
-import { getList,removeStuId ,recoverStudent,stuTree} from "@/api/system/student";
+import {
+  getList,
+  removeStuId,
+  recoverStudent,
+  stuTree,
+} from "@/api/system/student";
 import { mapGetters } from "vuex";
 import { nation } from "@/api/tool/data";
-import { formateDate} from "@/api/tool/date";
+import { formateDate } from "@/api/tool/date";
 export default {
   data() {
     return {
-      stuForm:{},
-      stuOption:{
-
-        menuPosition:"right",
+      stuForm: {},
+      stuOption: {
+        menuPosition: "right",
         column: [
           {
             label: "班级",
@@ -93,11 +105,11 @@ export default {
               value: "id",
             },
             span: 24,
-          }
-          ]
+          },
+        ],
       },
-      resetBox:false,
-      resetRowId:'',
+      resetBox: false,
+      resetRowId: "",
       form: {},
       box: false,
       props: {
@@ -121,8 +133,8 @@ export default {
         pageSizes: [8, 16, 24, 32, 40, 48],
       },
       option: {
-        columnBtn:false,
-        refreshBtn:false,
+        columnBtn: false,
+        refreshBtn: false,
         height: "auto",
         tip: false,
         simplePage: true,
@@ -131,31 +143,31 @@ export default {
         tree: true,
         border: true,
         index: true,
-        indexLabel:'序号',
+        indexLabel: "序号",
         selection: false,
         viewBtn: false,
         dialogWidth: 900,
         dialogClickModal: false,
         delBtn: false,
         editBtn: false,
-        addBtn:false,
+        addBtn: false,
         column: [
           {
             label: "学级",
             prop: "educationalCircles",
             search: true,
             display: false,
-            minlength:0,
-            maxlength:4
+            minlength: 0,
+            maxlength: 4,
           },
           {
             label: "姓名",
             prop: "name",
             search: true,
             display: false,
-            minlength:0,
-            maxlength:5,
-            width:100,
+            minlength: 0,
+            maxlength: 5,
+            width: 100,
             overHidden: true,
           },
           {
@@ -163,9 +175,9 @@ export default {
             prop: "childNo",
             search: false,
             display: false,
-            minlength:0,
-            maxlength:10,
-            width:100,
+            minlength: 0,
+            maxlength: 10,
+            width: 100,
             overHidden: true,
           },
           {
@@ -189,7 +201,7 @@ export default {
             label: "出生日期",
             prop: "birthDate",
             display: false,
-            width:100,
+            width: 100,
             overHidden: true,
           },
           {
@@ -203,52 +215,51 @@ export default {
             display: false,
             type: "select",
             dicData: nation,
-            width:100,
+            width: 100,
             overHidden: true,
           },
           {
             label: "户口所在地",
             prop: "location",
             display: false,
-            width:100,
+            width: 100,
             overHidden: true,
           },
           {
             label: "档案号",
             prop: "fileNumber",
             display: false,
-            width:100,
+            width: 100,
             overHidden: true,
           },
-            {
+          {
             label: "状态",
             prop: "isDelete",
             display: false,
             type: "select",
             search: true,
             dicData: [
-              { label: "离园", value: 2 },
+              { label: "离校", value: 2 },
               { label: "毕业", value: 3 },
             ],
           },
           {
-            label: "入园日期",
+            label: "入校日期",
             prop: "admissionDate",
             display: false,
             type: "date",
             search: true,
             searchRange: true,
             searchSpan: 8,
-            width:100,
+            width: 100,
             overHidden: true,
           },
           {
             label: "离校或毕业所在班级",
             prop: "leaveClassName",
             display: false,
-            width:100,
+            width: 100,
             overHidden: true,
-
           },
           {
             label: "离毕日期",
@@ -258,15 +269,14 @@ export default {
             searchRange: true,
             searchSpan: 8,
             search: true,
-            width:90,
-
+            width: 90,
           },
 
           {
             label: "离校原因",
             prop: "reason",
             display: false,
-            width:320,
+            width: 320,
             overHidden: true,
           },
         ],
@@ -274,9 +284,7 @@ export default {
       data: [],
     };
   },
-  mounted(){
-
-  },
+  mounted() {},
   computed: {
     ...mapGetters(["userInfo", "permission"]),
     permissionList() {
@@ -326,17 +334,29 @@ export default {
       this.onLoad(this.page);
     },
     searchChange(params, done) {
-        //
-        if(params.admissionDate){
-          params.admissionDateMin=formateDate(params.admissionDate[0], "yyyy-MM-dd HH:mm:ss")
-          params.admissionDateMax=formateDate(params.admissionDate[1], "yyyy-MM-dd HH:mm:ss")
-            delete params.admissionDate
-        }
-          if(params.leaveDate){
-            params.leaveDateMin=formateDate(params.leaveDate[0], "yyyy-MM-dd HH:mm:ss")
-            params.leaveDateMax=formateDate(params.leaveDate[1], "yyyy-MM-dd HH:mm:ss")
-            delete params.leaveDate
-        }
+      //
+      if (params.admissionDate) {
+        params.admissionDateMin = formateDate(
+          params.admissionDate[0],
+          "yyyy-MM-dd HH:mm:ss"
+        );
+        params.admissionDateMax = formateDate(
+          params.admissionDate[1],
+          "yyyy-MM-dd HH:mm:ss"
+        );
+        delete params.admissionDate;
+      }
+      if (params.leaveDate) {
+        params.leaveDateMin = formateDate(
+          params.leaveDate[0],
+          "yyyy-MM-dd HH:mm:ss"
+        );
+        params.leaveDateMax = formateDate(
+          params.leaveDate[1],
+          "yyyy-MM-dd HH:mm:ss"
+        );
+        delete params.leaveDate;
+      }
       this.query = params;
       this.page.currentPage = 1;
       this.onLoad(this.page, params);
@@ -349,40 +369,41 @@ export default {
     //   this.selectionList = [];
     //   this.$refs.crud.toggleSelection();
     // },
-    handleView(row){
-      this.$router.push({ path: "/oprate/addStudent",query:{id:row.id,detailFlag:true} });
+    handleView(row) {
+      this.$router.push({
+        path: "/oprate/addStudent",
+        query: { id: row.id, detailFlag: true },
+      });
     },
-    handleReset(row){
-      this.resetBox=true;
-      this.resetRowId=row.id;
+    handleReset(row) {
+      this.resetBox = true;
+      this.resetRowId = row.id;
     },
-    recoverStudent(){
-      let rows={ id: this.resetRowId, classId:this.stuForm.classId }
-      recoverStudent(rows).then(res=>{
-        if(res.data.success){
+    recoverStudent() {
+      let rows = { id: this.resetRowId, classId: this.stuForm.classId };
+      recoverStudent(rows).then((res) => {
+        if (res.data.success) {
           this.onLoad(this.page);
-          this.resetBox=false;
+          this.resetBox = false;
           this.$message({
             type: "success",
             message: "操作成功!",
           });
-        }else{
-
+        } else {
         }
         done();
-      })
+      });
     },
     handleDel(row) {
-    this.$confirm("确定将选择数据删除?", {
+      this.$confirm("确定将选择数据删除?", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
       })
         .then(() => {
-          let rows=[];
+          let rows = [];
           rows.push({ id: row.id, isDelete: 1 });
           return removeStuId(rows);
-
         })
         .then(() => {
           this.onLoad(this.page);
@@ -414,7 +435,7 @@ export default {
         this.data = res.data.data.records;
         this.page.total = res.data.data.total;
         this.loading = false;
-      //  this.selectionClear();
+        //  this.selectionClear();
       });
     },
   },
@@ -422,8 +443,7 @@ export default {
 </script>
 
 <style>
-
-  .resetClass .el-dialog__body{
-    padding: 30px 20px 0px 20px !important;
-  }
+.resetClass .el-dialog__body {
+  padding: 30px 20px 0px 20px !important;
+}
 </style>
